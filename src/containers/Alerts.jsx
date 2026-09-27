@@ -6,9 +6,10 @@ import MuiAlert from '@mui/material/Alert';
 
 import actions from '../actions';
 
-const Alert = (props) => {
-  return <MuiAlert elevation={6} variant="filled" {...props} />;
-};
+// Snackbar's transition needs a ref to the DOM node of its child.
+const Alert = React.forwardRef((props, ref) => {
+  return <MuiAlert elevation={6} variant="filled" ref={ref} {...props} />;
+});
 
 const Alerts = ({
   alerts = [],
