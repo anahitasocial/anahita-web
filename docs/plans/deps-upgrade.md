@@ -32,8 +32,8 @@ a service Google shut down in 2024. Both are follow-ups.
 | 1. Remove unused packages | ✅ | `b97db4e` |
 | 2. Minor and patch releases | ✅ | `3ecbe88` |
 | 3. Small majors | ✅ | `6cd7f04` |
-| 4. i18next | ✅ | (step 4) |
-| 5. Redux | ⬜ | |
+| 4. i18next | ✅ | `4b69d10` |
+| 5. Redux | ✅ | (step 5) |
 | 6. Geolocation, player, particles | ⬜ | |
 | 7. React 19 | ⬜ | |
 | 8. ESLint config | ⬜ | |
@@ -112,5 +112,13 @@ To be filled in as it happens.
   Suspense boundary in the app) and `nsMode` is gone; `initAsync: false`
   keeps initialisation synchronous, because components call `i18n.t` while
   rendering and the translations are bundled.
+- Step 5: redux 5, react-redux 9 (the 94 `connect` calls and the hooks
+  need no change) and redux-thunk 3, which exports `thunk` by name. The
+  three deprecated `redux-devtools` packages are gone. Their in-page monitor
+  was instrumented in the dev store but never rendered, so it was never
+  visible. The dev store now composes with the Redux DevTools browser
+  extension when it's installed; `redux-logger` still logs every action to
+  the console. `createStore` is deprecated in redux 5 in favour of Redux
+  Toolkit, but still works; moving to Toolkit would be its own change.
 - The project's ESLint parser doesn't accept `??` or `?.` until the config
   changes in step 8.
