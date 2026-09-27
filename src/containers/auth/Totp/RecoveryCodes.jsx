@@ -41,9 +41,11 @@ const TOTPRecoveryCodes = ({
       <Grid
         container
         direction="row"
-        justifyContent="center"
-        alignItems="center"
         spacing={2}
+        sx={{
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
       >
         <Grid item>
           <List>

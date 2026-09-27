@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemButton from '@mui/material/ListItemButton';
 
 import LocationIcon from '@mui/icons-material/LocationOn';
 
@@ -20,24 +20,24 @@ const LocationsListItem = ({
   return (
     <ListItem
       key={`locations-list-item-${location.id}`}
-      button
-      component="a"
-      href={`/locations/${location.id}-${location.alias}/`}
       divider
+      disablePadding
+      secondaryAction={actions}
     >
-      <ListItemAvatar>
-        <Avatar>
-          <LocationIcon />
-        </Avatar>
-      </ListItemAvatar>
-      <ListItemText
-        primary={location.name}
-        secondary={getAddress(location)}
-      />
-      {actions &&
-      <ListItemSecondaryAction>
-        {actions}
-      </ListItemSecondaryAction>}
+      <ListItemButton
+        component="a"
+        href={`/locations/${location.id}-${location.alias}/`}
+      >
+        <ListItemAvatar>
+          <Avatar>
+            <LocationIcon />
+          </Avatar>
+        </ListItemAvatar>
+        <ListItemText
+          primary={location.name}
+          secondary={getAddress(location)}
+        />
+      </ListItemButton>
     </ListItem>
   );
 };

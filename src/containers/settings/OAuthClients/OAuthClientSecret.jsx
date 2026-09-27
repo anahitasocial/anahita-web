@@ -99,14 +99,21 @@ const OAuthClientSecret = ({
           {i18n.t('settings:oauthClients.secret.cDescription')}
         </DialogContentText>
 
-        <Typography variant="caption" color="textSecondary" display="block">
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          sx={{ display: 'block' }}
+        >
           {i18n.t('settings:oauthClients.fields.clientId')}
         </Typography>
         <Typography className={classes.clientId} gutterBottom>
           {client.clientId}
         </Typography>
-
-        <Typography variant="caption" color="textSecondary" display="block">
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          sx={{ display: 'block' }}
+        >
           {i18n.t('settings:oauthClients.secret.label')}
         </Typography>
         <Box className={classes.secret}>

@@ -9,7 +9,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -113,11 +113,10 @@ const HomeCardNodes = ({
           const href = getURL(item);
           const avatar = getAvatar(item);
           return (
-            <ListItem
+            <ListItemButton
               key={key}
               href={href}
               component="a"
-              button
             >
               <ListItemAvatar>
                 {avatar}
@@ -129,7 +128,7 @@ const HomeCardNodes = ({
                   </Typography>
                 }
               />
-            </ListItem>
+            </ListItemButton>
           );
         })}
       </List>

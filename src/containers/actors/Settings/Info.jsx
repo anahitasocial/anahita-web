@@ -123,7 +123,10 @@ const ActorsSettingsInfo = (props) => {
       isFetching={isFetching}
       enabled={canAdmin &&
         <>
-          <Typography variant="caption" display="block">
+          <Typography
+            variant="caption"
+            sx={{ display: 'block' }}
+          >
             {created}
           </Typography>
           <FormControlLabel

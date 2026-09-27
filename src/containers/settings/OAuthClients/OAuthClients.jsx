@@ -136,7 +136,7 @@ const OAuthClients = ({
                         variant="caption"
                         color="textSecondary"
                         className={classes.clientId}
-                        display="block"
+                        sx={{ display: 'block' }}
                       >
                         {client.clientId}
                       </Typography>

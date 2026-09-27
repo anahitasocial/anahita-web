@@ -129,7 +129,7 @@ const Onboarding = ({
           subheader={i18n.t('onboarding:intro')}
         />
         {steps.length > 1 &&
-          <Box px={1}>
+          <Box sx={{ px: 1 }}>
             <Stepper activeStep={active} alternativeLabel>
               {steps.map((key) => {
                 return (

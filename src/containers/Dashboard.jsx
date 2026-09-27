@@ -29,7 +29,7 @@ const DashboardPage = ({
       </Helmet>
       <Grid
         container
-        justifyContent="center"
+        sx={{ justifyContent: 'center' }}
       >
         <Grid
           item

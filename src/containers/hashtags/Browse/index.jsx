@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import Avatar from '@mui/material/Avatar';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 
@@ -110,10 +110,9 @@ const HashtagsBrowse = ({
         {items.allIds.map((itemId) => {
           const node = items.byId[itemId];
           return (
-            <ListItem
+            <ListItemButton
               key={`node_list_item_${node.id}`}
               href={`/hashtags/${node.alias}/`}
-              button
               component="a"
               divider
             >
@@ -123,7 +122,7 @@ const HashtagsBrowse = ({
                 </Avatar>
               </ListItemAvatar>
               <ListItemText primary={node.name} />
-            </ListItem>
+            </ListItemButton>
           );
         })}
       </InfiniteScroll>

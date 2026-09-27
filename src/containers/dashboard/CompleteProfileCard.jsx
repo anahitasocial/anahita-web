@@ -53,7 +53,7 @@ const CompleteProfileCard = ({ viewer }) => {
   };
 
   return (
-    <Box mb={2}>
+    <Box sx={{ mb: 2 }}>
       <Card variant="outlined">
         <CardHeader
           title={i18n.t('onboarding:nudge.title')}

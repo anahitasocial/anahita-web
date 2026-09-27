@@ -69,7 +69,11 @@ const InfoRead = ({
       </List>
 
       {canAdmin &&
-        <Typography variant="caption" display="block" align="center">
+        <Typography
+          variant="caption"
+          align="center"
+          sx={{ display: 'block' }}
+        >
           {created}
         </Typography>}
 

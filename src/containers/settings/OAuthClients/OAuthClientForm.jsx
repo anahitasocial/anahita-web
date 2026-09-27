@@ -273,7 +273,11 @@ const OAuthClientForm = ({
               the server has no route for it. Shown, not offered. */}
           {isEdit ?
             <Box className={classes.field}>
-              <Typography variant="caption" color="textSecondary" display="block">
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                sx={{ display: 'block' }}
+              >
                 {i18n.t('settings:oauthClients.fields.clientId')}
               </Typography>
               <Typography className={classes.mono}>
@@ -351,7 +355,12 @@ const OAuthClientForm = ({
             })}
           </Box>
           {grantTypesMissing &&
-            <Typography variant="caption" color="error" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              color="error"
+              gutterBottom
+              sx={{ display: 'block' }}
+            >
               {i18n.t('settings:oauthClients.form.grantTypesRequired')}
             </Typography>}
 
@@ -377,11 +386,21 @@ const OAuthClientForm = ({
             })}
           </Box>
           {scopesMissing &&
-            <Typography variant="caption" color="error" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              color="error"
+              gutterBottom
+              sx={{ display: 'block' }}
+            >
               {i18n.t('settings:oauthClients.form.scopesRequired')}
             </Typography>}
           {availableScopes.length === 0 &&
-            <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              gutterBottom
+              sx={{ display: 'block' }}
+            >
               {i18n.t('settings:oauthClients.form.scopesUnavailable')}
             </Typography>}
 
@@ -411,7 +430,12 @@ const OAuthClientForm = ({
             }
             label={i18n.t('settings:oauthClients.fields.confidential')}
           />
-          <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+          <Typography
+            variant="caption"
+            color="textSecondary"
+            gutterBottom
+            sx={{ display: 'block' }}
+          >
             {i18n.t('settings:oauthClients.form.confidentialHint')}
           </Typography>
 
@@ -427,7 +451,12 @@ const OAuthClientForm = ({
             }
             label={i18n.t('settings:oauthClients.fields.skipConsent')}
           />
-          <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+          <Typography
+            variant="caption"
+            color="textSecondary"
+            gutterBottom
+            sx={{ display: 'block' }}
+          >
             {i18n.t('settings:oauthClients.form.skipConsentHint')}
           </Typography>
 

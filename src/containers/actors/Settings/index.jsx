@@ -253,7 +253,7 @@ const ActorsSettings = ({
             inside, or every card would sit within another card's border.
             Matching the gap SettingsItem puts below each card, so the header
             does not sit flush against the first one. */}
-        <Box mb={2}>
+        <Box sx={{ mb: 2 }}>
           <ActorSettingCard
             actor={actor}
             subheader={i18n.t(`people:settings.sections.${section.key}`)}
@@ -343,7 +343,7 @@ const ActorsSettings = ({
       {/* Header only, with the panel stacked underneath — the same layout the
           person page uses, so a group's Danger zone looks like a person's
           rather than like a different application. */}
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <ActorSettingCard
           actor={actor}
           subheader={i18n.t(tabLabelKey(namespace, activeTab.key))}

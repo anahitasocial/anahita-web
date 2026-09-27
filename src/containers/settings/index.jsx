@@ -92,7 +92,7 @@ const Settings = ({
           anybody landing on /settings looking for context. Stickiness is
           what the card costs, and it buys little across two tabs — the
           actor settings page has never had it either. */}
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <Card variant="outlined">
           <CardHeader
             avatar={

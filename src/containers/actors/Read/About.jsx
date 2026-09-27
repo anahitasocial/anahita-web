@@ -4,7 +4,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -48,8 +48,7 @@ const ActorBodyAbout = (props) => {
         </>}
       {websiteUrl &&
         <List>
-          <ListItem
-            button
+          <ListItemButton
             component="a"
             href={websiteUrl}
             target="_blank"
@@ -76,7 +75,7 @@ const ActorBodyAbout = (props) => {
                 </Typography>
               }
             />
-          </ListItem>
+          </ListItemButton>
         </List>}
     </Card>
   );

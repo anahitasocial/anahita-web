@@ -52,8 +52,8 @@ each built, tested and looked at before the next.
 | --- | --- | --- |
 | 0. Check this plan against the MCP docs | ✅ | (this commit) |
 | 1. v5, Emotion, codemods, theme | ✅ | `3a8ce4b` |
-| 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ✅ | (step 2 commit) |
-| 3. v6 | ⬜ | |
+| 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ✅ | `eeb5add` |
+| 3. v6 | ✅ | (step 3 commit) |
 | 4. v7 | ⬜ | |
 | 5. v9 | ⬜ | |
 | 6. Clean-up and docs | ⬜ | |
@@ -285,6 +285,20 @@ in v9, and Tabs/Menu roving tabindex.
   react-router (to its CJS build), axios (CJS), react-markdown,
   remark-gfm and react-geolocated. It is not a substitute for the visual
   check.
+- v6: `list-item-button-prop` renames the opening tag but not its closing
+  `</ListItem>`, leaving 12 files unparseable, and reprints whole files. It
+  was reverted; the 36 `ListItem button`s (not 4: most spread `button` over
+  several lines, and `LeftMenu.jsx` has 17) were converted by a
+  brace-aware script. The two with a secondary action (locations list,
+  onboarding Featured) became `<ListItem secondaryAction disablePadding>`
+  around a `ListItemButton`, the documented pattern. `styled` and
+  `theme-v6` changed nothing; `system-props` and `sx-prop` moved Box, Grid
+  and Typography props into `sx`.
+- Recast-based codemods drop blank lines and the final newline and write
+  double quotes. After each, a script restores the dropped blank lines
+  (only deletions consisting solely of blank lines), `eslint --fix`
+  handles quotes and brackets, and one-property `sx={{ … }}` objects are
+  put back on one line.
 - No browser in the session that ran steps 1–5, so the visual check is done
   afterwards by a person, one step commit at a time.
 

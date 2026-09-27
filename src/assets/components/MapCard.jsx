@@ -10,7 +10,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -83,11 +83,10 @@ const HomeCardMap = ({
             const key = `locations_${item.id}`;
             const href = getURL(item);
             return (
-              <ListItem
+              <ListItemButton
                 key={key}
                 href={href}
                 component="a"
-                button
               >
                 <ListItemAvatar>
                   <Avatar>
@@ -101,7 +100,7 @@ const HomeCardMap = ({
                     </Typography>
                   }
                 />
-              </ListItem>
+              </ListItemButton>
             );
           })}
         </List>}

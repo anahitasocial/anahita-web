@@ -33,7 +33,13 @@ const OnboardingAvatar = ({
         <Typography variant="body2" color="textSecondary">
           {i18n.t('onboarding:avatar.description')}
         </Typography>
-        <Box display="flex" justifyContent="center" mt={2}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 2,
+          }}
+        >
           <ActorsAvatar
             node={viewer}
             canEdit

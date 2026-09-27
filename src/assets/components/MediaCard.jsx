@@ -7,7 +7,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -34,8 +34,7 @@ const HomeCardMedia = () => {
         subheader="Media nodes"
       />
       <List>
-        <ListItem
-          button
+        <ListItemButton
           component={Link}
           to="/explore/notes/"
         >
@@ -45,9 +44,8 @@ const HomeCardMedia = () => {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={i18n.t('notes:cTitle')} />
-        </ListItem>
-        <ListItem
-          button
+        </ListItemButton>
+        <ListItemButton
           component={Link}
           to="/explore/photos/"
         >
@@ -57,9 +55,8 @@ const HomeCardMedia = () => {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={i18n.t('photos:cTitle')} />
-        </ListItem>
-        <ListItem
-          button
+        </ListItemButton>
+        <ListItemButton
           component={Link}
           to="/explore/topics/"
         >
@@ -69,9 +66,8 @@ const HomeCardMedia = () => {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={i18n.t('topics:cTitle')} />
-        </ListItem>
-        <ListItem
-          button
+        </ListItemButton>
+        <ListItemButton
           component={Link}
           to="/explore/articles/"
         >
@@ -81,9 +77,8 @@ const HomeCardMedia = () => {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={i18n.t('articles:cTitle')} />
-        </ListItem>
-        <ListItem
-          button
+        </ListItemButton>
+        <ListItemButton
           component={Link}
           to="/explore/documents/"
         >
@@ -93,7 +88,7 @@ const HomeCardMedia = () => {
             </Avatar>
           </ListItemAvatar>
           <ListItemText primary={i18n.t('documents:cTitle')} />
-        </ListItem>
+        </ListItemButton>
       </List>
       <CardActions>
         <Button

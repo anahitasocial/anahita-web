@@ -12,6 +12,7 @@ import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Radio from '@mui/material/Radio';
@@ -126,9 +127,8 @@ const ActorsSettingsAccess = (props) => {
           <List disablePadding>
             {accessOptions.map((option) => {
               return (
-                <ListItem
+                <ListItemButton
                   key={`access-${option}`}
-                  button
                   divider
                   onClick={() => {
                     setAccess(option);
@@ -148,7 +148,7 @@ const ActorsSettingsAccess = (props) => {
                     primary={i18n.t(`access:${option}`)}
                     secondary={i18n.t(`actor:access.descriptions.${option}`)}
                   />
-                </ListItem>
+                </ListItemButton>
               );
             })}
           </List>

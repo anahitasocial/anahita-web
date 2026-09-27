@@ -29,7 +29,7 @@ const SettingsItem = ({
   children,
 }) => {
   return (
-    <Box mb={2}>
+    <Box sx={{ mb: 2 }}>
       {/* Card + header + divider + child, and deliberately NO CardContent.
           The bare items are not uniform underneath: InfoForm and Forms/Delete
           bring their own CardContent AND CardActions, so an extra CardContent

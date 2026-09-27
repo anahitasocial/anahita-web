@@ -129,7 +129,10 @@ const PersonSettingsInfo = (props) => {
       isFetching={isFetching}
       enabled={canAdmin &&
         <>
-          <Typography variant="caption" display="block">
+          <Typography
+            variant="caption"
+            sx={{ display: 'block' }}
+          >
             {i18n.t('people:person.joinedDate', { date: joinedDate })}
           </Typography>
           <FormControlLabel

@@ -22,7 +22,12 @@ const StepActions = ({
   onSkip,
 }) => {
   return (
-    <Box px={2} pb={2}>
+    <Box
+      sx={{
+        px: 2,
+        pb: 2,
+      }}
+    >
       <Button
         type={type}
         variant="contained"
@@ -34,7 +39,12 @@ const StepActions = ({
       >
         {label}
       </Button>
-      <Box mt={3} textAlign="center">
+      <Box
+        sx={{
+          mt: 3,
+          textAlign: 'center',
+        }}
+      >
         {/* A button that looks like a link, which is what the rule cannot tell
             from an anchor used as a button. type="button" matters: inside the
             profile step's form, a bare button would submit it. */}

@@ -8,6 +8,7 @@ import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
@@ -97,24 +98,23 @@ const SupportPage = () => {
         {contact &&
           <List>
             {contact.email &&
-              <ListItem button component="a" href={`mailto:${contact.email}`}>
+              <ListItemButton component="a" href={`mailto:${contact.email}`}>
                 <ListItemIcon><EmailIcon /></ListItemIcon>
                 <ListItemText
                   primary={i18n.t('support:email.title')}
                   secondary={contact.email}
                 />
-              </ListItem>}
+              </ListItemButton>}
             {contact.phone &&
-              <ListItem button component="a" href={telHref(contact.phone)}>
+              <ListItemButton component="a" href={telHref(contact.phone)}>
                 <ListItemIcon><PhoneIcon /></ListItemIcon>
                 <ListItemText
                   primary={i18n.t('support:phone.title')}
                   secondary={contact.phone}
                 />
-              </ListItem>}
+              </ListItemButton>}
             {contact.website &&
-              <ListItem
-                button
+              <ListItemButton
                 component="a"
                 href={contact.website}
                 target="_blank"
@@ -125,7 +125,7 @@ const SupportPage = () => {
                   primary={i18n.t('support:website.title')}
                   secondary={contact.website}
                 />
-              </ListItem>}
+              </ListItemButton>}
             {/* Nothing configured is a real state and says so, rather than
                 an empty card that reads as a broken page. */}
             {!hasAny &&
@@ -139,14 +139,14 @@ const SupportPage = () => {
         {/* Somebody on a support page is often here about their account or
             their data, so the two documents that answer those belong on it. */}
         <List>
-          <ListItem button component={RouterLink} to="/legal/tos">
+          <ListItemButton component={RouterLink} to="/legal/tos">
             <ListItemIcon><TermsIcon /></ListItemIcon>
             <ListItemText primary={i18n.t('legal:tos')} />
-          </ListItem>
-          <ListItem button component={RouterLink} to="/legal/privacy">
+          </ListItemButton>
+          <ListItemButton component={RouterLink} to="/legal/privacy">
             <ListItemIcon><PolicyIcon /></ListItemIcon>
             <ListItemText primary={i18n.t('legal:privacy')} />
-          </ListItem>
+          </ListItemButton>
         </List>
       </Card>
     </Container>

@@ -63,7 +63,7 @@ const Locations = ({
     <>
       {/* No action. A location is attached to a post rather than created on
           its own, so there is nothing here for a + to open. */}
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <BrowseHeader
           icon={<LocationsIcon />}
           title={i18n.t('locations:cTitle')}

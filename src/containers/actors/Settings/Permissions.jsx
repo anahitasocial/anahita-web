@@ -157,8 +157,13 @@ const ActorsSettingsPermissions = (props) => {
                         question just wraps. Not the select's own floating
                         label either: an outlined label that long is cut off
                         in the border's notch. */}
-                    <Box width="100%" py={1}>
-                      <Box mb={1}>
+                    <Box
+                      sx={{
+                        width: '100%',
+                        py: 1,
+                      }}
+                    >
+                      <Box sx={{ mb: 1 }}>
                         <Typography variant="body1">{question}</Typography>
                       </Box>
                       {/* A select rather than radios: a person has five
