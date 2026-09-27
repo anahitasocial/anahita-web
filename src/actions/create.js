@@ -81,7 +81,7 @@ const browse = (namespace, api) => {
       const requestId = nextRequestId();
       dispatch(browseRequest(namespace, requestId));
       return new Promise((resolve, reject) => {
-        return api.browse(params)
+        api.browse(params)
           .then((results) => {
             dispatch(browseSuccess(results, namespace, requestId));
             return resolve();
@@ -123,7 +123,7 @@ const read = (namespace, api) => {
     return (dispatch) => {
       dispatch(readRequest(namespace));
       return new Promise((resolve, reject) => {
-        return api.read(id)
+        api.read(id)
           .then((result) => {
             dispatch(readSuccess(result, namespace));
             return resolve();
@@ -165,7 +165,7 @@ const edit = (namespace, api) => {
     return (dispatch) => {
       dispatch(editRequest(namespace));
       return new Promise((resolve, reject) => {
-        return api.edit(node)
+        api.edit(node)
           .then((result) => {
             dispatch(editSuccess(result, namespace));
             return resolve();
@@ -206,7 +206,7 @@ const editAccess = (namespace, api) => {
     return (dispatch) => {
       dispatch(editAccessRequest(namespace));
       return new Promise((resolve, reject) => {
-        return api.editAccess(node, owner)
+        api.editAccess(node, owner)
           .then((result) => {
             dispatch(editAccessSuccess(result, namespace));
             return resolve();
@@ -251,7 +251,7 @@ const add = (namespace, api) => {
     return (dispatch) => {
       dispatch(addRequest(namespace));
       return new Promise((resolve, reject) => {
-        return api.add(node, owner)
+        api.add(node, owner)
           .then((result) => {
             if (result.data && result.data.objectType === 'com.stories.story') {
               dispatch(stories.add(result.data));
@@ -297,7 +297,7 @@ const deleteItem = (namespace, api) => {
     return (dispatch) => {
       dispatch(deleteRequest(node, namespace));
       return new Promise((resolve, reject) => {
-        return api.deleteItem(node)
+        api.deleteItem(node)
           .then(() => {
             dispatch(deleteSuccess(node, namespace));
             return resolve();
@@ -324,7 +324,7 @@ const restore = (namespace, api) => {
     return (dispatch) => {
       dispatch(deleteRequest(node, namespace));
       return new Promise((resolve, reject) => {
-        return api.restore(node)
+        api.restore(node)
           .then(() => {
             return resolve();
           }, (response) => {

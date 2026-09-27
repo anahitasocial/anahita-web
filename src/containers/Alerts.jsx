@@ -42,7 +42,7 @@ const Alerts = ({
     );
   }
 
-  return (<></>);
+  return null;
 };
 
 Alerts.propTypes = {

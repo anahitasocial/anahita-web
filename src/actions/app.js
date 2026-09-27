@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { App as APP } from '../constants';
 import api from '../api';
 
@@ -36,7 +35,7 @@ const readNodeInfo = () => {
 const addAlert = (body, severity) => {
   return {
     type: APP.ALERT.ADD,
-    id: uuidv4(),
+    id: window.crypto.randomUUID(),
     body,
     severity,
   };

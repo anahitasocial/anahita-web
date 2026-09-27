@@ -1,5 +1,5 @@
 import React from 'react';
-import Img from 'react-image';
+import { Img } from 'react-image';
 import PropTypes from 'prop-types';
 import { withStyles } from 'tss-react/mui';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -40,46 +40,44 @@ const styles = (theme) => {
   };
 };
 
-function SingleLineImageList(props) {
+const SingleLineImageList = (props) => {
   const { classes, photos } = props;
 
   return (
-    <>
-      <ImageList
-        className={classes.imageList}
-        gap={1}
-        rowHeight={320}
-      >
-        {photos.map((photo) => {
-          const src = getPortraitURL(photo);
-          const url = getURL(photo);
-          return (
-            <ImageListItem
-              key={`gridlist-photo-${photo.id}`}
-              className={classes.item}
-            >
-              <Link href={url}>
-                <Img
-                  src={src}
-                  alt={photo.name}
-                  loader={<CircularProgress />}
-                />
-              </Link>
-              {photo.name &&
-                <ImageListItemBar
-                  title={photo.name}
-                  classes={{
-                    root: classes.titleBar,
-                    title: classes.title,
-                  }}
-                />}
-            </ImageListItem>
-          );
-        })}
-      </ImageList>
-    </>
+    <ImageList
+      className={classes.imageList}
+      gap={1}
+      rowHeight={320}
+    >
+      {photos.map((photo) => {
+        const src = getPortraitURL(photo);
+        const url = getURL(photo);
+        return (
+          <ImageListItem
+            key={`gridlist-photo-${photo.id}`}
+            className={classes.item}
+          >
+            <Link href={url}>
+              <Img
+                src={src}
+                alt={photo.name}
+                loader={<CircularProgress />}
+              />
+            </Link>
+            {photo.name &&
+            <ImageListItemBar
+              title={photo.name}
+              classes={{
+                root: classes.titleBar,
+                title: classes.title,
+              }}
+            />}
+          </ImageListItem>
+        );
+      })}
+    </ImageList>
   );
-}
+};
 
 SingleLineImageList.propTypes = {
   classes: PropTypes.object.isRequired,

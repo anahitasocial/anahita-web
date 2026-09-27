@@ -48,7 +48,10 @@ const ComposersFile = React.forwardRef(({
     getRootProps,
     getInputProps,
   } = useDropzone({
-    accept: supportedMimetypes.join(','),
+    // react-dropzone takes a map of MIME type to file extensions.
+    accept: Object.fromEntries(supportedMimetypes.map((type) => {
+      return [type, []];
+    })),
     onDrop: (files) => {
       handleOnFileSelect(files[0]);
     },

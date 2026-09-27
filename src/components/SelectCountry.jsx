@@ -2,7 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { CountryRegionData } from 'react-country-region-selector';
+import { CountryRegionData as countryRegionModule } from 'react-country-region-selector';
+
+// Since version 4 the package exports the data module; the array is its default.
+const { default: CountryRegionData } = countryRegionModule;
 
 const SelectCountry = ({
   disabled = false,

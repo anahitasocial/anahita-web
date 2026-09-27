@@ -1,23 +1,23 @@
 import { applyMiddleware, createStore, compose } from 'redux';
-import thunkMiddleware from 'redux-thunk';
+import { thunk } from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 
 import { apiErrorMiddleware } from '../middleware';
 import reducer from '../reducers';
-import DevTools from '../containers/DevTools';
 
 const loggerMiddleware = createLogger();
 
 const middleware = applyMiddleware(
-  thunkMiddleware,
+  thunk,
   apiErrorMiddleware,
   loggerMiddleware,
 );
 
-const createFinalStore = compose(
-  middleware,
-  DevTools.instrument(),
-)(createStore);
+// Connects to the Redux DevTools browser extension when it is installed.
+// eslint-disable-next-line no-underscore-dangle
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const createFinalStore = composeEnhancers(middleware)(createStore);
 
 export default (initialState) => {
   return createFinalStore(reducer, initialState);

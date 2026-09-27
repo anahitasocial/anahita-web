@@ -2,8 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
-import { CountryRegionData } from 'react-country-region-selector';
+import { CountryRegionData as countryRegionModule } from 'react-country-region-selector';
 import _ from 'lodash';
+
+// Since version 4 the package exports the data module; the array is its default.
+const { default: CountryRegionData } = countryRegionModule;
 
 const getRegions = (country) => {
   const index = _.findIndex(CountryRegionData, (item) => {

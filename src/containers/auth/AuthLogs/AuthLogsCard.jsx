@@ -48,7 +48,7 @@ const AuthLogsCard = ({
   const { classes } = useStyles();
 
   if (items.length === 0) {
-    return (<></>);
+    return null;
   }
 
   const getIcon = (authLog) => {

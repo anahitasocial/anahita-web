@@ -73,7 +73,7 @@ const ActorsRead = (props) => {
       );
     }
 
-    return <></>;
+    return null;
   }
 
   const canEdit = permissions.canEdit(actor);

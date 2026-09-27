@@ -27,59 +27,57 @@ const CommentForm = ({
 
   return (
     <form onSubmit={handleOnSubmit}>
-      <>
-        <CardHeader
-          avatar={
-            <ActorAvatar
-              actor={author}
-              linked={Boolean(author.id)}
-              size="small"
-            />
-          }
-          title={
-            <TextField
-              id="comment-text-box"
-              margin="normal"
-              variant="outlined"
-              placeholder={i18n.t('comments:comment.placeholder')}
-              onChange={handleOnChange}
-              name="body"
-              value={comment.body}
-              error={body.error !== ''}
-              helperText={body.error}
-              disabled={isFetching}
-              fullWidth
-              multiline
-              required
-              slotProps={{
-                htmlInput: {
-                  maxLength: BODY.MAX_LENGTH,
-                },
-              }}
-            />
-          }
-        />
-        <CardActions>
-          {comment.id > 0 &&
-            <Button
-              onClick={handleCancel}
-              size="small"
-              fullWidth
-            >
-              {i18n.t('actions:cancel')}
-            </Button>}
-          <Button
-            type="submit"
-            color="primary"
-            disabled={isFetching || !enableSubmit}
-            variant="contained"
+      <CardHeader
+        avatar={
+          <ActorAvatar
+            actor={author}
+            linked={Boolean(author.id)}
             size="small"
+          />
+          }
+        title={
+          <TextField
+            id="comment-text-box"
+            margin="normal"
+            variant="outlined"
+            placeholder={i18n.t('comments:comment.placeholder')}
+            onChange={handleOnChange}
+            name="body"
+            value={comment.body}
+            error={body.error !== ''}
+            helperText={body.error}
+            disabled={isFetching}
             fullWidth
-          >
-            {comment.id ? i18n.t('actions:update') : i18n.t('actions:post')}
-          </Button>
-        </CardActions>
-      </>
+            multiline
+            required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+              },
+            }}
+          />
+          }
+      />
+      <CardActions>
+        {comment.id > 0 &&
+        <Button
+          onClick={handleCancel}
+          size="small"
+          fullWidth
+        >
+          {i18n.t('actions:cancel')}
+        </Button>}
+        <Button
+          type="submit"
+          color="primary"
+          disabled={isFetching || !enableSubmit}
+          variant="contained"
+          size="small"
+          fullWidth
+        >
+          {comment.id ? i18n.t('actions:update') : i18n.t('actions:post')}
+        </Button>
+      </CardActions>
     </form>
   );
 };

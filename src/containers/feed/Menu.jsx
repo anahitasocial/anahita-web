@@ -46,7 +46,7 @@ const FeedItemMenu = ({
   const canDelete = node.commands && node.commands.includes('delete');
 
   if (!canSubscribe && !canFollow && !canDelete) {
-    return (<></>);
+    return null;
   }
 
   return (

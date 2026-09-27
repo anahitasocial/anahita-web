@@ -20,10 +20,13 @@ i18n
     lng: 'en',
     fallbackLng: 'en',
     debug: DEBUG,
+    // The translations are bundled, so initialise synchronously: components
+    // call i18n.t while rendering, before any effect could wait for it.
+    initAsync: false,
     react: {
-      wait: true,
+      // No Suspense boundary wraps the app.
+      useSuspense: false,
       bindI18n: 'languageChanged loaded',
-      nsMode: 'default',
     },
   }, (err) => {
     return err && console.log('Error loading i18n translation module.', err);
