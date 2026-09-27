@@ -20,6 +20,7 @@ export default {
     inviter: 'Invited you',
     person: 'Person',
     group: 'Group',
+    following: 'Following',
   },
   actions: {
     continue: 'Continue',

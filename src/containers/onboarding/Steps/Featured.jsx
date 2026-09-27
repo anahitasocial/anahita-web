@@ -1,0 +1,169 @@
+import React, { useState } from 'react';
+import PropTypes from 'prop-types';
+
+import CardContent from '@material-ui/core/CardContent';
+import Checkbox from '@material-ui/core/Checkbox';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import ListItemText from '@material-ui/core/ListItemText';
+import Typography from '@material-ui/core/Typography';
+
+import ActorAvatar from '../../../components/ActorAvatar';
+import ActorType from '../../../proptypes/Actor';
+import StepActions from '../StepActions';
+import ViewerType from '../../../proptypes/Viewer';
+import i18n from '../../../languages';
+import utils from '../../../utils';
+
+const { getActorName, isPerson } = utils.node;
+
+// The accounts the installation features, with whoever invited this person
+// first.
+//
+// NOTHING IS FOLLOWED AUTOMATICALLY. Nothing is pre-checked, the inviter
+// included: a follow is public, and an account can require approval first,
+// which a follow made on somebody's behalf would have to either honour or
+// bypass. Every follow here is a box the person ticks.
+//
+// One control per row, a checkbox, rather than a Follow button beside it —
+// two ways to do the same thing on one row would leave the checkbox wrong the
+// moment the button was used. Accounts already followed say so, with nothing
+// to tick.
+const OnboardingFeatured = ({
+  viewer,
+  actors,
+  inviterId = null,
+  primaryLabel,
+  onNext,
+  onSkip,
+  followActor,
+  alertError,
+}) => {
+  const [selected, setSelected] = useState(new Set());
+  const [pending, setPending] = useState(false);
+
+  const toggle = (id) => {
+    const next = new Set(selected);
+
+    if (next.has(id)) {
+      next.delete(id);
+    } else {
+      next.add(id);
+    }
+
+    setSelected(next);
+  };
+
+  // Each follow on its own: one that fails does not stop the rest, and does
+  // not stop the flow either. The accounts are still there to follow later.
+  const followSelected = () => {
+    if (selected.size === 0) {
+      onNext();
+      return;
+    }
+
+    setPending(true);
+
+    const follows = actors
+      .filter((actor) => { return selected.has(actor.id); })
+      .map((actor) => { return followActor({ actor, viewer }); });
+
+    Promise.allSettled(follows).then((results) => {
+      setPending(false);
+
+      if (results.some((result) => { return result.status === 'rejected'; })) {
+        alertError(i18n.t('onboarding:prompts.followError'));
+      }
+
+      onNext();
+    });
+  };
+
+  const secondaryText = (actor) => {
+    if (actor.id === inviterId) {
+      return i18n.t('onboarding:featured.inviter');
+    }
+
+    return isPerson(actor)
+      ? i18n.t('onboarding:featured.person')
+      : i18n.t('onboarding:featured.group');
+  };
+
+  return (
+    <>
+      <CardContent>
+        <Typography variant="h6" gutterBottom>
+          {i18n.t('onboarding:featured.title')}
+        </Typography>
+        <Typography variant="body2" color="textSecondary">
+          {i18n.t('onboarding:featured.description')}
+        </Typography>
+        <List>
+          {actors.map((actor) => {
+            const following = Boolean(actor.isLeadingViewer);
+            const labelId = `onboarding-featured-${actor.id}`;
+
+            return (
+              <ListItem
+                key={actor.id}
+                button={!following}
+                disabled={pending}
+                onClick={following ? undefined : () => { toggle(actor.id); }}
+              >
+                <ListItemAvatar>
+                  <ActorAvatar actor={actor} />
+                </ListItemAvatar>
+                <ListItemText
+                  id={labelId}
+                  primary={getActorName(actor)}
+                  secondary={secondaryText(actor)}
+                />
+                <ListItemSecondaryAction>
+                  {following
+                    ? (
+                      <Typography variant="body2" color="textSecondary">
+                        {i18n.t('onboarding:featured.following')}
+                      </Typography>
+                    )
+                    : (
+                      <Checkbox
+                        edge="end"
+                        color="primary"
+                        checked={selected.has(actor.id)}
+                        disabled={pending}
+                        onChange={() => { toggle(actor.id); }}
+                        inputProps={{ 'aria-labelledby': labelId }}
+                      />
+                    )}
+                </ListItemSecondaryAction>
+              </ListItem>
+            );
+          })}
+        </List>
+      </CardContent>
+      <StepActions
+        label={selected.size > 0
+          ? i18n.t('onboarding:actions.followSelected')
+          : primaryLabel}
+        onClick={followSelected}
+        pending={pending}
+        onSkip={onSkip}
+      />
+    </>
+  );
+};
+
+OnboardingFeatured.propTypes = {
+  viewer: ViewerType.isRequired,
+  actors: PropTypes.arrayOf(ActorType).isRequired,
+  inviterId: PropTypes.number,
+  primaryLabel: PropTypes.string.isRequired,
+  onNext: PropTypes.func.isRequired,
+  onSkip: PropTypes.func.isRequired,
+  followActor: PropTypes.func.isRequired,
+  alertError: PropTypes.func.isRequired,
+};
+
+export default OnboardingFeatured;

@@ -12,7 +12,9 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Stepper from '@material-ui/core/Stepper';
 
 import AvatarStep from './Steps/Avatar';
+import FeaturedStep from './Steps/Featured';
 import ProfileStep from './Steps/Profile';
+import featured from './featured';
 import Progress from '../../components/Progress';
 import ViewerType from '../../proptypes/Viewer';
 import actions from '../../actions';
@@ -23,7 +25,8 @@ import { Onboarding as ONBOARDING } from '../../constants';
 const { STEPS } = ONBOARDING;
 
 // Where somebody with an incomplete profile is sent after the agreements:
-// avatar, then name, bio and pronouns, then the dashboard.
+// avatar, then name, bio and pronouns, then the accounts the installation
+// features, then the dashboard.
 //
 // AN EMPTY LIST SKIPS ITS STEP. Whatever the steps need is fetched once, up
 // front, and a step whose list comes back empty — or fails to come back — is
@@ -35,28 +38,47 @@ const { STEPS } = ONBOARDING;
 // finishes, and finishing — however it is reached — is what stops the gate
 // sending this person back here.
 
-// loadSteps decides which steps this person gets.
-const loadSteps = () => {
-  return Promise.resolve([STEPS.AVATAR, STEPS.PROFILE]);
+// loadSteps decides which steps this person gets, and fetches what the list
+// steps show. It never rejects: each list fails on its own, as empty.
+const loadSteps = (viewer) => {
+  return featured.loadFeatured(viewer).then((featuredList) => {
+    const steps = [STEPS.AVATAR, STEPS.PROFILE];
+
+    if (featuredList.actors.length > 0) {
+      steps.push(STEPS.FEATURED);
+    }
+
+    return { steps, featured: featuredList };
+  });
 };
 
 const Onboarding = ({
   viewer,
   refreshSession,
+  followActor,
   alertError,
 }) => {
   const navigate = useNavigate();
   const [steps, setSteps] = useState(null);
+  const [featuredList, setFeaturedList] = useState({ actors: [], inviterId: null });
   const [active, setActive] = useState(0);
   const [finishing, setFinishing] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
 
-    loadSteps().then((list) => { if (!cancelled) setSteps(list); });
+    loadSteps(viewer).then((result) => {
+      if (!cancelled) {
+        setFeaturedList(result.featured);
+        setSteps(result.steps);
+      }
+    });
 
     return () => { cancelled = true; };
-  }, []);
+    // On the id, not the viewer. Refreshing the session after an upload
+    // replaces the viewer object, and must not rebuild the steps under
+    // somebody mid-flow.
+  }, [viewer.id]);
 
   // Record, refresh, then leave — in that order. Navigating before the
   // session carries onboardedAt would have the gate send this person straight
@@ -120,6 +142,13 @@ const Onboarding = ({
           </Box>}
         {steps[active] === STEPS.AVATAR && <AvatarStep {...stepProps} />}
         {steps[active] === STEPS.PROFILE && <ProfileStep {...stepProps} />}
+        {steps[active] === STEPS.FEATURED &&
+          <FeaturedStep
+            {...stepProps}
+            actors={featuredList.actors}
+            inviterId={featuredList.inviterId}
+            followActor={followActor}
+          />}
       </Card>
     </Container>
   );
@@ -128,6 +157,7 @@ const Onboarding = ({
 Onboarding.propTypes = {
   viewer: ViewerType.isRequired,
   refreshSession: PropTypes.func.isRequired,
+  followActor: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };
 
@@ -138,6 +168,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   return {
     refreshSession: () => { return dispatch(actions.session.read()); },
+    followActor: (params) => { return dispatch(actions.socialgraph.follow(params)); },
     alertError: (message) => { return dispatch(actions.app.alert.error(message)); },
   };
 };
