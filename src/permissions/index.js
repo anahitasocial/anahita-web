@@ -1,6 +1,7 @@
 import actor from './actor';
 import comment from './comment';
 import invite from './invite';
+import like from './like';
 import medium from './medium';
 import node from './node';
 import oauthClient from './oauthClient';
@@ -12,6 +13,7 @@ export default {
   actor,
   comment,
   invite,
+  like,
   medium,
   node,
   oauthClient,

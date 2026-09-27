@@ -349,45 +349,21 @@ const getSupportedMimetypes = (namespace) => {
   }
 };
 
-const getComposers = (actor, viewer) => {
-  if (!actor.features) {
-    return [];
-  }
+// The composers this viewer may use on the actor's profile.
+//
+// The server answers it as authorized.composers on every person and group it
+// returns, from the check the media services enforce when a post is created.
+// This used to be worked out here and was wrong in four ways: it read any
+// permission in a service as the composer's own (a follower allowed to like
+// was offered articles), knew only followers and admins, trusted a group flag
+// that said everybody administered every group, and offered everything on a
+// service with no permissions. Read from the server it cannot drift.
+//
+// Missing means none: every person and group response carries the list.
+const getComposers = (actor) => {
+  const composers = actor && actor.authorized && actor.authorized.composers;
 
-  const isOwnerOrAdmin = actor.id === viewer.id || isAdmin(viewer);
-
-  return actor.features.reduce((composers, feature) => {
-    if (!feature.enabled || !feature.composers.length) {
-      return composers;
-    }
-
-    if (isOwnerOrAdmin) {
-      return [...composers, ...feature.composers];
-    }
-
-    const { addPermissions = [] } = feature;
-
-    if (addPermissions.length === 0) {
-      return [...composers, ...feature.composers];
-    }
-
-    const hasAddPermission = addPermissions.some((permission) => {
-      switch (permission.access) {
-        case 'followers':
-          return actor.isLeadingViewer;
-        case 'admins':
-          return actor.isAdminedByViewer;
-        default:
-          return false;
-      }
-    });
-
-    if (hasAddPermission) {
-      return [...composers, ...feature.composers];
-    }
-
-    return composers;
-  }, []);
+  return Array.isArray(composers) ? composers : [];
 };
 
 // Updated utility function - replaces getEnabledFeatures

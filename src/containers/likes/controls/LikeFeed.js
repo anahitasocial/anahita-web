@@ -9,6 +9,7 @@ import UnlikeIcon from '@material-ui/icons/Favorite';
 import actions from '../../../actions';
 import NodeType from '../../../proptypes/Node';
 import i18n from '../../../languages';
+import likePerms from '../../../permissions/like';
 
 const LikesActionLikeStory = React.forwardRef(({
   repostNode,
@@ -31,10 +32,13 @@ const LikesActionLikeStory = React.forwardRef(({
   const label = liked ? i18n.t('actions:unlike') : i18n.t('actions:like');
   const onClick = liked ? handleUnlike : handleLike;
   const color = liked ? 'primary' : 'inherit';
+  // Unliking is always allowed; liking only when the server says so.
+  const disabled = !liked && !likePerms.canLike(node);
 
   return (
     <Button
       onClick={onClick}
+      disabled={disabled}
       color={color}
       aria-label={label}
       ref={ref}

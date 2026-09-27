@@ -27,6 +27,7 @@ import Lightbox from './Lightbox';
 import MediumForm from '../EditForm';
 
 import i18n from '../../../languages';
+import commentPerms from '../../../permissions/comment';
 import utils from '../../../utils';
 
 const { getURL } = utils.node;
@@ -169,7 +170,8 @@ const MediaStepperView = ({
         comments={
           <MediumComments
             parent={medium}
-            canAdd={isAuthenticated && medium.commentStatus}
+            canAdd={isAuthenticated && medium.commentStatus &&
+              commentPerms.canAdd(medium)}
             key={`${namespace}-comments-${medium.id}`}
             cardProps={{ variant: 'outlined' }}
           />

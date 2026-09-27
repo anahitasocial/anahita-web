@@ -11,6 +11,7 @@ import NodeType from '../../../proptypes/Node';
 import CommentType from '../../../proptypes/Comment';
 import CommentDefault from '../../../proptypes/CommentDefault';
 import i18n from '../../../languages';
+import likePerms from '../../../permissions/like';
 
 const LikesActionLikeComment = React.forwardRef(({
   node,
@@ -32,11 +33,14 @@ const LikesActionLikeComment = React.forwardRef(({
   const label = liked ? i18n.t('actions:unlike') : i18n.t('actions:like');
   const onClick = liked ? handleUnlike : handleLike;
   const color = liked ? 'primary' : 'inherit';
+  // Unliking is always allowed; liking only when the server says so.
+  const disabled = !liked && !likePerms.canLike(comment);
 
   return (
     <Button
       size="small"
       onClick={onClick}
+      disabled={disabled}
       color={color}
       aria-label={label}
       ref={ref}

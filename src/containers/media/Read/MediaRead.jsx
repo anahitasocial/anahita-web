@@ -16,6 +16,7 @@ import ControlDownload from '../../controls/medium/Download';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
+import commentPerms from '../../../permissions/comment';
 import utils from '../../../utils';
 
 const { getPortraitURL, getCoverURL } = utils.node;
@@ -40,7 +41,10 @@ const MediaReadView = ({
 }) => {
   const portrait = getPortraitURL(medium, 'large');
   const cover = getCoverURL(medium, 'large');
-  const canAddComment = isAuthenticated && medium.commentStatus;
+  // Open comments are not enough: the server answers whether this viewer
+  // may comment here, from the profile's access and permissions.
+  const canAddComment = isAuthenticated && medium.commentStatus &&
+    commentPerms.canAdd(medium);
 
   const mediumProps = {
     medium,

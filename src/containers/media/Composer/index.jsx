@@ -16,7 +16,6 @@ import ComposerDefault from './Default';
 import i18n from '../../../languages';
 import appIcons from '../../../components/AppIcons';
 import ActorType from '../../../proptypes/Actor';
-import PersonType from '../../../proptypes/Person';
 import utils from '../../../utils';
 
 const { form, node } = utils;
@@ -72,10 +71,9 @@ const COMPOSER_CONFIGS = {
 
 const Composers = ({
   actor,
-  viewer,
 }) => {
   const classes = useStyles();
-  const composers = node.getComposers(actor, viewer);
+  const composers = node.getComposers(actor);
   const [tab, setTab] = useState(composers[0]);
 
   if (composers.length === 0) {
@@ -129,7 +127,6 @@ const Composers = ({
 
 Composers.propTypes = {
   actor: ActorType.isRequired,
-  viewer: PersonType.isRequired,
 };
 
 export default Composers;

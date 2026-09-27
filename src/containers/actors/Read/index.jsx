@@ -81,7 +81,15 @@ const ActorsRead = (props) => {
   const canFollow = permissions.canFollow(actor, viewer);
 
   const showFollow = isAuthenticated && canFollow;
-  const showAddFollower = isAuthenticated && canAdminister && !utils.node.isPerson(actor);
+  // Adding somebody else to a group follows the group's own "Who can add a
+  // follower?" setting, which can include its followers — not only its
+  // administrators. The server answers it as authorized.addFollower; a
+  // response without it keeps the old rule.
+  const addFollowerAnswer = actor.authorized && actor.authorized.addFollower;
+  const canAddFollower = typeof addFollowerAnswer === 'boolean' ?
+    addFollowerAnswer :
+    canAdminister;
+  const showAddFollower = isAuthenticated && canAddFollower && !utils.node.isPerson(actor);
   const showCommands = isAuthenticated && canAdminister;
   const showEditNotifications = isAuthenticated && actor.isLeader;
   const showFollowRequests = isAuthenticated && canAdminister;
@@ -166,10 +174,7 @@ const ActorsRead = (props) => {
         admins={actor.administrators &&
           <Admins actor={actor} />}
         composers={isAuthenticated && actor.id && viewer.id &&
-          <Composers
-            actor={actor}
-            viewer={viewer}
-          />}
+          <Composers actor={actor} />}
         feed={actor.id &&
           <FeedActorBrowse
             actor={actor}

@@ -36,10 +36,7 @@ const DashboardPage = ({
           md={8}
         >
           {person.id &&
-            <Composers
-              actor={person}
-              viewer={viewer}
-            />}
+            <Composers actor={person} />}
         </Grid>
         <Grid
           item
