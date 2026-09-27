@@ -16,9 +16,14 @@ import PersonType from '../../../proptypes/Person';
 import form from '../../../utils/form';
 import i18n from '../../../languages';
 
+// Every field the form shows, pronouns included. PATCH /people/:id writes
+// every field it is given and clears the ones it is not, and a field only
+// reaches the request if it is declared here or was touched in this edit — so
+// an undeclared pronouns field was wiped by any save that did not change it.
 const formFields = form.createFormFields([
   'name',
   'body',
+  'personPronouns',
   'websiteUrl',
 ]);
 
