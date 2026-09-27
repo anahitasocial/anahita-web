@@ -44,4 +44,6 @@ export default shape({
   isAdministrated: bool,
   isLeader: bool,
   websiteUrl: string,
+  // When the installation featured this actor for onboarding, or absent.
+  featuredAt: string,
 });

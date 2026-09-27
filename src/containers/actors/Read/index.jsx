@@ -90,7 +90,9 @@ const ActorsRead = (props) => {
     addFollowerAnswer :
     canAdminister;
   const showAddFollower = isAuthenticated && canAddFollower && !utils.node.isPerson(actor);
-  const showCommands = isAuthenticated && canAdminister;
+  // Super administrators see the menu on every profile, for Feature, even
+  // where they do not administer the actor.
+  const showCommands = isAuthenticated && (canAdminister || permissions.canFeature(actor, viewer));
   const showEditNotifications = isAuthenticated && actor.isLeader;
   const showFollowRequests = isAuthenticated && canAdminister;
   const isViewer = actor.id === viewer.id;

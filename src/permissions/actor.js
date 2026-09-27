@@ -48,6 +48,13 @@ const canBlock = (actor, viewer) => {
   return utils.node.isPerson(actor) && actor.id !== viewer.id;
 };
 
+// Whether the viewer may feature an actor for onboarding. A statement by the
+// installation rather than by any one group's administrators, so super
+// administrators only — the same rule the server enforces.
+const canFeature = (actor, viewer) => {
+  return utils.node.isSuperAdmin(viewer) && Boolean(actor && actor.id);
+};
+
 const canNotificationSettings = (actor) => {
   return !isRegistered(actor) &&
   _.intersection(
@@ -74,6 +81,7 @@ export default {
   canDelete,
   canFollow,
   canBlock,
+  canFeature,
   canNotificationSettings,
   canViewCommands,
 };

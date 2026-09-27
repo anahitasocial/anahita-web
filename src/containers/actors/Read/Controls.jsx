@@ -5,6 +5,7 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import ControlBlock from '../../controls/Block';
+import ControlFeature from '../../controls/Feature';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -34,6 +35,7 @@ const ActorsReadControls = ({
 
   const showBlock = isAuthenticated && perms.canBlock(actor, viewer);
   const showEdit = perms.canEdit(actor);
+  const showFeature = isAuthenticated && perms.canFeature(actor, viewer);
 
   return (
     <>
@@ -62,6 +64,11 @@ const ActorsReadControls = ({
             actor={actor}
             key="actor-socialgraph-block"
             component="menuitem"
+          />}
+        {showFeature &&
+          <ControlFeature
+            actor={actor}
+            key="actor-featured"
           />}
         {showEdit &&
           <MenuItem
