@@ -3,5 +3,5 @@ export default {
   alias: '',
   email: '',
   personType: 'registered',
-  avatarURLs: {},
+  avatarUrls: {},
 };
