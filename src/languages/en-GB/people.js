@@ -85,6 +85,7 @@ export default {
       account: 'Account',
       security: 'Security',
       access: 'Access',
+      permissions: 'Permissions',
       administration: 'Administration',
       danger: 'Danger zone',
     },

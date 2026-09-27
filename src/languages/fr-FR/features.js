@@ -23,6 +23,8 @@ export default {
     addPermissions: {
       title: 'Autorisations',
       note: 'Qui peut publier une note ?',
+      article: 'Qui peut publier un article ?',
+      topic: 'Qui peut lancer un sujet ?',
       comment: 'Qui peut commenter ?',
       like: 'Qui peut aimer ?',
     },

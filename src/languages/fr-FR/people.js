@@ -79,6 +79,7 @@ export default {
       account: 'Compte',
       security: 'Sécurité',
       access: 'Accès',
+      permissions: 'Autorisations',
       administration: 'Administration',
       danger: 'Zone de danger',
     },

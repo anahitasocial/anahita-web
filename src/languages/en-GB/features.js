@@ -23,6 +23,8 @@ export default {
     addPermissions: {
       title: 'Permissions',
       note: 'Who can post a note?',
+      article: 'Who can post an article?',
+      topic: 'Who can start a topic?',
       comment: 'Who can comment?',
       like: 'Who can like?',
     },

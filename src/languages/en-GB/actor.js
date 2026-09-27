@@ -46,4 +46,46 @@ export default {
       error: 'Access could not be updated.',
     },
   },
+  permissions: {
+    title: 'Permissions',
+    cDescription: 'Who can post, comment and like here. Until these are saved, the site defaults apply.',
+    empty: 'Nothing here has permissions to set.',
+    restoreDefaults: 'Restore defaults',
+    // Per actor type, because "Admins" of a person is that person.
+    choices: {
+      person: {
+        registered: 'Anyone signed in',
+        followers: 'Followers',
+        leaders: 'Leaders',
+        mutuals: 'Mutuals',
+        admins: 'Only me',
+      },
+      group: {
+        registered: 'Anyone signed in',
+        followers: 'Followers',
+        admins: 'Admins',
+      },
+    },
+    // Shown under each choice in the open list — "Leaders" and "Mutuals"
+    // are the site's words, not everybody's.
+    descriptions: {
+      person: {
+        registered: 'Anyone with an account here.',
+        followers: 'People who follow you.',
+        leaders: 'People you follow.',
+        mutuals: 'People who follow you and whom you follow back.',
+        admins: 'Nobody else.',
+      },
+      group: {
+        registered: 'Anyone with an account here.',
+        followers: 'People who follow this group.',
+        admins: 'Administrators of this group.',
+      },
+    },
+    // Comments on a profile narrower than registered follow its access.
+    commentLocked: {
+      followers: 'Followers — this profile is visible to followers only.',
+      readers: 'Anyone who can see this profile, as set under Access.',
+    },
+  },
 };

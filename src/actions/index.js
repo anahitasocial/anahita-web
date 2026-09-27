@@ -60,6 +60,11 @@ namespaces.actors.forEach((namespace) => {
       access: createAction(`${namespace}_access`)(api.access),
       admins: createActorAdminsAction(`${namespace}_admins`)(api.admins),
       apps: createAction(`${namespace}_apps`)(api.apps),
+      // Under the actor's own namespace, not a `${namespace}_features` one:
+      // the response is the whole actor, and landing it as an ordinary
+      // EDIT_SUCCESS replaces the current actor in the store, so the
+      // composers and profile tabs that read actor.features follow the save.
+      features: createAction(namespace)({ edit: api.features.edit }),
     },
   };
 });

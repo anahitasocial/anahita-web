@@ -26,6 +26,10 @@ export const SECTIONS = {
   // section rather than erroring, which is the right way for a renamed tab to
   // age.
   ACCESS: 'access',
+  // Who can post, comment, like and add followers here. Its own tab rather
+  // than a second card under Access: Access is who can SEE the profile, this
+  // is who can ADD to it, and one tab holding both read as one setting.
+  PERMISSIONS: 'permissions',
   // Looking at somebody else's account as an administrator. Never the
   // viewer's own — see the notViewer flag below.
   ADMINISTRATION: 'administration',
@@ -46,6 +50,7 @@ export const ITEMS = {
   WEBAUTHN: 'webauthn',
   AUTHLOGS: 'authLogs',
   ACCESS: 'access',
+  PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
   REVOKE_PASSKEYS: 'revokePasskeys',
@@ -61,7 +66,8 @@ export const ITEMS = {
 // Verified per component rather than assumed:
 //
 //   own Card — auth/Password, auth/Email, auth/Username, auth/WebAuthn,
-//              auth/Totp (via TotpSteps), actors/Settings/Access
+//              auth/Totp (via TotpSteps), actors/Settings/Access,
+//              actors/Settings/Permissions
 //   bare     — auth/AuthLogs, people/Settings/Info, actors/Settings/Delete
 //
 // Access is a Card with no CardHeader, so it reads as untitled next to the
@@ -101,6 +107,14 @@ const ALL_SECTIONS = [
     key: SECTIONS.ACCESS,
     items: [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
+    ],
+  },
+  {
+    key: SECTIONS.PERMISSIONS,
+    // Not viewerOnly: an administrator can set these on somebody else's
+    // profile, and the server authorizes the edit the way it does Access.
+    items: [
+      { key: ITEMS.PERMISSIONS, bare: false, viewerOnly: false },
     ],
   },
   {
@@ -254,6 +268,8 @@ export const getGroupTabs = ({ canDelete, isAdmin }) => {
     { key: ITEMS.INFO, bare: true },
     { key: ITEMS.ADMINS, bare: true },
     { key: ITEMS.ACCESS, bare: false },
+    // Brings its own Card, like Access.
+    { key: ITEMS.PERMISSIONS, bare: false },
     // ONE Danger zone tab holding the three lifecycle actions, rather than
     // three tabs of their own.
     //

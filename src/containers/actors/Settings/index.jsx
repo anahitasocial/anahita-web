@@ -28,6 +28,7 @@ import Disable from './Disable';
 import Info from './Info';
 import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
+import Permissions from './Permissions';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -141,6 +142,7 @@ const ActorsSettings = ({
   const ActorAdmins = Admins(namespace);
   const ActorInfo = Info(namespace);
   const ActorAccess = Access(namespace);
+  const ActorPermissions = Permissions(namespace);
   const ActorDelete = Delete(namespace);
   const ActorArchive = Archive(namespace);
   const ActorDisable = Disable(namespace);
@@ -181,6 +183,7 @@ const ActorsSettings = ({
       [ITEMS.WEBAUTHN]: <WebAuthn />,
       [ITEMS.AUTHLOGS]: <AuthLogs personId={actor.id} />,
       [ITEMS.ACCESS]: <ActorAccess />,
+      [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the
       // admin counterparts of the viewer-scoped ones in Security, and
@@ -263,6 +266,7 @@ const ActorsSettings = ({
     [ITEMS.INFO]: <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
     [ITEMS.ACCESS]: <ActorAccess />,
+    [ITEMS.PERMISSIONS]: <ActorPermissions />,
     [ITEMS.DANGER]: (
       <>
         {groupDangerItems.map((item) => {
@@ -352,6 +356,7 @@ ActorsSettings.propTypes = {
     ITEMS.ADMINS,
     ITEMS.INFO,
     ITEMS.ACCESS,
+    ITEMS.PERMISSIONS,
     ITEMS.DANGER,
   ]),
 };

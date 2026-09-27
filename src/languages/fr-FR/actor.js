@@ -38,4 +38,42 @@ export default {
       error: "L'accès n'a pas pu être mis à jour.",
     },
   },
+  permissions: {
+    title: 'Autorisations',
+    cDescription: "Qui peut publier, commenter et aimer ici. Tant qu'elles ne sont pas enregistrées, les réglages par défaut du site s'appliquent.",
+    empty: "Il n'y a aucune autorisation à régler ici.",
+    restoreDefaults: 'Rétablir les valeurs par défaut',
+    choices: {
+      person: {
+        registered: 'Toute personne connectée',
+        followers: 'Abonnés',
+        leaders: 'Abonnements',
+        mutuals: 'Relations mutuelles',
+        admins: 'Moi uniquement',
+      },
+      group: {
+        registered: 'Toute personne connectée',
+        followers: 'Abonnés',
+        admins: 'Administrateurs',
+      },
+    },
+    descriptions: {
+      person: {
+        registered: 'Toute personne ayant un compte ici.',
+        followers: 'Les personnes qui vous suivent.',
+        leaders: 'Les personnes que vous suivez.',
+        mutuals: 'Les personnes qui vous suivent et que vous suivez en retour.',
+        admins: 'Personne d’autre.',
+      },
+      group: {
+        registered: 'Toute personne ayant un compte ici.',
+        followers: 'Les personnes abonnées à ce groupe.',
+        admins: 'Les administrateurs de ce groupe.',
+      },
+    },
+    commentLocked: {
+      followers: 'Abonnés — ce profil n’est visible que par ses abonnés.',
+      readers: 'Toute personne pouvant voir ce profil, selon le réglage Accès.',
+    },
+  },
 };
