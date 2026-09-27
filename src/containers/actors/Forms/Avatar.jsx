@@ -1,12 +1,12 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import withStyles from '@mui/styles/withStyles';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
 import NodeType from '../../../proptypes/Node';
 import utils from '../../../utils';
 import i18n from '../../../languages';
@@ -71,6 +71,7 @@ const ActorAvatarForm = ({
         className={classes.button}
         disabled={!canEdit || isFetching}
         onClick={handleOpen}
+        size="large"
       >
         <Avatar
           aria-label={getActorName(node)}

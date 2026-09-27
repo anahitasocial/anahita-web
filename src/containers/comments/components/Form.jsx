@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import CommentType from '../../../proptypes/Comment';

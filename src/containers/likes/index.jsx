@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogActions from '@material-ui/core/DialogActions';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogActions from '@mui/material/DialogActions';
 
-import LikeIcon from '@material-ui/icons/Favorite';
+import LikeIcon from '@mui/icons-material/Favorite';
 
 import LikesBrowse from './Browse';
 import CommentType from '../../proptypes/Comment';

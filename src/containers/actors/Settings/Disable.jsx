@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { singularize } from 'inflection';
 
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
 
 import api from '../../../api';
 import utils from '../../../utils';

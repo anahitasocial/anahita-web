@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
+import withStyles from '@mui/styles/withStyles';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 
 import ViewerType from '../proptypes/Viewer';
 import utils from '../utils';

@@ -1,18 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -281,6 +281,7 @@ const OAuthClientForm = ({
               </Typography>
             </Box> :
             <TextField
+              variant="standard"
               className={classes.field}
               name="clientId"
               label={i18n.t('settings:oauthClients.fields.clientId')}
@@ -301,6 +302,7 @@ const OAuthClientForm = ({
             />}
 
           <TextField
+            variant="standard"
             className={classes.field}
             name="name"
             label={i18n.t('settings:oauthClients.fields.name')}
@@ -314,6 +316,7 @@ const OAuthClientForm = ({
           />
 
           <TextField
+            variant="standard"
             className={classes.field}
             name="redirectUris"
             label={i18n.t('settings:oauthClients.fields.redirectUris')}
@@ -383,6 +386,7 @@ const OAuthClientForm = ({
             </Typography>}
 
           <TextField
+            variant="standard"
             className={classes.field}
             name="tokenExpiry"
             label={i18n.t('settings:oauthClients.fields.tokenExpiry')}

@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 
-import AboutIcon from '@material-ui/icons/Info';
+import AboutIcon from '@mui/icons-material/Info';
 
 import i18n from '../../languages';
 import NodeInfoType from '../../proptypes/NodeInfo';

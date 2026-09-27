@@ -1,15 +1,15 @@
 import React from 'react';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
-import WebsiteIcon from '@material-ui/icons/Web';
+import WebsiteIcon from '@mui/icons-material/Web';
 
 import i18n from '../../../languages';
 import Player from '../../../components/Player';

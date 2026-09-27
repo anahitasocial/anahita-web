@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CardHeader from '@material-ui/core/CardHeader';
-import Divider from '@material-ui/core/Divider';
-import Link from '@material-ui/core/Link';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
 
 import ActorAvatar from './ActorAvatar';
 import NodeType from '../proptypes/Node';

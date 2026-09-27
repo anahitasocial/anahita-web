@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 
 import { Locations as LOCATION } from '../../../constants';
 import LocationType from '../../../proptypes/Location';

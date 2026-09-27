@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Link from '@material-ui/core/Link';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Link from '@mui/material/Link';
 
 import MediumCard from '../../../components/MediumCard';
 import ActorAvatar from '../../../components/ActorAvatar';

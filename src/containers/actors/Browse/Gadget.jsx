@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import Browse from './index';
 import { Actor as ACTOR } from '../../../constants';

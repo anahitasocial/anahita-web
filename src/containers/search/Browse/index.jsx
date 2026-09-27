@@ -4,22 +4,22 @@ import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { geolocated } from 'react-geolocated';
 import queryString from 'query-string';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import AppBar from '@material-ui/core/AppBar';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import Select from '@material-ui/core/Select';
-import Slider from '@material-ui/core/Slider';
-import Switch from '@material-ui/core/Switch';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@mui/material/AppBar';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormGroup from '@mui/material/FormGroup';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select from '@mui/material/Select';
+import Slider from '@mui/material/Slider';
+import Switch from '@mui/material/Switch';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Toolbar from '@mui/material/Toolbar';
 
-import AllInclusiveIcon from '@material-ui/icons/AllInclusive';
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 import SearchList from './SearchList';
 import { Search as SEARCH } from '../../../constants';
@@ -125,6 +125,7 @@ const Search = ({
                 {i18n.t('search:sort')}
               </InputLabel>
               <Select
+                variant="standard"
                 labelId="search-sort-label"
                 id="search-sort-select"
                 value={sort}

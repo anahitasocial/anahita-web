@@ -2,12 +2,12 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import Typography from '@material-ui/core/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import Typography from '@mui/material/Typography';
 
 import Avatar from '../../components/ActorAvatar';
 

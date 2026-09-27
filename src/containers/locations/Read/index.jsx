@@ -2,15 +2,14 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
-import withWidth from '@material-ui/core/withWidth';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
-import LocationIcon from '@material-ui/icons/LocationOn';
+import LocationIcon from '@mui/icons-material/LocationOn';
 
 import LocationMenu from '../Menu';
 import LocationForm from './EditForm';
@@ -261,4 +260,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withWidth()(LocationsRead));
+)(LocationsRead);

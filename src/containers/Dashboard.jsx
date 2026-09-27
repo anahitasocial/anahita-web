@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 
-import Grid from '@material-ui/core/Grid';
+import Grid from '@mui/material/Grid';
 
 import CompleteProfileCard from './dashboard/CompleteProfileCard';
 import Composers from './media/Composer';

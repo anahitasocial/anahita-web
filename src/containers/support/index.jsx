@@ -1,23 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
-import SupportIcon from '@material-ui/icons/ContactSupport';
-import EmailIcon from '@material-ui/icons/Email';
-import PhoneIcon from '@material-ui/icons/Phone';
-import WebsiteIcon from '@material-ui/icons/Language';
-import TermsIcon from '@material-ui/icons/Description';
-import PolicyIcon from '@material-ui/icons/Policy';
+import SupportIcon from '@mui/icons-material/ContactSupport';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import WebsiteIcon from '@mui/icons-material/Language';
+import TermsIcon from '@mui/icons-material/Description';
+import PolicyIcon from '@mui/icons-material/Policy';
 
 import HeaderMeta from '../../components/HeaderMeta';
 import api from '../../api';

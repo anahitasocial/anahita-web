@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Switch from '@material-ui/core/Switch';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Switch from '@mui/material/Switch';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 
-import KeyIcon from '@material-ui/icons/VpnKey';
+import KeyIcon from '@mui/icons-material/VpnKey';
 
 import i18n from '../../../languages';
 import OAuthSigningKeysType from '../../../proptypes/OAuthSigningKeys';

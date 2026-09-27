@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import RepostIcon from '@material-ui/icons/Repeat';
+import Button from '@mui/material/Button';
+import RepostIcon from '@mui/icons-material/Repeat';
 
 import api from '../../api';
 import NodeType from '../../proptypes/Node';

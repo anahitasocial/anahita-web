@@ -1,24 +1,24 @@
 import React from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import { Link } from 'react-router-dom';
 
-import DocumentsIcon from '@material-ui/icons/PictureAsPdf';
-import NotesIcon from '@material-ui/icons/Note';
-import PhotosIcon from '@material-ui/icons/Photo';
-import TopicsIcon from '@material-ui/icons/QuestionAnswer';
-import ArticlesIcon from '@material-ui/icons/LibraryBooks';
+import DocumentsIcon from '@mui/icons-material/PictureAsPdf';
+import NotesIcon from '@mui/icons-material/Note';
+import PhotosIcon from '@mui/icons-material/Photo';
+import TopicsIcon from '@mui/icons-material/QuestionAnswer';
+import ArticlesIcon from '@mui/icons-material/LibraryBooks';
 
 import i18n from '../../languages';
 

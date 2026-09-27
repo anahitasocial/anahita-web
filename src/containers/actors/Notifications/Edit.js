@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { singularize } from 'inflection';
 import { useParams } from 'react-router-dom';
 
-import CardContent from '@material-ui/core/CardContent';
+import CardContent from '@mui/material/CardContent';
 
 import actions from '../../../actions';
 import apis from '../../../api';

@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
 
 import InfoForm from './InfoForm';
 import InfoRead from './InfoRead';

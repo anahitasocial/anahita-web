@@ -1,19 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
-import CssBaseline from '@material-ui/core/CssBaseline';
+import { useTheme } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import CssBaseline from '@mui/material/CssBaseline';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import AppBar from '@material-ui/core/AppBar';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import MenuIcon from '@material-ui/icons/Menu';
-import Toolbar from '@material-ui/core/Toolbar';
+import AppBar from '@mui/material/AppBar';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Drawer from '@mui/material/Drawer';
+import Hidden from '@mui/material/Hidden';
+import MenuIcon from '@mui/icons-material/Menu';
+import Toolbar from '@mui/material/Toolbar';
 
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 import SearchBox from '../components/SearchBox';
 
 import Viewer from '../components/AuthViewer';
@@ -62,7 +63,7 @@ const useStyles = makeStyles((theme) => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'flex-start',
-      padding: `0 ${theme.spacing(2)}px`,
+      padding: `0 ${theme.spacing(2)}`,
       ...theme.mixins.toolbar,
     },
     viewer: {
@@ -77,7 +78,7 @@ const useStyles = makeStyles((theme) => {
     // Below lg the page runs edge to edge; from lg up the Container's own
     // maxWidth and gutters take over.
     container: {
-      [theme.breakpoints.down('md')]: {
+      [theme.breakpoints.down('lg')]: {
         paddingLeft: 0,
         paddingRight: 0,
       },
@@ -150,6 +151,7 @@ const App = ({
             edge="start"
             onClick={handleDrawerToggle}
             className={classes.menuButton}
+            size="large"
           >
             <MenuIcon />
           </IconButton>
@@ -180,7 +182,7 @@ const App = ({
             {drawer()}
           </Drawer>
         </Hidden>
-        <Hidden mdDown implementation="css">
+        <Hidden lgDown implementation="css">
           <Drawer
             classes={{
               paper: classes.drawerPaper,

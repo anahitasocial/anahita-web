@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import ReactMarkdown from 'react-markdown';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import _ from 'lodash';
 import path from 'path';
 

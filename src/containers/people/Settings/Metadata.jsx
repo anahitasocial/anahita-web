@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
-import MetadataIcon from '@material-ui/icons/PermIdentity';
+import MetadataIcon from '@mui/icons-material/PermIdentity';
 
 import api from '../../../api';
 import i18n from '../../../languages';

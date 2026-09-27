@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
 import actions from '../../actions';
 import ActorType from '../../proptypes/Actor';

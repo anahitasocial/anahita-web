@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Switch from '@material-ui/core/Switch';
+import FormLabel from '@mui/material/FormLabel';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Switch from '@mui/material/Switch';
 
 import i18n from '../../../languages';
 
@@ -22,7 +22,7 @@ const ActorsNotificationsForm = (props) => {
 
   return (
     <>
-      <FormControl margin="normal" fullWidth>
+      <FormControl variant="standard" margin="normal" fullWidth>
         <FormLabel component="legend">
           {i18n.t(`${namespace}:notifications.optionsTitle`)}
         </FormLabel>

@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
 
 import LocationForm from './AddForm';
 import api from '../../../api';

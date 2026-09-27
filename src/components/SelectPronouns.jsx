@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 import i18n from '../languages';
 
@@ -24,7 +24,7 @@ const SelectPronouns = ({
   const list = Array.isArray(options) ? options : [];
 
   return (
-    <Select {...props} value={value} displayEmpty>
+    <Select variant="standard" {...props} value={value} displayEmpty>
       {/* Unset is a real answer and the default one. Most people will leave it
           alone, and an empty pronouns field renders nothing beside their name. */}
       <MenuItem value="">

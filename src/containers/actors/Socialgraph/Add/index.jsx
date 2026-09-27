@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import makeStyles from '@mui/styles/makeStyles';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
 
-import Button from '@material-ui/core/Button';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 
 import ActorType from '../../../../proptypes/Actor';
 import i18n from '../../../../languages';
@@ -56,6 +56,7 @@ const ActorsSocialgraphAdd = ({
               float: 'right',
             }}
             className={classes.closeButton}
+            size="large"
           >
             <CloseIcon />
           </IconButton>

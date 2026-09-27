@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import List from '@material-ui/core/List';
-import FormControl from '@material-ui/core/FormControl';
-import TextField from '@material-ui/core/TextField';
+import makeStyles from '@mui/styles/makeStyles';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import List from '@mui/material/List';
+import FormControl from '@mui/material/FormControl';
+import TextField from '@mui/material/TextField';
 
 import ListItem from './ListItem';
 import LocationsType from '../../../proptypes/Locations';
@@ -100,7 +100,7 @@ const LocationsList = ({
       {...cardProps}
     >
       <CardContent>
-        <FormControl fullWidth>
+        <FormControl variant="standard" fullWidth>
           <TextField
             name="keyword"
             value={keyword}

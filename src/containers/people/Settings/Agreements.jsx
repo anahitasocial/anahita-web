@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
+import makeStyles from '@mui/styles/makeStyles';
 
 // The same MenuBook the left menu uses for Legal. A gavel was the
 // earlier choice here and the wrong one twice over: it had already
 // been replaced for the legal pages, and it pictures a court rather
 // than a document somebody read and agreed to.
-import AgreementsIcon from '@material-ui/icons/MenuBook';
+import AgreementsIcon from '@mui/icons-material/MenuBook';
 
 import api from '../../../api';
 import i18n from '../../../languages';

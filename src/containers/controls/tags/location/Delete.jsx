@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
-import IconButton from '@material-ui/core/IconButton';
-import RemoveIcon from '@material-ui/icons/Remove';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 import TagType from '../../../../proptypes/Location';
 import NodeType from '../../../../proptypes/Node';
@@ -39,6 +39,7 @@ const ControlsTagsLocationDelete = React.forwardRef((props, ref) => {
             console.error(err);
           });
       }}
+      size="large"
     >
       {!isWaiting && <RemoveIcon />}
       {isWaiting && <CircularProgress size={20} />}

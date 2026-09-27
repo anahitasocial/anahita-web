@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
 
 import PersonInfoFields from './InfoFields';
 import PersonType from '../../../proptypes/Person';
@@ -57,6 +57,7 @@ const PersonInfo = ({
             InfoRead.jsx still DISPLAYS the role, correctly, off personType.
             Reading it was never the broken half. */}
         <TextField
+          variant="standard"
           name="websiteUrl"
           value={person.websiteUrl || ''}
           onChange={handleOnChange}

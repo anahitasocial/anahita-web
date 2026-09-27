@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import axios from 'axios';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CircularProgress from '@mui/material/CircularProgress';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
 
 import ActorAvatar from '../../../../components/ActorAvatar';
 import ActorType from '../../../../proptypes/Actor';
@@ -70,7 +70,7 @@ const ActorsSettingsAdminsAdd = (props) => {
       onChange={(event, admin) => {
         addAdmin({ actor, admin });
       }}
-      getOptionSelected={(option, value) => {
+      isOptionEqualToValue={(option, value) => {
         return option.name === value.name;
       }}
       getOptionLabel={(option) => {
@@ -82,9 +82,10 @@ const ActorsSettingsAdminsAdd = (props) => {
       }}
       options={options}
       loading={isFetching}
-      renderOption={(admin) => {
+      renderOption={(optionProps, admin) => {
+        const { key, ...rest } = optionProps;
         return (
-          <>
+          <li key={key} {...rest}>
             <ListItemAvatar>
               <ActorAvatar
                 actor={admin}
@@ -94,12 +95,13 @@ const ActorsSettingsAdminsAdd = (props) => {
             <ListItemText
               primary={getActorName(admin)}
             />
-          </>
+          </li>
         );
       }}
       renderInput={(params) => {
         return (
           <TextField
+            variant="standard"
             {...params}
             label="Add Admins"
             value={keyword}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 import { Person as PERSON } from '../constants';
 import i18n from '../languages';
@@ -19,7 +19,13 @@ const SelectPersontype = ({
   ...props
 }) => {
   return (
-    <Select {...props} disabled={disabled} required={required} value={value}>
+    <Select
+      variant="standard"
+      {...props}
+      disabled={disabled}
+      required={required}
+      value={value}
+    >
       <MenuItem>
         All
       </MenuItem>

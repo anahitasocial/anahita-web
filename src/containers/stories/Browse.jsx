@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import CommentIcon from '@material-ui/icons/Comment';
+import CommentIcon from '@mui/icons-material/Comment';
 
 import CommentsBrowse from './comments/Browse';
 import actions from '../../actions';

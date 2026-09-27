@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import permissions from '../../permissions/medium';
 import utils from '../../utils';
@@ -60,6 +60,7 @@ const MediaMenu = ({
         aria-owns={menuAnchorEl ? `medium-card-menu-${medium.id}` : undefined}
         aria-haspopup="true"
         onClick={handleOpenMenu}
+        size="large"
       >
         <MoreVertIcon />
       </IconButton>

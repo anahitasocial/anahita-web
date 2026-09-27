@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import makeStyles from '@mui/styles/makeStyles';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-import GroupsIcon from '@material-ui/icons/GroupWork';
-import PeopleIcon from '@material-ui/icons/People';
+import GroupsIcon from '@mui/icons-material/GroupWork';
+import PeopleIcon from '@mui/icons-material/People';
 
 import Browse from './Browse';
 import BrowseHeader from '../../components/BrowseHeader';

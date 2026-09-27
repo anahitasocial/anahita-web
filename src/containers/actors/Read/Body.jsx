@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import withStyles from '@mui/styles/withStyles';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';

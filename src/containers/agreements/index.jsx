@@ -5,11 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
-import Alert from '@material-ui/lab/Alert';
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Container from '@mui/material/Container';
+import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import AgreementCard from './AgreementCard';
 import ViewerType from '../../proptypes/Viewer';

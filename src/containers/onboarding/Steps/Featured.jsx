@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import CardContent from '@material-ui/core/CardContent';
-import Checkbox from '@material-ui/core/Checkbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import CardContent from '@mui/material/CardContent';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import ActorType from '../../../proptypes/Actor';

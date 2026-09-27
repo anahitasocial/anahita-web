@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Container from '@material-ui/core/Container';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
 
-import NotificationsIcon from '@material-ui/icons/Notifications';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import NotificationsList from './List';
 

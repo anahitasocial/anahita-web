@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import api from '../../../api';
 import form from '../../../utils/form';
 import i18n from '../../../languages';

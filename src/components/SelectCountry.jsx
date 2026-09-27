@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 import { CountryRegionData } from 'react-country-region-selector';
 
 const SelectCountry = ({
@@ -10,7 +10,7 @@ const SelectCountry = ({
   ...props
 }) => {
   return (
-    <Select {...props} disabled={disabled} required={required}>
+    <Select variant="standard" {...props} disabled={disabled} required={required}>
       {CountryRegionData.map((option) => {
         const key = `country_${option[0]}`;
         return (

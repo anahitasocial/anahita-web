@@ -51,7 +51,7 @@ each built, tested and looked at before the next.
 | step | state | commit |
 | --- | --- | --- |
 | 0. Check this plan against the MCP docs | ✅ | (this commit) |
-| 1. v5, Emotion, codemods, theme | ⬜ | |
+| 1. v5, Emotion, codemods, theme | ✅ | (step 1 commit) |
 | 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ⬜ | |
 | 3. v6 | ⬜ | |
 | 4. v7 | ⬜ | |
@@ -249,6 +249,26 @@ The bulk of the work: 72 files.
 
 To be filled in as they happen, e.g. `ListItemIcon` min-width 56px → 36px
 in v9, and Tabs/Menu roving tabindex.
+
+- v5: Menus open below their anchor instead of over it, and the alert
+  Snackbar sits bottom left on desktop instead of bottom centre. Both follow
+  the Material guidelines; restoring them per component wasn't worth it.
+- v5: the photo strip (`stories/components/GridList.jsx`) is a scrolling
+  flex row, because v5's grid-based ImageList can't show 1.1 columns.
+
+## Notes from running the plan
+
+- Lint baseline on `main`: 43 problems (unresolved imports in unused files
+  and a parse error in `registerServiceWorker.js`). "Lint passes" means no
+  problems beyond these.
+- The codemods write `size="large">` on the prop's line; `eslint --fix`
+  (only `react/jsx-closing-bracket-location` fires) puts them back.
+- `v5.0.0/preset-safe` renamed the local `./GridList` import in
+  `stories/components/PhotoAdd.jsx` to `./ImageList`; restored by hand.
+- After changing dependencies, clear `node_modules/.cache` or CRA's cached
+  lint reports `import/no-extraneous-dependencies` for the new packages.
+- No browser in the session that ran steps 1–5, so the visual check is done
+  afterwards by a person, one step commit at a time.
 
 ## Visual check (every step)
 

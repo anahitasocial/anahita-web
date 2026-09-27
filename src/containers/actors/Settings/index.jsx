@@ -3,16 +3,16 @@ import PropTypes from 'prop-types';
 import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import Box from '@material-ui/core/Box';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-import InfoIcon from '@material-ui/icons/Info';
-import AdminsIcon from '@material-ui/icons/SupervisorAccount';
-import DisableIcon from '@material-ui/icons/Block';
-import ArchiveIcon from '@material-ui/icons/Archive';
-import DeleteIcon from '@material-ui/icons/DeleteForever';
-import DangerIcon from '@material-ui/icons/Warning';
+import InfoIcon from '@mui/icons-material/Info';
+import AdminsIcon from '@mui/icons-material/SupervisorAccount';
+import DisableIcon from '@mui/icons-material/Block';
+import ArchiveIcon from '@mui/icons-material/Archive';
+import DeleteIcon from '@mui/icons-material/DeleteForever';
+import DangerIcon from '@mui/icons-material/Warning';
 import ActorSettingCard from '../../../components/ActorSetting';
 
 import Admins from './admins/Browse';
@@ -229,7 +229,7 @@ const ActorsSettings = ({
       <>
         <Tabs
           variant="scrollable"
-          scrollButtons="on"
+          scrollButtons
           value={section.key}
           onChange={(e, newSection) => {
             // push, not replace: the back button should walk the sections the
@@ -237,6 +237,7 @@ const ActorsSettings = ({
             navigate(`/people/${params.id}/settings/${newSection}`);
           }}
           aria-label={i18n.t('commons:settings')}
+          allowScrollButtonsMobile
         >
           {sections.map((entry) => {
             return (
@@ -321,12 +322,13 @@ const ActorsSettings = ({
     <>
       <Tabs
         variant="scrollable"
-        scrollButtons="on"
+        scrollButtons
         value={activeTab.key}
         onChange={(e, newTab) => {
           setTab(newTab);
         }}
         aria-label={i18n.t('commons:settings')}
+        allowScrollButtonsMobile
       >
         {groupTabs.map((entry) => {
           return (

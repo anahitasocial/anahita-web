@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { singularize } from 'inflection';
 
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import StepUp from '../../auth/StepUp';
 import api from '../../../api';

@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 
-import PublicIcon from '@material-ui/icons/Public';
-import PrivateIcon from '@material-ui/icons/VpnLock';
+import PublicIcon from '@mui/icons-material/Public';
+import PrivateIcon from '@mui/icons-material/VpnLock';
 
 import actions from '../../../actions';
 import i18n from '../../../languages';
@@ -66,6 +66,7 @@ const ControlsMediumAccess = ({
         aria-haspopup="true"
         onClick={handleOpenMenu}
         disabled={waiting}
+        size="large"
       >
         {isPublic && <PublicIcon fontSize={size} />}
         {!isPublic && <PrivateIcon fontSize={size} />}

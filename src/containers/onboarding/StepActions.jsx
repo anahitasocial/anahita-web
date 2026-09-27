@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Link from '@material-ui/core/Link';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+import Link from '@mui/material/Link';
 
 import i18n from '../../languages';
 

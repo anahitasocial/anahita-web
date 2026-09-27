@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 
 import { Medium as MEDIUM } from '../../../../constants';
 import MediumType from '../../../../proptypes/Medium';

@@ -1,12 +1,12 @@
 import React from 'react';
 import Img from 'react-image';
 import PropTypes from 'prop-types';
-import { withStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import ImageList from '@material-ui/core/ImageList';
-import ImageListItem from '@material-ui/core/ImageListItem';
-import ImageListItemBar from '@material-ui/core/ImageListItemBar';
-import Link from '@material-ui/core/Link';
+import withStyles from '@mui/styles/withStyles';
+import CircularProgress from '@mui/material/CircularProgress';
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import Link from '@mui/material/Link';
 import MediaType from '../../proptypes/Media';
 import utils from '../../utils';
 
@@ -17,11 +17,18 @@ const {
 
 const styles = (theme) => {
   return {
+    // v5's ImageList is a CSS grid, which can't show 1.1 columns; lay the
+    // strip out as a row that scrolls sideways instead.
     imageList: {
+      display: 'flex',
       flexWrap: 'nowrap',
+      overflowX: 'auto',
       // Promote the list into his own layer on Chrome.
       // This cost memory but helps keeping high FPS.
       transform: 'translateZ(0)',
+    },
+    item: {
+      flex: '0 0 91%',
     },
     title: {
       color: theme.palette.white,
@@ -40,7 +47,6 @@ function SingleLineImageList(props) {
     <>
       <ImageList
         className={classes.imageList}
-        cols={1.1}
         gap={1}
         rowHeight={320}
       >
@@ -48,7 +54,10 @@ function SingleLineImageList(props) {
           const src = getPortraitURL(photo);
           const url = getURL(photo);
           return (
-            <ImageListItem key={`gridlist-photo-${photo.id}`}>
+            <ImageListItem
+              key={`gridlist-photo-${photo.id}`}
+              className={classes.item}
+            >
               <Link href={url}>
                 <Img
                   src={src}

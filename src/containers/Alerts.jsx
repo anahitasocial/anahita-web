@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Snackbar from '@material-ui/core/Snackbar';
-import MuiAlert from '@material-ui/lab/Alert';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
 
 import actions from '../actions';
 

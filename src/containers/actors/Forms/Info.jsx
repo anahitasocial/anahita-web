@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
 
 import i18n from '../../../languages';
 import ActorType from '../../../proptypes/Actor';
@@ -27,6 +27,7 @@ const ActorFormsInfo = ({
       <CardContent>
         {enabled}
         <TextField
+          variant="standard"
           name="name"
           value={actor.name}
           onChange={handleOnChange}
@@ -42,6 +43,7 @@ const ActorFormsInfo = ({
           required
         />
         <TextField
+          variant="standard"
           name="body"
           value={actor.body || ''}
           onChange={handleOnChange}
@@ -58,6 +60,7 @@ const ActorFormsInfo = ({
           required
         />
         <TextField
+          variant="standard"
           name="websiteUrl"
           value={actor.websiteUrl || ''}
           onChange={handleOnChange}

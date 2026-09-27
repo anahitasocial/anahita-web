@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
-// import BlogsIcon from '@material-ui/icons/RssFeedOutlined';
-import HomeIcon from '@material-ui/icons/Home';
-import PeopleIcon from '@material-ui/icons/People';
-import GroupsIcon from '@material-ui/icons/GroupWork';
-import NotesIcon from '@material-ui/icons/Note';
-import PhotosIcon from '@material-ui/icons/Photo';
-import TopicsIcon from '@material-ui/icons/QuestionAnswer';
-import ArticlesIcon from '@material-ui/icons/LibraryBooks';
+// import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
+import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
+import GroupsIcon from '@mui/icons-material/GroupWork';
+import NotesIcon from '@mui/icons-material/Note';
+import PhotosIcon from '@mui/icons-material/Photo';
+import TopicsIcon from '@mui/icons-material/QuestionAnswer';
+import ArticlesIcon from '@mui/icons-material/LibraryBooks';
 // ExitToApp, not LockOpen.
 //
 // An open padlock pictures an account that is NOT secured, which is the
@@ -21,15 +21,15 @@ import ArticlesIcon from '@material-ui/icons/LibraryBooks';
 // Password card whose icon is a closed Lock, so the pair read as a
 // state toggle between secure and insecure rather than as an action.
 // A door with an arrow through it says leave.
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import LabelIcon from '@material-ui/icons/Label';
-import LocationIcon from '@material-ui/icons/LocationOn';
-import SettingsIcon from '@material-ui/icons/Settings';
-import SignupRequestsIcon from '@material-ui/icons/HowToReg';
-import InvitesIcon from '@material-ui/icons/MailOutline';
-import LegalIcon from '@material-ui/icons/MenuBook';
-import SupportIcon from '@material-ui/icons/ContactSupport';
-import AboutIcon from '@material-ui/icons/Info';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import LabelIcon from '@mui/icons-material/Label';
+import LocationIcon from '@mui/icons-material/LocationOn';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SignupRequestsIcon from '@mui/icons-material/HowToReg';
+import InvitesIcon from '@mui/icons-material/MailOutline';
+import LegalIcon from '@mui/icons-material/MenuBook';
+import SupportIcon from '@mui/icons-material/ContactSupport';
+import AboutIcon from '@mui/icons-material/Info';
 
 import { Link, useLocation } from 'react-router-dom';
 

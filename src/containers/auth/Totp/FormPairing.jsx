@@ -1,10 +1,10 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
-import Box from '@material-ui/core/Box';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import { Totp as TOTP } from '../../../constants';
 import i18n from '../../../languages';
@@ -60,6 +60,7 @@ const TOTPFormPairing = ({
         {i18n.t('auth:totp.qrCode.passcode.title')}
       </Typography>
       <TextField
+        variant="standard"
         autoFocus
         type="text"
         name="passcode"

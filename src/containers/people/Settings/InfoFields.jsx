@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 
 import PersonType from '../../../proptypes/Person';
 import { Person as PERSON } from '../../../constants';
@@ -34,6 +34,7 @@ const PersonInfoFields = ({
   return (
     <>
       <TextField
+        variant="standard"
         name="name"
         value={person.name || ''}
         onChange={handleOnChange}
@@ -50,6 +51,7 @@ const PersonInfoFields = ({
         required
       />
       <TextField
+        variant="standard"
         name="body"
         value={person.body || ''}
         onChange={handleOnChange}
@@ -65,7 +67,7 @@ const PersonInfoFields = ({
         }}
         required
       />
-      <FormControl margin="normal" fullWidth>
+      <FormControl variant="standard" margin="normal" fullWidth>
         <InputLabel id="pronouns-label" shrink>
           {i18n.t('people:person.pronouns')}
         </InputLabel>

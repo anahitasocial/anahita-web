@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Link from '@material-ui/core/Link';
+import withStyles from '@mui/styles/withStyles';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Link from '@mui/material/Link';
 
 import StoryMessage from './StoryMessage';
 import ActorAvatar from '../../../components/actor/Avatar';

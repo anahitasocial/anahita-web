@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import TextField from '@material-ui/core/TextField';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import TextField from '@mui/material/TextField';
 
-import LoginIcon from '@material-ui/icons/Person';
+import LoginIcon from '@mui/icons-material/Person';
 
 import i18n from '../../../languages';
 import { Totp as TOTP } from '../../../constants';
@@ -46,6 +46,7 @@ const TotpForm = (props) => {
             {i18n.t('auth:totp.verify.cDesc')}
           </Typography>
           <TextField
+            variant="standard"
             autoFocus
             name="passcode"
             value={passcode.value}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import { Totp as TOTP } from '../../../constants';
 import i18n from '../../../languages';
@@ -20,6 +20,7 @@ const TOTPFormPassword = ({
         {i18n.t('auth:totp.password.title')}
       </Typography>
       <TextField
+        variant="standard"
         type="password"
         name="password"
         value={password.value}

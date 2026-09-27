@@ -1,12 +1,12 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import PropTypes from 'prop-types';
 
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import i18n from '../../../languages';
 

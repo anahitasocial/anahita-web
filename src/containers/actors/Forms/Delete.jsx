@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import ActorType from '../../../proptypes/Actor';
 import { Actor as ACTOR } from '../../../constants';
@@ -210,6 +210,7 @@ const ActorDeleteForm = (props) => {
             As the label it stays visible above the text for the whole time it
             is being followed. */}
         <TextField
+          variant="standard"
           name="alias"
           onChange={handleOnChange}
           label={i18n.t('actor:delete.prompts.challenge', {

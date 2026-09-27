@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogActions from '@material-ui/core/DialogActions';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogActions from '@mui/material/DialogActions';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 
 import WebAuthnCredentialType from '../../../proptypes/WebAuthnCredential';
 

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { alpha, makeStyles } from '@material-ui/core/styles';
-import SearchIcon from '@material-ui/icons/Search';
-import InputBase from '@material-ui/core/InputBase';
+import { alpha } from '@mui/material/styles';
+import makeStyles from '@mui/styles/makeStyles';
+import SearchIcon from '@mui/icons-material/Search';
+import InputBase from '@mui/material/InputBase';
 import i18n from '../languages';
 
 const useStyles = makeStyles((theme) => {

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import inflector from 'inflector-js';
 import _ from 'lodash';
 
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import ArticleForm from './Forms/Article';
 import FileForm from './Forms/File';

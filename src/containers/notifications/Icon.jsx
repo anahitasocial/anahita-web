@@ -1,8 +1,8 @@
 /* eslint-disable no-undef */
 import React, { useEffect, useState } from 'react';
-import Badge from '@material-ui/core/Badge';
-import Icon from '@material-ui/icons/Notifications';
-import ErrorIcon from '@material-ui/icons/Error';
+import Badge from '@mui/material/Badge';
+import Icon from '@mui/icons-material/Notifications';
+import ErrorIcon from '@mui/icons-material/Error';
 import api from '../../api';
 
 let interval = null;

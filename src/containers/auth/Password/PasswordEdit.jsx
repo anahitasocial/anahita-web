@@ -2,21 +2,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Divider from '@material-ui/core/Divider';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import InputAdornment from '@material-ui/core/InputAdornment';
-import IconButton from '@material-ui/core/IconButton';
-import Visibility from '@material-ui/icons/Visibility';
-import VisibilityOff from '@material-ui/icons/VisibilityOff';
-import PasswordIcon from '@material-ui/icons/Lock';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Divider from '@mui/material/Divider';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import PasswordIcon from '@mui/icons-material/Lock';
 
 import i18n from '../../../languages';
 import { Password as PASSWORD } from '../../../constants';
@@ -108,6 +108,7 @@ const PasswordEdit = ({
                         edge="end"
                         disabled={submitting}
                         tabIndex={-1}
+                        size="large"
                       >
                         {showNewPassword ? <VisibilityOff /> : <Visibility />}
                       </IconButton>

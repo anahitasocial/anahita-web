@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
-import Container from '@material-ui/core/Container';
-import Paper from '@material-ui/core/Paper';
-import Tab from '@material-ui/core/Tab';
-import Tabs from '@material-ui/core/Tabs';
+import Container from '@mui/material/Container';
+import Paper from '@mui/material/Paper';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 
 import HeaderMeta from '../../components/HeaderMeta';
 import i18n from '../../languages';

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
+import makeStyles from '@mui/styles/makeStyles';
 import { useParams } from 'react-router-dom';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 import i18n from '../languages';
 import { App as APP } from '../constants';
 

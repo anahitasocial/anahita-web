@@ -21,7 +21,7 @@ export default (theme) => {
       userSelect: 'none',
       backgroundColor: '#000',
       height: PANE_HEIGHT,
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         height: '60vh',
         minHeight: 240,
       },
@@ -100,7 +100,7 @@ export default (theme) => {
     details: {
       height: PANE_HEIGHT,
       overflowY: 'auto',
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('md')]: {
         height: 'auto',
         overflowY: 'visible',
       },

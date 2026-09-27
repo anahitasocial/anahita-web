@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Link from '@material-ui/core/Link';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Link from '@mui/material/Link';
 
 import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';

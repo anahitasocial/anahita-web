@@ -2,19 +2,19 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Badge from '@material-ui/core/Badge';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import DialogActions from '@material-ui/core/DialogActions';
-import IconButton from '@material-ui/core/IconButton';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
+import Badge from '@mui/material/Badge';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import DialogActions from '@mui/material/DialogActions';
+import IconButton from '@mui/material/IconButton';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 
-import FollowRequestsIcon from '@material-ui/icons/People';
+import FollowRequestsIcon from '@mui/icons-material/People';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 
@@ -119,6 +119,7 @@ const ActorsFollowRequests = React.forwardRef(({
           setIsOpen(true);
         }}
         disabled={items.allIds.length === 0}
+        size="large"
       >
         <Badge
           color="secondary"
