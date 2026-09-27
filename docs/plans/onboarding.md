@@ -38,14 +38,14 @@ account, and a dashboard nudge.
 
 | item | phase | state | depends on | commit |
 | --- | --- | --- | --- | --- |
-| W1. Viewer, API module, `needsOnboarding` | 1 | ⬜ | S1 | |
-| W2. `OnboardingGate` | 1 | ⬜ | W1 | |
-| W3. `containers/onboarding/` shell and stepper | 1 | ⬜ | W1 | |
-| W4. Avatar step | 1 | ⬜ | W3 | |
-| W5. Profile step (name, bio, pronouns) | 1 | ⬜ | W3 | |
-| W6. Feature toggle for super administrators | 2 | ⬜ | S4 | |
-| W7. Featured accounts step | 2 | ⬜ | W3, S5, S6 | |
-| W8. Dashboard nudge | 1 | ⬜ | W1 | |
+| W1. Viewer, API module, `needsOnboarding` | 1 | ✅ | S1 | 79cd851 |
+| W2. `OnboardingGate` | 1 | ✅ | W1 | 15ddb3a |
+| W3. `containers/onboarding/` shell and stepper | 1 | ✅ | W1 | 15ddb3a |
+| W4. Avatar step | 1 | ✅ | W3 | 15ddb3a |
+| W5. Profile step (name, bio, pronouns) | 1 | ✅ | W3 | 15ddb3a, 9e1f71c |
+| W6. Feature toggle for super administrators | 2 | ✅ | S4 | 0a74f1d |
+| W7. Featured accounts step | 2 | ✅ | W3, S5, S6 | fd91b40 |
+| W8. Dashboard nudge | 1 | ✅ | W1 | d1e9b81 |
 
 ## Work items
 
@@ -73,7 +73,10 @@ account, and a dashboard nudge.
   while `hasOutdatedTerms(viewer)`, so agreements always come first and the two
   gates never fight each other.
 - `/onboarding` route inside `<AuthenticatedRoute>`, next to `/agreements`.
-- `isReachable` moves to a shared `routes/reachable.js` used by both gates.
+- `isReachable(pathname, ownPath)` moves to a shared `routes/reachable.js`
+  used by both gates. Each gate adds only its own page to the shared list: were
+  `/onboarding` reachable from `AgreementsGate`, somebody behind on the terms
+  could open it directly and skip them.
 
 ### W3. Shell and stepper
 
@@ -110,7 +113,10 @@ account, and a dashboard nudge.
 - Reuse `containers/actors/Forms/Avatar.jsx` (`ActorAvatarForm`, size `large`)
   and `api/avatar.js` `add(node, file)`, as `containers/actors/Read/Avatar.js`
   already does.
-- After upload, re-read the session so `viewer.avatarUrls` updates.
+- `ActorsAvatar` gained an optional `onChange`, called after an upload or a
+  delete; the step re-reads the session on it so `viewer.avatarUrls` updates.
+  A failed upload no longer leaves the avatar spinning.
+- Continue waits for an avatar; skipping does not.
 - No cropping. The server's `square` size centre-crops already.
 
 ### W5. Profile step — `Steps/Profile.jsx`
@@ -121,19 +127,26 @@ account, and a dashboard nudge.
   `actions.people.edit`. Load the person with `actions.people.read(viewer.alias)`
   so the fields are pre-filled.
 - `websiteUrl` is left out of this step.
-- **Check first:** `personPronouns` is not in `Info.jsx`'s `formFields`, so
-  pronouns may not be saved. Add it and check that it saves, in Settings and
-  here.
+- The three inputs moved to `people/Settings/InfoFields.jsx`, shared by the
+  settings form and this step.
+- **Found on the way:** `PATCH /people/:id` writes every field it is sent and
+  clears the rest, and settings only sent `personPronouns` when it had been
+  touched in that edit — so saving a bio wiped pronouns. Fixed by declaring it
+  in `Info.jsx`'s form fields (9e1f71c). For the same reason this step sends
+  the person's `websiteUrl` back unchanged.
 - After save, re-read the session so `viewer.hasBio` updates.
 
 ### W6. Feature toggle for super administrators
 
 - `api/actor/featured.js`: `edit(namespace, actor, featured)` →
   `PATCH /<namespace>/:id/featured`.
-- A "Feature this account" / "Stop featuring" item in the actor's menu,
-  shown only to super administrators (`permissions/actor.js`
-  `canFeature(viewer, actor)`), for people and groups. The state comes from
-  `actor.featuredAt`.
+- `containers/controls/Feature.jsx`: a "Feature this account" / "Stop
+  featuring" item in the profile's menu (`actors/Read/Controls.jsx`), shown
+  only to super administrators (`permissions/actor.js`
+  `canFeature(actor, viewer)`), for people and groups. The state comes from
+  `actor.featuredAt`. The menu itself now shows for super administrators on
+  every profile, not only ones they administer. A 409 says the account is
+  disabled or archived.
 
 ### W7. Featured accounts step — `Steps/Featured.jsx`
 
@@ -141,24 +154,30 @@ account, and a dashboard nudge.
   then the inviter's profile through `/people/:alias`; and
   `GET /people/?featured=1` and `GET /groups/?featured=1`. The inviter goes
   first; duplicates are dropped by id; the viewer is left out.
-- `SuggestedActors.jsx`, a list: each row `ListItem` + `ListItemAvatar` +
-  `components/ActorAvatar`, as in `containers/actors/Read/Admins.jsx`, labelled
-  person or group, with:
-  - a checkbox for "Follow selected", **never pre-checked**, the inviter
-    included, and not shown for accounts already followed;
-  - `containers/controls/Follow.jsx` for an immediate single follow.
-- "Follow selected" calls `actions.socialgraph.follow({ actor, viewer })` for
-  each checked account with `Promise.allSettled`, then continues. A failure
-  shows an alert and does not block the flow.
-- Follow requests: `Follow.jsx` has no "requested" state; for an account that
-  requires approval, the follow is a request. Check what the response carries
-  and add the state to `Follow.jsx` if needed, which fixes it everywhere else
-  it is used too.
+- Loading and ordering live in `containers/onboarding/featured.js`
+  (`loadFeatured`, `mergeFeatured`, tested): the inviter first, then people,
+  then groups, de-duplicated by id, the viewer left out.
+- `Steps/Featured.jsx`, a list: each row `ListItem` + `ListItemAvatar` +
+  `components/ActorAvatar`, as in `containers/actors/Read/Admins.jsx`,
+  labelled "Invited you", person or group, with **one control: a checkbox**,
+  never pre-checked, the inviter included. Accounts already followed say
+  "Following" with nothing to tick. No separate Follow button per row: two
+  ways to do the same thing would leave the checkbox wrong the moment the
+  button was used.
+- The primary action reads "Follow selected" once anything is ticked. It calls
+  `actions.socialgraph.follow({ actor, viewer })` for each with
+  `Promise.allSettled`, then continues. A failure shows an alert and does not
+  block the flow.
+- Follow requests: an account that requires approval gets a request rather
+  than a follow. Nothing here shows the difference yet, and neither does
+  `Follow.jsx` anywhere else; deferred.
 
 ### W8. Dashboard nudge
 
 - `src/containers/dashboard/CompleteProfileCard.jsx`, a dismissible card shown
-  while `hasIncompleteProfile(viewer)`, linking to the person's settings.
+  while `hasIncompleteProfile(viewer)`, linking back to `/onboarding` rather
+  than to settings: the flow covers the avatar and the bio together, and
+  finishing it again changes nothing.
 - A new `Grid item` above `Composers` in `src/containers/Dashboard.jsx`.
 - Dismissal in `localStorage`, reads and writes wrapped in try/catch: a
   per-browser convenience, not a record.
@@ -167,6 +186,8 @@ account, and a dashboard nudge.
 
 - Phase 3 (interests and suggestions) — see Phases.
 - Avatar cropping.
+- A "Requested" state for follows that need approval, here and in
+  `Follow.jsx`.
 - The MUI upgrade, which follows this plan.
 
 ## Verification
