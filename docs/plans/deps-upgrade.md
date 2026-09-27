@@ -37,7 +37,7 @@ a service Google shut down in 2024. Both are follow-ups.
 | 6. Geolocation, player, particles | ✅ | `9d2023b` |
 | 7. React 19 | ✅ | `435b2e7` |
 | 8. ESLint config | ✅ | `978efe3` |
-| Visual check | ⬜ | |
+| Visual check | ✅ | by the user, 2026-09-27 |
 
 ## Inventory
 
