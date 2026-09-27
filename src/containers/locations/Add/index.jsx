@@ -100,7 +100,7 @@ const LocationsSelector = ({
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <Divider light />
+        <Divider sx={{ opacity: '0.6' }} />
         <AppBar
           position="sticky"
           color="inherit"

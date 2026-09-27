@@ -44,11 +44,13 @@ const PersonInfoFields = ({
         autoFocus={autoFocus}
         fullWidth
         margin="normal"
-        inputProps={{
-          maxLength: NAME.MAX_LENGTH,
-          minLength: NAME.MIN_LENGTH,
-        }}
         required
+        slotProps={{
+          htmlInput: {
+            maxLength: NAME.MAX_LENGTH,
+            minLength: NAME.MIN_LENGTH,
+          },
+        }}
       />
       <TextField
         variant="standard"
@@ -61,11 +63,13 @@ const PersonInfoFields = ({
         margin="normal"
         fullWidth
         multiline
-        inputProps={{
-          maxLength: BODY.MAX_LENGTH,
-          minLength: BODY.MIN_LENGTH,
-        }}
         required
+        slotProps={{
+          htmlInput: {
+            maxLength: BODY.MAX_LENGTH,
+            minLength: BODY.MIN_LENGTH,
+          },
+        }}
       />
       <FormControl variant="standard" margin="normal" fullWidth>
         <InputLabel id="pronouns-label" shrink>

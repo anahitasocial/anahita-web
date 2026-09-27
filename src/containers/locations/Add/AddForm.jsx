@@ -51,13 +51,15 @@ const LocationAddForm = ({
           value={location.name}
           error={fields.name.error !== ''}
           helperText={fields.name.error}
-          inputProps={{
-            maxLength: TITLE.MAX_LENGTH,
-          }}
           disabled={isFetching}
           fullWidth
           autoFocus
           required={requiredFields.includes('name')}
+          slotProps={{
+            htmlInput: {
+              maxLength: TITLE.MAX_LENGTH,
+            },
+          }}
         />
         <TextField
           id="location-address"
@@ -69,12 +71,14 @@ const LocationAddForm = ({
           value={location.address}
           error={fields.address.error !== ''}
           helperText={fields.address.error}
-          inputProps={{
-            maxLength: ADDRESS.MAX_LENGTH,
-          }}
           disabled={isFetching}
           fullWidth
           required={requiredFields.includes('address')}
+          slotProps={{
+            htmlInput: {
+              maxLength: ADDRESS.MAX_LENGTH,
+            },
+          }}
         />
         {fields.city &&
           <TextField
@@ -87,12 +91,14 @@ const LocationAddForm = ({
             value={location.city}
             error={fields.city.error !== ''}
             helperText={fields.city.error}
-            inputProps={{
-              maxLength: CITY.MAX_LENGTH,
-            }}
             disabled={isFetching}
             fullWidth
             required={requiredFields.includes('city')}
+            slotProps={{
+              htmlInput: {
+                maxLength: CITY.MAX_LENGTH,
+              },
+            }}
           />}
         {fields.country &&
           <FormControl

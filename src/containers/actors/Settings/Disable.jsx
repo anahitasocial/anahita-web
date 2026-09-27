@@ -84,7 +84,11 @@ const ActorsSettingsDisable = (props) => {
   return (
     <>
       <CardContent>
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy(isEnabled ? 'description' : 'descriptionDisabled')}
         </Typography>
 

@@ -97,12 +97,14 @@ const InviteForm = ({
             fullWidth
             required
             autoFocus
-            inputProps={{
-              minLength: 10,
-              maxLength: 100,
-              autoCapitalize: 'none',
-              autoCorrect: 'off',
-              spellCheck: 'false',
+            slotProps={{
+              htmlInput: {
+                minLength: 10,
+                maxLength: 100,
+                autoCapitalize: 'none',
+                autoCorrect: 'off',
+                spellCheck: 'false',
+              },
             }}
           />
         </DialogContent>

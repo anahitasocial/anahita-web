@@ -46,8 +46,10 @@ const EmailEdit = ({
             <EmailIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('email:title')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <Divider />
 
@@ -108,13 +110,15 @@ const EmailEdit = ({
                 variant="outlined"
                 autoComplete="off"
                 autoFocus
-                inputProps={{
-                  minLength: EMAIL_LIMITS.EMAIL_MIN_LENGTH,
-                  maxLength: EMAIL_LIMITS.EMAIL_MAX_LENGTH,
-                  'aria-label': i18n.t('email:fields.new'),
-                }}
                 disabled={submitting}
                 required
+                slotProps={{
+                  htmlInput: {
+                    minLength: EMAIL_LIMITS.EMAIL_MIN_LENGTH,
+                    maxLength: EMAIL_LIMITS.EMAIL_MAX_LENGTH,
+                    'aria-label': i18n.t('email:fields.new'),
+                  },
+                }}
               />
 
             </CardContent>

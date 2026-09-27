@@ -73,7 +73,9 @@ const PersonInfo = ({
           // https://example.com. A stricter client than server would refuse
           // the most natural thing anyone types. inputMode still gets the
           // URL keyboard on mobile.
-          inputProps={{ maxLength: 255, inputMode: 'url' }}
+          slotProps={{
+            htmlInput: { maxLength: 255, inputMode: 'url' },
+          }}
         />
       </CardContent>
       {/* Cancel then Save, both full width — the same CardActions row every

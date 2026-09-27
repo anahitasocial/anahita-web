@@ -36,11 +36,13 @@ const ActorFormsInfo = ({
           helperText={fields.name.error}
           margin="normal"
           fullWidth
-          inputProps={{
-            maxLength: NAME.MAX_LENGTH,
-            minLength: NAME.MIN_LENGTH,
-          }}
           required
+          slotProps={{
+            htmlInput: {
+              maxLength: NAME.MAX_LENGTH,
+              minLength: NAME.MIN_LENGTH,
+            },
+          }}
         />
         <TextField
           variant="standard"
@@ -53,11 +55,13 @@ const ActorFormsInfo = ({
           margin="normal"
           fullWidth
           multiline
-          inputProps={{
-            maxLength: BODY.MAX_LENGTH,
-            minLength: BODY.MIN_LENGTH,
-          }}
           required
+          slotProps={{
+            htmlInput: {
+              maxLength: BODY.MAX_LENGTH,
+              minLength: BODY.MIN_LENGTH,
+            },
+          }}
         />
         <TextField
           variant="standard"
@@ -76,7 +80,9 @@ const ActorFormsInfo = ({
           // https://example.com. A stricter client than server would refuse
           // the most natural thing anyone types. inputMode still gets the
           // URL keyboard on mobile.
-          inputProps={{ maxLength: 255, inputMode: 'url' }}
+          slotProps={{
+            htmlInput: { maxLength: 255, inputMode: 'url' },
+          }}
         />
       </CardContent>
       {/* Cancel only when a handler is supplied. The settings card opens

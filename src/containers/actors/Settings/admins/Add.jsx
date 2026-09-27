@@ -106,14 +106,17 @@ const ActorsSettingsAdminsAdd = (props) => {
             label="Add Admins"
             value={keyword}
             placeholder="Jane smith ..."
-            InputProps={{
-              ...params.InputProps,
-              endAdornment: (
-                <>
-                  {isFetching ? <CircularProgress size={20} /> : null}
-                  {params.InputProps.endAdornment}
-                </>
-              ),
+            slotProps={{
+              ...params.slotProps,
+              input: {
+                ...params.slotProps.input,
+                endAdornment: (
+                  <>
+                    {isFetching ? <CircularProgress size={20} /> : null}
+                    {params.slotProps.input.endAdornment}
+                  </>
+                ),
+              },
             }}
           />
         );

@@ -81,8 +81,10 @@ const AuthLogsCard = ({
             <AuthLogsIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('auth:authLogs.cTitle')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <List>
         {items.map((authLog, index) => {

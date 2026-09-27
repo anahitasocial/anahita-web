@@ -84,7 +84,6 @@ const OAuthClientSecret = ({
   return (
     <Dialog
       open
-      disableEscapeKeyDown
       fullWidth
       maxWidth="sm"
       aria-labelledby="oauth-client-secret-title"

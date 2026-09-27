@@ -134,7 +134,9 @@ const OnboardingFeatured = ({
                       checked={selected.has(actor.id)}
                       disabled={pending}
                       onChange={() => { toggle(actor.id); }}
-                      inputProps={{ 'aria-labelledby': labelId }}
+                      slotProps={{
+                        input: { 'aria-labelledby': labelId },
+                      }}
                     />
                   )}
               >

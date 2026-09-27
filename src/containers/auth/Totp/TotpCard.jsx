@@ -42,11 +42,13 @@ const TotpCard = ({
             <TotpIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('auth:totp.cTitle')}
         subheader={enabled
           ? i18n.t('auth:totp.enable.on')
           : i18n.t('auth:totp.enable.off')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <Divider />
       <CardContent>

@@ -54,8 +54,8 @@ each built, tested and looked at before the next.
 | 1. v5, Emotion, codemods, theme | ✅ | `3a8ce4b` |
 | 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ✅ | `eeb5add` |
 | 3. v6 | ✅ | `52619f4` |
-| 4. v7 | ✅ | (step 4 commit) |
-| 5. v9 | ⬜ | |
+| 4. v7 | ✅ | `55d0a17` |
+| 5. v9 | ✅ | (step 5 commit) |
 | 6. Clean-up and docs | ⬜ | |
 
 ## Inventory (as of the plan)
@@ -237,13 +237,13 @@ The bulk of the work: 72 files.
 
 ## Decisions to make before step 5
 
-- **Browser floor.** v9 targets Chrome 117, Edge 121, Firefox 121 and
+- **Browser floor.** Decided 2026-09-27: accepted; go to v9. v9 targets Chrome 117, Edge 121, Firefox 121 and
   Safari 17, which is narrower than today's `>0.2%, not dead`. Accept it, or
   stop at v7 until it is acceptable.
 - **CRA.** `react-scripts` 5 is deprecated. v9 ships CommonJS alongside
   `.mjs`, so it should build and test under CRA, but that is untested until
   step 5. If it fails there, moving to Vite is its own plan, not part of this
-  one.
+  one. Result: v9 builds and tests under `react-scripts` 5 with no changes.
 
 ## Deliberate changes
 
@@ -253,6 +253,10 @@ in v9, and Tabs/Menu roving tabindex.
 - v5: Menus open below their anchor instead of over it, and the alert
   Snackbar sits bottom left on desktop instead of bottom centre. Both follow
   the Material guidelines; restoring them per component wasn't worth it.
+- v9: `ListItemIcon` is 36px wide instead of 56px, so text next to list
+  icons (left menu, support, settings lists) sits 20px further left.
+- v9: Menus, Tabs and Steppers use a roving tabindex; Stepper renders
+  `<ol>`/`<li>`.
 - v5: the photo strip (`stories/components/GridList.jsx`) is a scrolling
   flex row, because v5's grid-based ImageList can't show 1.1 columns.
 
@@ -310,6 +314,17 @@ in v9, and Tabs/Menu roving tabindex.
   still 100% wide. `Hidden` became the responsive-drawer pattern:
   `sx={{ display: { xs: 'block', lg: 'none' } }}` and the reverse, on the
   two Drawers.
+- v9: `deprecations/all` changed 45 files (`inputProps`, `InputLabelProps`,
+  `*TypographyProps` → `slotProps`, `paragraph` → `sx`, Autocomplete
+  `params.InputProps` → `params.slotProps.input`); `v9.0.0/system-props`
+  had nothing left after v6. The codemod dropped comments attached to the
+  props it moved (5 files); they are back above the new `slotProps`. By
+  hand: Menu `PaperProps` → `slotProps.paper` (Popover no longer takes
+  `PaperProps`); `disableEscapeKeyDown` dropped from the OAuth secret
+  dialog, which has no `onClose`, so Escape still can't close it; three
+  `*Outline` icons → `*Outlined`. Drawer `ModalProps` and InputBase
+  `inputProps` are still part of the v9 API and stay. Every `MenuItem` is
+  inside a `Menu` or `Select`, and every `Tab` inside `Tabs`.
 - No browser in the session that ran steps 1–5, so the visual check is done
   afterwards by a person, one step commit at a time.
 

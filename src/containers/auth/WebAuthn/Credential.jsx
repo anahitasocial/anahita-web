@@ -109,10 +109,6 @@ const Credential = ({
       </ListItemIcon>
       <ListItemText
         primary={nickname}
-        // component: 'div' because secondary holds Chips, which render
-        // as block-level elements. Without it MUI wraps them in a <p>
-        // and the markup is invalid.
-        secondaryTypographyProps={{ component: 'div' }}
         secondary={
           <>
             <Typography variant="caption" color="textSecondary">
@@ -140,6 +136,12 @@ const Credential = ({
               </div>}
           </>
         }
+        // component: 'div' because secondary holds Chips, which render
+        // as block-level elements. Without it MUI wraps them in a <p>
+        // and the markup is invalid.
+        slotProps={{
+          secondary: { component: 'div' },
+        }}
       />
       <ListItemSecondaryAction className={classes.actions}>
         <Tooltip title={t('actions:edit')}>

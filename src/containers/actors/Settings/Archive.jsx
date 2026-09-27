@@ -107,16 +107,28 @@ const ActorsSettingsArchive = (props) => {
         {/* Permanence first. Everything else is a reason to choose this over
             deleting, and none of it should arrive before the person knows
             there is no way back. */}
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           <strong>{copy('permanent')}</strong>
         </Typography>
 
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy(isPerson ? 'personDescription' : 'groupDescription')}
         </Typography>
 
         {isPerson && isSelf &&
-          <Typography variant="body2" color="textSecondary" paragraph>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            sx={{ marginBottom: '16px' }}
+          >
             {copy('selfSignIn')}
           </Typography>}
 

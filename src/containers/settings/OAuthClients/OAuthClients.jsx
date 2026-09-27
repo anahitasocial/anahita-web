@@ -129,7 +129,6 @@ const OAuthClients = ({
                 </ListItemAvatar>
                 <ListItemText
                   primary={client.name}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       <Typography
@@ -179,6 +178,9 @@ const OAuthClients = ({
                       </Typography>
                     </>
                   }
+                  slotProps={{
+                    secondary: { component: 'div' },
+                  }}
                 />
                 <ListItemSecondaryAction>
                   <OAuthClientMenu

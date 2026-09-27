@@ -41,7 +41,6 @@ const BrowseHeader = ({
             {icon}
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={title}
         action={actionTo &&
           <Tooltip title={actionLabel}>
@@ -55,6 +54,9 @@ const BrowseHeader = ({
               <AddIcon />
             </IconButton>
           </Tooltip>}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
     </Card>
   );

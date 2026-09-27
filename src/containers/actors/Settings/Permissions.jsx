@@ -95,9 +95,11 @@ const ActorsSettingsPermissions = (props) => {
               <PermissionsIcon />
             </Avatar>
           }
-          titleTypographyProps={{ variant: 'h5' }}
           title={i18n.t('actor:permissions.title')}
           subheader={i18n.t('actor:permissions.cDescription')}
+          slotProps={{
+            title: { variant: 'h5' },
+          }}
         />
         <Divider />
 
@@ -157,12 +159,7 @@ const ActorsSettingsPermissions = (props) => {
                         question just wraps. Not the select's own floating
                         label either: an outlined label that long is cut off
                         in the border's notch. */}
-                    <Box
-                      sx={{
-                        width: '100%',
-                        py: 1,
-                      }}
-                    >
+                    <Box sx={{ width: '100%', py: 1 }}>
                       <Box sx={{ mb: 1 }}>
                         <Typography variant="body1">{question}</Typography>
                       </Box>
@@ -180,14 +177,17 @@ const ActorsSettingsPermissions = (props) => {
                         onChange={(event) => {
                           setAccess(group.service, row.entity, event.target.value);
                         }}
-                        SelectProps={{
-                          renderValue: label,
-                        }}
-                        inputProps={{
-                          // Namespaced per service: comment and like appear
-                          // under more than one service.
-                          name: `${namespace}-${group.service}-${row.entity}`,
-                          'aria-label': question,
+                        slotProps={{
+                          htmlInput: {
+                            // Namespaced per service: comment and like appear
+                            // under more than one service.
+                            name: `${namespace}-${group.service}-${row.entity}`,
+                            'aria-label': question,
+                          },
+
+                          select: {
+                            renderValue: label,
+                          },
                         }}
                       >
                         {row.choices.map((choice) => {

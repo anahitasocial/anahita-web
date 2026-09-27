@@ -47,13 +47,15 @@ const CommentForm = ({
               value={comment.body}
               error={body.error !== ''}
               helperText={body.error}
-              inputProps={{
-                maxLength: BODY.MAX_LENGTH,
-              }}
               disabled={isFetching}
               fullWidth
               multiline
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: BODY.MAX_LENGTH,
+                },
+              }}
             />
           }
         />

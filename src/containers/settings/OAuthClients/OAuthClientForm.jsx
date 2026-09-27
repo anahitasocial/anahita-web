@@ -295,13 +295,15 @@ const OAuthClientForm = ({
               helperText={clientId.error || i18n.t('settings:oauthClients.form.clientIdHint')}
               fullWidth
               required
-              inputProps={{
-                minLength: 2,
-                maxLength: 64,
-                pattern: CLIENT_ID_PATTERN,
-                autoCapitalize: 'none',
-                autoCorrect: 'off',
-                spellCheck: 'false',
+              slotProps={{
+                htmlInput: {
+                  minLength: 2,
+                  maxLength: 64,
+                  pattern: CLIENT_ID_PATTERN,
+                  autoCapitalize: 'none',
+                  autoCorrect: 'off',
+                  spellCheck: 'false',
+                },
               }}
             />}
 
@@ -316,7 +318,9 @@ const OAuthClientForm = ({
             helperText={name.error || i18n.t('settings:oauthClients.form.nameHint')}
             fullWidth
             required
-            inputProps={{ minLength: 3, maxLength: 128 }}
+            slotProps={{
+              htmlInput: { minLength: 3, maxLength: 128 },
+            }}
           />
 
           <TextField
@@ -415,7 +419,9 @@ const OAuthClientForm = ({
             error={Boolean(tokenExpiry.error)}
             helperText={tokenExpiry.error || i18n.t('settings:oauthClients.form.tokenExpiryHint')}
             fullWidth
-            inputProps={{ min: 300, max: 86400 }}
+            slotProps={{
+              htmlInput: { min: 300, max: 86400 },
+            }}
           />
 
           <FormControlLabel

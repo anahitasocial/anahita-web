@@ -59,11 +59,13 @@ const PersonAddForm = (props) => {
             autoFocus
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: NAME.MAX_LENGTH,
-              minLength: NAME.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: NAME.MAX_LENGTH,
+                minLength: NAME.MIN_LENGTH,
+              },
+            }}
           />
           <TextField
             variant="standard"
@@ -76,11 +78,13 @@ const PersonAddForm = (props) => {
             helperText={username.error}
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: USERNAME.MAX_LENGTH,
-              minLength: USERNAME.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: USERNAME.MAX_LENGTH,
+                minLength: USERNAME.MIN_LENGTH,
+              },
+            }}
           />
           <TextField
             variant="standard"
@@ -94,11 +98,13 @@ const PersonAddForm = (props) => {
             helperText={email.error}
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: EMAIL.MAX_LENGTH,
-              minLength: EMAIL.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: EMAIL.MAX_LENGTH,
+                minLength: EMAIL.MIN_LENGTH,
+              },
+            }}
           />
           <TextField
             variant="standard"
@@ -111,11 +117,13 @@ const PersonAddForm = (props) => {
             margin="normal"
             fullWidth
             multiline
-            inputProps={{
-              maxLength: BODY.MAX_LENGTH,
-              minLength: BODY.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+                minLength: BODY.MIN_LENGTH,
+              },
+            }}
           />
         </FormControl>
         <FormControl variant="standard" margin="normal" fullWidth>

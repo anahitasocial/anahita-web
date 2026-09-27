@@ -54,13 +54,15 @@ const TotpForm = (props) => {
             label={i18n.t('auth:totp.verify.passcode')}
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: TOTP.FIELDS.PASSCODE.MAX_LENGTH,
-              minLength: TOTP.FIELDS.PASSCODE.MIN_LENGTH,
-            }}
             error={passcode.error !== ''}
             helperText={passcode.error}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: TOTP.FIELDS.PASSCODE.MAX_LENGTH,
+                minLength: TOTP.FIELDS.PASSCODE.MIN_LENGTH,
+              },
+            }}
           />
         </CardContent>
         <CardActions>

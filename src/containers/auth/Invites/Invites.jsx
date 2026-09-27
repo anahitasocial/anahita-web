@@ -26,10 +26,10 @@ import Typography from '@mui/material/Typography';
 import { makeStyles } from 'tss-react/mui';
 
 import AddIcon from '@mui/icons-material/Add';
-import AcceptedIcon from '@mui/icons-material/CheckCircleOutline';
+import AcceptedIcon from '@mui/icons-material/CheckCircleOutlined';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ExpiredIcon from '@mui/icons-material/HourglassEmpty';
-import InvitesIcon from '@mui/icons-material/MailOutline';
+import InvitesIcon from '@mui/icons-material/MailOutlined';
 
 import i18n from '../../../languages';
 import InvitesType from '../../../proptypes/Invites';
@@ -132,10 +132,6 @@ const Invites = ({
                 </ListItemAvatar>
                 <ListItemText
                   primary={invite.recipientEmail}
-                  // component: div because secondary holds Chips,
-                  // which are block-level. Without it MUI nests them
-                  // in a <p> and the markup is invalid.
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       {/* No "sent by": the server scopes this list to
@@ -158,6 +154,12 @@ const Invites = ({
                       </div>
                     </>
                   }
+                  // component: div because secondary holds Chips,
+                  // which are block-level. Without it MUI nests them
+                  // in a <p> and the markup is invalid.
+                  slotProps={{
+                    secondary: { component: 'div' },
+                  }}
                 />
                 {revocable &&
                   <ListItemSecondaryAction>

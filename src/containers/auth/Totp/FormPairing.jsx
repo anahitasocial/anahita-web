@@ -69,14 +69,16 @@ const TOTPFormPairing = ({
         label={i18n.t('auth:totp.qrCode.passcode.label')}
         margin="normal"
         fullWidth
-        inputProps={{
-          maxLength: TOTP.FIELDS.PASSCODE.MAX_LENGTH,
-          minLength: TOTP.FIELDS.PASSCODE.MIN_LENGTH,
-        }}
         required
         disabled={success || isFetching}
         error={passcode.error !== ''}
         helperText={passcode.error}
+        slotProps={{
+          htmlInput: {
+            maxLength: TOTP.FIELDS.PASSCODE.MAX_LENGTH,
+            minLength: TOTP.FIELDS.PASSCODE.MIN_LENGTH,
+          },
+        }}
       />
     </>
   );

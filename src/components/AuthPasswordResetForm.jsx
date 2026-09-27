@@ -53,11 +53,13 @@ const AuthPasswordResetForm = ({
             autoFocus
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: EMAIL.MAX_LENGTH,
-              minLength: EMAIL.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: EMAIL.MAX_LENGTH,
+                minLength: EMAIL.MIN_LENGTH,
+              },
+            }}
           />
         </CardContent>
         <CardActions>

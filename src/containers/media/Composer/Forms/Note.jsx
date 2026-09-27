@@ -54,11 +54,13 @@ const ComposersNote = ({
             margin="normal"
             variant="outlined"
             disabled={isFetching}
-            inputProps={{
-              maxLength: BODY.MAX_LENGTH,
-            }}
             placeholder={placeholder}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+              },
+            }}
           />
           {canPrivatePost &&
             <FormControlLabel

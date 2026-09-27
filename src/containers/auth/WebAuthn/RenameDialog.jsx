@@ -88,7 +88,6 @@ const RenameDialog = ({
             count: trimmed.length,
             max: NICKNAME_MAX_LENGTH,
           })}
-          inputProps={{ maxLength: NICKNAME_MAX_LENGTH }}
           onChange={(event) => {
             setNickname(event.target.value);
           }}
@@ -97,6 +96,9 @@ const RenameDialog = ({
               event.preventDefault();
               submit();
             }
+          }}
+          slotProps={{
+            htmlInput: { maxLength: NICKNAME_MAX_LENGTH },
           }}
         />
       </DialogContent>

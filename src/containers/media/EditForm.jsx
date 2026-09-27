@@ -42,11 +42,13 @@ const MediumFormEdit = (props) => {
             fullWidth
             margin="normal"
             disabled={isFetching}
-            inputProps={{
-              maxLength: NAME.MAX_LENGTH,
-              minLength: NAME.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: NAME.MAX_LENGTH,
+                minLength: NAME.MIN_LENGTH,
+              },
+            }}
           />}
         {fields.body &&
           <TextField
@@ -61,10 +63,12 @@ const MediumFormEdit = (props) => {
             fullWidth
             margin="normal"
             disabled={isFetching}
-            inputProps={{
-              maxLength: BODY.MAX_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+              },
+            }}
           />}
       </CardContent>
       <CardActions>

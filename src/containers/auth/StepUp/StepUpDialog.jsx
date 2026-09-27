@@ -137,9 +137,11 @@ const StepUpDialog = ({
                   margin="normal"
                   variant="outlined"
                   autoComplete="one-time-code"
-                  inputProps={{ inputMode: 'numeric', maxLength: 8 }}
                   disabled={submitting}
                   required
+                  slotProps={{
+                    htmlInput: { inputMode: 'numeric', maxLength: 8 },
+                  }}
                 />}
             </>}
 

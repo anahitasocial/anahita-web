@@ -35,20 +35,23 @@ const ComposersTodo = ({
               value={medium.name}
               onChange={handleOnChange}
               label={i18n.t('todos:composer.title')}
-              InputLabelProps={{
-                shrink: true,
-              }}
               placeholder={i18n.t('todos:composer.titlePlaceholder')}
               error={fields.name.error !== ''}
               helperText={fields.name.error}
               fullWidth
               margin="normal"
               disabled={isFetching}
-              inputProps={{
-                maxLength: NAME.MAX_LENGTH,
-                minLength: NAME.MIN_LENGTH,
-              }}
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: NAME.MAX_LENGTH,
+                  minLength: NAME.MIN_LENGTH,
+                },
+
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
             />}
           {fields.body &&
             <TextField
@@ -57,9 +60,6 @@ const ComposersTodo = ({
               value={medium.body}
               onChange={handleOnChange}
               label={i18n.t('todos:composer.body')}
-              InputLabelProps={{
-                shrink: true,
-              }}
               placeholder={i18n.t('todos:composer.bodyPlaceholder')}
               error={fields.body.error !== ''}
               helperText={fields.body.error}
@@ -67,12 +67,18 @@ const ComposersTodo = ({
               multiline
               margin="normal"
               disabled={isFetching}
-              inputProps={{
-                maxLength: BODY.MAX_LENGTH,
-              }}
               minRows={5}
               maxRows={10}
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: BODY.MAX_LENGTH,
+                },
+
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
             />}
         </CardContent>
         <CardActions>

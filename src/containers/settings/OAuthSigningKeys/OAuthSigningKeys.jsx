@@ -148,14 +148,7 @@ const OAuthSigningKeys = ({
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  // The whole kid, not a truncation. On a table it was
-                  // shortened to keep the column scannable; in a list
-                  // it has the row to itself and wraps, so there is no
-                  // reason to hide half of the one value somebody
-                  // came here to match against a token.
-                  primaryTypographyProps={{ className: classes.keyId }}
                   primary={key.keyId}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       <Typography variant="caption" color="textSecondary">
@@ -215,6 +208,15 @@ const OAuthSigningKeys = ({
                       </div>
                     </>
                   }
+                  slotProps={{
+                    // The whole kid, not a truncation. On a table it was
+                    // shortened to keep the column scannable; in a list
+                    // it has the row to itself and wraps, so there is no
+                    // reason to hide half of the one value somebody
+                    // came here to match against a token.
+                    primary: { className: classes.keyId },
+                    secondary: { component: 'div' },
+                  }}
                 />
                 <ListItemSecondaryAction>
                   {/* The span is load-bearing: a disabled control
@@ -233,11 +235,13 @@ const OAuthSigningKeys = ({
                         color="primary"
                         checked={Boolean(key.active)}
                         disabled={disabled}
-                        inputProps={{
-                          'aria-label': i18n.t('settings:oauthSigningKeys.fields.active'),
-                        }}
                         onChange={(event) => {
                           onToggle(key, event.target.checked);
+                        }}
+                        slotProps={{
+                          input: {
+                            'aria-label': i18n.t('settings:oauthSigningKeys.fields.active'),
+                          },
                         }}
                       />
                     </span>

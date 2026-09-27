@@ -63,7 +63,11 @@ const ActorDeleteForm = (props) => {
     return (
       <>
         <CardContent>
-          <Typography variant="body2" color="textSecondary" paragraph>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            sx={{ marginBottom: '16px' }}
+          >
             {copy('scheduled', {
               date: purgeDate.toLocaleDateString(undefined, {
                 year: 'numeric',
@@ -127,7 +131,11 @@ const ActorDeleteForm = (props) => {
     <form onSubmit={handleOnSubmit} noValidate>
       <CardContent>
         {/* What is lost, before the field that lets you lose it. */}
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy('description')}
         </Typography>
 
@@ -171,7 +179,11 @@ const ActorDeleteForm = (props) => {
                 })}
             </ul>
             {counts.memberSince && (
-              <Typography variant="body2" color="textSecondary" paragraph>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                sx={{ marginBottom: '16px' }}
+              >
                 {copy('counts.memberSince', {
                   date: new Date(counts.memberSince).toLocaleDateString(undefined, {
                     year: 'numeric',
@@ -186,15 +198,27 @@ const ActorDeleteForm = (props) => {
         {/* And what is not. Naming the grace period is the point of this card
             existing at all — without it the recovery path we built is
             invisible to the only person who needs it. */}
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy('reversible', { count: GRACE_DAYS })}
         </Typography>
 
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy('revoked')}
         </Typography>
 
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy('handle', { alias: actor.alias })}
         </Typography>
       </CardContent>
@@ -223,11 +247,13 @@ const ActorDeleteForm = (props) => {
           autoComplete="off"
           autoCapitalize="none"
           spellCheck="false"
-          inputProps={{
-            maxLength: ALIAS.MAX_LENGTH,
-            minLength: ALIAS.MIN_LENGTH,
-          }}
           required
+          slotProps={{
+            htmlInput: {
+              maxLength: ALIAS.MAX_LENGTH,
+              minLength: ALIAS.MIN_LENGTH,
+            },
+          }}
         />
       </CardContent>
       <CardActions>

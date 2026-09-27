@@ -45,8 +45,10 @@ const UsernameEdit = ({
             <AlternateEmailIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('username:title')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <Divider />
 
@@ -108,13 +110,15 @@ const UsernameEdit = ({
                 autoCapitalize="none"
                 spellCheck="false"
                 autoFocus
-                inputProps={{
-                  minLength: USERNAME.USERNAME_MIN_LENGTH,
-                  maxLength: USERNAME.USERNAME_MAX_LENGTH,
-                  'aria-label': i18n.t('username:fields.new'),
-                }}
                 disabled={submitting}
                 required
+                slotProps={{
+                  htmlInput: {
+                    minLength: USERNAME.USERNAME_MIN_LENGTH,
+                    maxLength: USERNAME.USERNAME_MAX_LENGTH,
+                    'aria-label': i18n.t('username:fields.new'),
+                  },
+                }}
               />
             </CardContent>
 

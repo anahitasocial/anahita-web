@@ -100,9 +100,11 @@ const Settings = ({
                 <SettingsIcon />
               </Avatar>
             }
-            titleTypographyProps={{ variant: 'h5' }}
             title={i18n.t('settings:cTitle')}
             subheader={i18n.t('settings:cDescription')}
+            slotProps={{
+              title: { variant: 'h5' },
+            }}
           />
           <Divider />
           <Tabs

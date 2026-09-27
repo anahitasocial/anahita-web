@@ -19,7 +19,7 @@ import Typography from '@mui/material/Typography';
 import { makeStyles } from 'tss-react/mui';
 
 import SignupRequestsIcon from '@mui/icons-material/HowToReg';
-import PersonIcon from '@mui/icons-material/PersonOutline';
+import PersonIcon from '@mui/icons-material/PersonOutlined';
 import WarningIcon from '@mui/icons-material/Warning';
 
 import i18n from '../../../languages';
@@ -126,7 +126,6 @@ const SignupRequests = ({
                 </ListItemAvatar>
                 <ListItemText
                   primary={request.username}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       <Typography variant="caption" color="textSecondary">
@@ -224,6 +223,9 @@ const SignupRequests = ({
                       </div>
                     </>
                   }
+                  slotProps={{
+                    secondary: { component: 'div' },
+                  }}
                 />
               </ListItem>
             );

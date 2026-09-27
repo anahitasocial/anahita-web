@@ -28,15 +28,17 @@ const TOTPFormPassword = ({
         label={i18n.t('auth:totp.password.label')}
         margin="normal"
         fullWidth
-        inputProps={{
-          maxLength: TOTP.FIELDS.PASSWORD.MAX_LENGTH,
-          minLength: TOTP.FIELDS.PASSWORD.MIN_LENGTH,
-        }}
         required
         disabled={success || isFetching}
         error={password.error !== ''}
         helperText={password.error}
         autoComplete="off"
+        slotProps={{
+          htmlInput: {
+            maxLength: TOTP.FIELDS.PASSWORD.MAX_LENGTH,
+            minLength: TOTP.FIELDS.PASSWORD.MIN_LENGTH,
+          },
+        }}
       />
     </>
   );

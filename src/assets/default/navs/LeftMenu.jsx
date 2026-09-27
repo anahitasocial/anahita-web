@@ -26,7 +26,7 @@ import LabelIcon from '@mui/icons-material/Label';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import SettingsIcon from '@mui/icons-material/Settings';
 import SignupRequestsIcon from '@mui/icons-material/HowToReg';
-import InvitesIcon from '@mui/icons-material/MailOutline';
+import InvitesIcon from '@mui/icons-material/MailOutlined';
 import LegalIcon from '@mui/icons-material/MenuBook';
 import SupportIcon from '@mui/icons-material/ContactSupport';
 import AboutIcon from '@mui/icons-material/Info';

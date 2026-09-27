@@ -41,8 +41,10 @@ const SettingsItem = ({
         <Card>
           <CardHeader
             avatar={icon ? <Avatar>{icon}</Avatar> : null}
-            titleTypographyProps={{ variant: 'h5' }}
             title={title}
+            slotProps={{
+              title: { variant: 'h5' },
+            }}
           />
           <Divider />
           {children}

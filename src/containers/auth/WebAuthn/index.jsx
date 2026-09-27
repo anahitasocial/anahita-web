@@ -203,9 +203,11 @@ const WebAuthn = () => {
             <PasskeyIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={t('auth:webauthn.cTitle')}
         subheader={t('auth:webauthn.cDesc')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
 
       {(isFetching || isBusy) &&

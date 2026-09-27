@@ -89,20 +89,23 @@ const ComposersFile = React.forwardRef(({
               value={medium.name}
               onChange={handleOnChange}
               label={i18n.t(`${namespace}:composer.name`)}
-              InputLabelProps={{
-                shrink: true,
-              }}
               placeholder={i18n.t(`${namespace}:composer.namePlaceholder`)}
               error={fields.name.error !== ''}
               helperText={fields.name.error}
               fullWidth
               margin="normal"
               disabled={isFetching}
-              inputProps={{
-                maxLength: NAME.MAX_LENGTH,
-                minLength: NAME.MIN_LENGTH,
-              }}
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: NAME.MAX_LENGTH,
+                  minLength: NAME.MIN_LENGTH,
+                },
+
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
             />}
           {fields.body &&
             <TextField
@@ -111,19 +114,22 @@ const ComposersFile = React.forwardRef(({
               value={medium.body}
               onChange={handleOnChange}
               label={i18n.t(`${namespace}:composer.body`)}
-              InputLabelProps={{
-                shrink: true,
-              }}
               placeholder={i18n.t(`${namespace}:composer.bodyPlaceholder`)}
               error={fields.body.error !== ''}
               helperText={fields.body.error}
               fullWidth
               margin="normal"
               disabled={isFetching}
-              inputProps={{
-                maxLength: BODY.MAX_LENGTH,
-              }}
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: BODY.MAX_LENGTH,
+                },
+
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
             />}
         </CardContent>
         <CardActions>

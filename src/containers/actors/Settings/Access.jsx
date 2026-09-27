@@ -102,9 +102,11 @@ const ActorsSettingsAccess = (props) => {
               <AccessIcon />
             </Avatar>
           }
-          titleTypographyProps={{ variant: 'h5' }}
           title={i18n.t('actor:access.title')}
           subheader={i18n.t('actor:access.cDescription')}
+          slotProps={{
+            title: { variant: 'h5' },
+          }}
         />
         <Divider />
 
@@ -139,8 +141,10 @@ const ActorsSettingsAccess = (props) => {
                       checked={access === option}
                       value={option}
                       color="primary"
-                      inputProps={{
-                        'aria-label': i18n.t(`access:${option}`),
+                      slotProps={{
+                        input: {
+                          'aria-label': i18n.t(`access:${option}`),
+                        },
                       }}
                     />
                   </ListItemIcon>

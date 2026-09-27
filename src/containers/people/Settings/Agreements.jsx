@@ -117,7 +117,6 @@ const Agreements = ({ personId }) => {
               <ListItem key={key} divider={key === 'tos'}>
                 <ListItemText
                   primary={i18n.t(`people:agreements.${key}`)}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <Typography variant="caption" color="textSecondary">
                       {/* Never accepted is a real state and says so.
@@ -129,6 +128,9 @@ const Agreements = ({ personId }) => {
                         i18n.t('people:agreements.never')}
                     </Typography>
                   }
+                  slotProps={{
+                    secondary: { component: 'div' },
+                  }}
                 />
                 {accepted && consent.version &&
                   <Chip
