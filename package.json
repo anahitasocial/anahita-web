@@ -1,10 +1,10 @@
 {
-  "name": "anahita-react",
+  "name": "anahita-web",
   "description": "Front-end React application for Anahita",
   "version": "1.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anahitasocial/anahita-react"
+    "url": "https://github.com/anahitasocial/anahita-web"
   },
   "private": true,
   "main": "index.js",
@@ -19,7 +19,7 @@
     "learning management",
     "lms"
   ],
-  "bugs": "https://github.com/anahitasocial/anahita-react/issues",
+  "bugs": "https://github.com/anahitasocial/anahita-web/issues",
   "license": "MIT",
   "devDependencies": {
     "eslint-config-airbnb": "^18.2.1",
