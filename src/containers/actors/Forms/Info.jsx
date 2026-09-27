@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
 
 import i18n from '../../../languages';
 import ActorType from '../../../proptypes/Actor';
@@ -27,6 +27,7 @@ const ActorFormsInfo = ({
       <CardContent>
         {enabled}
         <TextField
+          variant="standard"
           name="name"
           value={actor.name}
           onChange={handleOnChange}
@@ -35,13 +36,16 @@ const ActorFormsInfo = ({
           helperText={fields.name.error}
           margin="normal"
           fullWidth
-          inputProps={{
-            maxLength: NAME.MAX_LENGTH,
-            minLength: NAME.MIN_LENGTH,
-          }}
           required
+          slotProps={{
+            htmlInput: {
+              maxLength: NAME.MAX_LENGTH,
+              minLength: NAME.MIN_LENGTH,
+            },
+          }}
         />
         <TextField
+          variant="standard"
           name="body"
           value={actor.body || ''}
           onChange={handleOnChange}
@@ -51,13 +55,16 @@ const ActorFormsInfo = ({
           margin="normal"
           fullWidth
           multiline
-          inputProps={{
-            maxLength: BODY.MAX_LENGTH,
-            minLength: BODY.MIN_LENGTH,
-          }}
           required
+          slotProps={{
+            htmlInput: {
+              maxLength: BODY.MAX_LENGTH,
+              minLength: BODY.MIN_LENGTH,
+            },
+          }}
         />
         <TextField
+          variant="standard"
           name="websiteUrl"
           value={actor.websiteUrl || ''}
           onChange={handleOnChange}
@@ -73,7 +80,9 @@ const ActorFormsInfo = ({
           // https://example.com. A stricter client than server would refuse
           // the most natural thing anyone types. inputMode still gets the
           // URL keyboard on mobile.
-          inputProps={{ maxLength: 255, inputMode: 'url' }}
+          slotProps={{
+            htmlInput: { maxLength: 255, inputMode: 'url' },
+          }}
         />
       </CardContent>
       {/* Cancel only when a handler is supplied. The settings card opens

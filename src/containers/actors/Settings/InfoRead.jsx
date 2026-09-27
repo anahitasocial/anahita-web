@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import CardActions from '@material-ui/core/CardActions';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import CardActions from '@mui/material/CardActions';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import ActorType from '../../../proptypes/Actor';
 import i18n from '../../../languages';
@@ -69,7 +69,11 @@ const InfoRead = ({
       </List>
 
       {canAdmin &&
-        <Typography variant="caption" display="block" align="center">
+        <Typography
+          variant="caption"
+          align="center"
+          sx={{ display: 'block' }}
+        >
           {created}
         </Typography>}
 

@@ -8,25 +8,25 @@ import React, {
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Grid from '@material-ui/core/Grid';
-import IconButton from '@material-ui/core/IconButton';
-import Link from '@material-ui/core/Link';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
-import NextIcon from '@material-ui/icons/NavigateNext';
-import PrevIcon from '@material-ui/icons/NavigateBefore';
-import ZoomOutIcon from '@material-ui/icons/FullscreenExit';
+import NextIcon from '@mui/icons-material/NavigateNext';
+import PrevIcon from '@mui/icons-material/NavigateBefore';
+import ZoomOutIcon from '@mui/icons-material/FullscreenExit';
 
 import MediumType from '../../../../proptypes/Medium';
 import ActorTitle from '../../../../components/ActorTitle';
@@ -282,9 +282,6 @@ const MediumStepperLightboxDefault = ({
       <Grid container>
         {hasPortrait &&
           <Grid
-            item
-            xs={12}
-            md={8}
             ref={paneRef}
             className={clsx(
               classes.mediaPane,
@@ -297,6 +294,7 @@ const MediumStepperLightboxDefault = ({
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
+            size={{ xs: 12, md: 8 }}
           >
             {(!isPortraitLoaded || isZoomLoading) &&
               <CircularProgress className={classes.spinner} />}
@@ -322,6 +320,7 @@ const MediumStepperLightboxDefault = ({
                     className={classes.overlayNavButton}
                     aria-label={zoomLabel}
                     onClick={handleZoomToggle}
+                    size="large"
                   >
                     <ZoomOutIcon />
                   </IconButton>
@@ -336,6 +335,7 @@ const MediumStepperLightboxDefault = ({
                     aria-label={prevLabel}
                     onClick={handlePrev}
                     disabled={!hasPrev}
+                    size="large"
                   >
                     <PrevIcon />
                   </IconButton>
@@ -351,6 +351,7 @@ const MediumStepperLightboxDefault = ({
                     aria-label={nextLabel}
                     onClick={handleNext}
                     disabled={!hasNext}
+                    size="large"
                   >
                     <NextIcon />
                   </IconButton>
@@ -358,14 +359,10 @@ const MediumStepperLightboxDefault = ({
               </Tooltip>
             </div>}
           </Grid>}
-        <Grid
-          item
-          xs={12}
-          md={hasPortrait ? 4 : 12}
-        >
+        <Grid size={{ xs: 12, md: hasPortrait ? 4 : 12 }}>
           <div className={classes.details}>
             <div className={hasPortrait ? undefined : classes.detailsInner}>
-              <Card variant="outlined" square>
+              <Card>
                 {medium.owner && medium.owner.type &&
                   getNamespace(medium.owner) !== 'people' &&
                   <CardHeaderOwner owner={medium.owner} />}
@@ -432,6 +429,7 @@ const MediumStepperLightboxDefault = ({
                     aria-label={prevLabel}
                     onClick={handlePrev}
                     disabled={!hasPrev}
+                    size="large"
                   >
                     <PrevIcon />
                   </IconButton>
@@ -439,6 +437,7 @@ const MediumStepperLightboxDefault = ({
                     aria-label={nextLabel}
                     onClick={handleNext}
                     disabled={!hasNext}
+                    size="large"
                   >
                     <NextIcon />
                   </IconButton>
@@ -480,4 +479,4 @@ MediumStepperLightboxDefault.propTypes = {
   handlePrev: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(MediumStepperLightboxDefault);
+export default withStyles(MediumStepperLightboxDefault, styles);

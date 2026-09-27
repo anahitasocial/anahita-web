@@ -4,15 +4,15 @@ import {
   geolocated,
   geoPropTypes,
 } from 'react-geolocated';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Dialog from '@material-ui/core/Dialog';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import CloseIcon from '@material-ui/icons/Close';
+import { makeStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Dialog from '@mui/material/Dialog';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import CloseIcon from '@mui/icons-material/Close';
 
 import NodeType from '../../../proptypes/Node';
 import LocationsList from './List';
@@ -24,7 +24,7 @@ const TABS = {
   ADD: 'add',
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     closeButton: {
       position: 'absolute',
@@ -45,7 +45,7 @@ const LocationsSelector = ({
   selectedLocations = [],
   onChange = null,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const [tab, setTab] = useState(TABS.SEARCH);
   const [keyword, setKeyword] = useState('');
@@ -95,11 +95,12 @@ const LocationsSelector = ({
               float: 'right',
             }}
             className={classes.closeButton}
+            size="large"
           >
             <CloseIcon />
           </IconButton>
         </DialogTitle>
-        <Divider light />
+        <Divider sx={{ opacity: '0.6' }} />
         <AppBar
           position="sticky"
           color="inherit"

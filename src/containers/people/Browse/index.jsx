@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Box from '@material-ui/core/Box';
+import Box from '@mui/material/Box';
 
-import PeopleIcon from '@material-ui/icons/People';
+import PeopleIcon from '@mui/icons-material/People';
 
 import ActorsBrowse from '../../actors/Browse';
 import BrowseHeader from '../../../components/BrowseHeader';
@@ -30,7 +30,7 @@ const People = ({ viewer, inviteSettings }) => {
 
   return (
     <>
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <BrowseHeader
           icon={<PeopleIcon />}
           title={i18n.t('people:cTitle')}

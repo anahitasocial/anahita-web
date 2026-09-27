@@ -2,11 +2,10 @@ import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom';
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Typography from '@material-ui/core/Typography';
-import withWidth from '@material-ui/core/withWidth';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Typography from '@mui/material/Typography';
 
 import actions from '../../../actions';
 import i18n from '../../../languages';
@@ -52,7 +51,7 @@ const HashtagsRead = (props) => {
 
   return (
     <>
-      <Card variant="outlined" square>
+      <Card>
         <CardHeader
           avatar={
             <Avatar>
@@ -122,4 +121,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(withWidth()(HashtagsRead));
+)(HashtagsRead);

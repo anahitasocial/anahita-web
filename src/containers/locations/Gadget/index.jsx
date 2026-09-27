@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import List from '@material-ui/core/List';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
+import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 
 import api from '../../../api';
 import permissions from '../../../permissions/node';
@@ -29,6 +29,10 @@ const LocationsGadget = ({
   cardProps = {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  // The add dialog asks the browser for the viewer's position as soon as it
+  // mounts, so it isn't mounted until somebody first opens it. After that it
+  // stays mounted, so it can animate closed and open again.
+  const [wasOpened, setWasOpened] = useState(false);
   const [locations, setLocations] = useState([]);
   const [waiting, setWaiting] = useState(false);
 
@@ -76,7 +80,7 @@ const LocationsGadget = ({
 
   return (
     <>
-      {canAdd &&
+      {canAdd && wasOpened &&
         <LocationsAdd
           node={node}
           isOpen={isOpen}
@@ -123,6 +127,7 @@ const LocationsGadget = ({
           <CardActions>
             <Button
               onClick={() => {
+                setWasOpened(true);
                 return setIsOpen(true);
               }}
               variant="outlined"

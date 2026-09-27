@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import saveAs from 'file-saver';
 import PropTypes from 'prop-types';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
-import DownloadIcon from '@material-ui/icons/CloudDownload';
+import DownloadIcon from '@mui/icons-material/CloudDownload';
 
 import api from '../../../api';
 import NodeType from '../../../proptypes/Node';

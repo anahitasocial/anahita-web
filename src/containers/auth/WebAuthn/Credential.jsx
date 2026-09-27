@@ -1,26 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import { makeStyles } from '@material-ui/core/styles';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import IconButton from '@material-ui/core/IconButton';
-import Chip from '@material-ui/core/Chip';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import FingerprintIcon from '@material-ui/icons/Fingerprint';
-import PhonelinkIcon from '@material-ui/icons/Phonelink';
-import UsbIcon from '@material-ui/icons/Usb';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
-import WarningIcon from '@material-ui/icons/Warning';
+import { makeStyles } from 'tss-react/mui';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import IconButton from '@mui/material/IconButton';
+import Chip from '@mui/material/Chip';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import FingerprintIcon from '@mui/icons-material/Fingerprint';
+import PhonelinkIcon from '@mui/icons-material/Phonelink';
+import UsbIcon from '@mui/icons-material/Usb';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import WarningIcon from '@mui/icons-material/Warning';
 import moment from 'moment';
 
 import WebAuthnCredentialType from '../../../proptypes/WebAuthnCredential';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     meta: {
       display: 'flex',
@@ -77,7 +77,7 @@ const Credential = ({
   handleRename,
   handleDelete,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { t, i18n } = useTranslation('auth');
   const {
     nickname,
@@ -109,10 +109,6 @@ const Credential = ({
       </ListItemIcon>
       <ListItemText
         primary={nickname}
-        // component: 'div' because secondary holds Chips, which render
-        // as block-level elements. Without it MUI wraps them in a <p>
-        // and the markup is invalid.
-        secondaryTypographyProps={{ component: 'div' }}
         secondary={
           <>
             <Typography variant="caption" color="textSecondary">
@@ -140,6 +136,12 @@ const Credential = ({
               </div>}
           </>
         }
+        // component: 'div' because secondary holds Chips, which render
+        // as block-level elements. Without it MUI wraps them in a <p>
+        // and the markup is invalid.
+        slotProps={{
+          secondary: { component: 'div' },
+        }}
       />
       <ListItemSecondaryAction className={classes.actions}>
         <Tooltip title={t('actions:edit')}>

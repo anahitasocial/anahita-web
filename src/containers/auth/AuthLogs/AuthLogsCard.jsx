@@ -2,25 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import { makeStyles } from 'tss-react/mui';
 
-import DesktopMacIcon from '@material-ui/icons/DesktopMac';
-import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
-import MobileIcon from '@material-ui/icons/Smartphone';
-import TabletIcon from '@material-ui/icons/Tablet';
-import BotIcon from '@material-ui/icons/Warning';
-import AuthLogsIcon from '@material-ui/icons/History';
+import DesktopMacIcon from '@mui/icons-material/DesktopMac';
+import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
+import MobileIcon from '@mui/icons-material/Smartphone';
+import TabletIcon from '@mui/icons-material/Tablet';
+import BotIcon from '@mui/icons-material/Warning';
+import AuthLogsIcon from '@mui/icons-material/History';
 
 import i18n from '../../../languages';
 import { OAuthClients as OAUTH_CLIENTS } from '../../../constants';
@@ -30,7 +30,7 @@ const clientDisplayName = (clientId) => {
   return OAUTH_CLIENTS[clientId] || clientId;
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return ({
     chip: {
       marginLeft: theme.spacing(1),
@@ -45,7 +45,7 @@ const AuthLogsCard = ({
   handleDelete,
   loading,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   if (items.length === 0) {
     return (<></>);
@@ -81,8 +81,10 @@ const AuthLogsCard = ({
             <AuthLogsIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('auth:authLogs.cTitle')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <List>
         {items.map((authLog, index) => {

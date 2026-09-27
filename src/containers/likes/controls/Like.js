@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
+import Button from '@mui/material/Button';
 
-import LikeIcon from '@material-ui/icons/FavoriteBorder';
-import UnlikeIcon from '@material-ui/icons/Favorite';
+import LikeIcon from '@mui/icons-material/FavoriteBorder';
+import UnlikeIcon from '@mui/icons-material/Favorite';
 
 import actions from '../../../actions';
 import NodeType from '../../../proptypes/Node';

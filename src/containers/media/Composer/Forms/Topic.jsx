@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 
 import { Medium as MEDIUM } from '../../../../constants';
 import MediumType from '../../../../proptypes/Medium';
@@ -26,7 +26,7 @@ const ComposersTopic = ({
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
-      <Card square>
+      <Card>
         <CardContent>
           {fields.name &&
             <TextField
@@ -35,20 +35,23 @@ const ComposersTopic = ({
               value={medium.name}
               onChange={handleOnChange}
               label={i18n.t('topics:composer.title')}
-              InputLabelProps={{
-                shrink: true,
-              }}
               placeholder={i18n.t('topics:composer.titlePlaceholder')}
               error={fields.name.error !== ''}
               helperText={fields.name.error}
               fullWidth
               margin="normal"
               disabled={isFetching}
-              inputProps={{
-                maxLength: NAME.MAX_LENGTH,
-                minLength: NAME.MIN_LENGTH,
-              }}
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: NAME.MAX_LENGTH,
+                  minLength: NAME.MIN_LENGTH,
+                },
+
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
             />}
           {fields.body &&
             <TextField
@@ -57,9 +60,6 @@ const ComposersTopic = ({
               value={medium.body}
               onChange={handleOnChange}
               label={i18n.t('topics:composer.body')}
-              InputLabelProps={{
-                shrink: true,
-              }}
               placeholder={i18n.t('topics:composer.bodyPlaceholder')}
               error={fields.body.error !== ''}
               helperText={fields.body.error}
@@ -67,12 +67,18 @@ const ComposersTopic = ({
               multiline
               margin="normal"
               disabled={isFetching}
-              inputProps={{
-                maxLength: BODY.MAX_LENGTH,
-              }}
               minRows={5}
               maxRows={10}
               required
+              slotProps={{
+                htmlInput: {
+                  maxLength: BODY.MAX_LENGTH,
+                },
+
+                inputLabel: {
+                  shrink: true,
+                },
+              }}
             />}
         </CardContent>
         <CardActions>

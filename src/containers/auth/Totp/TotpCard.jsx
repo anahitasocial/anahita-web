@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Divider from '@material-ui/core/Divider';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CircularProgress from '@mui/material/CircularProgress';
+import Divider from '@mui/material/Divider';
+import Typography from '@mui/material/Typography';
 
-import TotpIcon from '@material-ui/icons/PhonelinkLock';
+import TotpIcon from '@mui/icons-material/PhonelinkLock';
 
 import DialogConfirm from '../../../components/DialogConfirm';
 import i18n from '../../../languages';
@@ -42,11 +42,13 @@ const TotpCard = ({
             <TotpIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('auth:totp.cTitle')}
         subheader={enabled
           ? i18n.t('auth:totp.enable.on')
           : i18n.t('auth:totp.enable.off')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <Divider />
       <CardContent>

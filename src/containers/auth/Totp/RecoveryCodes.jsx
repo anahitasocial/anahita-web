@@ -1,16 +1,16 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 
-import Grid from '@material-ui/core/Grid';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import i18n from '../../../languages';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     list: {
       fontSize: 16,
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => {
 const TOTPRecoveryCodes = ({
   items: recoveryCodes = [],
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <>
@@ -41,11 +41,10 @@ const TOTPRecoveryCodes = ({
       <Grid
         container
         direction="row"
-        justifyContent="center"
-        alignItems="center"
         spacing={2}
+        sx={{ justifyContent: 'center', alignItems: 'center' }}
       >
-        <Grid item>
+        <Grid>
           <List>
             {recoveryCodes.map((rCode, index) => {
               const key = `recoveryCode-left-${index}`;
@@ -61,7 +60,7 @@ const TOTPRecoveryCodes = ({
             })}
           </List>
         </Grid>
-        <Grid item>
+        <Grid>
           <List>
             {recoveryCodes.map((rCode, index) => {
               const key = `recoveryCode-right-${index}`;

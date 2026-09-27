@@ -1,9 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles } from 'tss-react/mui';
+import CircularProgress from '@mui/material/CircularProgress';
+import Grid from '@mui/material/Grid';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     progress: {
       margin: theme.spacing(1),
@@ -12,12 +12,17 @@ const useStyles = makeStyles((theme) => {
 });
 
 const Progress = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <Grid
       container
-      justifyContent="center"
-      alignItems="center"
+      sx={{
+        // GridLegacy was full width; the Grid that replaced it in v7 is
+        // not, and this is shown inside flex rows as well as blocks.
+        width: '100%',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
     >
       <Grid>
         <CircularProgress className={classes.progress} />

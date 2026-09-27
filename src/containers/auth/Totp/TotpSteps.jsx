@@ -1,20 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Stepper from '@material-ui/core/Stepper';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles } from 'tss-react/mui';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Typography from '@mui/material/Typography';
 
-import TOTPIcon from '@material-ui/icons/PhonelinkLock';
-import CopyIcon from '@material-ui/icons/FileCopy';
-import DownloadIcon from '@material-ui/icons/CloudDownload';
+import TOTPIcon from '@mui/icons-material/PhonelinkLock';
+import CopyIcon from '@mui/icons-material/FileCopy';
+import DownloadIcon from '@mui/icons-material/CloudDownload';
 
 import i18n from '../../../languages';
 import { Totp as TOTP } from '../../../constants';
@@ -23,7 +23,7 @@ import FormPassword from './FormPassword';
 import FormPairing from './FormPairing';
 import RecoveryCodes from './RecoveryCodes';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     stepper: {
       padding: theme.spacing(2),
@@ -50,7 +50,7 @@ const TotpSteps = ({
   codesCopySuccess = false,
   enableError = '',
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const steps = {
     [STEPS.PAIR_DEVICE]: i18n.t('auth:totp.steps.pairDevice'),
@@ -59,7 +59,7 @@ const TotpSteps = ({
   };
 
   return (
-    <Card variant="outlined">
+    <Card>
       <CardHeader
         avatar={
           <Avatar>

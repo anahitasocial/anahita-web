@@ -1,8 +1,8 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
+import { makeStyles } from 'tss-react/mui';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import assets from '../assets';
 
 const {
@@ -10,7 +10,7 @@ const {
   color: lightThemeLogo,
 } = assets.logo;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     logo: {
       backgroundColor: theme.palette.background.paper,
@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const Logo = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const src = prefersDarkMode ? darkThemeLogo : lightThemeLogo;
 

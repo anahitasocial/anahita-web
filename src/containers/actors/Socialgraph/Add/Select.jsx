@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { singularize } from 'inflection';
 import { connect } from 'react-redux';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CircularProgress from '@mui/material/CircularProgress';
+import TextField from '@mui/material/TextField';
 
-import Autocomplete from '@material-ui/lab/Autocomplete';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
+import Autocomplete from '@mui/material/Autocomplete';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
 
 import ActorAvatar from '../../../../components/ActorAvatar';
 import ActorType from '../../../../proptypes/Actor';
@@ -67,7 +67,7 @@ const ActorsSocialgraphAddSelect = ({
   };
 
   return (
-    <Card square>
+    <Card>
       <CardContent>
         <Autocomplete
           multiple
@@ -77,7 +77,7 @@ const ActorsSocialgraphAddSelect = ({
           onChange={(event, options) => {
             setFollowers(options);
           }}
-          getOptionSelected={(option, value) => {
+          isOptionEqualToValue={(option, value) => {
             return option.id === value.id;
           }}
           getOptionLabel={(option) => {
@@ -88,9 +88,10 @@ const ActorsSocialgraphAddSelect = ({
           }}
           options={people}
           loading={isFetching}
-          renderOption={(follower) => {
+          renderOption={(optionProps, follower) => {
+            const { key, ...rest } = optionProps;
             return (
-              <>
+              <li key={key} {...rest}>
                 <ListItemAvatar>
                   <ActorAvatar
                     actor={follower}
@@ -100,7 +101,7 @@ const ActorsSocialgraphAddSelect = ({
                 <ListItemText
                   primary={follower.name}
                 />
-              </>
+              </li>
             );
           }}
           renderInput={(params) => {
@@ -109,14 +110,17 @@ const ActorsSocialgraphAddSelect = ({
                 {...params}
                 variant="outlined"
                 placeholder="Add follower ..."
-                InputProps={{
-                  ...params.InputProps,
-                  endAdornment: (
-                    <>
-                      {isFetching ? <CircularProgress size={20} /> : null}
-                      {params.InputProps.endAdornment}
-                    </>
-                  ),
+                slotProps={{
+                  ...params.slotProps,
+                  input: {
+                    ...params.slotProps.input,
+                    endAdornment: (
+                      <>
+                        {isFetching ? <CircularProgress size={20} /> : null}
+                        {params.slotProps.input.endAdornment}
+                      </>
+                    ),
+                  },
                 }}
               />
             );

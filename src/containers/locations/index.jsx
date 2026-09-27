@@ -2,13 +2,13 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { makeStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-import LocationsIcon from '@material-ui/icons/LocationOn';
+import LocationsIcon from '@mui/icons-material/LocationOn';
 
 import LocationsBrowse from './Browse';
 import BrowseHeader from '../../components/BrowseHeader';
@@ -25,7 +25,7 @@ const {
 
 const SORT_OPTIONS = [TRENDING, TOP, RECENT];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 const Locations = ({
   selectedTab = TOP,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // The URL is the only source of truth for the selected sort, so it is
@@ -63,7 +63,7 @@ const Locations = ({
     <>
       {/* No action. A location is attached to a post rather than created on
           its own, so there is nothing here for a + to open. */}
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <BrowseHeader
           icon={<LocationsIcon />}
           title={i18n.t('locations:cTitle')}

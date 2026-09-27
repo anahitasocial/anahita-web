@@ -1,35 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from 'tss-react/mui';
 
-import AddIcon from '@material-ui/icons/Add';
-import ClientsIcon from '@material-ui/icons/Apps';
-import ConfidentialIcon from '@material-ui/icons/Lock';
-import PublicIcon from '@material-ui/icons/LockOpen';
+import AddIcon from '@mui/icons-material/Add';
+import ClientsIcon from '@mui/icons-material/Apps';
+import ConfidentialIcon from '@mui/icons-material/Lock';
+import PublicIcon from '@mui/icons-material/LockOpen';
 
 import i18n from '../../../languages';
 import OAuthClientsType from '../../../proptypes/OAuthClients';
 
 import OAuthClientMenu from './Menu';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     clientId: {
       fontFamily: 'monospace',
@@ -76,7 +76,7 @@ const OAuthClients = ({
   onDelete,
   onRotate,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Card>
@@ -129,14 +129,13 @@ const OAuthClients = ({
                 </ListItemAvatar>
                 <ListItemText
                   primary={client.name}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       <Typography
                         variant="caption"
                         color="textSecondary"
                         className={classes.clientId}
-                        display="block"
+                        sx={{ display: 'block' }}
                       >
                         {client.clientId}
                       </Typography>
@@ -179,6 +178,9 @@ const OAuthClients = ({
                       </Typography>
                     </>
                   }
+                  slotProps={{
+                    secondary: { component: 'div' },
+                  }}
                 />
                 <ListItemSecondaryAction>
                   <OAuthClientMenu

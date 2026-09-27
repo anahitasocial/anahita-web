@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 
 import PersonType from '../../../proptypes/Person';
@@ -47,8 +47,9 @@ const PersonAddForm = (props) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
       <CardContent>
-        <FormControl component="fieldset" margin="normal" fullWidth>
+        <FormControl variant="standard" component="fieldset" margin="normal" fullWidth>
           <TextField
+            variant="standard"
             name="name"
             value={person.name || ''}
             onChange={handleOnChange}
@@ -58,13 +59,16 @@ const PersonAddForm = (props) => {
             autoFocus
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: NAME.MAX_LENGTH,
-              minLength: NAME.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: NAME.MAX_LENGTH,
+                minLength: NAME.MIN_LENGTH,
+              },
+            }}
           />
           <TextField
+            variant="standard"
             name="username"
             value={person.username}
             onChange={handleOnChange}
@@ -74,13 +78,16 @@ const PersonAddForm = (props) => {
             helperText={username.error}
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: USERNAME.MAX_LENGTH,
-              minLength: USERNAME.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: USERNAME.MAX_LENGTH,
+                minLength: USERNAME.MIN_LENGTH,
+              },
+            }}
           />
           <TextField
+            variant="standard"
             type="email"
             name="email"
             value={person.email}
@@ -91,13 +98,16 @@ const PersonAddForm = (props) => {
             helperText={email.error}
             fullWidth
             margin="normal"
-            inputProps={{
-              maxLength: EMAIL.MAX_LENGTH,
-              minLength: EMAIL.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: EMAIL.MAX_LENGTH,
+                minLength: EMAIL.MIN_LENGTH,
+              },
+            }}
           />
           <TextField
+            variant="standard"
             name="body"
             value={person.body}
             onChange={handleOnChange}
@@ -107,14 +117,16 @@ const PersonAddForm = (props) => {
             margin="normal"
             fullWidth
             multiline
-            inputProps={{
-              maxLength: BODY.MAX_LENGTH,
-              minLength: BODY.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+                minLength: BODY.MIN_LENGTH,
+              },
+            }}
           />
         </FormControl>
-        <FormControl margin="normal" fullWidth>
+        <FormControl variant="standard" margin="normal" fullWidth>
           <InputLabel id="pronouns-label" shrink>
             {i18n.t('people:person.pronouns')}
           </InputLabel>

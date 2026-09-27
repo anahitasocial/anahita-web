@@ -2,13 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import IconButton from '@material-ui/core/IconButton';
-import Tooltip from '@material-ui/core/Tooltip';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 
-import AddIcon from '@material-ui/icons/Add';
+import AddIcon from '@mui/icons-material/Add';
 
 // The header a browse view opens with: what you are looking at, and the one
 // thing you can add to it.
@@ -34,14 +34,13 @@ const BrowseHeader = ({
   actionLabel = '',
 }) => {
   return (
-    <Card variant="outlined">
+    <Card>
       <CardHeader
         avatar={
           <Avatar>
             {icon}
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={title}
         action={actionTo &&
           <Tooltip title={actionLabel}>
@@ -50,10 +49,14 @@ const BrowseHeader = ({
               component={Link}
               to={actionTo}
               aria-label={actionLabel}
+              size="large"
             >
               <AddIcon />
             </IconButton>
           </Tooltip>}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
     </Card>
   );

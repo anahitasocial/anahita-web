@@ -1,11 +1,11 @@
 import React from 'react';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import ActorType from '../../../proptypes/Actor';
@@ -41,11 +41,10 @@ const ActorBodyAdmins = (props) => {
           const key = `admin_${admin.id}`;
           const href = getURL(admin);
           return (
-            <ListItem
+            <ListItemButton
               key={key}
               href={href}
               component="a"
-              button
             >
               <ListItemAvatar>
                 <ActorAvatar actor={admin} />
@@ -53,7 +52,7 @@ const ActorBodyAdmins = (props) => {
               <ListItemText
                 primary={getActorName(admin)}
               />
-            </ListItem>
+            </ListItemButton>
           );
         })}
       </List>

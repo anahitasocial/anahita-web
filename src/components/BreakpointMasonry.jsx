@@ -1,8 +1,9 @@
 import React from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { useTheme } from '@mui/material/styles';
+import { makeStyles } from 'tss-react/mui';
 import Masonry from 'react-masonry-css';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     masonryGrid: {
       display: 'flex',
@@ -17,7 +18,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const BreakpointMasonry = (params) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const theme = useTheme();
   const { children } = params;
 

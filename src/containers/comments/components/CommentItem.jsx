@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Link from '@material-ui/core/Link';
-import Divider from '@material-ui/core/Divider';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Link from '@mui/material/Link';
+import Divider from '@mui/material/Divider';
 
 import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import IconButton from '@material-ui/core/IconButton';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
 
@@ -44,6 +44,7 @@ const ActorsReadControls = ({
         aria-owns={anchorEl ? 'long-menu' : null}
         aria-haspopup="true"
         onClick={handleOpen}
+        size="large"
       >
         <MoreVertIcon />
       </IconButton>
@@ -52,10 +53,12 @@ const ActorsReadControls = ({
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
-        PaperProps={{
-          style: {
-            maxHeight: ITEM_HEIGHT * 4.5,
-            width: 200,
+        slotProps={{
+          paper: {
+            style: {
+              maxHeight: ITEM_HEIGHT * 4.5,
+              width: 200,
+            },
           },
         }}
       >

@@ -1,31 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Link from '@material-ui/core/Link';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from 'tss-react/mui';
 
-import SignupRequestsIcon from '@material-ui/icons/HowToReg';
-import PersonIcon from '@material-ui/icons/PersonOutline';
-import WarningIcon from '@material-ui/icons/Warning';
+import SignupRequestsIcon from '@mui/icons-material/HowToReg';
+import PersonIcon from '@mui/icons-material/PersonOutlined';
+import WarningIcon from '@mui/icons-material/Warning';
 
 import i18n from '../../../languages';
 import SignupRequestsType from '../../../proptypes/SignupRequests';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     body: {
       marginTop: theme.spacing(0.5),
@@ -85,7 +85,7 @@ const SignupRequests = ({
   canReject = false,
   onDecide,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Card>
@@ -126,7 +126,6 @@ const SignupRequests = ({
                 </ListItemAvatar>
                 <ListItemText
                   primary={request.username}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       <Typography variant="caption" color="textSecondary">
@@ -224,6 +223,9 @@ const SignupRequests = ({
                       </div>
                     </>
                   }
+                  slotProps={{
+                    secondary: { component: 'div' },
+                  }}
                 />
               </ListItem>
             );

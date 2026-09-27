@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import inflector from 'inflector-js';
 import _ from 'lodash';
 
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import ArticleForm from './Forms/Article';
 import FileForm from './Forms/File';
@@ -20,7 +20,7 @@ import utils from '../../../utils';
 
 const { form, node } = utils;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -72,7 +72,7 @@ const COMPOSER_CONFIGS = {
 const Composers = ({
   actor,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const composers = node.getComposers(actor);
   const [tab, setTab] = useState(composers[0]);
 
@@ -89,6 +89,7 @@ const Composers = ({
       color="inherit"
       className={classes.root}
       variant="outlined"
+      elevation={0}
     >
       {config && (
         <config.Composer

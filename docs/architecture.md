@@ -13,6 +13,7 @@ How the app is put together, and how it talks to anahita-services.
 - [Routes](#routes)
 - [What a viewer may do](#what-a-viewer-may-do)
 - [Translations](#translations)
+- [Styling](#styling)
 
 ## Directory layout
 
@@ -32,7 +33,8 @@ Everything is under `src/`:
 | `assets/` | Themes: logo, home page, left menu, styles and static pages |
 | `statics/` | Files shipped with the app, including the Terms of Service and Privacy Policy |
 | `proptypes/` | PropTypes shapes and matching default objects for the API's entities |
-| `constants/`, `utils/`, `styles/`, `middleware/` | Shared helpers |
+| `styles/` | Builds the Material UI theme from the active theme's `styles` |
+| `constants/`, `utils/`, `middleware/` | Shared helpers |
 
 ## Talking to the API
 
@@ -154,3 +156,26 @@ a namespace, such as `people.js` or `settings.js`, used as
 The app is currently set to English (`lng: 'en'` in `src/languages/index.js`).
 The French translations are maintained, but are not used unless that setting
 changes. See [Languages](customising.md#languages).
+
+## Styling
+
+The UI is Material UI 9 (`@mui/material`), styled with Emotion. The theme is
+made in `src/styles/index.js` with `createTheme`, from the options the active
+theme's `styles.global()` returns (see [Themes](customising.md#themes)), and
+provided in `src/containers/Root.jsx`. Under the theme's options,
+`src/styles/index.js` puts back a few Material-UI 4 defaults, such as the
+breakpoint widths and the background colours, so that the app kept its look
+through the upgrade; a theme can override any of them.
+
+Components style themselves in one of two ways:
+
+- `makeStyles` or `withStyles` from `tss-react/mui`, which return class names
+  built from the theme. Most existing components use these.
+- The `sx` prop, for a few rules on one element.
+
+Styles are plain objects. `theme.spacing(n)` returns a string with its unit
+(`'16px'`), so write `theme.spacing(-2)`, not `-theme.spacing(2)`, and don't
+add `px` after it.
+
+Material UI 9 supports Chrome 117, Edge 121, Firefox 121 and Safari 17 and
+later; `browserslist` in `package.json` matches.

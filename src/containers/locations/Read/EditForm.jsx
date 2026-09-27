@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 
 import { Locations as LOCATION } from '../../../constants';
 import LocationType from '../../../proptypes/Location';
@@ -51,13 +51,15 @@ const LocationEditForm = ({
           value={location.name}
           error={fields.name.error !== ''}
           helperText={fields.name.error}
-          inputProps={{
-            maxLength: TITLE.MAX_LENGTH,
-          }}
           disabled={isFetching}
           fullWidth
           autoFocus
           required={requiredFields.includes('name')}
+          slotProps={{
+            htmlInput: {
+              maxLength: TITLE.MAX_LENGTH,
+            },
+          }}
         />
         <TextField
           id="location-address"
@@ -69,12 +71,14 @@ const LocationEditForm = ({
           value={location.address}
           error={fields.address.error !== ''}
           helperText={fields.address.error}
-          inputProps={{
-            maxLength: ADDRESS.MAX_LENGTH,
-          }}
           disabled={isFetching}
           fullWidth
           required={requiredFields.includes('address')}
+          slotProps={{
+            htmlInput: {
+              maxLength: ADDRESS.MAX_LENGTH,
+            },
+          }}
         />
         {fields.city &&
           <TextField
@@ -87,12 +91,14 @@ const LocationEditForm = ({
             value={location.city}
             error={fields.city.error !== ''}
             helperText={fields.city.error}
-            inputProps={{
-              maxLength: CITY.MAX_LENGTH,
-            }}
             disabled={isFetching}
             fullWidth
             required={requiredFields.includes('city')}
+            slotProps={{
+              htmlInput: {
+                maxLength: CITY.MAX_LENGTH,
+              },
+            }}
           />}
         {fields.country &&
           <FormControl

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 import PersonInfoFields from '../../people/Settings/InfoFields';
 import Progress from '../../../components/Progress';

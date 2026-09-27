@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
-import CardContent from '@material-ui/core/CardContent';
-import Checkbox from '@material-ui/core/Checkbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import CardContent from '@mui/material/CardContent';
+import Checkbox from '@mui/material/Checkbox';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import ActorType from '../../../proptypes/Actor';
@@ -104,14 +104,8 @@ const OnboardingFeatured = ({
           {actors.map((actor) => {
             const following = Boolean(actor.isLeadingViewer);
             const labelId = `onboarding-featured-${actor.id}`;
-
-            return (
-              <ListItem
-                key={actor.id}
-                button={!following}
-                disabled={pending}
-                onClick={following ? undefined : () => { toggle(actor.id); }}
-              >
+            const content = (
+              <>
                 <ListItemAvatar>
                   <ActorAvatar actor={actor} />
                 </ListItemAvatar>
@@ -120,24 +114,42 @@ const OnboardingFeatured = ({
                   primary={getActorName(actor)}
                   secondary={secondaryText(actor)}
                 />
-                <ListItemSecondaryAction>
-                  {following
-                    ? (
-                      <Typography variant="body2" color="textSecondary">
-                        {i18n.t('onboarding:featured.following')}
-                      </Typography>
-                    )
-                    : (
-                      <Checkbox
-                        edge="end"
-                        color="primary"
-                        checked={selected.has(actor.id)}
-                        disabled={pending}
-                        onChange={() => { toggle(actor.id); }}
-                        inputProps={{ 'aria-labelledby': labelId }}
-                      />
-                    )}
-                </ListItemSecondaryAction>
+              </>
+            );
+
+            return (
+              <ListItem
+                key={actor.id}
+                disablePadding={!following}
+                secondaryAction={following
+                  ? (
+                    <Typography variant="body2" color="textSecondary">
+                      {i18n.t('onboarding:featured.following')}
+                    </Typography>
+                  )
+                  : (
+                    <Checkbox
+                      edge="end"
+                      color="primary"
+                      checked={selected.has(actor.id)}
+                      disabled={pending}
+                      onChange={() => { toggle(actor.id); }}
+                      slotProps={{
+                        input: { 'aria-labelledby': labelId },
+                      }}
+                    />
+                  )}
+              >
+                {following
+                  ? content
+                  : (
+                    <ListItemButton
+                      disabled={pending}
+                      onClick={() => { toggle(actor.id); }}
+                    >
+                      {content}
+                    </ListItemButton>
+                  )}
               </ListItem>
             );
           })}

@@ -1,6 +1,6 @@
 import React from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import IconButton from '@material-ui/core/IconButton';
+import Avatar from '@mui/material/Avatar';
+import IconButton from '@mui/material/IconButton';
 import PersonType from '../../proptypes/Person';
 import Icon from './Icon';
 

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { makeStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import Browse from './index';
 import { Actor as ACTOR } from '../../../constants';
@@ -12,7 +12,7 @@ import i18n from '../../../languages';
 
 const { FILTER } = ACTOR;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -26,7 +26,7 @@ const ActorsBrowseGadget = ({
   namespace,
   owner,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [tab, setTab] = useState(selectedTab);
 
   const changeTab = (event, value) => {

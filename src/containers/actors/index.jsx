@@ -2,14 +2,14 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { makeStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
-import GroupsIcon from '@material-ui/icons/GroupWork';
-import PeopleIcon from '@material-ui/icons/People';
+import GroupsIcon from '@mui/icons-material/GroupWork';
+import PeopleIcon from '@mui/icons-material/People';
 
 import Browse from './Browse';
 import BrowseHeader from '../../components/BrowseHeader';
@@ -26,7 +26,7 @@ const { FILTER } = ACTOR;
 const ALL = '';
 const AUTH_FILTERS = [FILTER.FOLLOWING, FILTER.ADMINISTERING];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -49,7 +49,7 @@ const Actors = ({
   isAuthenticated,
   actorSettings = {},
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // The URL is the only source of truth for the selected tab, so the tab is
@@ -88,7 +88,7 @@ const Actors = ({
     <>
       {/* Above the filters, not inside them: the header says what the page is,
           the tabs narrow it, and the tabs are the half worth pinning. */}
-      <Box mb={2}>
+      <Box sx={{ mb: 2 }}>
         <BrowseHeader
           icon={BROWSE_ICONS[namespace]}
           title={i18n.t(`${namespace}:cTitle`)}

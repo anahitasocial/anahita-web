@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import CircularProgress from '@mui/material/CircularProgress';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
 
 import ActorType from '../../../../proptypes/Actor';
 import PersonType from '../../../../proptypes/Person';
@@ -40,7 +40,7 @@ const ComposersNote = ({
 
   return (
     <form onSubmit={handleOnSubmit} noValidate>
-      <Card square>
+      <Card>
         <CardContent>
           <TextField
             autoFocus
@@ -54,11 +54,13 @@ const ComposersNote = ({
             margin="normal"
             variant="outlined"
             disabled={isFetching}
-            inputProps={{
-              maxLength: BODY.MAX_LENGTH,
-            }}
             placeholder={placeholder}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+              },
+            }}
           />
           {canPrivatePost &&
             <FormControlLabel

@@ -1,17 +1,17 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
-import Container from '@material-ui/core/Container';
+import Container from '@mui/material/Container';
 import _ from 'lodash';
 
 import HeaderMeta from '../../components/HeaderMeta';
 import i18n from '../../languages';
 import assets from '../../assets';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       '& a': {
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => {
 const StaticPage = ({
   match: { params },
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [source, setSource] = React.useState('');
   const alias = _.snakeCase(params.alias);
   const src = assets.pages[alias];

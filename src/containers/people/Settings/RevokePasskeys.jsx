@@ -2,23 +2,23 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from 'tss-react/mui';
 
-import PasskeyIcon from '@material-ui/icons/Fingerprint';
+import PasskeyIcon from '@mui/icons-material/Fingerprint';
 
 import StepUp from '../../auth/StepUp';
 import useStepUp from '../../settings/useStepUp';
@@ -27,7 +27,7 @@ import api from '../../../api';
 import i18n from '../../../languages';
 import PersonType from '../../../proptypes/Person';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     destructive: {
       color: theme.palette.error.main,
@@ -54,7 +54,7 @@ const RevokePasskeys = ({
   alertError,
   alertSuccess,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [count, setCount] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [confirming, setConfirming] = useState(false);

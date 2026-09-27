@@ -2,18 +2,18 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import striptags from 'striptags';
 import { Helmet } from 'react-helmet-async';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
-import Dialog from '@material-ui/core/Dialog';
-import Divider from '@material-ui/core/Divider';
-import IconButton from '@material-ui/core/IconButton';
-import Toolbar from '@material-ui/core/Toolbar';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
+import Dialog from '@mui/material/Dialog';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
-import CloseIcon from '@material-ui/icons/Close';
-import HomeIcon from '@material-ui/icons/Home';
-import LinkIcon from '@material-ui/icons/Link';
+import CloseIcon from '@mui/icons-material/Close';
+import HomeIcon from '@mui/icons-material/Home';
+import LinkIcon from '@mui/icons-material/Link';
 
 import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
@@ -102,7 +102,12 @@ const MediaStepperView = ({
       </Helmet>
       <Toolbar className={classes.toolbar} variant="dense">
         <Tooltip title={i18n.t('commons:close')}>
-          <IconButton aria-label={i18n.t('commons:close')} onClick={handleClose} edge="start">
+          <IconButton
+            aria-label={i18n.t('commons:close')}
+            onClick={handleClose}
+            edge="start"
+            size="large"
+          >
             <CloseIcon />
           </IconButton>
         </Tooltip>
@@ -121,12 +126,23 @@ const MediaStepperView = ({
             })}
           </Typography>}
         <Tooltip title={i18n.t('media:stepper.permalink')}>
-          <IconButton aria-label={i18n.t('media:stepper.permalink')} component="a" href={url}>
+          <IconButton
+            aria-label={i18n.t('media:stepper.permalink')}
+            component="a"
+            href={url}
+            size="large"
+          >
             <LinkIcon />
           </IconButton>
         </Tooltip>
         <Tooltip title={i18n.t('media:stepper.home')}>
-          <IconButton aria-label={i18n.t('media:stepper.home')} component="a" href="/" edge="end">
+          <IconButton
+            aria-label={i18n.t('media:stepper.home')}
+            component="a"
+            href="/"
+            edge="end"
+            size="large"
+          >
             <HomeIcon />
           </IconButton>
         </Tooltip>
@@ -213,4 +229,4 @@ MediaStepperView.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(MediaStepperView);
+export default withStyles(MediaStepperView, styles);

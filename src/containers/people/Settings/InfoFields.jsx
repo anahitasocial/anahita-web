@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import TextField from '@material-ui/core/TextField';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import TextField from '@mui/material/TextField';
 
 import PersonType from '../../../proptypes/Person';
 import { Person as PERSON } from '../../../constants';
@@ -34,6 +34,7 @@ const PersonInfoFields = ({
   return (
     <>
       <TextField
+        variant="standard"
         name="name"
         value={person.name || ''}
         onChange={handleOnChange}
@@ -43,13 +44,16 @@ const PersonInfoFields = ({
         autoFocus={autoFocus}
         fullWidth
         margin="normal"
-        inputProps={{
-          maxLength: NAME.MAX_LENGTH,
-          minLength: NAME.MIN_LENGTH,
-        }}
         required
+        slotProps={{
+          htmlInput: {
+            maxLength: NAME.MAX_LENGTH,
+            minLength: NAME.MIN_LENGTH,
+          },
+        }}
       />
       <TextField
+        variant="standard"
         name="body"
         value={person.body || ''}
         onChange={handleOnChange}
@@ -59,13 +63,15 @@ const PersonInfoFields = ({
         margin="normal"
         fullWidth
         multiline
-        inputProps={{
-          maxLength: BODY.MAX_LENGTH,
-          minLength: BODY.MIN_LENGTH,
-        }}
         required
+        slotProps={{
+          htmlInput: {
+            maxLength: BODY.MAX_LENGTH,
+            minLength: BODY.MIN_LENGTH,
+          },
+        }}
       />
-      <FormControl margin="normal" fullWidth>
+      <FormControl variant="standard" margin="normal" fullWidth>
         <InputLabel id="pronouns-label" shrink>
           {i18n.t('people:person.pronouns')}
         </InputLabel>

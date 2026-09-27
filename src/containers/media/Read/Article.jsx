@@ -1,18 +1,18 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Grid from '@material-ui/core/Grid';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import ButtonBase from '@mui/material/ButtonBase';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Grid from '@mui/material/Grid';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
 import MediumType from '../../../proptypes/Medium';
 import ActorTitle from '../../../components/ActorTitle';
@@ -70,9 +70,9 @@ const MediumReadArticle = ({
   return (
     <Grid
       container
-      justifyContent="center"
+      sx={{ justifyContent: 'center' }}
     >
-      <Grid item xs={12} md={8}>
+      <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
           {medium.owner.objectType.split('.')[1] !== 'people' &&
             <CardHeaderOwner node={medium} />}
@@ -167,4 +167,4 @@ MediumReadArticle.propTypes = {
   cover: PropTypes.node,
 };
 
-export default withStyles(styles)(MediumReadArticle);
+export default withStyles(MediumReadArticle, styles);

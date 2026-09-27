@@ -1,15 +1,15 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { useTheme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
-import Typography from '@material-ui/core/Typography';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 import Particles from 'react-tsparticles';
 
-import IconButton from '@material-ui/core/IconButton';
+import IconButton from '@mui/material/IconButton';
 
-import GithubIcon from '@material-ui/icons/GitHub';
-import FacebookIcon from '@material-ui/icons/Facebook';
-import WebsiteIcon from '@material-ui/icons/Web';
+import GithubIcon from '@mui/icons-material/GitHub';
+import FacebookIcon from '@mui/icons-material/Facebook';
+import WebsiteIcon from '@mui/icons-material/Web';
 
 import HeaderMeta from '../../../components/HeaderMeta';
 import Hero from './Hero';
@@ -71,6 +71,7 @@ const Home = () => {
           target="_blank"
           aria-label="website"
           title="Anahita Knowlege Networking Platform & Framework"
+          size="large"
         >
           <WebsiteIcon />
         </IconButton>
@@ -79,6 +80,7 @@ const Home = () => {
           target="_blank"
           aria-label="github-server"
           title="Anahita Server"
+          size="large"
         >
           <GithubIcon />
         </IconButton>
@@ -87,6 +89,7 @@ const Home = () => {
           target="_blank"
           aria-label="github-client"
           title="Anahita Client"
+          size="large"
         >
           <GithubIcon />
         </IconButton>
@@ -94,6 +97,7 @@ const Home = () => {
           href="https://www.facebook.com/anahita_io"
           target="_blank"
           aria-label="facebook"
+          size="large"
         >
           <FacebookIcon />
         </IconButton>

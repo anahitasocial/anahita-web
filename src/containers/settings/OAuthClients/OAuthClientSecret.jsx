@@ -1,20 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from 'tss-react/mui';
 
 import i18n from '../../../languages';
 import OAuthClientType from '../../../proptypes/OAuthClient';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     secret: {
       fontFamily: 'monospace',
@@ -52,7 +52,7 @@ const OAuthClientSecret = ({
   secret = null,
   onClose,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
@@ -84,7 +84,6 @@ const OAuthClientSecret = ({
   return (
     <Dialog
       open
-      disableEscapeKeyDown
       fullWidth
       maxWidth="sm"
       aria-labelledby="oauth-client-secret-title"
@@ -99,14 +98,21 @@ const OAuthClientSecret = ({
           {i18n.t('settings:oauthClients.secret.cDescription')}
         </DialogContentText>
 
-        <Typography variant="caption" color="textSecondary" display="block">
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          sx={{ display: 'block' }}
+        >
           {i18n.t('settings:oauthClients.fields.clientId')}
         </Typography>
         <Typography className={classes.clientId} gutterBottom>
           {client.clientId}
         </Typography>
-
-        <Typography variant="caption" color="textSecondary" display="block">
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          sx={{ display: 'block' }}
+        >
           {i18n.t('settings:oauthClients.secret.label')}
         </Typography>
         <Box className={classes.secret}>

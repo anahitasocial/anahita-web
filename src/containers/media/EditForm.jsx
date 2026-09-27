@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
 
 import MediumType from '../../proptypes/Medium';
 import { Medium as MEDIUM } from '../../constants';
@@ -31,6 +31,7 @@ const MediumFormEdit = (props) => {
       <CardContent>
         {fields.name &&
           <TextField
+            variant="standard"
             name="name"
             value={medium.name || ''}
             onChange={handleOnChange}
@@ -41,14 +42,17 @@ const MediumFormEdit = (props) => {
             fullWidth
             margin="normal"
             disabled={isFetching}
-            inputProps={{
-              maxLength: NAME.MAX_LENGTH,
-              minLength: NAME.MIN_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: NAME.MAX_LENGTH,
+                minLength: NAME.MIN_LENGTH,
+              },
+            }}
           />}
         {fields.body &&
           <TextField
+            variant="standard"
             name="body"
             value={medium.body || ''}
             onChange={handleOnChange}
@@ -59,10 +63,12 @@ const MediumFormEdit = (props) => {
             fullWidth
             margin="normal"
             disabled={isFetching}
-            inputProps={{
-              maxLength: BODY.MAX_LENGTH,
-            }}
             required
+            slotProps={{
+              htmlInput: {
+                maxLength: BODY.MAX_LENGTH,
+              },
+            }}
           />}
       </CardContent>
       <CardActions>

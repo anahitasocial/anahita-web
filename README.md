@@ -4,7 +4,7 @@
 
 The web app for [Anahita](https://www.anahita.io), an open source social
 networking platform and framework. It is a single-page app built with React 18,
-Material-UI 4 and Redux. It is a client of **anahita-services**, the Go
+Material UI 9 and Redux. It is a client of **anahita-services**, the Go
 microservices back end, and talks to it only through its HTTP API.
 
 People use it to keep a profile, follow people and groups, post notes,

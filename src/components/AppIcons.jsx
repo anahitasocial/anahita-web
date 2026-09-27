@@ -1,23 +1,23 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 
-import ArticlesIcon from '@material-ui/icons/LibraryBooks';
-import DocumentsIcon from '@material-ui/icons/PictureAsPdf';
-import LocationsIcon from '@material-ui/icons/LocationOn';
-import NotesIcon from '@material-ui/icons/Note';
-import PhotosIcon from '@material-ui/icons/Photo';
-import TopicsIcon from '@material-ui/icons/QuestionAnswer';
-import TodosIcon from '@material-ui/icons/AssignmentTurnedIn';
+import ArticlesIcon from '@mui/icons-material/LibraryBooks';
+import DocumentsIcon from '@mui/icons-material/PictureAsPdf';
+import LocationsIcon from '@mui/icons-material/LocationOn';
+import NotesIcon from '@mui/icons-material/Note';
+import PhotosIcon from '@mui/icons-material/Photo';
+import TopicsIcon from '@mui/icons-material/QuestionAnswer';
+import TodosIcon from '@mui/icons-material/AssignmentTurnedIn';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   icon: {
     fontSize: 20,
   },
 });
 
 const StyledIcon = ({ component: Component, ...props }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <Component className={classes.icon} {...props} />
   );

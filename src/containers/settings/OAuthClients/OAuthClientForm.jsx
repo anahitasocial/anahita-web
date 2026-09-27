@@ -1,18 +1,18 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Chip from '@material-ui/core/Chip';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from 'tss-react/mui';
 
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -45,7 +45,7 @@ const TEXT_FIELDS = [
   'tokenExpiry',
 ];
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     field: {
       marginBottom: theme.spacing(2),
@@ -101,7 +101,7 @@ const OAuthClientForm = ({
   onClose,
   onSave,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const isEdit = Boolean(client);
 
   const [fields, setFields] = useState(() => {
@@ -273,7 +273,11 @@ const OAuthClientForm = ({
               the server has no route for it. Shown, not offered. */}
           {isEdit ?
             <Box className={classes.field}>
-              <Typography variant="caption" color="textSecondary" display="block">
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                sx={{ display: 'block' }}
+              >
                 {i18n.t('settings:oauthClients.fields.clientId')}
               </Typography>
               <Typography className={classes.mono}>
@@ -281,6 +285,7 @@ const OAuthClientForm = ({
               </Typography>
             </Box> :
             <TextField
+              variant="standard"
               className={classes.field}
               name="clientId"
               label={i18n.t('settings:oauthClients.fields.clientId')}
@@ -290,17 +295,20 @@ const OAuthClientForm = ({
               helperText={clientId.error || i18n.t('settings:oauthClients.form.clientIdHint')}
               fullWidth
               required
-              inputProps={{
-                minLength: 2,
-                maxLength: 64,
-                pattern: CLIENT_ID_PATTERN,
-                autoCapitalize: 'none',
-                autoCorrect: 'off',
-                spellCheck: 'false',
+              slotProps={{
+                htmlInput: {
+                  minLength: 2,
+                  maxLength: 64,
+                  pattern: CLIENT_ID_PATTERN,
+                  autoCapitalize: 'none',
+                  autoCorrect: 'off',
+                  spellCheck: 'false',
+                },
               }}
             />}
 
           <TextField
+            variant="standard"
             className={classes.field}
             name="name"
             label={i18n.t('settings:oauthClients.fields.name')}
@@ -310,10 +318,13 @@ const OAuthClientForm = ({
             helperText={name.error || i18n.t('settings:oauthClients.form.nameHint')}
             fullWidth
             required
-            inputProps={{ minLength: 3, maxLength: 128 }}
+            slotProps={{
+              htmlInput: { minLength: 3, maxLength: 128 },
+            }}
           />
 
           <TextField
+            variant="standard"
             className={classes.field}
             name="redirectUris"
             label={i18n.t('settings:oauthClients.fields.redirectUris')}
@@ -348,7 +359,12 @@ const OAuthClientForm = ({
             })}
           </Box>
           {grantTypesMissing &&
-            <Typography variant="caption" color="error" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              color="error"
+              gutterBottom
+              sx={{ display: 'block' }}
+            >
               {i18n.t('settings:oauthClients.form.grantTypesRequired')}
             </Typography>}
 
@@ -374,15 +390,26 @@ const OAuthClientForm = ({
             })}
           </Box>
           {scopesMissing &&
-            <Typography variant="caption" color="error" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              color="error"
+              gutterBottom
+              sx={{ display: 'block' }}
+            >
               {i18n.t('settings:oauthClients.form.scopesRequired')}
             </Typography>}
           {availableScopes.length === 0 &&
-            <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              gutterBottom
+              sx={{ display: 'block' }}
+            >
               {i18n.t('settings:oauthClients.form.scopesUnavailable')}
             </Typography>}
 
           <TextField
+            variant="standard"
             className={classes.field}
             name="tokenExpiry"
             label={i18n.t('settings:oauthClients.fields.tokenExpiry')}
@@ -392,7 +419,9 @@ const OAuthClientForm = ({
             error={Boolean(tokenExpiry.error)}
             helperText={tokenExpiry.error || i18n.t('settings:oauthClients.form.tokenExpiryHint')}
             fullWidth
-            inputProps={{ min: 300, max: 86400 }}
+            slotProps={{
+              htmlInput: { min: 300, max: 86400 },
+            }}
           />
 
           <FormControlLabel
@@ -407,7 +436,12 @@ const OAuthClientForm = ({
             }
             label={i18n.t('settings:oauthClients.fields.confidential')}
           />
-          <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+          <Typography
+            variant="caption"
+            color="textSecondary"
+            gutterBottom
+            sx={{ display: 'block' }}
+          >
             {i18n.t('settings:oauthClients.form.confidentialHint')}
           </Typography>
 
@@ -423,7 +457,12 @@ const OAuthClientForm = ({
             }
             label={i18n.t('settings:oauthClients.fields.skipConsent')}
           />
-          <Typography variant="caption" color="textSecondary" display="block" gutterBottom>
+          <Typography
+            variant="caption"
+            color="textSecondary"
+            gutterBottom
+            sx={{ display: 'block' }}
+          >
             {i18n.t('settings:oauthClients.form.skipConsentHint')}
           </Typography>
 

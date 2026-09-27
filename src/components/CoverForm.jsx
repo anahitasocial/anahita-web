@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import ButtonBase from '@material-ui/core/ButtonBase';
-import Menu from '@material-ui/core/Menu';
-import MenuItem from '@material-ui/core/MenuItem';
-import CircularProgress from '@material-ui/core/CircularProgress';
-import CardMedia from '@material-ui/core/CardMedia';
-import Fade from '@material-ui/core/Fade';
+import { withStyles } from 'tss-react/mui';
+import ButtonBase from '@mui/material/ButtonBase';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import CircularProgress from '@mui/material/CircularProgress';
+import CardMedia from '@mui/material/CardMedia';
+import Fade from '@mui/material/Fade';
 
 import NodeType from '../proptypes/Node';
 import i18n from '../languages';
@@ -114,4 +114,4 @@ CoverForm.propTypes = {
   handleDelete: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(CoverForm);
+export default withStyles(CoverForm, styles);

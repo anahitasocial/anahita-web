@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Grid from '@material-ui/core/Grid';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { withStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Grid from '@mui/material/Grid';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -94,33 +94,35 @@ const ActorBody = ({
           container
           spacing={2}
           direction="row"
-          justifyContent="flex-start"
-          alignItems="flex-start"
+          sx={{
+            justifyContent: 'flex-start',
+            alignItems: 'flex-start',
+          }}
         >
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Grid container spacing={2}>
               {actor.body && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <ActorBodyAbout actor={actor} />
                 </Grid>
               )}
               {admins && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {admins}
                 </Grid>
               )}
               {locations && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {locations}
                 </Grid>
               )}
             </Grid>
           </Grid>
-          <Grid item xs={12} md={8}>
-            <Grid item xs={12}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Grid size={12}>
               {composers}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               {feed}
             </Grid>
           </Grid>
@@ -150,4 +152,4 @@ ActorBody.propTypes = {
   selectedTab: PropTypes.string,
 };
 
-export default withStyles(styles)(ActorBody);
+export default withStyles(ActorBody, styles);

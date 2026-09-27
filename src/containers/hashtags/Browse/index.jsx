@@ -2,12 +2,12 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
+import Avatar from '@mui/material/Avatar';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
 
 import Progress from '../../../components/Progress';
 
@@ -110,10 +110,9 @@ const HashtagsBrowse = ({
         {items.allIds.map((itemId) => {
           const node = items.byId[itemId];
           return (
-            <ListItem
+            <ListItemButton
               key={`node_list_item_${node.id}`}
               href={`/hashtags/${node.alias}/`}
-              button
               component="a"
               divider
             >
@@ -123,7 +122,7 @@ const HashtagsBrowse = ({
                 </Avatar>
               </ListItemAvatar>
               <ListItemText primary={node.name} />
-            </ListItem>
+            </ListItemButton>
           );
         })}
       </InfiniteScroll>

@@ -1,12 +1,12 @@
 import React from 'react';
 import slugify from 'slugify';
-import withStyles from '@material-ui/core/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
 
 import SocialgraphMeta from './SocialgraphMeta';
 import ActorType from '../../../proptypes/Actor';
@@ -22,14 +22,14 @@ const styles = (theme) => {
       backgroundColor: theme.palette.background.paper,
     },
     hAvatar: {
-      marginTop: -theme.spacing(15),
+      marginTop: theme.spacing(-15),
     },
     hContent: {
       marginTop: theme.spacing(4),
     },
     hAction: {
       alignSelf: 'flex-end',
-      marginTop: -theme.spacing(6),
+      marginTop: theme.spacing(-6),
     },
     title: {
       fontSize: 24,
@@ -57,7 +57,6 @@ const ActorHeader = ({
 }) => {
   return (
     <Card
-      square
       className={!actor.enabled ? classes.disabled : ''}
     >
       {cover}
@@ -110,4 +109,4 @@ ActorHeader.propTypes = {
   headerActions: PropTypes.node,
 };
 
-export default withStyles(styles)(ActorHeader);
+export default withStyles(ActorHeader, styles);

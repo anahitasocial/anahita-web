@@ -1,24 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import Chip from '@material-ui/core/Chip';
-import Divider from '@material-ui/core/Divider';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
-import ListItemText from '@material-ui/core/ListItemText';
-import Switch from '@material-ui/core/Switch';
-import Tooltip from '@material-ui/core/Tooltip';
-import Typography from '@material-ui/core/Typography';
-import { makeStyles } from '@material-ui/core/styles';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
+import Chip from '@mui/material/Chip';
+import Divider from '@mui/material/Divider';
+import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
+import ListItemText from '@mui/material/ListItemText';
+import Switch from '@mui/material/Switch';
+import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
+import { makeStyles } from 'tss-react/mui';
 
-import KeyIcon from '@material-ui/icons/VpnKey';
+import KeyIcon from '@mui/icons-material/VpnKey';
 
 import i18n from '../../../languages';
 import OAuthSigningKeysType from '../../../proptypes/OAuthSigningKeys';
@@ -28,7 +28,7 @@ import OAuthSigningKeysType from '../../../proptypes/OAuthSigningKeys';
 // JWKS before the old one stops verifying.
 const EXPIRY_WARNING_DAYS = 14;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     keyId: {
       fontFamily: 'monospace',
@@ -85,7 +85,7 @@ const OAuthSigningKeys = ({
   pendingKid = null,
   onToggle,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   // Whether switching a key off is even possible right now. The server
   // refuses to leave the registry with none active, so with exactly one
@@ -148,14 +148,7 @@ const OAuthSigningKeys = ({
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  // The whole kid, not a truncation. On a table it was
-                  // shortened to keep the column scannable; in a list
-                  // it has the row to itself and wraps, so there is no
-                  // reason to hide half of the one value somebody
-                  // came here to match against a token.
-                  primaryTypographyProps={{ className: classes.keyId }}
                   primary={key.keyId}
-                  secondaryTypographyProps={{ component: 'div' }}
                   secondary={
                     <>
                       <Typography variant="caption" color="textSecondary">
@@ -215,6 +208,15 @@ const OAuthSigningKeys = ({
                       </div>
                     </>
                   }
+                  slotProps={{
+                    // The whole kid, not a truncation. On a table it was
+                    // shortened to keep the column scannable; in a list
+                    // it has the row to itself and wraps, so there is no
+                    // reason to hide half of the one value somebody
+                    // came here to match against a token.
+                    primary: { className: classes.keyId },
+                    secondary: { component: 'div' },
+                  }}
                 />
                 <ListItemSecondaryAction>
                   {/* The span is load-bearing: a disabled control
@@ -233,11 +235,13 @@ const OAuthSigningKeys = ({
                         color="primary"
                         checked={Boolean(key.active)}
                         disabled={disabled}
-                        inputProps={{
-                          'aria-label': i18n.t('settings:oauthSigningKeys.fields.active'),
-                        }}
                         onChange={(event) => {
                           onToggle(key, event.target.checked);
+                        }}
+                        slotProps={{
+                          input: {
+                            'aria-label': i18n.t('settings:oauthSigningKeys.fields.active'),
+                          },
                         }}
                       />
                     </span>

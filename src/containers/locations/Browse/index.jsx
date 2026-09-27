@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
-import List from '@material-ui/core/List';
+import List from '@mui/material/List';
 
 import ListItem from './ListItem';
 import Progress from '../../../components/Progress';

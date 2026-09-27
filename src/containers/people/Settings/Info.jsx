@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import moment from 'moment';
 
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Switch from '@material-ui/core/Switch';
-import Typography from '@material-ui/core/Typography';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Switch from '@mui/material/Switch';
+import Typography from '@mui/material/Typography';
 
 import InfoForm from './InfoForm';
 import InfoRead from './InfoRead';
@@ -129,7 +129,10 @@ const PersonSettingsInfo = (props) => {
       isFetching={isFetching}
       enabled={canAdmin &&
         <>
-          <Typography variant="caption" display="block">
+          <Typography
+            variant="caption"
+            sx={{ display: 'block' }}
+          >
             {i18n.t('people:person.joinedDate', { date: joinedDate })}
           </Typography>
           <FormControlLabel

@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import CircularProgress from '@mui/material/CircularProgress';
 
-import EmailIcon from '@material-ui/icons/Email';
+import EmailIcon from '@mui/icons-material/Email';
 
 import i18n from '../../../languages';
 import { Email as EMAIL_LIMITS } from '../../../constants';
@@ -46,8 +46,10 @@ const EmailEdit = ({
             <EmailIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={i18n.t('email:title')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
       <Divider />
 
@@ -108,13 +110,15 @@ const EmailEdit = ({
                 variant="outlined"
                 autoComplete="off"
                 autoFocus
-                inputProps={{
-                  minLength: EMAIL_LIMITS.EMAIL_MIN_LENGTH,
-                  maxLength: EMAIL_LIMITS.EMAIL_MAX_LENGTH,
-                  'aria-label': i18n.t('email:fields.new'),
-                }}
                 disabled={submitting}
                 required
+                slotProps={{
+                  htmlInput: {
+                    minLength: EMAIL_LIMITS.EMAIL_MIN_LENGTH,
+                    maxLength: EMAIL_LIMITS.EMAIL_MAX_LENGTH,
+                    'aria-label': i18n.t('email:fields.new'),
+                  },
+                }}
               />
 
             </CardContent>

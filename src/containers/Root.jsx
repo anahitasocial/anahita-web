@@ -1,9 +1,9 @@
 import React from 'react';
-import useMediaQuery from '@material-ui/core/useMediaQuery';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import PropTypes from 'prop-types';
 import { Provider } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
-import { ThemeProvider } from '@material-ui/core/styles';
+import { ThemeProvider } from '@mui/material/styles';
 import App from './App';
 import Routes from '../routes';
 import styles from '../styles';

@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@material-ui/core/Box';
-import CardContent from '@material-ui/core/CardContent';
-import Typography from '@material-ui/core/Typography';
+import Box from '@mui/material/Box';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
 
 import ActorsAvatar from '../../actors/Read/Avatar';
 import StepActions from '../StepActions';
@@ -33,7 +33,13 @@ const OnboardingAvatar = ({
         <Typography variant="body2" color="textSecondary">
           {i18n.t('onboarding:avatar.description')}
         </Typography>
-        <Box display="flex" justifyContent="center" mt={2}>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            mt: 2,
+          }}
+        >
           <ActorsAvatar
             node={viewer}
             canEdit

@@ -1,23 +1,24 @@
 import React, { useEffect, useState } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
-import SupportIcon from '@material-ui/icons/ContactSupport';
-import EmailIcon from '@material-ui/icons/Email';
-import PhoneIcon from '@material-ui/icons/Phone';
-import WebsiteIcon from '@material-ui/icons/Language';
-import TermsIcon from '@material-ui/icons/Description';
-import PolicyIcon from '@material-ui/icons/Policy';
+import SupportIcon from '@mui/icons-material/ContactSupport';
+import EmailIcon from '@mui/icons-material/Email';
+import PhoneIcon from '@mui/icons-material/Phone';
+import WebsiteIcon from '@mui/icons-material/Language';
+import TermsIcon from '@mui/icons-material/Description';
+import PolicyIcon from '@mui/icons-material/Policy';
 
 import HeaderMeta from '../../components/HeaderMeta';
 import api from '../../api';
@@ -97,24 +98,23 @@ const SupportPage = () => {
         {contact &&
           <List>
             {contact.email &&
-              <ListItem button component="a" href={`mailto:${contact.email}`}>
+              <ListItemButton component="a" href={`mailto:${contact.email}`}>
                 <ListItemIcon><EmailIcon /></ListItemIcon>
                 <ListItemText
                   primary={i18n.t('support:email.title')}
                   secondary={contact.email}
                 />
-              </ListItem>}
+              </ListItemButton>}
             {contact.phone &&
-              <ListItem button component="a" href={telHref(contact.phone)}>
+              <ListItemButton component="a" href={telHref(contact.phone)}>
                 <ListItemIcon><PhoneIcon /></ListItemIcon>
                 <ListItemText
                   primary={i18n.t('support:phone.title')}
                   secondary={contact.phone}
                 />
-              </ListItem>}
+              </ListItemButton>}
             {contact.website &&
-              <ListItem
-                button
+              <ListItemButton
                 component="a"
                 href={contact.website}
                 target="_blank"
@@ -125,7 +125,7 @@ const SupportPage = () => {
                   primary={i18n.t('support:website.title')}
                   secondary={contact.website}
                 />
-              </ListItem>}
+              </ListItemButton>}
             {/* Nothing configured is a real state and says so, rather than
                 an empty card that reads as a broken page. */}
             {!hasAny &&
@@ -139,14 +139,14 @@ const SupportPage = () => {
         {/* Somebody on a support page is often here about their account or
             their data, so the two documents that answer those belong on it. */}
         <List>
-          <ListItem button component={RouterLink} to="/legal/tos">
+          <ListItemButton component={RouterLink} to="/legal/tos">
             <ListItemIcon><TermsIcon /></ListItemIcon>
             <ListItemText primary={i18n.t('legal:tos')} />
-          </ListItem>
-          <ListItem button component={RouterLink} to="/legal/privacy">
+          </ListItemButton>
+          <ListItemButton component={RouterLink} to="/legal/privacy">
             <ListItemIcon><PolicyIcon /></ListItemIcon>
             <ListItemText primary={i18n.t('legal:privacy')} />
-          </ListItem>
+          </ListItemButton>
         </List>
       </Card>
     </Container>

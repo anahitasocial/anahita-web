@@ -1,26 +1,26 @@
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { makeStyles } from '@material-ui/core/styles';
-import Avatar from '@material-ui/core/Avatar';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import List from '@material-ui/core/List';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
-import LinearProgress from '@material-ui/core/LinearProgress';
-import AddIcon from '@material-ui/icons/Add';
-import PasskeyIcon from '@material-ui/icons/Fingerprint';
-import Alert from '@material-ui/lab/Alert';
+import { makeStyles } from 'tss-react/mui';
+import Avatar from '@mui/material/Avatar';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import List from '@mui/material/List';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import LinearProgress from '@mui/material/LinearProgress';
+import AddIcon from '@mui/icons-material/Add';
+import PasskeyIcon from '@mui/icons-material/Fingerprint';
+import Alert from '@mui/material/Alert';
 
 import Credential from './Credential';
 import RenameDialog from './RenameDialog';
 import DeleteDialog from './DeleteDialog';
 import api from '../../../api';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     alert: {
       marginBottom: theme.spacing(2),
@@ -75,7 +75,7 @@ const ceremonyErrorKey = (error) => {
 };
 
 const WebAuthn = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { t } = useTranslation(['common', 'auth']);
 
   const [credentials, setCredentials] = useState([]);
@@ -203,9 +203,11 @@ const WebAuthn = () => {
             <PasskeyIcon />
           </Avatar>
         }
-        titleTypographyProps={{ variant: 'h5' }}
         title={t('auth:webauthn.cTitle')}
         subheader={t('auth:webauthn.cDesc')}
+        slotProps={{
+          title: { variant: 'h5' },
+        }}
       />
 
       {(isFetching || isBusy) &&

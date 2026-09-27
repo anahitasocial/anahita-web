@@ -2,8 +2,8 @@
 
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import Link from '@material-ui/core/Link';
-import Collapse from '@material-ui/core/Collapse';
+import Link from '@mui/material/Link';
+import Collapse from '@mui/material/Collapse';
 import striptags from 'striptags';
 import EntityBody from './NodeBody';
 import i18n from '../languages';

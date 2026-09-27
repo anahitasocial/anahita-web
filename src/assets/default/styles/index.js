@@ -13,10 +13,9 @@ const global = (params) => {
       fontWeightLight: 300,
       fontWeightRegular: 400,
       fontWeightMedium: 500,
-      useNextVariants: true,
     },
     palette: {
-      type: prefersDarkMode ? 'dark' : 'light',
+      mode: prefersDarkMode ? 'dark' : 'light',
       primary: {
         main: prefersDarkMode ? '#90caf9' : '#098ED1',
       },

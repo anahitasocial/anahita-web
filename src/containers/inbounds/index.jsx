@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { makeStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import InboundsBrowse from './Browse';
 import NodeType from '../../proptypes/Node';
@@ -17,7 +17,7 @@ const {
   },
 } = APP.BROWSE;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -30,7 +30,7 @@ const Inbounds = ({
   selectedTab = TOP,
   tag,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const [tab, setTab] = useState(selectedTab);
 
@@ -45,6 +45,7 @@ const Inbounds = ({
         color="inherit"
         className={classes.root}
         variant="outlined"
+        elevation={0}
       >
         <Tabs
           value={tab}

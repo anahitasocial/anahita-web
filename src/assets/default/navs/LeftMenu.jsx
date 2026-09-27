@@ -1,19 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
 
-// import BlogsIcon from '@material-ui/icons/RssFeedOutlined';
-import HomeIcon from '@material-ui/icons/Home';
-import PeopleIcon from '@material-ui/icons/People';
-import GroupsIcon from '@material-ui/icons/GroupWork';
-import NotesIcon from '@material-ui/icons/Note';
-import PhotosIcon from '@material-ui/icons/Photo';
-import TopicsIcon from '@material-ui/icons/QuestionAnswer';
-import ArticlesIcon from '@material-ui/icons/LibraryBooks';
+// import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
+import HomeIcon from '@mui/icons-material/Home';
+import PeopleIcon from '@mui/icons-material/People';
+import GroupsIcon from '@mui/icons-material/GroupWork';
+import NotesIcon from '@mui/icons-material/Note';
+import PhotosIcon from '@mui/icons-material/Photo';
+import TopicsIcon from '@mui/icons-material/QuestionAnswer';
+import ArticlesIcon from '@mui/icons-material/LibraryBooks';
 // ExitToApp, not LockOpen.
 //
 // An open padlock pictures an account that is NOT secured, which is the
@@ -21,15 +21,15 @@ import ArticlesIcon from '@material-ui/icons/LibraryBooks';
 // Password card whose icon is a closed Lock, so the pair read as a
 // state toggle between secure and insecure rather than as an action.
 // A door with an arrow through it says leave.
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import LabelIcon from '@material-ui/icons/Label';
-import LocationIcon from '@material-ui/icons/LocationOn';
-import SettingsIcon from '@material-ui/icons/Settings';
-import SignupRequestsIcon from '@material-ui/icons/HowToReg';
-import InvitesIcon from '@material-ui/icons/MailOutline';
-import LegalIcon from '@material-ui/icons/MenuBook';
-import SupportIcon from '@material-ui/icons/ContactSupport';
-import AboutIcon from '@material-ui/icons/Info';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import LabelIcon from '@mui/icons-material/Label';
+import LocationIcon from '@mui/icons-material/LocationOn';
+import SettingsIcon from '@mui/icons-material/Settings';
+import SignupRequestsIcon from '@mui/icons-material/HowToReg';
+import InvitesIcon from '@mui/icons-material/MailOutlined';
+import LegalIcon from '@mui/icons-material/MenuBook';
+import SupportIcon from '@mui/icons-material/ContactSupport';
+import AboutIcon from '@mui/icons-material/Info';
 
 import { Link, useLocation } from 'react-router-dom';
 
@@ -56,8 +56,7 @@ const LeftMenu = ({
 
   return (
     <List>
-      <ListItem
-        button
+      <ListItemButton
         component={Link}
         to="/"
         selected={pathname === '/'}
@@ -66,9 +65,8 @@ const LeftMenu = ({
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary={isAuthenticated ? i18n.t('dashboard:cTitle') : i18n.t('home:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/people/"
         selected={pathname === '/people/'}
@@ -77,9 +75,8 @@ const LeftMenu = ({
           <PeopleIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('people:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/groups/"
         selected={pathname === '/groups/'}
@@ -88,9 +85,8 @@ const LeftMenu = ({
           <GroupsIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('groups:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/notes/"
         selected={pathname === '/notes/'}
@@ -99,9 +95,8 @@ const LeftMenu = ({
           <NotesIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('notes:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/photos/"
         selected={pathname === '/photos/'}
@@ -110,9 +105,8 @@ const LeftMenu = ({
           <PhotosIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('photos:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/topics/"
         selected={pathname === '/topics/'}
@@ -121,9 +115,8 @@ const LeftMenu = ({
           <TopicsIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('topics:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/articles/"
         selected={pathname === '/articles/'}
@@ -132,9 +125,8 @@ const LeftMenu = ({
           <ArticlesIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('articles:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/hashtags/"
         selected={pathname === '/hashtags/'}
@@ -143,9 +135,8 @@ const LeftMenu = ({
           <LabelIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('hashtags:cTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/locations/"
         selected={pathname === '/locations/'}
@@ -154,7 +145,7 @@ const LeftMenu = ({
           <LocationIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('locations:cTitle')} />
-      </ListItem>
+      </ListItemButton>
       {/* Three separate gates, not one, because the three pages answer
           to three different rules. The queue is administrator-level,
           settings is super admin, and invites is whatever INVITES_FROM
@@ -167,8 +158,7 @@ const LeftMenu = ({
           who still has invitations from before a tightening can reach
           /invites directly. */}
       {isAuthenticated && permissions.signupRequest.canBrowse(viewer) &&
-        <ListItem
-          button
+        <ListItemButton
           component={Link}
           to="/signup-requests"
           selected={pathname === '/signup-requests'}
@@ -177,10 +167,9 @@ const LeftMenu = ({
             <SignupRequestsIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('signupRequests:mTitle')} />
-        </ListItem>}
+        </ListItemButton>}
       {isAuthenticated && permissions.invite.canAdd(viewer, inviteSettings) &&
-        <ListItem
-          button
+        <ListItemButton
           component={Link}
           to="/invites"
           selected={pathname === '/invites'}
@@ -189,10 +178,9 @@ const LeftMenu = ({
             <InvitesIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('invites:mTitle')} />
-        </ListItem>}
+        </ListItemButton>}
       {isAuthenticated && permissions.settings.canBrowse(viewer) &&
-        <ListItem
-          button
+        <ListItemButton
           component={Link}
           to="/settings/"
           selected={pathname === '/settings/'}
@@ -201,9 +189,8 @@ const LeftMenu = ({
             <SettingsIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('settings:mTitle')} />
-        </ListItem>}
-      {/* <ListItem
-        button
+        </ListItemButton>}
+      {/* <ListItemButton
         component={Link}
         to="/blogs/"
         selected={pathname === '/blogs/'}
@@ -212,14 +199,13 @@ const LeftMenu = ({
           <BlogsIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('blogs:cTitle')} />
-      </ListItem> */}
+      </ListItemButton> */}
       {/* Public, for everybody signed in or not. Support is where somebody
           who cannot sign in is sent, the terms are read before an account
           exists, and About is how a stranger decides whether to ask for one
           — hiding any of them behind authentication hides them from the
           people they are for. */}
-      <ListItem
-        button
+      <ListItemButton
         component={Link}
         to="/about"
         selected={pathname === '/about'}
@@ -228,9 +214,8 @@ const LeftMenu = ({
           <AboutIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('about:mTitle')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/support"
         selected={pathname === '/support'}
@@ -239,9 +224,8 @@ const LeftMenu = ({
           <SupportIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('pages:support')} />
-      </ListItem>
-      <ListItem
-        button
+      </ListItemButton>
+      <ListItemButton
         component={Link}
         to="/legal/tos"
         selected={pathname.startsWith('/legal')}
@@ -250,10 +234,9 @@ const LeftMenu = ({
           <LegalIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('legal:mTitle')} />
-      </ListItem>
+      </ListItemButton>
       {isAuthenticated &&
-        <ListItem
-          button
+        <ListItemButton
           component="a"
           onClick={onLogoutClick}
         >
@@ -261,7 +244,7 @@ const LeftMenu = ({
             <ExitToAppIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('auth:logout')} />
-        </ListItem>}
+        </ListItemButton>}
     </List>
   );
 };

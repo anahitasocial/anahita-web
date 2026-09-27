@@ -2,10 +2,10 @@ import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Navigate } from 'react-router-dom';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Avatar from '@material-ui/core/Avatar';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Avatar from '@mui/material/Avatar';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import PersonAddForm from './PersonAddForm';
 import actions from '../../../actions';
 import api from '../../../api';
@@ -122,7 +122,7 @@ const PeopleAdd = (props) => {
 
   return (
     <>
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           title={personName}
           subheader={person.username ? `@${person.username}` : ''}

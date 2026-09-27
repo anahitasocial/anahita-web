@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Card from '@material-ui/core/Card';
+import Card from '@mui/material/Card';
 import CommentRead from '../Read';
 import CommentForm from '../components/Form';
 import Progress from '../../../components/Progress';

@@ -2,14 +2,14 @@ import React from 'react';
 import slugify from 'slugify';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Typography from '@material-ui/core/Typography';
-import Link from '@material-ui/core/Link';
+import { withStyles } from 'tss-react/mui';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 import Truncate from 'react-truncate';
 
 import ActorType from '../proptypes/Actor';
@@ -140,4 +140,4 @@ ActorCard.propTypes = {
   viewer: PersonType,
 };
 
-export default withStyles(styles)(ActorCard);
+export default withStyles(ActorCard, styles);

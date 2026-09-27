@@ -1,9 +1,9 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Avatar from '@material-ui/core/Avatar';
-import Link from '@material-ui/core/Link';
+import { withStyles } from 'tss-react/mui';
+import Avatar from '@mui/material/Avatar';
+import Link from '@mui/material/Link';
 import ActorType from '../proptypes/Actor';
 import utils from '../utils';
 
@@ -88,4 +88,4 @@ ActorAvatar.propTypes = {
   size: PropTypes.oneOf(['small', 'large', 'default']),
 };
 
-export default withStyles(styles)(ActorAvatar);
+export default withStyles(ActorAvatar, styles);

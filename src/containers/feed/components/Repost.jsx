@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import Link from '@material-ui/core/Link';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Link from '@mui/material/Link';
 
 import MediumCard from '../../../components/MediumCard';
 import ActorAvatar from '../../../components/ActorAvatar';
@@ -19,7 +19,7 @@ const {
   getURL,
 } = utils.node;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -49,7 +49,7 @@ const FeedCardRepost = ({
   menu = null,
   showOwner = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const url = getURL(node.parent);
   const creationTime = moment.utc(node.creationTime).local().format('LLL').toString();
   const creationTimeFromNow = moment.utc(node.creationTime).fromNow();

@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import CircularProgress from '@material-ui/core/CircularProgress';
-import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
+import CircularProgress from '@mui/material/CircularProgress';
+import IconButton from '@mui/material/IconButton';
+import AddIcon from '@mui/icons-material/Add';
 
 import TagType from '../../../../proptypes/Location';
 import NodeType from '../../../../proptypes/Node';
@@ -37,6 +37,7 @@ const ControlsTagsLocationAdd = React.forwardRef((props, ref) => {
             console.error(err);
           });
       }}
+      size="large"
     >
       {!isWaiting && <AddIcon />}
       {isWaiting && <CircularProgress size={20} />}

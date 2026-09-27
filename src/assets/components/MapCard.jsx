@@ -4,16 +4,16 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import CardActions from '@material-ui/core/CardActions';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
-import ListItemText from '@material-ui/core/ListItemText';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import CardActions from '@mui/material/CardActions';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 
 import AnahitaMap from '../../components/Map';
 import Progress from '../../components/Progress';
@@ -83,11 +83,10 @@ const HomeCardMap = ({
             const key = `locations_${item.id}`;
             const href = getURL(item);
             return (
-              <ListItem
+              <ListItemButton
                 key={key}
                 href={href}
                 component="a"
-                button
               >
                 <ListItemAvatar>
                   <Avatar>
@@ -101,7 +100,7 @@ const HomeCardMap = ({
                     </Typography>
                   }
                 />
-              </ListItem>
+              </ListItemButton>
             );
           })}
         </List>}

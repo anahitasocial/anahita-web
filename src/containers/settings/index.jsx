@@ -1,17 +1,17 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Container from '@material-ui/core/Container';
-import Divider from '@material-ui/core/Divider';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Container from '@mui/material/Container';
+import Divider from '@mui/material/Divider';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Typography from '@mui/material/Typography';
 
-import SettingsIcon from '@material-ui/icons/Settings';
+import SettingsIcon from '@mui/icons-material/Settings';
 
 import HeaderMeta from '../../components/HeaderMeta';
 import i18n from '../../languages';
@@ -92,27 +92,30 @@ const Settings = ({
           anybody landing on /settings looking for context. Stickiness is
           what the card costs, and it buys little across two tabs — the
           actor settings page has never had it either. */}
-      <Box mb={2}>
-        <Card variant="outlined">
+      <Box sx={{ mb: 2 }}>
+        <Card>
           <CardHeader
             avatar={
               <Avatar>
                 <SettingsIcon />
               </Avatar>
             }
-            titleTypographyProps={{ variant: 'h5' }}
             title={i18n.t('settings:cTitle')}
             subheader={i18n.t('settings:cDescription')}
+            slotProps={{
+              title: { variant: 'h5' },
+            }}
           />
           <Divider />
           <Tabs
             variant="scrollable"
-            scrollButtons="on"
+            scrollButtons
             value={tab}
             onChange={(event, newTab) => {
               setTab(newTab);
             }}
             aria-label={i18n.t('settings:cTitle')}
+            allowScrollButtonsMobile
           >
             {TAB_ORDER.map((value) => {
               return (

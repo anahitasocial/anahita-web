@@ -2,12 +2,11 @@ import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 import remarkGfm from 'remark-gfm';
-import classNames from 'classnames';
-import { makeStyles } from '@material-ui/core/styles';
+import { makeStyles } from 'tss-react/mui';
 
 import utils from '../utils';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   const { body1, body2 } = theme.typography;
   return {
     root: {
@@ -39,7 +38,7 @@ const NodeBody = ({
     'mention',
   ],
 }) => {
-  const classes = useStyles();
+  const { classes, cx } = useStyles();
   let body = `${children}`;
 
   if (contentFilter) {
@@ -50,7 +49,7 @@ const NodeBody = ({
   }
 
   return (
-    <div className={classNames(classes.root, classes[size])}>
+    <div className={cx(classes.root, classes[size])}>
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
         {body}
       </ReactMarkdown>

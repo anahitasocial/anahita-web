@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Container from '@material-ui/core/Container';
-import Step from '@material-ui/core/Step';
-import StepLabel from '@material-ui/core/StepLabel';
-import Stepper from '@material-ui/core/Stepper';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Container from '@mui/material/Container';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Stepper from '@mui/material/Stepper';
 
 import AvatarStep from './Steps/Avatar';
 import FeaturedStep from './Steps/Featured';
@@ -123,13 +123,13 @@ const Onboarding = ({
 
   return (
     <Container maxWidth="sm">
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           title={i18n.t('onboarding:cTitle', { name: viewer.name || viewer.alias })}
           subheader={i18n.t('onboarding:intro')}
         />
         {steps.length > 1 &&
-          <Box px={1}>
+          <Box sx={{ px: 1 }}>
             <Stepper activeStep={active} alternativeLabel>
               {steps.map((key) => {
                 return (

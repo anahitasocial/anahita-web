@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import { Totp as TOTP } from '../../../constants';
 import i18n from '../../../languages';
@@ -20,6 +20,7 @@ const TOTPFormPassword = ({
         {i18n.t('auth:totp.password.title')}
       </Typography>
       <TextField
+        variant="standard"
         type="password"
         name="password"
         value={password.value}
@@ -27,15 +28,17 @@ const TOTPFormPassword = ({
         label={i18n.t('auth:totp.password.label')}
         margin="normal"
         fullWidth
-        inputProps={{
-          maxLength: TOTP.FIELDS.PASSWORD.MAX_LENGTH,
-          minLength: TOTP.FIELDS.PASSWORD.MIN_LENGTH,
-        }}
         required
         disabled={success || isFetching}
         error={password.error !== ''}
         helperText={password.error}
         autoComplete="off"
+        slotProps={{
+          htmlInput: {
+            maxLength: TOTP.FIELDS.PASSWORD.MAX_LENGTH,
+            minLength: TOTP.FIELDS.PASSWORD.MIN_LENGTH,
+          },
+        }}
       />
     </>
   );

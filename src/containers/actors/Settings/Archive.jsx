@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { singularize } from 'inflection';
 
-import Button from '@material-ui/core/Button';
-import CardContent from '@material-ui/core/CardContent';
-import CardActions from '@material-ui/core/CardActions';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Button from '@mui/material/Button';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import StepUp from '../../auth/StepUp';
 import api from '../../../api';
@@ -107,16 +107,28 @@ const ActorsSettingsArchive = (props) => {
         {/* Permanence first. Everything else is a reason to choose this over
             deleting, and none of it should arrive before the person knows
             there is no way back. */}
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           <strong>{copy('permanent')}</strong>
         </Typography>
 
-        <Typography variant="body2" color="textSecondary" paragraph>
+        <Typography
+          variant="body2"
+          color="textSecondary"
+          sx={{ marginBottom: '16px' }}
+        >
           {copy(isPerson ? 'personDescription' : 'groupDescription')}
         </Typography>
 
         {isPerson && isSelf &&
-          <Typography variant="body2" color="textSecondary" paragraph>
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            sx={{ marginBottom: '16px' }}
+          >
             {copy('selfSignIn')}
           </Typography>}
 

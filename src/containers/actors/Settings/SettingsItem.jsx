@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Card from '@material-ui/core/Card';
-import CardHeader from '@material-ui/core/CardHeader';
-import Divider from '@material-ui/core/Divider';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
 
 // One entry in a settings section.
 //
@@ -29,7 +29,7 @@ const SettingsItem = ({
   children,
 }) => {
   return (
-    <Box mb={2}>
+    <Box sx={{ mb: 2 }}>
       {/* Card + header + divider + child, and deliberately NO CardContent.
           The bare items are not uniform underneath: InfoForm and Forms/Delete
           bring their own CardContent AND CardActions, so an extra CardContent
@@ -41,8 +41,10 @@ const SettingsItem = ({
         <Card>
           <CardHeader
             avatar={icon ? <Avatar>{icon}</Avatar> : null}
-            titleTypographyProps={{ variant: 'h5' }}
             title={title}
+            slotProps={{
+              title: { variant: 'h5' },
+            }}
           />
           <Divider />
           {children}

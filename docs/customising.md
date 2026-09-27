@@ -41,12 +41,20 @@ A theme exports, from its `index.js`:
 | `opengraph` | `media/og` | An image for link previews. Exported, but nothing in the app uses it yet |
 | `Home` | `home/` | The home page signed-out visitors see |
 | `navs` | `navs/` | The left menu |
-| `styles` | `styles/` | The Material-UI theme: fonts and colours, for light and dark mode |
+| `styles` | `styles/` | The Material UI theme: fonts and colours, for light and dark mode |
 | `pages` | `pages/` | Markdown pages for the site, such as `contact.md` and `join.md` |
 
 A theme is compiled into the bundle, so changing one means rebuilding. Keep
 the parts' names and exports as they are in the default theme; the app imports
 them by those names.
+
+`styles/index.js` exports `global({ colors, prefersDarkMode })`, which returns
+[Material UI theme options](https://mui.com/material-ui/customization/theming/)
+for `createTheme`. `prefersDarkMode` follows the visitor's system setting, so
+set `palette.mode` from it (`'dark'` or `'light'`) and choose colours for
+each. Options you return are applied over the app's defaults; to change how a
+component looks everywhere, add it under `components`, for example
+`components: { MuiButton: { defaultProps: { disableElevation: true } } }`.
 
 ## Languages
 

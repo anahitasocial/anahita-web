@@ -3,22 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardHeader from '@material-ui/core/CardHeader';
-import Divider from '@material-ui/core/Divider';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
-import ListItemText from '@material-ui/core/ListItemText';
-import Radio from '@material-ui/core/Radio';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Switch from '@material-ui/core/Switch';
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import Switch from '@mui/material/Switch';
 
-import AccessIcon from '@material-ui/icons/Visibility';
+import AccessIcon from '@mui/icons-material/Visibility';
 
 import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
@@ -94,16 +95,18 @@ const ActorsSettingsAccess = (props) => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           avatar={
             <Avatar>
               <AccessIcon />
             </Avatar>
           }
-          titleTypographyProps={{ variant: 'h5' }}
           title={i18n.t('actor:access.title')}
           subheader={i18n.t('actor:access.cDescription')}
+          slotProps={{
+            title: { variant: 'h5' },
+          }}
         />
         <Divider />
 
@@ -126,9 +129,8 @@ const ActorsSettingsAccess = (props) => {
           <List disablePadding>
             {accessOptions.map((option) => {
               return (
-                <ListItem
+                <ListItemButton
                   key={`access-${option}`}
-                  button
                   divider
                   onClick={() => {
                     setAccess(option);
@@ -139,8 +141,10 @@ const ActorsSettingsAccess = (props) => {
                       checked={access === option}
                       value={option}
                       color="primary"
-                      inputProps={{
-                        'aria-label': i18n.t(`access:${option}`),
+                      slotProps={{
+                        input: {
+                          'aria-label': i18n.t(`access:${option}`),
+                        },
                       }}
                     />
                   </ListItemIcon>
@@ -148,7 +152,7 @@ const ActorsSettingsAccess = (props) => {
                     primary={i18n.t(`access:${option}`)}
                     secondary={i18n.t(`actor:access.descriptions.${option}`)}
                   />
-                </ListItem>
+                </ListItemButton>
               );
             })}
           </List>

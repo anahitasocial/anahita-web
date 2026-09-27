@@ -2,22 +2,22 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Avatar from '@material-ui/core/Avatar';
-import Box from '@material-ui/core/Box';
-import Button from '@material-ui/core/Button';
-import Card from '@material-ui/core/Card';
-import CardActions from '@material-ui/core/CardActions';
-import CardHeader from '@material-ui/core/CardHeader';
-import Divider from '@material-ui/core/Divider';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListSubheader from '@material-ui/core/ListSubheader';
-import MenuItem from '@material-ui/core/MenuItem';
-import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import ListSubheader from '@mui/material/ListSubheader';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
-import PermissionsIcon from '@material-ui/icons/Tune';
+import PermissionsIcon from '@mui/icons-material/Tune';
 
 import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
@@ -88,16 +88,18 @@ const ActorsSettingsPermissions = (props) => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           avatar={
             <Avatar>
               <PermissionsIcon />
             </Avatar>
           }
-          titleTypographyProps={{ variant: 'h5' }}
           title={i18n.t('actor:permissions.title')}
           subheader={i18n.t('actor:permissions.cDescription')}
+          slotProps={{
+            title: { variant: 'h5' },
+          }}
         />
         <Divider />
 
@@ -157,8 +159,8 @@ const ActorsSettingsPermissions = (props) => {
                         question just wraps. Not the select's own floating
                         label either: an outlined label that long is cut off
                         in the border's notch. */}
-                    <Box width="100%" py={1}>
-                      <Box mb={1}>
+                    <Box sx={{ width: '100%', py: 1 }}>
+                      <Box sx={{ mb: 1 }}>
                         <Typography variant="body1">{question}</Typography>
                       </Box>
                       {/* A select rather than radios: a person has five
@@ -175,14 +177,17 @@ const ActorsSettingsPermissions = (props) => {
                         onChange={(event) => {
                           setAccess(group.service, row.entity, event.target.value);
                         }}
-                        SelectProps={{
-                          renderValue: label,
-                        }}
-                        inputProps={{
-                          // Namespaced per service: comment and like appear
-                          // under more than one service.
-                          name: `${namespace}-${group.service}-${row.entity}`,
-                          'aria-label': question,
+                        slotProps={{
+                          htmlInput: {
+                            // Namespaced per service: comment and like appear
+                            // under more than one service.
+                            name: `${namespace}-${group.service}-${row.entity}`,
+                            'aria-label': question,
+                          },
+
+                          select: {
+                            renderValue: label,
+                          },
                         }}
                       >
                         {row.choices.map((choice) => {

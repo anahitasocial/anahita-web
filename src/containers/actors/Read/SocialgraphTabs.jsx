@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@material-ui/core/styles/withStyles';
-import AppBar from '@material-ui/core/AppBar';
-import Box from '@material-ui/core/Box';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
+import { withStyles } from 'tss-react/mui';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
 
 import i18n from '../../../languages';
 
@@ -41,6 +41,7 @@ const SocialgraphTabs = ({
         color="inherit"
         className={classes.appBar}
         variant="outlined"
+        elevation={0}
       >
         <Tabs
           value={value}
@@ -73,4 +74,4 @@ SocialgraphTabs.propTypes = {
   selectedTab: PropTypes.oneOf(['followers', 'leaders', 'mutuals', 'blocks']),
 };
 
-export default withStyles(styles)(SocialgraphTabs);
+export default withStyles(SocialgraphTabs, styles);
