@@ -55,8 +55,9 @@ each built, tested and looked at before the next.
 | 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ✅ | `eeb5add` |
 | 3. v6 | ✅ | `52619f4` |
 | 4. v7 | ✅ | `55d0a17` |
-| 5. v9 | ✅ | (step 5 commit) |
-| 6. Clean-up and docs | ⬜ | |
+| 5. v9 | ✅ | `2294a5a` |
+| 6. Clean-up and docs | ✅ | (step 6 commit) |
+| Visual check of steps 1–5 | ⬜ | see Follow-ups |
 
 ## Inventory (as of the plan)
 
@@ -237,9 +238,11 @@ The bulk of the work: 72 files.
 
 ## Decisions to make before step 5
 
-- **Browser floor.** Decided 2026-09-27: accepted; go to v9. v9 targets Chrome 117, Edge 121, Firefox 121 and
+- **Browser floor.** v9 targets Chrome 117, Edge 121, Firefox 121 and
   Safari 17, which is narrower than today's `>0.2%, not dead`. Accept it, or
-  stop at v7 until it is acceptable.
+  stop at v7 until it is acceptable. *Decided 2026-09-27: accepted.*
+  `browserslist` now lists those floors (plus iOS Safari 17, Chrome and
+  Firefox for Android, Samsung Internet 24).
 - **CRA.** `react-scripts` 5 is deprecated. v9 ships CommonJS alongside
   `.mjs`, so it should build and test under CRA, but that is untested until
   step 5. If it fails there, moving to Vite is its own plan, not part of this
@@ -327,6 +330,29 @@ in v9, and Tabs/Menu roving tabindex.
   inside a `Menu` or `Select`, and every `Tab` inside `Tabs`.
 - No browser in the session that ran steps 1–5, so the visual check is done
   afterwards by a person, one step commit at a time.
+
+## Follow-ups
+
+- **Visual check.** Not done yet for any step: the session had no browser.
+  Go through the list below on `2294a5a`/step 6; if something looks wrong,
+  check out the step commits (`3a8ce4b` v5, `eeb5add` JSS out, `52619f4`
+  v6, `55d0a17` v7, `2294a5a` v9) to find where it changed. Most likely
+  places: the left drawer at each breakpoint (Hidden → sx), the agreements
+  page (Grid → Stack), the photo strip, the onboarding Featured list and the
+  locations list (ListItem restructured), dark mode (backgrounds restored by
+  hand), and anything with Tabs.
+- Decide whether to keep the Deliberate changes above, or restore
+  `ListItemIcon` 56px, Menu anchoring and Snackbar position in the theme.
+- The main bundle grew from 578.8 kB to 621.8 kB gzipped (+7%): Emotion and
+  tss-react instead of JSS, and v9's larger components. Route-level code
+  splitting would more than make up for it.
+- Delete one of `src/containers/actors/Notifications/` and
+  `.../notifications/` (see Notes).
+- `react-scripts` 5 is deprecated; moving to Vite is its own plan. It would
+  also make a real rendering test setup (the smoke test's mocks) easier.
+- New code can use `sx` or `styled`; the tss-react `makeStyles` files can
+  move over gradually, but there is no need to.
+- `npx update-browserslist-db@latest`: caniuse-lite is six months old.
 
 ## Visual check (every step)
 

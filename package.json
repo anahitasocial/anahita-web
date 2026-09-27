@@ -28,8 +28,8 @@
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
-    "@mui/icons-material": "^9",
-    "@mui/material": "^9",
+    "@mui/icons-material": "^9.4.0",
+    "@mui/material": "^9.4.0",
     "add": "^2.0.6",
     "axios": "^1.13.2",
     "clsx": "^1.0.4",
@@ -93,10 +93,15 @@
     "extends": "react-app"
   },
   "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
+    "chrome >= 117",
+    "edge >= 121",
+    "firefox >= 121",
+    "safari >= 17",
+    "ios_saf >= 17",
+    "and_chr >= 117",
+    "and_ff >= 121",
+    "samsung >= 24",
+    "not dead"
   ],
   "resolutions": {
     "react-is": "^18.3.1"
