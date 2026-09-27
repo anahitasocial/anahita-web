@@ -32,6 +32,7 @@ import explore from './explore';
 import socialgraph from './socialgraph';
 import hashtags from './hashtags';
 import agreements from './agreements';
+import onboarding from './onboarding';
 import legal from './legal';
 import locations from './locations';
 import search from './search';
@@ -74,6 +75,7 @@ export default {
   socialgraph,
   hashtags,
   agreements,
+  onboarding,
   legal,
   locations,
   search,
