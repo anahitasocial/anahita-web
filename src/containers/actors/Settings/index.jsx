@@ -87,6 +87,32 @@ const tabLabelKey = (namespace, key) => {
   return `${namespace}:settings.${key}`;
 };
 
+// The cards for one namespace, built once and kept.
+//
+// Each factory returns a new connected component, and these were called in
+// the render body. A new component type on every render means React discards
+// the old card and mounts a fresh one — so any store update, such as the
+// delete request itself, reset every card's local state. The Delete card set
+// "open the step-up dialog" on a card that was replaced a moment later, and
+// deleting a profile failed with a generic error and no dialog.
+const cardsByNamespace = {};
+
+const cardsFor = (namespace) => {
+  if (!cardsByNamespace[namespace]) {
+    cardsByNamespace[namespace] = {
+      ActorAdmins: Admins(namespace),
+      ActorInfo: Info(namespace),
+      ActorAccess: Access(namespace),
+      ActorPermissions: Permissions(namespace),
+      ActorDelete: Delete(namespace),
+      ActorArchive: Archive(namespace),
+      ActorDisable: Disable(namespace),
+    };
+  }
+
+  return cardsByNamespace[namespace];
+};
+
 const ActorsSettings = ({
   readActor,
   actor,
@@ -139,13 +165,15 @@ const ActorsSettings = ({
     );
   }
 
-  const ActorAdmins = Admins(namespace);
-  const ActorInfo = Info(namespace);
-  const ActorAccess = Access(namespace);
-  const ActorPermissions = Permissions(namespace);
-  const ActorDelete = Delete(namespace);
-  const ActorArchive = Archive(namespace);
-  const ActorDisable = Disable(namespace);
+  const {
+    ActorAdmins,
+    ActorInfo,
+    ActorAccess,
+    ActorPermissions,
+    ActorDelete,
+    ActorArchive,
+    ActorDisable,
+  } = cardsFor(namespace);
 
   const canDelete = permissions.canDelete(actor);
 
