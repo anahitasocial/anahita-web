@@ -9,6 +9,7 @@ export default {
   avatar: {
     title: 'Add a profile photo',
     description: 'People are far more likely to follow somebody they can put a face to. Tap the circle to choose a photo.',
+    error: 'Your photo could not be uploaded. Please try again, or skip for now.',
   },
   profile: {
     title: 'Tell people about yourself',

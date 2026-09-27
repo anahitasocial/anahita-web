@@ -9,6 +9,7 @@ const ActorsAvatar = (props) => {
     node,
     canEdit,
     onChange = () => {},
+    onError = () => {},
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -60,7 +61,7 @@ const ActorsAvatar = (props) => {
       })
       // Stop spinning either way. On a failed upload the avatar was left
       // spinning for good, with nothing to say the upload had not happened.
-      .catch(() => {})
+      .catch(onError)
       .then(() => { setWaiting(false); });
   };
 
@@ -72,7 +73,7 @@ const ActorsAvatar = (props) => {
         setAvatar(null);
         onChange(null);
       })
-      .catch(() => {})
+      .catch(onError)
       .then(() => { setWaiting(false); });
   };
 
@@ -108,6 +109,8 @@ ActorsAvatar.propTypes = {
   // delete. Onboarding re-reads the session on it, so the viewer's avatar
   // updates everywhere without a reload.
   onChange: PropTypes.func,
+  // Called when an upload or a delete fails.
+  onError: PropTypes.func,
 };
 
 export default ActorsAvatar;

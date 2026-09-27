@@ -9,6 +9,7 @@ export default {
   avatar: {
     title: 'Ajoutez une photo de profil',
     description: 'On suit bien plus volontiers quelqu’un dont on voit le visage. Touchez le cercle pour choisir une photo.',
+    error: 'Votre photo n’a pas pu être envoyée. Veuillez réessayer, ou passer pour l’instant.',
   },
   profile: {
     title: 'Présentez-vous',

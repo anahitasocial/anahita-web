@@ -22,6 +22,7 @@ const OnboardingAvatar = ({
   onNext,
   onSkip,
   refreshSession,
+  alertError,
 }) => {
   return (
     <>
@@ -37,6 +38,7 @@ const OnboardingAvatar = ({
             node={viewer}
             canEdit
             onChange={refreshSession}
+            onError={() => { alertError(i18n.t('onboarding:avatar.error')); }}
           />
         </Box>
       </CardContent>
@@ -56,6 +58,7 @@ OnboardingAvatar.propTypes = {
   onNext: PropTypes.func.isRequired,
   onSkip: PropTypes.func.isRequired,
   refreshSession: PropTypes.func.isRequired,
+  alertError: PropTypes.func.isRequired,
 };
 
 export default OnboardingAvatar;
