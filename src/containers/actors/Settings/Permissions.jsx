@@ -207,35 +207,30 @@ const ActorsSettingsPermissions = (props) => {
           );
         })}
 
-        {/* Stacked, the primary action first. Side by side each button got
-            half the width, and a longer label — the French "Rétablir les
-            valeurs par défaut" — wrapped inside a half-width button on a
-            phone. */}
+        {/* Side by side, each button taking an equal share of the row:
+            the secondary "restore defaults" action first, the primary
+            submit action last. */}
         <CardActions>
-          <Box width="100%">
-            <Button
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={waiting || groups.length === 0}
-              fullWidth
-            >
-              {i18n.t('actions:update')}
-            </Button>
-            {/* No confirmation, as on the Access card: every value is on
-                screen and restoring is undone by setting them again. */}
-            <Box mt={1}>
-              <Button
-                onClick={() => {
-                  return save([]);
-                }}
-                disabled={waiting}
-                fullWidth
-              >
-                {i18n.t('actor:permissions.restoreDefaults')}
-              </Button>
-            </Box>
-          </Box>
+          {/* No confirmation, as on the Access card: every value is on
+              screen and restoring is undone by setting them again. */}
+          <Button
+            onClick={() => {
+              return save([]);
+            }}
+            disabled={waiting}
+            fullWidth
+          >
+            {i18n.t('actor:permissions.restoreDefaults')}
+          </Button>
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={waiting || groups.length === 0}
+            fullWidth
+          >
+            {i18n.t('actions:update')}
+          </Button>
         </CardActions>
       </Card>
     </form>
