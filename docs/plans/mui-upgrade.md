@@ -50,7 +50,7 @@ each built, tested and looked at before the next.
 
 | step | state | commit |
 | --- | --- | --- |
-| 0. Check this plan against the MCP docs | ⬜ | |
+| 0. Check this plan against the MCP docs | ✅ | (this commit) |
 | 1. v5, Emotion, codemods, theme | ⬜ | |
 | 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ⬜ | |
 | 3. v6 | ⬜ | |
@@ -110,6 +110,46 @@ file:
 - the v9 browser floor, and whether it is acceptable. See "Decisions".
 
 No code changes. Commit only this file, if it changed.
+
+#### Step 0 findings (MCP docs for 9.4.0, `@mui/codemod` 9.4.0)
+
+- **Codemods exist**: `v5.0.0/variant-prop`, `v5.0.0/link-underline-hover`,
+  `v5.0.0/jss-to-tss-react`, `v6.0.0/list-item-button-prop`,
+  `v6.0.0/system-props`, `v6.0.0/{styled,sx-prop,theme-v6}`,
+  `v7.0.0/{grid-props,input-label-size-normal-medium,lab-removed-components,theme-color-functions}`
+  (the last is in the codemod README, not the v7 guide), `deprecations/all`,
+  `v9.0.0/system-props`.
+- **`preset-safe` already does several hotspots.** It includes
+  `theme-breakpoints` (moves every `down()`/`between()` key up one; *not
+  idempotent*, never run it twice or bump by hand as well), `theme-spacing`
+  (drops the `px` after `${theme.spacing(n)}`), `hidden-down-props`,
+  `icon-button-size` (adds `size="large"` to keep v4's 48px),
+  `with-width` (inserts a stub), `moved-lab-modules` (Alert and
+  Autocomplete move to `@mui/material`), `autocomplete-rename-option`
+  (`getOptionSelected`), and `adapter-v4` (wraps the theme in
+  `adaptV4Theme`). So step 1 *checks* those hotspots instead of fixing them,
+  `@mui/lab` is not needed at all, and `adaptV4Theme` is removed by hand
+  because the theme is small enough to write in v5 shape.
+- Not codemodded: Autocomplete `renderOption(props, option)`,
+  `-theme.spacing(n)`, `withWidth` stubs.
+- **`react-is`**: the v6 and v7 guides require a resolution matching React
+  (`react-is@^18.3.1`) on React 18. Confirmed.
+- **v9 browser floor**: Chrome 117, Edge 121, Firefox 121, Safari 17
+  (v6: Chrome 109, Edge 121, Firefox 115, Safari 15.4). Confirmed; still a
+  decision for step 5.
+- **Defaults that change the look, missing from this plan.** v5 changed:
+  breakpoint values (md 960→900, lg 1280→1200, xl 1920→1536); Link underline
+  hover→always; CssBaseline body font body2→body1; Tabs indicator
+  secondary→primary and text inherit→primary; Checkbox, Radio and Switch
+  secondary→primary; Tooltip interactive by default; dark-mode Paper gets an
+  elevation overlay; AppBar ignores `color` in dark mode; Stepper loses its
+  24px padding; Tab min width 72→90; Menu opens below the anchor; Snackbar
+  moves to the bottom left on desktop. Step 1 restores the v4 values in the
+  shared theme (`src/styles/index.js`, so asset themes get them too) wherever
+  one theme entry does it; anything left is listed under Deliberate changes.
+- v9 also: `Typography paragraph` is removed (10 uses; `deprecations/all`
+  covers it), Stepper renders `<ol>`, `MenuItem` outside `Menu`/`MenuList`
+  and `Tab` outside `Tabs` throw, Grid `direction="column"` is removed.
 
 ### 1. v5, Emotion, codemods, theme
 
