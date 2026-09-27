@@ -29,8 +29,8 @@ a service Google shut down in 2024. Both are follow-ups.
 
 | step | state | commit |
 | --- | --- | --- |
-| 1. Remove unused packages | ✅ | (step 1) |
-| 2. Minor and patch releases | ⬜ | |
+| 1. Remove unused packages | ✅ | `b97db4e` |
+| 2. Minor and patch releases | ✅ | (step 2) |
 | 3. Small majors | ⬜ | |
 | 4. i18next | ⬜ | |
 | 5. Redux | ⬜ | |
