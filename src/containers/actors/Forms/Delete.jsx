@@ -34,7 +34,7 @@ const ActorDeleteForm = (props) => {
       alias,
     },
     actor,
-    counts,
+    counts = null,
     namespace,
     isFetching,
   } = props;
@@ -290,10 +290,6 @@ ActorDeleteForm.propTypes = {
   }),
   namespace: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
-};
-
-ActorDeleteForm.defaultProps = {
-  counts: null,
 };
 
 export default ActorDeleteForm;

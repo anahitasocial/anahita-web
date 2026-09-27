@@ -34,8 +34,8 @@ a service Google shut down in 2024. Both are follow-ups.
 | 3. Small majors | ✅ | `6cd7f04` |
 | 4. i18next | ✅ | `4b69d10` |
 | 5. Redux | ✅ | `550334b` |
-| 6. Geolocation, player, particles | ✅ | (step 6) |
-| 7. React 19 | ⬜ | |
+| 6. Geolocation, player, particles | ✅ | `9d2023b` |
+| 7. React 19 | ✅ | (step 7) |
 | 8. ESLint config | ⬜ | |
 | Visual check | ⬜ | |
 
@@ -132,5 +132,17 @@ a service Google shut down in 2024. Both are follow-ups.
     (the `wasOpened` state from `44f888b` is gone).
   - Particles removed at the user's request: the home page no longer
     renders them, and `react-tsparticles` is uninstalled (−20 kB gzipped).
+- Step 7: React and React DOM 19.3, with the `react-is` resolution raised to
+  match (Material UI requires it to equal React's major). `react-leaflet` 5
+  (needs React 19) and `react-helmet-async` 3 needed no code changes.
+  Checked for what React 19 removed: one `defaultProps` on a function
+  component (`ActorDeleteForm`, now a default in the destructuring); no
+  string refs, legacy context, `findDOMNode` or `ReactDOM.render`, in the
+  app or in the runtime builds of its React libraries. `react-truncate`
+  (last released 2019) and `react-ga` declare older React peers, but the
+  first is a class component using nothing React 19 removed, and the second
+  is plain JavaScript. React 19 no longer checks `propTypes`, so the app's
+  PropTypes declarations are documentation from here on. The main bundle
+  grew 23 kB gzipped, mostly React DOM.
 - The project's ESLint parser doesn't accept `??` or `?.` until the config
   changes in step 8.

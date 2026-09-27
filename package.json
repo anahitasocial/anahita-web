@@ -43,18 +43,18 @@
     "moment": "^2.31.0",
     "normalizr": "^3.4.0",
     "prop-types": "^15.7.2",
-    "react": "^18.3.1",
+    "react": "^19.3.0",
     "react-country-region-selector": "^4",
-    "react-dom": "18.3.1",
+    "react-dom": "^19.3.0",
     "react-dropzone": "^20",
     "react-ga": "^3.3.0",
     "react-geolocated": "^4",
-    "react-helmet-async": "^1.2.2",
+    "react-helmet-async": "^3",
     "react-i18next": "^17",
     "react-image": "^4",
     "react-infinite-scroll-component": "^7",
-    "react-is": "^18.3.1",
-    "react-leaflet": "^4.2.1",
+    "react-is": "^19.3.0",
+    "react-leaflet": "^5",
     "react-markdown": "^10.1.0",
     "react-masonry-css": "^1.0.14",
     "react-player": "^2.16.1",
@@ -90,6 +90,6 @@
     "not dead"
   ],
   "resolutions": {
-    "react-is": "^18.3.1"
+    "react-is": "^19.3.0"
   }
 }

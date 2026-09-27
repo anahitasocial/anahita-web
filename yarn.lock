@@ -1854,10 +1854,10 @@
   resolved "https://registry.yarnpkg.com/@popperjs/core/-/core-2.11.8.tgz#6b79032e760a0899cd4204710beede972a3a185f"
   integrity sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==
 
-"@react-leaflet/core@^2.1.0":
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/@react-leaflet/core/-/core-2.1.0.tgz#383acd31259d7c9ae8fb1b02d5e18fe613c2a13d"
-  integrity sha512-Qk7Pfu8BSarKGqILj4x7bCSZ1pjuAPZ+qmRwH5S7mDS91VSbVVsJSrW4qA+GPrro8t69gFYVMWb1Zc4yFmPiVg==
+"@react-leaflet/core@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@react-leaflet/core/-/core-3.0.0.tgz#34ccc280ce7d8ac5c09f2b3d5fffded450bdf1a2"
+  integrity sha512-3EWmekh4Nz+pGcr+xjf0KNyYfC3U2JjnkWsh0zcqaexYqmmB5ZhH37kz41JXGmKzpaMZCnPofBBm64i+YrEvGQ==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"
@@ -6863,7 +6863,7 @@ longest-streak@^3.0.0:
   resolved "https://registry.yarnpkg.com/longest-streak/-/longest-streak-3.1.0.tgz#62fa67cd958742a1574af9f39866364102d90cd4"
   integrity sha512-9Ri+o0JYgehTaVBBDoMqIl8GXtbWg711O3srftcHhZ0dqnETqLaoIK0x17fUw9rFSlK/0NlsKe0Ahhyl5pXE2g==
 
-loose-envify@^1.0.0, loose-envify@^1.1.0, loose-envify@^1.4.0:
+loose-envify@^1.0.0, loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -8723,13 +8723,12 @@ react-dev-utils@^12.0.1:
     strip-ansi "^6.0.1"
     text-table "^0.2.0"
 
-react-dom@18.3.1:
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-18.3.1.tgz#c2265d79511b57d479b3dd3fdfa51536494c5cb4"
-  integrity sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==
+react-dom@^19.3.0:
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-19.3.0.tgz#a0ff19161d7f4e9be5469a07278b0c06e00f9001"
+  integrity sha512-JDk8dgif51OjFoDE70+OT9ICyYr+69HlmihNwp1+Nsfbna3t5sIiCa9ZJktDmQ4/1b/rn26hIAR2uYXDMr5r0Q==
   dependencies:
-    loose-envify "^1.1.0"
-    scheduler "^0.23.2"
+    scheduler "^0.28.0"
 
 react-dropzone@^20:
   version "20.1.2"
@@ -8744,7 +8743,7 @@ react-error-overlay@^6.0.11:
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-6.1.0.tgz#22b86256beb1c5856f08a9a228adb8121dd985f2"
   integrity sha512-SN/U6Ytxf1QGkw/9ve5Y+NxBbZM6Ht95tuXNMKs8EJyFa/Vy/+Co3stop3KBHARfn/giv+Lj1uUnTfOJ3moFEQ==
 
-react-fast-compare@^3.0.1, react-fast-compare@^3.2.0:
+react-fast-compare@^3.0.1, react-fast-compare@^3.2.2:
   version "3.2.2"
   resolved "https://registry.yarnpkg.com/react-fast-compare/-/react-fast-compare-3.2.2.tgz#929a97a532304ce9fee4bcae44234f1ce2c21d49"
   integrity sha512-nsO+KSNgo1SbJqJEYRE9ERzo7YtYbou/OqjSQKxV7jcKox7+usiUVZOAC+XnDOABXggQTno0Y1CpVnuWEc1boQ==
@@ -8759,15 +8758,13 @@ react-geolocated@^4:
   resolved "https://registry.yarnpkg.com/react-geolocated/-/react-geolocated-4.5.1.tgz#411ab9a3dab557103dca1dffe112772ec88ac7d6"
   integrity sha512-ZzeqinRx+7PWBVQF+Ww6+GgiYQvYj/Z34KtI1HAU2KcsZcFgm3jmHG1dmM/JAYFeutxvLhETK/9raoOm1JB6Qw==
 
-react-helmet-async@^1.2.2:
-  version "1.3.0"
-  resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-1.3.0.tgz#7bd5bf8c5c69ea9f02f6083f14ce33ef545c222e"
-  integrity sha512-9jZ57/dAn9t3q6hneQS0wukqC2ENOBgMNVEhb/ZG9ZSxUetzVIw4iAmEU38IaVg3QGYauQPhSeUTuIUtFglWpg==
+react-helmet-async@^3:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/react-helmet-async/-/react-helmet-async-3.0.0.tgz#16f31779ea4e4e01827c071b2f15301d074dd570"
+  integrity sha512-nA3IEZfXiclgrz4KLxAhqJqIfFDuvzQwlKwpdmzZIuC1KNSghDEIXmyU0TKtbM+NafnkICcwx8CECFrZ/sL/1w==
   dependencies:
-    "@babel/runtime" "^7.12.5"
     invariant "^2.2.4"
-    prop-types "^15.7.2"
-    react-fast-compare "^3.2.0"
+    react-fast-compare "^3.2.2"
     shallowequal "^1.1.0"
 
 react-i18next@^17:
@@ -8789,17 +8786,17 @@ react-infinite-scroll-component@^7:
   resolved "https://registry.yarnpkg.com/react-infinite-scroll-component/-/react-infinite-scroll-component-7.2.1.tgz#95bd7a9b9ed34c9460eb30339f60f66e2db1f0ac"
   integrity sha512-yPuEf6VHBJXFt+YXDxjlnAuhorUwiA2cKURx/P6a7WW3k+TvwY/mbx7KP1rQ1hxGzDcwreczRyLIv6eSd1sFIw==
 
-react-is@^16.13.1, react-is@^16.7.0, react-is@^17.0.1, react-is@^18.0.0, react-is@^18.3.1, react-is@^19.2.8:
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/react-is/-/react-is-18.3.1.tgz#e83557dc12eae63a99e003a46388b1dcbb44db7e"
-  integrity sha512-/LLMVyas0ljjAtoYiPqYiL8VWXzUUdThrmU5+n20DZv+a+ClRoevUzw5JxU+Ieh5/c87ytoTBV9G1FiKfNJdmg==
+react-is@^16.13.1, react-is@^16.7.0, react-is@^17.0.1, react-is@^18.0.0, react-is@^19.2.8, react-is@^19.3.0:
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.3.0.tgz#716028d67e9993d23a2d353c6d08a3c1ef2bbeb4"
+  integrity sha512-UpMYezM4v5/18F28aC66AEsjXIgE02kyEMH6yLdgLXu/UTfa1Ntwck/nNLrbqJsEXW7gPb0coNO9FQse9WTovA==
 
-react-leaflet@^4.2.1:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-4.2.1.tgz#c300e9eccaf15cb40757552e181200aa10b94780"
-  integrity sha512-p9chkvhcKrWn/H/1FFeVSqLdReGwn2qmiobOQGO3BifX+/vV/39qhY8dGqbdcPh1e6jxh/QHriLXr7a4eLFK4Q==
+react-leaflet@^5:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-leaflet/-/react-leaflet-5.0.0.tgz#945d40bad13b69e8606278b19446b00bab57376a"
+  integrity sha512-CWbTpr5vcHw5bt9i4zSlPEVQdTVcML390TjeDG0cK59z1ylexpqC6M1PJFjV8jD7CF+ACBFsLIDs6DRMoLEofw==
   dependencies:
-    "@react-leaflet/core" "^2.1.0"
+    "@react-leaflet/core" "^3.0.0"
 
 react-markdown@^10.1.0:
   version "10.1.0"
@@ -8932,12 +8929,10 @@ react-truncate@^2.4.0:
   resolved "https://registry.yarnpkg.com/react-truncate/-/react-truncate-2.4.0.tgz#3cf5ff09ab86f93e3c078d359f4de6d75aa60510"
   integrity sha512-3QW11/COYwi6iPUaunUhl06DW5NJBJD1WkmxW5YxqqUu6kvP+msB3jfoLg8WRbu57JqgebjVW8Lknw6T5/QZdA==
 
-react@^18.3.1:
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"
-  integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
-  dependencies:
-    loose-envify "^1.1.0"
+react@^19.3.0:
+  version "19.3.0"
+  resolved "https://registry.yarnpkg.com/react/-/react-19.3.0.tgz#e20aa3a14687075ce863351b5878b0608c3fbfb2"
+  integrity sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog==
 
 read-cache@^1.0.0:
   version "1.0.0"
@@ -9317,12 +9312,10 @@ saxes@^5.0.1:
   dependencies:
     xmlchars "^2.2.0"
 
-scheduler@^0.23.2:
-  version "0.23.2"
-  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.23.2.tgz#414ba64a3b282892e944cf2108ecc078d115cdc3"
-  integrity sha512-UOShsPwz7NrMUqhR6t0hWjFduvOzbtv7toDH1/hIrfRNIDBnnBWd0CwJTGvTpngVlmwGCdP9/Zl/tVrDqcuYzQ==
-  dependencies:
-    loose-envify "^1.1.0"
+scheduler@^0.28.0:
+  version "0.28.0"
+  resolved "https://registry.yarnpkg.com/scheduler/-/scheduler-0.28.0.tgz#03d3ca348aeaf8b7502f64468f217b27523f9695"
+  integrity sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==
 
 schema-utils@2.7.0:
   version "2.7.0"
