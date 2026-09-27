@@ -328,6 +328,13 @@ in v9, and Tabs/Menu roving tabindex.
   `*Outline` icons → `*Outlined`. Drawer `ModalProps` and InputBase
   `inputProps` are still part of the v9 API and stay. Every `MenuItem` is
   inside a `Menu` or `Select`, and every `Tab` inside `Tabs`.
+- Found in the first visual check: saving a form crashed with "Cannot read
+  properties of null (reading 'scrollTop')". The local `Alert` wrapper in
+  `Alerts.jsx` didn't forward its ref, and since v5 a Snackbar's transition
+  needs one (v4 used `findDOMNode`). Fixed in `12966d9`. A scan for other
+  custom components directly inside Tooltip, Snackbar, Popper, Modal,
+  ClickAwayListener or a transition found none. The smoke test missed it
+  because no alert opens on a signed-out page.
 - No browser in the session that ran steps 1–5, so the visual check is done
   afterwards by a person, one step commit at a time.
 
