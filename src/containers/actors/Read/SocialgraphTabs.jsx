@@ -41,6 +41,7 @@ const SocialgraphTabs = ({
         color="inherit"
         className={classes.appBar}
         variant="outlined"
+        elevation={0}
       >
         <Tabs
           value={value}

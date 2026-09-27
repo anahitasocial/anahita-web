@@ -41,6 +41,7 @@ const Blogs = ({ selectedTab = RECENT }) => {
         color="inherit"
         className={classes.root}
         variant="outlined"
+        elevation={0}
       >
         <Tabs
           value={tab}

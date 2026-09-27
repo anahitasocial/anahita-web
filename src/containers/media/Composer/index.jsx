@@ -89,6 +89,7 @@ const Composers = ({
       color="inherit"
       className={classes.root}
       variant="outlined"
+      elevation={0}
     >
       {config && (
         <config.Composer

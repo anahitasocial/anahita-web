@@ -45,6 +45,7 @@ const Inbounds = ({
         color="inherit"
         className={classes.root}
         variant="outlined"
+        elevation={0}
       >
         <Tabs
           value={tab}
