@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -26,7 +26,7 @@ const { FILTER } = ACTOR;
 const ALL = '';
 const AUTH_FILTERS = [FILTER.FOLLOWING, FILTER.ADMINISTERING];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -49,7 +49,7 @@ const Actors = ({
   isAuthenticated,
   actorSettings = {},
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // The URL is the only source of truth for the selected tab, so the tab is

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
@@ -16,7 +16,7 @@ import ControlAdd from '../../controls/tags/location/Add';
 import actions from '../../../actions';
 import { App as APP } from '../../../constants';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     list: {
       position: 'relative',
@@ -46,7 +46,7 @@ const LocationsList = ({
   selectedLocations = [],
   onChange = null,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const [keyword, setKeyword] = useState('');
   const [debouncedKeyword, setDebouncedKeyword] = useState(keyword);

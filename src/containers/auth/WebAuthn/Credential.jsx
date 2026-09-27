@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
@@ -20,7 +20,7 @@ import moment from 'moment';
 
 import WebAuthnCredentialType from '../../../proptypes/WebAuthnCredential';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     meta: {
       display: 'flex',
@@ -77,7 +77,7 @@ const Credential = ({
   handleRename,
   handleDelete,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { t, i18n } = useTranslation('auth');
   const {
     nickname,

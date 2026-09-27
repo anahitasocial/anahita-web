@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
@@ -150,4 +150,4 @@ ActorBody.propTypes = {
   selectedTab: PropTypes.string,
 };
 
-export default withStyles(styles)(ActorBody);
+export default withStyles(ActorBody, styles);

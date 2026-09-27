@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -25,7 +25,7 @@ const {
 
 const SORT_OPTIONS = [TRENDING, TOP, RECENT];
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
 const Locations = ({
   selectedTab = TOP,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // The URL is the only source of truth for the selected sort, so it is

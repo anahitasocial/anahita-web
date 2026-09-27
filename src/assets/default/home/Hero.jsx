@@ -1,5 +1,5 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import appLogo from '../media/logo';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       backgroundColor: 'transparent',
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const HomeHero = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { color: logo } = appLogo;
   return (
     <Card elevation={0} className={classes.root}>

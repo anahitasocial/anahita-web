@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -193,4 +193,4 @@ MediumReadDefault.propTypes = {
   handleView: PropTypes.func,
 };
 
-export default withStyles(styles)(MediumReadDefault);
+export default withStyles(MediumReadDefault, styles);

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import ButtonBase from '@mui/material/ButtonBase';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -114,4 +114,4 @@ CoverForm.propTypes = {
   handleDelete: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(CoverForm);
+export default withStyles(CoverForm, styles);

@@ -2,7 +2,7 @@ import React from 'react';
 import slugify from 'slugify';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -140,4 +140,4 @@ ActorCard.propTypes = {
   viewer: PersonType,
 };
 
-export default withStyles(styles)(ActorCard);
+export default withStyles(ActorCard, styles);

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { geolocated } from 'react-geolocated';
 import queryString from 'query-string';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import AppBar from '@mui/material/AppBar';
 import FormControl from '@mui/material/FormControl';
@@ -27,7 +27,7 @@ import i18n from '../../../languages';
 
 const { SCOPE, SORTING } = SEARCH;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       marginBottom: 8 * 2,
@@ -78,7 +78,7 @@ const Search = ({
   isGeolocationAvailable,
   isGeolocationEnabled,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const location = useLocation();
   const { q } = queryString.parse(location.search);

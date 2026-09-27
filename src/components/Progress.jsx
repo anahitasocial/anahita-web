@@ -1,9 +1,9 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     progress: {
       margin: theme.spacing(1),
@@ -12,7 +12,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const Progress = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <Grid
       container

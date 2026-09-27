@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import AboutIcon from '@mui/icons-material/Info';
 
@@ -21,7 +21,7 @@ import i18n from '../../languages';
 import NodeInfoType from '../../proptypes/NodeInfo';
 import packageInfo from '../../../package.json';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     container: {
       paddingTop: theme.spacing(2),
@@ -73,7 +73,7 @@ const SettingsAbout = ({
   nodeInfo = null,
   failed = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   if (failed || !nodeInfo) {
     return (

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -22,7 +22,7 @@ const {
   getCoverURL,
 } = utils.node;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -57,7 +57,7 @@ const FeedCardComment = ({
   menu = null,
   showOwner = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const portrait = getPortraitURL(node.parent, 'medium');
   const cover = getCoverURL(node.parent);
   const {

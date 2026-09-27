@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -19,7 +19,7 @@ const {
   getURL,
 } = utils.node;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -49,7 +49,7 @@ const FeedCardRepost = ({
   menu = null,
   showOwner = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const url = getURL(node.parent);
   const creationTime = moment.utc(node.creationTime).local().format('LLL').toString();
   const creationTimeFromNow = moment.utc(node.creationTime).fromNow();

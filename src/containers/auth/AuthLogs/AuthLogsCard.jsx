@@ -13,7 +13,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import DesktopMacIcon from '@mui/icons-material/DesktopMac';
 import DesktopWindowsIcon from '@mui/icons-material/DesktopWindows';
@@ -30,7 +30,7 @@ const clientDisplayName = (clientId) => {
   return OAUTH_CLIENTS[clientId] || clientId;
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return ({
     chip: {
       marginLeft: theme.spacing(1),
@@ -45,7 +45,7 @@ const AuthLogsCard = ({
   handleDelete,
   loading,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   if (items.length === 0) {
     return (<></>);

@@ -17,7 +17,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import TotpIcon from '@mui/icons-material/PhonelinkLock';
 
@@ -26,7 +26,7 @@ import api from '../../../api';
 import i18n from '../../../languages';
 import PersonType from '../../../proptypes/Person';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     destructive: {
       color: theme.palette.error.main,
@@ -54,7 +54,7 @@ const RevokeTotp = ({
   alertError,
   alertSuccess,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [status, setStatus] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [confirming, setConfirming] = useState(false);

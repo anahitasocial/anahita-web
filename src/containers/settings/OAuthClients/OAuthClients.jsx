@@ -17,7 +17,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import AddIcon from '@mui/icons-material/Add';
 import ClientsIcon from '@mui/icons-material/Apps';
@@ -29,7 +29,7 @@ import OAuthClientsType from '../../../proptypes/OAuthClients';
 
 import OAuthClientMenu from './Menu';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     clientId: {
       fontFamily: 'monospace',
@@ -76,7 +76,7 @@ const OAuthClients = ({
   onDelete,
   onRotate,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Card>

@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -25,7 +25,7 @@ const DEFAULT_FILTERS = {
   filter: '',
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -43,7 +43,7 @@ const ActorsBrowse = ({
   total = 0,
   isFetching = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const {
     q = '',

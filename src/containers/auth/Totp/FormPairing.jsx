@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { Totp as TOTP } from '../../../constants';
 import i18n from '../../../languages';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     qrCode: {
       marginTop: theme.spacing(2),
@@ -34,7 +34,7 @@ const TOTPFormPairing = ({
   success = false,
   qrCodeImage = null,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const blob = new Blob([qrCodeImage], { type: 'image/png' });
   const src = URL.createObjectURL(blob);
 

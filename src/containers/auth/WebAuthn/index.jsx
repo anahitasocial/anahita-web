@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useCallback, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -20,7 +20,7 @@ import RenameDialog from './RenameDialog';
 import DeleteDialog from './DeleteDialog';
 import api from '../../../api';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     alert: {
       marginBottom: theme.spacing(2),
@@ -75,7 +75,7 @@ const ceremonyErrorKey = (error) => {
 };
 
 const WebAuthn = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { t } = useTranslation(['common', 'auth']);
 
   const [credentials, setCredentials] = useState([]);

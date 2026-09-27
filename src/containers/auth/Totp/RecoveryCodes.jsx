@@ -1,5 +1,5 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Grid';
@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import i18n from '../../../languages';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     list: {
       fontSize: 16,
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => {
 const TOTPRecoveryCodes = ({
   items: recoveryCodes = [],
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <>

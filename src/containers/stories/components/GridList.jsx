@@ -1,7 +1,7 @@
 import React from 'react';
 import Img from 'react-image';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import CircularProgress from '@mui/material/CircularProgress';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
@@ -86,4 +86,4 @@ SingleLineImageList.propTypes = {
   photos: PropTypes.arrayOf(MediaType.isRequired).isRequired,
 };
 
-export default withStyles(styles)(SingleLineImageList);
+export default withStyles(SingleLineImageList, styles);

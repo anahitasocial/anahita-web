@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { useDropzone } from 'react-dropzone';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -14,7 +14,7 @@ import { Medium as MEDIUM } from '../../../../constants';
 import MediumType from '../../../../proptypes/Medium';
 import i18n from '../../../../languages';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       width: '100%',
@@ -41,7 +41,7 @@ const ComposersFile = React.forwardRef(({
   isFetching,
   namespace,
 }, ref) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const {
     // acceptedFiles,

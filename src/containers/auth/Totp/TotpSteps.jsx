@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -23,7 +23,7 @@ import FormPassword from './FormPassword';
 import FormPairing from './FormPairing';
 import RecoveryCodes from './RecoveryCodes';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     stepper: {
       padding: theme.spacing(2),
@@ -50,7 +50,7 @@ const TotpSteps = ({
   codesCopySuccess = false,
   enableError = '',
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const steps = {
     [STEPS.PAIR_DEVICE]: i18n.t('auth:totp.steps.pairDevice'),

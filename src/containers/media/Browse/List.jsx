@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Masonry from '../../../components/BreakpointMasonry';
@@ -10,7 +10,7 @@ import Progress from '../../../components/Progress';
 import PersonType from '../../../proptypes/Person';
 import MediaType from '../../../proptypes/Media';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -26,7 +26,7 @@ const MediaList = ({
   fetchList,
   handleView,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const hasMore = total > items.allIds.length;
 
   return (

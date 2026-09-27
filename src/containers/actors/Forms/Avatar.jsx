@@ -1,7 +1,7 @@
 import React from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -125,4 +125,4 @@ ActorAvatarForm.propTypes = {
   size: PropTypes.oneOf(['small', 'large', 'default']),
 };
 
-export default withStyles(styles)(ActorAvatarForm);
+export default withStyles(ActorAvatarForm, styles);

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 
@@ -13,7 +13,7 @@ import HeaderMeta from '../../components/HeaderMeta';
 import i18n from '../../languages';
 import legal from '../../statics/legal';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     tabs: {
       marginBottom: theme.spacing(2),
@@ -45,7 +45,7 @@ const DOCUMENTS = ['tos', 'privacy'];
 // Public, deliberately. People read the terms BEFORE they have an account —
 // that is the point of linking them from the signup form.
 const LegalPage = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const { tab } = useParams();
 

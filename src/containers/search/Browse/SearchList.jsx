@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import Typography from '@mui/material/Typography';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -26,7 +26,7 @@ const {
   RECENT,
 } = SEARCH.SORTING;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -51,7 +51,7 @@ const SearchList = ({
     searchComments,
   },
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const [start, setStart] = useState(0);
 

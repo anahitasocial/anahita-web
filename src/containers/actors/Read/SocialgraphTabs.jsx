@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
 import Box from '@mui/material/Box';
 import Tabs from '@mui/material/Tabs';
@@ -73,4 +73,4 @@ SocialgraphTabs.propTypes = {
   selectedTab: PropTypes.oneOf(['followers', 'leaders', 'mutuals', 'blocks']),
 };
 
-export default withStyles(styles)(SocialgraphTabs);
+export default withStyles(SocialgraphTabs, styles);

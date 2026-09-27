@@ -16,7 +16,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Switch from '@mui/material/Switch';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import KeyIcon from '@mui/icons-material/VpnKey';
 
@@ -28,7 +28,7 @@ import OAuthSigningKeysType from '../../../proptypes/OAuthSigningKeys';
 // JWKS before the old one stops verifying.
 const EXPIRY_WARNING_DAYS = 14;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     keyId: {
       fontFamily: 'monospace',
@@ -85,7 +85,7 @@ const OAuthSigningKeys = ({
   pendingKid = null,
   onToggle,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   // Whether switching a key off is even possible right now. The server
   // refuses to leave the registry with none active, so with exactly one

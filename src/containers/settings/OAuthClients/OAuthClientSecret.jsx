@@ -9,12 +9,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import i18n from '../../../languages';
 import OAuthClientType from '../../../proptypes/OAuthClient';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     secret: {
       fontFamily: 'monospace',
@@ -52,7 +52,7 @@ const OAuthClientSecret = ({
   secret = null,
   onClose,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {

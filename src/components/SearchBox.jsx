@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { alpha } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import SearchIcon from '@mui/icons-material/Search';
 import InputBase from '@mui/material/InputBase';
 import i18n from '../languages';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       position: 'relative',
@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => {
 });
 
 const SearchBox = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [searchParams] = useSearchParams();
   const query = searchParams.get('q') || '';
 

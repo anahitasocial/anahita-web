@@ -8,7 +8,7 @@ import React, {
 import PropTypes from 'prop-types';
 import clsx from 'clsx';
 import moment from 'moment';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -485,4 +485,4 @@ MediumStepperLightboxDefault.propTypes = {
   handlePrev: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(MediumStepperLightboxDefault);
+export default withStyles(MediumStepperLightboxDefault, styles);

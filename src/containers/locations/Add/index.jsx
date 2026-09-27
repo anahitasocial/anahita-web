@@ -4,7 +4,7 @@ import {
   geolocated,
   geoPropTypes,
 } from 'react-geolocated';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
@@ -24,7 +24,7 @@ const TABS = {
   ADD: 'add',
 };
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     closeButton: {
       position: 'absolute',
@@ -45,7 +45,7 @@ const LocationsSelector = ({
   selectedLocations = [],
   onChange = null,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   const [tab, setTab] = useState(TABS.SEARCH);
   const [keyword, setKeyword] = useState('');

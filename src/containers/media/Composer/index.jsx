@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import inflector from 'inflector-js';
 import _ from 'lodash';
 
@@ -20,7 +20,7 @@ import utils from '../../../utils';
 
 const { form, node } = utils;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -72,7 +72,7 @@ const COMPOSER_CONFIGS = {
 const Composers = ({
   actor,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const composers = node.getComposers(actor);
   const [tab, setTab] = useState(composers[0]);
 

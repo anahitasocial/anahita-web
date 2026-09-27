@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -16,7 +16,7 @@ import { App as APP } from '../../../constants';
 
 const { LIMIT } = APP.BROWSE;
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     card: {
       marginBottom: theme.spacing(2),
@@ -35,7 +35,7 @@ const ActorsSocialgraph = ({
     q: '',
   },
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { q = '' } = queryFilters;
   const [start, setStart] = useState(0);
 

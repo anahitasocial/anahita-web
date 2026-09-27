@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import striptags from 'striptags';
 import { Helmet } from 'react-helmet-async';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
@@ -229,4 +229,4 @@ MediaStepperView.propTypes = {
   handleOnSubmit: PropTypes.func.isRequired,
 };
 
-export default withStyles(styles)(MediaStepperView);
+export default withStyles(MediaStepperView, styles);

@@ -1,6 +1,6 @@
 import React from 'react';
 import slugify from 'slugify';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 
 import Card from '@mui/material/Card';
@@ -110,4 +110,4 @@ ActorHeader.propTypes = {
   headerActions: PropTypes.node,
 };
 
-export default withStyles(styles)(ActorHeader);
+export default withStyles(ActorHeader, styles);

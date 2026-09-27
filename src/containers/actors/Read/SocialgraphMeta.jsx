@@ -1,5 +1,5 @@
 import React from 'react';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
@@ -58,4 +58,4 @@ SocialgraphMeta.propTypes = {
   actor: ActorType.isRequired,
 };
 
-export default withStyles(styles)(SocialgraphMeta);
+export default withStyles(SocialgraphMeta, styles);

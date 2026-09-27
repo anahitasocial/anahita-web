@@ -16,7 +16,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import SignupRequestsIcon from '@mui/icons-material/HowToReg';
 import PersonIcon from '@mui/icons-material/PersonOutline';
@@ -25,7 +25,7 @@ import WarningIcon from '@mui/icons-material/Warning';
 import i18n from '../../../languages';
 import SignupRequestsType from '../../../proptypes/SignupRequests';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     body: {
       marginTop: theme.spacing(0.5),
@@ -85,7 +85,7 @@ const SignupRequests = ({
   canReject = false,
   onDecide,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Card>

@@ -12,7 +12,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
@@ -22,7 +22,7 @@ import RotateIcon from '@mui/icons-material/VpnKey';
 import i18n from '../../../languages';
 import OAuthClientType from '../../../proptypes/OAuthClient';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     destructive: {
       color: theme.palette.error.main,
@@ -51,7 +51,7 @@ const OAuthClientMenu = ({
   onDelete,
   onRotate,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const [confirming, setConfirming] = useState(null);
 

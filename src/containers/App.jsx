@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import CssBaseline from '@mui/material/CssBaseline';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +30,7 @@ const drawerWidth = 240;
 const { LeftMenu } = assets.navs;
 
 // Apply some reset
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       display: 'flex',
@@ -95,7 +95,7 @@ const App = ({
   readNodeInfo,
   logout,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(false);

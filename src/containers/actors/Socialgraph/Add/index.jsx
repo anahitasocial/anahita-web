@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 
@@ -14,7 +14,7 @@ import ActorType from '../../../../proptypes/Actor';
 import i18n from '../../../../languages';
 import SelectList from './Select';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     closeButton: {
       position: 'absolute',
@@ -29,7 +29,7 @@ const ActorsSocialgraphAdd = ({
   actor,
   isOpen: defaultIsOpen = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [isOpen, setIsOpen] = useState(defaultIsOpen);
 
   const handleClose = () => {

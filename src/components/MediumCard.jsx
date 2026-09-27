@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 import { useNavigate } from 'react-router-dom';
 import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
@@ -192,4 +192,4 @@ MediumCard.propTypes = {
   cardProps: PropTypes.objectOf(PropTypes.any),
 };
 
-export default withStyles(styles)(MediumCard);
+export default withStyles(MediumCard, styles);

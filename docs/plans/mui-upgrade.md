@@ -51,8 +51,8 @@ each built, tested and looked at before the next.
 | step | state | commit |
 | --- | --- | --- |
 | 0. Check this plan against the MCP docs | ✅ | (this commit) |
-| 1. v5, Emotion, codemods, theme | ✅ | (step 1 commit) |
-| 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ⬜ | |
+| 1. v5, Emotion, codemods, theme | ✅ | `3a8ce4b` |
+| 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ✅ | (step 2 commit) |
 | 3. v6 | ⬜ | |
 | 4. v7 | ⬜ | |
 | 5. v9 | ⬜ | |
@@ -267,6 +267,24 @@ in v9, and Tabs/Menu roving tabindex.
   `stories/components/PhotoAdd.jsx` to `./ImageList`; restored by hand.
 - After changing dependencies, clear `node_modules/.cache` or CRA's cached
   lint reports `import/no-extraneous-dependencies` for the new packages.
+- `jss-to-tss-react` converted all 72 files mechanically. Its two TODOs
+  (`App.jsx`, `NodeBody.jsx`) flagged spread/identifier style values, which
+  need no change. There were no `$rule` references. `StyledEngineProvider`
+  is gone: Emotion's `styled` merges a `className` passed to an MUI
+  component after the component's own styles, so tss classes still win.
+  `classnames` became unused and was removed.
+- `src/containers/actors/Notifications/` and `.../notifications/` are both
+  tracked, with identical files; on macOS they are one directory, so
+  `git add -A` fails. Both index entries are updated together with
+  `git update-index --cacheinfo`. One of them should be deleted, separately
+  from this upgrade.
+- Runtime smoke check, per step: a throwaway Jest test (kept out of the
+  repo) mounts `Root` in jsdom at ten signed-out routes and fails on any
+  console error. It needs `--transformIgnorePatterns
+  'node_modules/(?!(react-leaflet|@react-leaflet|leaflet)/)'` and mocks for
+  react-router (to its CJS build), axios (CJS), react-markdown,
+  remark-gfm and react-geolocated. It is not a substitute for the visual
+  check.
 - No browser in the session that ran steps 1–5, so the visual check is done
   afterwards by a person, one step commit at a time.
 

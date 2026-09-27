@@ -12,7 +12,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -45,7 +45,7 @@ const TEXT_FIELDS = [
   'tokenExpiry',
 ];
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     field: {
       marginBottom: theme.spacing(2),
@@ -101,7 +101,7 @@ const OAuthClientForm = ({
   onClose,
   onSave,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const isEdit = Boolean(client);
 
   const [fields, setFields] = useState(() => {

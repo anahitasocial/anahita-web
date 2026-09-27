@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -167,4 +167,4 @@ MediumReadArticle.propTypes = {
   cover: PropTypes.node,
 };
 
-export default withStyles(styles)(MediumReadArticle);
+export default withStyles(MediumReadArticle, styles);

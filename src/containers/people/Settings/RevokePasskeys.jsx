@@ -16,7 +16,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import PasskeyIcon from '@mui/icons-material/Fingerprint';
 
@@ -27,7 +27,7 @@ import api from '../../../api';
 import i18n from '../../../languages';
 import PersonType from '../../../proptypes/Person';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     destructive: {
       color: theme.palette.error.main,
@@ -54,7 +54,7 @@ const RevokePasskeys = ({
   alertError,
   alertSuccess,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [count, setCount] = useState(null);
   const [isFetching, setIsFetching] = useState(true);
   const [confirming, setConfirming] = useState(false);

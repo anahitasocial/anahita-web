@@ -12,7 +12,7 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 // The same MenuBook the left menu uses for Legal. A gavel was the
 // earlier choice here and the wrong one twice over: it had already
@@ -23,7 +23,7 @@ import AgreementsIcon from '@mui/icons-material/MenuBook';
 import api from '../../../api';
 import i18n from '../../../languages';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     chip: {
       marginLeft: theme.spacing(1),
@@ -53,7 +53,7 @@ const formatDate = (value) => {
 // address on a settings card would be a privacy expansion arriving by
 // accident because the column was next door.
 const Agreements = ({ personId }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [agreements, setAgreements] = useState(null);
   const [failed, setFailed] = useState(false);
 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import ReactPlayer from 'react-player';
 import VisibilitySensor from 'react-visibility-sensor';
-import withStyles from '@mui/styles/withStyles';
+import { withStyles } from 'tss-react/mui';
 
 const regex = /((?:https?|http?):\/\/[-a-z0-9+&@#/%?=~_()|!:,.;]*[-a-z0-9+&@#/%=~_()|])/ig;
 
@@ -64,4 +64,4 @@ MediaPlayer.propTypes = {
   text: PropTypes.string,
 };
 
-export default withStyles(styles)(MediaPlayer);
+export default withStyles(MediaPlayer, styles);

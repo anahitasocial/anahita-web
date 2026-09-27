@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 
 import DocumentIcon from '@mui/icons-material/Description';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     // The text in a bounded, scrolling box rather than behind a link.
     //
@@ -40,7 +40,7 @@ const AgreementCard = ({
   onAccept,
   disabled = false,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
 
   return (
     <Card>

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import { useParams } from 'react-router-dom';
 import AppBar from '@mui/material/AppBar';
 import Tabs from '@mui/material/Tabs';
@@ -23,7 +23,7 @@ const {
   },
 } = APP.BROWSE;
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   root: {
     marginBottom: 8 * 2,
     position: 'sticky',
@@ -33,7 +33,7 @@ const useStyles = makeStyles({
 });
 
 const ExplorePage = () => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const { tab: selectedTab = TABS.GROUPS } = useParams();
 
   const [tab, setTab] = useState(selectedTab);

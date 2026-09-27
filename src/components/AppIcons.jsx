@@ -1,5 +1,5 @@
 import React from 'react';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 import PropTypes from 'prop-types';
 
 import ArticlesIcon from '@mui/icons-material/LibraryBooks';
@@ -10,14 +10,14 @@ import PhotosIcon from '@mui/icons-material/Photo';
 import TopicsIcon from '@mui/icons-material/QuestionAnswer';
 import TodosIcon from '@mui/icons-material/AssignmentTurnedIn';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles()({
   icon: {
     fontSize: 20,
   },
 });
 
 const StyledIcon = ({ component: Component, ...props }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   return (
     <Component className={classes.icon} {...props} />
   );

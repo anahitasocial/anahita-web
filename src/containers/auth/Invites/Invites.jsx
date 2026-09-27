@@ -23,7 +23,7 @@ import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import ListItemText from '@mui/material/ListItemText';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import makeStyles from '@mui/styles/makeStyles';
+import { makeStyles } from 'tss-react/mui';
 
 import AddIcon from '@mui/icons-material/Add';
 import AcceptedIcon from '@mui/icons-material/CheckCircleOutline';
@@ -34,7 +34,7 @@ import InvitesIcon from '@mui/icons-material/MailOutline';
 import i18n from '../../../languages';
 import InvitesType from '../../../proptypes/Invites';
 
-const useStyles = makeStyles((theme) => {
+const useStyles = makeStyles()((theme) => {
   return {
     meta: {
       display: 'flex',
@@ -84,7 +84,7 @@ const Invites = ({
   onAdd,
   onDelete,
 }) => {
-  const classes = useStyles();
+  const { classes } = useStyles();
   const [revoking, setRevoking] = useState(null);
 
   return (
