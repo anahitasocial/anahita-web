@@ -36,7 +36,7 @@ a service Google shut down in 2024. Both are follow-ups.
 | 5. Redux | ✅ | `550334b` |
 | 6. Geolocation, player, particles | ✅ | `9d2023b` |
 | 7. React 19 | ✅ | `435b2e7` |
-| 8. ESLint config | ✅ | (step 8) |
+| 8. ESLint config | ✅ | `978efe3` |
 | Visual check | ⬜ | |
 
 ## Inventory
@@ -158,3 +158,41 @@ a service Google shut down in 2024. Both are follow-ups.
   components declared with `function`. `parserOptions.ecmaVersion` is
   2022, so ESLint now accepts `??` and `?.`, which CRA's Babel already
   compiled.
+
+## Visual check
+
+What the build, tests and smoke test can't see, most likely first:
+
+- **Infinite scroll** (feeds, people, groups, hashtags, locations, search):
+  the next page still loads, including when the first page is too short to
+  fill the screen.
+- **Forms that alert**: saving shows the snackbar; errors show too.
+- **Plurals**: the delete-profile counts ("1 post", "3 posts"), the
+  password-change message with signed-out sessions; in French too if you
+  switch.
+- **Search**: `/search?q=word` searches for the word; a search with no `q`
+  still works; the location prompt appears.
+- **Add location** on your profile: the location prompt appears only when
+  the dialog opens; "near me" results use it.
+- **Composer**: each tab (note, topic, article, photo, file) posts; a file
+  or photo can be dropped or picked (the dropzone's `accept` changed).
+- **Country and region pickers** (location add and edit forms).
+- **Videos** in posts: YouTube, Vimeo, SoundCloud still embed and play.
+- **Maps** on location pages (react-leaflet 5).
+- **Page titles** in the browser tab (react-helmet-async 3).
+- **Home page**: no particles, nothing else changed.
+- **Redux DevTools**: with the browser extension installed, the store shows
+  up in it in development.
+
+## Follow-ups
+
+- `react-player` 3, if SoundCloud, Dailymotion, Mixcloud and Twitch embeds
+  can go, or get their own embed code.
+- `react-ga` still reports to Universal Analytics, which Google shut down;
+  replace with GA4 (`react-ga4`) or drop it.
+- `react-truncate` was last released in 2019; CSS line clamping
+  (`-webkit-line-clamp`) would do the same without it.
+- Redux Toolkit, since plain `createStore` is deprecated.
+- PropTypes are no longer checked by React 19.
+- `react-scripts` → Vite, as in the MUI plan's follow-ups.
+
