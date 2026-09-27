@@ -119,6 +119,22 @@ export default (namespace, defaultNode) => {
           ),
           success: true,
         };
+      // The Access card saves through the `${namespace}_access` actions, whose
+      // success no reducer used to handle — the server's answer was dropped
+      // and the store kept the old access level until a reload. The
+      // Permissions tab reads it to decide whether comments can be set.
+      //
+      // The node only, not success: the Access card raises its own alert,
+      // and success here would add the page-level one on top.
+      case `${namespace.toUpperCase()}_ACCESS_EDIT_SUCCESS`:
+        return {
+          ...state,
+          [namespace]: editItem(
+            state[namespace],
+            action.node,
+            defaultNode,
+          ),
+        };
       case `${namespace.toUpperCase()}_DELETE_SUCCESS`:
         return {
           ...state,
