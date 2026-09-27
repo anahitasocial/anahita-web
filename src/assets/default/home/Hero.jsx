@@ -44,7 +44,7 @@ const HomeHero = () => {
   const { classes } = useStyles();
   const { color: logo } = appLogo;
   return (
-    <Card elevation={0} className={classes.root}>
+    <Card className={classes.root}>
       <CardHeader
         classes={{
           root: classes.hRoot,

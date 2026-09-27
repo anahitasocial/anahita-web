@@ -58,7 +58,7 @@ const ComposersFile = React.forwardRef(({
 
   return (
     <form onSubmit={handleOnSubmit} noValidate>
-      <Card square>
+      <Card>
         <CardContent>
           <Button
             {...rootProps}

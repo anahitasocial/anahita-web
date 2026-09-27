@@ -96,7 +96,6 @@ const LocationsList = ({
 
   return (
     <Card
-      square
       {...cardProps}
     >
       <CardContent>

@@ -135,7 +135,7 @@ const LocationsRead = ({
       <HeaderMeta
         title={location.name}
       />
-      <Card square>
+      <Card>
         <CardHeader
           avatar={
             <Avatar>

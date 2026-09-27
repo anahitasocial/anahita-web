@@ -40,7 +40,7 @@ const ComposersNote = ({
 
   return (
     <form onSubmit={handleOnSubmit} noValidate>
-      <Card square>
+      <Card>
         <CardContent>
           <TextField
             autoFocus

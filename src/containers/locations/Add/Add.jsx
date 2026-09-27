@@ -95,7 +95,7 @@ const LocationsSelectorAdd = (props) => {
   };
 
   return (
-    <Card square variant="outlined">
+    <Card>
       <LocationForm
         fields={fields}
         location={location}

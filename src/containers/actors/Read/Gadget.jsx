@@ -61,7 +61,7 @@ const ActorsGadget = (props) => {
     && admin.id === viewer.id;
 
   return (
-    <Card variant="outlined">
+    <Card>
       <CardHeader
         title={
           <Typography

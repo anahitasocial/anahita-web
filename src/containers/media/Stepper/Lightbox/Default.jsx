@@ -362,7 +362,7 @@ const MediumStepperLightboxDefault = ({
         <Grid size={{ xs: 12, md: hasPortrait ? 4 : 12 }}>
           <div className={classes.details}>
             <div className={hasPortrait ? undefined : classes.detailsInner}>
-              <Card variant="outlined" square>
+              <Card>
                 {medium.owner && medium.owner.type &&
                   getNamespace(medium.owner) !== 'people' &&
                   <CardHeaderOwner owner={medium.owner} />}

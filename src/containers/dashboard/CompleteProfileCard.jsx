@@ -54,7 +54,7 @@ const CompleteProfileCard = ({ viewer }) => {
 
   return (
     <Box sx={{ mb: 2 }}>
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           title={i18n.t('onboarding:nudge.title')}
           subheader={i18n.t('onboarding:nudge.description')}

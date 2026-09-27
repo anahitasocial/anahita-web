@@ -67,7 +67,7 @@ const ActorsSocialgraphAddSelect = ({
   };
 
   return (
-    <Card square>
+    <Card>
       <CardContent>
         <Autocomplete
           multiple

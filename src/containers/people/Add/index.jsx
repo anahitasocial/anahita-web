@@ -122,7 +122,7 @@ const PeopleAdd = (props) => {
 
   return (
     <>
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           title={personName}
           subheader={person.username ? `@${person.username}` : ''}

@@ -51,7 +51,7 @@ const HashtagsRead = (props) => {
 
   return (
     <>
-      <Card variant="outlined" square>
+      <Card>
         <CardHeader
           avatar={
             <Avatar>

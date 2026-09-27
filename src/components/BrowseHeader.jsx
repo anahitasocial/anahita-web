@@ -34,7 +34,7 @@ const BrowseHeader = ({
   actionLabel = '',
 }) => {
   return (
-    <Card variant="outlined">
+    <Card>
       <CardHeader
         avatar={
           <Avatar>

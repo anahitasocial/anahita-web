@@ -27,7 +27,7 @@ const ComposersArticle = ({
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
-      <Card square>
+      <Card>
         <CardContent>
           {fields.name &&
             <TextField

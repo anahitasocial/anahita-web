@@ -95,7 +95,7 @@ const ActorsSettingsAccess = (props) => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           avatar={
             <Avatar>

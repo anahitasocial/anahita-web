@@ -260,6 +260,9 @@ in v9, and Tabs/Menu roving tabindex.
   icons (left menu, support, settings lists) sits 20px further left.
 - v9: Menus, Tabs and Steppers use a roving tabindex; Stepper renders
   `<ol>`/`<li>`.
+- After v9, by request: every Card uses Material UI's defaults. The 24
+  that were `variant="outlined"`, `square` or `elevation={0}` are now
+  raised (elevation 1) with rounded corners.
 - v5: the photo strip (`stories/components/GridList.jsx`) is a scrolling
   flex row, because v5's grid-based ImageList can't show 1.1 columns.
 

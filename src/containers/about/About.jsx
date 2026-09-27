@@ -96,7 +96,7 @@ const SettingsAbout = ({
 
   return (
     <Container maxWidth="md" className={classes.container}>
-      <Card variant="outlined">
+      <Card>
         {/* Titled with the instance name and subtitled with the
             operator's own description — the pair those two NodeInfo
             values make, and what another server reads about this one.

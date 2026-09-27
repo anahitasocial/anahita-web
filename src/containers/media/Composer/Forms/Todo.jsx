@@ -26,7 +26,7 @@ const ComposersTodo = ({
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
-      <Card square>
+      <Card>
         <CardContent>
           {fields.name &&
             <TextField

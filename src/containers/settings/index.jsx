@@ -93,7 +93,7 @@ const Settings = ({
           what the card costs, and it buys little across two tabs — the
           actor settings page has never had it either. */}
       <Box sx={{ mb: 2 }}>
-        <Card variant="outlined">
+        <Card>
           <CardHeader
             avatar={
               <Avatar>

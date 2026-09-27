@@ -123,7 +123,7 @@ const Onboarding = ({
 
   return (
     <Container maxWidth="sm">
-      <Card variant="outlined">
+      <Card>
         <CardHeader
           title={i18n.t('onboarding:cTitle', { name: viewer.name || viewer.alias })}
           subheader={i18n.t('onboarding:intro')}

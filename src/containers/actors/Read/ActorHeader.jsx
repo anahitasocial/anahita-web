@@ -57,7 +57,6 @@ const ActorHeader = ({
 }) => {
   return (
     <Card
-      square
       className={!actor.enabled ? classes.disabled : ''}
     >
       {cover}

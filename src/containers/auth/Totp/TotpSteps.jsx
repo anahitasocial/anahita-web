@@ -59,7 +59,7 @@ const TotpSteps = ({
   };
 
   return (
-    <Card variant="outlined">
+    <Card>
       <CardHeader
         avatar={
           <Avatar>
