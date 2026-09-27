@@ -53,7 +53,7 @@ function browse(tag) {
     return (dispatch) => {
       dispatch(browseRequest());
       return new Promise((resolve, reject) => {
-        return api(tag).browse(params)
+        api(tag).browse(params)
           .then((results) => {
             dispatch(browseSuccess(results));
             return resolve();

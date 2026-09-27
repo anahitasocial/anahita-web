@@ -70,7 +70,8 @@ const exchangeCode = (code) => {
   sessionStorage.removeItem('oauth_state');
   sessionStorage.removeItem('oauth_code_verifier');
 
-  return axios.post(OAUTH_CONFIG.sessionUrl,
+  return axios.post(
+    OAUTH_CONFIG.sessionUrl,
     new URLSearchParams({
       grant_type: 'authorization_code',
       code,
@@ -80,7 +81,8 @@ const exchangeCode = (code) => {
     }),
     {
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    });
+    },
+  );
 };
 
 // The viewer arrives camelCase like every other response: the interceptor in

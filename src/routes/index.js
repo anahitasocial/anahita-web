@@ -90,7 +90,7 @@ const PhotosRead = MediaRead('photos');
 const Topics = Media('topics');
 const TopicsRead = MediaRead('topics');
 
-function AppRoutes() {
+const AppRoutes = () => {
   const isAuthenticated = useSelector((state) => {
     return state.session.isAuthenticated;
   });
@@ -343,6 +343,6 @@ function AppRoutes() {
       </OnboardingGate>
     </AgreementsGate>
   );
-}
+};
 
 export default AppRoutes;

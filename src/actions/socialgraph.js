@@ -38,7 +38,7 @@ function follow({ actor, viewer }) {
   return (dispatch) => {
     dispatch(followRequest(actor));
     return new Promise((resolve, reject) => {
-      return api.follow({ actor, viewer })
+      api.follow({ actor, viewer })
         .then((result) => {
           dispatch(followSuccess(result));
           return resolve();
@@ -79,7 +79,7 @@ function unfollow({ actor, viewer }) {
   return (dispatch) => {
     dispatch(unfollowRequest(actor));
     return new Promise((resolve, reject) => {
-      return api.unfollow({ actor, viewer })
+      api.unfollow({ actor, viewer })
         .then((result) => {
           dispatch(unfollowSuccess(result));
           return resolve();
@@ -121,7 +121,7 @@ function removefollower({ actor, follower }) {
     dispatch(removefollowerRequest(actor));
     return new Promise((resolve, reject) => {
       const namespace = utils.node.getNamespace(actor);
-      return apis[namespace][singularize(namespace)].addFollowers.deleteItem({ actor, follower })
+      apis[namespace][singularize(namespace)].addFollowers.deleteItem({ actor, follower })
         .then(() => {
           dispatch(removefollowerSuccess(follower));
           return resolve();
@@ -162,7 +162,7 @@ function block({ actor, viewer }) {
   return (dispatch) => {
     dispatch(blockRequest(actor));
     return new Promise((resolve, reject) => {
-      return api.block({ actor, viewer })
+      api.block({ actor, viewer })
         .then((result) => {
           dispatch(blockSuccess(result));
           return resolve();
@@ -203,7 +203,7 @@ function unblock({ actor, viewer }) {
   return (dispatch) => {
     dispatch(unblockRequest(actor));
     return new Promise((resolve, reject) => {
-      return api.unblock({ actor, viewer })
+      api.unblock({ actor, viewer })
         .then((result) => {
           dispatch(unblockSuccess(result));
           return resolve();

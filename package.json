@@ -22,7 +22,7 @@
   "bugs": "https://github.com/anahitasocial/anahita-web/issues",
   "license": "MIT",
   "devDependencies": {
-    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-airbnb": "^19",
     "react-scripts": "^5.0.1"
   },
   "dependencies": {

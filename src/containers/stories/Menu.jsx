@@ -45,7 +45,7 @@ const StoryMenu = (props) => {
   const canDelete = story.commands && story.commands.includes('delete') && false;
 
   if (!canSubscribe && !canFollow && !canDelete) {
-    return (<></>);
+    return null;
   }
 
   return (

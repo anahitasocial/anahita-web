@@ -121,31 +121,29 @@ const PeopleAdd = (props) => {
   const personInitials = getPersonInitials(person) || <PersonAddIcon />;
 
   return (
-    <>
-      <Card>
-        <CardHeader
-          title={personName}
-          subheader={person.username ? `@${person.username}` : ''}
-          avatar={
-            <Avatar
-              aria-label={personName}
-              alt={personName}
-            >
-              {personInitials}
-            </Avatar>
+    <Card>
+      <CardHeader
+        title={personName}
+        subheader={person.username ? `@${person.username}` : ''}
+        avatar={
+          <Avatar
+            aria-label={personName}
+            alt={personName}
+          >
+            {personInitials}
+          </Avatar>
           }
-        />
-        <PersonAddForm
-          fields={fields}
-          person={person}
-          handleOnChange={handleOnChange}
-          handleOnBlur={handleOnBlur}
-          handleOnSubmit={handleOnSubmit}
-          isFetching={isFetching}
-          dismissPath="/people/"
-        />
-      </Card>
-    </>
+      />
+      <PersonAddForm
+        fields={fields}
+        person={person}
+        handleOnChange={handleOnChange}
+        handleOnBlur={handleOnBlur}
+        handleOnSubmit={handleOnSubmit}
+        isFetching={isFetching}
+        dismissPath="/people/"
+      />
+    </Card>
   );
 };
 

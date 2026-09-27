@@ -51,7 +51,7 @@ const MediaMenu = ({
   const canDelete = permissions.canDelete(viewer, medium);
 
   if (!canEdit && !canSubscribe && !canComment && !canDelete) {
-    return (<></>);
+    return null;
   }
 
   return (

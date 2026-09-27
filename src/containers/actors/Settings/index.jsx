@@ -190,9 +190,7 @@ const ActorsSettings = ({
   const isViewer = namespace === 'people' && actor.id === viewer.id;
 
   if (!actor.id) {
-    return (
-      <></>
-    );
+    return null;
   }
 
   if (isPerson) {

@@ -31,11 +31,7 @@ const CommentCard = ({
   const url = getCommentURL(comment);
 
   if (isEditing) {
-    return (
-      <>
-        {commentForm}
-      </>
-    );
+    return commentForm;
   }
 
   return (

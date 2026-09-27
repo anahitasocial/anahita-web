@@ -63,31 +63,29 @@ const ActorsSocialgraph = ({
   const hasMore = total > items.allIds.length;
 
   return (
-    <>
-      <InfiniteScroll
-        dataLength={items.allIds.length}
-        next={fetchList}
-        hasMore={hasMore}
-        loader={
-          <Progress key="items-progress" />
+    <InfiniteScroll
+      dataLength={items.allIds.length}
+      next={fetchList}
+      hasMore={hasMore}
+      loader={
+        <Progress key="items-progress" />
         }
-      >
-        <Masonry>
-          {items.allIds.map((itemId) => {
-            const follower = items.byId[itemId];
-            const key = `socialgraph_node_${follower.id}`;
-            return (
-              <div
-                className={classes.card}
-                key={key}
-              >
-                <ActorsCard leader={actorNode} actor={follower} />
-              </div>
-            );
-          })}
-        </Masonry>
-      </InfiniteScroll>
-    </>
+    >
+      <Masonry>
+        {items.allIds.map((itemId) => {
+          const follower = items.byId[itemId];
+          const key = `socialgraph_node_${follower.id}`;
+          return (
+            <div
+              className={classes.card}
+              key={key}
+            >
+              <ActorsCard leader={actorNode} actor={follower} />
+            </div>
+          );
+        })}
+      </Masonry>
+    </InfiniteScroll>
   );
 };
 

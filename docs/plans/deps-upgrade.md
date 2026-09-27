@@ -35,8 +35,8 @@ a service Google shut down in 2024. Both are follow-ups.
 | 4. i18next | ✅ | `4b69d10` |
 | 5. Redux | ✅ | `550334b` |
 | 6. Geolocation, player, particles | ✅ | `9d2023b` |
-| 7. React 19 | ✅ | (step 7) |
-| 8. ESLint config | ⬜ | |
+| 7. React 19 | ✅ | `435b2e7` |
+| 8. ESLint config | ✅ | (step 8) |
 | Visual check | ⬜ | |
 
 ## Inventory
@@ -144,5 +144,17 @@ a service Google shut down in 2024. Both are follow-ups.
   is plain JavaScript. React 19 no longer checks `propTypes`, so the app's
   PropTypes declarations are documentation from here on. The main bundle
   grew 23 kB gzipped, mostly React DOM.
-- The project's ESLint parser doesn't accept `??` or `?.` until the config
-  changes in step 8.
+- Step 8: `eslint-config-airbnb` 19 added 281 problems. Two rules conflict
+  with how this code is written and are configured rather than obeyed:
+  `react/function-component-definition` now requires arrow functions (the
+  app's style everywhere; airbnb's default wanted function declarations,
+  which would have meant rewriting 224 components), and
+  `default-param-last` is off, because Redux reducers take
+  `(state = initialState, action)`. The rest were fixed: 26 fragments
+  (single-child fragments unwrapped, `return <></>` → `return null`,
+  which also drops a missing-`key` warning in the recovery-code lists),
+  27 promise executors that returned a value nobody reads (the `return`
+  removed; behaviour unchanged), two function-paren newlines, and two
+  components declared with `function`. `parserOptions.ecmaVersion` is
+  2022, so ESLint now accepts `??` and `?.`, which CRA's Babel already
+  compiled.

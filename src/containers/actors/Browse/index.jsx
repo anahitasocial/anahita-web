@@ -110,31 +110,29 @@ const ActorsBrowse = ({
   };
 
   return (
-    <>
-      <InfiniteScroll
-        dataLength={items.allIds.length}
-        next={fetchList}
-        hasMore={hasMore}
-        loader={
-          <Progress key={`${namespace}-progress`} />
+    <InfiniteScroll
+      dataLength={items.allIds.length}
+      next={fetchList}
+      hasMore={hasMore}
+      loader={
+        <Progress key={`${namespace}-progress`} />
         }
-      >
-        <Masonry>
-          {items.allIds.map((itemId) => {
-            const node = items.byId[itemId];
-            const key = `${namespace}_node_list_item_${node.id}`;
-            return (
-              <div
-                className={classes.card}
-                key={key}
-              >
-                <ActorsCard actor={node} viewer={viewer} />
-              </div>
-            );
-          })}
-        </Masonry>
-      </InfiniteScroll>
-    </>
+    >
+      <Masonry>
+        {items.allIds.map((itemId) => {
+          const node = items.byId[itemId];
+          const key = `${namespace}_node_list_item_${node.id}`;
+          return (
+            <div
+              className={classes.card}
+              key={key}
+            >
+              <ActorsCard actor={node} viewer={viewer} />
+            </div>
+          );
+        })}
+      </Masonry>
+    </InfiniteScroll>
   );
 };
 

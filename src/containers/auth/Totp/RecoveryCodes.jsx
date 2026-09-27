@@ -56,7 +56,7 @@ const TOTPRecoveryCodes = ({
                 );
               }
 
-              return (<></>);
+              return null;
             })}
           </List>
         </Grid>
@@ -72,7 +72,7 @@ const TOTPRecoveryCodes = ({
                 );
               }
 
-              return (<></>);
+              return null;
             })}
           </List>
         </Grid>

@@ -50,7 +50,7 @@ const AuthToken = ({
     );
   }
 
-  return (<></>);
+  return null;
 };
 
 AuthToken.propTypes = {

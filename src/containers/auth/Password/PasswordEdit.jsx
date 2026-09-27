@@ -68,84 +68,82 @@ const PasswordEdit = ({
         </CardActions>}
 
       {isEditing &&
-        <>
-          <form onSubmit={onSubmit} noValidate>
-            <CardContent>
-              {/* Kept as body copy rather than folded into the subheader —
+        <form onSubmit={onSubmit} noValidate>
+          <CardContent>
+            {/* Kept as body copy rather than folded into the subheader —
                   it carries the length requirement, which the person needs
                   while typing, not just while deciding whether to open the
                   card. */}
-              <Typography variant="body2" color="textSecondary" gutterBottom>
-                {i18n.t('password:description', { count: PASSWORD_MIN_LENGTH })}
-              </Typography>
+            <Typography variant="body2" color="textSecondary" gutterBottom>
+              {i18n.t('password:description', { count: PASSWORD_MIN_LENGTH })}
+            </Typography>
 
-              <TextField
-                type={showNewPassword ? 'text' : 'password'}
-                name="newPassword"
-                label={i18n.t('password:fields.new')}
-                value={fields.newPassword.value}
-                onChange={onChange}
-                error={Boolean(errors.newPassword)}
-                helperText={errors.newPassword || ''}
-                fullWidth
-                margin="normal"
-                variant="outlined"
-                autoComplete="new-password"
-                disabled={submitting}
-                required
-                slotProps={{
-                  input: {
-                    endAdornment: (
-                      <InputAdornment position="end">
-                        <IconButton
-                          aria-label={
+            <TextField
+              type={showNewPassword ? 'text' : 'password'}
+              name="newPassword"
+              label={i18n.t('password:fields.new')}
+              value={fields.newPassword.value}
+              onChange={onChange}
+              error={Boolean(errors.newPassword)}
+              helperText={errors.newPassword || ''}
+              fullWidth
+              margin="normal"
+              variant="outlined"
+              autoComplete="new-password"
+              disabled={submitting}
+              required
+              slotProps={{
+                input: {
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton
+                        aria-label={
                             showNewPassword
                               ? i18n.t('password:toggle.hide')
                               : i18n.t('password:toggle.show')
                           }
-                          aria-pressed={showNewPassword}
-                          onClick={onToggleVisibility}
-                          edge="end"
-                          disabled={submitting}
-                          tabIndex={-1}
-                          size="large"
-                        >
-                          {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  },
+                        aria-pressed={showNewPassword}
+                        onClick={onToggleVisibility}
+                        edge="end"
+                        disabled={submitting}
+                        tabIndex={-1}
+                        size="large"
+                      >
+                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                },
 
-                  htmlInput: {
-                    minLength: PASSWORD_MIN_LENGTH,
-                    maxLength: PASSWORD_MAX_LENGTH,
-                    'aria-label': i18n.t('password:fields.new'),
-                  },
-                }}
-              />
-            </CardContent>
+                htmlInput: {
+                  minLength: PASSWORD_MIN_LENGTH,
+                  maxLength: PASSWORD_MAX_LENGTH,
+                  'aria-label': i18n.t('password:fields.new'),
+                },
+              }}
+            />
+          </CardContent>
 
-            <CardActions>
-              <Button
-                onClick={onCancel}
-                disabled={submitting}
-                fullWidth
-              >
-                {i18n.t('actions:cancel')}
-              </Button>
-              <Button
-                type="submit"
-                color="primary"
-                variant="contained"
-                disabled={submitting}
-                startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
-                fullWidth
-              >
-                {submitting ? i18n.t('password:submitting') : i18n.t('password:update')}
-              </Button>
-            </CardActions>
-          </form>
-        </>}
+          <CardActions>
+            <Button
+              onClick={onCancel}
+              disabled={submitting}
+              fullWidth
+            >
+              {i18n.t('actions:cancel')}
+            </Button>
+            <Button
+              type="submit"
+              color="primary"
+              variant="contained"
+              disabled={submitting}
+              startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
+              fullWidth
+            >
+              {submitting ? i18n.t('password:submitting') : i18n.t('password:update')}
+            </Button>
+          </CardActions>
+        </form>}
     </Card>
   );
 };

@@ -30,7 +30,7 @@ function reset(person) {
   return (dispatch) => {
     dispatch(resetRequest());
     return new Promise((resolve, reject) => {
-      return api.reset(person)
+      api.reset(person)
         .then((response) => {
           dispatch(resetSuccess(response));
           return resolve();

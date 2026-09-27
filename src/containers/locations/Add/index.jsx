@@ -94,70 +94,68 @@ const LocationsSelector = ({
   }
 
   return (
-    <>
-      <Dialog
-        open={isOpen}
-        onClose={handleClose}
-        maxWidth="sm"
-        fullWidth
-      >
-        <DialogTitle>
-          {i18n.t('locations:add.cTitle')}
-          <IconButton
-            onClick={handleClose}
-            style={{
-              float: 'right',
-            }}
-            className={classes.closeButton}
-            size="large"
-          >
-            <CloseIcon />
-          </IconButton>
-        </DialogTitle>
-        <Divider sx={{ opacity: '0.6' }} />
-        <AppBar
-          position="sticky"
-          color="inherit"
-          elevation={1}
+    <Dialog
+      open={isOpen}
+      onClose={handleClose}
+      maxWidth="sm"
+      fullWidth
+    >
+      <DialogTitle>
+        {i18n.t('locations:add.cTitle')}
+        <IconButton
+          onClick={handleClose}
+          style={{
+            float: 'right',
+          }}
+          className={classes.closeButton}
+          size="large"
         >
-          <Tabs
-            value={tab}
-            onChange={changeTab}
-            centered
-            variant="fullWidth"
-            indicatorColor="primary"
-            textColor="primary"
-          >
-            <Tab label={i18n.t('actions:search')} value={TABS.SEARCH} />
-            <Tab label={i18n.t('actions:add')} value={TABS.ADD} />
-          </Tabs>
-        </AppBar>
-        {tab === TABS.SEARCH &&
-          <LocationsList
-            node={node}
-            queryFilters={{
-              nearby_latitude: here.latitude,
-              nearby_longitude: here.longitude,
-            }}
-            handleClose={handleClose}
-            noResultsCallback={(newKeyword) => {
-              setKeyword(newKeyword);
-              setTab(TABS.ADD);
-            }}
-            selectedLocations={selectedLocations}
-            onChange={handleChanged}
-          />}
-        {tab === TABS.ADD &&
-          <AddLocation
-            node={node}
-            name={keyword}
-            callback={() => {
-              handleChanged();
-              handleClose();
-            }}
-          />}
-      </Dialog>
-    </>
+          <CloseIcon />
+        </IconButton>
+      </DialogTitle>
+      <Divider sx={{ opacity: '0.6' }} />
+      <AppBar
+        position="sticky"
+        color="inherit"
+        elevation={1}
+      >
+        <Tabs
+          value={tab}
+          onChange={changeTab}
+          centered
+          variant="fullWidth"
+          indicatorColor="primary"
+          textColor="primary"
+        >
+          <Tab label={i18n.t('actions:search')} value={TABS.SEARCH} />
+          <Tab label={i18n.t('actions:add')} value={TABS.ADD} />
+        </Tabs>
+      </AppBar>
+      {tab === TABS.SEARCH &&
+      <LocationsList
+        node={node}
+        queryFilters={{
+          nearby_latitude: here.latitude,
+          nearby_longitude: here.longitude,
+        }}
+        handleClose={handleClose}
+        noResultsCallback={(newKeyword) => {
+          setKeyword(newKeyword);
+          setTab(TABS.ADD);
+        }}
+        selectedLocations={selectedLocations}
+        onChange={handleChanged}
+      />}
+      {tab === TABS.ADD &&
+      <AddLocation
+        node={node}
+        name={keyword}
+        callback={() => {
+          handleChanged();
+          handleClose();
+        }}
+      />}
+    </Dialog>
   );
 };
 
