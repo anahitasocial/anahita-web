@@ -1,9 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import {
-  geolocated,
-  geoPropTypes,
-} from 'react-geolocated';
+import { useGeolocated } from 'react-geolocated';
 import { makeStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
 import Dialog from '@mui/material/Dialog';
@@ -39,13 +36,30 @@ const LocationsSelector = ({
   node,
   isOpen,
   handleClose,
-  coords,
-  isGeolocationAvailable,
-  isGeolocationEnabled,
   selectedLocations = [],
   onChange = null,
 }) => {
   const { classes } = useStyles();
+  // The dialog stays mounted while closed, so it asks for the viewer's
+  // position when it opens, not when it mounts.
+  const {
+    coords,
+    isGeolocationAvailable,
+    isGeolocationEnabled,
+    getPosition,
+  } = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+    suppressLocationOnMount: true,
+  });
+
+  useEffect(() => {
+    if (isOpen && !coords) {
+      getPosition();
+    }
+  }, [isOpen]);
 
   const [tab, setTab] = useState(TABS.SEARCH);
   const [keyword, setKeyword] = useState('');
@@ -153,12 +167,6 @@ LocationsSelector.propTypes = {
   handleClose: PropTypes.func.isRequired,
   selectedLocations: PropTypes.arrayOf(NodeType),
   onChange: PropTypes.func,
-  ...geoPropTypes,
 };
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 5000,
-})(LocationsSelector);
+export default LocationsSelector;

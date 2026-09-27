@@ -1,8 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
-import { geolocated } from 'react-geolocated';
+import { useGeolocated } from 'react-geolocated';
 import { makeStyles } from 'tss-react/mui';
 
 import AppBar from '@mui/material/AppBar';
@@ -69,15 +68,18 @@ const marks = [
   },
 ];
 
-const Search = ({
-  coords = {
-    latitude: 0.0,
-    longitude: 0.0,
-  },
-  isGeolocationAvailable,
-  isGeolocationEnabled,
-}) => {
+const Search = () => {
   const { classes } = useStyles();
+  const {
+    coords,
+    isGeolocationAvailable,
+    isGeolocationEnabled,
+  } = useGeolocated({
+    positionOptions: {
+      enableHighAccuracy: false,
+    },
+    userDecisionTimeout: 5000,
+  });
 
   const location = useLocation();
   // undefined rather than null when absent, so the request leaves it out.
@@ -225,24 +227,10 @@ const Search = ({
   );
 };
 
-Search.propTypes = {
-  coords: PropTypes.objectOf(PropTypes.shape({
-    longitude: PropTypes.number,
-    latitude: PropTypes.number,
-  })),
-  isGeolocationAvailable: PropTypes.bool.isRequired,
-  isGeolocationEnabled: PropTypes.bool.isRequired,
-};
-
 const mapStateToProps = () => {
   return {};
 };
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-  },
-  userDecisionTimeout: 5000,
-})(connect(
+export default connect(
   mapStateToProps,
-)(Search));
+)(Search);

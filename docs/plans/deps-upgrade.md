@@ -33,8 +33,8 @@ a service Google shut down in 2024. Both are follow-ups.
 | 2. Minor and patch releases | ✅ | `3ecbe88` |
 | 3. Small majors | ✅ | `6cd7f04` |
 | 4. i18next | ✅ | `4b69d10` |
-| 5. Redux | ✅ | (step 5) |
-| 6. Geolocation, player, particles | ⬜ | |
+| 5. Redux | ✅ | `550334b` |
+| 6. Geolocation, player, particles | ✅ | (step 6) |
 | 7. React 19 | ⬜ | |
 | 8. ESLint config | ⬜ | |
 | Visual check | ⬜ | |
@@ -76,7 +76,11 @@ a service Google shut down in 2024. Both are follow-ups.
 
 ## Held back
 
-To be filled in as it happens.
+- **`react-player` stays on 2** (2.16.1, from 1.15.3). Version 3 plays only
+  files, HLS, DASH, Mux, YouTube, Vimeo and Wistia; it dropped SoundCloud,
+  Dailymotion, Mixcloud and Twitch, which `components/Player.jsx` embeds.
+  2.16 supports React 16.6 and later, including 19, and keeps the `url`
+  prop the app uses.
 
 ## Notes from running the plan
 
@@ -120,5 +124,13 @@ To be filled in as it happens.
   extension when it's installed; `redux-logger` still logs every action to
   the console. `createStore` is deprecated in redux 5 in favour of Redux
   Toolkit, but still works; moving to Toolkit would be its own change.
+- Step 6:
+  - `react-geolocated` 4 has only a `useGeolocated` hook. The search page
+    calls it on mount, as before. The add-location dialog passes
+    `suppressLocationOnMount` and calls `getPosition()` when it opens, so
+    the locations gadget no longer needs to delay mounting the dialog
+    (the `wasOpened` state from `44f888b` is gone).
+  - Particles removed at the user's request: the home page no longer
+    renders them, and `react-tsparticles` is uninstalled (−20 kB gzipped).
 - The project's ESLint parser doesn't accept `??` or `?.` until the config
   changes in step 8.
