@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles } from 'tss-react/mui';
-import inflector from 'inflector-js';
+import { pluralize } from 'inflection';
 import _ from 'lodash';
 
 import AppBar from '@mui/material/AppBar';
@@ -80,7 +80,7 @@ const Composers = ({
     return null;
   }
 
-  const namespace = inflector.pluralize(tab);
+  const namespace = pluralize(tab);
   const config = COMPOSER_CONFIGS[namespace];
 
   return (

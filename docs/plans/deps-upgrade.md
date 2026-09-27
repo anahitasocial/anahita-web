@@ -30,8 +30,8 @@ a service Google shut down in 2024. Both are follow-ups.
 | step | state | commit |
 | --- | --- | --- |
 | 1. Remove unused packages | ✅ | `b97db4e` |
-| 2. Minor and patch releases | ✅ | (step 2) |
-| 3. Small majors | ⬜ | |
+| 2. Minor and patch releases | ✅ | `3ecbe88` |
+| 3. Small majors | ✅ | (step 3) |
 | 4. i18next | ⬜ | |
 | 5. Redux | ⬜ | |
 | 6. Geolocation, player, particles | ⬜ | |
@@ -80,4 +80,28 @@ To be filled in as it happens.
 
 ## Notes from running the plan
 
-To be filled in as it happens.
+- The checks run from a script: build (after deleting CRA's
+  `node_modules/.cache/.eslintcache`, which otherwise reports stale
+  results), tests, lint diffed against the baseline, and the smoke test.
+- Step 3, replaced rather than upgraded:
+  - `uuid` 14 exposes itself only through package `exports`, which CRA's
+    Jest 27 and ESLint resolver can't read. Its one use, alert ids, is
+    `window.crypto.randomUUID()` now, which every browser on the Material
+    UI 9 floor has (it needs a secure context: https, or localhost).
+  - `query-string` 9 is ESM only; its one use, reading `?q=` on the search
+    page, is `URLSearchParams`. An absent `q` stays `undefined`, not
+    `null`, so axios still leaves it out of the request.
+  - `inflector-js` 2 is ESM only; its one use, `pluralize` in the
+    composer, comes from `inflection`, which 11 files already use. Both give
+    the same plural for every composer type.
+- Step 3, code changes for new majors:
+  - `react-country-region-selector` 4 exports `CountryRegionData` as a
+    module whose `default` is the array.
+  - `react-dropzone` takes `accept` as `{ [mimeType]: [extensions] }`.
+  - `react-image` 4 exports `Img` by name.
+  - `react-infinite-scroll-component` 7 keeps its API but triggers with an
+    IntersectionObserver. Visual check: a first page that doesn't fill the
+    screen must still load the next.
+  - `clsx` 2 and `inflection` 3 needed nothing.
+- The project's ESLint parser doesn't accept `??` or `?.` until the config
+  changes in step 8.

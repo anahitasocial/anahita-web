@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useLocation } from 'react-router-dom';
 import { geolocated } from 'react-geolocated';
-import queryString from 'query-string';
 import { makeStyles } from 'tss-react/mui';
 
 import AppBar from '@mui/material/AppBar';
@@ -81,7 +80,9 @@ const Search = ({
   const { classes } = useStyles();
 
   const location = useLocation();
-  const { q } = queryString.parse(location.search);
+  // undefined rather than null when absent, so the request leaves it out.
+  const searchParams = new URLSearchParams(location.search);
+  const q = searchParams.has('q') ? searchParams.get('q') : undefined;
   let coordLong = 0.0;
   let coordLat = 0.0;
 

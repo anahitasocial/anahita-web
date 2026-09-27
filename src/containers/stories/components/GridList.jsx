@@ -1,5 +1,5 @@
 import React from 'react';
-import Img from 'react-image';
+import { Img } from 'react-image';
 import PropTypes from 'prop-types';
 import { withStyles } from 'tss-react/mui';
 import CircularProgress from '@mui/material/CircularProgress';
