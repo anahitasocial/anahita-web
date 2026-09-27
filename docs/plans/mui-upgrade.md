@@ -56,8 +56,8 @@ each built, tested and looked at before the next.
 | 3. v6 | ✅ | `52619f4` |
 | 4. v7 | ✅ | `55d0a17` |
 | 5. v9 | ✅ | `2294a5a` |
-| 6. Clean-up and docs | ✅ | (step 6 commit) |
-| Visual check of steps 1–5 | ⬜ | see Follow-ups |
+| 6. Clean-up and docs | ✅ | `fe3c6f6` |
+| Visual check (on the finished branch) | ✅ | fixes `12966d9`, `d7fdc4f`, `44f888b` |
 
 ## Inventory (as of the plan)
 
@@ -338,19 +338,19 @@ in v9, and Tabs/Menu roving tabindex.
   custom components directly inside Tooltip, Snackbar, Popper, Modal,
   ClickAwayListener or a transition found none. The smoke test missed it
   because no alert opens on a signed-out page.
-- No browser in the session that ran steps 1–5, so the visual check is done
-  afterwards by a person, one step commit at a time.
+- No browser in the session that ran steps 1–6. The visual check was done
+  afterwards by a person, on the finished branch rather than per step. It
+  turned up the Snackbar crash above and three console messages: outlined
+  AppBars with the default elevation (v9 warns; `elevation={0}` added,
+  `d7fdc4f`), `findDOMNode` from `react-visibility-sensor` (replaced by an
+  `IntersectionObserver` in `Player.jsx`), and a location prompt on every
+  profile page, because the locations gadget mounted its geolocated add
+  dialog while closed (it now mounts on first open; both `44f888b`). The
+  last two predate the upgrade. Cards were switched to Material UI's
+  defaults on request (`ddc3a74`). The console is now clean.
 
 ## Follow-ups
 
-- **Visual check.** Not done yet for any step: the session had no browser.
-  Go through the list below on `2294a5a`/step 6; if something looks wrong,
-  check out the step commits (`3a8ce4b` v5, `eeb5add` JSS out, `52619f4`
-  v6, `55d0a17` v7, `2294a5a` v9) to find where it changed. Most likely
-  places: the left drawer at each breakpoint (Hidden → sx), the agreements
-  page (Grid → Stack), the photo strip, the onboarding Featured list and the
-  locations list (ListItem restructured), dark mode (backgrounds restored by
-  hand), and anything with Tabs.
 - Decide whether to keep the Deliberate changes above, or restore
   `ListItemIcon` 56px, Menu anchoring and Snackbar position in the theme.
 - The main bundle grew from 578.8 kB to 621.8 kB gzipped (+7%): Emotion and
