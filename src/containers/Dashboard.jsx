@@ -31,26 +31,14 @@ const DashboardPage = ({
         container
         sx={{ justifyContent: 'center' }}
       >
-        <Grid
-          item
-          xs={12}
-          md={8}
-        >
+        <Grid size={{ xs: 12, md: 8 }}>
           <CompleteProfileCard viewer={viewer} />
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={8}
-        >
+        <Grid size={{ xs: 12, md: 8 }}>
           {person.id &&
             <Composers actor={person} />}
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={8}
-        >
+        <Grid size={{ xs: 12, md: 8 }}>
           <FeedBrowse />
         </Grid>
       </Grid>

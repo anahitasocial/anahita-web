@@ -10,7 +10,6 @@ import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
-import Hidden from '@mui/material/Hidden';
 import MenuIcon from '@mui/icons-material/Menu';
 import Toolbar from '@mui/material/Toolbar';
 
@@ -165,34 +164,32 @@ const App = ({
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer}>
-        <Hidden lgUp implementation="css">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={open}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer()}
-          </Drawer>
-        </Hidden>
-        <Hidden lgDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer()}
-          </Drawer>
-        </Hidden>
+        <Drawer
+          container={container}
+          variant="temporary"
+          anchor={theme.direction === 'rtl' ? 'right' : 'left'}
+          open={open}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{ display: { xs: 'block', lg: 'none' } }}
+        >
+          {drawer()}
+        </Drawer>
+        <Drawer
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          variant="permanent"
+          open
+          sx={{ display: { xs: 'none', lg: 'block' } }}
+        >
+          {drawer()}
+        </Drawer>
       </nav>
       <main className={classes.content}>
         <div className={classes.appBarSpacer} />

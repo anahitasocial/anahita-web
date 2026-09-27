@@ -99,30 +99,30 @@ const ActorBody = ({
             alignItems: 'flex-start',
           }}
         >
-          <Grid item xs={12} md={4}>
+          <Grid size={{ xs: 12, md: 4 }}>
             <Grid container spacing={2}>
               {actor.body && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <ActorBodyAbout actor={actor} />
                 </Grid>
               )}
               {admins && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {admins}
                 </Grid>
               )}
               {locations && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   {locations}
                 </Grid>
               )}
             </Grid>
           </Grid>
-          <Grid item xs={12} md={8}>
-            <Grid item xs={12}>
+          <Grid size={{ xs: 12, md: 8 }}>
+            <Grid size={12}>
               {composers}
             </Grid>
-            <Grid item xs={12}>
+            <Grid size={12}>
               {feed}
             </Grid>
           </Grid>

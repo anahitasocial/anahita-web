@@ -17,6 +17,9 @@ const Progress = () => {
     <Grid
       container
       sx={{
+        // GridLegacy was full width; the Grid that replaced it in v7 is
+        // not, and this is shown inside flex rows as well as blocks.
+        width: '100%',
         justifyContent: 'center',
         alignItems: 'center',
       }}

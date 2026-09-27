@@ -282,9 +282,6 @@ const MediumStepperLightboxDefault = ({
       <Grid container>
         {hasPortrait &&
           <Grid
-            item
-            xs={12}
-            md={8}
             ref={paneRef}
             className={clsx(
               classes.mediaPane,
@@ -297,6 +294,7 @@ const MediumStepperLightboxDefault = ({
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
             onMouseLeave={handleMouseUp}
+            size={{ xs: 12, md: 8 }}
           >
             {(!isPortraitLoaded || isZoomLoading) &&
               <CircularProgress className={classes.spinner} />}
@@ -361,11 +359,7 @@ const MediumStepperLightboxDefault = ({
               </Tooltip>
             </div>}
           </Grid>}
-        <Grid
-          item
-          xs={12}
-          md={hasPortrait ? 4 : 12}
-        >
+        <Grid size={{ xs: 12, md: hasPortrait ? 4 : 12 }}>
           <div className={classes.details}>
             <div className={hasPortrait ? undefined : classes.detailsInner}>
               <Card variant="outlined" square>

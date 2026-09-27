@@ -50,11 +50,11 @@ each built, tested and looked at before the next.
 
 | step | state | commit |
 | --- | --- | --- |
-| 0. Check this plan against the MCP docs | ✅ | (this commit) |
+| 0. Check this plan against the MCP docs | ✅ | `58f80fe` |
 | 1. v5, Emotion, codemods, theme | ✅ | `3a8ce4b` |
 | 2. JSS out: 51 `makeStyles`, 21 `withStyles` | ✅ | `eeb5add` |
-| 3. v6 | ✅ | (step 3 commit) |
-| 4. v7 | ⬜ | |
+| 3. v6 | ✅ | `52619f4` |
+| 4. v7 | ✅ | (step 4 commit) |
 | 5. v9 | ⬜ | |
 | 6. Clean-up and docs | ⬜ | |
 
@@ -299,6 +299,17 @@ in v9, and Tabs/Menu roving tabindex.
   (only deletions consisting solely of blank lines), `eslint --fix`
   handles quotes and brackets, and one-property `sx={{ … }}` objects are
   put back on one line.
+- v7: `grid-props` moved 7 files to the new Grid (`size`, no `item`);
+  `theme-color-functions` turned `alpha()` in `SearchBox.jsx` into
+  `theme.alpha()`; the lab and InputLabel codemods had nothing to do.
+  The agreements page used `Grid direction="column"`, which the new Grid
+  doesn't support, so it is a `Stack spacing={2}` now. `Progress` gets
+  `width: '100%'` because the new Grid container isn't full width and
+  Progress is used inside flex rows. The other containers sit in block
+  parents. Nested `Grid size={12}` without a container (actor Body) is
+  still 100% wide. `Hidden` became the responsive-drawer pattern:
+  `sx={{ display: { xs: 'block', lg: 'none' } }}` and the reverse, on the
+  two Drawers.
 - No browser in the session that ran steps 1–5, so the visual check is done
   afterwards by a person, one step commit at a time.
 

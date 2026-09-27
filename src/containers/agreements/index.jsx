@@ -8,7 +8,7 @@ import gfm from 'remark-gfm';
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
-import Grid from '@mui/material/Grid';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import AgreementCard from './AgreementCard';
@@ -81,8 +81,8 @@ const Agreements = ({
 
   return (
     <Container maxWidth="md">
-      <Grid container direction="column" spacing={2}>
-        <Grid item>
+      <Stack spacing={2}>
+        <div>
           <Typography variant="h5" gutterBottom>
             {i18n.t('agreements:cTitle')}
           </Typography>
@@ -91,9 +91,9 @@ const Agreements = ({
               ? i18n.t('agreements:allCurrent')
               : i18n.t('agreements:intro')}
           </Typography>
-        </Grid>
+        </div>
 
-        <Grid item>
+        <div>
           {tosOutdated
             ? (
               <AgreementCard
@@ -108,9 +108,9 @@ const Agreements = ({
               />
             )
             : <Alert severity="success">{i18n.t('agreements:prompts.tosCurrent')}</Alert>}
-        </Grid>
+        </div>
 
-        <Grid item>
+        <div>
           {privacyOutdated
             ? (
               <AgreementCard
@@ -125,10 +125,10 @@ const Agreements = ({
               />
             )
             : <Alert severity="success">{i18n.t('agreements:prompts.privacyCurrent')}</Alert>}
-        </Grid>
+        </div>
 
         {allCurrent &&
-          <Grid item>
+          <div>
             <Button
               variant="contained"
               color="primary"
@@ -137,8 +137,8 @@ const Agreements = ({
             >
               {i18n.t('agreements:actions.continue')}
             </Button>
-          </Grid>}
-      </Grid>
+          </div>}
+      </Stack>
     </Container>
   );
 };

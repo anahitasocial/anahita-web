@@ -89,7 +89,7 @@ const MediumReadDefault = ({
       container
       sx={{ justifyContent: 'center' }}
     >
-      <Grid item xs={12} md={8}>
+      <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
           {medium.owner.type.includes('person') &&
             <CardHeaderOwner node={medium} />}

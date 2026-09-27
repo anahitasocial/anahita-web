@@ -42,12 +42,9 @@ const TOTPRecoveryCodes = ({
         container
         direction="row"
         spacing={2}
-        sx={{
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
+        sx={{ justifyContent: 'center', alignItems: 'center' }}
       >
-        <Grid item>
+        <Grid>
           <List>
             {recoveryCodes.map((rCode, index) => {
               const key = `recoveryCode-left-${index}`;
@@ -63,7 +60,7 @@ const TOTPRecoveryCodes = ({
             })}
           </List>
         </Grid>
-        <Grid item>
+        <Grid>
           <List>
             {recoveryCodes.map((rCode, index) => {
               const key = `recoveryCode-right-${index}`;
