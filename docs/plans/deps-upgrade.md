@@ -31,8 +31,8 @@ a service Google shut down in 2024. Both are follow-ups.
 | --- | --- | --- |
 | 1. Remove unused packages | ✅ | `b97db4e` |
 | 2. Minor and patch releases | ✅ | `3ecbe88` |
-| 3. Small majors | ✅ | (step 3) |
-| 4. i18next | ⬜ | |
+| 3. Small majors | ✅ | `6cd7f04` |
+| 4. i18next | ✅ | (step 4) |
 | 5. Redux | ⬜ | |
 | 6. Geolocation, player, particles | ⬜ | |
 | 7. React 19 | ⬜ | |
@@ -103,5 +103,14 @@ To be filled in as it happens.
     IntersectionObserver. Visual check: a first page that doesn't fill the
     screen must still load the next.
   - `clsx` 2 and `inflection` 3 needed nothing.
+- Step 4: i18next 21 changed plural keys from `key_plural` to `key_one` /
+  `key_other`, and 24 dropped the old format. The 21 `_plural` keys (en-GB
+  and fr-FR) are `_other` now; the singular stays the base key, which
+  i18next falls back to when `_one` is missing, so lookups without `count`
+  still work. Checked: en 0/1/2 → posts/post/posts, fr → publication,
+  publication, publications. `react.wait` became `useSuspense: false` (no
+  Suspense boundary in the app) and `nsMode` is gone; `initAsync: false`
+  keeps initialisation synchronous, because components call `i18n.t` while
+  rendering and the translations are bundled.
 - The project's ESLint parser doesn't accept `??` or `?.` until the config
   changes in step 8.

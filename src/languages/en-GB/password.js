@@ -21,7 +21,7 @@ export default {
   // looked up, so the toast rendered the literal string
   // 'successSessions' instead of a sentence.
   successSessions: 'Your password has been updated and {{count}} other session was signed out. A confirmation email has been sent.',
-  successSessions_plural: 'Your password has been updated and {{count}} other sessions were signed out. A confirmation email has been sent.',
+  successSessions_other: 'Your password has been updated and {{count}} other sessions were signed out. A confirmation email has been sent.',
   errors: {
     newRequired: 'Enter a new password.',
     newTooShort: 'New password must be at least {{count}} characters.',
