@@ -114,8 +114,7 @@ const ActorsSettingsDelete = (props) => {
   };
 
   // The deletion itself, separated from the form event so the step-up dialog
-  // can run it again after a proof arrives. Without this the retry would have
-  // to synthesise a submit event, and the form is gone from the DOM by then.
+  // can run it once a proof arrives.
   const submitDelete = () => {
     const isViewer = actor.id === viewer.id;
     return deleteActor(actor)
@@ -142,6 +141,9 @@ const ActorsSettingsDelete = (props) => {
         const status = err && err.response && err.response.status;
         const body = (err && err.response && err.response.data) || {};
 
+        // Still possible after the dialog: the proof expired, or was used up
+        // by another action, before the delete arrived.
+        //
         // 403 carries two different meanings here, and telling them apart
         // is what stops a loop: "step_up_required" opens the dialog, while
         // a plain 403 means this viewer may not delete the profile at all.
@@ -176,8 +178,12 @@ const ActorsSettingsDelete = (props) => {
     const { target } = event;
     const newFields = form.validateForm(target, fields);
 
+    // Proof first, then the delete. person-service and group-service refuse
+    // every deletion without a fresh step-up, so sending it first only
+    // guaranteed a refused request — and a DELETE on the wire before the
+    // person had confirmed who they were.
     if (form.isValid(newFields)) {
-      submitDelete();
+      setStepUpOpen(true);
     }
 
     setFields({ ...newFields });

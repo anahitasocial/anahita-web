@@ -5,6 +5,14 @@ export default {
   website: 'Website',
   body: 'Description',
   unknown: 'Unknown',
+  featured: {
+    feature: 'Feature this account',
+    unfeature: 'Stop featuring',
+    errors: {
+      generic: 'Could not change whether this account is featured. Please try again.',
+      conflict: 'A disabled or archived account cannot be featured.',
+    },
+  },
   delete: {
     // The card said nothing about what deletion does, whether it is
     // reversible, or when it takes effect — it offered one text field and a

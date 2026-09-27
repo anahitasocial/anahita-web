@@ -8,6 +8,8 @@ const ActorsAvatar = (props) => {
   const {
     node,
     canEdit,
+    onChange = () => {},
+    onError = () => {},
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -51,20 +53,28 @@ const ActorsAvatar = (props) => {
     }
 
     setWaiting(true);
-    api.add(node, files[0]).then((result) => {
-      const { data } = result;
-      setAvatar(data.large.url);
-      setWaiting(false);
-    });
+    api.add(node, files[0])
+      .then((result) => {
+        const { data } = result;
+        setAvatar(data.large.url);
+        onChange(data);
+      })
+      // Stop spinning either way. On a failed upload the avatar was left
+      // spinning for good, with nothing to say the upload had not happened.
+      .catch(onError)
+      .then(() => { setWaiting(false); });
   };
 
   const handleDelete = () => {
     setAnchorEl(null);
     setWaiting(true);
-    api.deleteItem(node).then(() => {
-      setAvatar(null);
-      setWaiting(false);
-    });
+    api.deleteItem(node)
+      .then(() => {
+        setAvatar(null);
+        onChange(null);
+      })
+      .catch(onError)
+      .then(() => { setWaiting(false); });
   };
 
   const handleOpen = (event) => {
@@ -95,6 +105,12 @@ const ActorsAvatar = (props) => {
 ActorsAvatar.propTypes = {
   node: NodeType.isRequired,
   canEdit: PropTypes.bool.isRequired,
+  // Called with the new image URLs after an upload, and with null after a
+  // delete. Onboarding re-reads the session on it, so the viewer's avatar
+  // updates everywhere without a reload.
+  onChange: PropTypes.func,
+  // Called when an upload or a delete fails.
+  onError: PropTypes.func,
 };
 
 export default ActorsAvatar;

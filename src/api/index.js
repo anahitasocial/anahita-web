@@ -21,6 +21,7 @@ import node from './node';
 import nodeInfo from './nodeInfo';
 import notifications from './notifications';
 import notificationsSub from './notifications/sub';
+import onboarding from './onboarding';
 import oauthClients from './oauthClients';
 import oauthSigningKeys from './oauthSigningKeys';
 import openidConfiguration from './openidConfiguration';
@@ -126,6 +127,7 @@ const apis = {
   nodeInfo,
   notifications,
   notificationsSub,
+  onboarding,
   oauthClients,
   oauthSigningKeys,
   openidConfiguration,

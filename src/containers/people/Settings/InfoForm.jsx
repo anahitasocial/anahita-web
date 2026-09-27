@@ -4,19 +4,11 @@ import PropTypes from 'prop-types';
 import Button from '@material-ui/core/Button';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
 import TextField from '@material-ui/core/TextField';
 
+import PersonInfoFields from './InfoFields';
 import PersonType from '../../../proptypes/Person';
-import { Person as PERSON } from '../../../constants';
-import SelectPronouns from '../../../components/SelectPronouns';
 import i18n from '../../../languages';
-
-const {
-  NAME,
-  BODY,
-} = PERSON.FIELDS;
 
 const PersonInfo = ({
   handleOnChange,
@@ -43,49 +35,11 @@ const PersonInfo = ({
     <form onSubmit={handleOnSubmit} noValidate>
       <CardContent>
         {enabled}
-        <TextField
-          name="name"
-          value={person.name || ''}
-          onChange={handleOnChange}
-          label={i18n.t('people:person.displayName')}
-          error={name.error !== ''}
-          helperText={name.error}
-          autoFocus
-          fullWidth
-          margin="normal"
-          inputProps={{
-            maxLength: NAME.MAX_LENGTH,
-            minLength: NAME.MIN_LENGTH,
-          }}
-          required
+        <PersonInfoFields
+          fields={fields}
+          person={person}
+          handleOnChange={handleOnChange}
         />
-        <TextField
-          name="body"
-          value={person.body || ''}
-          onChange={handleOnChange}
-          label={i18n.t('people:person.body')}
-          error={body.error !== ''}
-          helperText={body.error}
-          margin="normal"
-          fullWidth
-          multiline
-          inputProps={{
-            maxLength: BODY.MAX_LENGTH,
-            minLength: BODY.MIN_LENGTH,
-          }}
-          required
-        />
-        <FormControl margin="normal" fullWidth>
-          <InputLabel id="pronouns-label" shrink>
-            {i18n.t('people:person.pronouns')}
-          </InputLabel>
-          <SelectPronouns
-            labelId="pronouns-label"
-            name="personPronouns"
-            value={person.personPronouns || ''}
-            onChange={handleOnChange}
-          />
-        </FormControl>
         {/* The role radio group was removed here.
 
             It read `person.usertype` while the API sends `person_type`, which

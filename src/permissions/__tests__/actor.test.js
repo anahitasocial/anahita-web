@@ -63,3 +63,16 @@ describe('actor.canAdd', () => {
     expect(actor.canAdd(undefined, { groupsFrom: 'registered' })).toBe(false);
   });
 });
+
+// Featuring is a statement by the installation, not by one group's
+// administrators — the server refuses everybody but super administrators.
+describe('actor.canFeature', () => {
+  const someone = { id: 7 };
+
+  it('admits super administrators only', () => {
+    expect(actor.canFeature(someone, SUPER_ADMIN)).toBe(true);
+    expect(actor.canFeature(someone, ADMIN)).toBe(false);
+    expect(actor.canFeature(someone, REGISTERED)).toBe(false);
+    expect(actor.canFeature(someone, GUEST)).toBe(false);
+  });
+});

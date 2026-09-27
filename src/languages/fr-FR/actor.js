@@ -5,6 +5,14 @@ export default {
   website: 'Site web',
   body: 'Description',
   unknown: 'Inconnu',
+  featured: {
+    feature: 'Mettre ce compte en avant',
+    unfeature: 'Ne plus mettre en avant',
+    errors: {
+      generic: 'Impossible de modifier la mise en avant de ce compte. Veuillez réessayer.',
+      conflict: 'Un compte désactivé ou archivé ne peut pas être mis en avant.',
+    },
+  },
   delete: {
     prompts: {
       challenge: 'Tapez {{ alias }} pour confirmer',
