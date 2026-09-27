@@ -6,4 +6,7 @@ export default {
     PROFILE: 'profile',
     FEATURED: 'featured',
   },
+  // Where the dashboard remembers that the "Complete your profile" card was
+  // dismissed. Per browser: a convenience, not a record.
+  NUDGE_DISMISSED_STORAGE_KEY: 'anahita-dismissed-profile-nudge',
 };

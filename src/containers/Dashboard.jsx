@@ -5,6 +5,7 @@ import { Helmet } from 'react-helmet-async';
 
 import Grid from '@material-ui/core/Grid';
 
+import CompleteProfileCard from './dashboard/CompleteProfileCard';
 import Composers from './media/Composer';
 import FeedBrowse from './feed/Leaders';
 import actions from '../actions';
@@ -30,6 +31,13 @@ const DashboardPage = ({
         container
         justifyContent="center"
       >
+        <Grid
+          item
+          xs={12}
+          md={8}
+        >
+          <CompleteProfileCard viewer={viewer} />
+        </Grid>
         <Grid
           item
           xs={12}
