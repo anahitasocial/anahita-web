@@ -29,6 +29,10 @@ const LocationsGadget = ({
   cardProps = {},
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  // The add dialog asks the browser for the viewer's position as soon as it
+  // mounts, so it isn't mounted until somebody first opens it. After that it
+  // stays mounted, so it can animate closed and open again.
+  const [wasOpened, setWasOpened] = useState(false);
   const [locations, setLocations] = useState([]);
   const [waiting, setWaiting] = useState(false);
 
@@ -76,7 +80,7 @@ const LocationsGadget = ({
 
   return (
     <>
-      {canAdd &&
+      {canAdd && wasOpened &&
         <LocationsAdd
           node={node}
           isOpen={isOpen}
@@ -123,6 +127,7 @@ const LocationsGadget = ({
           <CardActions>
             <Button
               onClick={() => {
+                setWasOpened(true);
                 return setIsOpen(true);
               }}
               variant="outlined"
