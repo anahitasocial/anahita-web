@@ -12,5 +12,5 @@ question or change involving Material UI:
    fetched, not from memory.
 
 The app is being upgraded from Material-UI v4 (`@material-ui/*`) to
-`@mui/material` v9; see `docs/plans/mui-upgrade.md`. Check which version a file
+`@mui/material` v9; see `docs/plans/done/mui-upgrade.md`. Check which version a file
 is on before applying docs for the other.

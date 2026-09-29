@@ -1,6 +1,6 @@
 # Onboarding — web app
 
-Companion to `anahita-services/docs/plans/onboarding.md`, which owns the flow,
+Companion to `anahita-services/docs/plans/done/onboarding.md`, which owns the flow,
 the rules (nothing is followed automatically, skipping is quiet, an empty list
 skips its step, existing members are included) and the backend items. This plan
 covers only the web app. **S1–S6** refer to items in the services plan.
