@@ -35,7 +35,6 @@ export default shape({
   coverURLs: ImageUrls,
   followerCount: number,
   leaderCount: number,
-  mutualCount: number,
   subscriberCount: number,
   creationTime: string,
   updateTime: string,

@@ -17,18 +17,19 @@
   - an nginx upstream and location (`nginx/nginx.conf:43-44, ~1030`);
   - `dockerfiles/story-service.dockerfile`.
 - The web app's `src/containers/stories/*` (legacy **activity** stories: `PhotoAdd`, `Actor`, `TodoStatus`, …) are imported nowhere, and `stories` is listed in the `src/api/index.js:108` namespaces.
-- `nodes.featured_at` exists, but it means *site-featured actors* (super-admin). Pinning is a different concept and gets its own column.
+- **`nodes.pinned` already exists and is wired:** media edits set it (`graph-grpc-service/cmd/server/handlers/medium.go:213,296`) and media responses return `pinned` (`anahita-libs/responses/medium.go`). What's missing is a dedicated pin endpoint with its permission and limit, pinned-first ordering, and the web controls.
+- `nodes.featured_at` is a different thing: *site-featured actors* (super-admin).
 - The leaders feed and the actor feed are in feed-service and graph-grpc (`feed_leaders.go`, `feed_actor.go`).
 
 ## Implementation
 **A. Pinned posts**
-- **Data:** a `nodes.pinned_at datetime NULL` column, indexed with `owner_id` (a migration mirrored in `init.sql` and `legacy/upgrade.sql`).
+- **Data:** use the existing `nodes.pinned` flag. Add `nodes.pinned_at datetime NULL` beside it only for ordering pins (newest pin first); an index on (`owner_id`, `pinned`). The migration is mirrored in `init.sql` and `legacy/upgrade.sql`.
 - **Endpoints:** `PUT /{ns}/:id/pin` and `DELETE /{ns}/:id/pin` for articles, notes, topics and photos (text-service and photo-service, sharing a handler in `anahita-libs`).
   - Allowed for the post's owner, meaning the profile it's on: a person on their own profile, or a group's admins.
   - At most **5** pinned per owner; pinning a 6th returns 409 with the current pins.
   - Pinned replies aren't allowed (item 7).
 - **Reads:**
-  - the actor feed (`GET /feeds/actor/:id/`) and profile media tabs return pinned posts first (`ORDER BY pinned_at IS NULL, pinned_at DESC, created_on DESC` on the first page only), each marked `pinned: true`;
+  - the actor feed (`GET /feeds/actor/:id/`) and profile media tabs return pinned posts first (`ORDER BY pinned DESC, pinned_at DESC, created_on DESC` on the first page only), each marked `pinned: true`;
   - pinned posts are left out of later pages so they don't appear twice.
 - **Access:** unchanged. A pinned followers-only post is still hidden from non-followers.
 - **Events (item 12):** host announcements use the same pin mechanism.
@@ -96,7 +97,7 @@
 A phase is finished only when these pages match the code. anahita-services pages are under its `docs/`, anahita-web pages under its `docs/`. When a page is added, add it to that repo's `docs/README.md` contents too.
 
 - **services `permissions.md`**: who may pin, and the limit of 5.
-- **services `architecture.md`**: `pinned_at`, `GET /feeds/leaders/active`, and story-service removed.
+- **services `architecture.md`**: `pinned` and `pinned_at`, `GET /feeds/leaders/active`, and story-service removed.
 - **web `architecture.md`**: the tray (seen state kept on the device only) and pinned posts.
 
 ## Status
