@@ -1,6 +1,6 @@
 # Anahita roadmap
 
-*Planned 2026-09-28. One plan file per item, in the repo the item mostly touches.*
+*Planned 2026-09-28; items 22–25 added 2026-10-02. One plan file per item, in the repo the item mostly touches.*
 
 **The order follows four principles:**
 1. Fix security and data problems first.
@@ -35,16 +35,20 @@ Each milestone ends in a shippable state.
 | 12 | 20 · Language on posts | [content-language.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-language.md) | services + web | 2–3 | — |
 | 13 | 19 · Creative Commons licences | [content-licences.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-licences.md) | services + web | 3–4 | 9 |
 | 14 | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md) | services + web | 3–4 | 9 |
-| **M5. Conversations** | | | | **about 10–13** | |
+| **M5. Conversations** | | | | **about 17–22** | |
 | 15 | 7 · Notes as replies; retire comment-service | [notes-as-replies.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/notes-as-replies.md) (update) | services + web | 7–9 | 0, 1 |
+| 15b | 24 · Profile tabs for replies and reposts, with a "show my reposts" setting | [profile-tabs-and-reposts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/profile-tabs-and-reposts.md) | services + web | 2 | 7 |
+| 15c | 25 · Quote posts | [quote-posts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/quote-posts.md) | services + web | 3–4 | 13 |
 | 16 | 15 · Pinned posts + "New from people you follow" tray; remove story-service | [pinned-posts-and-activity-tray.md](pinned-posts-and-activity-tray.md) | services + web | 3–4 | 0 |
+| 16b | 22 · Post insights (views, replies, reposts, quotes, likes) | [post-insights.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/post-insights.md) | services + web | 2–3 | 7, 25 |
 | **M6. Community** | | | | **about 10–13** | |
 | 17 | 11 · Invitations (plus 8 socialgraph bug fixes) | [actor-invitations.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-invitations.md) | services + web | 5–6 | 4b limiter |
 | 18 | 12 · Events | [events.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/events.md) | services + web | 5–7 | 11 |
-| **M7. Discovery** | | | | **about 15–18** | |
+| **M7. Discovery** | | | | **about 16–19** | |
 | 19 | 14 · Custom feeds ("your algorithm") | [feed-generators.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/feed-generators.md) (update) | services + web | 5–7 | 0 |
 | 20 | 3 · Recommendation service | [recommendation-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/recommendation-service.md) | services + web | 6 | 0, 1 |
 | 21 | 10 · Link previews + web shell (Open Graph) | [link-previews.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/link-previews.md) + [open-graph.md](open-graph.md) | services + web | 4–5 | 9 |
+| 21b | 23 · Share button | [share-button.md](share-button.md) | web | ½–1 | 10 |
 | **M8. Media and portability** | | | | **about 11–14** | |
 | 22 | 16 · Video service + worker | [video-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/video-service.md) | services + web | 5–7 | 9 |
 | 23 | 21 · Download your data | [data-export.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/data-export.md) | services + web | 6–7 | 9, 5 |
@@ -53,7 +57,7 @@ Each milestone ends in a shippable state.
 | 25 | 8 · Phase 1 ActivityPub | [federation.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/federation.md) | services + web | 7–9 | 24 |
 | 26 | 8 · Phase 1 AT Protocol | [federation.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/federation.md) | services + web | 6–8 | 24 |
 
-**Total: about 425–560 hours, roughly 105–140 sessions** at about 4 h per session. Shared pieces built once save a few percent:
+**Total: about 450–595 hours, roughly 110–150 sessions** at about 4 h per session. Shared pieces built once save a few percent:
 - the rate limiter;
 - `FilterNodesForViewer`;
 - the jobs queue;
@@ -86,13 +90,14 @@ To get to federation sooner, you can move **M9 phase 0** right after M3 and do *
   `abuse-report-service.md`, `actor-hard-delete.md`, `login-code.md`, `federation.md`,
   `cloud-neutral.md`, `link-previews.md`, `actor-invitations.md`, `events.md`,
   `instance-privacy.md`, `video-service.md`, `photo-albums.md`, `content-licences.md`,
-  `content-language.md`, `data-export.md`;
+  `content-language.md`, `data-export.md`, `post-insights.md`, `profile-tabs-and-reposts.md`,
+  `quote-posts.md`;
 - extended with a "Decisions and schedule" section: `notes-as-replies.md`, `feed-generators.md`;
 - pointers added: `done/onboarding.md` (recommendations) and `actor-profile-management.md` §2 (hard delete).
 - finished, moved to `done/`: `signup-and-onboarding.md`, `onboarding.md`, `dissolve-people-people.md`, `actor-lifecycle-states.md`.
 
 **anahita-web** (`docs/plans/`): this roadmap, `remove-global-media-browse.md`, `admin-area.md`,
-`open-graph.md`, `pinned-posts-and-activity-tray.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`.
+`open-graph.md`, `pinned-posts-and-activity-tray.md`, `share-button.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`.
 
 The operator guide `anahita-services/docs/deploying.md` (provider matrix and `STORAGE_*` settings)
 is written as part of item 9, once those settings exist.
