@@ -10,12 +10,7 @@ import MediumStepper from '../Stepper';
 import MediaList from './List';
 import { App as APP } from '../../../constants';
 
-const {
-  LIMIT,
-  SORTING: {
-    RECENT,
-  },
-} = APP.BROWSE;
+const { LIMIT } = APP.BROWSE;
 
 const MediaBrowse = ({
   browseList,
@@ -24,11 +19,7 @@ const MediaBrowse = ({
   namespace,
   viewer,
   isFetching,
-  queryFilters = {
-    q: '',
-    oid: 0,
-    sort: RECENT,
-  },
+  queryFilters,
   total = 0,
 }) => {
   const [start, setStart] = useState(0);
@@ -95,7 +86,11 @@ MediaBrowse.propTypes = {
   resetList: PropTypes.func.isRequired,
   namespace: PropTypes.string.isRequired,
   viewer: PersonType.isRequired,
-  queryFilters: PropTypes.object,
+  // oid is the profile whose posts are listed. It is required: the server
+  // has no list of every post of a type.
+  queryFilters: PropTypes.shape({
+    oid: PropTypes.number.isRequired,
+  }).isRequired,
   items: MediaType.isRequired,
   isFetching: PropTypes.bool.isRequired,
   total: PropTypes.number,

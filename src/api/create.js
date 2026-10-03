@@ -14,6 +14,15 @@ const browse = (namespace) => {
   };
 };
 
+// A media list is always one profile's: GET /notes/<owner id>/. The owner is
+// part of the path, not a filter, because the server has no list of every
+// post of a type and refuses a request without one.
+const browseOwned = (namespace) => {
+  return ({ oid, ...params }) => {
+    return axios.get(`/${namespace}/${oid}/`, { params });
+  };
+};
+
 const read = (namespace) => {
   return (id) => {
     return axios.get(`/${namespace}/${id}`);
@@ -70,6 +79,8 @@ const download = (namespace) => {
     return axios.get(`/${namespace}/${id}/download`, { responseType: 'blob' });
   };
 };
+
+export { browseOwned };
 
 export default (namespace) => {
   return {

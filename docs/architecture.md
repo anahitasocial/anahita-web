@@ -115,7 +115,7 @@ history. The main paths:
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/notes`, `/articles`, `/topics`, `/photos` and `/<type>/:id` | Posts of each type |
+| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags/:alias`, `/locations/:id` | Hashtags and places |
 | `/notifications`, `/settings`, `/invites`, `/signup-requests` | The viewer's own pages, and administration |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |

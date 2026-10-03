@@ -37,7 +37,6 @@ import HashtagsRead from '../containers/hashtags/Read';
 import Locations from '../containers/locations';
 import LocationsRead from '../containers/locations/Read';
 
-import Media from '../containers/media';
 import MediaRead from '../containers/media/Read';
 
 import Notifications from '../containers/notifications/Browse';
@@ -78,16 +77,12 @@ SettingsSectionRedirect.propTypes = {
   section: PropTypes.string.isRequired,
 };
 
-const Articles = Media('articles');
 const ArticlesRead = MediaRead('articles');
 
-const Notes = Media('notes');
 const NotesRead = MediaRead('notes');
 
-const Photos = Media('photos');
 const PhotosRead = MediaRead('photos');
 
-const Topics = Media('topics');
 const TopicsRead = MediaRead('topics');
 
 const AppRoutes = () => {
@@ -287,17 +282,22 @@ const AppRoutes = () => {
           }
           />
 
-          {/* Media types */}
-          <Route path="/articles" element={<Articles />} />
+          {/*
+            Media types. A post has a page; a type does not. There is no list
+            of every note or photo on the site: posts are found through feeds,
+            search, hashtags and profiles. The bare paths used to be such
+            lists, so they send an old bookmark home instead of to Not Found.
+          */}
+          <Route path="/articles" element={<Navigate to="/" replace />} />
           <Route path="/articles/:id" element={<ArticlesRead />} />
 
-          <Route path="/notes" element={<Notes />} />
+          <Route path="/notes" element={<Navigate to="/" replace />} />
           <Route path="/notes/:id" element={<NotesRead />} />
 
-          <Route path="/photos" element={<Photos />} />
+          <Route path="/photos" element={<Navigate to="/" replace />} />
           <Route path="/photos/:id" element={<PhotosRead />} />
 
-          <Route path="/topics" element={<Topics />} />
+          <Route path="/topics" element={<Navigate to="/" replace />} />
           <Route path="/topics/:id" element={<TopicsRead />} />
 
           <Route path="/hashtags" element={<Hashtags />} />

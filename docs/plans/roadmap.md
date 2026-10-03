@@ -1,6 +1,6 @@
 # Anahita roadmap
 
-*Planned 2026-09-28; items 22–26 and 0d added 2026-10-02. One plan file per item, in the repo the item mostly touches.*
+*Planned 2026-09-28; items 22–26 and 0d added 2026-10-02, item 27 on 2026-10-03. One plan file per item, in the repo the item mostly touches.*
 
 **The order follows four principles:**
 1. Fix security and data problems first.
@@ -17,16 +17,16 @@ Each milestone ends in a shippable state.
 | # | State | Item | Plan file | Repo | Est. sessions | Needs |
 | --- | --- | --- | --- | --- | --- | --- |
 | **Now** | ⬜ | Rotate the AWS key found in `k8s/00-secret.yml` | — | services | ops, minutes | — |
-| **M1. Safety and cleanup** |  | | | | **about 4–5** | |
-| 1 | ✅ | 0 · Feed access leak | [feed-access-leak.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/feed-access-leak.md) | services | ½–1 | — |
-| 1b | ⬜ | 0b · auth-service hardening: IP lookup, `X-Forwarded-For`, refresh re-checks `Enabled`, TOTP freshness, gRPC shared-secret interceptor | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2 | — |
+| **M1. Safety and cleanup** | ✅ | | | | **about 4–5** | |
+| 1 | ✅ | 0 · Feed access leak | [feed-access-leak.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/feed-access-leak.md) | services | ½–1 | — |
+| 1b | ✅ | 0b · auth-service hardening: IP lookup, `X-Forwarded-For`, refresh re-checks `Enabled`, TOTP freshness | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2 | — |
 | 1c | ✅ | 0d · Remove unused legacy node columns; rename `hits` to `view_count` | [remove-unused-node-columns.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-unused-node-columns.md) | services + web | ½ | — |
-| 2 | ⬜ | 1 · Remove private notes | [remove-private-notes.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/remove-private-notes.md) | services + web | 1 | — |
-| 3 | ⬜ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
-| 4 | ⬜ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](remove-global-media-browse.md) | web + services | ½ | — |
+| 2 | ✅ | 1 · Remove private notes | [remove-private-notes.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-private-notes.md) | services + web | 1 | — |
+| 3 | ✅ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
+| 4 | ✅ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](done/remove-global-media-browse.md) | web + services | ½ | — |
 | **M2. Foundations** |  | | | | **about 14–18** | |
 | 5 | ⬜ | 9 · Cloud-neutral (storage, local Garage/MinIO, upload hardening, keys, k8s overlays) | [cloud-neutral.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/cloud-neutral.md) | services + web | 5–6 | — |
-| 5b | ⬜ | 0c · gRPC mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
+| 5b | ⬜ | 0c · gRPC calls authenticated and encrypted: mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
 | 6 | ⬜ | 6 · Sign in with a code | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/login-code.md) | services | 3–4 | — |
 | 7 | ⬜ | 6b · Codes for signup, reset, email change, step-up | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/login-code.md) (phase 2) | services + web | 3–4 | 6 |
 | **M3. Administration and moderation** |  | | | | **about 13** | |
@@ -60,6 +60,8 @@ Each milestone ends in a shippable state.
 | 25 | ⬜ | 8 · Phase 1 ActivityPub | [federation.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/federation.md) | services + web | 7–9 | 24 |
 | 26 | ⬜ | 8 · Phase 1 AT Protocol | [federation.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/federation.md) | services + web | 6–8 | 24 |
 | 26b | ⬜ | 26 · Verified domains: prove you own a website; domain as Bluesky handle, verified link on Mastodon | [verified-domains.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/verified-domains.md) | services + web | 4–5 | 8, 10 |
+| **Before the first release** |  | | | | **about 1–1½** | |
+| 27 | ⬜ | 27 · One clean schema: fold the migrations into a baseline | [migration-baseline.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/migration-baseline.md) | services | 1–1½ | every schema change above |
 
 **Total: about 465–615 hours, roughly 115–155 sessions** at about 4 h per session. Shared pieces built once save a few percent:
 - the rate limiter;
@@ -95,13 +97,13 @@ To get to federation sooner, you can move **M9 phase 0** right after M3 and do *
   `cloud-neutral.md`, `link-previews.md`, `actor-invitations.md`, `events.md`,
   `instance-privacy.md`, `video-service.md`, `photo-albums.md`, `content-licences.md`,
   `content-language.md`, `data-export.md`, `post-insights.md`, `profile-tabs-and-reposts.md`,
-  `quote-posts.md`, `verified-domains.md`;
+  `quote-posts.md`, `verified-domains.md`, `migration-baseline.md`;
 - extended with a "Decisions and schedule" section: `notes-as-replies.md`, `feed-generators.md`;
 - pointers added: `done/onboarding.md` (recommendations) and `actor-profile-management.md` §2 (hard delete).
-- finished, in `done/`: `signup-and-onboarding.md`, `onboarding.md`, `dissolve-people-people.md`, `actor-lifecycle-states.md`, `remove-unused-node-columns.md`.
+- finished, in `done/`: `signup-and-onboarding.md`, `onboarding.md`, `dissolve-people-people.md`, `actor-lifecycle-states.md`, `remove-unused-node-columns.md`, `feed-access-leak.md`, `remove-private-notes.md`.
 
-**anahita-web** (`docs/plans/`): this roadmap, `remove-global-media-browse.md`, `admin-area.md`,
-`open-graph.md`, `pinned-posts-and-activity-tray.md`, `share-button.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`.
+**anahita-web** (`docs/plans/`): this roadmap, `admin-area.md`,
+`open-graph.md`, `pinned-posts-and-activity-tray.md`, `share-button.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`, `remove-global-media-browse.md`.
 
 The operator guide `anahita-services/docs/deploying.md` (provider matrix and `STORAGE_*` settings)
 is written as part of item 9, once those settings exist.

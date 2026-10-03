@@ -10,7 +10,6 @@ export default {
       'node.medium.note-service.note.v1',
       'node.medium.topic-service.topic.v1',
       'node.medium.photo-service.photo.v1',
-      'node.medium.photo-service.photo-set.v1',
     ],
     FEED: [
       'node.base.feed-service.repost.v1',

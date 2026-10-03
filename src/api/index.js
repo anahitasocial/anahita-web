@@ -2,7 +2,7 @@
 import _ from 'lodash';
 import axios from 'axios';
 import { singularize } from 'inflection';
-import createApi from './create';
+import createApi, { browseOwned } from './create';
 import createActor from './actor';
 
 import agreements from './agreements';
@@ -156,6 +156,7 @@ namespaces.actors.forEach((ns) => {
 namespaces.media.forEach((ns) => {
   apis[ns] = {
     ...createApi(ns),
+    browse: browseOwned(ns),
     [singularize(ns)]: createApi(ns),
   };
 });
