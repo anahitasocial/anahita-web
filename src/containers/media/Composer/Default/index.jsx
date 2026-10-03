@@ -40,19 +40,10 @@ const MediaComposerDefault = ({
 
   const handleOnChange = (event) => {
     const { target } = event;
-    const {
-      name,
-      value,
-      type,
-      checked,
-    } = target;
+    const { name, value } = target;
     const { form } = utils;
 
-    if (type === 'checkbox') {
-      medium[name] = checked;
-    } else {
-      medium[name] = value;
-    }
+    medium[name] = value;
 
     const newFields = form.validateField(target, fields);
 

@@ -6,8 +6,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import CircularProgress from '@mui/material/CircularProgress';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Switch from '@mui/material/Switch';
 import TextField from '@mui/material/TextField';
 
 import ActorType from '../../../../proptypes/Actor';
@@ -36,8 +34,6 @@ const ComposersNote = ({
     name: actor.name,
   }) : i18n.t('notes:composer.bodyPlaceholder');
 
-  const canPrivatePost = isPerson(actor) && actor.id !== viewer.id;
-
   return (
     <form onSubmit={handleOnSubmit} noValidate>
       <Card>
@@ -62,17 +58,6 @@ const ComposersNote = ({
               },
             }}
           />
-          {canPrivatePost &&
-            <FormControlLabel
-              control={
-                <Switch
-                  name="is_private"
-                  value
-                  onChange={handleOnChange}
-                />
-              }
-              label="Private"
-            />}
         </CardContent>
         <CardActions>
           <Button
