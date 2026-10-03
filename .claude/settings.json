@@ -4,5 +4,10 @@
       "Bash(npm run eject)",
       "Read(**/.npmrc)"
     ]
+  },
+  "attribution": {
+    "commit": "",
+    "pr": "",
+    "sessionUrl": false
   }
 }
