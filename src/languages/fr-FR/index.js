@@ -26,7 +26,6 @@ import photos from './photos';
 import media from './media';
 import topics from './topics';
 import articles from './articles';
-import explore from './explore';
 import socialgraph from './socialgraph';
 import hashtags from './hashtags';
 import agreements from './agreements';
@@ -66,7 +65,6 @@ export default {
   media,
   topics,
   articles,
-  explore,
   socialgraph,
   hashtags,
   agreements,

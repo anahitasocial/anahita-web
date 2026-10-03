@@ -10,10 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
-import NotesIcon from '@mui/icons-material/Note';
-import PhotosIcon from '@mui/icons-material/Photo';
-import TopicsIcon from '@mui/icons-material/QuestionAnswer';
-import ArticlesIcon from '@mui/icons-material/LibraryBooks';
 // ExitToApp, not LockOpen.
 //
 // An open padlock pictures an account that is NOT secured, which is the
@@ -85,46 +81,6 @@ const LeftMenu = ({
           <GroupsIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('groups:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/notes/"
-        selected={pathname === '/notes/'}
-      >
-        <ListItemIcon>
-          <NotesIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('notes:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/photos/"
-        selected={pathname === '/photos/'}
-      >
-        <ListItemIcon>
-          <PhotosIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('photos:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/topics/"
-        selected={pathname === '/topics/'}
-      >
-        <ListItemIcon>
-          <TopicsIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('topics:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/articles/"
-        selected={pathname === '/articles/'}
-      >
-        <ListItemIcon>
-          <ArticlesIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('articles:cTitle')} />
       </ListItemButton>
       <ListItemButton
         component={Link}

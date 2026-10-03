@@ -17,13 +17,13 @@ Each milestone ends in a shippable state.
 | # | State | Item | Plan file | Repo | Est. sessions | Needs |
 | --- | --- | --- | --- | --- | --- | --- |
 | **Now** | ⬜ | Rotate the AWS key found in `k8s/00-secret.yml` | — | services | ops, minutes | — |
-| **M1. Safety and cleanup** |  | | | | **about 4–5** | |
+| **M1. Safety and cleanup** | ✅ | | | | **about 4–5** | |
 | 1 | ✅ | 0 · Feed access leak | [feed-access-leak.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/feed-access-leak.md) | services | ½–1 | — |
 | 1b | ✅ | 0b · auth-service hardening: IP lookup, `X-Forwarded-For`, refresh re-checks `Enabled`, TOTP freshness | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2 | — |
 | 1c | ✅ | 0d · Remove unused legacy node columns; rename `hits` to `view_count` | [remove-unused-node-columns.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-unused-node-columns.md) | services + web | ½ | — |
 | 2 | ✅ | 1 · Remove private notes | [remove-private-notes.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-private-notes.md) | services + web | 1 | — |
 | 3 | ✅ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
-| 4 | ⬜ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](remove-global-media-browse.md) | web + services | ½ | — |
+| 4 | ✅ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](done/remove-global-media-browse.md) | web + services | ½ | — |
 | **M2. Foundations** |  | | | | **about 14–18** | |
 | 5 | ⬜ | 9 · Cloud-neutral (storage, local Garage/MinIO, upload hardening, keys, k8s overlays) | [cloud-neutral.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/cloud-neutral.md) | services + web | 5–6 | — |
 | 5b | ⬜ | 0c · gRPC calls authenticated and encrypted: mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
@@ -102,8 +102,8 @@ To get to federation sooner, you can move **M9 phase 0** right after M3 and do *
 - pointers added: `done/onboarding.md` (recommendations) and `actor-profile-management.md` §2 (hard delete).
 - finished, in `done/`: `signup-and-onboarding.md`, `onboarding.md`, `dissolve-people-people.md`, `actor-lifecycle-states.md`, `remove-unused-node-columns.md`, `feed-access-leak.md`, `remove-private-notes.md`.
 
-**anahita-web** (`docs/plans/`): this roadmap, `remove-global-media-browse.md`, `admin-area.md`,
-`open-graph.md`, `pinned-posts-and-activity-tray.md`, `share-button.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`.
+**anahita-web** (`docs/plans/`): this roadmap, `admin-area.md`,
+`open-graph.md`, `pinned-posts-and-activity-tray.md`, `share-button.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`, `remove-global-media-browse.md`.
 
 The operator guide `anahita-services/docs/deploying.md` (provider matrix and `STORAGE_*` settings)
 is written as part of item 9, once those settings exist.

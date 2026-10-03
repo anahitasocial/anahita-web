@@ -66,9 +66,26 @@ A phase is finished only when these pages match the code. anahita-services pages
 - **web `architecture.md`**, *Routes*: remove `/notes`, `/photos`, `/topics`, `/articles` as list pages; media lists live only on profiles.
 - **services `architecture.md`**, *Routing*: media list routes are `GET /{ns}/:owner_id/` only.
 
+## What was built (2026-10-03)
+
+**anahita-web**
+- The `/notes`, `/photos`, `/topics` and `/articles` list pages are gone, with their four left-menu entries. The bare paths redirect to the home page, so an old bookmark doesn't land on Not Found. The `/<type>/:id` pages are unchanged.
+- Deleted: `containers/media/index.jsx`, the unrouted `containers/Explore.jsx`, `APP.TABS.EXPLORE`, the `explore` language files, and the three unused cards in `assets/components` (`MediaCard`, `NodesCard`, `MapCard`).
+- Media lists call `GET /{ns}/{oid}/`: `browseOwned` in `src/api/create.js`, used for the media namespaces in `src/api/index.js`.
+- **The sort parameter:** the plan said to fix `sort` versus `ordering`. Only the removed site-wide wrapper ever sent `sort`; profile tabs send just the owner, and the server's default is newest first. So nothing sends it now, and there was nothing left to fix.
+
+**anahita-services**
+- `GET /` is removed from the article, note, topic and photo list routes.
+- `MediumBrowseRequest.OwnerID` is required, at least 1, and read from the path only. `?oid=` is no longer bound, so it can neither stand in for the path nor override it. `MediaGRPCBrowseRequest.OwnerID` is required too.
+- Test: `TestMediumBrowseNeedsAnOwnerInThePath` (`anahita-libs/requests/media_test.go`).
+
+**Checked on the running stack:** `/notes/`, `/photos/`, `/articles/`, `/topics/` and `/notes/?oid=5` answer 404; `/notes/0/` answers 400; `/notes/5/` lists that profile's notes; `/notes/5/?oid=14071` still returns only profile 5's.
+
+**Left alone:** `assets/components/ContentCard.jsx` is also imported nowhere, but wasn't part of this plan.
+
 ## Status
 
 | Item | State |
 | --- | --- |
 | Plan | written 2026-09-28 |
-| Implementation | not started |
+| Implementation | done 2026-10-03, on branch `m1-safety-cleanup` in both repos |
