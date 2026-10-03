@@ -22,7 +22,7 @@ Each milestone ends in a shippable state.
 | 1b | ✅ | 0b · auth-service hardening: IP lookup, `X-Forwarded-For`, refresh re-checks `Enabled`, TOTP freshness | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2 | — |
 | 1c | ✅ | 0d · Remove unused legacy node columns; rename `hits` to `view_count` | [remove-unused-node-columns.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-unused-node-columns.md) | services + web | ½ | — |
 | 2 | ✅ | 1 · Remove private notes | [remove-private-notes.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-private-notes.md) | services + web | 1 | — |
-| 3 | ⬜ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
+| 3 | ✅ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
 | 4 | ⬜ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](remove-global-media-browse.md) | web + services | ½ | — |
 | **M2. Foundations** |  | | | | **about 14–18** | |
 | 5 | ⬜ | 9 · Cloud-neutral (storage, local Garage/MinIO, upload hardening, keys, k8s overlays) | [cloud-neutral.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/cloud-neutral.md) | services + web | 5–6 | — |
