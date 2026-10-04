@@ -54,7 +54,7 @@ const resolveError = (err, fallbackKey) => {
 // One case: what was reported, who reported it and why, what was decided,
 // and the earlier cases the same thing has had.
 //
-// Nothing here deletes or disables anything. "Open it" goes to the thing
+// Nothing here deletes or disables anything. "View" goes to the thing
 // itself, where the controls that do that live, with their own
 // confirmations and their own rules about who may use them. This page
 // records the decision.
