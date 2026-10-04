@@ -21,19 +21,15 @@ import PersonType from '../../proptypes/Person';
 
 import SignupRequests from '../auth/SignupRequests';
 import Invites from '../auth/Invites';
-import Settings from '../settings';
 
 import tabs from './tabs';
 
 const SITE_NAME = process.env.REACT_APP_NAME;
 
-// The page behind each tab. Settings has a title card of its own when it
-// is a page; here the area's card already says where the viewer is, so
-// it is asked to leave its own out.
+// The page behind each tab.
 const PANELS = {
-  'signup-requests': { Component: SignupRequests },
-  invites: { Component: Invites },
-  settings: { Component: Settings, props: { embedded: true } },
+  'signup-requests': SignupRequests,
+  invites: Invites,
 };
 
 // The administration area: one home for the pages only administrators
@@ -77,7 +73,7 @@ const Admin = ({
     return <Navigate to={`/admin/${available[0].key}`} replace />;
   }
 
-  const { Component: Panel, props: panelProps = {} } = PANELS[current.key];
+  const Panel = PANELS[current.key];
 
   return (
     <>
@@ -123,7 +119,7 @@ const Admin = ({
           </Tabs>
         </Card>
       </Box>
-      <Panel {...panelProps} />
+      <Panel />
     </>
   );
 };

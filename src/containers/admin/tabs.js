@@ -14,6 +14,10 @@ const { isAdmin } = utils.node;
 // says how many things on that tab are waiting for somebody.
 //
 // The key is the last part of the address: /admin/<key>.
+//
+// Site settings are deliberately not here. They are for super
+// administrators alone and have a menu entry of their own (/settings);
+// this area is what every administrator shares.
 const TABS = [
   {
     key: 'signup-requests',
@@ -31,13 +35,6 @@ const TABS = [
     title: 'invites:mTitle',
     canView: (viewer) => {
       return isAdmin(viewer);
-    },
-  },
-  {
-    key: 'settings',
-    title: 'settings:mTitle',
-    canView: (viewer) => {
-      return permissions.settings.canBrowse(viewer);
     },
   },
 ];

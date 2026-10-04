@@ -120,7 +120,8 @@ history. The main paths:
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
-| `/settings`, `/signup-requests` | Where two administration pages used to be. Both redirect into `/admin` |
+| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own |
+| `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
 
@@ -134,7 +135,9 @@ history. The main paths:
 | --- | --- | --- |
 | Signup requests | `/admin/signup-requests` | Administrators and super administrators |
 | Invites | `/admin/invites` | Administrators and super administrators |
-| Settings | `/admin/settings` | Super administrators |
+
+Site settings are not a tab. They are for super administrators alone, so they
+keep their own page (`/settings`) and menu entry.
 
 A tab the viewer may not see is not drawn, and its address lands on the first
 tab they may. Somebody with no tabs sees a "restricted" message, and has no

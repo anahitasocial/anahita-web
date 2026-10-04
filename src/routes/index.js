@@ -48,6 +48,7 @@ import DashboardPage from '../containers/Dashboard';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
+import Settings from '../containers/settings';
 import AdminRedirects from '../containers/admin/Redirects';
 import StaticPage from '../containers/page';
 import NotFoundPage from '../containers/NotFound';
@@ -256,11 +257,22 @@ const AppRoutes = () => {
           }
           />
 
-          {/* Where these pages used to live, kept so bookmarks and links in
-            mail already sent still arrive. /settings/signup-requests never
-            existed as a page: it is the address the signup-request email
-            carried by mistake. */}
-          <Route path="/settings" element={<Navigate to="/admin/settings" replace />} />
+          {/* Site settings: super administrators only, and a page of its own
+            for that reason. The administration area is what every
+            administrator shares. The page checks the permission itself. */}
+          <Route
+            path="/settings"
+            element={
+              <AuthenticatedRoute>
+                <Settings />
+              </AuthenticatedRoute>
+          }
+          />
+
+          {/* Where the signup queue used to live, kept so bookmarks and
+            links in mail already sent still arrive.
+            /settings/signup-requests never existed as a page: it is the
+            address the signup-request email carried by mistake. */}
           <Route
             path="/settings/signup-requests"
             element={<Navigate to="/admin/signup-requests" replace />}

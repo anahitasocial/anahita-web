@@ -48,16 +48,17 @@ A phase is finished only when these pages match the code. anahita-services pages
 
 ## What was built (2026-10-03)
 
-- **`/admin` and `/admin/:tab`** (`src/containers/admin`): a header card with route-linked tabs for Signup requests, Invites and Settings. `tabs.js` says who sees each, and the page redirects to the first tab the viewer may see.
-- **The existing pages are the tab panels, unchanged,** except that Settings leaves out its own title card when it is a tab.
+- **`/admin` and `/admin/:tab`** (`src/containers/admin`): a header card with route-linked tabs for Signup requests and Invites. `tabs.js` says who sees each, and the page redirects to the first tab the viewer may see.
+- **The existing pages are the tab panels, unchanged.**
 - **One menu entry,** Administration, with a badge for the number waiting. `actions.admin.readCounts` reads the pending signup requests total, on session, every five minutes, on window focus, and after a decision.
-- **Redirects:** `/settings` and `/signup-requests` go to their tabs. `/settings/signup-requests`, the address the email carried by mistake, goes there too.
+- **Redirects:** `/signup-requests` goes to its tab. `/settings/signup-requests`, the address the email carried by mistake, goes there too.
 - **The email link** in anahita-services now points at `/admin/signup-requests`.
 - **Strings:** an `admin` namespace in en-GB and fr-FR.
 - **Tests:** `containers/admin/__tests__/tabs.test.js` covers who sees which tab and the waiting count.
 
 **Done differently from the plan:**
 
+- **Settings is not a tab** (decided by the site owner, 2026-10-03). It is for super administrators alone, so it keeps its own page at `/settings` and its own menu entry. The administration area holds what every administrator shares.
 - **`/invites` is still a page for members who may invite.** `INVITES_FROM` can let ordinary members invite, and they have no administration area. They keep the Invites menu entry and the page. An administrator opening `/invites` is sent to the tab.
 - **No Reports tab yet.** It arrives with item 4b, along with its count.
 

@@ -12,14 +12,16 @@ const keys = (list) => {
 };
 
 describe('administration tabs', () => {
-  it('shows an administrator the queue and invitations, not site settings', () => {
+  it('shows administrators and super administrators the same tabs', () => {
     expect(keys(tabs.visibleTabs(viewer('administrator'))))
+      .toEqual(['signup-requests', 'invites']);
+    expect(keys(tabs.visibleTabs(viewer('super-administrator'))))
       .toEqual(['signup-requests', 'invites']);
   });
 
-  it('shows a super administrator every tab', () => {
-    expect(keys(tabs.visibleTabs(viewer('super-administrator'))))
-      .toEqual(['signup-requests', 'invites', 'settings']);
+  // Site settings are a page of their own, for super administrators.
+  it('has no settings tab', () => {
+    expect(keys(tabs.TABS)).not.toContain('settings');
   });
 
   it('shows a member, and a guest, nothing', () => {

@@ -22,6 +22,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LabelIcon from '@mui/icons-material/Label';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import AdminIcon from '@mui/icons-material/AdminPanelSettings';
+import SettingsIcon from '@mui/icons-material/Settings';
 import InvitesIcon from '@mui/icons-material/MailOutlined';
 import LegalIcon from '@mui/icons-material/MenuBook';
 import SupportIcon from '@mui/icons-material/ContactSupport';
@@ -104,8 +105,8 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('locations:cTitle')} />
       </ListItemButton>
-      {/* One entry for everything administrators look after: the signup
-          queue, invitations and site settings are tabs behind it. Shown to
+      {/* One entry for what every administrator looks after: the signup
+          queue and invitations are tabs behind it. Shown to
           anybody who may see at least one of those tabs, with the number
           of things waiting for them. */}
       {isAuthenticated && adminTabs.canBrowse(viewer) &&
@@ -143,6 +144,19 @@ const LeftMenu = ({
             <InvitesIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('invites:mTitle')} />
+        </ListItemButton>}
+      {/* Site settings, for super administrators alone, which is why it is
+          not a tab of the administration area above. */}
+      {isAuthenticated && permissions.settings.canBrowse(viewer) &&
+        <ListItemButton
+          component={Link}
+          to="/settings"
+          selected={pathname.startsWith('/settings')}
+        >
+          <ListItemIcon>
+            <SettingsIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('settings:mTitle')} />
         </ListItemButton>}
       {/* <ListItemButton
         component={Link}

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Avatar from '@mui/material/Avatar';
@@ -45,12 +44,8 @@ const TAB_ORDER = [
 // The route was authenticated but ungated before this: the left menu
 // hid the link from everybody else, and anybody who typed the URL got
 // in. Hiding a link is presentation; this is the check.
-//
-// `embedded` is set by the administration area, where this is a tab. The
-// area's own card names the page, so this one keeps only its tab bar.
 const Settings = ({
   viewer,
-  embedded = false,
 }) => {
   const canBrowse = permissions.settings.canBrowse(viewer);
   const [tab, setTab] = useState(TABS.OAUTH_CLIENTS);
@@ -99,22 +94,19 @@ const Settings = ({
           actor settings page has never had it either. */}
       <Box sx={{ mb: 2 }}>
         <Card>
-          {!embedded &&
-            <>
-              <CardHeader
-                avatar={
-                  <Avatar>
-                    <SettingsIcon />
-                  </Avatar>
-                }
-                title={i18n.t('settings:cTitle')}
-                subheader={i18n.t('settings:cDescription')}
-                slotProps={{
-                  title: { variant: 'h5' },
-                }}
-              />
-              <Divider />
-            </>}
+          <CardHeader
+            avatar={
+              <Avatar>
+                <SettingsIcon />
+              </Avatar>
+            }
+            title={i18n.t('settings:cTitle')}
+            subheader={i18n.t('settings:cDescription')}
+            slotProps={{
+              title: { variant: 'h5' },
+            }}
+          />
+          <Divider />
           <Tabs
             variant="scrollable"
             scrollButtons
@@ -147,7 +139,6 @@ const Settings = ({
 
 Settings.propTypes = {
   viewer: PersonType.isRequired,
-  embedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

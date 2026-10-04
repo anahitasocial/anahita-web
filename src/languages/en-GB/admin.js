@@ -1,6 +1,6 @@
 export default {
   cTitle: 'Administration',
-  cDescription: 'Requests, invitations and settings that administrators look after.',
+  cDescription: 'Signup requests and invitations that administrators look after.',
   mTitle: 'Administration',
   tabWithCount: '{{title}} ({{count}})',
   waiting_one: '{{count}} item waiting',
