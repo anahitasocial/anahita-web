@@ -25,6 +25,7 @@ import HeaderMeta from '../../../components/HeaderMeta';
 
 import actions from '../../../actions';
 import permissions from '../../../permissions/actor';
+import reportPermissions from '../../../permissions/report';
 import utils from '../../../utils';
 import { Actor as ACTOR } from '../../../constants';
 
@@ -92,7 +93,13 @@ const ActorsRead = (props) => {
   const showAddFollower = isAuthenticated && canAddFollower && !utils.node.isPerson(actor);
   // Super administrators see the menu on every profile, for Feature, even
   // where they do not administer the actor.
-  const showCommands = isAuthenticated && (canAdminister || permissions.canFeature(actor, viewer));
+  // And anybody signed in sees it on somebody else's profile, where it
+  // holds Block and Report.
+  const showCommands = isAuthenticated && (
+    canAdminister ||
+    permissions.canFeature(actor, viewer) ||
+    reportPermissions.canAdd(viewer, actor)
+  );
   const showEditNotifications = isAuthenticated && actor.isLeader;
   const showFollowRequests = isAuthenticated && canAdminister;
   const isViewer = actor.id === viewer.id;

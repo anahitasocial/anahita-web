@@ -6,6 +6,7 @@ import medium from './medium';
 import node from './node';
 import oauthClient from './oauthClient';
 import oauthSigningKey from './oauthSigningKey';
+import report from './report';
 import settings from './settings';
 import signupRequest from './signupRequest';
 
@@ -18,6 +19,7 @@ export default {
   node,
   oauthClient,
   oauthSigningKey,
+  report,
   settings,
   signupRequest,
 };

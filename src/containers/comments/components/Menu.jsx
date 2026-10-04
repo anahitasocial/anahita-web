@@ -11,6 +11,7 @@ import utils from '../../../utils';
 import ControlFollow from '../../controls/Follow';
 import ControlBlock from '../../controls/Block';
 import ControlDelete from '../../controls/comment/Delete';
+import useReport from '../../reports/useReport';
 
 import PersonType from '../../../proptypes/Person';
 import CommentType from '../../../proptypes/Comment';
@@ -30,6 +31,7 @@ const CommentMenu = ({
   const canEdit = Boolean(comment.authorized.edit);
   const canDelete = Boolean(comment.authorized.delete);
   const { author } = comment;
+  const report = useReport(viewer, comment);
 
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
 
@@ -95,7 +97,17 @@ const CommentMenu = ({
             key={`comment-delete-${comment.id}`}
             inline={inline}
           />}
+        {report.canReport &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              report.open();
+            }}
+          >
+            {i18n.t('abuseReports:report')}
+          </MenuItem>}
       </Menu>
+      {report.dialog}
     </>
   );
 };

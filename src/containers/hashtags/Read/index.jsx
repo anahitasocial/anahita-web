@@ -66,9 +66,11 @@ const HashtagsRead = (props) => {
           subheader={i18n.t('inbounds:count', {
             count: inboundsCount,
           })}
-          action={canAdminister &&
+          action={(canAdminister || permissions.report.canAdd(viewer, hashtag)) &&
             <HashtagMenu
               hashtag={hashtag}
+              viewer={viewer}
+              canAdminister={Boolean(canAdminister)}
             />}
         />
       </Card>

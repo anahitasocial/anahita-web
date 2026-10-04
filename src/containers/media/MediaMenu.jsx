@@ -12,6 +12,7 @@ import utils from '../../utils';
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlCommentStatus from '../controls/medium/CommentStatus';
 import ControlDelete from '../controls/Delete';
+import useReport from '../reports/useReport';
 
 import PersonType from '../../proptypes/Person';
 import MediumType from '../../proptypes/Medium';
@@ -49,8 +50,11 @@ const MediaMenu = ({
   const canSubscribe = isSubscribable(medium);
   const canComment = isCommentable(medium);
   const canDelete = permissions.canDelete(viewer, medium);
+  const report = useReport(viewer, medium);
 
-  if (!canEdit && !canSubscribe && !canComment && !canDelete) {
+  // Somebody who may do nothing else here may still report it, so the
+  // menu is drawn for them too.
+  if (!canEdit && !canSubscribe && !canComment && !canDelete && !report.canReport) {
     return null;
   }
 
@@ -99,7 +103,17 @@ const MediaMenu = ({
           component="menuitem"
           confirmMessage={i18n.t('media:confirm.delete')}
         />
+        {report.canReport &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              report.open();
+            }}
+          >
+            {i18n.t('abuseReports:report')}
+          </MenuItem>}
       </Menu>
+      {report.dialog}
     </>
   );
 };
