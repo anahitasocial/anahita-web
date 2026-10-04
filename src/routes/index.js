@@ -256,6 +256,15 @@ const AppRoutes = () => {
               </AuthenticatedRoute>
           }
           />
+          {/* One thing inside a tab: a reported case, /admin/reports/12. */}
+          <Route
+            path="/admin/:tab/:id"
+            element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
+          }
+          />
 
           {/* Site settings: super administrators only, and a page of its own
             for that reason. The administration area is what every

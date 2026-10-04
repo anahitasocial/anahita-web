@@ -14,9 +14,9 @@ const keys = (list) => {
 describe('administration tabs', () => {
   it('shows administrators and super administrators the same tabs', () => {
     expect(keys(tabs.visibleTabs(viewer('administrator'))))
-      .toEqual(['signup-requests', 'invites']);
+      .toEqual(['reports', 'signup-requests', 'invites']);
     expect(keys(tabs.visibleTabs(viewer('super-administrator'))))
-      .toEqual(['signup-requests', 'invites']);
+      .toEqual(['reports', 'signup-requests', 'invites']);
   });
 
   // Site settings are a page of their own, for super administrators.
@@ -32,9 +32,9 @@ describe('administration tabs', () => {
   });
 
   it('counts what is waiting on the tabs the viewer may see', () => {
-    const counts = { signupRequests: 3 };
+    const counts = { signupRequests: 3, reports: 2 };
 
-    expect(tabs.waitingCount(viewer('administrator'), counts)).toBe(3);
+    expect(tabs.waitingCount(viewer('administrator'), counts)).toBe(5);
     expect(tabs.waitingCount(viewer('registered'), counts)).toBe(0);
   });
 

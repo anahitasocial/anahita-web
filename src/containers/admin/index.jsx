@@ -21,6 +21,7 @@ import PersonType from '../../proptypes/Person';
 
 import SignupRequests from '../auth/SignupRequests';
 import Invites from '../auth/Invites';
+import Reports from './Reports';
 
 import tabs from './tabs';
 
@@ -28,6 +29,7 @@ const SITE_NAME = process.env.REACT_APP_NAME;
 
 // The page behind each tab.
 const PANELS = {
+  reports: Reports,
   'signup-requests': SignupRequests,
   invites: Invites,
 };

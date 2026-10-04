@@ -28,7 +28,9 @@ const browseCases = (params = {}) => {
     lang,
   } = params;
   return axios.get('/abuse-reports/cases', {
-    params: { status, limit, offset, lang },
+    params: {
+      status, limit, offset, lang,
+    },
   });
 };
 

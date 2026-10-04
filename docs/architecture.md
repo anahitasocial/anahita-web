@@ -133,6 +133,7 @@ history. The main paths:
 
 | Tab | Address | Who sees it |
 | --- | --- | --- |
+| Reports | `/admin/reports`, and `/admin/reports/:id` for one case | Administrators and super administrators |
 | Signup requests | `/admin/signup-requests` | Administrators and super administrators |
 | Invites | `/admin/invites` | Administrators and super administrators |
 
@@ -143,10 +144,28 @@ A tab the viewer may not see is not drawn, and its address lands on the first
 tab they may. Somebody with no tabs sees a "restricted" message, and has no
 Administration entry in the left menu.
 
-The menu entry carries the number of things waiting, which today is pending
+The menu entry carries the number of things waiting: open reports plus pending
 signup requests. The app reads it when an administrator's session is known,
 every five minutes, when the window regains focus, and after a request is
 approved or rejected (`actions.admin.readCounts`, `state.admin.counts`).
+
+### Reporting
+
+Every menu that sits on a node has a **Report** item: profiles, posts, feed
+items, comments, hashtags and places. It is offered to anybody signed in,
+except on themselves and on what they wrote (`permissions/report.js`). A menu
+that somebody could do nothing else in is now drawn for them, holding Report.
+
+The item comes from the `useReport(viewer, node)` hook in
+`containers/reports`, which also returns the dialog. The dialog is rendered
+beside the menu, not inside it, because choosing the item closes the menu.
+The reasons it lists come from the server, for the kind of thing being
+reported and in the app's language, and are fetched once per kind.
+
+The Reports tab lists cases by status and opens one at a time. It records an
+administrator's decision; it does not delete or disable anything. "Open it"
+goes to the reported thing, where those controls already live. See
+anahita-services' `docs/abuse-reports.md`.
 
 ## What a viewer may do
 

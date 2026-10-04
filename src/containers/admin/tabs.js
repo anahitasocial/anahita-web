@@ -20,6 +20,15 @@ const { isAdmin } = utils.node;
 // this area is what every administrator shares.
 const TABS = [
   {
+    // First, because it is the tab where waiting costs the most.
+    key: 'reports',
+    title: 'abuseReports:mTitle',
+    count: 'reports',
+    canView: (viewer) => {
+      return isAdmin(viewer);
+    },
+  },
+  {
     key: 'signup-requests',
     title: 'signupRequests:mTitle',
     count: 'signupRequests',
