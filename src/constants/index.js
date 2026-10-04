@@ -1,4 +1,5 @@
 import Access from './access';
+import Admin from './admin';
 import Actor from './actor';
 import App from './app';
 import Auth from './auth';
@@ -26,6 +27,7 @@ import Totp from './totp';
 
 export {
   Access,
+  Admin,
   Actor,
   App,
   Auth,

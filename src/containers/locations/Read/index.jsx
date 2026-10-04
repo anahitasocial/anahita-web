@@ -17,6 +17,7 @@ import actions from '../../../actions';
 import form from '../../../utils/form';
 import i18n from '../../../languages';
 import utils from '../../../utils';
+import reportPermissions from '../../../permissions/report';
 
 import LocationsType from '../../../proptypes/Locations';
 
@@ -150,11 +151,12 @@ const LocationsRead = ({
           subheader={i18n.t('inbounds:count', {
             count: inboundsCount,
           })}
-          action={canAdminister &&
+          action={(canAdminister || reportPermissions.canAdd(viewer, location)) &&
             <LocationMenu
               location={location}
               viewer={viewer}
               handleEdit={handleEdit}
+              canAdminister={Boolean(canAdminister)}
             />}
         />
         {isEditing &&

@@ -29,7 +29,7 @@
   - At most **5** pinned per owner; pinning a 6th returns 409 with the current pins.
   - Pinned replies aren't allowed (item 7).
 - **Reads:**
-  - the actor feed (`GET /feeds/actor/:id/`) and profile media tabs return pinned posts first (`ORDER BY pinned DESC, pinned_at DESC, created_on DESC` on the first page only), each marked `pinned: true`;
+  - the actor feed (`GET /feeds/actor/:id/`) and profile media tabs return pinned posts first (`ORDER BY pinned DESC, pinned_at DESC, created_at DESC` on the first page only), each marked `pinned: true`;
   - pinned posts are left out of later pages so they don't appear twice.
 - **Access:** unchanged. A pinned followers-only post is still hidden from non-followers.
 - **Events (item 12):** host announcements use the same pin mechanism.

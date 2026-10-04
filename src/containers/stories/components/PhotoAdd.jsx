@@ -60,8 +60,8 @@ const StoryCardPhotoAdd = ({
   const body = story.object && story.object.body;
   const url = story.object ? getURL(story.object) : '';
   const showOwnerHeader = showOwner && (story.subject.id !== story.owner.id);
-  const creationTime = moment.utc(story.creationTime).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(story.creationTime).fromNow();
+  const createdAt = moment.utc(story.createdAt).local().format('LLL').toString();
+  const creationTimeFromNow = moment.utc(story.createdAt).fromNow();
 
   const [isLoaded, setIsLoaded] = useState(!portrait);
 
@@ -97,7 +97,7 @@ const StoryCardPhotoAdd = ({
         subheader={
           <Link
             href={url}
-            title={creationTime}
+            title={createdAt}
           >
             {creationTimeFromNow}
           </Link>

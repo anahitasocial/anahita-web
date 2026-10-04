@@ -15,6 +15,9 @@ export default {
     // group administrators to "sign in to restore", which a group cannot do,
     // and that their passkeys would be removed, which a group has none of.
     delete: 'Delete',
+    // The card title. Its text is in the accounts namespace, shared with
+    // the accounts list.
+    purge: 'Delete permanently',
     // Archive. The copy does the work here: archive sits next to delete and
     // must never read as the gentler option. Permanence first, then what is
     // preserved — which is the reason to choose it, not a softener.

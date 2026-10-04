@@ -57,7 +57,9 @@ const errorMessage = (err, fallbackKey) => {
 const SignupRequestsPage = ({
   alertError,
   alertSuccess,
+  readAdminCounts,
   viewer,
+  embedded = false,
 }) => {
   const [items, setItems] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -110,6 +112,8 @@ const SignupRequestsPage = ({
           });
         });
         setDeciding(null);
+        // One fewer waiting: the number on the menu and on the tab.
+        readAdminCounts();
         alertSuccess(decision === 'approve' ?
           i18n.t('signupRequests:alerts.approved', {
             username: request.username,
@@ -153,7 +157,7 @@ const SignupRequestsPage = ({
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" disableGutters={embedded}>
       <HeaderMeta title={`${i18n.t('signupRequests:cTitle')} - ${SITE_NAME}`} />
       <SignupRequests
         items={items}
@@ -179,7 +183,12 @@ const SignupRequestsPage = ({
 SignupRequestsPage.propTypes = {
   alertError: PropTypes.func.isRequired,
   alertSuccess: PropTypes.func.isRequired,
+  readAdminCounts: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,
+  // Set by the administration area, where this is a tab: the page then
+  // sits under the area's header card and must be as wide as it. The
+  // side padding is for when this is a page of its own.
+  embedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
@@ -194,6 +203,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     alertSuccess: (message) => {
       return dispatch(actions.app.alert.success(message));
+    },
+    readAdminCounts: () => {
+      return dispatch(actions.admin.readCounts());
     },
   };
 };

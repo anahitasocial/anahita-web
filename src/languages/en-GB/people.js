@@ -16,6 +16,9 @@ export default {
     // Deletion copy, namespace-specific — groups carry their own in groups.js,
     // because the sign-in and passkey lines here are meaningless for a group.
     delete: 'Delete',
+    // The card title. Its text is in the accounts namespace, shared with
+    // the accounts list.
+    purge: 'Delete permanently',
     // Archive. The copy does the work here: archive sits next to delete and
     // must never read as the gentler option. Permanence first, then what is
     // preserved — which is the reason to choose it, not a softener.

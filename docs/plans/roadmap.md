@@ -29,10 +29,11 @@ Each milestone ends in a shippable state.
 | 5b | ✅ | 0c · gRPC calls authenticated and encrypted: mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
 | 6 | ✅ | 6 · Sign in with a code | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/login-code.md) | services | 3–4 | — |
 | 7 | ✅ | 6b · Codes for signup, reset and email change (step-up by code left out) | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/login-code.md) (phase 2) | services + web | 3–4 | 6 |
-| **M3. Administration and moderation** |  | | | | **about 13** | |
-| 8 | ⬜ | 4a · Admin area | [admin-area.md](admin-area.md) | web | 1 | — |
-| 9 | ⬜ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/abuse-report-service.md) | services + web | 6 | 4a |
-| 10 | ⬜ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-hard-delete.md) | services + web | 6 | 4a |
+| **M3. Administration and moderation** | ✅ | | | | **about 15** | |
+| 8 | ✅ | 4a · Admin area | [admin-area.md](done/admin-area.md) | web | 1 | — |
+| 9 | ✅ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/abuse-report-service.md) | services + web | 6 | 4a |
+| 10 | ✅ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-hard-delete.md) | services + web | 6 | 4a |
+| 10b | ✅ | 28 · One name for timestamps: every date-and-time column and field ends in `_at` | [timestamp-names.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/timestamp-names.md) | services + web | 2 | 4b, 5 |
 | **M4. Posting experience** |  | | | | **about 13–18** | |
 | 11 | ⬜ | 13 · Composer audience picker, then members-only / preview / no-public settings | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/instance-privacy.md) | services + web | 5–7 | 4a |
 | 12 | ⬜ | 20 · Language on posts | [content-language.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-language.md) | services + web | 2–3 | — |
@@ -63,7 +64,7 @@ Each milestone ends in a shippable state.
 | **Before the first release** |  | | | | **about 1–1½** | |
 | 27 | ⬜ | 27 · One clean schema: fold the migrations into a baseline | [migration-baseline.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/migration-baseline.md) | services | 1–1½ | every schema change above |
 
-**Total: about 465–615 hours, roughly 115–155 sessions** at about 4 h per session. Shared pieces built once save a few percent:
+**Total: about 475–625 hours, roughly 117–157 sessions** at about 4 h per session. Shared pieces built once save a few percent:
 - the rate limiter;
 - `FilterNodesForViewer`;
 - the jobs queue;

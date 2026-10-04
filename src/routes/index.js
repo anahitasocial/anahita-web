@@ -47,9 +47,9 @@ import PeopleAdd from '../containers/people/Add';
 import DashboardPage from '../containers/Dashboard';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
+import Admin from '../containers/admin';
 import Settings from '../containers/settings';
-import SignupRequests from '../containers/auth/SignupRequests';
-import Invites from '../containers/auth/Invites';
+import AdminRedirects from '../containers/admin/Redirects';
 import StaticPage from '../containers/page';
 import NotFoundPage from '../containers/NotFound';
 
@@ -235,6 +235,40 @@ const AppRoutes = () => {
               </AuthenticatedRoute>
           }
           />
+          {/* The administration area. One page, with the tab in the address
+            so an email can link to the tab it is about. Which tabs appear,
+            and whether the page opens at all, is decided by who is looking:
+            see containers/admin/tabs. AuthenticatedRoute only establishes
+            that somebody is signed in. */}
+          <Route
+            path="/admin"
+            element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
+          }
+          />
+          <Route
+            path="/admin/:tab"
+            element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
+          }
+          />
+          {/* One thing inside a tab: a reported case, /admin/reports/12. */}
+          <Route
+            path="/admin/:tab/:id"
+            element={
+              <AuthenticatedRoute>
+                <Admin />
+              </AuthenticatedRoute>
+          }
+          />
+
+          {/* Site settings: super administrators only, and a page of its own
+            for that reason. The administration area is what every
+            administrator shares. The page checks the permission itself. */}
           <Route
             path="/settings"
             element={
@@ -244,26 +278,26 @@ const AppRoutes = () => {
           }
           />
 
-          {/* Administrator-level, and separate from /settings for that
-            reason. auth-service gates both on IsAdminOrSuperAdmin while
-            settings is super-admin-only, so folding them in would have
-            hidden them from the administrators they are for.
-
-            Each page checks the permission itself; AuthenticatedRoute
-            only establishes that somebody is signed in. */}
+          {/* Where the signup queue used to live, kept so bookmarks and
+            links in mail already sent still arrive.
+            /settings/signup-requests never existed as a page: it is the
+            address the signup-request email carried by mistake. */}
+          <Route
+            path="/settings/signup-requests"
+            element={<Navigate to="/admin/signup-requests" replace />}
+          />
           <Route
             path="/signup-requests"
-            element={
-              <AuthenticatedRoute>
-                <SignupRequests />
-              </AuthenticatedRoute>
-          }
+            element={<Navigate to="/admin/signup-requests" replace />}
           />
+
+          {/* Still a page of its own for a member who may invite; a tab in
+            the administration area for an administrator. */}
           <Route
             path="/invites"
             element={
               <AuthenticatedRoute>
-                <Invites />
+                <AdminRedirects.InvitesPage />
               </AuthenticatedRoute>
           }
           />

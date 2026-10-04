@@ -10,6 +10,6 @@ export default shape({
   type: oneOf(['node.tag.hashtag-service.hashtag.v1']),
   alias: string,
   name: string,
-  creationTime: string,
-  updateTime: string,
+  createdAt: string,
+  updatedAt: string,
 });

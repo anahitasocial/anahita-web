@@ -18,7 +18,7 @@ export default shape({
     'node.story.story-service.story.v1',
   ]),
   component: string,
-  creationTime: string,
+  createdAt: string,
   commands: arrayOf(string),
   owner: ActorType,
   subject: PersonType,

@@ -6,7 +6,7 @@ export default {
   id: null,
   type: '',
   service: '',
-  creationTime: '0000-00-00 00:00:00',
+  createdAt: '0000-00-00 00:00:00',
   subject: PersonDefault,
   object: NodeDefault,
   target: ActorDefault,

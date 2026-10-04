@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import utils from '../../utils';
@@ -10,6 +11,7 @@ import i18n from '../../languages';
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlDelete from '../controls/Delete';
 import ControlFollow from '../controls/Follow';
+import useReport from '../reports/useReport';
 
 import PersonType from '../../proptypes/Person';
 import NodeType from '../../proptypes/Node';
@@ -44,8 +46,9 @@ const FeedItemMenu = ({
   const canSubscribe = node.id && isSubscribable(node);
   const canFollow = permissions.actor.canFollow(node.owner, viewer);
   const canDelete = node.commands && node.commands.includes('delete');
+  const report = useReport(viewer, node);
 
-  if (!canSubscribe && !canFollow && !canDelete) {
+  if (!canSubscribe && !canFollow && !canDelete && !report.canReport) {
     return null;
   }
 
@@ -89,7 +92,17 @@ const FeedItemMenu = ({
             node={node}
             key={`feed-delete-${id}`}
           />}
+        {report.canReport &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              report.open();
+            }}
+          >
+            {i18n.t('abuseReports:report')}
+          </MenuItem>}
       </Menu>
+      {report.dialog}
     </>
   );
 };

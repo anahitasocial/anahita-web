@@ -14,6 +14,7 @@ import ControlDelete from '../../controls/Delete';
 
 import PersonType from '../../../proptypes/Person';
 import LocationType from '../../../proptypes/Location';
+import useReport from '../../reports/useReport';
 
 const { withRef } = utils.component;
 
@@ -23,8 +24,10 @@ const LocationMenu = ({
   location,
   viewer,
   handleEdit = null,
+  canAdminister = false,
 }) => {
   const canEdit = permissions.canEdit(viewer, location);
+  const report = useReport(viewer, location);
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
 
   const handleOpenMenu = (event) => {
@@ -52,7 +55,7 @@ const LocationMenu = ({
         open={Boolean(menuAnchorEl)}
         onClose={handleClose}
       >
-        {handleEdit &&
+        {canAdminister && handleEdit &&
           <MenuItem
             onClick={() => {
               handleEdit();
@@ -62,13 +65,24 @@ const LocationMenu = ({
           >
             Edit
           </MenuItem>}
-        <DeleteActionWithRef
-          node={location}
-          redirect="/locations/"
-          key={`location-delete-${location.id}`}
-          confirmMessage={i18n.t('locations:confirm.delete')}
-        />
+        {canAdminister &&
+          <DeleteActionWithRef
+            node={location}
+            redirect="/locations/"
+            key={`location-delete-${location.id}`}
+            confirmMessage={i18n.t('locations:confirm.delete')}
+          />}
+        {report.canReport &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              report.open();
+            }}
+          >
+            {i18n.t('abuseReports:report')}
+          </MenuItem>}
       </Menu>
+      {report.dialog}
     </>
   );
 };
@@ -77,6 +91,8 @@ LocationMenu.propTypes = {
   location: LocationType.isRequired,
   viewer: PersonType.isRequired,
   handleEdit: PropTypes.func,
+  // Administrators edit and delete; anybody signed in may report.
+  canAdminister: PropTypes.bool,
 };
 
 export default LocationMenu;

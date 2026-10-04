@@ -59,6 +59,7 @@ export const ITEMS = {
   DISABLE: 'disable',
   ARCHIVE: 'archive',
   DELETE: 'delete',
+  PURGE: 'purge',
 };
 
 // `bare` says the item's component does NOT render its own MUI Card, so the
@@ -178,6 +179,17 @@ const ALL_SECTIONS = [
         viewerOnly: false,
         requiresDelete: true,
       },
+      {
+        // Last, below the delete it must not be mistaken for: that one can
+        // be taken back for thirty days and this cannot. Super
+        // administrators only, and never on their own profile — the
+        // server refuses both.
+        key: ITEMS.PURGE,
+        bare: true,
+        viewerOnly: false,
+        requiresSuperAdmin: true,
+        notViewer: true,
+      },
     ],
   },
 ];
@@ -194,7 +206,9 @@ const ALL_SECTIONS = [
 // applying it uniformly is what closes the sign-in-activity hole the flat
 // layout had: its Tab was gated on the viewer but its panel only on the
 // namespace, so loading somebody else's settings requested their session list.
-export const getPersonSections = ({ isViewer, canDelete, isAdmin }) => {
+export const getPersonSections = ({
+  isViewer, canDelete, isAdmin, isSuperAdmin = false,
+}) => {
   return ALL_SECTIONS
     .map((section) => {
       const items = section.items.filter((item) => {
@@ -207,6 +221,10 @@ export const getPersonSections = ({ isViewer, canDelete, isAdmin }) => {
         }
 
         if (item.requiresAdmin && !isAdmin) {
+          return false;
+        }
+
+        if (item.requiresSuperAdmin && !isSuperAdmin) {
           return false;
         }
 
@@ -295,12 +313,18 @@ export const getGroupTabs = ({ canDelete, isAdmin }) => {
 // The lifecycle actions inside a group's Danger zone, in the same order and by
 // the same rules as the person page: the reversible one first, then the two
 // that are not.
-export const getGroupDangerItems = ({ canDelete, isAdmin }) => {
+export const getGroupDangerItems = ({ canDelete, isAdmin, isSuperAdmin = false }) => {
   return [
     { key: ITEMS.DISABLE, bare: true, requiresAdmin: true },
     { key: ITEMS.ARCHIVE, bare: true, requiresDelete: true },
     { key: ITEMS.DELETE, bare: true, requiresDelete: true },
+    // Delete permanently, with no thirty days. Super administrators only.
+    { key: ITEMS.PURGE, bare: true, requiresSuperAdmin: true },
   ].filter((item) => {
+    if (item.requiresSuperAdmin && !isSuperAdmin) {
+      return false;
+    }
+
     if (item.requiresDelete && !canDelete) {
       return false;
     }

@@ -68,8 +68,8 @@ const MediumCard = ({
   const cover = getCoverURL(medium);
   const url = getURL(medium);
   const author = getAuthor(medium);
-  const creationTime = moment.utc(medium.creationTime).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(medium.creationTime).fromNow();
+  const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
+  const creationTimeFromNow = moment.utc(medium.createdAt).fromNow();
 
   const [isPortraitLoaded, setIsPortraitLoaded] = useState(!portrait);
 
@@ -119,7 +119,7 @@ const MediumCard = ({
           <>
             <Link
               href={url}
-              title={creationTime}
+              title={createdAt}
             >
               {creationTimeFromNow}
             </Link>

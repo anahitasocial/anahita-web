@@ -57,8 +57,8 @@ const ActorCard = ({
   const cover = getCoverURL(actor);
   const url = getURL(actor);
   const slug = `@${slugify(actor.alias.toLowerCase())}`;
-  const creationTime = moment.utc(actor.creationTime).local().format('LLL').toString();
-  const lastVisitDate = isPerson(actor) ? moment.utc(actor.lastVisitDate).local().format('LLL').toString() : null;
+  const createdAt = moment.utc(actor.createdAt).local().format('LLL').toString();
+  const lastVisitedAt = isPerson(actor) ? moment.utc(actor.lastVisitedAt).local().format('LLL').toString() : null;
 
   return (
     <Card
@@ -113,15 +113,15 @@ const ActorCard = ({
           <div>
             <Typography variant="caption">
               {i18n.t('people:person.joinedDate', {
-                date: creationTime,
+                date: createdAt,
               })}
             </Typography>
           </div>
           <div>
-            {lastVisitDate &&
+            {lastVisitedAt &&
             <Typography variant="caption">
               {i18n.t('people:person.lastVisitOn', {
-                date: lastVisitDate,
+                date: lastVisitedAt,
               })}
             </Typography>}
           </div>

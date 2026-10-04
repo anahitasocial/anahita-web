@@ -6,6 +6,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
+import useReport from '../../reports/useReport';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -36,6 +37,7 @@ const ActorsReadControls = ({
   const showBlock = isAuthenticated && perms.canBlock(actor, viewer);
   const showEdit = perms.canEdit(actor);
   const showFeature = isAuthenticated && perms.canFeature(actor, viewer);
+  const report = useReport(viewer, actor);
 
   return (
     <>
@@ -86,7 +88,17 @@ const ActorsReadControls = ({
             what is destroyed, what is recoverable and by when — so the
             ceremony there was decorative while this existed. Deleting a
             profile is now a deliberate trip to settings. */}
+        {report.canReport &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              report.open();
+            }}
+          >
+            {i18n.t('abuseReports:report')}
+          </MenuItem>}
       </Menu>
+      {report.dialog}
     </>
   );
 };

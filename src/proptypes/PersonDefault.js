@@ -18,7 +18,7 @@ export default {
   followerCount: 0,
   leaderCount: 0,
   subscriberCount: 0,
-  creationTime: '0000-00-00 00:00:00',
-  updateTime: '0000-00-00 00:00:00',
+  createdAt: '0000-00-00 00:00:00',
+  updatedAt: '0000-00-00 00:00:00',
   websiteUrl: '',
 };

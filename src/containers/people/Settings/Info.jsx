@@ -106,7 +106,7 @@ const PersonSettingsInfo = (props) => {
   }
 
   const canAdmin = canAdminister(person) && viewer.id !== person.id;
-  const joinedDate = moment.utc(person.creationTime).format('LLL').toString();
+  const joinedDate = moment.utc(person.createdAt).format('LLL').toString();
 
   if (!isEditing) {
     return (

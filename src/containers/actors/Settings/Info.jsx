@@ -99,7 +99,7 @@ const ActorsSettingsInfo = (props) => {
     );
   }
 
-  const created = `Created ${moment.utc(actor.creationTime).format('LLL').toString()}`;
+  const created = `Created ${moment.utc(actor.createdAt).format('LLL').toString()}`;
   const canAdmin = canAdminister(viewer);
 
   if (!isEditing) {

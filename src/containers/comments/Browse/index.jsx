@@ -57,7 +57,7 @@ const CommentsBrowse = ({
       node: { id, objectType },
       start,
       limit: LIMIT,
-      sort: 'created_on',
+      sort: 'created_at',
       direction: 'asc',
     });
   }, [id, objectType, start]);

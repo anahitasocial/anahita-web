@@ -12,6 +12,7 @@ import AdminsIcon from '@mui/icons-material/SupervisorAccount';
 import DisableIcon from '@mui/icons-material/Block';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import DeleteIcon from '@mui/icons-material/DeleteForever';
+import PurgeIcon from '@mui/icons-material/DeleteSweep';
 import DangerIcon from '@mui/icons-material/Warning';
 import ActorSettingCard from '../../../components/ActorSetting';
 
@@ -23,6 +24,7 @@ import WebAuthn from '../../auth/WebAuthn';
 import Email from '../../auth/Email';
 import Totp from '../../auth/Totp';
 import Delete from './Delete';
+import Purge from './Purge';
 import Archive from './Archive';
 import Disable from './Disable';
 import Info from './Info';
@@ -65,6 +67,7 @@ const ITEM_ICONS = {
   [ITEMS.DISABLE]: <DisableIcon />,
   [ITEMS.ARCHIVE]: <ArchiveIcon />,
   [ITEMS.DELETE]: <DeleteIcon />,
+  [ITEMS.PURGE]: <PurgeIcon />,
   [ITEMS.DANGER]: <DangerIcon />,
 };
 
@@ -105,6 +108,7 @@ const cardsFor = (namespace) => {
       ActorAccess: Access(namespace),
       ActorPermissions: Permissions(namespace),
       ActorDelete: Delete(namespace),
+      ActorPurge: Purge(namespace),
       ActorArchive: Archive(namespace),
       ActorDisable: Disable(namespace),
     };
@@ -171,6 +175,7 @@ const ActorsSettings = ({
     ActorAccess,
     ActorPermissions,
     ActorDelete,
+    ActorPurge,
     ActorArchive,
     ActorDisable,
   } = cardsFor(namespace);
@@ -184,6 +189,9 @@ const ActorsSettings = ({
   // satisfy and who should not be able to suspend it.
   const isAdmin = utils.node.isAdmin(viewer);
 
+  // Removing an account for good is a super administrator's alone.
+  const isSuperAdmin = utils.node.isSuperAdmin(viewer);
+
   // WebAuthn credentials belong to the current session's own account —
   // the endpoints are viewer-scoped and take no actor id — so the tab
   // only makes sense on the viewer's own profile.
@@ -194,7 +202,9 @@ const ActorsSettings = ({
   }
 
   if (isPerson) {
-    const sections = getPersonSections({ isViewer, canDelete, isAdmin });
+    const sections = getPersonSections({
+      isViewer, canDelete, isAdmin, isSuperAdmin,
+    });
     const section = resolveSection(params.section, sections);
 
     // What each item key renders. Built here rather than in sections.js so that
@@ -221,6 +231,7 @@ const ActorsSettings = ({
       [ITEMS.DISABLE]: <ActorDisable />,
       [ITEMS.ARCHIVE]: <ActorArchive />,
       [ITEMS.DELETE]: <ActorDelete />,
+      [ITEMS.PURGE]: <ActorPurge />,
     };
 
     return (
@@ -281,7 +292,7 @@ const ActorsSettings = ({
     return entry.key === tab;
   }) || groupTabs[0];
 
-  const groupDangerItems = getGroupDangerItems({ canDelete, isAdmin });
+  const groupDangerItems = getGroupDangerItems({ canDelete, isAdmin, isSuperAdmin });
 
   // Every key getGroupTabs can return needs an entry here, or selecting that
   // tab renders undefined — a tab that opens onto nothing, with no error.
@@ -308,6 +319,7 @@ const ActorsSettings = ({
                 [ITEMS.DISABLE]: <ActorDisable />,
                 [ITEMS.ARCHIVE]: <ActorArchive />,
                 [ITEMS.DELETE]: <ActorDelete />,
+                [ITEMS.PURGE]: <ActorPurge />,
               }[item.key]}
             </SettingsItem>
           );

@@ -14,6 +14,9 @@ export default {
     permissions: 'Autorisations',
     access: 'Accès',
     delete: 'Supprimer',
+    // The card title. Its text is in the accounts namespace, shared with
+    // the accounts list.
+    purge: 'Supprimer définitivement',
     archive: 'Archiver',
     archivePrompts: {
       permanent: 'L\'archivage est irréversible. Il n\'y a aucun moyen de restaurer ce profil.',

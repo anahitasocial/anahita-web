@@ -11,6 +11,8 @@ import avatar from './avatar';
 import comments from './comments';
 import commentStatus from './commentsStatus';
 import cover from './cover';
+import abuseReports from './abuseReports';
+import accounts from './accounts';
 import email from './email';
 import feed from './feed';
 import hashtags from './hashtags';
@@ -141,6 +143,8 @@ const apis = {
   tagGraph,
   totp,
   webauthn,
+  abuseReports,
+  accounts,
   email,
 };
 

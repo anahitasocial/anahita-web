@@ -128,7 +128,7 @@ const MediumStepperLightboxDefault = ({
   const canZoom = hasPortrait && Boolean(zoom) && !hasZoomFailed;
   const url = getURL(medium);
   const author = getAuthor(medium);
-  const creationTime = moment.utc(medium.creationTime).local().format('LLL').toString();
+  const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
 
   // Drop a download still in flight: its photo is no longer the one on screen.
   const cancelZoomLoad = useCallback(() => {
@@ -382,9 +382,9 @@ const MediumStepperLightboxDefault = ({
                   subheader={
                     <Link
                       href={url}
-                      title={creationTime}
+                      title={createdAt}
                     >
-                      {moment.utc(medium.creationTime).fromNow()}
+                      {moment.utc(medium.createdAt).fromNow()}
                     </Link>
                   }
                   action={menu}

@@ -5,6 +5,7 @@ import createAction from './create';
 import createGraphAction from './createGraph';
 import createActorFollowRequests from './actor/followRequests';
 import createActorAdminsAction from './actor/admins';
+import admin from './admin';
 import app from './app';
 import commentsInline from './commentsInline';
 import likes from './likes';
@@ -40,6 +41,7 @@ const namespaces = {
 };
 
 const actions = {
+  admin,
   app,
   commentsInline,
   likes,
