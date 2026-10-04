@@ -3,6 +3,6 @@ export default {
   type: 'node.tag.hashtag-service.hashtag.v1',
   name: '',
   alias: '',
-  creationTime: '0000-00-00 00:00:00',
-  updateTime: '0000-00-00 00:00:00',
+  createdAt: '0000-00-00 00:00:00',
+  updatedAt: '0000-00-00 00:00:00',
 };

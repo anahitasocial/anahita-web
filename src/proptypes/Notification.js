@@ -14,7 +14,7 @@ export default shape({
   id: number,
   type: string,
   service: string,
-  creationTime: string,
+  createdAt: string,
   subject: PersonType,
   object: oneOfType([
     MediumType,

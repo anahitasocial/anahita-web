@@ -20,7 +20,7 @@ const CommentListItem = ({
   isEditing = false,
   commentForm = null,
 }) => {
-  const { author, creationTime } = comment;
+  const { author, createdAt } = comment;
 
   if (isEditing) {
     return (
@@ -65,7 +65,7 @@ const CommentListItem = ({
                 actor={author}
                 linked={Boolean(author.id)}
               />
-              {moment(creationTime).fromNow()}
+              {moment(createdAt).fromNow()}
             </>
           }
           secondary={

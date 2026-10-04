@@ -36,7 +36,7 @@ export default shape({
   followerCount: number,
   leaderCount: number,
   subscriberCount: number,
-  creationTime: string,
-  updateTime: string,
+  createdAt: string,
+  updatedAt: string,
   websiteUrl: string,
 });

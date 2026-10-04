@@ -42,7 +42,7 @@ describe('the response transform', () => {
       person_type: 'super-administrator',
       preferred_username: 'ada',
       totp_enabled: false,
-      last_visit_date: '2026-09-13T20:37:42Z',
+      last_visited_at: '2026-09-13T20:37:42Z',
       avatar_urls: { large: { url: 'https://example.com/a.png' } },
     });
 
@@ -51,7 +51,7 @@ describe('the response transform', () => {
     expect(data.alias).toBe('ada');
 
     expect(data.totpEnabled).toBe(false);
-    expect(data.lastVisitDate).toBe('2026-09-13T20:37:42Z');
+    expect(data.lastVisitedAt).toBe('2026-09-13T20:37:42Z');
     expect(data.preferredUsername).toBe('ada');
     expect(data.avatarUrls.large.url).toBe('https://example.com/a.png');
 

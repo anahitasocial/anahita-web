@@ -8,7 +8,7 @@ import {
 
 // Matches responses.OAuthClientItem in auth-service.
 //
-// createTime and updateTime used to be here and never existed: the
+// createTime and updatedAt used to be here and never existed: the
 // server sends created_at, which arrives as createdAt, and has no
 // updated field at all. The clients table read client.createTime and
 // rendered `new Date(undefined)` — "Invalid Date" in every row.

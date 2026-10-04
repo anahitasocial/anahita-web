@@ -56,7 +56,7 @@ const MediumReadArticle = ({
 
   const portrait = getPortraitURL(medium, 'large');
   const author = getAuthor(medium);
-  const creationTime = moment.utc(medium.creationTime).local().format('LLL').toString();
+  const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
 
   const portraitMedia = (
     <CardMedia
@@ -101,7 +101,7 @@ const MediumReadArticle = ({
             }
             subheader={
               <>
-                {creationTime}
+                {createdAt}
                 {access}
               </>
             }

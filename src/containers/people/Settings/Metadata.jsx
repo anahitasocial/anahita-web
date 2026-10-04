@@ -78,7 +78,7 @@ const Metadata = ({ person }) => {
     };
   }, [person]);
 
-  const joined = formatDateTime(person.creationTime);
+  const joined = formatDateTime(person.createdAt);
   const seen = formatDateTime(lastSignIn);
 
   return (

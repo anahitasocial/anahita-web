@@ -7,7 +7,7 @@ export default {
   name: '',
   objectType: 'node.story.story-service.story.v1',
   component: '',
-  creationTime: '0000-00-00 00:00:00',
+  createdAt: '0000-00-00 00:00:00',
   commands: [],
   owner: ActorDefault,
   subject: PersonDefault,

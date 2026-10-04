@@ -66,8 +66,8 @@ const StoryCardComment = ({
   const title = story.object && story.object.name;
   const body = story.object && story.object.body;
   const url = story.object ? getURL(story.object) : '';
-  const creationTime = moment.utc(story.creationTime).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(story.creationTime).fromNow();
+  const createdAt = moment.utc(story.createdAt).local().format('LLL').toString();
+  const creationTimeFromNow = moment.utc(story.createdAt).fromNow();
 
   return (
     <Card
@@ -82,7 +82,7 @@ const StoryCardComment = ({
         subheader={
           <Link
             href={url}
-            title={creationTime}
+            title={createdAt}
           >
             {creationTimeFromNow}
           </Link>

@@ -66,8 +66,8 @@ const FeedCardComment = ({
   } = node.parent;
   const { body } = node;
   const url = getURL(node.parent);
-  const creationTime = moment.utc(node.creationTime).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(node.creationTime).fromNow();
+  const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
+  const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
 
   return (
     <Card
@@ -109,7 +109,7 @@ const FeedCardComment = ({
         subheader={
           <Link
             href={url}
-            title={creationTime}
+            title={createdAt}
           >
             {creationTimeFromNow}
           </Link>

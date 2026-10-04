@@ -58,7 +58,7 @@ const MediumReadDefault = ({
   const portrait = getPortraitURL(medium, 'original');
   const cover = getCoverURL(medium, 'large');
   const author = getAuthor(medium);
-  const creationTime = moment.utc(medium.creationTime).local().format('LLL').toString();
+  const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
 
   const [isLoaded, setIsLoaded] = useState(!portrait);
 
@@ -128,7 +128,7 @@ const MediumReadDefault = ({
             }
             subheader={
               <>
-                {creationTime}
+                {createdAt}
                 {access}
               </>
             }

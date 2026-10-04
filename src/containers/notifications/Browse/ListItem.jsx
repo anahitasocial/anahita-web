@@ -31,7 +31,7 @@ const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
       </ListItemAvatar>
       <ListItemText
         primary={<NotificationMessage notification={item} />}
-        secondary={moment.utc(item.creationTime).fromNow()}
+        secondary={moment.utc(item.createdAt).fromNow()}
       />
       <ListItemSecondaryAction>
         <IconButton

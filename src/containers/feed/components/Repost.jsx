@@ -51,8 +51,8 @@ const FeedCardRepost = ({
 }) => {
   const { classes } = useStyles();
   const url = getURL(node.parent);
-  const creationTime = moment.utc(node.creationTime).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(node.creationTime).fromNow();
+  const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
+  const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
 
   return (
     <Card
@@ -71,7 +71,7 @@ const FeedCardRepost = ({
         subheader={
           <Link
             href={url}
-            title={creationTime}
+            title={createdAt}
           >
             {creationTimeFromNow}
           </Link>
