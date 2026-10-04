@@ -16,6 +16,7 @@ import home from './home';
 import documents from './documents';
 import about from './about';
 import abuseReports from './abuseReports';
+import accounts from './accounts';
 import admin from './admin';
 import settings from './settings';
 import signupRequests from './signupRequests';
@@ -60,6 +61,7 @@ export default {
   documents,
   about,
   abuseReports,
+  accounts,
   admin,
   settings,
   signupRequests,

@@ -136,9 +136,27 @@ history. The main paths:
 | Reports | `/admin/reports`, and `/admin/reports/:id` for one case | Administrators and super administrators |
 | Signup requests | `/admin/signup-requests` | Administrators and super administrators |
 | Invites | `/admin/invites` | Administrators and super administrators |
+| Accounts | `/admin/accounts` | Super administrators only |
 
-Site settings are not a tab. They are for super administrators alone, so they
-keep their own page (`/settings`) and menu entry.
+Site settings are not a tab. They configure the installation, where this area
+looks after the people on it, so they keep their own page (`/settings`) and
+menu entry.
+
+**Accounts** (`containers/admin/Accounts`) lists every person or group, least
+recently active first, with filters for finding the ones nobody uses: an
+activity tier (empty, dormant, active), dates, never verified, never onboarded,
+nothing written, and for groups, no administrator. Accounts are ticked, or all
+that match are selected at once, up to 500, and "Delete permanently" opens a
+dialog that says what will go, asks for the count to be typed (`PURGE 37`) and
+for a proof of identity, then shows the progress. The server answers a purge
+before the work is done, so `usePurgeProgress` asks how the batch is doing
+until nothing is queued. Administrators and the viewer cannot be ticked. A
+group with no administrator links to its settings, where one is appointed.
+
+The same purge for one account is the last card in a profile's Danger zone,
+"Delete permanently" (`containers/actors/Settings/Purge.jsx`), offered to
+super administrators on anybody's profile but their own. What a purge removes
+is in the services' `docs/account-lifecycle.md`.
 
 A tab the viewer may not see is not drawn, and its address lands on the first
 tab they may. Somebody with no tabs sees a "restricted" message, and has no

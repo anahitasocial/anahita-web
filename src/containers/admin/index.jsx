@@ -21,6 +21,7 @@ import PersonType from '../../proptypes/Person';
 
 import SignupRequests from '../auth/SignupRequests';
 import Invites from '../auth/Invites';
+import Accounts from './Accounts';
 import Reports from './Reports';
 
 import tabs from './tabs';
@@ -32,6 +33,7 @@ const PANELS = {
   reports: Reports,
   'signup-requests': SignupRequests,
   invites: Invites,
+  accounts: Accounts,
 };
 
 // The administration area: one home for the pages only administrators

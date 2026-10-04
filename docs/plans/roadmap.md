@@ -32,7 +32,7 @@ Each milestone ends in a shippable state.
 | **M3. Administration and moderation** | 🚧 | | | | **about 15** | |
 | 8 | ✅ | 4a · Admin area | [admin-area.md](done/admin-area.md) | web | 1 | — |
 | 9 | ✅ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/abuse-report-service.md) | services + web | 6 | 4a |
-| 10 | ⬜ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-hard-delete.md) | services + web | 6 | 4a |
+| 10 | ✅ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-hard-delete.md) | services + web | 6 | 4a |
 | 10b | ⬜ | 28 · One name for timestamps: every date-and-time column and field ends in `_at` | [timestamp-names.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/timestamp-names.md) | services + web | 2 | 4b, 5 |
 | **M4. Posting experience** |  | | | | **about 13–18** | |
 | 11 | ⬜ | 13 · Composer audience picker, then members-only / preview / no-public settings | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/instance-privacy.md) | services + web | 5–7 | 4a |

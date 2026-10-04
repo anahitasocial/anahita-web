@@ -16,8 +16,9 @@ const { isAdmin } = utils.node;
 // The key is the last part of the address: /admin/<key>.
 //
 // Site settings are deliberately not here. They are for super
-// administrators alone and have a menu entry of their own (/settings);
-// this area is what every administrator shares.
+// administrators alone and have a menu entry of their own (/settings):
+// they configure the installation, and this area looks after the people
+// on it.
 const TABS = [
   {
     // First, because it is the tab where waiting costs the most.
@@ -44,6 +45,17 @@ const TABS = [
     title: 'invites:mTitle',
     canView: (viewer) => {
       return isAdmin(viewer);
+    },
+  },
+  {
+    // Every person and group, for clearing out the ones nobody uses.
+    // Super administrators only: what this tab is for is removing
+    // accounts for good, which an administrator may not do. Last, because
+    // it is the one tab most administrators never see.
+    key: 'accounts',
+    title: 'accounts:mTitle',
+    canView: (viewer) => {
+      return permissions.account.canBrowse(viewer);
     },
   },
 ];

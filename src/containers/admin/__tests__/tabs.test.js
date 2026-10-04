@@ -12,11 +12,16 @@ const keys = (list) => {
 };
 
 describe('administration tabs', () => {
-  it('shows administrators and super administrators the same tabs', () => {
+  it('shows an administrator the three shared tabs', () => {
     expect(keys(tabs.visibleTabs(viewer('administrator'))))
       .toEqual(['reports', 'signup-requests', 'invites']);
+  });
+
+  // Removing accounts for good is a super administrator's power, so the
+  // list for choosing them is theirs alone.
+  it('shows a super administrator the accounts tab as well', () => {
     expect(keys(tabs.visibleTabs(viewer('super-administrator'))))
-      .toEqual(['reports', 'signup-requests', 'invites']);
+      .toEqual(['reports', 'signup-requests', 'invites', 'accounts']);
   });
 
   // Site settings are a page of their own, for super administrators.

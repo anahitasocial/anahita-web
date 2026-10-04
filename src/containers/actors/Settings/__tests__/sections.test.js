@@ -130,6 +130,51 @@ describe('settings tabs and panels agree', () => {
     expect(items).toEqual([ITEMS.DISABLE, ITEMS.ARCHIVE, ITEMS.DELETE]);
   });
 
+  // Delete permanently: no thirty days, so it is a super administrator's
+  // alone, it comes last, and it is never offered on their own profile.
+  describe('delete permanently', () => {
+    const dangerKeys = (who) => {
+      const danger = getPersonSections({ canDelete: true, isAdmin: true, ...who })
+        .find((section) => {
+          return section.key === 'danger';
+        });
+      return danger.items.map((item) => {
+        return item.key;
+      });
+    };
+
+    it('is the last action a super administrator sees on somebody else', () => {
+      expect(dangerKeys({ isViewer: false, isSuperAdmin: true }))
+        .toEqual([ITEMS.DISABLE, ITEMS.ARCHIVE, ITEMS.DELETE, ITEMS.PURGE]);
+    });
+
+    it('is not offered to an administrator, or on your own profile', () => {
+      expect(dangerKeys({ isViewer: false, isSuperAdmin: false })).not.toContain(ITEMS.PURGE);
+      expect(dangerKeys({ isViewer: true, isSuperAdmin: true })).not.toContain(ITEMS.PURGE);
+    });
+
+    it('is the last action on a group, for a super administrator only', () => {
+      const keys = (isSuperAdmin) => {
+        return getGroupDangerItems({ canDelete: true, isAdmin: true, isSuperAdmin })
+          .map((item) => {
+            return item.key;
+          });
+      };
+
+      expect(keys(true)).toEqual([ITEMS.DISABLE, ITEMS.ARCHIVE, ITEMS.DELETE, ITEMS.PURGE]);
+      expect(keys(false)).not.toContain(ITEMS.PURGE);
+    });
+
+    it('has a panel on both pages', () => {
+      expect(panelKeysIn(indexSource, 'panels')).toContain('PURGE');
+
+      const mapStart = indexSource.indexOf('const groupPanels = {');
+      const start = indexSource.indexOf('[ITEMS.DANGER]:', mapStart);
+      const dangerBlock = indexSource.slice(start, indexSource.indexOf('};', start));
+      expect(dangerBlock).toContain('[ITEMS.PURGE]:');
+    });
+  });
+
   it('drops the Danger tab when none of its actions apply', () => {
     const tabs = getGroupTabs({ canDelete: false, isAdmin: false }).map((t) => {
       return t.key;

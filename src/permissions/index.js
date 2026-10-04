@@ -1,3 +1,4 @@
+import account from './account';
 import actor from './actor';
 import comment from './comment';
 import invite from './invite';
@@ -11,6 +12,7 @@ import settings from './settings';
 import signupRequest from './signupRequest';
 
 export default {
+  account,
   actor,
   comment,
   invite,
