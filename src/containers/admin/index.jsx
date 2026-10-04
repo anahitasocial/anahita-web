@@ -119,7 +119,9 @@ const Admin = ({
           </Tabs>
         </Card>
       </Box>
-      <Panel />
+      {/* embedded: the panel drops its own side padding, so it lines up
+          with the card above it. */}
+      <Panel embedded />
     </>
   );
 };

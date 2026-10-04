@@ -28,9 +28,9 @@ const TABS = [
     },
   },
   {
-    // Invitations are here for administrators, who see everybody's.
-    // Where members may invite too (INVITES_FROM), they keep their own
-    // page at /invites: this area is not theirs to open.
+    // An administrator's own invitations. Where members may invite too
+    // (INVITES_FROM), they keep the page at /invites: this area is not
+    // theirs to open.
     key: 'invites',
     title: 'invites:mTitle',
     canView: (viewer) => {

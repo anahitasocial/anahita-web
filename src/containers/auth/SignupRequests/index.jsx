@@ -59,6 +59,7 @@ const SignupRequestsPage = ({
   alertSuccess,
   readAdminCounts,
   viewer,
+  embedded = false,
 }) => {
   const [items, setItems] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
@@ -156,7 +157,7 @@ const SignupRequestsPage = ({
   }
 
   return (
-    <Container maxWidth="lg">
+    <Container maxWidth="lg" disableGutters={embedded}>
       <HeaderMeta title={`${i18n.t('signupRequests:cTitle')} - ${SITE_NAME}`} />
       <SignupRequests
         items={items}
@@ -184,6 +185,10 @@ SignupRequestsPage.propTypes = {
   alertSuccess: PropTypes.func.isRequired,
   readAdminCounts: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,
+  // Set by the administration area, where this is a tab: the page then
+  // sits under the area's header card and must be as wide as it. The
+  // side padding is for when this is a page of its own.
+  embedded: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {
