@@ -12,8 +12,6 @@ import AuthenticatedRoute from './AuthenticatedRoute';
 import analytics from '../utils/analytics';
 
 import AuthPage from '../containers/auth';
-import AuthToken from '../containers/auth/Token';
-import PasswordResetPage from '../containers/auth/PasswordReset';
 
 import HomePage from '../containers/home';
 
@@ -131,16 +129,8 @@ const AppRoutes = () => {
           <Route path="/support" element={<SupportPage />} />
           <Route path="/search" element={<SearchPage />} />
 
-          <Route
-            path="/token/:token/resetpassword"
-            element={<AuthToken resetPassword />}
-          />
-          <Route path="/token/:token" element={<AuthToken />} />
-
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/auth/:tab" element={<AuthPage />} />
-
-          <Route path="/passwordreset" element={<PasswordResetPage />} />
 
           <Route
             path="/dashboard"
@@ -163,9 +153,8 @@ const AppRoutes = () => {
           />
           {/* The password card now lives inside the Security section, so this
             redirects rather than selecting a tab. The URL is not ours to
-            retire: it is in the username-change notification email and is
-            where the password-reset token flow lands people — see
-            containers/auth/Token. Password is the first card in that
+            retire: it is in the username-change notification email.
+            Password is the first card in that
             section, so the redirect arrives on it without scrolling. */}
           <Route
             path="/people/:id/settings/password"

@@ -8,7 +8,6 @@ import createActorAdminsAction from './actor/admins';
 import app from './app';
 import commentsInline from './commentsInline';
 import likes from './likes';
-import password from './password';
 import session from './session';
 import socialgraph from './socialgraph';
 import stories from './stories';
@@ -44,7 +43,6 @@ const actions = {
   app,
   commentsInline,
   likes,
-  password,
   session,
   socialgraph,
   stories,

@@ -7,7 +7,6 @@ import locations from './locations';
 import locationsGraph from './locationsGraph';
 import hashtags from './hashtags';
 import notifications from './notifications';
-import password from './password';
 import search from './search';
 import session from './session';
 import socialgraph from './socialgraph';
@@ -49,7 +48,6 @@ const reducers = {
   locationsGraph,
   hashtags,
   notifications,
-  password,
   search,
   session,
   socialgraph,

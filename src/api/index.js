@@ -34,7 +34,6 @@ import session from './session';
 import socialgraph from './socialgraph';
 import inbounds from './inbounds';
 import tagGraph from './tag_graph';
-import token from './token';
 import totp from './totp';
 import api from '../utils/api';
 import webauthn from './webauthn';
@@ -140,7 +139,6 @@ const apis = {
   socialgraph,
   inbounds,
   tagGraph,
-  token,
   totp,
   webauthn,
   email,
