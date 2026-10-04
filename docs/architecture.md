@@ -164,7 +164,7 @@ reported and in the app's language, and are fetched once per kind.
 
 The Reports tab lists cases, filtered by status and by reason with two select
 lists, and adds more with a "Show more" button. It opens one case at a time. It records an
-administrator's decision; it does not delete or disable anything. "Open it"
+administrator's decision; it does not delete or disable anything. "View"
 goes to the reported thing, where those controls already live. See
 anahita-services' `docs/abuse-reports.md`.
 

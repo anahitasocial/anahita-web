@@ -73,7 +73,7 @@ export default {
     back: 'All reports',
     targetGone: 'This no longer exists',
     targetGoneHint: 'It was deleted, so there is nothing left to decide.',
-    open: 'Open it',
+    open: 'View',
     openHint: 'Deleting, disabling or blocking is done on its own page. A deleted post or comment closes its report by itself.',
     reports: 'Who reported it',
     noDetails: 'No explanation given.',

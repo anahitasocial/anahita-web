@@ -73,7 +73,7 @@ export default {
     back: 'Tous les signalements',
     targetGone: 'Ce contenu n’existe plus',
     targetGoneHint: 'Il a été supprimé : il n’y a plus rien à décider.',
-    open: 'Ouvrir',
+    open: 'Voir',
     openHint: 'La suppression, la désactivation ou le blocage se font sur la page du contenu. Une publication ou un commentaire supprimé ferme son signalement automatiquement.',
     reports: 'Qui l’a signalé',
     noDetails: 'Aucune explication donnée.',
