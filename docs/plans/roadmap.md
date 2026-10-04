@@ -29,8 +29,8 @@ Each milestone ends in a shippable state.
 | 5b | ✅ | 0c · gRPC calls authenticated and encrypted: mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
 | 6 | ✅ | 6 · Sign in with a code | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/login-code.md) | services | 3–4 | — |
 | 7 | ✅ | 6b · Codes for signup, reset and email change (step-up by code left out) | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/login-code.md) (phase 2) | services + web | 3–4 | 6 |
-| **M3. Administration and moderation** |  | | | | **about 13** | |
-| 8 | ⬜ | 4a · Admin area | [admin-area.md](admin-area.md) | web | 1 | — |
+| **M3. Administration and moderation** | 🚧 | | | | **about 13** | |
+| 8 | ✅ | 4a · Admin area | [admin-area.md](done/admin-area.md) | web | 1 | — |
 | 9 | ⬜ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/abuse-report-service.md) | services + web | 6 | 4a |
 | 10 | ⬜ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-hard-delete.md) | services + web | 6 | 4a |
 | **M4. Posting experience** |  | | | | **about 13–18** | |

@@ -117,9 +117,33 @@ history. The main paths:
 | `/groups/:id/settings` | A group's settings |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags/:alias`, `/locations/:id` | Hashtags and places |
-| `/notifications`, `/settings`, `/invites`, `/signup-requests` | The viewer's own pages, and administration |
+| `/notifications` | The viewer's notifications |
+| `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
+| `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
+| `/settings`, `/signup-requests` | Where two administration pages used to be. Both redirect into `/admin` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
+
+### The administration area
+
+`/admin` is one page with a tab per thing administrators look after
+(`src/containers/admin`). Each tab names who may see it in
+`containers/admin/tabs.js`, reusing the rule the page behind it enforces:
+
+| Tab | Address | Who sees it |
+| --- | --- | --- |
+| Signup requests | `/admin/signup-requests` | Administrators and super administrators |
+| Invites | `/admin/invites` | Administrators and super administrators |
+| Settings | `/admin/settings` | Super administrators |
+
+A tab the viewer may not see is not drawn, and its address lands on the first
+tab they may. Somebody with no tabs sees a "restricted" message, and has no
+Administration entry in the left menu.
+
+The menu entry carries the number of things waiting, which today is pending
+signup requests. The app reads it when an administrator's session is known,
+every five minutes, when the window regains focus, and after a request is
+approved or rejected (`actions.admin.readCounts`, `state.admin.counts`).
 
 ## What a viewer may do
 

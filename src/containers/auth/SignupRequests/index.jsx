@@ -57,6 +57,7 @@ const errorMessage = (err, fallbackKey) => {
 const SignupRequestsPage = ({
   alertError,
   alertSuccess,
+  readAdminCounts,
   viewer,
 }) => {
   const [items, setItems] = useState([]);
@@ -110,6 +111,8 @@ const SignupRequestsPage = ({
           });
         });
         setDeciding(null);
+        // One fewer waiting: the number on the menu and on the tab.
+        readAdminCounts();
         alertSuccess(decision === 'approve' ?
           i18n.t('signupRequests:alerts.approved', {
             username: request.username,
@@ -179,6 +182,7 @@ const SignupRequestsPage = ({
 SignupRequestsPage.propTypes = {
   alertError: PropTypes.func.isRequired,
   alertSuccess: PropTypes.func.isRequired,
+  readAdminCounts: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,
 };
 
@@ -194,6 +198,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     alertSuccess: (message) => {
       return dispatch(actions.app.alert.success(message));
+    },
+    readAdminCounts: () => {
+      return dispatch(actions.admin.readCounts());
     },
   };
 };

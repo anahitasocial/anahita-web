@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Badge from '@mui/material/Badge';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
@@ -20,8 +21,7 @@ import GroupsIcon from '@mui/icons-material/GroupWork';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import LabelIcon from '@mui/icons-material/Label';
 import LocationIcon from '@mui/icons-material/LocationOn';
-import SettingsIcon from '@mui/icons-material/Settings';
-import SignupRequestsIcon from '@mui/icons-material/HowToReg';
+import AdminIcon from '@mui/icons-material/AdminPanelSettings';
 import InvitesIcon from '@mui/icons-material/MailOutlined';
 import LegalIcon from '@mui/icons-material/MenuBook';
 import SupportIcon from '@mui/icons-material/ContactSupport';
@@ -33,12 +33,14 @@ import i18n from '../../../languages';
 import PersonType from '../../../proptypes/Person';
 import NodeInfoType from '../../../proptypes/NodeInfo';
 import permissions from '../../../permissions';
+import adminTabs from '../../../containers/admin/tabs';
 
 const LeftMenu = ({
   isAuthenticated,
   viewer,
   nodeInfo = null,
   onLogoutClick = null,
+  adminWaiting = 0,
 }) => {
   const location = useLocation();
   const { pathname = '/' } = location;
@@ -102,29 +104,36 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('locations:cTitle')} />
       </ListItemButton>
-      {/* Three separate gates, not one, because the three pages answer
-          to three different rules. The queue is administrator-level,
-          settings is super admin, and invites is whatever INVITES_FROM
-          says — which is why that one is the only gate here that needs
-          an answer from the server.
-
-          Invites is gated on canAdd rather than canBrowse. Anybody
-          registered may READ their own list, but a page that can only
-          ever be empty is not worth a permanent menu entry; somebody
-          who still has invitations from before a tightening can reach
-          /invites directly. */}
-      {isAuthenticated && permissions.signupRequest.canBrowse(viewer) &&
+      {/* One entry for everything administrators look after: the signup
+          queue, invitations and site settings are tabs behind it. Shown to
+          anybody who may see at least one of those tabs, with the number
+          of things waiting for them. */}
+      {isAuthenticated && adminTabs.canBrowse(viewer) &&
         <ListItemButton
           component={Link}
-          to="/signup-requests"
-          selected={pathname === '/signup-requests'}
+          to="/admin"
+          selected={pathname.startsWith('/admin')}
         >
           <ListItemIcon>
-            <SignupRequestsIcon />
+            <Badge
+              badgeContent={adminWaiting}
+              color="primary"
+              aria-label={adminWaiting > 0 ?
+                i18n.t('admin:waiting', { count: adminWaiting }) :
+                undefined}
+            >
+              <AdminIcon />
+            </Badge>
           </ListItemIcon>
-          <ListItemText primary={i18n.t('signupRequests:mTitle')} />
+          <ListItemText primary={i18n.t('admin:mTitle')} />
         </ListItemButton>}
-      {isAuthenticated && permissions.invite.canAdd(viewer, inviteSettings) &&
+      {/* Invitations, for a member who may invite (INVITES_FROM) but is not
+          an administrator: they have no administration area, so the page
+          keeps its own entry for them. Gated on canAdd rather than
+          canBrowse: anybody registered may READ their own list, but a page
+          that can only ever be empty is not worth a permanent menu entry. */}
+      {isAuthenticated && !adminTabs.canBrowse(viewer) &&
+        permissions.invite.canAdd(viewer, inviteSettings) &&
         <ListItemButton
           component={Link}
           to="/invites"
@@ -134,17 +143,6 @@ const LeftMenu = ({
             <InvitesIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('invites:mTitle')} />
-        </ListItemButton>}
-      {isAuthenticated && permissions.settings.canBrowse(viewer) &&
-        <ListItemButton
-          component={Link}
-          to="/settings/"
-          selected={pathname === '/settings/'}
-        >
-          <ListItemIcon>
-            <SettingsIcon />
-          </ListItemIcon>
-          <ListItemText primary={i18n.t('settings:mTitle')} />
         </ListItemButton>}
       {/* <ListItemButton
         component={Link}
@@ -210,6 +208,8 @@ LeftMenu.propTypes = {
   viewer: PersonType.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   nodeInfo: NodeInfoType,
+  // How many things are waiting in the administration area.
+  adminWaiting: PropTypes.number,
 };
 
 export default LeftMenu;

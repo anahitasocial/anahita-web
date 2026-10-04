@@ -1,6 +1,7 @@
 import { combineReducers } from 'redux';
 import createReducer from './create';
 
+import admin from './admin';
 import app from './app';
 import commentsInline from './commentsInline';
 import locations from './locations';
@@ -42,6 +43,7 @@ const namespaces = {
 };
 
 const reducers = {
+  admin,
   app,
   commentsInline,
   locations,

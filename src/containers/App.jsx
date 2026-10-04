@@ -24,6 +24,8 @@ import Alerts from './Alerts';
 import MenuLogo from '../components/Logo';
 import actions from '../actions';
 import NotificationButton from './notifications/Button';
+import adminTabs from './admin/tabs';
+import { Admin as ADMIN } from '../constants';
 
 const drawerWidth = 240;
 const { LeftMenu } = assets.navs;
@@ -90,8 +92,10 @@ const App = ({
   isAuthenticated,
   viewer,
   nodeInfo,
+  adminCounts,
   whoami,
   readNodeInfo,
+  readAdminCounts,
   logout,
 }) => {
   const { classes } = useStyles();
@@ -103,6 +107,28 @@ const App = ({
     whoami();
     readNodeInfo();
   }, []);
+
+  // The number on the Administration menu entry. Read once it is known
+  // that the viewer has an administration area, then every few minutes
+  // and whenever the window comes back into focus, which is when
+  // somebody returning to the tab wants it to be right.
+  const hasAdminArea = isAuthenticated && adminTabs.canBrowse(viewer);
+
+  useEffect(() => {
+    if (!hasAdminArea) {
+      return undefined;
+    }
+
+    readAdminCounts();
+
+    const timer = window.setInterval(readAdminCounts, ADMIN.COUNTS_REFRESH_MS);
+    window.addEventListener('focus', readAdminCounts);
+
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('focus', readAdminCounts);
+    };
+  }, [hasAdminArea]);
 
   const handleDrawerToggle = () => {
     setOpen(!open);
@@ -127,6 +153,7 @@ const App = ({
           viewer={viewer}
           isAuthenticated={isAuthenticated}
           nodeInfo={nodeInfo}
+          adminWaiting={adminTabs.waitingCount(viewer, adminCounts)}
           classNames={classes}
         />
         <Divider />
@@ -215,7 +242,9 @@ App.propTypes = {
   logout: PropTypes.func.isRequired,
   whoami: PropTypes.func.isRequired,
   readNodeInfo: PropTypes.func.isRequired,
+  readAdminCounts: PropTypes.func.isRequired,
   nodeInfo: NodeInfoType.isRequired,
+  adminCounts: PropTypes.objectOf(PropTypes.number).isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -232,6 +261,7 @@ const mapStateToProps = (state) => {
     nodeInfo,
     isAuthenticated,
     viewer,
+    adminCounts: state.admin.counts,
   };
 };
 
@@ -242,6 +272,9 @@ function mapDispatchToProps(dispatch) {
     },
     readNodeInfo: () => {
       return dispatch(actions.app.readNodeInfo());
+    },
+    readAdminCounts: () => {
+      return dispatch(actions.admin.readCounts());
     },
     logout: () => {
       return dispatch(actions.session.deleteItem());

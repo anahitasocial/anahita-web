@@ -1,6 +1,6 @@
 # Admin area
 
-*Roadmap item 4a, planned 2026-09-28. See the [roadmap](roadmap.md) for order and dependencies.*
+*Roadmap item 4a, planned 2026-09-28. See the [roadmap](../roadmap.md) for order and dependencies.*
 
 ## Context
 Admin screens are scattered today. `/signup-requests` and `/invites` are admin pages and `/settings` is a super-admin page, each with its own entry in the left menu. Abuse reports (item 4b) and future moderation screens need one home.
@@ -46,9 +46,26 @@ A phase is finished only when these pages match the code. anahita-services pages
 - **web `architecture.md`**, *Routes*: `/admin` and its tabs, and the redirects from `/signup-requests`, `/invites`, `/settings`; *What a viewer may do*: which roles see which tab.
 - **services `registration.md`**, *The approval queue*: the signup-request email now links to `/admin/signup-requests`.
 
+## What was built (2026-10-03)
+
+- **`/admin` and `/admin/:tab`** (`src/containers/admin`): a header card with route-linked tabs for Signup requests, Invites and Settings. `tabs.js` says who sees each, and the page redirects to the first tab the viewer may see.
+- **The existing pages are the tab panels, unchanged,** except that Settings leaves out its own title card when it is a tab.
+- **One menu entry,** Administration, with a badge for the number waiting. `actions.admin.readCounts` reads the pending signup requests total, on session, every five minutes, on window focus, and after a decision.
+- **Redirects:** `/settings` and `/signup-requests` go to their tabs. `/settings/signup-requests`, the address the email carried by mistake, goes there too.
+- **The email link** in anahita-services now points at `/admin/signup-requests`.
+- **Strings:** an `admin` namespace in en-GB and fr-FR.
+- **Tests:** `containers/admin/__tests__/tabs.test.js` covers who sees which tab and the waiting count.
+
+**Done differently from the plan:**
+
+- **`/invites` is still a page for members who may invite.** `INVITES_FROM` can let ordinary members invite, and they have no administration area. They keep the Invites menu entry and the page. An administrator opening `/invites` is sent to the tab.
+- **No Reports tab yet.** It arrives with item 4b, along with its count.
+
+**Not checked:** the page was not opened in a browser here. Lint, the test suite and the production build pass.
+
 ## Status
 
 | Item | State |
 | --- | --- |
 | Plan | written 2026-09-28 |
-| Implementation | not started |
+| Implementation | done 2026-10-03, on branch `m3-admin-moderation` |

@@ -15,6 +15,7 @@ import dashboard from './dashboard';
 import home from './home';
 import documents from './documents';
 import about from './about';
+import admin from './admin';
 import settings from './settings';
 import signupRequests from './signupRequests';
 import invites from './invites';
@@ -57,6 +58,7 @@ export default {
   home,
   documents,
   about,
+  admin,
   settings,
   signupRequests,
   invites,
