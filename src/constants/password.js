@@ -1,7 +1,3 @@
-import async from './async';
-
-const password = async('password');
-
 // PASSWORD_MIN_LENGTH / PASSWORD_MAX_LENGTH mirror the server's
 // validation on requests.PasswordEdit and requests.PasswordReset
 // (`min=15,max=150`). They live here rather than under FIELDS because
@@ -21,7 +17,6 @@ const PASSWORD_MIN_LENGTH = 15;
 const PASSWORD_MAX_LENGTH = 150;
 
 export default {
-  RESET: password('reset'),
   PASSWORD_MIN_LENGTH,
   PASSWORD_MAX_LENGTH,
   FIELDS: {

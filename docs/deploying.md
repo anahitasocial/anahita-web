@@ -37,7 +37,7 @@ the app's address in two places, or signing in fails:
 
 | Where | What |
 | --- | --- |
-| nginx's CORS settings | Allow the app's origin, such as `https://www.example.com`, with credentials |
+| The gateway's `WEB_ORIGIN` setting | The app's origin, such as `https://www.example.com`. The gateway allows that one origin to call the API with the session cookie. See anahita-services' `docs/deploying.md` |
 | The `anahita-web` OAuth client | Register `https://www.example.com/oauth/callback` as a redirect URI. A site administrator can do this in the app under **Settings › OAuth clients**; on a new installation it can go in anahita-services' `auth-defaults/oauth_seed_clients.json` before the first run |
 
 Serve both over HTTPS. The session is a cookie set by the API's domain and sent

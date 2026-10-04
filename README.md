@@ -1,4 +1,4 @@
-![Anahita social networking platform and framework](https://s3.ca-central-1.amazonaws.com/production.anahita.io/media/logos/homepage_logo.png)
+![Anahita social networking platform and framework](docs/images/anahita-logo.png)
 
 # Anahita Web
 

@@ -25,8 +25,15 @@ L.Icon.Default.mergeOptions({
   shadowUrl: markerShadow,
 });
 
-const TILE_URL = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
-const TILE_ATTRIBUTION = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+// Where map tiles come from. The default is OpenStreetMap's public tile
+// server, which sees the address of everybody who opens a map and asks heavy
+// users to host their own. REACT_APP_MAP_TILE_URL points the map at another
+// server, in Leaflet's {s}/{z}/{x}/{y} form; the attribution is whatever that
+// server's licence asks for.
+const TILE_URL = process.env.REACT_APP_MAP_TILE_URL ||
+  'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const TILE_ATTRIBUTION = process.env.REACT_APP_MAP_TILE_ATTRIBUTION ||
+  '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
 
 const DEFAULT_CENTER = [-3.745, -38.523];
 const DEFAULT_ZOOM = 13;

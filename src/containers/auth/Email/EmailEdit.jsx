@@ -32,12 +32,21 @@ const EmailEdit = ({
   fields,
   errors,
   submitting,
-  sent,
+  pendingEmail,
+  code,
+  codeError,
+  confirming,
   onOpen,
   onCancel,
   onChange,
   onSubmit,
+  onCodeChange,
+  onConfirm,
 }) => {
+  // Two steps inside the open card: the new address, then the code that
+  // was mailed to the current one.
+  const awaitingCode = isEditing && Boolean(pendingEmail);
+
   return (
     <Card>
       <CardHeader
@@ -67,10 +76,6 @@ const EmailEdit = ({
 
       {!isEditing &&
         <CardContent>
-          {sent &&
-            <Typography variant="body2" color="primary" gutterBottom>
-              {i18n.t('email:sent', { email: currentEmail })}
-            </Typography>}
           <Typography variant="body2" color="textSecondary">
             {i18n.t('email:description')}
           </Typography>
@@ -88,7 +93,63 @@ const EmailEdit = ({
           </Button>
         </CardActions>}
 
-      {isEditing &&
+      {awaitingCode &&
+        <>
+          <Divider />
+          <form onSubmit={onConfirm} noValidate>
+            <CardContent>
+              <Typography variant="body2" color="textSecondary" gutterBottom>
+                {i18n.t('email:sent', { email: currentEmail, newEmail: pendingEmail })}
+              </Typography>
+
+              <TextField
+                name="code"
+                label={i18n.t('email:fields.code')}
+                value={code}
+                onChange={onCodeChange}
+                error={Boolean(codeError)}
+                helperText={codeError || ''}
+                fullWidth
+                margin="normal"
+                variant="outlined"
+                autoComplete="one-time-code"
+                autoFocus
+                disabled={confirming}
+                required
+                slotProps={{
+                  htmlInput: {
+                    inputMode: 'numeric',
+                    pattern: '[0-9]*',
+                    maxLength: 6,
+                    'aria-label': i18n.t('email:fields.code'),
+                  },
+                }}
+              />
+            </CardContent>
+
+            <CardActions>
+              <Button
+                onClick={onCancel}
+                disabled={confirming}
+                fullWidth
+              >
+                {i18n.t('actions:cancel')}
+              </Button>
+              <Button
+                type="submit"
+                color="primary"
+                variant="contained"
+                disabled={confirming}
+                startIcon={confirming ? <CircularProgress size={16} color="inherit" /> : null}
+                fullWidth
+              >
+                {confirming ? i18n.t('email:confirming') : i18n.t('email:confirm')}
+              </Button>
+            </CardActions>
+          </form>
+        </>}
+
+      {isEditing && !awaitingCode &&
         <>
           <Divider />
           <form onSubmit={onSubmit} noValidate>
@@ -154,11 +215,16 @@ EmailEdit.propTypes = {
   fields: PropTypes.objectOf(PropTypes.any).isRequired,
   errors: PropTypes.objectOf(PropTypes.string).isRequired,
   submitting: PropTypes.bool.isRequired,
-  sent: PropTypes.bool.isRequired,
+  pendingEmail: PropTypes.string.isRequired,
+  code: PropTypes.string.isRequired,
+  codeError: PropTypes.string.isRequired,
+  confirming: PropTypes.bool.isRequired,
   onOpen: PropTypes.func.isRequired,
   onCancel: PropTypes.func.isRequired,
   onChange: PropTypes.func.isRequired,
   onSubmit: PropTypes.func.isRequired,
+  onCodeChange: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
 };
 
 export default EmailEdit;

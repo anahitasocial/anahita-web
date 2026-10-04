@@ -24,11 +24,11 @@ Each milestone ends in a shippable state.
 | 2 | ✅ | 1 · Remove private notes | [remove-private-notes.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-private-notes.md) | services + web | 1 | — |
 | 3 | ✅ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
 | 4 | ✅ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](done/remove-global-media-browse.md) | web + services | ½ | — |
-| **M2. Foundations** |  | | | | **about 14–18** | |
-| 5 | ⬜ | 9 · Cloud-neutral (storage, local Garage/MinIO, upload hardening, keys, k8s overlays) | [cloud-neutral.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/cloud-neutral.md) | services + web | 5–6 | — |
-| 5b | ⬜ | 0c · gRPC calls authenticated and encrypted: mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
-| 6 | ⬜ | 6 · Sign in with a code | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/login-code.md) | services | 3–4 | — |
-| 7 | ⬜ | 6b · Codes for signup, reset, email change, step-up | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/login-code.md) (phase 2) | services + web | 3–4 | 6 |
+| **M2. Foundations** | ✅ | | | | **about 14–18** | |
+| 5 | ✅ | 9 · Cloud-neutral (storage, local Garage, upload hardening, keys, k8s overlays) | [cloud-neutral.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/cloud-neutral.md) | services + web | 5–6 | — |
+| 5b | ✅ | 0c · gRPC calls authenticated and encrypted: mTLS (cert-manager or Linkerd) | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2–3 | 9, 0b |
+| 6 | ✅ | 6 · Sign in with a code | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/login-code.md) | services | 3–4 | — |
+| 7 | ✅ | 6b · Codes for signup, reset and email change (step-up by code left out) | [login-code.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/login-code.md) (phase 2) | services + web | 3–4 | 6 |
 | **M3. Administration and moderation** |  | | | | **about 13** | |
 | 8 | ⬜ | 4a · Admin area | [admin-area.md](admin-area.md) | web | 1 | — |
 | 9 | ⬜ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/abuse-report-service.md) | services + web | 6 | 4a |

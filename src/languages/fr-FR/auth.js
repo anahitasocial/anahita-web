@@ -6,10 +6,6 @@ export default {
   username: "E-mail ou nom d'utilisateur",
   password: 'Mot de passe',
   forgotPassword: 'Mot de passe oublié ?',
-  passwordResetEmail: 'Quelle est votre adresse e-mail ?',
-  actions: {
-    resetPassword: 'Réinitialiser le mot de passe',
-  },
   signup: {
     cTitle: 'Veuillez vous inscrire',
     mTitle: 'Inscription',
@@ -158,8 +154,6 @@ export default {
     error: 'Une erreur est survenue !',
     errorSignupUsernameTaken: "Ce nom d'utilisateur est déjà pris !",
     errorSignupEmailTaken: 'Cette adresse e-mail est déjà utilisée dans notre système !',
-    errorTokenInvalid: 'Ce jeton est invalide !',
-    passwordResetEmailSuccess: 'Nous vous avons envoyé un lien par e-mail. Veuillez cliquer sur ce lien et suivre les instructions !',
     signupEmailSuccess: "Merci ! Nous venons de vous envoyer un lien d'activation de compte par e-mail.",
   },
 };

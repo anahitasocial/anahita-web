@@ -57,13 +57,29 @@ is read:
 | --- | --- |
 | `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | How often to check for new notifications, in milliseconds. `15000` (15 seconds) when unset; `.env.example` sets `1500000` (25 minutes) |
 | `REACT_APP_ASSETS` | The theme to use: the name of a directory under `src/assets/`. Unset uses `src/assets/default`. See [Themes](customising.md#themes) |
-| `REACT_APP_GOOGLE_ANALYTICS` | A Google Analytics measurement ID. Use a GA4 ID (`G-…`); Universal Analytics (`UA-…`) stopped collecting data in 2023 |
+| `REACT_APP_ANALYTICS` | Page-view analytics: `plausible`, `umami` or `matomo`. Unset means off: no script is loaded and nothing leaves the browser |
+| `REACT_APP_ANALYTICS_URL` | Where that analytics service is, for example `https://stats.example.org` |
+| `REACT_APP_ANALYTICS_SITE_ID` | The site as that service knows it: the domain for Plausible, the website id for Umami, the numeric site id for Matomo |
+| `REACT_APP_MAP_TILE_URL` | Where map tiles come from, in Leaflet's `{s}/{z}/{x}/{y}` form. Unset uses OpenStreetMap's public tile server |
+| `REACT_APP_MAP_TILE_ATTRIBUTION` | The credit shown on the map, as the tile server's licence requires. Unset credits OpenStreetMap |
 | `REACT_APP_LOCATION_FIXED_COUNTRY` | Pins every new location to one country, as a two-letter code such as `CA`, and hides the country field |
 | `REACT_APP_LOCATION_FIXED_STATE_PROVINCE` | Pins new locations to one state or province, as a short code such as `BC` |
 | `REACT_APP_LOCATION_FIXED_CITY` | Pins new locations to one city, as free text |
 
 Leave the location variables unset to let people choose freely. That is the
 usual case.
+
+### Third parties the app talks to
+
+With the defaults, the browser contacts two services besides your own API:
+
+- **OpenStreetMap's tile server**, whenever a map is shown. Point
+  `REACT_APP_MAP_TILE_URL` at your own tiles to avoid it.
+- **Video and audio hosts** (YouTube, Vimeo and the like), only when a post
+  embeds something from one of them.
+
+Analytics is off unless you configure it, and all three supported services can
+be self-hosted. The app loads no fonts or scripts from a CDN.
 
 ### Build
 

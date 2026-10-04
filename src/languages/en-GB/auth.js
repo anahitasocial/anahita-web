@@ -6,10 +6,6 @@ export default {
   username: 'Email or Username',
   password: 'Password',
   forgotPassword: 'Forgot password?',
-  passwordResetEmail: 'What is your email?',
-  actions: {
-    resetPassword: 'Reset password',
-  },
   signup: {
     cTitle: 'Please signup',
     mTitle: 'Signup',
@@ -190,8 +186,6 @@ export default {
     error: 'Something went wrong!',
     errorSignupUsernameTaken: 'Username is already taken!',
     errorSignupEmailTaken: 'Email is already available in our system!',
-    errorTokenInvalid: 'This is an invalid token!',
-    passwordResetEmailSuccess: 'We emailed you a link. Please click on that link and follow the instructions!',
     signupEmailSuccess: 'Thank you! We just emailed you an account activation link.',
   },
 };

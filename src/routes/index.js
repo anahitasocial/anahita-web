@@ -1,5 +1,4 @@
-import React, { useEffect } from 'react';
-import ReactGA from 'react-ga';
+import React, { useEffect, useRef } from 'react';
 import { useSelector } from 'react-redux';
 import {
   Navigate,
@@ -10,10 +9,9 @@ import {
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthenticatedRoute from './AuthenticatedRoute';
+import analytics from '../utils/analytics';
 
 import AuthPage from '../containers/auth';
-import AuthToken from '../containers/auth/Token';
-import PasswordResetPage from '../containers/auth/PasswordReset';
 
 import HomePage from '../containers/home';
 
@@ -91,18 +89,15 @@ const AppRoutes = () => {
   });
   const location = useLocation();
 
-  useEffect(() => {
-    if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
-      ReactGA.initialize(process.env.REACT_APP_GOOGLE_ANALYTICS, {
-        debug: process.env.NODE_ENV === 'development' && false,
-      });
-    }
-  }, []);
+  // Analytics is off unless the build configures it; see utils/analytics.js.
+  // start runs once, and hands back the function that records a page view.
+  const pageview = useRef(null);
+  if (pageview.current === null) {
+    pageview.current = analytics.start();
+  }
 
   useEffect(() => {
-    if (process.env.REACT_APP_GOOGLE_ANALYTICS) {
-      ReactGA.send({ hitType: 'pageview', page: location.pathname + location.search });
-    }
+    pageview.current(location.pathname + location.search);
     window.scrollTo(0, 0);
   }, [location]);
 
@@ -134,16 +129,8 @@ const AppRoutes = () => {
           <Route path="/support" element={<SupportPage />} />
           <Route path="/search" element={<SearchPage />} />
 
-          <Route
-            path="/token/:token/resetpassword"
-            element={<AuthToken resetPassword />}
-          />
-          <Route path="/token/:token" element={<AuthToken />} />
-
           <Route path="/auth" element={<AuthPage />} />
           <Route path="/auth/:tab" element={<AuthPage />} />
-
-          <Route path="/passwordreset" element={<PasswordResetPage />} />
 
           <Route
             path="/dashboard"
@@ -166,9 +153,8 @@ const AppRoutes = () => {
           />
           {/* The password card now lives inside the Security section, so this
             redirects rather than selecting a tab. The URL is not ours to
-            retire: it is in the username-change notification email and is
-            where the password-reset token flow lands people — see
-            containers/auth/Token. Password is the first card in that
+            retire: it is in the username-change notification email.
+            Password is the first card in that
             section, so the redirect arrives on it without scrolling. */}
           <Route
             path="/people/:id/settings/password"

@@ -47,7 +47,6 @@
     "react-country-region-selector": "^4",
     "react-dom": "^19.3.0",
     "react-dropzone": "^20",
-    "react-ga": "^3.3.0",
     "react-geolocated": "^4",
     "react-helmet-async": "^3",
     "react-i18next": "^17",

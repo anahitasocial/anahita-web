@@ -24,23 +24,32 @@ const formFields = form.createFormFields([
 // themselves — because email is what password reset delivers to, so
 // whoever can set it can take the account.
 //
-// Submitting does not change anything yet. It mails a confirmation link
-// to the person's CURRENT address, and the change applies only once
-// they open it and re-type the new address.
+// Submitting does not change anything yet. It mails a 6-digit code to
+// the person's CURRENT address, and the change applies only once they
+// type that code into this card.
 //
 // Two independent proofs in total: a recent step-up (a passkey, or a
 // password plus a passcode, or a password) and control of the existing
 // inbox. The step-up is collected by the dialog on a 403, not by this
 // form — see containers/auth/StepUp.
+const CODE_LENGTH = 6;
+
 const Email = ({
   viewer,
   alertError,
+  alertSuccess,
+  readSession,
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [fields, setFields] = useState(formFields);
   const [submitting, setSubmitting] = useState(false);
   const [errors, setErrors] = useState({});
-  const [sent, setSent] = useState(false);
+  // The address a code has been sent for, while it is waiting to be
+  // entered. Empty when nothing is pending.
+  const [pendingEmail, setPendingEmail] = useState('');
+  const [code, setCode] = useState('');
+  const [codeError, setCodeError] = useState('');
+  const [confirming, setConfirming] = useState(false);
   const [stepUpOpen, setStepUpOpen] = useState(false);
 
   const resetForm = () => {
@@ -48,17 +57,32 @@ const Email = ({
     setErrors({});
   };
 
+  const resetCode = () => {
+    setPendingEmail('');
+    setCode('');
+    setCodeError('');
+  };
+
   const handleOpen = () => {
-    // Clear the "check your inbox" notice when reopening — it describes
-    // a previous request, not the one about to be made.
-    setSent(false);
+    resetCode();
     resetForm();
     setIsEditing(true);
   };
 
+  // Cancelling while a code is pending only forgets it here. The code
+  // itself expires on the server, and asking again replaces it.
   const handleCancel = () => {
+    resetCode();
     resetForm();
     setIsEditing(false);
+  };
+
+  const handleCodeChange = (event) => {
+    // Digits only, so a pasted "123 456" still works.
+    setCode(event.target.value.replace(/\D/g, '').slice(0, CODE_LENGTH));
+    if (codeError) {
+      setCodeError('');
+    }
   };
 
   const handleOnChange = (event) => {
@@ -103,9 +127,9 @@ const Email = ({
     api.email.edit({ email: newEmail })
       .then(() => {
         setSubmitting(false);
-        resetForm();
-        setIsEditing(false);
-        setSent(true);
+        setCode('');
+        setCodeError('');
+        setPendingEmail(newEmail);
       })
       .catch((err) => {
         setSubmitting(false);
@@ -157,6 +181,73 @@ const Email = ({
     submit();
   };
 
+  const handleOnConfirm = (event) => {
+    event.preventDefault();
+
+    if (confirming) {
+      return;
+    }
+
+    if (code.length !== CODE_LENGTH) {
+      setCodeError(i18n.t('email:errors.codeRequired'));
+      return;
+    }
+
+    setConfirming(true);
+
+    api.email.confirm({ code })
+      .then(() => {
+        setConfirming(false);
+        resetCode();
+        resetForm();
+        setIsEditing(false);
+        alertSuccess(i18n.t('email:changed'));
+
+        // The server has just signed every session out, this one
+        // included. Reading the session again is what tells the rest of
+        // the app, which then shows the signed-out state.
+        readSession();
+      })
+      .catch((err) => {
+        setConfirming(false);
+
+        const status = err && err.response && err.response.status;
+
+        if (status === 422) {
+          const remaining = err.response.data && err.response.data.remaining;
+          setCodeError(
+            typeof remaining === 'number'
+              ? i18n.t('email:errors.codeWrong', { count: remaining })
+              : i18n.t('email:errors.codeWrong'),
+          );
+          setCode('');
+          return;
+        }
+
+        if (status === 400) {
+          setCodeError(i18n.t('email:errors.codeRequired'));
+          return;
+        }
+
+        // Nothing pending any more: expired, replaced or out of tries.
+        // Back to the address form, which is where a new code comes from.
+        if (status === 410) {
+          resetCode();
+          setErrors({ email: i18n.t('email:errors.codeExpired') });
+          return;
+        }
+
+        // Somebody else took the address while the code was in transit.
+        if (status === 409) {
+          resetCode();
+          setErrors({ email: i18n.t('email:errors.taken') });
+          return;
+        }
+
+        alertError(i18n.t('email:errors.confirmFailed'));
+      });
+  };
+
   return (
     <>
       <EmailEdit
@@ -165,11 +256,16 @@ const Email = ({
         fields={fields}
         errors={errors}
         submitting={submitting}
-        sent={sent}
+        pendingEmail={pendingEmail}
+        code={code}
+        codeError={codeError}
+        confirming={confirming}
         onOpen={handleOpen}
         onCancel={handleCancel}
         onChange={handleOnChange}
         onSubmit={handleOnSubmit}
+        onCodeChange={handleCodeChange}
+        onConfirm={handleOnConfirm}
       />
       <StepUp
         open={stepUpOpen}
@@ -188,6 +284,8 @@ const Email = ({
 Email.propTypes = {
   viewer: PropTypes.objectOf(PropTypes.any).isRequired,
   alertError: PropTypes.func.isRequired,
+  alertSuccess: PropTypes.func.isRequired,
+  readSession: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -199,6 +297,12 @@ const mapDispatchToProps = (dispatch) => {
   return {
     alertError: (message) => {
       return dispatch(actions.app.alert.error(message));
+    },
+    alertSuccess: (message) => {
+      return dispatch(actions.app.alert.success(message));
+    },
+    readSession: () => {
+      return dispatch(actions.session.read());
     },
   };
 };
