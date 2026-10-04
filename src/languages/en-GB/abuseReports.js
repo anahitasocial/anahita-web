@@ -52,11 +52,15 @@ export default {
     other: 'Something else',
   },
   list: {
-    filter: 'Which reports to show',
+    status: 'Status',
+    reason: 'Reason',
+    anyReason: 'Any reason',
+    showing: 'Showing {{shown}} of {{total}}',
     empty: {
       open: 'Nothing is waiting. No open reports.',
       actioned: 'No reports have been actioned.',
       dismissed: 'No reports have been dismissed.',
+      filtered: 'No reports match.',
     },
     reports_one: '{{count}} report',
     reports_other: '{{count}} reports',

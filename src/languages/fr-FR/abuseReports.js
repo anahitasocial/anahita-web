@@ -52,11 +52,15 @@ export default {
     other: 'Autre chose',
   },
   list: {
-    filter: 'Signalements à afficher',
+    status: 'État',
+    reason: 'Motif',
+    anyReason: 'Tous les motifs',
+    showing: '{{shown}} sur {{total}} affichés',
     empty: {
       open: 'Rien n’attend. Aucun signalement ouvert.',
       actioned: 'Aucun signalement n’a été traité.',
       dismissed: 'Aucun signalement n’a été rejeté.',
+      filtered: 'Aucun signalement ne correspond.',
     },
     reports_one: '{{count}} signalement',
     reports_other: '{{count}} signalements',

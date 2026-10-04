@@ -16,8 +16,8 @@ import LinearProgress from '@mui/material/LinearProgress';
 import List from '@mui/material/List';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import MenuItem from '@mui/material/MenuItem';
+import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import ReportsIcon from '@mui/icons-material/Flag';
@@ -31,26 +31,61 @@ import target from './target';
 const STATUSES = ['open', 'actioned', 'dismissed'];
 const PAGE_SIZE = 20;
 
+// The filter's value for "every reason". Not '', which a select shows as
+// nothing chosen.
+const ANY_REASON = 'any';
+
 const formatDate = (value) => {
   const date = new Date(value);
   return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString();
 };
 
-// The cases, by status. Open ones are the work; the other two are the
-// record of what was decided.
+// The cases, by status and, if wanted, by a reason somebody gave. Open
+// ones are the work; the other two statuses are the record of what was
+// decided.
+//
+// The filters are select lists rather than a row of buttons: three
+// buttons already crowd a phone's width, and a list of sixteen reasons
+// could not be buttons at any width.
+//
+// More cases are fetched by a "Show more" button that adds to the list,
+// not by pages. The open list shrinks as it is worked through, and with
+// pages every case closed would shift the rest up and hide one behind
+// the page boundary.
 const ReportsList = ({
   alertError,
 }) => {
   const [status, setStatus] = useState('open');
+  const [reason, setReason] = useState(ANY_REASON);
+  const [reasons, setReasons] = useState([]);
   const [items, setItems] = useState([]);
   const [total, setTotal] = useState(0);
   const [isFetching, setIsFetching] = useState(true);
 
-  const fetchPage = useCallback((offset, which) => {
+  // Every reason on the installation's list, for the filter. If this
+  // fails the list still works, with the filter left at "any".
+  useEffect(() => {
+    let current = true;
+
+    api.abuseReports.reasons(undefined, i18n.language)
+      .then(({ data }) => {
+        if (current) {
+          setReasons(data.data || []);
+        }
+      })
+      .catch(() => {});
+
+    return () => {
+      current = false;
+    };
+  }, []);
+
+  const fetchPage = useCallback((offset, which, why) => {
     setIsFetching(true);
 
     return api.abuseReports.browseCases({
       status: which,
+      reason: why === ANY_REASON ? '' : why,
       limit: PAGE_SIZE,
       offset,
       lang: i18n.language,
@@ -73,8 +108,10 @@ const ReportsList = ({
 
   useEffect(() => {
     setItems([]);
-    fetchPage(0, status);
-  }, [fetchPage, status]);
+    fetchPage(0, status, reason);
+  }, [fetchPage, status, reason]);
+
+  const filtered = reason !== ANY_REASON;
 
   return (
     <Card>
@@ -92,28 +129,57 @@ const ReportsList = ({
       />
       <Divider />
       <CardContent>
-        <ToggleButtonGroup
-          exclusive
-          size="small"
-          color="primary"
-          value={status}
-          onChange={(event, value) => {
-            // Clicking the selected button would clear it. One is always
-            // selected.
-            if (value) {
-              setStatus(value);
-            }
+        {/* Side by side where there is room, stacked on a phone. */}
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            gap: 2,
           }}
-          aria-label={i18n.t('abuseReports:list.filter')}
         >
-          {STATUSES.map((value) => {
-            return (
-              <ToggleButton key={value} value={value}>
-                {i18n.t(`abuseReports:statuses.${value}`)}
-              </ToggleButton>
-            );
-          })}
-        </ToggleButtonGroup>
+          <TextField
+            select
+            size="small"
+            name="status"
+            label={i18n.t('abuseReports:list.status')}
+            value={status}
+            onChange={(event) => {
+              setStatus(event.target.value);
+            }}
+            sx={{ minWidth: { sm: 180 } }}
+            fullWidth
+          >
+            {STATUSES.map((value) => {
+              return (
+                <MenuItem key={value} value={value}>
+                  {i18n.t(`abuseReports:statuses.${value}`)}
+                </MenuItem>
+              );
+            })}
+          </TextField>
+          <TextField
+            select
+            size="small"
+            name="reason"
+            label={i18n.t('abuseReports:list.reason')}
+            value={reason}
+            onChange={(event) => {
+              setReason(event.target.value);
+            }}
+            fullWidth
+          >
+            <MenuItem value={ANY_REASON}>
+              {i18n.t('abuseReports:list.anyReason')}
+            </MenuItem>
+            {reasons.map((item) => {
+              return (
+                <MenuItem key={item.key} value={item.key}>
+                  {item.label}
+                </MenuItem>
+              );
+            })}
+          </TextField>
+        </Box>
       </CardContent>
 
       {isFetching && <LinearProgress />}
@@ -122,7 +188,9 @@ const ReportsList = ({
       {!isFetching && items.length === 0 &&
         <CardContent>
           <Typography variant="body2" color="textSecondary">
-            {i18n.t(`abuseReports:list.empty.${status}`)}
+            {filtered ?
+              i18n.t('abuseReports:list.empty.filtered') :
+              i18n.t(`abuseReports:list.empty.${status}`)}
           </Typography>
         </CardContent>}
 
@@ -156,16 +224,16 @@ const ReportsList = ({
                         })}`}
                       </Typography>
                       <Box sx={{ mt: 0.5 }}>
-                        {(item.reasons || []).map((reason) => {
+                        {(item.reasons || []).map((given) => {
                           return (
                             <Chip
-                              key={reason.key}
+                              key={given.key}
                               size="small"
                               variant="outlined"
                               sx={{ mr: 0.5, mb: 0.5 }}
-                              label={reason.count > 1 ?
-                                `${reason.label} × ${reason.count}` :
-                                reason.label}
+                              label={given.count > 1 ?
+                                `${given.label} × ${given.count}` :
+                                given.label}
                             />
                           );
                         })}
@@ -178,13 +246,25 @@ const ReportsList = ({
           })}
         </List>}
 
+      {/* How much of the list is on screen, so the size of the queue is
+          known without reaching its end. */}
+      {items.length > 0 &&
+        <CardContent>
+          <Typography variant="caption" color="textSecondary">
+            {i18n.t('abuseReports:list.showing', {
+              shown: items.length,
+              total: Math.max(total, items.length),
+            })}
+          </Typography>
+        </CardContent>}
+
       {items.length < total &&
         <CardActions>
           <Button
             fullWidth
             disabled={isFetching}
             onClick={() => {
-              fetchPage(items.length, status);
+              fetchPage(items.length, status, reason);
             }}
           >
             {i18n.t('abuseReports:list.more')}

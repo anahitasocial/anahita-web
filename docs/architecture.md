@@ -162,7 +162,8 @@ beside the menu, not inside it, because choosing the item closes the menu.
 The reasons it lists come from the server, for the kind of thing being
 reported and in the app's language, and are fetched once per kind.
 
-The Reports tab lists cases by status and opens one at a time. It records an
+The Reports tab lists cases, filtered by status and by reason with two select
+lists, and adds more with a "Show more" button. It opens one case at a time. It records an
 administrator's decision; it does not delete or disable anything. "Open it"
 goes to the reported thing, where those controls already live. See
 anahita-services' `docs/abuse-reports.md`.

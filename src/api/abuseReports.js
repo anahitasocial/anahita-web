@@ -4,7 +4,7 @@ import axios from 'axios';
 // See anahita-services docs/abuse-reports.md.
 
 // The reasons that can be given for reporting a node of this type, in the
-// given language.
+// given language. With no type, every reason: the administrators' filter.
 const reasons = (type, lang) => {
   return axios.get('/abuse-reports/reasons', {
     params: { type, lang },
@@ -20,16 +20,25 @@ const add = ({ targetId, reasonKey, details = '' }) => {
 
 // --- administrators ---
 
+// `reason` is optional: with it, only the cases in which somebody gave
+// that reason.
 const browseCases = (params = {}) => {
   const {
     status = 'open',
+    reason = '',
     limit = 20,
     offset = 0,
     lang,
   } = params;
+
   return axios.get('/abuse-reports/cases', {
     params: {
-      status, limit, offset, lang,
+      status,
+      // Left out altogether when there is no filter.
+      reason: reason || undefined,
+      limit,
+      offset,
+      lang,
     },
   });
 };
