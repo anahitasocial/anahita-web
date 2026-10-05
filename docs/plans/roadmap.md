@@ -38,6 +38,7 @@ Each milestone ends in a shippable state.
 | 11 | ✅ | 13 · Composer audience picker; members-only, preview and no-new-public settings | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/instance-privacy.md) | services + web | 5–7 | 4a |
 | 12 | ✅ | 20 · Language on posts (the author chooses; detection and backfill left for later) | [content-language.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/content-language.md) | services + web | 2–3 | — |
 | 14 | ✅ | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/photo-albums.md) | services + web | 3–4 | 9 |
+| 14b | ✅ | 29 · One actor service: people and groups merged into `actor-service`. Addresses and type names unchanged; nothing in the web app changes | [actor-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-service.md) | services | under 1 | — |
 | **M5. Conversations** |  | | | | **about 17–22** | |
 | 15 | ⬜ | 7 · Notes as replies; retire comment-service | [notes-as-replies.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/notes-as-replies.md) (update) | services + web | 7–9 | 0, 1 |
 | 15b | ⬜ | 24 · Profile tabs for replies and reposts, with a "show my reposts" setting | [profile-tabs-and-reposts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/profile-tabs-and-reposts.md) | services + web | 2 | 7 |
@@ -63,6 +64,7 @@ Each milestone ends in a shippable state.
 | **Before the first release** |  | | | | **about 1–1½** | |
 | 27 | ⬜ | 27 · One clean schema: fold the migrations into a baseline | [migration-baseline.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/migration-baseline.md) | services | 1–1½ | every schema change above |
 | **Kept for later** (not scheduled, not counted in the total) |  | | | | | |
+| — | ⬜ | 30 · The Website actor: a website as something to follow, fed by syndication, with plugins for WordPress, Drupal and Joomla if needed. Goal and name recorded 2026-10-05; **scope open, not to be built yet** | [website-actor.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/website-actor.md) | services + web | not estimated | 29, 8, 26 |
 | — | ⬜ | 19 · Creative Commons licences. Taken out of M4 on 2026-10-04: the licence label does not reach Mastodon or Bluesky. Look again after items 16 and 17 | [content-licences.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-licences.md) | services + web | 3–4, or 1 for a badge only | 16, 17 |
 
 **Total: about 463–610 hours, roughly 114–153 sessions** at about 4 h per session. Shared pieces built once save a few percent:
