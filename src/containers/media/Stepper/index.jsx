@@ -191,6 +191,7 @@ const MediaStepper = ({
       handleClose={handleClose}
       medium={medium}
       fileIndex={fileIndex}
+      handleFileIndex={setFileIndex}
       current={current}
       fields={fields}
       index={currentIndex}

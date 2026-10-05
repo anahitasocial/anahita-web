@@ -351,4 +351,8 @@ PhotoSlides.propTypes = {
   onOpen: PropTypes.func,
 };
 
+// One photo of a post at a wanted size, stepping down to a smaller one if
+// that size was never stored. The lightbox builds its own row from these.
+export { Slide as PhotoSlideImage };
+
 export default PhotoSlides;

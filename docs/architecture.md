@@ -334,8 +334,14 @@ phone a photo follows the finger and carries on with the flick. Where there
 is a mouse there are arrows, and the left and right keys work on the focused
 post. Photos after the first load when they are about to come into view. The
 frame takes the first photo's shape, kept between 4 by 5 and about 2 by 1,
-and a photo of another shape is shown whole inside it. The lightbox goes through a post's images before it goes on to
-the next post (`Stepper/index.jsx` holds which image is on show). A post with
+and a photo of another shape is shown whole inside it.
+
+The lightbox shows a post's images as the same kind of row, swiped the same
+way. It goes through a post's images before it goes on to the next post: the
+arrows and the arrow keys step through them, and a swipe leaves the post only
+from its first or last image. `Stepper/index.jsx` holds which image is on
+show; the row tells it when a swipe has moved. Zooming takes the image on
+show out of the row and shows it at full size, as for any photo. A post with
 one image is drawn as it always was.
 
 Every image carries its description as `alt`. One without a description falls

@@ -49,6 +49,38 @@ export default (theme) => {
       background: 'none',
       cursor: 'zoom-in',
     },
+    // The images of a post with several, side by side in a row the browser
+    // scrolls sideways and brings to rest on one, as on the post's card.
+    fileRow: {
+      display: 'flex',
+      width: '100%',
+      height: '100%',
+      overflowX: 'auto',
+      overflowY: 'hidden',
+      scrollSnapType: 'x mandatory',
+      overscrollBehaviorX: 'contain',
+      WebkitOverflowScrolling: 'touch',
+      scrollbarWidth: 'none',
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
+    },
+    fileSlide: {
+      flex: '0 0 100%',
+      minWidth: 0,
+      height: '100%',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      scrollSnapAlign: 'center',
+      scrollSnapStop: 'always',
+    },
+    fileImage: {
+      display: 'block',
+      maxWidth: '100%',
+      maxHeight: '100%',
+      objectFit: 'contain',
+    },
     // Which of a post's images this is, "2 of 4".
     fileCount: {
       position: 'absolute',
