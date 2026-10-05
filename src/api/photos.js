@@ -18,7 +18,13 @@ const upload = (owner, file) => {
 const add = (node, owner) => {
   if (Array.isArray(node.uploads)) {
     const { file, ...post } = node;
-    return axios.post(`/photos/${owner.id}/`, post);
+    return axios.post(`/photos/${owner.id}/`, {
+      ...post,
+      // A form sends this as "1", which the server reads as true. JSON has
+      // real booleans, and the server refuses a number where it expects
+      // one.
+      composed: Boolean(post.composed),
+    });
   }
   return axios.post(`/photos/${owner.id}/`, constructFormData(node));
 };
