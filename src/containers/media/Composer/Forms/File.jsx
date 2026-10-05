@@ -40,6 +40,7 @@ const ComposersFile = React.forwardRef(({
   file = null,
   isFetching,
   namespace,
+  audiencePicker = null,
 }, ref) => {
   const { classes } = useStyles();
 
@@ -136,6 +137,7 @@ const ComposersFile = React.forwardRef(({
             />}
         </CardContent>
         <CardActions>
+          {audiencePicker}
           <Button
             type="submit"
             variant="contained"
@@ -153,6 +155,8 @@ const ComposersFile = React.forwardRef(({
 });
 
 ComposersFile.propTypes = {
+  // The audience button, built by the composer. See ../Audience.
+  audiencePicker: PropTypes.node,
   handleOnChange: PropTypes.func.isRequired,
   handleOnFileSelect: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,

@@ -211,6 +211,25 @@ drifted before.
 The rules themselves, and how to change their defaults, are documented in
 anahita-services under Permissions.
 
+### Choosing who can see a post
+
+The composer has an audience button beside Post
+(`containers/media/Composer/Audience.jsx`). It names the current choice and
+opens a short menu; the choice is sent with the post as `access`, so a post is
+never public first and narrowed afterwards.
+
+What it offers is worked out in `src/utils/audience.js`, which mirrors the
+server's rule (the services' `docs/permissions.md`, *Choosing who can see a
+post*) so that only choices the server accepts are shown:
+
+- The options depend on where the post is going: your own profile, somebody
+  else's, or a group. In a group, followers are called Members.
+- An audience wider than the profile itself is shown disabled, with the
+  reason: a post is never seen more widely than its profile.
+- It starts on the last audience used for that kind of place, remembered per
+  person in the browser's `localStorage`, or else on the widest the profile
+  allows. It works the same with storage unavailable, only without a memory.
+
 ## Translations
 
 Text is translated with i18next (`src/languages/`). Each language is a

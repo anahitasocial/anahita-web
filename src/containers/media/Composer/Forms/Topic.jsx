@@ -23,6 +23,7 @@ const ComposersTopic = ({
   fields,
   medium,
   isFetching,
+  audiencePicker = null,
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
@@ -82,6 +83,7 @@ const ComposersTopic = ({
             />}
         </CardContent>
         <CardActions>
+          {audiencePicker}
           <Button
             type="submit"
             variant="contained"
@@ -99,6 +101,8 @@ const ComposersTopic = ({
 };
 
 ComposersTopic.propTypes = {
+  // The audience button, built by the composer. See ../Audience.
+  audiencePicker: PropTypes.node,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   fields: PropTypes.objectOf(PropTypes.any).isRequired,

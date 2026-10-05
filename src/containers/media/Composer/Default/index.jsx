@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 
 import actions from '../../../../actions';
 import utils from '../../../../utils';
+import audience from '../../../../utils/audience';
+import ComposerAudience from '../Audience';
 
 import AcctorType from '../../../../proptypes/Actor';
 import PersonType from '../../../../proptypes/Person';
@@ -27,6 +29,18 @@ const MediaComposerDefault = ({
   const [fields, setFields] = useState(formFields);
   const [medium, setMedium] = useState({ ...MediumDefault });
   const [file, setFile] = useState(null);
+
+  // Who can see the post. Starts on the last choice for this kind of
+  // place, or the widest this profile allows; see utils/audience.
+  const [access, setAccess] = useState(() => {
+    return audience.defaultFor(actor, viewer);
+  });
+
+  // The same composer is reused when moving from one profile to another,
+  // and what could be chosen on the last one may not be choosable here.
+  useEffect(() => {
+    setAccess(audience.defaultFor(actor, viewer));
+  }, [actor.id, actor.access, viewer.id]);
 
   useEffect(() => {
     if (error) {
@@ -72,8 +86,14 @@ const MediaComposerDefault = ({
 
       addItem({
         ...formData,
+        // Sent with the post, so it is never public first and narrowed
+        // afterwards.
+        access,
         composed: 1,
       }, actor).then(() => {
+        // Remembered once it has been used, not when it is picked: a
+        // choice somebody backed out of is not a habit.
+        audience.remember(actor, viewer, access);
         setMedium({
           ...medium,
           name: '',
@@ -99,6 +119,17 @@ const MediaComposerDefault = ({
       success={success}
       file={file}
       namespace={namespace}
+      // Built here and handed over ready, so each form only has to place
+      // it beside its button.
+      audiencePicker={
+        <ComposerAudience
+          actor={actor}
+          viewer={viewer}
+          value={access}
+          onChange={setAccess}
+          disabled={isFetching}
+        />
+      }
     />
   );
 };
