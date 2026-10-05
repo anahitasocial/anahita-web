@@ -103,6 +103,10 @@ server's NodeInfo document (`/.well-known/nodeinfo`):
 | Whether anything new may be public | `MIN_CONTENT_ACCESS`. The app stops offering "Public" where it may not |
 | Who may post, comment and like by default | `graph-grpc-defaults/actor_features` |
 
+The two privacy settings, what each does to visitors and how to check them are
+described in anahita-services under
+[Privacy](https://github.com/purplerat/anahita-services/blob/main/docs/privacy.md).
+
 Some older variables are no longer read:
 
 | Variable | Replaced by |

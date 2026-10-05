@@ -127,6 +127,10 @@ history. The main paths:
 
 ### A members-only site
 
+Everything about who can see what, on the server and here, is in one place:
+[Privacy](https://github.com/purplerat/anahita-services/blob/main/docs/privacy.md)
+in anahita-services. What follows is the app's part of it.
+
 An installation can serve nothing to people who are not signed in
 (`SITE_READ_ACCESS=registered` on the server). The server enforces it: every
 content route answers 401 to them. NodeInfo still answers and says so in
