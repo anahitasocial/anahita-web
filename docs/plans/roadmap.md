@@ -34,10 +34,9 @@ Each milestone ends in a shippable state.
 | 9 | ✅ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/abuse-report-service.md) | services + web | 6 | 4a |
 | 10 | ✅ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-hard-delete.md) | services + web | 6 | 4a |
 | 10b | ✅ | 28 · One name for timestamps: every date-and-time column and field ends in `_at` | [timestamp-names.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/timestamp-names.md) | services + web | 2 | 4b, 5 |
-| **M4. Posting experience** |  | | | | **about 13–18** | |
+| **M4. Posting experience** | 🚧 | | | | **about 10–14** | |
 | 11 | ⬜ | 13 · Composer audience picker, then members-only / preview / no-public settings | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/instance-privacy.md) | services + web | 5–7 | 4a |
 | 12 | ⬜ | 20 · Language on posts | [content-language.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-language.md) | services + web | 2–3 | — |
-| 13 | ⬜ | 19 · Creative Commons licences | [content-licences.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-licences.md) | services + web | 3–4 | 9 |
 | 14 | ⬜ | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md) | services + web | 3–4 | 9 |
 | **M5. Conversations** |  | | | | **about 17–22** | |
 | 15 | ⬜ | 7 · Notes as replies; retire comment-service | [notes-as-replies.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/notes-as-replies.md) (update) | services + web | 7–9 | 0, 1 |
@@ -63,8 +62,10 @@ Each milestone ends in a shippable state.
 | 26b | ⬜ | 26 · Verified domains: prove you own a website; domain as Bluesky handle, verified link on Mastodon | [verified-domains.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/verified-domains.md) | services + web | 4–5 | 8, 10 |
 | **Before the first release** |  | | | | **about 1–1½** | |
 | 27 | ⬜ | 27 · One clean schema: fold the migrations into a baseline | [migration-baseline.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/migration-baseline.md) | services | 1–1½ | every schema change above |
+| **Kept for later** (not scheduled, not counted in the total) |  | | | | | |
+| — | ⬜ | 19 · Creative Commons licences. Taken out of M4 on 2026-10-04: the licence label does not reach Mastodon or Bluesky. Look again after items 16 and 17 | [content-licences.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-licences.md) | services + web | 3–4, or 1 for a badge only | 16, 17 |
 
-**Total: about 475–625 hours, roughly 117–157 sessions** at about 4 h per session. Shared pieces built once save a few percent:
+**Total: about 463–610 hours, roughly 114–153 sessions** at about 4 h per session. Shared pieces built once save a few percent:
 - the rate limiter;
 - `FilterNodesForViewer`;
 - the jobs queue;
