@@ -94,18 +94,62 @@ const widthOf = (level) => {
   return index === -1 ? 0 : index;
 };
 
-// The options to show: each level the server accepts, and whether it is
-// worth choosing. One that is wider than the profile itself is shown
-// disabled, not hidden, so it is clear why "Public" is missing on a
-// followers-only group.
-const optionsFor = (actor, viewer) => {
+// Turns levels into options: each one, and whether it is worth choosing.
+// One that is wider than the profile itself is shown disabled, not
+// hidden, so it is clear why "Public" is missing on a followers-only
+// group.
+const capped = (levels, actor) => {
   const cap = widthOf(actor && actor.access);
 
-  return levelsFor(actor, viewer).map((level) => {
+  return levels.map((level) => {
     return {
       level,
       disabled: widthOf(level) < cap,
     };
+  });
+};
+
+// The options for a post being written on this profile.
+const optionsFor = (actor, viewer) => {
+  return capped(levelsFor(actor, viewer), actor);
+};
+
+// The options for a post that exists, for somebody who may change who
+// sees it.
+//
+// The server sends them with the post (`authorized.audiences`), and they
+// are not quite the ones for a new post: whether "only me" is possible
+// depends on who WROTE it, not on who is changing it. An administrator
+// tidying somebody's post sees that person's choices.
+//
+// The audience the post has now is always among them, even one that is
+// no longer offered ("leaders") or no longer allowed, so the menu can
+// show where things stand. Choosing it again changes nothing.
+const optionsForMedium = (medium) => {
+  const owner = medium.owner || {};
+  const answered = medium.authorized && medium.authorized.audiences;
+
+  let levels;
+  if (Array.isArray(answered) && answered.length > 0) {
+    levels = answered.filter((level) => {
+      return level !== LEADERS;
+    });
+  } else {
+    // Not said. Judge "own profile" by the author, as the server does.
+    const author = medium.author || {};
+    levels = fallbackLevels(owner, { id: author.id });
+  }
+
+  if (medium.access && !levels.includes(medium.access)) {
+    levels = [...levels, medium.access].sort((a, b) => {
+      return widthOf(a) - widthOf(b);
+    });
+  }
+
+  return capped(levels, owner).map((option) => {
+    return option.level === medium.access ?
+      { ...option, disabled: false } :
+      option;
   });
 };
 
@@ -167,6 +211,7 @@ export default {
   placeOf,
   levelsFor,
   optionsFor,
+  optionsForMedium,
   defaultFor,
   remember,
   remembered,

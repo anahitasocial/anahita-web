@@ -214,8 +214,13 @@ anahita-services under Permissions.
 
 ### Choosing who can see a post
 
-The composer has an audience button beside Post
-(`containers/media/Composer/Audience.jsx`). It names the current choice and
+One button, `components/AudienceButton.jsx`, in the two places the question
+comes up: beside Post in the composer
+(`containers/media/Composer/Audience.jsx`), and on a post that exists, for
+somebody who may change who sees it (`containers/controls/medium/Access.jsx`).
+A post carries its own `authorized.audiences` for that.
+
+In the composer, it names the current choice and
 opens a short menu; the choice is sent with the post as `access`, so a post is
 never public first and narrowed afterwards.
 

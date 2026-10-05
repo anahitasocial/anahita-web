@@ -74,6 +74,53 @@ describe('composer audience', () => {
     expect(enabled(options)).toEqual(['followers']);
   });
 
+  describe('for a post that exists', () => {
+    const post = (extra) => {
+      return {
+        id: 100,
+        access: 'public',
+        owner: own,
+        author: own,
+        ...extra,
+      };
+    };
+
+    it('offers what the server sends with the post', () => {
+      const options = audience.optionsForMedium(post({
+        authorized: { audiences: ['public', 'registered', 'followers', 'leaders', 'mutuals', 'myself'] },
+      }));
+
+      expect(levels(options)).toEqual(['public', 'registered', 'followers', 'mutuals', 'myself']);
+    });
+
+    // An administrator changing somebody's post sees that person's
+    // choices: "only me" depends on who wrote it.
+    it('judges "only me" by the author when the server does not say', () => {
+      expect(levels(audience.optionsForMedium(post({})))).toContain('myself');
+      expect(levels(audience.optionsForMedium(post({ author: someone }))))
+        .not.toContain('myself');
+    });
+
+    it('keeps the audience the post has now, even one no longer offered', () => {
+      const options = audience.optionsForMedium(post({
+        access: 'leaders',
+        authorized: { audiences: ['public', 'registered', 'followers', 'leaders', 'mutuals'] },
+      }));
+
+      expect(levels(options)).toEqual(['public', 'registered', 'followers', 'leaders', 'mutuals']);
+    });
+
+    it('never disables the audience the post has now', () => {
+      const options = audience.optionsForMedium(post({
+        access: 'public',
+        owner: { ...group, access: 'followers' },
+        author: someone,
+      }));
+
+      expect(enabled(options)).toEqual(['public', 'followers']);
+    });
+  });
+
   it('starts on the widest that can be chosen', () => {
     expect(audience.defaultFor(own, viewer)).toBe('public');
     expect(audience.defaultFor({ ...group, access: 'followers' }, viewer)).toBe('followers');

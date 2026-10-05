@@ -45,7 +45,7 @@ const MediaListItem = ({
           viewer={viewer}
           inline
         />}
-      access={canEditMedium && medium.access && <Access medium={medium} size="small" />}
+      access={canEditMedium && medium.access && <Access medium={medium} />}
       stats={
         <>
           <LikesStats node={medium} />

@@ -49,7 +49,7 @@ const MediaReadView = ({
   const mediumProps = {
     medium,
     handleView: portrait ? handleView : null,
-    access: canEdit && medium.access && <Access medium={medium} size="small" />,
+    access: canEdit && medium.access && <Access medium={medium} />,
     editing: isEditing,
     cover: (
       <Cover

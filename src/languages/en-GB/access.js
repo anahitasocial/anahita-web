@@ -16,6 +16,7 @@ export default {
       registered: 'Signed-in people',
       followers: 'Followers',
       members: 'Members',
+      leaders: 'Leaders',
       mutuals: 'Mutuals',
       admins: 'Administrators',
       myself: 'Only me',
@@ -25,12 +26,15 @@ export default {
       registered: 'Anyone who is signed in',
       own: {
         followers: 'People who follow you',
+        leaders: 'People you follow',
         mutuals: 'People you follow who follow you back',
         myself: 'Nobody else',
       },
       person: {
         followers: 'People who follow {{ name }}',
+        leaders: 'People {{ name }} follows',
         mutuals: 'People {{ name }} follows who follow them back',
+        myself: 'Only {{ name }}',
       },
       group: {
         followers: 'Members of {{ name }}',
