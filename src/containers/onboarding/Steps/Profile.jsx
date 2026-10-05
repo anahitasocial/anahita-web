@@ -16,6 +16,7 @@ const formFields = form.createFormFields([
   'name',
   'body',
   'personPronouns',
+  'language',
 ]);
 
 // Display name, bio and pronouns, pre-filled with whatever is already there.

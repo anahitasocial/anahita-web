@@ -121,7 +121,7 @@ const MediumReadArticle = ({
                     {medium.name}
                   </Typography>}
                 {medium.body &&
-                  <EntityBody contentFilter>
+                  <EntityBody contentFilter lang={medium.language}>
                     {medium.body}
                   </EntityBody>}
                 <SignInPrompt show={Boolean(medium.truncated)} />

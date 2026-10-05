@@ -105,6 +105,9 @@ export default {
     body: 'Bio',
     pronouns: 'Pronoms',
     pronounsUnset: 'Je préfère ne pas le dire',
+    postingLanguage: 'Langue de vos publications',
+    postingLanguageUnset: 'La langue de mon navigateur',
+    postingLanguageHint: 'Le champ de publication commence dans cette langue. Vous pouvez la changer pour chaque publication.',
     pronounOptions: [
       'il',
       'elle',

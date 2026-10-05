@@ -37,6 +37,7 @@ const NodeBody = ({
     'hashtag',
     'mention',
   ],
+  lang = '',
 }) => {
   const { classes, cx } = useStyles();
   let body = `${children}`;
@@ -49,7 +50,13 @@ const NodeBody = ({
   }
 
   return (
-    <div className={cx(classes.root, classes[size])}>
+    // The language the author said it is in, so a screen reader reads a
+    // French post with French pronunciation on an English page. Left off
+    // when they did not say: the page's own language then applies.
+    <div
+      className={cx(classes.root, classes[size])}
+      lang={lang && lang !== 'und' ? lang : undefined}
+    >
       <ReactMarkdown remarkPlugins={[remarkGfm]}>
         {body}
       </ReactMarkdown>
@@ -62,6 +69,8 @@ NodeBody.propTypes = {
   size: PropTypes.oneOf(['body1', 'body2']),
   contentFilter: PropTypes.bool,
   filters: PropTypes.arrayOf(PropTypes.string),
+  // A language tag, "fr" or "fr-CA".
+  lang: PropTypes.string,
 };
 
 export default NodeBody;

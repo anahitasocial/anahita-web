@@ -283,6 +283,26 @@ reads that and adds what the server has no opinion on:
   person in the browser's `localStorage`, or else on the widest the profile
   allows. It works the same with storage unavailable, only without a memory.
 
+### The language of a post
+
+Beside the audience button the composer has a language button
+(`components/LanguageButton.jsx`), showing a code such as `EN`. The choice is
+sent with the post as `language`. `src/utils/postLanguage.js` decides where it
+starts: the language this person last posted in, in this browser; then the
+posting language on their profile, which the session's viewer carries; then
+the browser's language; then English. Language names come from the browser
+(`Intl.DisplayNames`), in the language the app is being read in.
+
+Where a post's text is drawn, `components/NodeBody.jsx` puts the post's
+language on it as the `lang` attribute, so a screen reader reads each post in
+the right one.
+
+"Language you post in" is in the profile form. It is the language somebody
+writes in, not the language of the interface.
+
+What the server stores and accepts is in the services'
+`docs/post-language.md`.
+
 ## Translations
 
 Text is translated with i18next (`src/languages/`). Each language is a

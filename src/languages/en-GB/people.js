@@ -111,6 +111,9 @@ export default {
     body: 'Bio',
     pronouns: 'Pronouns',
     pronounsUnset: 'Prefer not to say',
+    postingLanguage: 'Language you post in',
+    postingLanguageUnset: "My browser's language",
+    postingLanguageHint: 'The composer starts on this language. You can change it for any post.',
     // The set that makes sense in THIS language. Other locales ship their own;
     // a language with no gendered third-person pronoun ships an empty list and
     // the field offers only "prefer not to say".

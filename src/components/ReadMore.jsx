@@ -15,6 +15,7 @@ const ReadMore = ({
   readMoreText = i18n.t('commons:readMore'),
   children,
   contentFilter = false,
+  lang = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -27,7 +28,7 @@ const ReadMore = ({
 
   if (striptags(children).length < charLimit) {
     return (
-      <EntityBody contentFilter={contentFilter}>
+      <EntityBody contentFilter={contentFilter} lang={lang}>
         {longBody}
       </EntityBody>
     );
@@ -40,7 +41,7 @@ const ReadMore = ({
         timeout="auto"
         unmountOnExit
       >
-        <EntityBody contentFilter={contentFilter}>
+        <EntityBody contentFilter={contentFilter} lang={lang}>
           {shortBody}
         </EntityBody>
         <Link
@@ -56,7 +57,7 @@ const ReadMore = ({
         timeout="auto"
         unmountOnExit
       >
-        <EntityBody contentFilter={contentFilter}>
+        <EntityBody contentFilter={contentFilter} lang={lang}>
           {longBody}
         </EntityBody>
       </Collapse>
@@ -65,6 +66,8 @@ const ReadMore = ({
 };
 
 ReadMore.propTypes = {
+  // The language of the text, passed on to where it is drawn.
+  lang: PropTypes.string,
   charLimit: PropTypes.number,
   readMoreText: PropTypes.string,
   children: PropTypes.string.isRequired,

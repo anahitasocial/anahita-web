@@ -25,6 +25,7 @@ const formFields = form.createFormFields([
   'body',
   'personPronouns',
   'websiteUrl',
+  'language',
 ]);
 
 const { canAdminister } = permissions.actor;

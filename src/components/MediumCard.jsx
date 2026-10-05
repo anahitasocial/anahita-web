@@ -165,7 +165,7 @@ const MediumCard = ({
             </Link>
           </Typography>}
         {medium.body &&
-          <ReadMore contentFilter>
+          <ReadMore contentFilter lang={medium.language}>
             {medium.body}
           </ReadMore>}
         <SignInPrompt show={Boolean(medium.truncated)} />

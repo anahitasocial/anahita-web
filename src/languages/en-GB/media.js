@@ -16,4 +16,8 @@ export default {
   confirm: {
     delete: 'Do you want to delete this post?',
   },
+  // The language button in the composer.
+  language: {
+    label: 'Language: {{ name }}',
+  },
 };

@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 import actions from '../../../../actions';
 import utils from '../../../../utils';
 import audience from '../../../../utils/audience';
+import postLanguage from '../../../../utils/postLanguage';
+import LanguageButton from '../../../../components/LanguageButton';
 import ComposerAudience from '../Audience';
 
 import AcctorType from '../../../../proptypes/Actor';
@@ -41,6 +43,17 @@ const MediaComposerDefault = ({
   useEffect(() => {
     setAccess(audience.defaultFor(actor, viewer));
   }, [actor.id, actor.access, viewer.id]);
+
+  // The language it is written in. Starts on the one this person last
+  // posted in, or their profile's, or the browser's; see
+  // utils/postLanguage.
+  const [language, setLanguage] = useState(() => {
+    return postLanguage.defaultFor(viewer);
+  });
+
+  useEffect(() => {
+    setLanguage(postLanguage.defaultFor(viewer));
+  }, [viewer.id, viewer.language]);
 
   useEffect(() => {
     if (error) {
@@ -89,8 +102,10 @@ const MediaComposerDefault = ({
         // Sent with the post, so it is never public first and narrowed
         // afterwards.
         access,
+        language,
         composed: 1,
       }, actor).then(() => {
+        postLanguage.remember(viewer, language);
         // Remembered once it has been used, not when it is picked: a
         // choice somebody backed out of is not a habit.
         audience.remember(actor, viewer, access);
@@ -119,16 +134,24 @@ const MediaComposerDefault = ({
       success={success}
       file={file}
       namespace={namespace}
-      // Built here and handed over ready, so each form only has to place
-      // it beside its button.
-      audiencePicker={
-        <ComposerAudience
-          actor={actor}
-          viewer={viewer}
-          value={access}
-          onChange={setAccess}
-          disabled={isFetching}
-        />
+      // The choices that go with a post: who can see it, and what
+      // language it is in. Built here and handed over ready, so each form
+      // only has to place them beside its button.
+      postOptions={
+        <>
+          <ComposerAudience
+            actor={actor}
+            viewer={viewer}
+            value={access}
+            onChange={setAccess}
+            disabled={isFetching}
+          />
+          <LanguageButton
+            value={language}
+            onChange={setLanguage}
+            disabled={isFetching}
+          />
+        </>
       }
     />
   );

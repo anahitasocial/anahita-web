@@ -29,7 +29,7 @@ const ComposersNote = ({
   viewer,
   actor,
   isFetching,
-  audiencePicker = null,
+  postOptions = null,
 }) => {
   const placeholder = isPerson(actor) && actor.id !== viewer.id ? i18n.t('notes:composer.bodyPlaceholderPerson', {
     name: actor.name,
@@ -61,7 +61,7 @@ const ComposersNote = ({
           />
         </CardContent>
         <CardActions>
-          {audiencePicker}
+          {postOptions}
           <Button
             type="submit"
             variant="contained"
@@ -79,8 +79,8 @@ const ComposersNote = ({
 };
 
 ComposersNote.propTypes = {
-  // The audience button, built by the composer. See ../Audience.
-  audiencePicker: PropTypes.node,
+  // The audience and language buttons, built by the composer.
+  postOptions: PropTypes.node,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,
