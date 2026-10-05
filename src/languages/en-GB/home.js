@@ -8,4 +8,12 @@ export default {
     cDescription: 'Sign in to read it. Nothing here is shown to people who are not signed in.',
     signIn: 'Sign in',
   },
+  // For somebody who is not signed in, on an installation that shows
+  // visitors only the start of what is public (SITE_READ_ACCESS=preview).
+  preview: {
+    cTitle: 'You are seeing a preview',
+    cDescription: 'Sign in to read whole posts, comments and everything past the first page.',
+    signIn: 'Sign in',
+    readMore: 'Sign in to read more',
+  },
 };

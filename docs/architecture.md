@@ -139,6 +139,13 @@ in. Every page carries `robots: noindex`.
 The pages that stay open, the ways in and the pages about the site, are listed
 in `routes/membersOnly.js`.
 
+The setting has a middle value, `preview`: visitors are sent only the start of
+what is public, cut on the server. The pages work, so the same gate leaves
+them in place under a notice that this is a preview. A post that was cut
+arrives with `truncated` set, and `components/SignInToReadMore.jsx` shows the
+way to the rest under it. Lists stop at their first page by themselves: the
+server lowers their total to what it sent.
+
 ### The administration area
 
 `/admin` is one page with a tab per thing administrators look after

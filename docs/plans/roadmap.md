@@ -35,7 +35,7 @@ Each milestone ends in a shippable state.
 | 10 | ✅ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-hard-delete.md) | services + web | 6 | 4a |
 | 10b | ✅ | 28 · One name for timestamps: every date-and-time column and field ends in `_at` | [timestamp-names.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/timestamp-names.md) | services + web | 2 | 4b, 5 |
 | **M4. Posting experience** | 🚧 | | | | **about 10–14** | |
-| 11 | 🚧 | 13 · Composer audience picker, no-new-public and members-only settings, convert action (done); preview mode (to do) | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/instance-privacy.md) | services + web | 5–7 | 4a |
+| 11 | ✅ | 13 · Composer audience picker; members-only, preview and no-new-public settings | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/instance-privacy.md) | services + web | 5–7 | 4a |
 | 12 | ⬜ | 20 · Language on posts | [content-language.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-language.md) | services + web | 2–3 | — |
 | 14 | ⬜ | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md) | services + web | 3–4 | 9 |
 | **M5. Conversations** |  | | | | **about 17–22** | |

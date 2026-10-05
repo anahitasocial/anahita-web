@@ -16,6 +16,9 @@ import membersOnly from './membersOnly';
 // On a members-only installation, shows somebody who is not signed in a
 // way in, in place of whatever page they asked for.
 //
+// It also handles the setting between open and members-only, `preview`,
+// where the pages stay and a notice goes above them; see below.
+//
 // The server decides this, not the app: with SITE_READ_ACCESS=registered
 // every route that serves content answers 401 to them. Without this gate
 // each page would load, ask, be refused, and show its own error. NodeInfo
@@ -41,7 +44,40 @@ const MembersOnlyGate = ({ children }) => {
   // Until the session has been read there is no telling a member from a
   // visitor, and showing a member the door for a moment on every reload
   // would be worse than showing a visitor a page that then fails.
-  if (readAccess !== 'registered' || !isResolved || isAuthenticated) {
+  if (!isResolved || isAuthenticated) {
+    return children;
+  }
+
+  // The middle setting: visitors are shown the start of what is public.
+  // The pages work, so they are left in place, under a line saying that
+  // this is not all of it. Not on the pages that are the same for
+  // everybody: nothing there was cut.
+  if (readAccess === 'preview') {
+    if (membersOnly.isOpen(location.pathname)) {
+      return children;
+    }
+
+    return (
+      <>
+        <Box sx={{ mb: 2 }}>
+          <Alert
+            severity="info"
+            action={
+              <Button color="inherit" size="small" component={Link} to="/auth">
+                {i18n.t('home:preview.signIn')}
+              </Button>
+            }
+          >
+            <AlertTitle>{i18n.t('home:preview.cTitle')}</AlertTitle>
+            {i18n.t('home:preview.cDescription')}
+          </Alert>
+        </Box>
+        {children}
+      </>
+    );
+  }
+
+  if (readAccess !== 'registered') {
     return children;
   }
 
