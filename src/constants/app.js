@@ -5,6 +5,9 @@ export default {
   },
   NODE_INFO: {
     READ: 'APP_NODE_INFO_READ',
+    // The request finished without a document: the server could not be
+    // reached, or answered with an error.
+    UNAVAILABLE: 'APP_NODE_INFO_UNAVAILABLE',
   },
   BROWSE: {
     LIMIT: 20,

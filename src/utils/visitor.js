@@ -36,6 +36,37 @@ const isShutOut = (state) => {
   return isVisitor(state) && readAccessOf(state) === REGISTERED;
 };
 
+// Whether it is known yet who is looking and what kind of site this is:
+// the session has been read, and NodeInfo has answered or failed to.
+const isKnown = (state) => {
+  return Boolean(state.session.isResolved) && Boolean(state.app.nodeInfoResolved);
+};
+
+const STORAGE_KEY = 'site.readAccess';
+
+// What this site said last time, kept in the browser. It is how a page
+// can be drawn straight away on an open site, without waiting to be told
+// again that it is open, while a site that was restricted last time waits
+// for the answer before drawing anything a visitor might be refused.
+//
+// '' when nothing is remembered, or nothing can be: then the page waits.
+const rememberedReadAccess = () => {
+  try {
+    return window.localStorage.getItem(STORAGE_KEY) || '';
+  } catch (e) {
+    return '';
+  }
+};
+
+const rememberReadAccess = (readAccess) => {
+  try {
+    window.localStorage.setItem(STORAGE_KEY, readAccess);
+  } catch (e) {
+    // Not remembered. The next page waits for the answer, which is the
+    // safe way round.
+  }
+};
+
 // The server's way of saying "this needs signing in, on this site": a 401
 // whose body says members_only. Told apart from other failures so it can
 // be met with a way in and not an error.
@@ -57,6 +88,9 @@ export default {
   REGISTERED,
   readAccessOf,
   isVisitor,
+  isKnown,
+  rememberedReadAccess,
+  rememberReadAccess,
   isPreviewVisitor,
   isShutOut,
   isMembersOnlyRefusal,

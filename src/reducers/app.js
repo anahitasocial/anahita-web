@@ -9,12 +9,22 @@ export default (state = {
   // without guarding every hop. The empty value means "not known yet",
   // and every reader treats that as the closed answer.
   nodeInfo: NODE_INFO_DEFAULT,
+  // Whether the request for it has finished, with a document or without.
+  // Until then nothing is known about the site, including whether a
+  // visitor may read it; see routes/MembersOnlyGate.
+  nodeInfoResolved: false,
 }, action) => {
   switch (action.type) {
     case APP.NODE_INFO.READ:
       return {
         ...state,
         nodeInfo: action.nodeInfo,
+        nodeInfoResolved: true,
+      };
+    case APP.NODE_INFO.UNAVAILABLE:
+      return {
+        ...state,
+        nodeInfoResolved: true,
       };
     case APP.ALERT.ADD:
       return {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
@@ -10,6 +10,8 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 
 import HomePage from '../containers/home';
+import Progress from '../components/Progress';
+import visitor from '../utils/visitor';
 import i18n from '../languages';
 import membersOnly from './membersOnly';
 
@@ -36,16 +38,39 @@ const MembersOnlyGate = ({ children }) => {
 
   const isAuthenticated = useSelector((state) => { return state.session.isAuthenticated; });
   const isResolved = useSelector((state) => { return state.session.isResolved; });
-  const readAccess = useSelector((state) => {
-    const { nodeInfo } = state.app;
-    return (nodeInfo && nodeInfo.metadata && nodeInfo.metadata.readAccess) || 'public';
-  });
+  const nodeInfoResolved = useSelector((state) => { return state.app.nodeInfoResolved; });
+  const readAccess = useSelector((state) => { return visitor.readAccessOf(state); });
 
-  // Until the session has been read there is no telling a member from a
-  // visitor, and showing a member the door for a moment on every reload
-  // would be worse than showing a visitor a page that then fails.
-  if (!isResolved || isAuthenticated) {
+  // Kept for the next page load; see below.
+  useEffect(() => {
+    if (nodeInfoResolved) {
+      visitor.rememberReadAccess(readAccess);
+    }
+  }, [nodeInfoResolved, readAccess]);
+
+  // Somebody signed in is never held up or turned away here.
+  if (isAuthenticated) {
     return children;
+  }
+
+  // Not known yet who is looking, or what kind of site this is: the
+  // session is still being read, or NodeInfo has not answered.
+  //
+  // Drawing the page now means it asks the server for its content at
+  // once. On a restricted site every one of those requests is refused,
+  // and each page showed that as an error of its own before this gate
+  // caught up and replaced it. So a page that could be refused waits,
+  // for the moment the two answers take.
+  //
+  // Not on a site that said it was open last time, which is nearly all
+  // of them: there the page is drawn straight away, as it always was.
+  // If such a site has been closed since, this one load sees the old
+  // behaviour and the next one waits.
+  if (!isResolved || !nodeInfoResolved) {
+    const drawNow = membersOnly.isOpen(location.pathname) ||
+      visitor.rememberedReadAccess() === visitor.PUBLIC;
+
+    return drawNow ? children : <Progress />;
   }
 
   // The middle setting: visitors are shown the start of what is public.

@@ -159,6 +159,13 @@ which kind of site:
 - On a members-only site the search box and the People, Groups, Hashtags and
   Places menu entries are not shown.
 
+**A page that could be refused waits to be drawn** until the session has been
+read and NodeInfo has answered. Drawn sooner, it asks for its content at once,
+is refused, and shows the refusal before the gate has caught up. The wait is a
+moment, and an open site does not pay it: what the site said last time is kept
+in the browser (`site.readAccess` in `localStorage`), and a site that said
+`public` is drawn straight away.
+
 A request that is refused anyway, because some page did not expect it, is
 caught in `src/index.js`: an unhandled "sign in first" answer from the server
 is dropped instead of reaching the screen as an error. Every other unhandled

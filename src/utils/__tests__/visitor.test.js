@@ -3,7 +3,10 @@ import visitor from '../visitor';
 
 const state = (readAccess, session) => {
   return {
-    app: { nodeInfo: readAccess ? { metadata: { readAccess } } : null },
+    app: {
+      nodeInfo: readAccess ? { metadata: { readAccess } } : null,
+      nodeInfoResolved: true,
+    },
     session: { isResolved: true, isAuthenticated: false, ...session },
   };
 };
@@ -44,6 +47,24 @@ describe('visitor', () => {
 
     expect(visitor.isShutOut(state('registered', member))).toBe(false);
     expect(visitor.isPreviewVisitor(state('preview', member))).toBe(false);
+  });
+
+  // A page that could be refused is not drawn until both are in.
+  it('knows nothing until the session and the site have both answered', () => {
+    expect(visitor.isKnown(state('registered'))).toBe(true);
+    expect(visitor.isKnown(state('registered', { isResolved: false }))).toBe(false);
+
+    const waiting = state('registered');
+    waiting.app.nodeInfoResolved = false;
+    expect(visitor.isKnown(waiting)).toBe(false);
+  });
+
+  it('remembers what the site said last time', () => {
+    window.localStorage.clear();
+    expect(visitor.rememberedReadAccess()).toBe('');
+
+    visitor.rememberReadAccess('registered');
+    expect(visitor.rememberedReadAccess()).toBe('registered');
   });
 
   it('knows the server saying "sign in first" from other failures', () => {
