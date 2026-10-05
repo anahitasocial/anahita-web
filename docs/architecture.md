@@ -125,6 +125,20 @@ history. The main paths:
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
 
+### A members-only site
+
+An installation can serve nothing to people who are not signed in
+(`SITE_READ_ACCESS=registered` on the server). The server enforces it: every
+content route answers 401 to them. NodeInfo still answers and says so in
+`metadata.readAccess`, and `routes/MembersOnlyGate.jsx`, which wraps the whole
+route table, reads that. Somebody who is not signed in then sees a notice with
+a Sign in button and the home page, in place of whatever page they asked for
+and at the same address, so a link to a post leads to the post once they are
+in. Every page carries `robots: noindex`.
+
+The pages that stay open, the ways in and the pages about the site, are listed
+in `routes/membersOnly.js`.
+
 ### The administration area
 
 `/admin` is one page with a tab per thing administrators look after
