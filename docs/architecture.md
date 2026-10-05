@@ -120,7 +120,7 @@ history. The main paths:
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
-| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own |
+| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, and Privacy, which shows what the installation lets visitors read and can make everything public members-only |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |

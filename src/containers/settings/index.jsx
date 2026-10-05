@@ -20,20 +20,25 @@ import PersonType from '../../proptypes/Person';
 
 import SettingsOAuthClients from './OAuthClients';
 import SettingsOAuthSigningKeys from './OAuthSigningKeys';
+import SettingsPrivacy from './Privacy';
 
 const SITE_NAME = process.env.REACT_APP_NAME;
 
 const TABS = {
   OAUTH_CLIENTS: 'oauthClients',
   OAUTH_SIGNING_KEYS: 'oauthSigningKeys',
+  // What the installation shows to whom. Last: it is looked at rarely,
+  // and the page keeps opening on what it always has.
+  PRIVACY: 'privacy',
 };
 
 const TAB_ORDER = [
   TABS.OAUTH_CLIENTS,
   TABS.OAUTH_SIGNING_KEYS,
+  TABS.PRIVACY,
 ];
 
-// Site settings. Super admin only, both tabs.
+// Site settings. Super admin only, every tab.
 //
 // About used to sit here and does not any more: nothing on it was a
 // setting, everything on it was already public in NodeInfo, and the
@@ -133,6 +138,8 @@ const Settings = ({
         <SettingsOAuthClients />}
       {tab === TABS.OAUTH_SIGNING_KEYS &&
         <SettingsOAuthSigningKeys />}
+      {tab === TABS.PRIVACY &&
+        <SettingsPrivacy />}
     </>
   );
 };
