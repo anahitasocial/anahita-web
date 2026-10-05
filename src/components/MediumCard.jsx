@@ -158,6 +158,8 @@ const MediumCard = ({
         {medium.name &&
           <Typography
             variant="h2"
+            dir="auto"
+            lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
             className={classes.title}
           >
             <Link href={url}>

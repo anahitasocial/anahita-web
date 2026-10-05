@@ -55,6 +55,7 @@ const ComposersNote = ({
             required
             slotProps={{
               htmlInput: {
+                dir: 'auto',
                 maxLength: BODY.MAX_LENGTH,
               },
             }}

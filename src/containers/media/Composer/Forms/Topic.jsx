@@ -45,6 +45,7 @@ const ComposersTopic = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: NAME.MAX_LENGTH,
                   minLength: NAME.MIN_LENGTH,
                 },
@@ -73,6 +74,7 @@ const ComposersTopic = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: BODY.MAX_LENGTH,
                 },
 

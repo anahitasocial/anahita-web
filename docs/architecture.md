@@ -297,6 +297,15 @@ Where a post's text is drawn, `components/NodeBody.jsx` puts the post's
 language on it as the `lang` attribute, so a screen reader reads each post in
 the right one.
 
+**Right-to-left writing.** The interface is left to right and has no
+right-to-left layout. What people write is another matter: a post's title and
+text, and the fields they are typed into, carry `dir="auto"`, so Persian,
+Arabic or Hebrew runs right to left and aligns to the right. The direction
+comes from the text, not from the language tag, so it holds for untagged and
+older posts, and each paragraph of a post is judged on its own. Mirroring the
+whole interface (MUI's `direction: 'rtl'` theme with the stylis RTL plugin)
+would come with a Persian or Arabic translation of it, and there is none yet.
+
 "Language you post in" is in the profile form. It is the language somebody
 writes in, not the language of the interface.
 

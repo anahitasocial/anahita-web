@@ -39,6 +39,7 @@ const ActorFormsInfo = ({
           required
           slotProps={{
             htmlInput: {
+              dir: 'auto',
               maxLength: NAME.MAX_LENGTH,
               minLength: NAME.MIN_LENGTH,
             },
@@ -58,6 +59,7 @@ const ActorFormsInfo = ({
           required
           slotProps={{
             htmlInput: {
+              dir: 'auto',
               maxLength: BODY.MAX_LENGTH,
               minLength: BODY.MIN_LENGTH,
             },

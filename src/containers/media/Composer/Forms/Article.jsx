@@ -46,6 +46,7 @@ const ComposersArticle = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: NAME.MAX_LENGTH,
                   minLength: NAME.MIN_LENGTH,
                 },
@@ -74,6 +75,7 @@ const ComposersArticle = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: BODY.MAX_LENGTH,
                 },
 
@@ -98,6 +100,7 @@ const ComposersArticle = ({
               disabled={isFetching}
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: EXCERPT.MAX_LENGTH,
                 },
 

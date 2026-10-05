@@ -52,6 +52,7 @@ const CommentForm = ({
             required
             slotProps={{
               htmlInput: {
+                dir: 'auto',
                 maxLength: BODY.MAX_LENGTH,
               },
             }}

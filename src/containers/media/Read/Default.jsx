@@ -143,6 +143,8 @@ const MediumReadDefault = ({
                 {medium.name &&
                   <Typography
                     variant="h2"
+                    dir="auto"
+                    lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
                     className={classes.title}
                   >
                     {medium.name}
