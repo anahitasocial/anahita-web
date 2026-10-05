@@ -69,12 +69,12 @@ const ReplyForm = ({
           },
         }}
       />
-      <Box sx={{
-        display: 'flex', justifyContent: 'flex-end', gap: 1, mt: 1,
-      }}
-      >
+      {/* Buttons the width of the box, as in the composer and the edit
+          forms: one for sending, and beside it one for backing out where
+          there is something to back out of. */}
+      <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
         {onCancel &&
-          <Button onClick={onCancel} disabled={isSending}>
+          <Button onClick={onCancel} disabled={isSending} fullWidth>
             {i18n.t('actions:cancel')}
           </Button>}
         <Button
@@ -82,6 +82,7 @@ const ReplyForm = ({
           variant="contained"
           color="primary"
           disabled={!text || isSending}
+          fullWidth
         >
           {!isSending && submitLabel}
           {isSending && <CircularProgress size={20} />}
