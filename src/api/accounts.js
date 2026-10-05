@@ -78,6 +78,25 @@ const purgeProgress = (namespace, batchId) => {
   return axios.get(`/${namespace}/purge-batch/${batchId}`);
 };
 
+// How much on the installation is public: { people, groups, posts, total,
+// publicAllowed }. Super administrators only.
+const publicContent = () => {
+  return axios.get('/accounts/public-content');
+};
+
+// Makes every public person, group and post visible to signed-in people
+// only. `total` is the number publicContent gave, which the server checks
+// against what is public at that moment.
+//
+// 200 with what was changed; 400 `confirmation_mismatch` the number has
+// moved since; 403 `step_up_required`; 409 `public_content_allowed` the
+// installation still allows public content. It cannot be undone.
+const makeRegistered = (total) => {
+  return axios.post('/accounts/make-registered', {
+    confirm: `CONVERT ${total}`,
+  });
+};
+
 export default {
   NAMESPACES,
   BATCH_MAX,
@@ -85,4 +104,6 @@ export default {
   purgeBatch,
   purgeOne,
   purgeProgress,
+  publicContent,
+  makeRegistered,
 };

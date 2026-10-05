@@ -120,10 +120,56 @@ history. The main paths:
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
-| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own |
+| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, and Privacy, which shows what the installation lets visitors read and can make everything public members-only |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
+
+### A members-only site
+
+Everything about who can see what, on the server and here, is in one place:
+[Privacy](https://github.com/purplerat/anahita-services/blob/main/docs/privacy.md)
+in anahita-services. What follows is the app's part of it.
+
+An installation can serve nothing to people who are not signed in
+(`SITE_READ_ACCESS=registered` on the server). The server enforces it: every
+content route answers 401 to them. NodeInfo still answers and says so in
+`metadata.readAccess`, and `routes/MembersOnlyGate.jsx`, which wraps the whole
+route table, reads that. Somebody who is not signed in then sees a notice with
+a Sign in button and the home page, in place of whatever page they asked for
+and at the same address, so a link to a post leads to the post once they are
+in. Every page carries `robots: noindex`.
+
+The pages that stay open, the ways in and the pages about the site, are listed
+in `routes/membersOnly.js`.
+
+The setting has a middle value, `preview`: visitors are sent only the start of
+what is public, cut on the server. The pages work, so the same gate leaves
+them in place under a notice that this is a preview. A post that was cut
+arrives with `truncated` set, and `components/SignInPrompt.jsx` shows the way
+to the rest under it. Lists stop at their first page by themselves: the server
+lowers their total to what it sent.
+
+**The app does not ask for what a visitor will be refused.** `utils/visitor.js`
+answers, from the session and NodeInfo, whether the viewer is a visitor and on
+which kind of site:
+
+- On a preview site the comments under a post and the lists of who follows
+  whom are not requested. A sign-in prompt stands where they would be.
+- On a members-only site the search box and the People, Groups, Hashtags and
+  Places menu entries are not shown.
+
+**A page that could be refused waits to be drawn** until the session has been
+read and NodeInfo has answered. Drawn sooner, it asks for its content at once,
+is refused, and shows the refusal before the gate has caught up. The wait is a
+moment, and an open site does not pay it: what the site said last time is kept
+in the browser (`site.readAccess` in `localStorage`), and a site that said
+`public` is drawn straight away.
+
+A request that is refused anyway, because some page did not expect it, is
+caught in `src/index.js`: an unhandled "sign in first" answer from the server
+is dropped instead of reaching the screen as an error. Every other unhandled
+failure is left to be seen.
 
 ### The administration area
 
@@ -197,6 +243,7 @@ enforces:
 | --- | --- | --- |
 | `edit`, `delete`, `administration` | Everything | Whether the viewer may edit, delete or administer it |
 | `composers` | People and groups | Which kinds of post the viewer may create on the profile |
+| `audiences` | People and groups | Who a post the viewer writes there may be shown to |
 | `addFollower` | Groups | Whether the viewer may add somebody else as a follower |
 | `comment` | Posts | Whether the viewer may comment |
 | `like` | Posts and comments | Whether the viewer may like it |
@@ -210,6 +257,110 @@ drifted before.
 
 The rules themselves, and how to change their defaults, are documented in
 anahita-services under Permissions.
+
+### Choosing who can see a post
+
+One button, `components/AudienceButton.jsx`, in the two places the question
+comes up: beside Post in the composer
+(`containers/media/Composer/Audience.jsx`), and on a post that exists, for
+somebody who may change who sees it (`containers/controls/medium/Access.jsx`).
+A post carries its own `authorized.audiences` for that.
+
+In the composer, it names the current choice and
+opens a short menu; the choice is sent with the post as `access`, so a post is
+never public first and narrowed afterwards.
+
+What it offers comes from the server: every person and group carries
+`authorized.audiences`, the audiences a new post there may have (the services'
+`docs/permissions.md`, *Choosing who can see a post*). `src/utils/audience.js`
+reads that and adds what the server has no opinion on:
+
+- The options depend on where the post is going: your own profile, somebody
+  else's, or a group.
+- An audience wider than the profile itself is shown disabled, with the
+  reason: a post is never seen more widely than its profile.
+- It starts on the last audience used for that kind of place, remembered per
+  person in the browser's `localStorage`, or else on the widest the profile
+  allows. It works the same with storage unavailable, only without a memory.
+
+### The language of a post
+
+Beside the audience button the composer has a language button
+(`components/LanguageButton.jsx`), showing a code such as `EN`. The choice is
+sent with the post as `language`. `src/utils/postLanguage.js` decides where it
+starts: the language this person last posted in, in this browser; then the
+posting language on their profile, which the session's viewer carries; then
+the browser's language; then English. Language names come from the browser
+(`Intl.DisplayNames`), in the language the app is being read in.
+
+Where a post's text is drawn, `components/NodeBody.jsx` puts the post's
+language on it as the `lang` attribute, so a screen reader reads each post in
+the right one.
+
+**Right-to-left writing.** The interface is left to right and has no
+right-to-left layout. What people write is another matter: a post's title and
+text, and the fields they are typed into, carry `dir="auto"`, so Persian,
+Arabic or Hebrew runs right to left and aligns to the right. The direction
+comes from the text, not from the language tag, so it holds for untagged and
+older posts, and each paragraph of a post is judged on its own. Mirroring the
+whole interface (MUI's `direction: 'rtl'` theme with the stylis RTL plugin)
+would come with a Persian or Arabic translation of it, and there is none yet.
+
+"Language you post in" is in the profile form. It is the language somebody
+writes in, not the language of the interface.
+
+What the server stores and accepts is in the services'
+`docs/post-language.md`.
+
+### The photos of a post
+
+A photo post holds up to four images. The number comes from the server
+(`metadata.photoMaxFiles` in NodeInfo); the app does not carry it.
+
+**Making one.** The photo composer (`Composer/Forms/Photo.jsx`) shows
+`components/PhotoFilesEditor.jsx`: pick or drop several images, put them in
+order with the arrows under each, remove one, and describe each with its
+`ALT` button. Each image is uploaded the moment it is picked, in a request of
+its own (`api.photos.upload`), so the Post button waits until all of them are
+stored and the post itself is then a small JSON request naming the uploads.
+
+**Showing one.** A post with more than one image is drawn by
+`components/PhotoSlides.jsx` on the post card, in the feed and on the photo's
+page. Material UI has no carousel, so this is one made for this one job from
+its small parts (`ButtonBase`, `IconButton`, `MobileStepper` for the dots)
+with no other library. The photos sit side by side in a row that the browser
+scrolls sideways and brings to rest on one photo (CSS scroll snap), so on a
+phone a photo follows the finger and carries on with the flick. Where there
+is a mouse there are arrows, and the left and right keys work on the focused
+post. Photos after the first load when they are about to come into view. The
+frame takes the first photo's shape, kept between 4 by 5 and about 2 by 1,
+and a photo of another shape is shown whole inside it.
+
+The lightbox shows a post's images as the same kind of row, swiped the same
+way. It goes through a post's images before it goes on to the next post: the
+arrows and the arrow keys step through them, and a swipe leaves the post only
+from its first or last image. `Stepper/index.jsx` holds which image is on
+show; the row tells it when a swipe has moved. Zooming takes the image on
+show out of the row and shows it at full size, as for any photo. A post with
+one image is drawn as it always was.
+
+Every image carries its description as `alt`. One without a description falls
+back to the post's title.
+
+**Changing one.** "Edit photos" in a photo's menu opens
+`containers/media/PhotoFilesDialog.jsx`, the same editor over what the post
+has. Save sends the whole list as it is to be; nothing changes before that.
+
+The rules that can be tested without a browser are in
+`src/utils/photoFiles.js`: what can be sent, how a list is reordered, what a
+step lands on. `asSingle(medium, index)` gives the post as if one of its
+images were its only one, which is how everything that already draws a
+photo from `portraitUrls` draws any of them.
+
+In preview mode a visitor is sent one small image of a post however many it
+has, so it is drawn as a single photo.
+
+What the server stores and accepts is in the services' `docs/photos.md`.
 
 ## Translations
 

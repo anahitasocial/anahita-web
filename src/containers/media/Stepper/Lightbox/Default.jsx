@@ -1,6 +1,7 @@
 import React, {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useMemo,
   useRef,
   useState,
@@ -32,10 +33,12 @@ import MediumType from '../../../../proptypes/Medium';
 import ActorTitle from '../../../../components/ActorTitle';
 import ActorAvatar from '../../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../../components/MediumOwnerCardHeader';
+import { PhotoSlideImage } from '../../../../components/PhotoSlides';
 import Player from '../../../../components/Player';
 import EntityBody from '../../../../components/NodeBody';
 import i18n from '../../../../languages';
 import utils from '../../../../utils';
+import photoFiles from '../../../../utils/photoFiles';
 import styles from './styles';
 
 const {
@@ -58,6 +61,8 @@ const TABS = {
 const MediumStepperLightboxDefault = ({
   classes,
   medium,
+  fileIndex = 0,
+  handleFileIndex = null,
   actions,
   menu,
   stats,
@@ -81,12 +86,27 @@ const MediumStepperLightboxDefault = ({
   const paneRef = useRef(null);
   const dragRef = useRef(null);
   const zoomLoaderRef = useRef(null);
+  // The row of a post's images, the image it was last scrolled to, and
+  // whether it has only just been put on the page.
+  const rowRef = useRef(null);
+  const scrolledToRef = useRef(0);
+  const rowIsNewRef = useRef(true);
+  const rowMediumRef = useRef(null);
 
   // A size the API lists is not necessarily a size it stored, so these are
   // candidates rather than a URL.
+  //
+  // A post with several images is shown one image at a time. shown is the
+  // post as if the image on show were its only one, which is all the rest
+  // of this needs to know about there being several.
+  const fileCount = photoFiles.countOf(medium);
+  const shown = useMemo(() => {
+    return photoFiles.asSingle(medium, fileIndex);
+  }, [medium, fileIndex]);
+
   const portraits = useMemo(() => {
-    return getPortraitURLs(medium, 'large');
-  }, [medium]);
+    return getPortraitURLs(shown, 'large');
+  }, [shown]);
 
   // Probing candidates by pointing the visible <img> at them blanks the pane
   // once per 404, so a photo whose 'large' was never generated flickers twice
@@ -119,7 +139,10 @@ const MediumStepperLightboxDefault = ({
 
   // The full upload runs to several megabytes, so it is fetched only once
   // someone asks to zoom — never on open, and never by the neighbour prefetch.
-  const zoom = getPortraitURL(medium, 'original');
+  const zoom = getPortraitURL(shown, 'original');
+  // A post with several images shows them as a row to swipe through.
+  // Zoomed, it is the one image at full size, as for any photo.
+  const hasRow = fileCount > 1;
   const hasPortrait = portraits.length > 0;
   const src = isZoomed ? zoom : resolvedSrc;
   // Derived rather than reset in an effect: an effect lands a frame late, and
@@ -144,7 +167,7 @@ const MediumStepperLightboxDefault = ({
     setIsZoomed(false);
     setHasZoomFailed(false);
     cancelZoomLoad();
-  }, [medium.id, cancelZoomLoad]);
+  }, [medium.id, fileIndex, cancelZoomLoad]);
 
   useEffect(() => {
     return cancelZoomLoad;
@@ -186,6 +209,49 @@ const MediumStepperLightboxDefault = ({
 
     loader.src = zoom;
   }, [canZoom, isZoomed, isZoomLoading, zoom, resolvedSrc]);
+
+  // Keeps the row where the stepper says it is. The stepper moves through
+  // a post's images for the arrows and the arrow keys; a swipe moves the
+  // row itself and tells the stepper afterwards, and that must not be
+  // answered by scrolling the row again.
+  useLayoutEffect(() => {
+    const row = rowRef.current;
+    if (!row) {
+      // Not on the page: zoomed, or a post with one image. When it comes
+      // back it starts at the first image and has to be put right.
+      rowIsNewRef.current = true;
+      return;
+    }
+
+    // Each post has a row of its own, so another post is a new row too.
+    const isNew = rowIsNewRef.current || rowMediumRef.current !== medium.id;
+    rowIsNewRef.current = false;
+    rowMediumRef.current = medium.id;
+    if (!isNew && scrolledToRef.current === fileIndex) {
+      return;
+    }
+
+    scrolledToRef.current = fileIndex;
+    const still = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    row.scrollTo({
+      left: fileIndex * row.clientWidth,
+      // A step slides. Arriving at a post, or back from a zoom, does not:
+      // the image wanted is simply there.
+      behavior: isNew || still ? 'auto' : 'smooth',
+    });
+  }, [fileIndex, medium.id, isZoomed, hasRow]);
+
+  const handleRowScroll = () => {
+    const row = rowRef.current;
+    if (!row || !row.clientWidth) return;
+
+    const at = photoFiles.step(Math.round(row.scrollLeft / row.clientWidth), 0, fileCount);
+    if (at === scrolledToRef.current) return;
+
+    scrolledToRef.current = at;
+    if (handleFileIndex) handleFileIndex(at);
+  };
 
   // Panning is mouse-only: a zoomed pane scrolls, so touch already pans itself.
   const handleMouseDown = (event) => {
@@ -229,7 +295,10 @@ const MediumStepperLightboxDefault = ({
 
   const handleTouchStart = (event) => {
     if (isZoomed) return;
-    touchStartRef.current = event.changedTouches[0].clientX;
+    touchStartRef.current = {
+      x: event.changedTouches[0].clientX,
+      fileIndex,
+    };
   };
 
   const handleTouchEnd = (event) => {
@@ -238,8 +307,17 @@ const MediumStepperLightboxDefault = ({
     // While zoomed a horizontal drag is panning the photo, not stepping off it.
     if (isZoomed || start === null) return;
 
-    const distance = event.changedTouches[0].clientX - start;
+    const distance = event.changedTouches[0].clientX - start.x;
     if (Math.abs(distance) < SWIPE_THRESHOLD) return;
+
+    // Within a post's images the row scrolls itself. A swipe leaves the
+    // post only from its ends: on from the last image, back from the
+    // first.
+    if (hasRow) {
+      if (distance < 0 && start.fileIndex < fileCount - 1) return;
+      if (distance > 0 && start.fileIndex > 0) return;
+    }
+
     if (distance < 0 && hasNext) handleNext();
     if (distance > 0 && hasPrev) handlePrev();
   };
@@ -255,7 +333,7 @@ const MediumStepperLightboxDefault = ({
         isPortraitLoaded && classes.portraitLoaded,
         isZoomed && classes.portraitZoomed,
       )}
-      alt={medium.name}
+      alt={photoFiles.altOf(medium, fileIndex)}
       src={src}
       draggable={false}
       onLoad={() => {
@@ -296,13 +374,62 @@ const MediumStepperLightboxDefault = ({
             onMouseLeave={handleMouseUp}
             size={{ xs: 12, md: 8 }}
           >
-            {(!isPortraitLoaded || isZoomLoading) &&
+            {(isZoomLoading || (!isPortraitLoaded && !(hasRow && !isZoomed))) &&
               <CircularProgress className={classes.spinner} />}
+            {fileCount > 1 && !isZoomed &&
+              <span className={classes.fileCount} aria-live="polite">
+                {i18n.t('photos:slides.position', {
+                  index: fileIndex + 1,
+                  total: fileCount,
+                })}
+              </span>}
             {/* Zoomed, the pane itself takes the click so a pan does not
                 register as one; fitted, a real button carries the affordance
                 and gives the keyboard a way in. */}
             {isZoomed && image}
-            {!isZoomed && canZoom && image &&
+            {!isZoomed && hasRow &&
+              <div
+                // A row of its own for each post, so it starts where that
+                // post should and not where the last one was left.
+                key={`files-${medium.id}`}
+                ref={rowRef}
+                className={classes.fileRow}
+                // Left to right whatever the page, so the arithmetic that
+                // reads the position holds.
+                dir="ltr"
+                onScroll={handleRowScroll}
+              >
+                {photoFiles.filesOf(medium).map((file, at) => {
+                  return (
+                    <div
+                      className={classes.fileSlide}
+                      key={file.id || at}
+                    >
+                      <button
+                        type="button"
+                        className={classes.zoomButton}
+                        title={zoomLabel}
+                        aria-label={zoomLabel}
+                        // Only the image on show takes the keyboard, and
+                        // only it can be zoomed.
+                        tabIndex={at === fileIndex ? 0 : -1}
+                        disabled={!canZoom}
+                        onClick={() => {
+                          if (at === fileIndex) handleZoomToggle();
+                        }}
+                      >
+                        <PhotoSlideImage
+                          medium={medium}
+                          index={at}
+                          size="large"
+                          imageClassName={classes.fileImage}
+                        />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>}
+            {!isZoomed && !hasRow && canZoom && image &&
               <button
                 type="button"
                 className={classes.zoomButton}
@@ -312,7 +439,7 @@ const MediumStepperLightboxDefault = ({
               >
                 {image}
               </button>}
-            {!isZoomed && !canZoom && image}
+            {!isZoomed && !hasRow && !canZoom && image}
             {isZoomed &&
               <div className={classes.zoomExit}>
                 <Tooltip title={zoomLabel}>
@@ -469,6 +596,10 @@ MediumStepperLightboxDefault.propTypes = {
   stats: PropTypes.node,
   menu: PropTypes.node,
   medium: MediumType.isRequired,
+  // Which image of a post with several is on show.
+  fileIndex: PropTypes.number,
+  // Told which image has been swiped to.
+  handleFileIndex: PropTypes.func,
   locations: PropTypes.node,
   comments: PropTypes.node,
   form: PropTypes.node,

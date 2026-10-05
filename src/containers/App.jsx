@@ -25,6 +25,7 @@ import MenuLogo from '../components/Logo';
 import actions from '../actions';
 import NotificationButton from './notifications/Button';
 import adminTabs from './admin/tabs';
+import visitor from '../utils/visitor';
 import { Admin as ADMIN } from '../constants';
 
 const drawerWidth = 240;
@@ -93,6 +94,7 @@ const App = ({
   viewer,
   nodeInfo,
   adminCounts,
+  isShutOut = false,
   whoami,
   readNodeInfo,
   readAdminCounts,
@@ -153,6 +155,7 @@ const App = ({
           viewer={viewer}
           isAuthenticated={isAuthenticated}
           nodeInfo={nodeInfo}
+          isShutOut={isShutOut}
           adminWaiting={adminTabs.waitingCount(viewer, adminCounts)}
           classNames={classes}
         />
@@ -181,7 +184,9 @@ const App = ({
           >
             <MenuIcon />
           </IconButton>
-          <SearchBox />
+          {/* Nothing to search on a members-only site until signed in:
+              the search would only be refused. */}
+          {!isShutOut && <SearchBox />}
           <div className={classes.grow} />
           {isAuthenticated && <NotificationButton viewer={viewer} />}
           <Viewer
@@ -236,6 +241,8 @@ const App = ({
 };
 
 App.propTypes = {
+  // A visitor on a members-only site: nothing to search or browse.
+  isShutOut: PropTypes.bool,
   viewer: ViewerType.isRequired,
   children: PropTypes.node.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
@@ -262,6 +269,8 @@ const mapStateToProps = (state) => {
     isAuthenticated,
     viewer,
     adminCounts: state.admin.counts,
+    // A visitor on a members-only site, who can be shown nothing.
+    isShutOut: visitor.isShutOut(state),
   };
 };
 

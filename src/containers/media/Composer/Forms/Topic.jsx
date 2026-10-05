@@ -23,6 +23,7 @@ const ComposersTopic = ({
   fields,
   medium,
   isFetching,
+  postOptions = null,
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
@@ -44,6 +45,7 @@ const ComposersTopic = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: NAME.MAX_LENGTH,
                   minLength: NAME.MIN_LENGTH,
                 },
@@ -72,6 +74,7 @@ const ComposersTopic = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: BODY.MAX_LENGTH,
                 },
 
@@ -82,6 +85,7 @@ const ComposersTopic = ({
             />}
         </CardContent>
         <CardActions>
+          {postOptions}
           <Button
             type="submit"
             variant="contained"
@@ -99,6 +103,8 @@ const ComposersTopic = ({
 };
 
 ComposersTopic.propTypes = {
+  // The audience and language buttons, built by the composer.
+  postOptions: PropTypes.node,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   fields: PropTypes.objectOf(PropTypes.any).isRequired,

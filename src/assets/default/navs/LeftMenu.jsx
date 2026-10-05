@@ -42,6 +42,7 @@ const LeftMenu = ({
   nodeInfo = null,
   onLogoutClick = null,
   adminWaiting = 0,
+  isShutOut = false,
 }) => {
   const location = useLocation();
   const { pathname = '/' } = location;
@@ -65,46 +66,52 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={isAuthenticated ? i18n.t('dashboard:cTitle') : i18n.t('home:cTitle')} />
       </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/people/"
-        selected={pathname === '/people/'}
-      >
-        <ListItemIcon>
-          <PeopleIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('people:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/groups/"
-        selected={pathname === '/groups/'}
-      >
-        <ListItemIcon>
-          <GroupsIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('groups:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/hashtags/"
-        selected={pathname === '/hashtags/'}
-      >
-        <ListItemIcon>
-          <LabelIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('hashtags:cTitle')} />
-      </ListItemButton>
-      <ListItemButton
-        component={Link}
-        to="/locations/"
-        selected={pathname === '/locations/'}
-      >
-        <ListItemIcon>
-          <LocationIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('locations:cTitle')} />
-      </ListItemButton>
+      {/* People, groups, hashtags and places: nothing a visitor to a
+          members-only site can be shown, so they are not offered. Each
+          would only lead to the same request to sign in. */}
+      {!isShutOut &&
+        <>
+          <ListItemButton
+            component={Link}
+            to="/people/"
+            selected={pathname === '/people/'}
+          >
+            <ListItemIcon>
+              <PeopleIcon />
+            </ListItemIcon>
+            <ListItemText primary={i18n.t('people:cTitle')} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/groups/"
+            selected={pathname === '/groups/'}
+          >
+            <ListItemIcon>
+              <GroupsIcon />
+            </ListItemIcon>
+            <ListItemText primary={i18n.t('groups:cTitle')} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/hashtags/"
+            selected={pathname === '/hashtags/'}
+          >
+            <ListItemIcon>
+              <LabelIcon />
+            </ListItemIcon>
+            <ListItemText primary={i18n.t('hashtags:cTitle')} />
+          </ListItemButton>
+          <ListItemButton
+            component={Link}
+            to="/locations/"
+            selected={pathname === '/locations/'}
+          >
+            <ListItemIcon>
+              <LocationIcon />
+            </ListItemIcon>
+            <ListItemText primary={i18n.t('locations:cTitle')} />
+          </ListItemButton>
+        </>}
       {/* One entry for what every administrator looks after: the signup
           queue and invitations are tabs behind it. Shown to
           anybody who may see at least one of those tabs, with the number
@@ -224,6 +231,8 @@ LeftMenu.propTypes = {
   nodeInfo: NodeInfoType,
   // How many things are waiting in the administration area.
   adminWaiting: PropTypes.number,
+  // A visitor on a members-only site.
+  isShutOut: PropTypes.bool,
 };
 
 export default LeftMenu;

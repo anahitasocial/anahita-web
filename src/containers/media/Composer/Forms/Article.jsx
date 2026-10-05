@@ -24,6 +24,7 @@ const ComposersArticle = ({
   fields,
   medium,
   isFetching,
+  postOptions = null,
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
@@ -45,6 +46,7 @@ const ComposersArticle = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: NAME.MAX_LENGTH,
                   minLength: NAME.MIN_LENGTH,
                 },
@@ -73,6 +75,7 @@ const ComposersArticle = ({
               required
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: BODY.MAX_LENGTH,
                 },
 
@@ -97,6 +100,7 @@ const ComposersArticle = ({
               disabled={isFetching}
               slotProps={{
                 htmlInput: {
+                  dir: 'auto',
                   maxLength: EXCERPT.MAX_LENGTH,
                 },
 
@@ -107,6 +111,7 @@ const ComposersArticle = ({
             />}
         </CardContent>
         <CardActions>
+          {postOptions}
           <Button
             type="submit"
             variant="contained"
@@ -124,6 +129,8 @@ const ComposersArticle = ({
 };
 
 ComposersArticle.propTypes = {
+  // The audience and language buttons, built by the composer.
+  postOptions: PropTypes.node,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   fields: PropTypes.objectOf(PropTypes.any).isRequired,

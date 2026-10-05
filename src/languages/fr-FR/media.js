@@ -16,4 +16,8 @@ export default {
   confirm: {
     delete: 'Voulez-vous supprimer cette publication ?',
   },
+  // The language button in the composer.
+  language: {
+    label: 'Langue : {{ name }}',
+  },
 };

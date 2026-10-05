@@ -596,7 +596,7 @@ const Accounts = ({
                             {` · ${i18n.t(isGroup ? 'accounts:list.contentGroup' : 'accounts:list.content', {
                               count: account.contentCount,
                             })}`}
-                            {` · ${i18n.t(isGroup ? 'accounts:list.members' : 'accounts:list.followers', {
+                            {` · ${i18n.t('accounts:list.followers', {
                               count: account.followerCount,
                             })}`}
                           </Typography>

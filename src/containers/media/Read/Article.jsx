@@ -20,6 +20,7 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
+import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import styles from './styles';
@@ -115,14 +116,17 @@ const MediumReadArticle = ({
                 {medium.name &&
                   <Typography
                     variant="h2"
+                    dir="auto"
+                    lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
                     className={classes.title}
                   >
                     {medium.name}
                   </Typography>}
                 {medium.body &&
-                  <EntityBody contentFilter>
+                  <EntityBody contentFilter lang={medium.language}>
                     {medium.body}
                   </EntityBody>}
+                <SignInPrompt show={Boolean(medium.truncated)} />
               </CardContent>
               {stats &&
                 <CardActions>

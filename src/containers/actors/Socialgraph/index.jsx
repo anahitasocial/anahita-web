@@ -5,6 +5,8 @@ import { makeStyles } from 'tss-react/mui';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import SignInPrompt from '../../../components/SignInPrompt';
+import visitor from '../../../utils/visitor';
 import actions from '../../../actions';
 
 import ActorType from '../../../proptypes/Actor';
@@ -34,6 +36,7 @@ const ActorsSocialgraph = ({
   queryFilters = {
     q: '',
   },
+  heldBack = false,
 }) => {
   const { classes } = useStyles();
   const { q = '' } = queryFilters;
@@ -46,21 +49,35 @@ const ActorsSocialgraph = ({
   }, []);
 
   useEffect(() => {
-    browseList({
+    // Not asked for when the answer is known to be no: who follows whom
+    // is held back from a visitor on a preview site.
+    if (heldBack) {
+      return;
+    }
+
+    Promise.resolve(browseList({
       q,
       filter,
       actor: actorNode,
       start,
       limit: LIMIT,
       ...queryFilters,
+    })).catch(() => {
+      // The failure is in the store. Uncaught, the browser shows it raw.
     });
-  }, [q, filter, start]);
+  }, [q, filter, start, heldBack]);
 
   const fetchList = () => {
     return setStart(start + LIMIT);
   };
 
   const hasMore = total > items.allIds.length;
+
+  // Where the list would be, a way to it. The counts on the profile are
+  // still shown; it is the names that need signing in.
+  if (heldBack) {
+    return <SignInPrompt what="followers" />;
+  }
 
   return (
     <InfiniteScroll
@@ -101,6 +118,9 @@ ActorsSocialgraph.propTypes = {
     'blocks',
   ]).isRequired,
   queryFilters: PropTypes.object,
+  // The list is not shown to this viewer: a visitor on a site that shows
+  // visitors only the start of things.
+  heldBack: PropTypes.bool,
   total: PropTypes.number,
 };
 
@@ -121,6 +141,7 @@ const mapStateToProps = () => {
       error,
       total,
       viewer,
+      heldBack: visitor.isPreviewVisitor(state),
     };
   };
 };

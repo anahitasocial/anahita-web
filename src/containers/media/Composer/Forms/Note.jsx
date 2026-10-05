@@ -29,6 +29,7 @@ const ComposersNote = ({
   viewer,
   actor,
   isFetching,
+  postOptions = null,
 }) => {
   const placeholder = isPerson(actor) && actor.id !== viewer.id ? i18n.t('notes:composer.bodyPlaceholderPerson', {
     name: actor.name,
@@ -54,12 +55,14 @@ const ComposersNote = ({
             required
             slotProps={{
               htmlInput: {
+                dir: 'auto',
                 maxLength: BODY.MAX_LENGTH,
               },
             }}
           />
         </CardContent>
         <CardActions>
+          {postOptions}
           <Button
             type="submit"
             variant="contained"
@@ -77,6 +80,8 @@ const ComposersNote = ({
 };
 
 ComposersNote.propTypes = {
+  // The audience and language buttons, built by the composer.
+  postOptions: PropTypes.node,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,

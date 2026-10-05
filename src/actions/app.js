@@ -27,7 +27,11 @@ const readNodeInfo = () => {
         });
       })
       .catch(() => {
-        return null;
+        // Still no alert. But the wait is over, and whatever was holding
+        // back until the answer came can stop holding.
+        return dispatch({
+          type: APP.NODE_INFO.UNAVAILABLE,
+        });
       });
   };
 };

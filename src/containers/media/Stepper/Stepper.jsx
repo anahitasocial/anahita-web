@@ -69,6 +69,8 @@ const MediaStepperView = ({
   fields,
   index,
   itemCount,
+  fileIndex = 0,
+  handleFileIndex = null,
   namespace,
   viewer,
   isAuthenticated,
@@ -150,6 +152,8 @@ const MediaStepperView = ({
       <Divider />
       <Lightbox
         medium={medium}
+        fileIndex={fileIndex}
+        handleFileIndex={handleFileIndex}
         editing={isEditing}
         hasNext={hasNext}
         hasPrev={hasPrev}
@@ -218,6 +222,10 @@ MediaStepperView.propTypes = {
   isAuthenticated: PropTypes.bool.isRequired,
   isFetching: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool.isRequired,
+  // Which image of a post with several is on show.
+  fileIndex: PropTypes.number,
+  // Told which image has been swiped to.
+  handleFileIndex: PropTypes.func,
   hasNext: PropTypes.bool.isRequired,
   hasPrev: PropTypes.bool.isRequired,
   Like: PropTypes.elementType,
