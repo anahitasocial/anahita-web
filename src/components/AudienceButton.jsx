@@ -57,14 +57,11 @@ const AudienceButton = ({
   const [anchorEl, setAnchorEl] = useState(null);
 
   // Whose profile it is decides the wording: "people who follow you" on
-  // your own, "people who follow Ada" on hers, "members" in a group.
+  // your own, "people who follow Ada" on hers or on a group's.
   const place = audience.placeOf(actor, viewer);
-  const isGroup = place === audience.PLACE.GROUP;
 
-  // In a group, the followers are its members, and are called that.
   const nameOf = (level) => {
-    const key = isGroup && level === 'followers' ? 'members' : level;
-    return i18n.t(`access:audience.names.${key}`);
+    return i18n.t(`access:audience.names.${level}`);
   };
 
   // Public and registered mean the same everywhere. The rest depend on

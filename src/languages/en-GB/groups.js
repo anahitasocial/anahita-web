@@ -39,7 +39,7 @@ export default {
     // the two below trains people to type confirmations without reading.
     disable: 'Disable',
     disablePrompts: {
-      description: 'Disabling hides this group from everyone. Its members cannot post to it or find it while it is disabled.',
+      description: 'Disabling hides this group from everyone. Its followers cannot post to it or find it while it is disabled.',
       descriptionDisabled: 'This group is disabled. It does not appear anywhere and nobody can post to it.',
       reversible: 'This can be undone at any time, and nothing is deleted. To remove a profile permanently, archive or delete it instead.',
       action: 'Disable',
@@ -65,9 +65,9 @@ export default {
         admins_other: '{{ count }} administrators',
         memberSince: 'Created {{ date }}.',
       },
-      description: 'Deleting removes this group and everything in it: posts, photos, comments and the membership list. Content other members contributed goes with it.',
+      description: 'Deleting removes this group and everything in it: posts, photos, comments and the list of followers. Content its followers contributed goes with it.',
       reversible: 'This is not immediate. The group is hidden straight away and permanently erased after {{ count }} days. Any administrator can restore it from this page before then.',
-      revoked: 'Members lose access immediately, and the group disappears from their profiles and feeds.',
+      revoked: 'Followers lose access immediately, and the group disappears from their profiles and feeds.',
       handle: 'The name {{ alias }} stays reserved afterwards, so no other group can take it.',
       scheduled: 'This group is scheduled for deletion and will be erased on {{ date }}.',
       restore: 'Restore this group',

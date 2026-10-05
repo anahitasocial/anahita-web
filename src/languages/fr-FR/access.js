@@ -15,7 +15,6 @@ export default {
       public: 'Public',
       registered: 'Personnes connectées',
       followers: 'Abonnés',
-      members: 'Membres',
       leaders: 'Abonnements',
       mutuals: 'Relations mutuelles',
       admins: 'Administrateurs',
@@ -37,7 +36,7 @@ export default {
         myself: '{{ name }} uniquement',
       },
       group: {
-        followers: 'Les membres de {{ name }}',
+        followers: 'Les personnes qui suivent {{ name }}',
         admins: 'Les administrateurs de {{ name }}',
       },
     },

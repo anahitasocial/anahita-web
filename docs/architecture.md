@@ -251,7 +251,7 @@ What it offers comes from the server: every person and group carries
 reads that and adds what the server has no opinion on:
 
 - The options depend on where the post is going: your own profile, somebody
-  else's, or a group. In a group, followers are called Members.
+  else's, or a group.
 - An audience wider than the profile itself is shown disabled, with the
   reason: a post is never seen more widely than its profile.
 - It starts on the last audience used for that kind of place, remembered per

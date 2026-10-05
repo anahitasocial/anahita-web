@@ -33,7 +33,7 @@ export default {
   },
   tierHelp: {
     person: 'Vide : n’a rien écrit, ne suit personne, n’a aucun abonné. Inactif : pas vide, et sans activité depuis deux ans.',
-    group: 'Vide : rien n’y a été publié et un membre au plus. Inactif : pas vide, et sans publication depuis deux ans.',
+    group: 'Vide : rien n’y a été publié et un abonné au plus. Inactif : pas vide, et sans publication depuis deux ans.',
   },
   states: {
     active: 'En service',
@@ -54,8 +54,6 @@ export default {
     contentGroup_other: '{{count}} publications',
     followers_one: '{{count}} abonné',
     followers_other: '{{count}} abonnés',
-    members_one: '{{count}} membre',
-    members_other: '{{count}} membres',
     unverified: 'Adresse e-mail non vérifiée',
     notOnboarded: 'Accueil non terminé',
     noAdmin: 'Aucun administrateur',

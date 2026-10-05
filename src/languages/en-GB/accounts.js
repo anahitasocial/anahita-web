@@ -33,7 +33,7 @@ export default {
   },
   tierHelp: {
     person: 'Empty: nothing written, follows nobody, has no followers. Dormant: not empty, and not active for two years.',
-    group: 'Empty: nothing posted in it and at most one member. Dormant: not empty, and nothing posted for two years.',
+    group: 'Empty: nothing posted in it and at most one follower. Dormant: not empty, and nothing posted for two years.',
   },
   states: {
     active: 'In use',
@@ -54,8 +54,6 @@ export default {
     contentGroup_other: '{{count}} posts',
     followers_one: '{{count}} follower',
     followers_other: '{{count}} followers',
-    members_one: '{{count}} member',
-    members_other: '{{count}} members',
     unverified: 'Email not verified',
     notOnboarded: 'Not onboarded',
     noAdmin: 'No administrator',

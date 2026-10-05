@@ -71,7 +71,7 @@ export default {
         groupsAdministered_other: 'administrator of {{ count }} groups',
         memberSince: 'A member since {{ date }}.',
       },
-      description: 'Deleting removes this profile and everything on it: posts, comments, photos, followers and group memberships. Comments other people left on this content go with it.',
+      description: 'Deleting removes this profile and everything on it: posts, comments, photos, followers and the groups they follow. Comments other people left on this content go with it.',
       reversible: 'This is not immediate. The profile is hidden straight away and permanently erased after {{ count }} days. Signing in before then will offer to restore it.',
       revoked: 'Sessions on every device end now, and any passkeys are removed. Restoring does not bring those back.',
       handle: 'The handle {{ alias }} stays reserved afterwards, so nobody else can take it.',
