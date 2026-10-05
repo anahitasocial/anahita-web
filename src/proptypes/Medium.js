@@ -4,6 +4,7 @@ import {
   string,
   arrayOf,
   bool,
+  object,
 } from 'prop-types';
 
 import ActorType from './Actor';
@@ -18,6 +19,16 @@ export default shape({
   alias: string,
   body: string,
   portraitUrls: ImageUrls,
+  // The images of a photo post, in order. The first is the one
+  // portraitUrls shows. Not sent for other kinds of post.
+  files: arrayOf(shape({
+    id: string,
+    position: number,
+    altText: string,
+    width: number,
+    height: number,
+    urls: object,
+  })),
   coverUrls: ImageUrls,
   commands: arrayOf(string),
   subscriberCount: number,

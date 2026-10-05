@@ -36,6 +36,7 @@ import Player from '../../../../components/Player';
 import EntityBody from '../../../../components/NodeBody';
 import i18n from '../../../../languages';
 import utils from '../../../../utils';
+import photoFiles from '../../../../utils/photoFiles';
 import styles from './styles';
 
 const {
@@ -58,6 +59,7 @@ const TABS = {
 const MediumStepperLightboxDefault = ({
   classes,
   medium,
+  fileIndex = 0,
   actions,
   menu,
   stats,
@@ -84,9 +86,18 @@ const MediumStepperLightboxDefault = ({
 
   // A size the API lists is not necessarily a size it stored, so these are
   // candidates rather than a URL.
+  //
+  // A post with several images is shown one image at a time. shown is the
+  // post as if the image on show were its only one, which is all the rest
+  // of this needs to know about there being several.
+  const fileCount = photoFiles.countOf(medium);
+  const shown = useMemo(() => {
+    return photoFiles.asSingle(medium, fileIndex);
+  }, [medium, fileIndex]);
+
   const portraits = useMemo(() => {
-    return getPortraitURLs(medium, 'large');
-  }, [medium]);
+    return getPortraitURLs(shown, 'large');
+  }, [shown]);
 
   // Probing candidates by pointing the visible <img> at them blanks the pane
   // once per 404, so a photo whose 'large' was never generated flickers twice
@@ -119,7 +130,7 @@ const MediumStepperLightboxDefault = ({
 
   // The full upload runs to several megabytes, so it is fetched only once
   // someone asks to zoom — never on open, and never by the neighbour prefetch.
-  const zoom = getPortraitURL(medium, 'original');
+  const zoom = getPortraitURL(shown, 'original');
   const hasPortrait = portraits.length > 0;
   const src = isZoomed ? zoom : resolvedSrc;
   // Derived rather than reset in an effect: an effect lands a frame late, and
@@ -144,7 +155,7 @@ const MediumStepperLightboxDefault = ({
     setIsZoomed(false);
     setHasZoomFailed(false);
     cancelZoomLoad();
-  }, [medium.id, cancelZoomLoad]);
+  }, [medium.id, fileIndex, cancelZoomLoad]);
 
   useEffect(() => {
     return cancelZoomLoad;
@@ -255,7 +266,7 @@ const MediumStepperLightboxDefault = ({
         isPortraitLoaded && classes.portraitLoaded,
         isZoomed && classes.portraitZoomed,
       )}
-      alt={medium.name}
+      alt={photoFiles.altOf(medium, fileIndex)}
       src={src}
       draggable={false}
       onLoad={() => {
@@ -298,6 +309,13 @@ const MediumStepperLightboxDefault = ({
           >
             {(!isPortraitLoaded || isZoomLoading) &&
               <CircularProgress className={classes.spinner} />}
+            {fileCount > 1 && !isZoomed &&
+              <span className={classes.fileCount} aria-live="polite">
+                {i18n.t('photos:slides.position', {
+                  index: fileIndex + 1,
+                  total: fileCount,
+                })}
+              </span>}
             {/* Zoomed, the pane itself takes the click so a pan does not
                 register as one; fitted, a real button carries the affordance
                 and gives the keyboard a way in. */}
@@ -469,6 +487,8 @@ MediumStepperLightboxDefault.propTypes = {
   stats: PropTypes.node,
   menu: PropTypes.node,
   medium: MediumType.isRequired,
+  // Which image of a post with several is on show.
+  fileIndex: PropTypes.number,
   locations: PropTypes.node,
   comments: PropTypes.node,
   form: PropTypes.node,

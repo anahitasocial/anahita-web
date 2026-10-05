@@ -17,6 +17,7 @@ import MediaType from '../../../proptypes/Media';
 import actions from '../../../actions';
 import form from '../../../utils/form';
 import utils from '../../../utils';
+import photoFiles from '../../../utils/photoFiles';
 
 const { getPortraitURL, getNamespace } = utils.node;
 
@@ -51,6 +52,9 @@ const MediaStepper = ({
   const [isEditing, setIsEditing] = useState(false);
   const [fields, setFields] = useState(formFields);
   const [currentId, setCurrentId] = useState(mediumId);
+  // Which image of the post is on show. A photo post can hold several, and
+  // Next goes through them before it goes to the next post.
+  const [fileIndex, setFileIndex] = useState(0);
   const [current, setCurrent] = useState({ ...MEDIUM_DEFAULT });
 
   // byId is a plain object, so its keys are strings while allIds holds whatever
@@ -65,6 +69,7 @@ const MediaStepper = ({
   // only changes this prop.
   useEffect(() => {
     setCurrentId(mediumId);
+    setFileIndex(0);
   }, [mediumId]);
 
   useEffect(() => {
@@ -72,18 +77,39 @@ const MediaStepper = ({
     if (success) alertSuccess('Updated successfully.');
   }, [error, success]);
 
-  const hasNext = currentIndex > -1 && currentIndex < items.allIds.length - 1;
-  const hasPrev = currentIndex > 0;
+  const fileCount = photoFiles.countOf(medium);
+  const hasNextFile = fileIndex < fileCount - 1;
+  const hasPrevFile = fileIndex > 0;
+
+  const hasNext = hasNextFile ||
+    (currentIndex > -1 && currentIndex < items.allIds.length - 1);
+  const hasPrev = hasPrevFile || currentIndex > 0;
 
   const handleNext = useCallback(() => {
+    if (hasNextFile) {
+      setFileIndex(fileIndex + 1);
+      return;
+    }
     const nextId = items.allIds[currentIndex + 1];
-    if (nextId) setCurrentId(nextId);
-  }, [currentIndex, items]);
+    if (nextId) {
+      setCurrentId(nextId);
+      setFileIndex(0);
+    }
+  }, [currentIndex, items, fileIndex, hasNextFile]);
 
   const handlePrev = useCallback(() => {
+    if (hasPrevFile) {
+      setFileIndex(fileIndex - 1);
+      return;
+    }
     const prevId = items.allIds[currentIndex - 1];
-    if (prevId) setCurrentId(prevId);
-  }, [currentIndex, items]);
+    if (prevId) {
+      // Going back lands on the last image of the post before, so stepping
+      // back and forth passes every image in both directions.
+      setCurrentId(prevId);
+      setFileIndex(Math.max(photoFiles.countOf(items.byId[prevId]) - 1, 0));
+    }
+  }, [currentIndex, items, fileIndex, hasPrevFile]);
 
   const handleKeydown = useCallback((event) => {
     if (isEditing) return;
@@ -164,6 +190,7 @@ const MediaStepper = ({
       open={open}
       handleClose={handleClose}
       medium={medium}
+      fileIndex={fileIndex}
       current={current}
       fields={fields}
       index={currentIndex}

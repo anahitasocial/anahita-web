@@ -18,12 +18,14 @@ import MediumType from '../../../proptypes/Medium';
 import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
+import PhotoSlides from '../../../components/PhotoSlides';
 import Player from '../../../components/Player';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
 import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
+import photoFiles from '../../../utils/photoFiles';
 import styles from './styles';
 
 const {
@@ -61,6 +63,9 @@ const MediumReadDefault = ({
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
 
+  // A post with several images is drawn as slides, which load their own.
+  const hasSlides = photoFiles.hasSeveral(medium);
+
   const [isLoaded, setIsLoaded] = useState(!portrait);
 
   useEffect(() => {
@@ -80,7 +85,7 @@ const MediumReadDefault = ({
     <CardMedia
       component="img"
       title={medium.name}
-      alias={medium.name}
+      alt={photoFiles.altOf(medium)}
       image={portrait}
     />
   );
@@ -101,7 +106,15 @@ const MediumReadDefault = ({
               image={cover}
               src="picture"
             />}
-          {portrait && isLoaded && handleView &&
+          {hasSlides &&
+            <PhotoSlides
+              medium={medium}
+              size="large"
+              onOpen={handleView ? () => {
+                handleView();
+              } : null}
+            />}
+          {!hasSlides && portrait && isLoaded && handleView &&
             <ButtonBase
               className={classes.portraitButton}
               onClick={handleView}
@@ -109,8 +122,8 @@ const MediumReadDefault = ({
             >
               {portraitMedia}
             </ButtonBase>}
-          {portrait && isLoaded && !handleView && portraitMedia}
-          {!isLoaded &&
+          {!hasSlides && portrait && isLoaded && !handleView && portraitMedia}
+          {!hasSlides && !isLoaded &&
             <CardContent>
               <Progress />
             </CardContent>}

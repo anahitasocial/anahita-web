@@ -13,6 +13,7 @@ import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlCommentStatus from '../controls/medium/CommentStatus';
 import ControlDelete from '../controls/Delete';
 import useReport from '../reports/useReport';
+import PhotoFilesDialog from './PhotoFilesDialog';
 
 import PersonType from '../../proptypes/Person';
 import MediumType from '../../proptypes/Medium';
@@ -20,6 +21,7 @@ import i18n from '../../languages';
 
 const { withRef } = utils.component;
 const {
+  getNamespace,
   getURL,
   // isLikeable,
   isCommentable,
@@ -37,6 +39,7 @@ const MediaMenu = ({
   inline = false,
 }) => {
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
+  const [isEditingPhotos, setIsEditingPhotos] = React.useState(false);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,6 +54,9 @@ const MediaMenu = ({
   const canComment = isCommentable(medium);
   const canDelete = permissions.canDelete(viewer, medium);
   const report = useReport(viewer, medium);
+  // A photo post's images are changed in a dialog of their own: their
+  // order, their descriptions, and which there are.
+  const canEditPhotos = canEdit && getNamespace(medium) === 'photos';
 
   // Somebody who may do nothing else here may still report it, so the
   // menu is drawn for them too.
@@ -85,6 +91,15 @@ const MediaMenu = ({
           >
             Edit
           </MenuItem>}
+        {canEditPhotos &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setIsEditingPhotos(true);
+            }}
+          >
+            {i18n.t('photos:editor.edit')}
+          </MenuItem>}
         {isSubscribable(medium) &&
           <NotificationSubActionWithRef
             medium={medium}
@@ -114,6 +129,14 @@ const MediaMenu = ({
           </MenuItem>}
       </Menu>
       {report.dialog}
+      {canEditPhotos &&
+        <PhotoFilesDialog
+          medium={medium}
+          open={isEditingPhotos}
+          onClose={() => {
+            setIsEditingPhotos(false);
+          }}
+        />}
     </>
   );
 };

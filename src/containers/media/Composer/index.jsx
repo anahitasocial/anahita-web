@@ -10,6 +10,7 @@ import Tab from '@mui/material/Tab';
 import ArticleForm from './Forms/Article';
 import FileForm from './Forms/File';
 import NoteForm from './Forms/Note';
+import PhotoForm from './Forms/Photo';
 import TopicForm from './Forms/Topic';
 import ComposerDefault from './Default';
 
@@ -51,7 +52,7 @@ const COMPOSER_CONFIGS = {
   photos: {
     Composer: ComposerDefault('photos'),
     formFields: form.createFormFields(['name', 'body']),
-    formComponent: FileForm,
+    formComponent: PhotoForm,
     supportedMimetypes: [
       'image/jpeg',
       'image/png',

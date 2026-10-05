@@ -49,6 +49,18 @@ export default (theme) => {
       background: 'none',
       cursor: 'zoom-in',
     },
+    // Which of a post's images this is, "2 of 4".
+    fileCount: {
+      position: 'absolute',
+      top: theme.spacing(1),
+      left: theme.spacing(1),
+      zIndex: 1,
+      padding: '2px 8px',
+      borderRadius: 12,
+      fontSize: 12,
+      color: '#fff',
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    },
     zoomExit: {
       position: 'absolute',
       top: theme.spacing(1),

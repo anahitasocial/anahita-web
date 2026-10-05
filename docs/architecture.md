@@ -312,6 +312,44 @@ writes in, not the language of the interface.
 What the server stores and accepts is in the services'
 `docs/post-language.md`.
 
+### The photos of a post
+
+A photo post holds up to four images. The number comes from the server
+(`metadata.photoMaxFiles` in NodeInfo); the app does not carry it.
+
+**Making one.** The photo composer (`Composer/Forms/Photo.jsx`) shows
+`components/PhotoFilesEditor.jsx`: pick or drop several images, put them in
+order with the arrows under each, remove one, and describe each with its
+`ALT` button. Each image is uploaded the moment it is picked, in a request of
+its own (`api.photos.upload`), so the Post button waits until all of them are
+stored and the post itself is then a small JSON request naming the uploads.
+
+**Showing one.** A post with more than one image is drawn by
+`components/PhotoSlides.jsx` on the post card, in the feed and on the photo's
+page: arrows, a swipe on a touch screen, the left and right keys, dots, and
+"2 of 4". Only the image on show is in the page; the next is fetched quietly
+in advance. The lightbox goes through a post's images before it goes on to
+the next post (`Stepper/index.jsx` holds which image is on show). A post with
+one image is drawn as it always was.
+
+Every image carries its description as `alt`. One without a description falls
+back to the post's title.
+
+**Changing one.** "Edit photos" in a photo's menu opens
+`containers/media/PhotoFilesDialog.jsx`, the same editor over what the post
+has. Save sends the whole list as it is to be; nothing changes before that.
+
+The rules that can be tested without a browser are in
+`src/utils/photoFiles.js`: what can be sent, how a list is reordered, what a
+step lands on. `asSingle(medium, index)` gives the post as if one of its
+images were its only one, which is how everything that already draws a
+photo from `portraitUrls` draws any of them.
+
+In preview mode a visitor is sent one small image of a post however many it
+has, so it is drawn as a single photo.
+
+What the server stores and accepts is in the services' `docs/photos.md`.
+
 ## Translations
 
 Text is translated with i18next (`src/languages/`). Each language is a

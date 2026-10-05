@@ -4,6 +4,7 @@ import axios from 'axios';
 import { singularize } from 'inflection';
 import createApi, { browseOwned } from './create';
 import createActor from './actor';
+import photos from './photos';
 
 import agreements from './agreements';
 import authLogs from './authLogs';
@@ -162,6 +163,17 @@ namespaces.media.forEach((ns) => {
     [singularize(ns)]: createApi(ns),
   };
 });
+
+// A photo post is made from images uploaded one at a time, which the
+// other kinds of post have no need of.
+apis.photos = {
+  ...apis.photos,
+  ...photos,
+  photo: {
+    ...apis.photos.photo,
+    ...photos,
+  },
+};
 
 namespaces.nodes.forEach((ns) => {
   apis[ns] = createApi(ns);

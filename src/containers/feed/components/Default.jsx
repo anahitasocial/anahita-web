@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { withStyles } from 'tss-react/mui';
+import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
@@ -14,8 +15,10 @@ import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
+import PhotoSlides from '../../../components/PhotoSlides';
 import Player from '../../../components/Player';
 import utils from '../../../utils';
+import photoFiles from '../../../utils/photoFiles';
 
 const {
   getURL,
@@ -58,6 +61,7 @@ const FeedCardDefault = ({
   menu,
   showOwner = false,
 }) => {
+  const navigate = useNavigate();
   const authorName = getPersonName(node.author);
   const portrait = getPortraitURL(node, 'medium');
   const cover = getCoverURL(node, 'medium');
@@ -103,11 +107,19 @@ const FeedCardDefault = ({
             src="picture"
           />
         </Link>}
-      {portrait &&
+      {photoFiles.hasSeveral(node) &&
+        <PhotoSlides
+          medium={node}
+          onOpen={() => {
+            navigate(url);
+          }}
+        />}
+      {!photoFiles.hasSeveral(node) && portrait &&
         <Link href={url}>
           <CardMedia
             component="img"
             title={title}
+            alt={photoFiles.altOf(node)}
             image={portrait}
           />
         </Link>}

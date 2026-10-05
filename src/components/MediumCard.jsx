@@ -16,11 +16,13 @@ import MediumType from '../proptypes/Medium';
 import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';
 import CardHeaderOwner from './MediumOwnerCardHeader';
+import PhotoSlides from './PhotoSlides';
 import Player from './Player';
 import Progress from './Progress';
 import ReadMore from './ReadMore';
 import SignInPrompt from './SignInPrompt';
 import utils from '../utils';
+import photoFiles from '../utils/photoFiles';
 
 const {
   getAuthor,
@@ -71,6 +73,9 @@ const MediumCard = ({
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
   const creationTimeFromNow = moment.utc(medium.createdAt).fromNow();
+
+  // A post with several images is drawn as slides, which load their own.
+  const hasSlides = photoFiles.hasSeveral(medium);
 
   const [isPortraitLoaded, setIsPortraitLoaded] = useState(!portrait);
 
@@ -129,7 +134,17 @@ const MediumCard = ({
         }
         action={menu}
       />
-      {portrait && isPortraitLoaded &&
+      {hasSlides &&
+        <PhotoSlides
+          medium={medium}
+          onOpen={() => {
+            if (handleView) {
+              return handleView(medium.id);
+            }
+            return navigate(url);
+          }}
+        />}
+      {!hasSlides && portrait && isPortraitLoaded &&
         <ButtonBase
           style={{
             width: '100%',
@@ -145,11 +160,11 @@ const MediumCard = ({
           <CardMedia
             component="img"
             title={medium.name}
-            alias={medium.name}
+            alt={photoFiles.altOf(medium)}
             image={portrait}
           />
         </ButtonBase>}
-      {!isPortraitLoaded &&
+      {!hasSlides && !isPortraitLoaded &&
         <CardContent>
           <Progress />
         </CardContent>}

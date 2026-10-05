@@ -22,7 +22,7 @@ Each milestone ends in a shippable state.
 | 1b | ✅ | 0b · auth-service hardening: IP lookup, `X-Forwarded-For`, refresh re-checks `Enabled`, TOTP freshness | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2 | — |
 | 1c | ✅ | 0d · Remove unused legacy node columns; rename `hits` to `view_count` | [remove-unused-node-columns.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-unused-node-columns.md) | services + web | ½ | — |
 | 2 | ✅ | 1 · Remove private notes | [remove-private-notes.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/remove-private-notes.md) | services + web | 1 | — |
-| 3 | ✅ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md)) | services | ½ | — |
+| 3 | ✅ | 18 · Delete legacy photo sets | (section of [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/photo-albums.md)) | services | ½ | — |
 | 4 | ✅ | 2 · Remove site-wide media browse | [remove-global-media-browse.md](done/remove-global-media-browse.md) | web + services | ½ | — |
 | **M2. Foundations** | ✅ | | | | **about 14–18** | |
 | 5 | ✅ | 9 · Cloud-neutral (storage, local Garage, upload hardening, keys, k8s overlays) | [cloud-neutral.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/cloud-neutral.md) | services + web | 5–6 | — |
@@ -34,10 +34,10 @@ Each milestone ends in a shippable state.
 | 9 | ✅ | 4b · Abuse reports | [abuse-report-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/abuse-report-service.md) | services + web | 6 | 4a |
 | 10 | ✅ | 5 · Complete purge + bulk cleanup | [actor-hard-delete.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-hard-delete.md) | services + web | 6 | 4a |
 | 10b | ✅ | 28 · One name for timestamps: every date-and-time column and field ends in `_at` | [timestamp-names.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/timestamp-names.md) | services + web | 2 | 4b, 5 |
-| **M4. Posting experience** | 🚧 | | | | **about 10–14** | |
+| **M4. Posting experience** | ✅ | | | | **about 10–14** | |
 | 11 | ✅ | 13 · Composer audience picker; members-only, preview and no-new-public settings | [instance-privacy.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/instance-privacy.md) | services + web | 5–7 | 4a |
 | 12 | ✅ | 20 · Language on posts (the author chooses; detection and backfill left for later) | [content-language.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/content-language.md) | services + web | 2–3 | — |
-| 14 | ⬜ | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/photo-albums.md) | services + web | 3–4 | 9 |
+| 14 | ✅ | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/photo-albums.md) | services + web | 3–4 | 9 |
 | **M5. Conversations** |  | | | | **about 17–22** | |
 | 15 | ⬜ | 7 · Notes as replies; retire comment-service | [notes-as-replies.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/notes-as-replies.md) (update) | services + web | 7–9 | 0, 1 |
 | 15b | ⬜ | 24 · Profile tabs for replies and reposts, with a "show my reposts" setting | [profile-tabs-and-reposts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/profile-tabs-and-reposts.md) | services + web | 2 | 7 |
