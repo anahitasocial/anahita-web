@@ -1,10 +1,12 @@
 // Who can see a post, chosen while writing it.
 //
-// The server decides which audiences a post may have where it is going
-// (anahita-services, permissions.MediumAudiences) and refuses the rest
-// with 422. This mirrors that rule, so the composer only offers what
-// will be accepted, and adds what the server has no opinion on: which
-// one to start from, and which are pointless here.
+// The server decides which audiences a post may have where it is going,
+// and sends the answer with every person and group as
+// `authorized.audiences` (anahita-services, permissions.PostAudiences).
+// It refuses anything else with 422. This reads that answer, so the
+// composer only offers what will be accepted, and adds what the server
+// has no opinion on: which one to start from, and which are pointless
+// here.
 //
 // Every level is judged against the profile the post is ON, not against
 // its author: "followers" are that profile's followers, "admins" its
@@ -49,12 +51,12 @@ const administers = (actor) => {
   return Boolean(actor && actor.authorized && actor.authorized.administration);
 };
 
-// The levels the server will accept here, widest first.
-//
-// "Leaders" is accepted on a person's profile and deliberately not
-// offered: "the people this profile follows" is not an audience anybody
-// picks while writing, and a post that already has it keeps it.
-const levelsFor = (actor, viewer) => {
+// What to offer when a response does not say: the server's rule as it
+// stood when this was written. A fallback only. If the two ever
+// disagree the server's list wins wherever it is sent, and where it is
+// not, the worst a stale copy does is offer something that is then
+// refused.
+const fallbackLevels = (actor, viewer) => {
   switch (placeOf(actor, viewer)) {
     case PLACE.OWN:
       return [PUBLIC, REGISTERED, FOLLOWERS, MUTUALS, MYSELF];
@@ -67,6 +69,24 @@ const levelsFor = (actor, viewer) => {
         [PUBLIC, REGISTERED, FOLLOWERS, ADMINS] :
         [PUBLIC, REGISTERED, FOLLOWERS];
   }
+};
+
+// The levels to offer here, widest first: the server's answer for this
+// profile.
+//
+// "Leaders" is accepted on a person's profile and deliberately not
+// offered: "the people this profile follows" is not an audience anybody
+// picks while writing, and a post that already has it keeps it.
+const levelsFor = (actor, viewer) => {
+  const answered = actor && actor.authorized && actor.authorized.audiences;
+
+  if (Array.isArray(answered) && answered.length > 0) {
+    return answered.filter((level) => {
+      return level !== LEADERS;
+    });
+  }
+
+  return fallbackLevels(actor, viewer);
 };
 
 const widthOf = (level) => {

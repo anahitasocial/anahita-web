@@ -22,6 +22,8 @@ export default shape({
   features: arrayOf(shape({
     service: string,
     composers: arrayOf(string),
+    // Who a post the viewer writes here may be shown to, widest first.
+    audiences: arrayOf(string),
     optional: bool,
     enabled: bool,
     addPermissions: arrayOf(shape({

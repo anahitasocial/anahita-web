@@ -27,7 +27,25 @@ describe('composer audience', () => {
     window.localStorage.clear();
   });
 
-  it('offers only what the server accepts for that place', () => {
+  // The server sends what a post here may be shown to, and that is what
+  // is offered: not a second copy of its rule.
+  it('offers what the server says, without "leaders"', () => {
+    const answered = {
+      ...group,
+      authorized: { audiences: ['public', 'followers', 'leaders', 'admins'] },
+    };
+
+    expect(audience.levelsFor(answered, viewer)).toEqual(['public', 'followers', 'admins']);
+  });
+
+  it('falls back to the rule it knows when the server does not say', () => {
+    expect(audience.levelsFor({ ...group, authorized: {} }, viewer))
+      .toEqual(['public', 'registered', 'followers']);
+    expect(audience.levelsFor({ ...group, authorized: { audiences: [] } }, viewer))
+      .toEqual(['public', 'registered', 'followers']);
+  });
+
+  it('knows the rule for each kind of place', () => {
     expect(audience.levelsFor(own, viewer))
       .toEqual(['public', 'registered', 'followers', 'mutuals', 'myself']);
     expect(audience.levelsFor(group, viewer))

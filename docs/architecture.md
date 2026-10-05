@@ -197,6 +197,7 @@ enforces:
 | --- | --- | --- |
 | `edit`, `delete`, `administration` | Everything | Whether the viewer may edit, delete or administer it |
 | `composers` | People and groups | Which kinds of post the viewer may create on the profile |
+| `audiences` | People and groups | Who a post the viewer writes there may be shown to |
 | `addFollower` | Groups | Whether the viewer may add somebody else as a follower |
 | `comment` | Posts | Whether the viewer may comment |
 | `like` | Posts and comments | Whether the viewer may like it |
@@ -218,9 +219,10 @@ The composer has an audience button beside Post
 opens a short menu; the choice is sent with the post as `access`, so a post is
 never public first and narrowed afterwards.
 
-What it offers is worked out in `src/utils/audience.js`, which mirrors the
-server's rule (the services' `docs/permissions.md`, *Choosing who can see a
-post*) so that only choices the server accepts are shown:
+What it offers comes from the server: every person and group carries
+`authorized.audiences`, the audiences a new post there may have (the services'
+`docs/permissions.md`, *Choosing who can see a post*). `src/utils/audience.js`
+reads that and adds what the server has no opinion on:
 
 - The options depend on where the post is going: your own profile, somebody
   else's, or a group. In a group, followers are called Members.
