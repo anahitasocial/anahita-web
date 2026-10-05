@@ -64,7 +64,7 @@ export default {
         groupsAdministered_other: 'administrateur de {{ count }} groupes',
         memberSince: 'Membre depuis {{ date }}.',
       },
-      description: 'La suppression retire ce profil et tout ce qu\'il contient : publications, commentaires, photos, abonnés et adhésions aux groupes. Les commentaires laissés par d\'autres personnes sur ce contenu sont également supprimés.',
+      description: 'La suppression retire ce profil et tout ce qu\'il contient : publications, commentaires, photos, abonnés et groupes suivis. Les commentaires laissés par d\'autres personnes sur ce contenu sont également supprimés.',
       reversible: 'Ce n\'est pas immédiat. Le profil est masqué aussitôt puis définitivement effacé après {{ count }} jours. En vous connectant avant cette date, vous pourrez le restaurer.',
       revoked: 'Les sessions sur tous les appareils prennent fin immédiatement et les clés d\'accès sont supprimées. La restauration ne les rétablit pas.',
       handle: 'Le nom {{ alias }} reste réservé, personne d\'autre ne pourra le prendre.',
