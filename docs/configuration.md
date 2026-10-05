@@ -99,6 +99,7 @@ server's NodeInfo document (`/.well-known/nodeinfo`):
 | Whether people can sign up, and how | `REGISTRATION_MODE` |
 | Support email, phone and website | `SUPPORT_EMAIL`, `SUPPORT_PHONE`, `SUPPORT_WEBSITE` |
 | Who may create groups and send invitations | `GROUPS_FROM`, `INVITES_FROM` |
+| Whether anything new may be public | `MIN_CONTENT_ACCESS`. The app stops offering "Public" where it may not |
 | Who may post, comment and like by default | `graph-grpc-defaults/actor_features` |
 
 Some older variables are no longer read:

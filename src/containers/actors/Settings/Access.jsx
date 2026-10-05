@@ -42,10 +42,21 @@ const ActorsSettingsAccess = (props) => {
     alertSuccess,
     actor,
     namespace,
+    minContentAccess = ACCESS.ACTORS.PUBLIC,
   } = props;
 
   const actorType = utils.node.isPerson(actor) ? 'PEOPLE' : 'ACTORS';
-  const accessOptions = _.values(ACCESS[actorType]);
+
+  // An installation can rule out anything new being public
+  // (MIN_CONTENT_ACCESS on the server, published in NodeInfo). There the
+  // option is not offered, unless this profile is public already: it may
+  // stay so, and the menu has to be able to show where things stand. The
+  // server refuses the change either way.
+  const publicAllowed = minContentAccess === ACCESS.ACTORS.PUBLIC ||
+    actor.access === ACCESS.ACTORS.PUBLIC;
+  const accessOptions = _.values(ACCESS[actorType]).filter((option) => {
+    return publicAllowed || option !== ACCESS.ACTORS.PUBLIC;
+  });
 
   const [access, setAccess] = useState(actor.access || ACCESS.ACTORS.PUBLIC);
 
@@ -200,6 +211,8 @@ ActorsSettingsAccess.propTypes = {
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
   namespace: PropTypes.string.isRequired,
+  // 'public' or 'registered': the widest anything new may be made here.
+  minContentAccess: PropTypes.string,
 };
 
 const mapStateToProps = (namespace) => {
@@ -210,9 +223,13 @@ const mapStateToProps = (namespace) => {
       },
     } = state[namespace];
 
+    const { nodeInfo } = state.app;
+    const metadata = (nodeInfo && nodeInfo.metadata) || {};
+
     return {
       actor,
       namespace,
+      minContentAccess: metadata.minContentAccess,
     };
   };
 };
