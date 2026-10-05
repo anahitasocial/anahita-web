@@ -158,6 +158,10 @@ const PhotoFilesEditor = ({
   const { classes, cx } = useStyles();
   const [describing, setDescribing] = useState(null);
   const [draft, setDraft] = useState('');
+  // How many photos of the last pick did not fit. The system's own file
+  // window cannot be told how many to allow, so somebody can pick more
+  // than a post holds; the extra ones are left out and this says so.
+  const [leftOut, setLeftOut] = useState(0);
 
   // The browser's own addresses for the picked files, let go of when this
   // goes away so the files are not held in memory.
@@ -174,6 +178,8 @@ const PhotoFilesEditor = ({
 
   const handleDrop = (files) => {
     // No more than there is room for; the rest are left out, not queued.
+    setLeftOut(Math.max(files.length - room, 0));
+
     files.slice(0, room).forEach((file) => {
       const previewUrl = URL.createObjectURL(file);
       previews.current.push(previewUrl);
@@ -263,6 +269,7 @@ const PhotoFilesEditor = ({
                     className={cx(classes.over, classes.remove)}
                     aria-label={`${i18n.t('photos:editor.remove')} (${position})`}
                     onClick={() => {
+                      setLeftOut(0);
                       onChange((current) => {
                         return photoFiles.remove(current, item.key);
                       });
@@ -333,6 +340,10 @@ const PhotoFilesEditor = ({
             {i18n.t(items.length ? 'photos:editor.addMore' : 'photos:editor.add')}
           </Button>}
       </div>
+      {leftOut > 0 &&
+        <Typography variant="caption" color="error" component="p" role="alert">
+          {i18n.t('photos:editor.leftOut', { count: leftOut, max })}
+        </Typography>}
       <Typography variant="caption" color="textSecondary" component="p">
         {i18n.t('photos:editor.limit', { max })}
       </Typography>

@@ -14,6 +14,8 @@ export default {
     addMore: 'Add another',
     limit: 'Up to {{max}} photos in a post. The first is shown first.',
     first: 'First',
+    leftOut_one: 'A post holds {{max}} photos, so 1 of the ones you picked was left out.',
+    leftOut_other: 'A post holds {{max}} photos, so {{count}} of the ones you picked were left out.',
     remove: 'Remove this photo',
     earlier: 'Move earlier',
     later: 'Move later',

@@ -14,6 +14,8 @@ export default {
     addMore: 'Ajouter une autre',
     limit: 'Jusqu\'à {{max}} photos par publication. La première est affichée en premier.',
     first: 'Première',
+    leftOut_one: 'Une publication contient {{max}} photos : 1 de celles que vous avez choisies a été laissée de côté.',
+    leftOut_other: 'Une publication contient {{max}} photos : {{count}} de celles que vous avez choisies ont été laissées de côté.',
     remove: 'Retirer cette photo',
     earlier: 'Déplacer avant',
     later: 'Déplacer après',
