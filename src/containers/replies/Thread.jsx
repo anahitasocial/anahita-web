@@ -210,7 +210,7 @@ const RepliesThread = ({
   };
 
   return (
-    <Card>
+    <Card sx={{ pb: 1 }}>
       {canReply &&
         <ReplyForm
           onSubmit={(body) => {
@@ -250,8 +250,8 @@ const RepliesThread = ({
         </CardContent>}
       {hidden.length > 0 &&
         <>
-          <Divider sx={{ mt: 1 }} />
-          <Box sx={{ px: 2, py: 1.5 }}>
+          <Divider sx={{ mt: 2 }} />
+          <Box sx={{ px: 2, py: 2 }}>
             <Typography variant="subtitle2">
               {i18n.t('replies:hidden.title', { count: hidden.length })}
             </Typography>

@@ -25,6 +25,7 @@ const ReplyForm = ({
   placeholder = i18n.t('replies:placeholder'),
   submitLabel = i18n.t('replies:send'),
   autoFocus = false,
+  flush = false,
 }) => {
   const [body, setBody] = useState(initial);
   const [isSending, setIsSending] = useState(false);
@@ -48,7 +49,14 @@ const ReplyForm = ({
   };
 
   return (
-    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ p: 2, pt: 1 }}>
+    // Spacing here and through the thread is in whole steps of the theme's
+    // 8 pixels: 8, 16, 24. Nothing in between.
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      noValidate
+      sx={{ p: flush ? 0 : 2, mt: flush ? 1 : 0 }}
+    >
       <TextField
         value={body}
         onChange={(event) => {
@@ -100,6 +108,9 @@ ReplyForm.propTypes = {
   placeholder: PropTypes.string,
   submitLabel: PropTypes.string,
   autoFocus: PropTypes.bool,
+  // Without padding of its own, for where it sits inside a reply that
+  // already has some.
+  flush: PropTypes.bool,
 };
 
 export default ReplyForm;

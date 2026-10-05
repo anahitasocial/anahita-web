@@ -26,7 +26,8 @@ import utils from '../../utils';
 
 const { getAuthor } = utils.node;
 
-// How far each level of a thread is set in from the one above.
+// How far each level of a thread is set in from the one above: 24 pixels.
+// Every space in a thread is a whole number of the theme's 8-pixel steps.
 const STEP = 3;
 
 // One reply, and under it the replies made to it.
@@ -93,7 +94,7 @@ const ReplyItem = ({
         <Typography
           variant="body2"
           color="textSecondary"
-          sx={{ px: 2, py: 1.5, fontStyle: 'italic' }}
+          sx={{ px: 2, py: 2, fontStyle: 'italic' }}
         >
           {i18n.t('replies:removed')}
         </Typography>
@@ -105,7 +106,7 @@ const ReplyItem = ({
   return (
     <Box component="section" id={`reply-${reply.id}`}>
       <Box sx={{
-        display: 'flex', alignItems: 'flex-start', gap: 1.5, px: 2, pt: 1.5,
+        display: 'flex', alignItems: 'flex-start', gap: 2, px: 2, pt: 2, pb: 1,
       }}
       >
         <ActorAvatar
@@ -113,7 +114,14 @@ const ReplyItem = ({
           linked={Boolean(author.id)}
           size="small"
         />
-        <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box
+          sx={{
+            flex: 1,
+            minWidth: 0,
+            // The text's own paragraphs, brought onto the same steps.
+            '& p': { mt: 1, mb: 1 },
+          }}
+        >
           <Box sx={{
             display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap',
           }}
@@ -139,6 +147,7 @@ const ReplyItem = ({
           {isEditing &&
             <ReplyForm
               initial={reply.body || ''}
+              flush
               submitLabel={i18n.t('actions:save')}
               autoFocus
               onCancel={() => {
@@ -152,7 +161,7 @@ const ReplyItem = ({
             />}
           {!isEditing &&
             <Box sx={{
-              display: 'flex', alignItems: 'center', gap: 0.5, ml: -1,
+              display: 'flex', alignItems: 'center', gap: 1, ml: -1,
             }}
             >
               {authorized.comment &&
