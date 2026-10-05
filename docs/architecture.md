@@ -326,9 +326,15 @@ stored and the post itself is then a small JSON request naming the uploads.
 
 **Showing one.** A post with more than one image is drawn by
 `components/PhotoSlides.jsx` on the post card, in the feed and on the photo's
-page: arrows, a swipe on a touch screen, the left and right keys, dots, and
-"2 of 4". Only the image on show is in the page; the next is fetched quietly
-in advance. The lightbox goes through a post's images before it goes on to
+page. Material UI has no carousel, so this is one made for this one job from
+its small parts (`ButtonBase`, `IconButton`, `MobileStepper` for the dots)
+with no other library. The photos sit side by side in a row that the browser
+scrolls sideways and brings to rest on one photo (CSS scroll snap), so on a
+phone a photo follows the finger and carries on with the flick. Where there
+is a mouse there are arrows, and the left and right keys work on the focused
+post. Photos after the first load when they are about to come into view. The
+frame takes the first photo's shape, kept between 4 by 5 and about 2 by 1,
+and a photo of another shape is shown whole inside it. The lightbox goes through a post's images before it goes on to
 the next post (`Stepper/index.jsx` holds which image is on show). A post with
 one image is drawn as it always was.
 
