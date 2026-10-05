@@ -1,4 +1,5 @@
 import axios from 'axios';
+import utils from '../utils';
 
 // Replies. A reply is a note that answers a post or another reply, so it is
 // read, changed and removed at /notes/:id like any note. The post answered
@@ -29,10 +30,18 @@ const setHidden = (reply, hidden) => {
   return axios.patch(`/notes/${reply.id}/hidden`, { hidden });
 };
 
+// Who may reply to a post: "anyone", "nobody", or groups joined by commas.
+// Set on the post itself, so under its own kind's address.
+const setAccess = (medium, replyAccess) => {
+  const namespace = utils.node.getNamespace(medium);
+  return axios.patch(`/${namespace}/${medium.id}/reply-access`, { replyAccess });
+};
+
 export default {
   add,
   edit,
   remove,
+  setAccess,
   setHidden,
   thread,
 };

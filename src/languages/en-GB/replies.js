@@ -33,6 +33,38 @@ export default {
     delete: 'Delete this reply? This cannot be undone.',
     hide: 'Hide this reply from everybody who reads this post? Replies to it are hidden with it. You can show it again.',
   },
+  // Who can reply to a post, as its author sets it.
+  access: {
+    menu: 'Who can reply',
+    title: 'Post interaction settings',
+    who: 'Who can reply',
+    anyone: 'Anyone',
+    nobody: 'Nobody',
+    except: 'Except',
+    groups: {
+      followers: 'Your followers',
+      following: 'People you follow',
+      mentioned: 'People you mention',
+    },
+    help: 'This only narrows who can reply. The profile\'s own rule for who can comment still applies, and you can always reply under your own post.',
+    label: 'Replies: {{ who }}',
+    short: {
+      anyone: 'Anyone',
+      nobody: 'Nobody',
+      some: 'Limited',
+    },
+    summary: {
+      anyone: 'Anyone can reply.',
+      nobody: 'Replies are closed on this post.',
+      some: 'Only {{ groups }} can reply.',
+      or: ', ',
+      followers: 'people who follow the author',
+      following: 'people the author follows',
+      mentioned: 'people mentioned in the post',
+    },
+    saved: 'Who can reply was updated.',
+    notSaved: 'Who can reply could not be updated.',
+  },
   prompts: {
     added: 'Your reply was posted.',
     notAdded: 'Your reply could not be posted.',

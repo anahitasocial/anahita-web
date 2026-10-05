@@ -50,4 +50,6 @@ export default shape({
   isQuotedByViewer: bool,
   commentCount: number,
   commentStatus: bool,
+  // Who may reply: "anyone", "nobody", or groups joined by commas.
+  replyAccess: string,
 });

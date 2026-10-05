@@ -24,6 +24,7 @@ import i18n from '../../languages';
 import MediumType from '../../proptypes/Medium';
 import PersonType from '../../proptypes/Person';
 import postLanguage from '../../utils/postLanguage';
+import replyAccess from '../../utils/replyAccess';
 import thread from '../../utils/thread';
 import visitor from '../../utils/visitor';
 
@@ -48,6 +49,8 @@ const RepliesThread = ({
 }) => {
   const [replies, setReplies] = useState([]);
   const [canReply, setCanReply] = useState(false);
+  // Who the post's author lets reply, as the server reads it.
+  const [limitedTo, setLimitedTo] = useState(replyAccess.ANYONE);
   const [isTruncated, setIsTruncated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasFailed, setHasFailed] = useState(false);
@@ -62,13 +65,15 @@ const RepliesThread = ({
     return api.replies.thread(root).then((result) => {
       setReplies(result.data.data || []);
       setCanReply(Boolean(result.data.canReply));
+      setLimitedTo(replyAccess.normalize(result.data.replyAccess));
       setIsTruncated(Boolean(result.data.truncated));
     }).catch(() => {
       setHasFailed(true);
     }).finally(() => {
       setIsLoading(false);
     });
-  }, [root.id]);
+  // Read again when who can reply is changed from the post's menu.
+  }, [root.id, root.replyAccess]);
 
   useEffect(() => {
     // Not asked for when the answer is known to be no: on a site that
@@ -217,12 +222,19 @@ const RepliesThread = ({
             return handleReply(root, body);
           }}
         />}
+      {/* Said to everybody, the people who can still reply included, so
+          a thread with few voices in it explains itself. */}
+      {!isLoading && !hasFailed && replyAccess.isLimited(limitedTo) &&
+        <CardContent sx={{ pb: 0 }}>
+          <Typography variant="body2" color="textSecondary">
+            {replyAccess.summary(limitedTo, i18n.t.bind(i18n))}
+          </Typography>
+        </CardContent>}
       {isAuthenticated && !isLoading && !hasFailed && !canReply &&
+        !replyAccess.isLimited(limitedTo) &&
         <CardContent>
           <Typography variant="body2" color="textSecondary">
-            {i18n.t(root.commentStatus === false ?
-              'replies:closed' :
-              'replies:prompts.notAllowed')}
+            {i18n.t('replies:prompts.notAllowed')}
           </Typography>
         </CardContent>}
       {isLoading && <Progress />}

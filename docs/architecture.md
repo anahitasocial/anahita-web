@@ -388,6 +388,16 @@ replies, made directly to the post.
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
 
+- **Who can reply** is the post's own setting, chosen by its author:
+  anyone, nobody, or any of the people who follow them, the people they
+  follow and the people the post mentions. `components/ReplyAccessDialog.jsx`
+  asks it as two questions, anyone or nobody and then who is let in anyway,
+  and `utils/replyAccess.js` turns that into the one value the server keeps.
+  The dialog opens from `ReplyAccessButton` in the composer, beside the
+  audience and the language, and from "Who can reply" in a post's menu
+  (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
+  replies and says it when it is limited.
+
 The comment components (`containers/comments`, `CommentCard`, the comment
 like controls) are no longer shown anywhere. They are removed with the
 comment service.

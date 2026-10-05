@@ -10,7 +10,7 @@ import permissions from '../../permissions/medium';
 import utils from '../../utils';
 
 import ControlNotificationSub from '../controls/medium/NotificationSub';
-import ControlCommentStatus from '../controls/medium/CommentStatus';
+import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
@@ -29,7 +29,6 @@ const {
 } = utils.node;
 
 const NotificationSubActionWithRef = withRef(ControlNotificationSub);
-const CommentStatusActionWithRef = withRef(ControlCommentStatus);
 const DeleteActionWithRef = withRef(ControlDelete);
 
 const MediaMenu = ({
@@ -40,6 +39,7 @@ const MediaMenu = ({
 }) => {
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
   const [isEditingPhotos, setIsEditingPhotos] = React.useState(false);
+  const [isSettingReplies, setIsSettingReplies] = React.useState(false);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,7 +51,9 @@ const MediaMenu = ({
 
   const canEdit = permissions.canEdit(viewer, medium);
   const canSubscribe = isSubscribable(medium);
-  const canComment = isCommentable(medium);
+  // Who can reply is the post's own setting, changed by whoever may edit
+  // the post.
+  const canSetReplies = canEdit && isCommentable(medium);
   const canDelete = permissions.canDelete(viewer, medium);
   const report = useReport(viewer, medium);
   // A photo post's images are changed in a dialog of their own: their
@@ -60,7 +62,7 @@ const MediaMenu = ({
 
   // Somebody who may do nothing else here may still report it, so the
   // menu is drawn for them too.
-  if (!canEdit && !canSubscribe && !canComment && !canDelete && !report.canReport) {
+  if (!canEdit && !canSubscribe && !canDelete && !report.canReport) {
     return null;
   }
 
@@ -106,11 +108,15 @@ const MediaMenu = ({
             isSubscribedByViewer={medium.isSubscribedByViewer}
             key={`medium-notification-${medium.id}`}
           />}
-        {isCommentable(medium) &&
-          <CommentStatusActionWithRef
-            medium={medium}
-            key={`medium-comment-status-${medium.id}`}
-          />}
+        {canSetReplies &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setIsSettingReplies(true);
+            }}
+          >
+            {i18n.t('replies:access.menu')}
+          </MenuItem>}
         <DeleteActionWithRef
           node={medium}
           key={`medium-delete-${medium.id}`}
@@ -129,6 +135,14 @@ const MediaMenu = ({
           </MenuItem>}
       </Menu>
       {report.dialog}
+      {canSetReplies &&
+        <ControlReplyAccess
+          medium={medium}
+          open={isSettingReplies}
+          onClose={() => {
+            setIsSettingReplies(false);
+          }}
+        />}
       {canEditPhotos &&
         <PhotoFilesDialog
           medium={medium}

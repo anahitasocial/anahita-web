@@ -33,6 +33,38 @@ export default {
     delete: 'Supprimer cette réponse ? Cette action est irréversible.',
     hide: 'Masquer cette réponse pour toutes les personnes qui lisent cette publication ? Les réponses qui lui sont faites sont masquées avec elle. Vous pourrez l\'afficher à nouveau.',
   },
+  // Qui peut répondre à une publication, selon son auteur.
+  access: {
+    menu: 'Qui peut répondre',
+    title: 'Paramètres d\'interaction',
+    who: 'Qui peut répondre',
+    anyone: 'Tout le monde',
+    nobody: 'Personne',
+    except: 'Sauf',
+    groups: {
+      followers: 'Vos abonnés',
+      following: 'Les personnes que vous suivez',
+      mentioned: 'Les personnes que vous mentionnez',
+    },
+    help: 'Ce réglage ne fait que restreindre qui peut répondre. La règle du profil sur les commentaires s\'applique toujours, et vous pouvez toujours répondre sous votre propre publication.',
+    label: 'Réponses : {{ who }}',
+    short: {
+      anyone: 'Tout le monde',
+      nobody: 'Personne',
+      some: 'Limité',
+    },
+    summary: {
+      anyone: 'Tout le monde peut répondre.',
+      nobody: 'Les réponses sont fermées sur cette publication.',
+      some: 'Seules {{ groups }} peuvent répondre.',
+      or: ', ',
+      followers: 'les personnes qui suivent l\'auteur',
+      following: 'les personnes que l\'auteur suit',
+      mentioned: 'les personnes mentionnées dans la publication',
+    },
+    saved: 'Les personnes pouvant répondre ont été mises à jour.',
+    notSaved: 'Ce réglage n\'a pas pu être mis à jour.',
+  },
   prompts: {
     added: 'Votre réponse a été publiée.',
     notAdded: 'Votre réponse n\'a pas pu être publiée.',
