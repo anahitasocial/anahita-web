@@ -364,9 +364,10 @@ What the server stores and accepts is in the services' `docs/photos.md`.
 
 ### Replies
 
-A note is answered with replies: notes themselves, each of which can be
-answered in turn. `containers/replies/Thread.jsx` shows them, as a Replies tab
-on a note's page.
+A post of any kind is answered with replies: notes, each of which can be
+answered in turn. `containers/replies/Thread.jsx` shows them, as the Replies
+tab on a post's page and in the lightbox. What used to be comments are
+replies, made directly to the post.
 
 - **The thread is read whole** (`api.replies.thread`) and kept in the
   component, not in the store. Nothing else on the page shows it.
@@ -387,8 +388,9 @@ on a note's page.
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
 
-Photos, articles and topics still show comments. They get replies when the
-comments are turned into them.
+The comment components (`containers/comments`, `CommentCard`, the comment
+like controls) are no longer shown anywhere. They are removed with the
+comment service.
 
 The rules are the server's, in the services' `docs/permissions.md`, Replies.
 

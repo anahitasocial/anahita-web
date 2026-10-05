@@ -31,7 +31,7 @@ const {
 } = utils.node;
 
 const TABS = {
-  COMMENTS: 'comments',
+  REPLIES: 'replies',
   LOCATIONS: 'locations',
 };
 
@@ -42,14 +42,14 @@ const MediumReadArticle = ({
   actions = null,
   menu = null,
   locations = null,
-  comments = null,
+  replies = null,
   editing = false,
   form = null,
   stats = null,
   handleView = null,
   cover = null,
 }) => {
-  const [tab, setTab] = useState(TABS.COMMENTS);
+  const [tab, setTab] = useState(TABS.REPLIES);
 
   const changeTab = (event, value) => {
     setTab(value);
@@ -146,10 +146,10 @@ const MediumReadArticle = ({
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="Comments" value={TABS.COMMENTS} />
+          <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
           <Tab label="Locations" value={TABS.LOCATIONS} />
         </Tabs>
-        {tab === TABS.COMMENTS && comments}
+        {tab === TABS.REPLIES && replies}
         {tab === TABS.LOCATIONS && locations}
       </Grid>
     </Grid>
@@ -163,7 +163,8 @@ MediumReadArticle.propTypes = {
   medium: MediumType.isRequired,
   access: PropTypes.node,
   locations: PropTypes.node,
-  comments: PropTypes.node,
+  // The thread of replies under the article.
+  replies: PropTypes.node,
   form: PropTypes.node,
   stats: PropTypes.node,
   editing: PropTypes.bool,

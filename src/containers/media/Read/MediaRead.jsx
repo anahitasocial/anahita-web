@@ -10,14 +10,12 @@ import CommentStats from '../../../components/CommentStats';
 import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
-import MediumComments from '../../comments/Browse';
 import RepliesThread from '../../replies/Thread';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
-import commentPerms from '../../../permissions/comment';
 import utils from '../../../utils';
 
 const { getPortraitURL, getCoverURL } = utils.node;
@@ -42,10 +40,6 @@ const MediaReadView = ({
 }) => {
   const portrait = getPortraitURL(medium, 'large');
   const cover = getCoverURL(medium, 'large');
-  // Open comments are not enough: the server answers whether this viewer
-  // may comment here, from the profile's access and permissions.
-  const canAddComment = isAuthenticated && medium.commentStatus &&
-    commentPerms.canAdd(medium);
 
   const mediumProps = {
     medium,
@@ -90,17 +84,12 @@ const MediaReadView = ({
         <CommentStats node={medium} />
       </>
     ),
-    comments: (
-      <MediumComments
-        parent={medium}
-        canAdd={canAddComment}
-      />
-    ),
-    // Notes are answered with replies: notes themselves, threaded, each
-    // liked and removed like any post. The other kinds of post still have
-    // comments, until those are turned into replies too.
-    replies: namespace === 'notes' && medium.id ? (
-      <RepliesThread root={medium} />
+    // Every kind of post is answered with replies: notes, threaded, each
+    // liked and removed like any post. What used to be comments are replies
+    // now, made directly to the post. Keyed by the post, so a thread is not
+    // carried from one post to the next.
+    replies: medium.id ? (
+      <RepliesThread root={medium} key={`replies-${medium.id}`} />
     ) : null,
     locations: (
       <LocationsGadget

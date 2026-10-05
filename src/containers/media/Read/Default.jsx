@@ -36,7 +36,6 @@ const {
 
 const TABS = {
   REPLIES: 'replies',
-  COMMENTS: 'comments',
   LOCATIONS: 'locations',
 };
 
@@ -47,16 +46,13 @@ const MediumReadDefault = ({
   actions = null,
   menu = null,
   locations = null,
-  comments = null,
   replies = null,
   editing = false,
   form = null,
   stats = null,
   handleView = null,
 }) => {
-  // Where a post has replies they come first: they are where the
-  // conversation is now.
-  const [tab, setTab] = useState(replies ? TABS.REPLIES : TABS.COMMENTS);
+  const [tab, setTab] = useState(TABS.REPLIES);
 
   const changeTab = (event, value) => {
     setTab(value);
@@ -190,13 +186,10 @@ const MediumReadDefault = ({
           indicatorColor="primary"
           textColor="primary"
         >
-          {replies &&
-            <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />}
-          <Tab label="Comments" value={TABS.COMMENTS} />
-          <Tab label="Locations" value={TABS.LOCATIONS} />
+          <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
+          <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
         </Tabs>
         {tab === TABS.REPLIES && replies}
-        {tab === TABS.COMMENTS && comments}
         {tab === TABS.LOCATIONS && locations}
       </Grid>
     </Grid>
@@ -210,8 +203,7 @@ MediumReadDefault.propTypes = {
   medium: MediumType.isRequired,
   access: PropTypes.node,
   locations: PropTypes.node,
-  comments: PropTypes.node,
-  // The thread of replies, for the kinds of post that have one.
+  // The thread of replies under the post.
   replies: PropTypes.node,
   form: PropTypes.node,
   stats: PropTypes.node,
