@@ -19,7 +19,7 @@ import CardHeaderOwner from './MediumOwnerCardHeader';
 import Player from './Player';
 import Progress from './Progress';
 import ReadMore from './ReadMore';
-import SignInToReadMore from './SignInToReadMore';
+import SignInPrompt from './SignInPrompt';
 import utils from '../utils';
 
 const {
@@ -168,7 +168,7 @@ const MediumCard = ({
           <ReadMore contentFilter>
             {medium.body}
           </ReadMore>}
-        <SignInToReadMore truncated={medium.truncated} />
+        <SignInPrompt show={Boolean(medium.truncated)} />
       </CardContent>
       {stats &&
         <CardActions>

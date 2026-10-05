@@ -4,9 +4,11 @@ import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import CommentRead from '../Read';
 import CommentForm from '../components/Form';
 import Progress from '../../../components/Progress';
+import SignInPrompt from '../../../components/SignInPrompt';
 
 import actions from '../../../actions';
 import NodeType from '../../../proptypes/Node';
@@ -15,6 +17,7 @@ import CommentDefault from '../../../proptypes/CommentDefault';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
 import utils from '../../../utils';
+import visitor from '../../../utils/visitor';
 
 const { form } = utils;
 const { LIMIT } = APP.BROWSE;
@@ -33,6 +36,7 @@ const CommentsBrowse = ({
   isFetching,
   cardProps = {},
   total = 0,
+  heldBack = false,
 }) => {
   const namespace = utils.node.getNamespace(parent);
 
@@ -53,14 +57,24 @@ const CommentsBrowse = ({
   }, []);
 
   useEffect(() => {
+    // Not asked for when the answer is known to be no: comments are held
+    // back from a visitor on a preview site, and asking would only be
+    // refused.
+    if (heldBack) {
+      return;
+    }
+
     browseList({
       node: { id, objectType },
       start,
       limit: LIMIT,
       sort: 'created_at',
       direction: 'asc',
+    }).catch(() => {
+      // The failure is in the store, where the list reads it. Without
+      // this the rejection goes unhandled, and the browser shows it raw.
     });
-  }, [id, objectType, start]);
+  }, [id, objectType, start, heldBack]);
 
   const fetchList = () => {
     return setStart(start + LIMIT);
@@ -99,6 +113,17 @@ const CommentsBrowse = ({
   };
 
   const hasMore = total > items.allIds.length;
+
+  // Where the comments would be, a way to them.
+  if (heldBack) {
+    return (
+      <Card>
+        <CardContent>
+          <SignInPrompt what="comments" />
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -151,6 +176,7 @@ const mapStateToProps = (state) => {
     error,
     isFetching,
     total,
+    heldBack: visitor.isPreviewVisitor(state),
   };
 };
 
@@ -172,6 +198,9 @@ CommentsBrowse.propTypes = {
   items: CommentsType.isRequired,
   parent: NodeType.isRequired,
   canAdd: PropTypes.bool,
+  // The comments are not shown to this viewer: a visitor on a site that
+  // shows visitors only the start of things.
+  heldBack: PropTypes.bool,
   addItem: PropTypes.func.isRequired,
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,

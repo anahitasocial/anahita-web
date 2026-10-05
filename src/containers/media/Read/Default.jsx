@@ -21,7 +21,7 @@ import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import Player from '../../../components/Player';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
-import SignInToReadMore from '../../../components/SignInToReadMore';
+import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import styles from './styles';
@@ -151,7 +151,7 @@ const MediumReadDefault = ({
                   <EntityBody contentFilter>
                     {medium.body}
                   </EntityBody>}
-                <SignInToReadMore truncated={medium.truncated} />
+                <SignInPrompt show={Boolean(medium.truncated)} />
               </CardContent>
               {stats &&
                 <CardActions>

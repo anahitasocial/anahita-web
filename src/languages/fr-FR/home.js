@@ -15,5 +15,7 @@ export default {
     cDescription: 'Connectez-vous pour lire les publications en entier, les commentaires et tout ce qui suit la première page.',
     signIn: 'Se connecter',
     readMore: 'Connectez-vous pour lire la suite',
+    comments: 'Connectez-vous pour lire les commentaires',
+    followers: 'Connectez-vous pour voir qui suit qui',
   },
 };

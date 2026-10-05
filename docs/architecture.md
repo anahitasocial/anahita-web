@@ -146,9 +146,23 @@ in `routes/membersOnly.js`.
 The setting has a middle value, `preview`: visitors are sent only the start of
 what is public, cut on the server. The pages work, so the same gate leaves
 them in place under a notice that this is a preview. A post that was cut
-arrives with `truncated` set, and `components/SignInToReadMore.jsx` shows the
-way to the rest under it. Lists stop at their first page by themselves: the
-server lowers their total to what it sent.
+arrives with `truncated` set, and `components/SignInPrompt.jsx` shows the way
+to the rest under it. Lists stop at their first page by themselves: the server
+lowers their total to what it sent.
+
+**The app does not ask for what a visitor will be refused.** `utils/visitor.js`
+answers, from the session and NodeInfo, whether the viewer is a visitor and on
+which kind of site:
+
+- On a preview site the comments under a post and the lists of who follows
+  whom are not requested. A sign-in prompt stands where they would be.
+- On a members-only site the search box and the People, Groups, Hashtags and
+  Places menu entries are not shown.
+
+A request that is refused anyway, because some page did not expect it, is
+caught in `src/index.js`: an unhandled "sign in first" answer from the server
+is dropped instead of reaching the screen as an error. Every other unhandled
+failure is left to be seen.
 
 ### The administration area
 

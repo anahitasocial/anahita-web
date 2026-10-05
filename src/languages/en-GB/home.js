@@ -15,5 +15,7 @@ export default {
     cDescription: 'Sign in to read whole posts, comments and everything past the first page.',
     signIn: 'Sign in',
     readMore: 'Sign in to read more',
+    comments: 'Sign in to read the comments',
+    followers: 'Sign in to see who follows whom',
   },
 };

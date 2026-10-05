@@ -20,7 +20,7 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
-import SignInToReadMore from '../../../components/SignInToReadMore';
+import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import styles from './styles';
@@ -124,7 +124,7 @@ const MediumReadArticle = ({
                   <EntityBody contentFilter>
                     {medium.body}
                   </EntityBody>}
-                <SignInToReadMore truncated={medium.truncated} />
+                <SignInPrompt show={Boolean(medium.truncated)} />
               </CardContent>
               {stats &&
                 <CardActions>
