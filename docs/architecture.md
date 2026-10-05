@@ -362,6 +362,36 @@ has, so it is drawn as a single photo.
 
 What the server stores and accepts is in the services' `docs/photos.md`.
 
+### Replies
+
+A note is answered with replies: notes themselves, each of which can be
+answered in turn. `containers/replies/Thread.jsx` shows them, as a Replies tab
+on a note's page.
+
+- **The thread is read whole** (`api.replies.thread`) and kept in the
+  component, not in the store. Nothing else on the page shows it.
+- **`src/utils/thread.js`** arranges the flat list the server sends into
+  replies and the replies under them, and holds the rule for each change: a
+  reply added, edited, removed, hidden. After a change is made on the server
+  the same change is made to the copy on the page, so the thread is not read
+  again after every reply. It is plain functions with tests.
+- **What a viewer may do comes with each reply,** in `authorized`: `comment`
+  (reply to it), `edit`, `delete`, `hide`, `like`. A control is drawn only
+  when its answer is yes. Whether somebody may reply to the post at all comes
+  with the thread, as `canReply`.
+- **A removed reply that had been answered** arrives as `deleted`, with no
+  text and no author, and is drawn as a line saying so with its replies still
+  under it.
+- **Hidden replies** are sent only to whoever may show them again, marked
+  `hidden`. They are drawn apart, under the thread, closed until opened.
+- Replies are set in a level for each step down, up to four, with a line down
+  the side. Past that they line up, so a long exchange fits a phone.
+
+Photos, articles and topics still show comments. They get replies when the
+comments are turned into them.
+
+The rules are the server's, in the services' `docs/permissions.md`, Replies.
+
 ## Translations
 
 Text is translated with i18next (`src/languages/`). Each language is a

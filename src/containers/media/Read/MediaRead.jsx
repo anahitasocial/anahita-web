@@ -11,6 +11,7 @@ import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
 import MediumComments from '../../comments/Browse';
+import RepliesThread from '../../replies/Thread';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
 import MediumMenu from '../MediaMenu';
@@ -95,6 +96,12 @@ const MediaReadView = ({
         canAdd={canAddComment}
       />
     ),
+    // Notes are answered with replies: notes themselves, threaded, each
+    // liked and removed like any post. The other kinds of post still have
+    // comments, until those are turned into replies too.
+    replies: namespace === 'notes' && medium.id ? (
+      <RepliesThread root={medium} />
+    ) : null,
     locations: (
       <LocationsGadget
         node={medium}

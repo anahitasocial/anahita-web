@@ -8,6 +8,7 @@ import pages from './pages';
 import social from './social';
 import feed from './feed';
 import comments from './comments';
+import replies from './replies';
 import auth from './auth';
 import actor from './actor';
 import blogs from './blogs';
@@ -50,6 +51,7 @@ export default {
   social,
   feed,
   comments,
+  replies,
   auth,
   actor,
   blogs,
