@@ -77,8 +77,8 @@ const MediumReadArticle = ({
       <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
           {context}
-          {medium.owner.objectType.split('.')[1] !== 'people' &&
-            <CardHeaderOwner node={medium} />}
+          {!context && medium.owner && medium.owner.id !== author.id &&
+            <CardHeaderOwner owner={medium.owner} />}
           {cover}
           {portrait && handleView &&
             <ButtonBase

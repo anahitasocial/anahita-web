@@ -109,7 +109,7 @@ const MediaReadView = ({
     ) : replyThread,
     // Above a reply shown on its own: what it is a reply to.
     context: isReply && medium.root ? (
-      <ReplyContext answered={medium.root}>
+      <ReplyContext answered={medium.root} owner={medium.root.owner}>
         {medium.parentId !== medium.rootId &&
           <Link
             href={`/notes/${medium.parentId}/`}

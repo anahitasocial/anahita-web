@@ -408,6 +408,11 @@ replies, made directly to the post.
   (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
   that is under it: the thread is read whole for the post at the top, and
   `utils/thread.js` picks out the branch. Replying there answers that reply.
+- **Where a reply was said** is shown above it wherever it is away from its
+  thread: the profile the thread is on, a person, a group or any other actor,
+  from `root.owner`. A reply is owned by whoever wrote it, so its own owner
+  does not say. A post shows the profile it is on the same way when that is
+  not its author's own.
 - **A profile has three lists**: Posts, Replies and Reposts, the first three
   tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
   asked for with a different `filter` (`containers/feed/Actor`); they share

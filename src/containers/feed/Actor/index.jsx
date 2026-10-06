@@ -125,6 +125,7 @@ const FeedActorBrowse = ({
           context={
             <ReplyContext
               answered={node.parent}
+              owner={node.root && node.root.owner}
               href={getURL(node)}
             />
             }

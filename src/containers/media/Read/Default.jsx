@@ -99,8 +99,11 @@ const MediumReadDefault = ({
       <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
           {context}
-          {medium.owner.type.includes('person') &&
-            <CardHeaderOwner node={medium} />}
+          {/* The profile it was posted on, when that is not its author's
+              own: a group, or somebody else's profile. A reply says where
+              it was said in its context, below. */}
+          {!context && medium.owner && medium.owner.id !== author.id &&
+            <CardHeaderOwner owner={medium.owner} />}
           {cover &&
             <CardMedia
               className={classes.cover}

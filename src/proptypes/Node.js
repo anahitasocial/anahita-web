@@ -4,6 +4,7 @@ import {
   string,
   arrayOf,
   bool,
+  object,
 } from 'prop-types';
 
 import ActorType from './Actor';
@@ -34,4 +35,7 @@ export default shape({
   quoteCount: number,
   isQuotedByViewer: bool,
   commentCount: number,
+  // On a reply: the post at the top of its thread, with its owner.
+  rootId: number,
+  root: object,
 });
