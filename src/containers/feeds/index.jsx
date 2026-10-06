@@ -5,15 +5,22 @@ import { Helmet } from 'react-helmet-async';
 
 import Grid from '@mui/material/Grid';
 
-import CompleteProfileCard from './dashboard/CompleteProfileCard';
-import Composers from './media/Composer';
-import FeedBrowse from './feed/Leaders';
-import actions from '../actions';
-import i18n from '../languages';
+import CompleteProfileCard from './CompleteProfileCard';
+import Tray from './Tray';
+import Composers from '../media/Composer';
+import FeedBrowse from '../feed/Leaders';
+import actions from '../../actions';
+import i18n from '../../languages';
 
-import PersonType from '../proptypes/Person';
+import PersonType from '../../proptypes/Person';
 
-const DashboardPage = ({
+// Home, for somebody signed in: who has posted lately, a place to post, and
+// the feed of the people and groups they follow.
+//
+// This is the page that will hold more than one feed. Custom feeds (the
+// roadmap's item 14) become tabs here beside the one there is now, which is
+// why it lives under `feeds` and is not called a dashboard.
+const FeedsPage = ({
   readPerson,
   viewer,
   person,
@@ -25,7 +32,7 @@ const DashboardPage = ({
   return (
     <>
       <Helmet>
-        <title>{i18n.t('dashboard:cTitle')}</title>
+        <title>{i18n.t('home:cTitle')}</title>
       </Helmet>
       <Grid
         container
@@ -33,6 +40,9 @@ const DashboardPage = ({
       >
         <Grid size={{ xs: 12, md: 8 }}>
           <CompleteProfileCard viewer={viewer} />
+        </Grid>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <Tray viewer={viewer} />
         </Grid>
         <Grid size={{ xs: 12, md: 8 }}>
           {person.id &&
@@ -46,7 +56,7 @@ const DashboardPage = ({
   );
 };
 
-DashboardPage.propTypes = {
+FeedsPage.propTypes = {
   readPerson: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,
   person: PersonType.isRequired,
@@ -71,9 +81,6 @@ const mapStateToProps = (state) => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    sessionRead: () => {
-      return dispatch(actions.session.read());
-    },
     readPerson: (alias) => {
       return dispatch(actions.people.read(alias, 'people'));
     },
@@ -83,4 +90,4 @@ const mapDispatchToProps = (dispatch) => {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(DashboardPage);
+)(FeedsPage);

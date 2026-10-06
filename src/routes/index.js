@@ -45,7 +45,7 @@ import OAuthCallback from '../containers/OAuthCallback';
 import People from '../containers/people/Browse';
 import PeopleAdd from '../containers/people/Add';
 
-import DashboardPage from '../containers/Dashboard';
+import FeedsPage from '../containers/feeds';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
@@ -111,7 +111,7 @@ const AppRoutes = () => {
 
             <Route
               path="/"
-              element={isAuthenticated ? <DashboardPage /> : <HomePage />}
+              element={isAuthenticated ? <FeedsPage /> : <HomePage />}
             />
 
             {/* Public, like /support and /legal below. Everything on it is
@@ -136,11 +136,7 @@ const AppRoutes = () => {
 
             <Route
               path="/dashboard"
-              element={
-                <AuthenticatedRoute>
-                  <DashboardPage />
-                </AuthenticatedRoute>
-          }
+              element={<Navigate to="/" replace />}
             />
 
             {/* People — static paths before parameterized */}

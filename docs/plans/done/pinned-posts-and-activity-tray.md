@@ -1,6 +1,6 @@
 # Pinned posts and a "New from people you follow" tray (instead of stories)
 
-*Roadmap item 15, planned 2026-09-28. See the [roadmap](roadmap.md) for order and dependencies.*
+*Roadmap item 15, planned 2026-09-28. See the [roadmap](../roadmap.md) for order and dependencies.*
 
 ## Context and decision
 - **What was proposed:** a story-service where people share one of their posts as a story, followers see stories from the actors they follow and tap through to the post, and each story keeps a list of who viewed it.
@@ -105,4 +105,56 @@ A phase is finished only when these pages match the code. anahita-services pages
 | Item | State |
 | --- | --- |
 | Plan | written 2026-09-28 |
-| Implementation | not started |
+| Implementation | done 2026-10-05, on branch `m5-conversations`; see [What was built](#what-was-built-2026-10-05) |
+
+## What was built (2026-10-05)
+
+**Pinned posts.** `PUT` and `DELETE /{ns}/:id/pin`, `nodes.pinned_at`, pinned
+first on a profile's posts and on its lists of one kind, "Pin to profile" in
+both menus and a "Pinned" label.
+
+- **One pin a profile, not five.** The user's decision while it was being
+  built: one is what a profile leads with, and it is exactly what Bluesky
+  has. Pinning another post moves the pin; there is no "too many" to answer.
+- **Pinned first is one ordering over the whole list**, not something done to
+  the first page only as planned. It comes to the same thing, a pinned post
+  on the first page and on no other, without a special case.
+- **An ordinary edit no longer writes the flag.** It used to: any edit wrote
+  `pinned` from whatever it carried. Pinning goes through its own routes.
+- After pinning in a feed the label shows at once; the order changes when the
+  list is next read.
+
+**New from people you follow.** `GET /feeds/leaders/active`, the row of faces
+on home, and a viewer that steps through an actor's recent posts.
+
+- **Posts only**: not replies, not reposts, as decided for profiles.
+- **The viewer is a dialog of its own**, not the photo lightbox: the lightbox
+  is built around one kind of post's store, and the tray shows every kind.
+  Arrow keys and buttons move through it; there is no swipe yet.
+- **The posts come from the actor's profile feed**, a page of twenty, cut to
+  the last day in the browser. Somebody who posted more than twenty times in
+  a day is shown the latest twenty.
+- "Seen" is kept on the device, per person, as planned.
+
+**Cleanup.** story-service was a running stub, not just wiring: it and its
+entries in the compose file, the gateway, Kubernetes and the Makefile are
+gone, and so are the web app's `containers/stories`, its actions, reducers and
+prop types.
+
+**Home.** At the user's asking `Dashboard.jsx` became `containers/feeds/
+index.jsx`, where custom feeds (item 14) will be tabs, and the menu item reads
+"Home" signed in as it did signed out. `/dashboard` leads to `/`.
+
+**Left for federation (item 8):** `featured` and `pinnedPost`.
+
+**Checked.** Against a real database: the pin moves, a pinned post leads both
+kinds of list and is on one page only, pinning does not show a post to
+anybody who could not see it, a request to pin a reply or somebody else's
+post moves nothing, an edit keeps a pin; and the faces count only posts, by
+followed actors, that the viewer may see, inside the window. The rule for who
+may pin, the device's "seen" record and the store's pin move in unit tests.
+The migration run twice and compared with a fresh schema. The web app's 27
+suites, and it builds. On the dev stack, signed out: the new routes refuse a
+visitor and `/stories/` is gone. **Nothing signed in, and nothing in a
+browser, by me.**
+

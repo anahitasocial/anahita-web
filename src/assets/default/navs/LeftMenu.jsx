@@ -64,7 +64,7 @@ const LeftMenu = ({
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
-        <ListItemText primary={isAuthenticated ? i18n.t('dashboard:cTitle') : i18n.t('home:cTitle')} />
+        <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
       {/* People, groups, hashtags and places: nothing a visitor to a
           members-only site can be shown, so they are not offered. Each

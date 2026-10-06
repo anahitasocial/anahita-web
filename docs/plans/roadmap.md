@@ -40,11 +40,11 @@ Each milestone ends in a shippable state.
 | 14 | ✅ | 17 · Up to 4 images per photo post | [photo-albums.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/photo-albums.md) | services + web | 3–4 | 9 |
 | 14b | ✅ | 29 · One actor service: people and groups merged into `actor-service`. Addresses and type names unchanged; nothing in the web app changes | [actor-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/actor-service.md) | services | under 1 | — |
 | 14c | ✅ | 31 · One identity image service: avatars and covers merged into `identity-image-service`. Addresses unchanged; removing or replacing a picture now cleans up after itself; an actor's avatar has its own column, `avatar_filename`; nothing in the web app changes | [identity-image-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/identity-image-service.md) | services | under 1 | 29 |
-| **M5. Conversations** | 🚧 | | | | **about 17–22** | |
+| **M5. Conversations** | ✅ | | | | **about 17–22** | |
 | 15 | ✅ | 7 · Notes as replies; retire comment-service. Done 2026-10-05: every comment is a reply, a post's author chooses who can reply, and comment-service and the comment code are removed | [notes-as-replies.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/notes-as-replies.md) | services + web | 7–9 | 0, 1 |
 | 15b | ✅ | 24 · Profile tabs for replies and reposts, with a "show my reposts" setting. Done 2026-10-05, with a page for a single reply | [profile-tabs-and-reposts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/profile-tabs-and-reposts.md) | services + web | 2 | 7 |
 | 15c | ✅ | 25 · Quote posts. Done 2026-10-05 | [quote-posts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/quote-posts.md) | services + web | 3–4 | 13 |
-| 16 | ⬜ | 15 · Pinned posts + "New from people you follow" tray; remove story-service | [pinned-posts-and-activity-tray.md](pinned-posts-and-activity-tray.md) | services + web | 3–4 | 0 |
+| 16 | ✅ | 15 · Pinned posts (one a profile) + "New from people you follow" tray; story-service removed. Done 2026-10-05 | [pinned-posts-and-activity-tray.md](done/pinned-posts-and-activity-tray.md) | services + web | 3–4 | 0 |
 | 16b | ⬜ | 22 · Post insights (views, replies, reposts, quotes, likes) | [post-insights.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/post-insights.md) | services + web | 2–3 | 7, 25 |
 | **M6. Community** |  | | | | **about 10–13** | |
 | 17 | ⬜ | 11 · Invitations (plus 8 socialgraph bug fixes) | [actor-invitations.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-invitations.md) | services + web | 5–6 | 4b limiter |

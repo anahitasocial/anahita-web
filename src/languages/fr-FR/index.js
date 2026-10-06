@@ -11,7 +11,6 @@ import replies from './replies';
 import auth from './auth';
 import actor from './actor';
 import blogs from './blogs';
-import dashboard from './dashboard';
 import home from './home';
 import documents from './documents';
 import about from './about';
@@ -53,7 +52,6 @@ export default {
   auth,
   actor,
   blogs,
-  dashboard,
   home,
   documents,
   about,

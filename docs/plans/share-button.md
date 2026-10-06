@@ -15,7 +15,7 @@ Every post, and every profile, gets a share button (the paper-airplane icon) for
 - **Use the device's own share sheet where there is one** (`navigator.share`): on phones and on desktop Safari and Edge it offers every app the person has, and we ship no third-party SDKs or tracking scripts.
 - **Elsewhere, a small menu:** Copy link, Share by email, Share on Mastodon, Share on Bluesky. These four are plain links. No Facebook, X or WhatsApp buttons: the device sheet covers them where they are installed, and a button per network is a maintenance tail.
 - **Only public content gets the full share options.** A post that isn't public offers Copy link only, with a note that only people who can already see it can open it.
-- **Sharing is not counted.** No "shares" number and no record of who shared (in line with [pinned-posts-and-activity-tray.md](pinned-posts-and-activity-tray.md) and the insights plan).
+- **Sharing is not counted.** No "shares" number and no record of who shared (in line with [pinned-posts-and-activity-tray.md](done/pinned-posts-and-activity-tray.md) and the insights plan).
 
 ## Design
 - **`src/containers/controls/Share.jsx`:** an icon button (MUI `Send` icon; check the MUI docs through the MCP server before choosing, per `CLAUDE.md`) placed in the action row of post cards, the read page and the profile header.
