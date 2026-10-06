@@ -157,7 +157,16 @@ const ReplyAccessDialog = ({
           <Typography variant="body2" color="textSecondary">
             {i18n.t('replies:quote.policy.help')}
           </Typography>
-          <Stack spacing={1}>
+          {/* Side by side, each half the width: Cancel, then the one
+              that does it. */}
+          <Stack direction="row" spacing={1}>
+            <Button
+              fullWidth
+              disabled={saving}
+              onClick={onClose}
+            >
+              {i18n.t('actions:cancel')}
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -175,13 +184,6 @@ const ReplyAccessDialog = ({
             >
               {!saving && i18n.t('actions:save')}
               {saving && <CircularProgress size={24} />}
-            </Button>
-            <Button
-              fullWidth
-              disabled={saving}
-              onClick={onClose}
-            >
-              {i18n.t('actions:cancel')}
             </Button>
           </Stack>
         </Stack>

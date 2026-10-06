@@ -110,7 +110,16 @@ const QuoteDialog = ({
             }}
           />
           <QuoteEmbed quote={{ post }} />
-          <Stack spacing={1}>
+          {/* Side by side, each half the width: Cancel, then the one
+              that does it. */}
+          <Stack direction="row" spacing={1}>
+            <Button
+              fullWidth
+              disabled={isSending}
+              onClick={onClose}
+            >
+              {i18n.t('actions:cancel')}
+            </Button>
             <Button
               variant="contained"
               color="primary"
@@ -120,13 +129,6 @@ const QuoteDialog = ({
             >
               {!isSending && i18n.t('replies:quote.send')}
               {isSending && <CircularProgress size={24} />}
-            </Button>
-            <Button
-              fullWidth
-              disabled={isSending}
-              onClick={onClose}
-            >
-              {i18n.t('actions:cancel')}
             </Button>
           </Stack>
         </Stack>
