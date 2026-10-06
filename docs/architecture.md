@@ -458,8 +458,8 @@ stops saying so. The new order shows when the list is next read.
 the left menu under Home, at `/saved` (`containers/saved/index.jsx`, the list
 in `Browse.jsx`), in the same masonry as the other lists. It was a tab on the
 viewer's own profile for a day and was moved on 2026-10-06: a profile is what
-other people look at. There are no folders; collections, to group what is
-saved, would go on this page.
+other people look at. There are no folders. Collections (roadmap item 34) are a
+separate feature, filled from this list, and leave it as it is.
 
 It is private end to end: the server never says who saved a post. The page
 says so in one line under its title. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
