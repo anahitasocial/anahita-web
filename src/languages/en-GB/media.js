@@ -39,6 +39,7 @@ export default {
   // Saving a post to find it again. Private to whoever saved it.
   saved: {
     title: 'Saved',
+    private: 'Only you can see the saved items',
     save: 'Save',
     remove: 'Remove from saved',
     saved: 'Saved. It is under Saved in the menu.',

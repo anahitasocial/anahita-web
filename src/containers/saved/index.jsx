@@ -13,7 +13,8 @@ import i18n from '../../languages';
 //
 // It was a tab on the viewer's own profile first. A profile is what other
 // people look at, so a list nobody else sees sat oddly there and had to say
-// that it was private. Here it does not have to. Collections, to group what
+// that it was private in a note above the list. Here it says so once, under
+// its title. Collections, to group what
 // is saved, would be added to this page.
 const SavedPage = () => {
   return (
@@ -25,6 +26,7 @@ const SavedPage = () => {
         <BrowseHeader
           icon={<SavedIcon />}
           title={i18n.t('media:saved.title')}
+          subheader={i18n.t('media:saved.private')}
         />
       </Box>
       <SavedBrowse />

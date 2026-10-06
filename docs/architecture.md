@@ -462,7 +462,7 @@ other people look at. There are no folders; collections, to group what is
 saved, would go on this page.
 
 It is private end to end: the server never says who saved a post. The page
-does not say so, as nothing on it suggests otherwise. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
+says so in one line under its title. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
 handled in `reducers/create.js`).
 
 ### A post's interactions

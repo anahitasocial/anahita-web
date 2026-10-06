@@ -39,6 +39,7 @@ export default {
   // Enregistrer une publication pour la retrouver. Privé.
   saved: {
     title: 'Enregistrements',
+    private: 'Vous seul pouvez voir vos enregistrements',
     save: 'Enregistrer',
     remove: 'Retirer des enregistrements',
     saved: 'Enregistrée. Elle est sous Enregistrements dans le menu.',

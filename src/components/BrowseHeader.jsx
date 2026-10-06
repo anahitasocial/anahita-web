@@ -30,6 +30,7 @@ import AddIcon from '@mui/icons-material/Add';
 const BrowseHeader = ({
   icon,
   title,
+  subheader = '',
   actionTo = '',
   actionLabel = '',
 }) => {
@@ -42,6 +43,7 @@ const BrowseHeader = ({
           </Avatar>
         }
         title={title}
+        subheader={subheader || undefined}
         action={actionTo &&
           <Tooltip title={actionLabel}>
             <IconButton
@@ -65,6 +67,9 @@ const BrowseHeader = ({
 BrowseHeader.propTypes = {
   icon: PropTypes.node.isRequired,
   title: PropTypes.string.isRequired,
+  // A line under the title, for a page that has something to say about
+  // itself.
+  subheader: PropTypes.string,
   actionTo: PropTypes.string,
   actionLabel: PropTypes.string,
 };
