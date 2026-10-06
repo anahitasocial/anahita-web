@@ -11,6 +11,7 @@ import i18n from '../../languages';
 
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlDelete from '../controls/Delete';
+import ControlPin from '../controls/medium/Pin';
 import ControlFollow from '../controls/Follow';
 import useReport from '../reports/useReport';
 
@@ -52,9 +53,10 @@ const FeedItemMenu = ({
   // answer, sent with it in the feed as on its own page.
   const canEdit = permissions.medium.canEdit(viewer, node);
   const canDelete = permissions.medium.canDelete(viewer, node);
+  const canPin = Boolean(node.authorized && node.authorized.pin);
   const report = useReport(viewer, node);
 
-  if (!canSubscribe && !canFollow && !canEdit && !canDelete && !report.canReport) {
+  if (!canSubscribe && !canFollow && !canEdit && !canPin && !canDelete && !report.canReport) {
     return null;
   }
 
@@ -104,6 +106,12 @@ const FeedItemMenu = ({
           >
             {i18n.t('actions:edit')}
           </MenuItem>}
+        {canPin &&
+          <ControlPin
+            medium={node}
+            onDone={handleClose}
+            key={`feed-pin-${id}`}
+          />}
         {canDelete &&
           <DeleteActionWithRef
             node={node}

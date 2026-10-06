@@ -64,3 +64,40 @@ describe('the previous state', () => {
     expect(items.byId).toEqual({ 1: { id: 1 } });
   });
 });
+
+describe('pinChanged', () => {
+  const list = {
+    byId: {
+      1: { id: 1, pinned: true, owner: { id: 7 } },
+      2: { id: 2, pinned: false, owner: { id: 7 } },
+      3: { id: 3, pinned: true, owner: { id: 8 } },
+    },
+    allIds: [1, 2, 3],
+    current: { id: 1, pinned: true, owner: { id: 7 } },
+  };
+
+  it('moves the pin: the post that had it on that profile gives it up', () => {
+    const next = reducer.pinChanged(list, { id: 2, pinned: true, owner: { id: 7 } });
+
+    expect(next.byId[2].pinned).toBe(true);
+    expect(next.byId[1].pinned).toBe(false);
+    // Another profile's pin is its own.
+    expect(next.byId[3].pinned).toBe(true);
+    expect(next.current.pinned).toBe(false);
+    // The list it was given is not written through.
+    expect(list.byId[1].pinned).toBe(true);
+  });
+
+  it('takes a pin off and leaves the rest alone', () => {
+    const next = reducer.pinChanged(list, { id: 1, pinned: false, owner: { id: 7 } });
+
+    expect(next.byId[1].pinned).toBe(false);
+    expect(next.byId[3].pinned).toBe(true);
+  });
+
+  it('gives back the same list when nothing in it changes', () => {
+    expect(reducer.pinChanged(list, { id: 99, pinned: false, owner: { id: 7 } })).toBe(list);
+    expect(reducer.pinChanged(list, { id: 3, pinned: true, owner: { id: 8 } })).toBe(list);
+    expect(reducer.pinChanged(undefined, { id: 1 })).toBe(undefined);
+  });
+});

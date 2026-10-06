@@ -12,6 +12,7 @@ import utils from '../../utils';
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
+import ControlPin from '../controls/medium/Pin';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
 
@@ -56,6 +57,8 @@ const MediaMenu = ({
   // Not on a reply, which follows the post at the top of its thread.
   const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
   const canDelete = permissions.canDelete(viewer, medium);
+  // Pinning is the profile's: the server says whether this viewer may.
+  const canPin = Boolean(medium.authorized && medium.authorized.pin);
   const report = useReport(viewer, medium);
   // A photo post's images are changed in a dialog of their own: their
   // order, their descriptions, and which there are.
@@ -108,6 +111,12 @@ const MediaMenu = ({
             medium={medium}
             isSubscribedByViewer={medium.isSubscribedByViewer}
             key={`medium-notification-${medium.id}`}
+          />}
+        {canPin &&
+          <ControlPin
+            medium={medium}
+            onDone={handleClose}
+            key={`medium-pin-${medium.id}`}
           />}
         {canSetReplies &&
           <MenuItem

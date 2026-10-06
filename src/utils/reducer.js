@@ -33,6 +33,56 @@ const editItem = (list, item, defaultItem) => {
   return items;
 };
 
+// The list after a post was pinned or unpinned.
+//
+// A profile has one pin, so pinning a post takes the pin from whichever
+// post on that profile had it. The server does that; this does the same to
+// the copies held here, so the old one does not go on saying it is pinned.
+// Works on any list of posts or of feed items: a feed item that is a repost
+// is left alone, the mark is on posts.
+//
+// Returns the same list when nothing in it changes.
+const pinChanged = (list, node) => {
+  if (!list || !list.byId || !node || !node.id) {
+    return list;
+  }
+
+  const ownerId = node.owner && node.owner.id;
+  const byId = { ...list.byId };
+  let changed = false;
+
+  Object.keys(byId).forEach((key) => {
+    const item = byId[key];
+    if (!item) {
+      return;
+    }
+
+    if (item.id === node.id) {
+      if (Boolean(item.pinned) !== Boolean(node.pinned)) {
+        byId[key] = { ...item, pinned: Boolean(node.pinned) };
+        changed = true;
+      }
+      return;
+    }
+
+    const sameProfile = ownerId && item.owner && item.owner.id === ownerId;
+    if (node.pinned && sameProfile && item.pinned) {
+      byId[key] = { ...item, pinned: false };
+      changed = true;
+    }
+  });
+
+  if (!changed) {
+    return list;
+  }
+
+  const current = list.current && byId[list.current.id] ?
+    { ...list.current, pinned: byId[list.current.id].pinned } :
+    list.current;
+
+  return { ...list, byId, current };
+};
+
 const deleteItem = (list, item, defaultItem) => {
   const items = {
     ...emptyList(),
@@ -51,4 +101,5 @@ const deleteItem = (list, item, defaultItem) => {
 export default {
   editItem,
   deleteItem,
+  pinChanged,
 };

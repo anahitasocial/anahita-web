@@ -19,6 +19,7 @@ import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
+import PinnedLabel from '../../../components/PinnedLabel';
 import Player from '../../../components/Player';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
@@ -99,6 +100,7 @@ const MediumReadDefault = ({
     >
       <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
+          <PinnedLabel show={Boolean(medium.pinned)} />
           {context}
           {/* The profile it was posted on, when that is not its author's
               own: a group, or somebody else's profile. A reply says where

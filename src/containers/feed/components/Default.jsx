@@ -16,6 +16,7 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
+import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
 import Player from '../../../components/Player';
 import utils from '../../../utils';
@@ -77,6 +78,7 @@ const FeedCardDefault = ({
       className={classes.root}
       component="article"
     >
+      <PinnedLabel show={Boolean(node.pinned)} />
       {showOwner && node.owner && <CardOwner owner={node.owner} />}
       {context}
       <CardHeader

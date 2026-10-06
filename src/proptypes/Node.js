@@ -37,6 +37,8 @@ export default shape({
   commentCount: number,
   // On a reply: the post at the top of its thread, with its owner.
   rootId: number,
+  // Pinned to the profile it is on.
+  pinned: bool,
   root: object,
   quoteId: number,
   quote: object,

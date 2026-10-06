@@ -5,6 +5,7 @@ import { singularize } from 'inflection';
 import createApi, { browseOwned } from './create';
 import createActor from './actor';
 import photos from './photos';
+import pins from './pins';
 import quotes from './quotes';
 import replies from './replies';
 import reposts from './reposts';
@@ -135,6 +136,7 @@ const apis = {
   signupRequests,
   password,
   reauth,
+  pins,
   quotes,
   replies,
   repost,
