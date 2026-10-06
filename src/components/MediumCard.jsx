@@ -17,6 +17,7 @@ import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';
 import CardHeaderOwner from './MediumOwnerCardHeader';
 import PhotoSlides from './PhotoSlides';
+import QuoteEmbed from './QuoteEmbed';
 import Player from './Player';
 import Progress from './Progress';
 import ReadMore from './ReadMore';
@@ -185,6 +186,7 @@ const MediumCard = ({
           <ReadMore contentFilter lang={medium.language}>
             {medium.body}
           </ReadMore>}
+        <QuoteEmbed quote={medium.quote} />
         <SignInPrompt show={Boolean(medium.truncated)} />
       </CardContent>
       {stats &&

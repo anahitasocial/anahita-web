@@ -52,4 +52,9 @@ export default shape({
   rootId: number,
   parentId: number,
   root: object,
+  // On a note that quotes a post: that post or why it is not shown, and
+  // who may quote this post when its author has said.
+  quoteId: number,
+  quote: object,
+  quotePolicy: string,
 });

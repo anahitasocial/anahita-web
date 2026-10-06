@@ -17,31 +17,44 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import i18n from '../languages';
+import quotes from '../utils/quotes';
 import replyAccess from '../utils/replyAccess';
 
-// Who can reply to a post: anyone, or nobody but the people ticked.
+// A post's interaction settings: who can reply to it, and who can quote it.
+//
+// Who can reply: anyone, or nobody but the people ticked.
 //
 // Asked as two questions, the way Bluesky asks it. The boxes are an
 // exception to "nobody", so they are only live under it.
 //
-// Used for a post being written, where Save only hands the choice back,
-// and for one that exists, where the caller saves it and says so with
-// `saving`. Nothing changes until Save either way.
+// Who can quote: anyone, the author's followers, or nobody. A post that has
+// never been asked follows its author's own setting, so the dialog opens on
+// that (`defaultQuotePolicy`) and only a choice that differs is a choice.
+//
+// Used for a post being written, where Save only hands the choices back,
+// and for one that exists, where the caller saves them and says so with
+// `saving`. Nothing changes until Save either way. Save is called with who
+// can reply and who can quote.
 const ReplyAccessDialog = ({
   open,
   value,
+  quotePolicy = '',
+  defaultQuotePolicy = '',
   onClose,
   onSave,
   saving = false,
 }) => {
   const [choice, setChoice] = useState(replyAccess.toChoice(value));
+  const startingQuotePolicy = quotes.effective(quotePolicy, defaultQuotePolicy);
+  const [whoQuotes, setWhoQuotes] = useState(startingQuotePolicy);
 
   // Each time it is opened it starts from what is set now.
   useEffect(() => {
     if (open) {
       setChoice(replyAccess.toChoice(value));
+      setWhoQuotes(startingQuotePolicy);
     }
-  }, [open, value]);
+  }, [open, value, startingQuotePolicy]);
 
   const toggle = (group) => {
     return (event) => {
@@ -117,6 +130,33 @@ const ReplyAccessDialog = ({
           <Typography variant="body2" color="textSecondary">
             {i18n.t('replies:access.help')}
           </Typography>
+          <FormControl disabled={saving}>
+            <FormLabel id="quote-policy-who">
+              {i18n.t('replies:quote.policy.who')}
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="quote-policy-who"
+              name="quote-policy-who"
+              value={whoQuotes}
+              onChange={(event) => {
+                setWhoQuotes(event.target.value);
+              }}
+            >
+              {quotes.POLICIES.map((policy) => {
+                return (
+                  <FormControlLabel
+                    key={policy}
+                    value={policy}
+                    control={<Radio />}
+                    label={i18n.t(`replies:quote.policy.${policy}`)}
+                  />
+                );
+              })}
+            </RadioGroup>
+          </FormControl>
+          <Typography variant="body2" color="textSecondary">
+            {i18n.t('replies:quote.policy.help')}
+          </Typography>
           <Stack spacing={1}>
             <Button
               variant="contained"
@@ -124,7 +164,13 @@ const ReplyAccessDialog = ({
               fullWidth
               disabled={saving}
               onClick={() => {
-                onSave(replyAccess.fromChoice(choice));
+                // Who can quote is only sent when it is not what the post
+                // had already: a post left on its author's setting stays
+                // on it.
+                onSave(
+                  replyAccess.fromChoice(choice),
+                  whoQuotes === startingQuotePolicy ? quotes.normalize(quotePolicy) : whoQuotes,
+                );
               }}
             >
               {!saving && i18n.t('actions:save')}
@@ -149,7 +195,11 @@ ReplyAccessDialog.propTypes = {
   // "anyone", "nobody", or groups joined by commas. See utils/replyAccess.
   value: PropTypes.string,
   onClose: PropTypes.func.isRequired,
-  // Called with the value chosen.
+  // Who can quote, as the post has it: '' when it has never been said.
+  quotePolicy: PropTypes.string,
+  // The author's own setting, which such a post follows.
+  defaultQuotePolicy: PropTypes.string,
+  // Called with who can reply and who can quote ('' for "not said").
   onSave: PropTypes.func.isRequired,
   saving: PropTypes.bool,
 };

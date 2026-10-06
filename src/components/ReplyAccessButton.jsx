@@ -16,6 +16,9 @@ import replyAccess from '../utils/replyAccess';
 const ReplyAccessButton = ({
   value,
   onChange,
+  quotePolicy = '',
+  defaultQuotePolicy = '',
+  onQuotePolicyChange = null,
   disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,11 +47,16 @@ const ReplyAccessButton = ({
       <ReplyAccessDialog
         open={isOpen}
         value={value}
+        quotePolicy={quotePolicy}
+        defaultQuotePolicy={defaultQuotePolicy}
         onClose={() => {
           setIsOpen(false);
         }}
-        onSave={(chosen) => {
+        onSave={(chosen, whoQuotes) => {
           onChange(chosen);
+          if (onQuotePolicyChange) {
+            onQuotePolicyChange(whoQuotes);
+          }
           setIsOpen(false);
         }}
       />
@@ -59,6 +67,10 @@ const ReplyAccessButton = ({
 ReplyAccessButton.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
+  // Who can quote the post being written: '' while it has not been said.
+  quotePolicy: PropTypes.string,
+  defaultQuotePolicy: PropTypes.string,
+  onQuotePolicyChange: PropTypes.func,
   disabled: PropTypes.bool,
 };
 

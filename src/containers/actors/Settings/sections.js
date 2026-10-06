@@ -52,6 +52,8 @@ export const ITEMS = {
   ACCESS: 'access',
   // Whether reposts show among the posts on the profile.
   REPOSTS: 'reposts',
+  // Who can quote this person's posts.
+  QUOTES: 'quotes',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -115,6 +117,7 @@ const ALL_SECTIONS = [
     items: [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
       { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
+      { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
     ],
   },
   {

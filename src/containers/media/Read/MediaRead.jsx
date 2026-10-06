@@ -13,8 +13,10 @@ import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
 import RepliesThread from '../../replies/Thread';
 import ReplyContext from '../../replies/ReplyContext';
+import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
+import ControlRepost from '../../controls/Repost';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
@@ -87,6 +89,10 @@ const MediaReadView = ({
     ),
     actions: [
       isAuthenticated && <Like node={medium} key={`medium-like-${medium.id}`} />,
+      // Repost or quote. Not a reply: it is not passed on without its thread.
+      isAuthenticated && !isReply && (
+        <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />
+      ),
       namespace === 'documents' && (
         <ControlDownload
           node={medium}
@@ -107,6 +113,9 @@ const MediaReadView = ({
     replies: medium.id && !isReply ? (
       <RepliesThread root={medium} key={`replies-${medium.id}`} />
     ) : replyThread,
+    // The post this note quotes, with a way out of it for that post's
+    // author.
+    quote: medium.quote ? <QuoteDetach note={medium} viewer={viewer} /> : null,
     // Above a reply shown on its own: what it is a reply to.
     context: isReply && medium.root ? (
       <ReplyContext answered={medium.root} owner={medium.root.owner}>

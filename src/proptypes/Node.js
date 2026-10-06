@@ -38,4 +38,6 @@ export default shape({
   // On a reply: the post at the top of its thread, with its owner.
   rootId: number,
   root: object,
+  quoteId: number,
+  quote: object,
 });

@@ -14,6 +14,7 @@ export default {
     permissions: 'Permissions',
     access: 'Access',
     reposts: 'Reposts',
+    quotes: 'Quotes',
     // Deletion copy, namespace-specific — groups carry their own in groups.js,
     // because the sign-in and passkey lines here are meaningless for a group.
     delete: 'Delete',

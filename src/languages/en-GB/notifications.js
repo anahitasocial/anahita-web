@@ -16,6 +16,7 @@ export default {
   voteup: '<0>{{subject}}</0> liked your <1>post</1>',
   repostAdd: '<0>{{subject}}</0> reposted your <1>post</1>',
   replyAdd: '<0>{{subject}}</0> replied to your <1>post</1>',
+  quoteAdd: '<0>{{subject}}</0> quoted your post in a <1>note</1>',
   noteComment: '<0>{{subject}}</0> commented on your <1>note</1>',
   articleComment: '<0>{{subject}}</0> commented on your <1>article</1>',
   topicComment: '<0>{{subject}}</0> commented on your <1>topic</1>',

@@ -44,6 +44,7 @@ const MediumReadArticle = ({
   locations = null,
   replies = null,
   context = null,
+  quote = null,
   editing = false,
   form = null,
   stats = null,
@@ -128,6 +129,7 @@ const MediumReadArticle = ({
                   <EntityBody contentFilter lang={medium.language}>
                     {medium.body}
                   </EntityBody>}
+                {quote}
                 <SignInPrompt show={Boolean(medium.truncated)} />
               </CardContent>
               {stats &&
@@ -165,6 +167,8 @@ MediumReadArticle.propTypes = {
   medium: MediumType.isRequired,
   access: PropTypes.node,
   locations: PropTypes.node,
+  // The post a note quotes, under the note's own words.
+  quote: PropTypes.node,
   // What a reply is a reply to, above a reply shown on its own.
   context: PropTypes.node,
   // The thread of replies under the article.

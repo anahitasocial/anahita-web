@@ -427,6 +427,30 @@ replies, made directly to the post.
   (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
   it.
 
+### Quote posts
+
+A quote is a note that carries another post under its own words. It is an
+ordinary note in every other way: its own audience, likes and replies.
+
+- **Making one.** The repost button under a post opens a small menu, upward:
+  Repost, or Quote (`containers/controls/Repost.jsx`). Quote is switched off
+  where the server said this viewer may not quote this post
+  (`authorized.quote`). It opens `containers/controls/QuoteDialog.jsx`, which
+  posts a note on the writer's own profile with `quote_id`. A refusal at that
+  point is said in the server's words (`utils/quotes.js`).
+- **Showing one.** A note that quotes is sent `quote`: the post, or why it is
+  not shown (`unavailable`, `detached`). `components/QuoteEmbed.jsx` draws
+  either, inside the note, in feeds, lists and on the note's page. The server
+  sends the post only to a reader who may see it.
+- **Taking a post out.** On the page of a note that quotes their post, the
+  quoted author has "Remove my post from this quote"
+  (`containers/controls/QuoteDetach.jsx`). It cannot be undone.
+- **Who can quote** is the third part of a post's interaction settings
+  (`components/ReplyAccessDialog.jsx`): anyone, the author's followers, or
+  nobody. A post that has never been asked follows its author's own setting,
+  "Who can quote my posts", under Settings › Access
+  (`containers/actors/Settings/QuotePolicy.jsx`).
+
 There is no comment code left: the comment components, actions, reducers,
 API modules and prop types went with the comment service. Two names remain
 from then, because the server still uses them: `authorized.comment` and

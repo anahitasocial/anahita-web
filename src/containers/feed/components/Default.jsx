@@ -16,6 +16,7 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
+import QuoteEmbed from '../../../components/QuoteEmbed';
 import Player from '../../../components/Player';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
@@ -140,6 +141,7 @@ const FeedCardDefault = ({
           <ReadMore contentFilter>
             {body}
           </ReadMore>}
+        <QuoteEmbed quote={node.quote} />
       </CardContent>
       {stats &&
         <CardActions>

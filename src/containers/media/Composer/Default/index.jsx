@@ -69,6 +69,10 @@ const MediaComposerDefault = ({
   // closed to replies by habit is a surprise.
   const [whoReplies, setWhoReplies] = useState(replyAccess.ANYONE);
 
+  // Who can quote. Not said unless the author chooses, which leaves the
+  // post on their own setting.
+  const [whoQuotes, setWhoQuotes] = useState('');
+
   useEffect(() => {
     if (error) {
       alertError(i18n.t('prompts:posted.error'));
@@ -130,6 +134,7 @@ const MediaComposerDefault = ({
         access,
         language,
         ...replyAccess.toRequest(whoReplies),
+        ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
         composed: 1,
       }, actor).then(() => {
         postLanguage.remember(viewer, language);
@@ -143,6 +148,7 @@ const MediaComposerDefault = ({
         });
         setFile(null);
         setWhoReplies(replyAccess.ANYONE);
+        setWhoQuotes('');
         setPhotoItems([]);
         setFields({ ...formFields });
       });
@@ -186,6 +192,9 @@ const MediaComposerDefault = ({
           <ReplyAccessButton
             value={whoReplies}
             onChange={setWhoReplies}
+            quotePolicy={whoQuotes}
+            defaultQuotePolicy={viewer.quotePolicy}
+            onQuotePolicyChange={setWhoQuotes}
             disabled={isFetching}
           />
         </>

@@ -14,6 +14,7 @@ export default {
     permissions: 'Autorisations',
     access: 'Accès',
     reposts: 'Repartages',
+    quotes: 'Citations',
     delete: 'Supprimer',
     // The card title. Its text is in the accounts namespace, shared with
     // the accounts list.
