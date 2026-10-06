@@ -124,8 +124,19 @@ both menus and a "Pinned" label.
 - After pinning in a feed the label shows at once; the order changes when the
   list is next read.
 
-**New from people you follow.** `GET /feeds/leaders/active`, the row of faces
-on home, and a viewer that steps through an actor's recent posts.
+**New from people you follow: built, then taken out the same day.** The user
+tried it and judged it unnecessary for now: a new installation has too few
+people and too little activity for a row of who posted lately to say
+anything. The endpoint, the row and its viewer were removed again, from both
+repos (they are in the history of `m5-conversations`, commits `59b2324` in
+anahita-services and `273b1c6` in anahita-web). What the user has in mind
+instead, for later, is recorded in the roadmap under Kept for later: stories
+as a queue of shared posts that lasts 24 hours, shown above the feed, one
+queue for each actor.
+
+As it was built, for whoever picks that up: `GET /feeds/leaders/active`, the
+row of faces on home, and a viewer that stepped through an actor's recent
+posts.
 
 - **Posts only**: not replies, not reposts, as decided for profiles.
 - **The viewer is a dialog of its own**, not the photo lightbox: the lightbox
@@ -150,9 +161,8 @@ index.jsx`, where custom feeds (item 14) will be tabs, and the menu item reads
 **Checked.** Against a real database: the pin moves, a pinned post leads both
 kinds of list and is on one page only, pinning does not show a post to
 anybody who could not see it, a request to pin a reply or somebody else's
-post moves nothing, an edit keeps a pin; and the faces count only posts, by
-followed actors, that the viewer may see, inside the window. The rule for who
-may pin, the device's "seen" record and the store's pin move in unit tests.
+post moves nothing, an edit keeps a pin; The rule for who
+may pin and the store's pin move in unit tests.
 The migration run twice and compared with a fresh schema. The web app's 27
 suites, and it builds. On the dev stack, signed out: the new routes refuse a
 visitor and `/stories/` is gone. **Nothing signed in, and nothing in a

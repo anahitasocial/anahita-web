@@ -109,7 +109,7 @@ history. The main paths:
 
 | Path | Page |
 | --- | --- |
-| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with who posted lately, the composer and the feed. `/dashboard` leads here |
+| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
@@ -432,25 +432,12 @@ replies, made directly to the post.
   (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
   it.
 
-### Home, and who posted lately
+### Home
 
 Home for somebody signed in is `containers/feeds/index.jsx` (it was
-`Dashboard.jsx`; the menu says "Home" either way). It holds the row of faces,
-the composer and the feed of the people and groups the viewer follows. It
-lives under `feeds` because custom feeds will be tabs on it.
-
-- **New from people you follow** (`containers/feeds/Tray.jsx`) is a row of
-  faces, one for each actor the viewer follows that has posted in the last
-  day. A face with something not yet looked at has a ring and comes first;
-  the rest are dimmed. Nothing is drawn when nobody has posted.
-- **Choosing a face** opens `TrayViewer.jsx`: that actor's posts from the last
-  day, oldest first, one at a time, each with "Open post". Next goes on to
-  the next face after the last post; the arrow keys do the same. The posts
-  are a page of the actor's own profile feed.
-- **"Seen" is kept in the browser** (`utils/tray.js`, in `localStorage`, per
-  person) and nowhere else. Nothing about looking is sent to the server. It
-  does not follow somebody from one device to another, and a browser that
-  will not keep it shows the rings again.
+`Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
+of the people and groups the viewer follows. It lives under `feeds` because
+custom feeds will be tabs on it.
 
 ### Pinned posts
 

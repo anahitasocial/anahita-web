@@ -6,7 +6,6 @@ import { Helmet } from 'react-helmet-async';
 import Grid from '@mui/material/Grid';
 
 import CompleteProfileCard from './CompleteProfileCard';
-import Tray from './Tray';
 import Composers from '../media/Composer';
 import FeedBrowse from '../feed/Leaders';
 import actions from '../../actions';
@@ -14,8 +13,8 @@ import i18n from '../../languages';
 
 import PersonType from '../../proptypes/Person';
 
-// Home, for somebody signed in: who has posted lately, a place to post, and
-// the feed of the people and groups they follow.
+// Home, for somebody signed in: a place to post, and the feed of the people
+// and groups they follow.
 //
 // This is the page that will hold more than one feed. Custom feeds (the
 // roadmap's item 14) become tabs here beside the one there is now, which is
@@ -40,9 +39,6 @@ const FeedsPage = ({
       >
         <Grid size={{ xs: 12, md: 8 }}>
           <CompleteProfileCard viewer={viewer} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Tray viewer={viewer} />
         </Grid>
         <Grid size={{ xs: 12, md: 8 }}>
           {person.id &&
