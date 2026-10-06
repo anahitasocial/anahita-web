@@ -1,23 +1,23 @@
 /* eslint-env jest */
-import comment from '../comment';
+import reply from '../reply';
 import like from '../like';
 import utils from '../../utils';
 
-// Who may comment, like and post is answered by the server, on the node it
+// Who may reply, like and post is answered by the server, on the node it
 // returns, from the same checks it enforces. The client reads the answer and
 // falls back only where a response does not carry one yet.
 
-describe('comment.canAdd', () => {
+describe('reply.canAdd', () => {
   it('follows the server', () => {
-    expect(comment.canAdd({ id: 1, authorized: { comment: true } })).toBe(true);
-    expect(comment.canAdd({ id: 1, authorized: { comment: false } })).toBe(false);
+    expect(reply.canAdd({ id: 1, authorized: { comment: true } })).toBe(true);
+    expect(reply.canAdd({ id: 1, authorized: { comment: false } })).toBe(false);
   });
 
   it('falls back to any saved post when unanswered', () => {
-    expect(comment.canAdd({ id: 1, authorized: { edit: false } })).toBe(true);
-    expect(comment.canAdd({ id: 1 })).toBe(true);
-    expect(comment.canAdd({ id: 0 })).toBe(false);
-    expect(comment.canAdd(undefined)).toBe(false);
+    expect(reply.canAdd({ id: 1, authorized: { edit: false } })).toBe(true);
+    expect(reply.canAdd({ id: 1 })).toBe(true);
+    expect(reply.canAdd({ id: 0 })).toBe(false);
+    expect(reply.canAdd(undefined)).toBe(false);
   });
 });
 

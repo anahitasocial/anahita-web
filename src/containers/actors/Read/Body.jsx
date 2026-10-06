@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
@@ -34,6 +34,9 @@ const ActorBody = ({
   admins = null,
   composers = null,
   feed = null,
+  replies = null,
+  reposts = null,
+  onTabChange = null,
   locations = null,
   socialgraph = null,
   tabPanels = {},
@@ -41,18 +44,43 @@ const ActorBody = ({
   selectedTab = null,
 }) => {
   const namespace = getNamespace(actor);
-  const featureTabs = getActorFeatureTabs(actor);
+  // The profile's own lists come first: what was posted on it and, for a
+  // person, what they replied and what they reposted. Only people reply
+  // and repost, so a group or any other kind of actor has the first alone.
+  const hasOwnWords = utils.node.isPerson(actor);
+  const featureTabs = getActorFeatureTabs(actor).flatMap((tab) => {
+    if (tab !== 'feed' || !hasOwnWords) {
+      return [tab];
+    }
+    return ['feed', 'replies', 'reposts'];
+  });
   const defaultTab = featureTabs[0] || 'feed';
+  const known = (tab) => {
+    return featureTabs.includes(tab) ? tab : defaultTab;
+  };
 
-  const [value, setValue] = useState(selectedTab || defaultTab);
+  const [value, setValue] = useState(known(selectedTab));
+
+  // The tab is in the address, so it can be linked to and survives a
+  // reload. Going back or forward changes the address without this
+  // component being made again.
+  useEffect(() => {
+    setValue(known(selectedTab));
+  }, [selectedTab, actor.id]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
+    if (onTabChange) {
+      onTabChange(newValue === defaultTab ? '' : newValue);
+    }
   };
 
   const getTabLabel = (tab) => {
     if (tab === 'feed') {
-      return i18n.t(`${namespace}:mTitle`);
+      return i18n.t('replies:tabs.posts');
+    }
+    if (tab === 'replies' || tab === 'reposts') {
+      return i18n.t(`replies:tabs.${tab}`);
     }
     if (tab === 'socialgraph') {
       return i18n.t('socialgraph:mTitle');
@@ -129,6 +157,10 @@ const ActorBody = ({
         </Grid>
       )}
 
+      {/* The whole width, like the lists of notes, articles and photos. */}
+      {value === 'replies' && replies}
+      {value === 'reposts' && reposts}
+
       {value === 'socialgraph' && socialgraph}
 
       {tabPanels[value] && tabPanels[value]}
@@ -144,6 +176,11 @@ ActorBody.propTypes = {
   viewer: PersonType.isRequired,
   composers: PropTypes.node,
   feed: PropTypes.node,
+  // The profile's other two lists.
+  replies: PropTypes.node,
+  reposts: PropTypes.node,
+  // Called with the tab chosen, '' for the first one.
+  onTabChange: PropTypes.func,
   locations: PropTypes.node,
   admins: PropTypes.node,
   socialgraph: PropTypes.node,

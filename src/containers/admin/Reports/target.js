@@ -3,9 +3,7 @@ import i18n from '../../../languages';
 
 const {
   getURL,
-  getCommentURL,
   isActor,
-  isComment,
 } = utils.node;
 
 // What kind of thing was reported, in words. From the case's own record of
@@ -52,17 +50,12 @@ const body = (item) => {
   return excerpt(target.body);
 };
 
-// Where to go to look at it, or '' when there is nowhere: it is gone, or
-// it is a comment whose post is not known.
+// Where to go to look at it, or '' when there is nowhere: it is gone.
 const url = (item) => {
   const { target } = item;
 
   if (!target) {
     return '';
-  }
-
-  if (isComment(target)) {
-    return getCommentURL(target);
   }
 
   return getURL(target);

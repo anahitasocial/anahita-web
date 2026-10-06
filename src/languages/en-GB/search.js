@@ -7,7 +7,6 @@ export default {
     relevant: 'Most relevant',
     recent: 'Most recent',
   },
-  includeComments: 'Include comments',
   filterNodeTypes: {
     all: 'All',
     media: 'Media',

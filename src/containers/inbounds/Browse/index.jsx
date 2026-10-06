@@ -10,7 +10,6 @@ import actions from '../../../actions';
 import NodeType from '../../../proptypes/Node';
 import NodesType from '../../../proptypes/Nodes';
 
-import CommentCard from '../../../components/CommentCard';
 import ActorCard from '../../../components/ActorCard';
 import Masonry from '../../../components/BreakpointMasonry';
 import MediumNode from '../../nodes/MediumNode';
@@ -100,8 +99,6 @@ const InboundsBrowse = ({
                 <ActorCard actor={node} />}
               {utils.isMedium(node) &&
                 <MediumNode medium={node} />}
-              {utils.isComment(node) &&
-                <CommentCard comment={node} />}
             </div>
           );
         })}

@@ -39,11 +39,11 @@ const browseFailure = (response) => {
 };
 
 const browse = (api) => {
-  return (node, comment = null) => {
+  return (node) => {
     return (dispatch) => {
       dispatch(browseRequest());
       return new Promise((resolve, reject) => {
-        api.browse(node, comment)
+        api.browse(node)
           .then((result) => {
             dispatch(browseSuccess(result));
             return resolve();
@@ -75,18 +75,17 @@ const addSuccess = (namespace) => {
       results,
       child,
       node,
-      comment = null,
     } = params;
 
     const { data } = results;
 
     // Merge over what is already in the store rather than replacing it. The
     // like endpoint answers with its own narrower view of the node, which
-    // carries no `authorized` block — so replacing the comment wholesale left
-    // CommentMenu reading `.edit` on undefined. Unlike has always merged
+    // carries no `authorized` block, so replacing the node wholesale left
+    // its menu reading `.edit` on undefined. Unlike has always merged
     // locally; liking was the one that threw the rest of the node away.
     const newNode = {
-      ...(comment || node),
+      ...node,
       ...data,
       isLikedByViewer: true,
     };
@@ -110,17 +109,16 @@ const addFailure = (namespace) => {
 
 const add = (namespace) => {
   return (api) => {
-    return ({ child, node, comment = null }) => {
+    return ({ child, node }) => {
       return (dispatch) => {
         dispatch(addRequest(namespace)(node));
         return new Promise((resolve, reject) => {
-          api.add(node, comment)
+          api.add(node)
             .then((results) => {
               dispatch(addSuccess(namespace)({
                 results,
                 child,
                 node,
-                comment,
               }));
               return resolve();
             }, (response) => {
@@ -149,10 +147,9 @@ const deleteSuccess = (namespace) => {
   return (params) => {
     const {
       node,
-      comment = null,
       child,
     } = params;
-    const newNode = comment ? { ...comment } : { ...node };
+    const newNode = { ...node };
 
     newNode.likesCount -= 1;
     newNode.isLikedByViewer = false;
@@ -176,16 +173,15 @@ const deleteFailure = (namespace) => {
 
 const deleteItem = (namespace) => {
   return (api) => {
-    return ({ child, node, comment = null }) => {
+    return ({ child, node }) => {
       return (dispatch) => {
         dispatch(deleteRequest(namespace)());
         return new Promise((resolve, reject) => {
-          api.deleteItem(node, comment)
+          api.deleteItem(node)
             .then(() => {
               dispatch(deleteSuccess(namespace)({
                 child,
                 node,
-                comment,
               }));
               return resolve();
             }, (response) => {

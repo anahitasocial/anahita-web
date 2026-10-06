@@ -25,7 +25,7 @@ export default {
       note: 'Who can post a note?',
       article: 'Who can post an article?',
       topic: 'Who can start a topic?',
-      comment: 'Who can comment?',
+      comment: 'Who can reply?',
       like: 'Who can like?',
     },
   },
@@ -35,7 +35,7 @@ export default {
     addPermissions: {
       title: 'Permissions',
       photo: 'Who can post a photo?',
-      comment: 'Who can comment?',
+      comment: 'Who can reply?',
       like: 'Who can like?',
     },
   },

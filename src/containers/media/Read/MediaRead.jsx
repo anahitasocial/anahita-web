@@ -1,22 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from '@mui/material/Link';
 
 import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
 
 import Article from './Article';
 import Default from './Default';
-import CommentStats from '../../../components/CommentStats';
+import ReplyStats from '../../../components/ReplyStats';
 import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
-import MediumComments from '../../comments/Browse';
+import RepliesThread from '../../replies/Thread';
+import ReplyContext from '../../replies/ReplyContext';
+import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
+import ControlRepost from '../../controls/Repost';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
-import commentPerms from '../../../permissions/comment';
+import i18n from '../../../languages';
 import utils from '../../../utils';
 
 const { getPortraitURL, getCoverURL } = utils.node;
@@ -41,10 +45,19 @@ const MediaReadView = ({
 }) => {
   const portrait = getPortraitURL(medium, 'large');
   const cover = getCoverURL(medium, 'large');
-  // Open comments are not enough: the server answers whether this viewer
-  // may comment here, from the profile's access and permissions.
-  const canAddComment = isAuthenticated && medium.commentStatus &&
-    commentPerms.canAdd(medium);
+
+  // A reply opened on its own page. It is shown as the post, with what it
+  // answers above it and what was said under it below. The thread it is in
+  // is the root's; a reply the viewer was not sent the root of has none to
+  // show.
+  const isReply = Boolean(medium.rootId);
+  const replyThread = isReply && medium.root ? (
+    <RepliesThread
+      root={medium.root}
+      under={medium}
+      key={`replies-${medium.id}`}
+    />
+  ) : null;
 
   const mediumProps = {
     medium,
@@ -76,6 +89,10 @@ const MediaReadView = ({
     ),
     actions: [
       isAuthenticated && <Like node={medium} key={`medium-like-${medium.id}`} />,
+      // Repost or quote. Not a reply: it is not passed on without its thread.
+      isAuthenticated && !isReply && (
+        <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />
+      ),
       namespace === 'documents' && (
         <ControlDownload
           node={medium}
@@ -86,15 +103,32 @@ const MediaReadView = ({
     stats: (
       <>
         <Likes node={medium} />
-        <CommentStats node={medium} />
+        <ReplyStats node={medium} />
       </>
     ),
-    comments: (
-      <MediumComments
-        parent={medium}
-        canAdd={canAddComment}
-      />
-    ),
+    // Every kind of post is answered with replies: notes, threaded, each
+    // liked and removed like any post. What used to be comments are replies
+    // now, made directly to the post. Keyed by the post, so a thread is not
+    // carried from one post to the next.
+    replies: medium.id && !isReply ? (
+      <RepliesThread root={medium} key={`replies-${medium.id}`} />
+    ) : replyThread,
+    // The post this note quotes, with a way out of it for that post's
+    // author.
+    quote: medium.quote ? <QuoteDetach note={medium} viewer={viewer} /> : null,
+    // Above a reply shown on its own: what it is a reply to.
+    context: isReply && medium.root ? (
+      <ReplyContext answered={medium.root} owner={medium.root.owner}>
+        {medium.parentId !== medium.rootId &&
+          <Link
+            href={`/notes/${medium.parentId}/`}
+            variant="caption"
+            color="textSecondary"
+          >
+            {i18n.t('replies:context.answered')}
+          </Link>}
+      </ReplyContext>
+    ) : null,
     locations: (
       <LocationsGadget
         node={medium}

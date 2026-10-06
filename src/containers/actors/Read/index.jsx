@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import ActorHeader from './ActorHeader';
 import ActorBody from './Body';
@@ -55,6 +55,7 @@ const ActorsRead = (props) => {
   } = props;
 
   const { id: slug, tab, subtab } = useParams();
+  const navigate = useNavigate();
   const [id] = slug.split('-');
 
   useEffect(() => {
@@ -184,9 +185,26 @@ const ActorsRead = (props) => {
           <Admins actor={actor} />}
         composers={isAuthenticated && actor.id && viewer.id &&
           <Composers actor={actor} />}
+        onTabChange={(newTab) => {
+          navigate(newTab ? `/${namespace}/${slug}/${newTab}` : `/${namespace}/${slug}`);
+        }}
         feed={actor.id &&
           <FeedActorBrowse
             actor={actor}
+            filter="posts"
+            key={`feed-posts-${actor.id}`}
+          />}
+        replies={actor.id &&
+          <FeedActorBrowse
+            actor={actor}
+            filter="replies"
+            key={`feed-replies-${actor.id}`}
+          />}
+        reposts={actor.id &&
+          <FeedActorBrowse
+            actor={actor}
+            filter="reposts"
+            key={`feed-reposts-${actor.id}`}
           />}
         locations={actor.id &&
           <LocationsGadget

@@ -10,6 +10,39 @@ export default (namespace) => {
   return (iniState, action) => {
     const state = createReducer(namespace, NODE_DEFAULT)(iniState, action);
     const { type } = action;
+
+    // A post removed from anywhere leaves the feed too: the post itself,
+    // and a repost of it. The removal is announced under the post's own
+    // kind (NOTES_DELETE_SUCCESS and so on), not under the feed's name.
+    if (/^[A-Z]+_DELETE_SUCCESS$/.test(type) && action.node && action.node.id) {
+      const list = state[namespace];
+      const gone = list.allIds.filter((itemId) => {
+        const item = list.byId[itemId];
+        return itemId === action.node.id ||
+          Boolean(item && item.parent && item.parent.id === action.node.id);
+      });
+
+      if (gone.length === 0) {
+        return state;
+      }
+
+      const byId = { ...list.byId };
+      gone.forEach((itemId) => {
+        delete byId[itemId];
+      });
+
+      return {
+        ...state,
+        [namespace]: {
+          ...list,
+          byId,
+          allIds: list.allIds.filter((itemId) => {
+            return !gone.includes(itemId);
+          }),
+        },
+      };
+    }
+
     switch (type) {
       case `${namespace.toUpperCase()}_LIKES_ADD_REQUEST`:
       case `${namespace.toUpperCase()}_LIKES_DELETE_REQUEST`:

@@ -5,12 +5,15 @@ import { singularize } from 'inflection';
 import createApi, { browseOwned } from './create';
 import createActor from './actor';
 import photos from './photos';
+import pins from './pins';
+import quotes from './quotes';
+import replies from './replies';
+import saved from './saved';
+import reposts from './reposts';
 
 import agreements from './agreements';
 import authLogs from './authLogs';
 import avatar from './avatar';
-import comments from './comments';
-import commentStatus from './commentsStatus';
 import cover from './cover';
 import abuseReports from './abuseReports';
 import accounts from './accounts';
@@ -107,7 +110,6 @@ const namespaces = {
   ],
   nodes: [
     'search',
-    'stories',
     'blogs',
   ],
 };
@@ -116,8 +118,6 @@ const apis = {
   authLogs,
   avatar,
   agreements,
-  comments,
-  commentStatus,
   cover,
   feed_leaders: feed.leaders,
   feed_actor: feed.actor,
@@ -137,7 +137,12 @@ const apis = {
   signupRequests,
   password,
   reauth,
+  pins,
+  quotes,
+  replies,
   repost,
+  saved,
+  reposts,
   session,
   socialgraph,
   inbounds,

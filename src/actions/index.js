@@ -7,11 +7,9 @@ import createActorFollowRequests from './actor/followRequests';
 import createActorAdminsAction from './actor/admins';
 import admin from './admin';
 import app from './app';
-import commentsInline from './commentsInline';
 import likes from './likes';
 import session from './session';
 import socialgraph from './socialgraph';
-import stories from './stories';
 import inbounds from './inbound';
 
 const namespaces = {
@@ -43,11 +41,9 @@ const namespaces = {
 const actions = {
   admin,
   app,
-  commentsInline,
   likes,
   session,
   socialgraph,
-  stories,
   inbounds,
 };
 
@@ -85,15 +81,6 @@ namespaces.tags.forEach((namespace) => {
 namespaces.nodes.forEach((namespace) => {
   actions[namespace] = createAction(namespace)(apis[namespace]);
 });
-
-actions.comments = {
-  ...createAction('comments')(apis.comments),
-  likes: likes('comments')(apis.likes),
-};
-
-actions.commentStatus = (namespace) => {
-  return createAction('commentStatus')(apis.commentStatus(namespace));
-};
 
 namespaces.feeds.forEach((namespace) => {
   actions[namespace] = {

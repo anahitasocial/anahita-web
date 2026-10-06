@@ -21,7 +21,6 @@ export default {
     'actors:write',
     'media:read',
     'media:write',
-    'comments:write',
     'likes:write',
     'socialgraph:read',
     'socialgraph:write',

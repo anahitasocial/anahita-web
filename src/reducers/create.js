@@ -4,6 +4,8 @@ import utils from '../utils';
 const {
   editItem,
   deleteItem,
+  pinChanged,
+  savedChanged,
 } = utils.reducer;
 
 // A browse response is stale iff it was issued before the most recent reset —
@@ -169,6 +171,18 @@ export default (namespace, defaultNode) => {
           isFetching: false,
           error: action.error,
         };
+      // A post was pinned or unpinned, somewhere. Announced once for
+      // every list on the page, whatever its kind: the same post can be
+      // in a feed and in a list of notes at once.
+      case 'POST_PIN_CHANGED': {
+        const list = pinChanged(state[namespace], action.node);
+        return list === state[namespace] ? state : { ...state, [namespace]: list };
+      }
+      // The viewer saved a post, or took it out of what they saved.
+      case 'POST_SAVED_CHANGED': {
+        const list = savedChanged(state[namespace], action.id, action.saved);
+        return list === state[namespace] ? state : { ...state, [namespace]: list };
+      }
       default:
         return state;
     }

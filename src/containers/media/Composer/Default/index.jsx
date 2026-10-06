@@ -7,7 +7,9 @@ import utils from '../../../../utils';
 import audience from '../../../../utils/audience';
 import postLanguage from '../../../../utils/postLanguage';
 import photoFiles from '../../../../utils/photoFiles';
+import replyAccess from '../../../../utils/replyAccess';
 import LanguageButton from '../../../../components/LanguageButton';
+import ReplyAccessButton from '../../../../components/ReplyAccessButton';
 import ComposerAudience from '../Audience';
 
 import AcctorType from '../../../../proptypes/Actor';
@@ -61,6 +63,15 @@ const MediaComposerDefault = ({
   useEffect(() => {
     setLanguage(postLanguage.defaultFor(viewer));
   }, [viewer.id, viewer.language]);
+
+  // Who can reply. Anyone unless the author says otherwise, and said for
+  // each post: it is not remembered from the last one, because a post
+  // closed to replies by habit is a surprise.
+  const [whoReplies, setWhoReplies] = useState(replyAccess.ANYONE);
+
+  // Who can quote. Not said unless the author chooses, which leaves the
+  // post on their own setting.
+  const [whoQuotes, setWhoQuotes] = useState('');
 
   useEffect(() => {
     if (error) {
@@ -122,6 +133,8 @@ const MediaComposerDefault = ({
         // afterwards.
         access,
         language,
+        ...replyAccess.toRequest(whoReplies),
+        ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
         composed: 1,
       }, actor).then(() => {
         postLanguage.remember(viewer, language);
@@ -134,6 +147,8 @@ const MediaComposerDefault = ({
           body: '',
         });
         setFile(null);
+        setWhoReplies(replyAccess.ANYONE);
+        setWhoQuotes('');
         setPhotoItems([]);
         setFields({ ...formFields });
       });
@@ -157,8 +172,8 @@ const MediaComposerDefault = ({
       onPhotoItemsChange={setPhotoItems}
       maxFiles={maxFiles}
       namespace={namespace}
-      // The choices that go with a post: who can see it, and what
-      // language it is in. Built here and handed over ready, so each form
+      // The choices that go with a post: who can see it, what language
+      // it is in, and who can reply. Built here and handed over ready, so each form
       // only has to place them beside its button.
       postOptions={
         <>
@@ -172,6 +187,14 @@ const MediaComposerDefault = ({
           <LanguageButton
             value={language}
             onChange={setLanguage}
+            disabled={isFetching}
+          />
+          <ReplyAccessButton
+            value={whoReplies}
+            onChange={setWhoReplies}
+            quotePolicy={whoQuotes}
+            defaultQuotePolicy={viewer.quotePolicy}
+            onQuotePolicyChange={setWhoQuotes}
             disabled={isFetching}
           />
         </>

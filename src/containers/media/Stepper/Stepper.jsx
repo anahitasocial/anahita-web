@@ -18,16 +18,15 @@ import LinkIcon from '@mui/icons-material/Link';
 import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
 
-import MediumComments from '../../comments/Browse';
+import RepliesThread from '../../replies/Thread';
 import LocationsGadget from '../../locations/Gadget';
 import Likes from '../../likes';
-import CommentStats from '../../../components/CommentStats';
+import ReplyStats from '../../../components/ReplyStats';
 import MediaMenu from '../MediaMenu';
 import Lightbox from './Lightbox';
 import MediumForm from '../EditForm';
 
 import i18n from '../../../languages';
-import commentPerms from '../../../permissions/comment';
 import utils from '../../../utils';
 
 const { getURL } = utils.node;
@@ -184,16 +183,14 @@ const MediaStepperView = ({
         stats={
           <>
             <Likes node={medium} key={`likes-${medium.id}`} />
-            <CommentStats node={medium} />
+            <ReplyStats node={medium} />
           </>
         }
-        comments={
-          <MediumComments
-            parent={medium}
-            canAdd={isAuthenticated && medium.commentStatus &&
-              commentPerms.canAdd(medium)}
-            key={`${namespace}-comments-${medium.id}`}
-            cardProps={{ variant: 'outlined' }}
+        // The thread of replies, a new one for each post stepped to.
+        replies={
+          <RepliesThread
+            root={medium}
+            key={`${namespace}-replies-${medium.id}`}
           />
         }
         locations={

@@ -21,7 +21,7 @@ MediumStepperLightbox.propTypes = {
   menu: PropTypes.node,
   medium: MediumType.isRequired,
   locations: PropTypes.node,
-  comments: PropTypes.node,
+  replies: PropTypes.node,
   hasNext: PropTypes.bool,
   hasPrev: PropTypes.bool,
   handleNext: PropTypes.func,

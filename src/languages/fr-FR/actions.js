@@ -20,8 +20,6 @@ export default {
   create: 'Créer',
   post: 'Publier',
   publish: 'Publier',
-  openComments: 'Ouvrir les commentaires',
-  closeComments: 'Fermer les commentaires',
   login: 'Connexion',
   download: 'Télécharger',
   search: 'Rechercher',

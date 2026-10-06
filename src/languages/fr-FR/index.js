@@ -7,11 +7,10 @@ import features from './features';
 import pages from './pages';
 import social from './social';
 import feed from './feed';
-import comments from './comments';
+import replies from './replies';
 import auth from './auth';
 import actor from './actor';
 import blogs from './blogs';
-import dashboard from './dashboard';
 import home from './home';
 import documents from './documents';
 import about from './about';
@@ -49,11 +48,10 @@ export default {
   pages,
   social,
   feed,
-  comments,
+  replies,
   auth,
   actor,
   blogs,
-  dashboard,
   home,
   documents,
   about,

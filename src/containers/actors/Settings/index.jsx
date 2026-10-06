@@ -31,6 +31,8 @@ import Info from './Info';
 import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
 import Permissions from './Permissions';
+import RepostsOnProfile from './RepostsOnProfile';
+import QuotePolicy from './QuotePolicy';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -107,6 +109,8 @@ const cardsFor = (namespace) => {
       ActorInfo: Info(namespace),
       ActorAccess: Access(namespace),
       ActorPermissions: Permissions(namespace),
+      ActorReposts: RepostsOnProfile(namespace),
+      ActorQuotes: QuotePolicy(namespace),
       ActorDelete: Delete(namespace),
       ActorPurge: Purge(namespace),
       ActorArchive: Archive(namespace),
@@ -178,6 +182,8 @@ const ActorsSettings = ({
     ActorPurge,
     ActorArchive,
     ActorDisable,
+    ActorReposts,
+    ActorQuotes,
   } = cardsFor(namespace);
 
   const canDelete = permissions.canDelete(actor);
@@ -219,6 +225,8 @@ const ActorsSettings = ({
       [ITEMS.WEBAUTHN]: <WebAuthn />,
       [ITEMS.AUTHLOGS]: <AuthLogs personId={actor.id} />,
       [ITEMS.ACCESS]: <ActorAccess />,
+      [ITEMS.REPOSTS]: <ActorReposts />,
+      [ITEMS.QUOTES]: <ActorQuotes />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the

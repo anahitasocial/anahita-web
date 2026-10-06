@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import CommentStats from '../../../components/CommentStats';
+import ReplyStats from '../../../components/ReplyStats';
 import ControlLike from '../../likes/controls/Like';
 import LikesStats from '../../likes';
 import MediumCard from '../../../components/MediumCard';
@@ -49,7 +49,7 @@ const MediaListItem = ({
       stats={
         <>
           <LikesStats node={medium} />
-          <CommentStats node={medium} />
+          <ReplyStats node={medium} />
         </>
       }
       actions={isAuthenticated && <Like node={medium} />}

@@ -4,9 +4,7 @@ import Actor from './actor';
 import App from './app';
 import Auth from './auth';
 import Avatar from './avatar';
-import Comments from './comments';
 import Cover from './cover';
-import CommentsInline from './commentsInline';
 import Is from './is';
 import Likes from './likes';
 import Locations from './locations';
@@ -22,7 +20,6 @@ import Search from './search';
 import Session from './session';
 import Socialgraph from './socialgraph';
 import Storage from './storage';
-import Stories from './stories';
 import Totp from './totp';
 
 export {
@@ -32,9 +29,7 @@ export {
   App,
   Auth,
   Avatar,
-  Comments,
   Cover,
-  CommentsInline,
   Is,
   Likes,
   Locations,
@@ -50,6 +45,5 @@ export {
   Session,
   Socialgraph,
   Storage,
-  Stories,
   Totp,
 };

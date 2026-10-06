@@ -25,7 +25,7 @@ Everything is under `src/`:
 | `actions/` | Redux thunks that call the API and dispatch the result |
 | `reducers/` | Redux reducers, most of them made by shared factories |
 | `store/` | The Redux store, with a development and a production version |
-| `containers/` | Pages and components connected to the store, grouped by feature (`actors`, `media`, `comments`, `settings`, `auth`…) |
+| `containers/` | Pages and components connected to the store, grouped by feature (`actors`, `media`, `replies`, `settings`, `auth`…) |
 | `components/` | Presentational components with no store access |
 | `routes/` | The route table and the two route guards |
 | `permissions/` | What the viewer may do, mostly read from the server's answers |
@@ -109,9 +109,11 @@ history. The main paths:
 
 | Path | Page |
 | --- | --- |
-| `/` | The home page when signed out, the dashboard when signed in |
+| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
+| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
+| `/saved` | The posts the viewer saved. Signed in only; in the left menu |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
@@ -154,7 +156,7 @@ lowers their total to what it sent.
 answers, from the session and NodeInfo, whether the viewer is a visitor and on
 which kind of site:
 
-- On a preview site the comments under a post and the lists of who follows
+- On a preview site the replies under a post and the lists of who follows
   whom are not requested. A sign-in prompt stands where they would be.
 - On a members-only site the search box and the People, Groups, Hashtags and
   Places menu entries are not shown.
@@ -216,7 +218,7 @@ approved or rejected (`actions.admin.readCounts`, `state.admin.counts`).
 ### Reporting
 
 Every menu that sits on a node has a **Report** item: profiles, posts, feed
-items, comments, hashtags and places. It is offered to anybody signed in,
+items, replies, hashtags and places. It is offered to anybody signed in,
 except on themselves and on what they wrote (`permissions/report.js`). A menu
 that somebody could do nothing else in is now drawn for them, holding Report.
 
@@ -235,7 +237,7 @@ anahita-services' `docs/abuse-reports.md`.
 ## What a viewer may do
 
 **The server decides, and the app follows.** Every person, group, post and
-comment the API returns carries an `authorized` object answering what the
+reply the API returns carries an `authorized` object answering what the
 viewer may do with it. The server works each answer out with the same checks it
 enforces:
 
@@ -245,8 +247,8 @@ enforces:
 | `composers` | People and groups | Which kinds of post the viewer may create on the profile |
 | `audiences` | People and groups | Who a post the viewer writes there may be shown to |
 | `addFollower` | Groups | Whether the viewer may add somebody else as a follower |
-| `comment` | Posts | Whether the viewer may comment |
-| `like` | Posts and comments | Whether the viewer may like it |
+| `comment` | Posts and replies | Whether the viewer may reply. The name is from when replies were comments |
+| `like` | Posts and replies | Whether the viewer may like it |
 
 The helpers in `src/permissions/` read these answers. Where a response does not
 carry an answer, the helpers fall back to a simple rule, and the server still
@@ -361,6 +363,156 @@ In preview mode a visitor is sent one small image of a post however many it
 has, so it is drawn as a single photo.
 
 What the server stores and accepts is in the services' `docs/photos.md`.
+
+### Replies
+
+A post of any kind is answered with replies: notes, each of which can be
+answered in turn. `containers/replies/Thread.jsx` shows them, as the Replies
+tab on a post's page and in the lightbox. What used to be comments are
+replies, made directly to the post.
+
+- **The thread is read whole** (`api.replies.thread`) and kept in the
+  component, not in the store. Nothing else on the page shows it.
+- **`src/utils/thread.js`** arranges the flat list the server sends into
+  replies and the replies under them, and holds the rule for each change: a
+  reply added, edited, removed, hidden. After a change is made on the server
+  the same change is made to the copy on the page, so the thread is not read
+  again after every reply. It is plain functions with tests.
+- **What a viewer may do comes with each reply,** in `authorized`: `comment`
+  (reply to it), `edit`, `delete`, `hide`, `like`. A control is drawn only
+  when its answer is yes. Whether somebody may reply to the post at all comes
+  with the thread, as `canReply`.
+- **A removed reply that had been answered** arrives as `deleted`, with no
+  text and no author, and is drawn as a line saying so with its replies still
+  under it.
+- **Hidden replies** are sent only to whoever may show them again, marked
+  `hidden`. They are drawn apart, under the thread, closed until opened.
+- Replies are set in a level for each step down, up to four, with a line down
+  the side. Past that they line up, so a long exchange fits a phone.
+
+- **Who can reply** is the post's own setting, chosen by its author:
+  anyone, nobody, or any of the people who follow them, the people they
+  follow and the people the post mentions. `components/ReplyAccessDialog.jsx`
+  asks it as two questions, anyone or nobody and then who is let in anyway,
+  and `utils/replyAccess.js` turns that into the one value the server keeps.
+  The dialog opens from `ReplyAccessButton` in the composer, beside the
+  audience and the language, and from "Who can reply" in a post's menu
+  (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
+  replies and says it when it is limited.
+
+- **A post's menu in a feed** has Edit and Delete where the server says the
+  viewer may (`authorized.edit`, `authorized.delete`, sent with each feed
+  item). Edit opens the post's page with its form up (`?edit=1`, which is
+  then taken out of the address). A deleted post leaves every feed on the
+  page, with any repost of it (`reducers/createFeed.js`).
+- **In a feed**, the reply button under a post is a link to the post's page,
+  where its thread is (`containers/feed/components/ReplyButton.jsx`), and
+  `components/ReplyStats.jsx` shows how many replies it has.
+
+- **A reply has a page of its own**, at `/notes/:id` like any note. It is
+  drawn as the post, with what it answers above it
+  (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
+  that is under it: the thread is read whole for the post at the top, and
+  `utils/thread.js` picks out the branch. Replying there answers that reply.
+- **Where a reply was said** is shown above it wherever it is away from its
+  thread: the profile the thread is on, a person, a group or any other actor,
+  from `root.owner`. A reply is owned by whoever wrote it, so its own owner
+  does not say. A post shows the profile it is on the same way when that is
+  not its author's own.
+- **A person's profile has three lists**: Posts, Replies and Reposts. Only
+  people reply and repost, so a group has Posts alone. They are the first
+  tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
+  asked for with a different `filter` (`containers/feed/Actor`); they share
+  one place in the store, so each is keyed and read when its tab is opened.
+  Posts are one column beside the profile's details; Replies and Reposts
+  fill the page in the same masonry as the lists of notes, articles and
+  photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
+  is drawn as itself, not inside a card for whoever reposted it.
+  The tab is in the address. Reposts are not among the posts unless the
+  profile's owner asks for that, under Settings › Access
+  (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
+  it.
+
+### Home
+
+Home for somebody signed in is `containers/feeds/index.jsx` (it was
+`Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
+of the people and groups the viewer follows. It lives under `feeds` because
+custom feeds will be tabs on it.
+
+### Pinned posts
+
+"Pin to profile" and "Unpin" are in a post's menu, on its page and in a feed
+(`containers/controls/medium/Pin.jsx`), where the server says the viewer may
+(`authorized.pin`). A pinned post has a "Pinned" line at the top of its card
+(`components/PinnedLabel.jsx`). A profile has one pin, so pinning moves it:
+the change is told to every list on the page (`POST_PIN_CHANGED`, handled in
+`reducers/create.js` by `utils/reducer.js`), and the post that had the pin
+stops saying so. The new order shows when the list is next read.
+
+### Saved posts
+
+"Save" in a post's menu puts it on the viewer's own list; the same item reads
+"Remove from saved" once it is (`containers/controls/medium/Save.jsx`,
+`isSavedByViewer` on the post). The list is a page of its own, **Saved** in
+the left menu under Home, at `/saved` (`containers/saved/index.jsx`, the list
+in `Browse.jsx`), in the same masonry as the other lists. It was a tab on the
+viewer's own profile for a day and was moved on 2026-10-06: a profile is what
+other people look at. There are no folders. Collections (roadmap item 34) are a
+separate feature, filled from this list, and leave it as it is.
+
+It is private end to end: the server never says who saved a post. The page
+says so in one line under its title. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
+handled in `reducers/create.js`).
+
+### A post's interactions
+
+"Interactions" is a dialog with four lists: who liked a post, reposted it,
+quoted it and replied to it, with an icon and the count of each on its tab
+(`containers/activity/PostActivity.jsx`, `utils/activity.js`). It opens from
+the number of likes under a post, which can be pressed whenever the post has
+any of the four, and from "Interactions" in a post's menu. In the code it is
+still called activity. Each list is read
+when its tab is first opened. People in the likes and reposts lists have a
+Follow button; quotes and replies show what was said and lead to the note.
+
+There are no views in it, and nothing anywhere counts them.
+
+### Menus
+
+Every item in the menus on posts, feed items and replies has an icon before
+its words, through `components/MenuItemLabel.jsx`.
+
+### Quote posts
+
+A quote is a note that carries another post under its own words. It is an
+ordinary note in every other way: its own audience, likes and replies.
+
+- **Making one.** The repost button under a post opens a small menu, upward:
+  Repost, or Quote (`containers/controls/Repost.jsx`). Quote is switched off
+  where the server said this viewer may not quote this post
+  (`authorized.quote`). It opens `containers/controls/QuoteDialog.jsx`, which
+  posts a note on the writer's own profile with `quote_id`. A refusal at that
+  point is said in the server's words (`utils/quotes.js`).
+- **Showing one.** A note that quotes is sent `quote`: the post, or why it is
+  not shown (`unavailable`, `detached`). `components/QuoteEmbed.jsx` draws
+  either, inside the note, in feeds, lists and on the note's page. The server
+  sends the post only to a reader who may see it.
+- **Taking a post out.** On the page of a note that quotes their post, the
+  quoted author has "Remove my post from this quote"
+  (`containers/controls/QuoteDetach.jsx`). It cannot be undone.
+- **Who can quote** is the third part of a post's interaction settings
+  (`components/ReplyAccessDialog.jsx`): anyone, the author's followers, or
+  nobody. A post that has never been asked follows its author's own setting,
+  "Who can quote my posts", under Settings › Access
+  (`containers/actors/Settings/QuotePolicy.jsx`).
+
+There is no comment code left: the comment components, actions, reducers,
+API modules and prop types went with the comment service. Two names remain
+from then, because the server still uses them: `authorized.comment` and
+`commentCount`.
+
+The rules are the server's, in the services' `docs/permissions.md`, Replies.
 
 ## Translations
 

@@ -7,7 +7,6 @@ export default {
     relevant: 'Les plus pertinents',
     recent: 'Les plus récents',
   },
-  includeComments: 'Inclure les commentaires',
   filterNodeTypes: {
     all: 'Tout',
     media: 'Médias',

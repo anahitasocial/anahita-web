@@ -50,6 +50,10 @@ export const ITEMS = {
   WEBAUTHN: 'webauthn',
   AUTHLOGS: 'authLogs',
   ACCESS: 'access',
+  // Whether reposts show among the posts on the profile.
+  REPOSTS: 'reposts',
+  // Who can quote this person's posts.
+  QUOTES: 'quotes',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -106,8 +110,14 @@ const ALL_SECTIONS = [
   },
   {
     key: SECTIONS.ACCESS,
+    // Who can see the profile, and what the profile shows of what the
+    // person reposts. (A group's Access tab has the first only: a group
+    // does not repost.) Neither is viewerOnly: an administrator can set them
+    // on somebody else's profile, and the server authorizes the edit.
     items: [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
+      { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
+      { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
     ],
   },
   {

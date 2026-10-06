@@ -1,19 +1,16 @@
 import axios from 'axios';
 
+// Likes on a post or a reply. A reply is a note, so both are liked by id.
 const browse = (params) => {
-  const { node, comment } = params;
-  const path = comment && comment.id > 0 ? `/likes/${comment.id}/` : `/likes/${node.id}/`;
-  return axios.get(path);
+  return axios.get(`/likes/${params.node.id}/`);
 };
 
-const add = (node, comment = null) => {
-  const path = comment && comment.id > 0 ? `/likes/${comment.id}/` : `/likes/${node.id}/`;
-  return axios.post(path);
+const add = (node) => {
+  return axios.post(`/likes/${node.id}/`);
 };
 
-const deleteItem = (node, comment = null) => {
-  const path = comment && comment.id > 0 ? `/likes/${comment.id}/` : `/likes/${node.id}/`;
-  return axios.delete(path);
+const deleteItem = (node) => {
+  return axios.delete(`/likes/${node.id}/`);
 };
 
 export default {

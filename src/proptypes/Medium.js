@@ -8,7 +8,6 @@ import {
 } from 'prop-types';
 
 import ActorType from './Actor';
-import CommentType from './Comment';
 import PersonType from './Person';
 import ImageUrls from './ImageUrls';
 
@@ -38,9 +37,6 @@ export default shape({
   createdAt: string,
   editor: PersonType,
   updatedAt: string,
-  lastComment: CommentType,
-  lastCommenter: PersonType,
-  lastCommentTime: string,
   likesCount: number,
   dislikesCount: number,
   isLikedByViewer: bool,
@@ -50,4 +46,15 @@ export default shape({
   isQuotedByViewer: bool,
   commentCount: number,
   commentStatus: bool,
+  // Who may reply: "anyone", "nobody", or groups joined by commas.
+  replyAccess: string,
+  // On a reply: the post at the top of its thread, and what it answers.
+  rootId: number,
+  parentId: number,
+  root: object,
+  // On a note that quotes a post: that post or why it is not shown, and
+  // who may quote this post when its author has said.
+  quoteId: number,
+  quote: object,
+  quotePolicy: string,
 });

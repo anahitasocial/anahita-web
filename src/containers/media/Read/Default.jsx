@@ -19,6 +19,7 @@ import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
+import PinnedLabel from '../../../components/PinnedLabel';
 import Player from '../../../components/Player';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
@@ -35,7 +36,7 @@ const {
 } = utils.node;
 
 const TABS = {
-  COMMENTS: 'comments',
+  REPLIES: 'replies',
   LOCATIONS: 'locations',
 };
 
@@ -46,13 +47,15 @@ const MediumReadDefault = ({
   actions = null,
   menu = null,
   locations = null,
-  comments = null,
+  replies = null,
+  context = null,
+  quote = null,
   editing = false,
   form = null,
   stats = null,
   handleView = null,
 }) => {
-  const [tab, setTab] = useState(TABS.COMMENTS);
+  const [tab, setTab] = useState(TABS.REPLIES);
 
   const changeTab = (event, value) => {
     setTab(value);
@@ -97,8 +100,13 @@ const MediumReadDefault = ({
     >
       <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
-          {medium.owner.type.includes('person') &&
-            <CardHeaderOwner node={medium} />}
+          <PinnedLabel show={Boolean(medium.pinned)} />
+          {context}
+          {/* The profile it was posted on, when that is not its author's
+              own: a group, or somebody else's profile. A reply says where
+              it was said in its context, below. */}
+          {!context && medium.owner && medium.owner.id !== author.id &&
+            <CardHeaderOwner owner={medium.owner} />}
           {cover &&
             <CardMedia
               className={classes.cover}
@@ -166,6 +174,7 @@ const MediumReadDefault = ({
                   <EntityBody contentFilter lang={medium.language}>
                     {medium.body}
                   </EntityBody>}
+                {quote}
                 <SignInPrompt show={Boolean(medium.truncated)} />
               </CardContent>
               {stats &&
@@ -186,10 +195,10 @@ const MediumReadDefault = ({
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="Comments" value={TABS.COMMENTS} />
-          <Tab label="Locations" value={TABS.LOCATIONS} />
+          <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
+          <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
         </Tabs>
-        {tab === TABS.COMMENTS && comments}
+        {tab === TABS.REPLIES && replies}
         {tab === TABS.LOCATIONS && locations}
       </Grid>
     </Grid>
@@ -203,7 +212,12 @@ MediumReadDefault.propTypes = {
   medium: MediumType.isRequired,
   access: PropTypes.node,
   locations: PropTypes.node,
-  comments: PropTypes.node,
+  // The post a note quotes, under the note's own words.
+  quote: PropTypes.node,
+  // What a reply is a reply to, above a reply shown on its own.
+  context: PropTypes.node,
+  // The thread of replies under the post.
+  replies: PropTypes.node,
   form: PropTypes.node,
   stats: PropTypes.node,
   editing: PropTypes.bool,

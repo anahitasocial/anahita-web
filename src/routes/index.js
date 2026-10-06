@@ -45,7 +45,8 @@ import OAuthCallback from '../containers/OAuthCallback';
 import People from '../containers/people/Browse';
 import PeopleAdd from '../containers/people/Add';
 
-import DashboardPage from '../containers/Dashboard';
+import FeedsPage from '../containers/feeds';
+import SavedPage from '../containers/saved';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
@@ -111,7 +112,7 @@ const AppRoutes = () => {
 
             <Route
               path="/"
-              element={isAuthenticated ? <DashboardPage /> : <HomePage />}
+              element={isAuthenticated ? <FeedsPage /> : <HomePage />}
             />
 
             {/* Public, like /support and /legal below. Everything on it is
@@ -136,11 +137,7 @@ const AppRoutes = () => {
 
             <Route
               path="/dashboard"
-              element={
-                <AuthenticatedRoute>
-                  <DashboardPage />
-                </AuthenticatedRoute>
-          }
+              element={<Navigate to="/" replace />}
             />
 
             {/* People — static paths before parameterized */}
@@ -198,6 +195,7 @@ const AppRoutes = () => {
           }
             />
             <Route path="/people/:id/:tab/:subtab" element={<PeopleRead />} />
+            <Route path="/people/:id/:tab" element={<PeopleRead />} />
             <Route path="/people/:id" element={<PeopleRead />} />
 
             {/* Groups — static paths before parameterized */}
@@ -227,8 +225,18 @@ const AppRoutes = () => {
           }
             />
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
+            <Route path="/groups/:id/:tab" element={<GroupsRead />} />
             <Route path="/groups/:id" element={<GroupsRead />} />
 
+            {/* What the viewer saved. Reached from the left menu. */}
+            <Route
+              path="/saved"
+              element={
+                <AuthenticatedRoute>
+                  <SavedPage />
+                </AuthenticatedRoute>
+          }
+            />
             <Route
               path="/notifications"
               element={

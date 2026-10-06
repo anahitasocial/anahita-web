@@ -16,6 +16,8 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
+import PinnedLabel from '../../../components/PinnedLabel';
+import QuoteEmbed from '../../../components/QuoteEmbed';
 import Player from '../../../components/Player';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
@@ -60,6 +62,7 @@ const FeedCardDefault = ({
   actions = null,
   menu,
   showOwner = false,
+  context = null,
 }) => {
   const navigate = useNavigate();
   const authorName = getPersonName(node.author);
@@ -75,7 +78,9 @@ const FeedCardDefault = ({
       className={classes.root}
       component="article"
     >
+      <PinnedLabel show={Boolean(node.pinned)} />
       {showOwner && node.owner && <CardOwner owner={node.owner} />}
+      {context}
       <CardHeader
         avatar={
           <ActorAvatar
@@ -138,6 +143,7 @@ const FeedCardDefault = ({
           <ReadMore contentFilter>
             {body}
           </ReadMore>}
+        <QuoteEmbed quote={node.quote} />
       </CardContent>
       {stats &&
         <CardActions>
@@ -152,6 +158,8 @@ const FeedCardDefault = ({
 };
 
 FeedCardDefault.propTypes = {
+  // Above a reply: what it is a reply to.
+  context: PropTypes.node,
   classes: PropTypes.object.isRequired,
   stats: PropTypes.node,
   actions: PropTypes.node,

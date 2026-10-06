@@ -66,10 +66,6 @@ const isRepost = (node) => {
   return node.type && node.type.includes('repost');
 };
 
-const isComment = (node) => {
-  return node.type && node.type.includes('comment');
-};
-
 const isCommentable = (medium) => {
   return TYPES.MEDIUM.includes(medium.type);
 };
@@ -317,20 +313,6 @@ const getNamespace = (node) => {
   return pluralize(entityName);
 };
 
-const getCommentURL = (comment) => {
-  const { parent } = comment;
-
-  // A comment permalink points at the node the comment is on. Both halves
-  // were wrong: `parentId` is not a field any comment response carries, and
-  // splitting the COMMENT's own type gave `comment-service`, which is not a
-  // route — every permalink read /comment-services/undefined/#<id>.
-  if (!parent || !parent.type) {
-    return '';
-  }
-
-  return `/${getNamespace(parent)}/${parent.id}/#${comment.id}`;
-};
-
 const getSupportedMimetypes = (namespace) => {
   switch (namespace) {
     case 'documents':
@@ -431,7 +413,6 @@ export default {
   isRegistered,
   isMedium,
   isRepost,
-  isComment,
   isCommentable,
   isLikeable,
   isSubscribable,
@@ -445,7 +426,6 @@ export default {
   getAddress,
   getAuthor,
   getAvatarURL,
-  getCommentURL,
   getCoverURL,
   getOwnerName,
   getPortraitURL,

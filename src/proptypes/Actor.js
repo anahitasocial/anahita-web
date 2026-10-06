@@ -43,6 +43,10 @@ export default shape({
   updatedAt: string,
   isAdministrated: bool,
   isLeader: bool,
+  // Whether what this actor reposts is also among its profile's posts.
+  showRepostsOnProfile: bool,
+  // On a person: who may quote their posts, when a post does not say.
+  quotePolicy: string,
   websiteUrl: string,
   // When the installation featured this actor for onboarding, or absent.
   featuredAt: string,

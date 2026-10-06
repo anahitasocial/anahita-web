@@ -4,12 +4,12 @@ import {
   string,
   arrayOf,
   bool,
+  object,
 } from 'prop-types';
 
 import ActorType from './Actor';
 import PersonType from './Person';
 import ImageUrls from './ImageUrls';
-import CommentsType from './Comments';
 
 export default shape({
   id: number,
@@ -29,11 +29,19 @@ export default shape({
   updatedAt: string,
   isAdministrated: bool,
   isLeader: bool,
-  comments: CommentsType,
   isSubscribedByViewer: bool,
   repostCount: number,
   isRepostedByViewer: bool,
   quoteCount: number,
   isQuotedByViewer: bool,
   commentCount: number,
+  // On a reply: the post at the top of its thread, with its owner.
+  rootId: number,
+  // Pinned to the profile it is on.
+  pinned: bool,
+  // Whether the viewer has saved it. Known to them alone.
+  isSavedByViewer: bool,
+  root: object,
+  quoteId: number,
+  quote: object,
 });

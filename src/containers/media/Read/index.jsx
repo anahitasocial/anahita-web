@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Navigate, useParams } from 'react-router-dom';
+import { Navigate, useParams, useSearchParams } from 'react-router-dom';
 
 import PersonType from '../../../proptypes/Person';
 import MediaType from '../../../proptypes/Media';
@@ -87,6 +87,25 @@ const MediaRead = ({
     setFields(formFields);
     setIsEditing(false);
   };
+
+  // Opened to be edited: "Edit" in a feed's menu leads here with ?edit=1.
+  // The form goes up once the post has arrived, for somebody who may edit
+  // it, and the mark is taken out of the address so that a reload, or
+  // coming back, shows the post and not the form again.
+  const [searchParams, setSearchParams] = useSearchParams();
+  const wantsEdit = searchParams.get('edit') === '1';
+  const loadedId = medium && medium.id;
+
+  useEffect(() => {
+    // The address holds the id with the post's slug after it.
+    if (!wantsEdit || !loadedId || String(loadedId) !== String(id).split('-')[0]) {
+      return;
+    }
+    if (perms.medium.canEdit(viewer, medium)) {
+      handleEdit();
+    }
+    setSearchParams({}, { replace: true });
+  }, [wantsEdit, loadedId, id]);
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;

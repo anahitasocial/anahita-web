@@ -1,15 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import ActivityIcon from '@mui/icons-material/BarChartOutlined';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import utils from '../../utils';
 import i18n from '../../languages';
 
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlDelete from '../controls/Delete';
+import ControlPin from '../controls/medium/Pin';
+import ControlSave from '../controls/medium/Save';
+import PostActivity from '../activity/PostActivity';
 import ControlFollow from '../controls/Follow';
 import useReport from '../reports/useReport';
 
@@ -21,6 +30,7 @@ const { withRef } = utils.component;
 const {
   getOwnerName,
   isSubscribable,
+  getURL,
 } = utils.node;
 
 const FollowActionWithRef = withRef(ControlFollow);
@@ -32,6 +42,8 @@ const FeedItemMenu = ({
   viewer,
 }) => {
   const [menuAnchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
+  const [isShowingActivity, setIsShowingActivity] = useState(false);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,12 +57,12 @@ const FeedItemMenu = ({
   const { id } = node;
   const canSubscribe = node.id && isSubscribable(node);
   const canFollow = permissions.actor.canFollow(node.owner, viewer);
-  const canDelete = node.commands && node.commands.includes('delete');
+  // Whether the viewer may edit and remove the post is the server's
+  // answer, sent with it in the feed as on its own page.
+  const canEdit = permissions.medium.canEdit(viewer, node);
+  const canDelete = permissions.medium.canDelete(viewer, node);
+  const canPin = Boolean(node.authorized && node.authorized.pin);
   const report = useReport(viewer, node);
-
-  if (!canSubscribe && !canFollow && !canDelete && !report.canReport) {
-    return null;
-  }
 
   return (
     <>
@@ -87,10 +99,46 @@ const FeedItemMenu = ({
             isSubscribedByViewer={node.isSubscribedByViewer}
             key={`feed-notification-${id}`}
           />}
+        {/* Editing is done on the post's own page, which is opened with
+            its form already up. */}
+        {canEdit &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              navigate(`${getURL(node)}?edit=1`);
+            }}
+          >
+            <MenuItemLabel icon={<EditIcon fontSize="small" />}>
+              {i18n.t('actions:edit')}
+            </MenuItemLabel>
+          </MenuItem>}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setIsShowingActivity(true);
+          }}
+        >
+          <MenuItemLabel icon={<ActivityIcon fontSize="small" />}>
+            {i18n.t('media:activity.title')}
+          </MenuItemLabel>
+        </MenuItem>
+        <ControlSave
+          medium={node}
+          onDone={handleClose}
+          key={`post-save-${node.id}`}
+        />
+        {canPin &&
+          <ControlPin
+            medium={node}
+            onDone={handleClose}
+            key={`feed-pin-${id}`}
+          />}
         {canDelete &&
           <DeleteActionWithRef
             node={node}
             key={`feed-delete-${id}`}
+            component="menuitem"
+            confirmMessage={i18n.t('media:confirm.delete')}
           />}
         {report.canReport &&
           <MenuItem
@@ -99,10 +147,19 @@ const FeedItemMenu = ({
               report.open();
             }}
           >
-            {i18n.t('abuseReports:report')}
+            <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+              {i18n.t('abuseReports:report')}
+            </MenuItemLabel>
           </MenuItem>}
       </Menu>
       {report.dialog}
+      <PostActivity
+        post={node}
+        open={isShowingActivity}
+        onClose={() => {
+          setIsShowingActivity(false);
+        }}
+      />
     </>
   );
 };

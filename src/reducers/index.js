@@ -3,7 +3,6 @@ import createReducer from './create';
 
 import admin from './admin';
 import app from './app';
-import commentsInline from './commentsInline';
 import locations from './locations';
 import locationsGraph from './locationsGraph';
 import hashtags from './hashtags';
@@ -11,14 +10,12 @@ import notifications from './notifications';
 import search from './search';
 import session from './session';
 import socialgraph from './socialgraph';
-import stories from './stories';
 
 // creators
 import createActorAdmins from './actor/admins';
 import createActorApps from './actor/apps';
 import createActorFollowRequests from './actor/followRequests';
 import createActorsReducer from './createActors';
-import createCommentReducer from './createComment';
 import createMediaReducer from './createMedia';
 import createFeed from './createFeed';
 
@@ -45,7 +42,6 @@ const namespaces = {
 const reducers = {
   admin,
   app,
-  commentsInline,
   locations,
   locationsGraph,
   hashtags,
@@ -53,7 +49,6 @@ const reducers = {
   search,
   session,
   socialgraph,
-  stories,
 };
 
 namespaces.actors.forEach((ns) => {
@@ -75,8 +70,6 @@ namespaces.media.forEach((ns) => {
 namespaces.nodes.forEach((ns) => {
   reducers[ns] = createReducer(ns, DEFAULT_NODE);
 });
-
-reducers.comments = createCommentReducer('comments');
 
 reducers.feedLeaders = createFeed('feed_leaders');
 reducers.feedActor = createFeed('feed_actor');

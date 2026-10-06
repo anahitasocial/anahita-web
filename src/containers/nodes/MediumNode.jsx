@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import CommentStats from '../../components/CommentStats';
+import ReplyStats from '../../components/ReplyStats';
 import LikesStats from '../likes';
 import MediumCard from '../../components/MediumCard';
 
@@ -19,7 +19,7 @@ const MediumNode = ({
       stats={
         <>
           <LikesStats node={medium} />
-          <CommentStats node={medium} />
+          <ReplyStats node={medium} />
         </>
       }
     />

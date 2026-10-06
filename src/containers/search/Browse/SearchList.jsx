@@ -10,7 +10,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import actions from '../../../actions';
 import NodesType from '../../../proptypes/Nodes';
 
-import CommentCard from '../../../components/CommentCard';
 import ActorsCard from '../../actors/Browse/Card';
 import Masonry from '../../../components/BreakpointMasonry';
 import MediaCard from '../../nodes/MediumNode';
@@ -48,7 +47,6 @@ const SearchList = ({
     coordLong,
     coordLat,
     searchRange,
-    searchComments,
   },
 }) => {
   const { classes } = useStyles();
@@ -72,7 +70,6 @@ const SearchList = ({
       start,
       scope,
       search_range: searchRange <= 100 ? searchRange : '',
-      search_comments: searchComments,
       coord_lng: searchRange <= 100 ? coordLong : '',
       coord_lat: searchRange <= 100 ? coordLat : '',
       limit: LIMIT,
@@ -83,7 +80,6 @@ const SearchList = ({
     start,
     scope,
     searchRange,
-    searchComments,
     searchRange,
     coordLong,
     coordLat,
@@ -128,8 +124,6 @@ const SearchList = ({
                 <ActorsCard actor={node} />}
               {utils.isMedium(node) &&
                 <MediaCard medium={node} />}
-              {utils.isComment(node) &&
-                <CommentCard comment={node} />}
             </div>
           );
         })}
@@ -164,7 +158,6 @@ SearchList.propTypes = {
     q: PropTypes.string,
     scope: PropTypes.string,
     searchRange: PropTypes.number,
-    searchComments: PropTypes.bool,
     coordLong: PropTypes.number,
     coordLat: PropTypes.number,
   }).isRequired,

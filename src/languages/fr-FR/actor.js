@@ -48,7 +48,7 @@ export default {
   },
   permissions: {
     title: 'Autorisations',
-    cDescription: "Qui peut publier, commenter et aimer ici. Tant qu'elles ne sont pas enregistrées, les réglages par défaut du site s'appliquent.",
+    cDescription: "Qui peut publier, répondre et aimer ici. Tant qu'elles ne sont pas enregistrées, les réglages par défaut du site s'appliquent.",
     empty: "Il n'y a aucune autorisation à régler ici.",
     restoreDefaults: 'Rétablir les valeurs par défaut',
     choices: {

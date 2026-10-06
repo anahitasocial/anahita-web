@@ -154,7 +154,7 @@ const ActorDeleteForm = (props) => {
             <ul>
               {[
                 ['posts', counts.posts],
-                ['comments', counts.comments],
+                ['replies', counts.replies],
                 ['followers', counts.followers],
                 // A group has administrators; a person administers groups.
                 // Both come back on the same edge read from opposite ends, so
@@ -164,9 +164,9 @@ const ActorDeleteForm = (props) => {
                 ['following', counts.following],
                 ['groupsAdministered', counts.groupsAdministered],
               ]
-                // Zeroes are dropped rather than listed. "0 comments" is
+                // Zeroes are dropped rather than listed. "0 replies" is
                 // noise in a list whose whole job is weight, and a person
-                // with no comments is not reassured by being told so.
+                // with no replies is not reassured by being told so.
                 .filter(([, value]) => { return value > 0; })
                 .map(([key, value]) => {
                   return (
@@ -281,7 +281,7 @@ ActorDeleteForm.propTypes = {
   // the card renders without them rather than blocking.
   counts: PropTypes.shape({
     posts: PropTypes.number,
-    comments: PropTypes.number,
+    replies: PropTypes.number,
     followers: PropTypes.number,
     following: PropTypes.number,
     admins: PropTypes.number,

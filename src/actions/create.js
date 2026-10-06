@@ -1,5 +1,4 @@
 import { normalize, schema } from 'normalizr';
-import stories from './stories';
 
 // Monotonic id stamped on every browse request and every reset, so the reducer
 // can drop responses that were issued before the most recent reset. A single
@@ -230,12 +229,9 @@ const addRequest = (namespace) => {
 };
 
 const addSuccess = (result, namespace) => {
-  const node = result.data.objectType === 'com.stories.story' ?
-    result.data.object :
-    result.data;
   return {
     type: `${namespace.toUpperCase()}_ADD_SUCCESS`,
-    node,
+    node: result.data,
   };
 };
 
@@ -253,9 +249,6 @@ const add = (namespace, api) => {
       return new Promise((resolve, reject) => {
         api.add(node, owner)
           .then((result) => {
-            if (result.data && result.data.objectType === 'com.stories.story') {
-              dispatch(stories.add(result.data));
-            }
             dispatch(addSuccess(result, namespace));
             return resolve();
           }, (response) => {

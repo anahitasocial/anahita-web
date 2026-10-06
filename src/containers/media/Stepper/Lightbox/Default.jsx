@@ -54,7 +54,7 @@ const SWIPE_THRESHOLD = 50;
 const DRAG_THRESHOLD = 5;
 
 const TABS = {
-  COMMENTS: 'comments',
+  REPLIES: 'replies',
   LOCATIONS: 'locations',
 };
 
@@ -67,7 +67,7 @@ const MediumStepperLightboxDefault = ({
   menu,
   stats,
   locations,
-  comments,
+  replies,
   editing,
   form,
   hasNext,
@@ -75,7 +75,7 @@ const MediumStepperLightboxDefault = ({
   handleNext,
   handlePrev,
 }) => {
-  const [tab, setTab] = useState(TABS.COMMENTS);
+  const [tab, setTab] = useState(TABS.REPLIES);
   const [resolvedSrc, setResolvedSrc] = useState('');
   const [loadedSrc, setLoadedSrc] = useState('');
   const [isZoomed, setIsZoomed] = useState(false);
@@ -577,10 +577,10 @@ const MediumStepperLightboxDefault = ({
                 textColor="primary"
                 variant="fullWidth"
               >
-                <Tab label={i18n.t('comments:cTitle')} value={TABS.COMMENTS} />
+                <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
                 <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
               </Tabs>
-              {tab === TABS.COMMENTS && comments}
+              {tab === TABS.REPLIES && replies}
               {tab === TABS.LOCATIONS && locations}
             </div>
           </div>
@@ -601,7 +601,8 @@ MediumStepperLightboxDefault.propTypes = {
   // Told which image has been swiped to.
   handleFileIndex: PropTypes.func,
   locations: PropTypes.node,
-  comments: PropTypes.node,
+  // The thread of replies under the post.
+  replies: PropTypes.node,
   form: PropTypes.node,
   editing: PropTypes.bool,
   hasNext: PropTypes.bool.isRequired,

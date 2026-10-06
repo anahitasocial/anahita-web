@@ -5,13 +5,23 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import PhotosIcon from '@mui/icons-material/PhotoLibraryOutlined';
+import ActivityIcon from '@mui/icons-material/BarChartOutlined';
+import RepliesIcon from '@mui/icons-material/ForumOutlined';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import permissions from '../../permissions/medium';
 import utils from '../../utils';
 
 import ControlNotificationSub from '../controls/medium/NotificationSub';
-import ControlCommentStatus from '../controls/medium/CommentStatus';
+import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
+import ControlPin from '../controls/medium/Pin';
+import ControlSave from '../controls/medium/Save';
+import PostActivity from '../activity/PostActivity';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
 
@@ -29,7 +39,6 @@ const {
 } = utils.node;
 
 const NotificationSubActionWithRef = withRef(ControlNotificationSub);
-const CommentStatusActionWithRef = withRef(ControlCommentStatus);
 const DeleteActionWithRef = withRef(ControlDelete);
 
 const MediaMenu = ({
@@ -40,6 +49,8 @@ const MediaMenu = ({
 }) => {
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
   const [isEditingPhotos, setIsEditingPhotos] = React.useState(false);
+  const [isSettingReplies, setIsSettingReplies] = React.useState(false);
+  const [isShowingActivity, setIsShowingActivity] = React.useState(false);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -50,9 +61,12 @@ const MediaMenu = ({
   };
 
   const canEdit = permissions.canEdit(viewer, medium);
-  const canSubscribe = isSubscribable(medium);
-  const canComment = isCommentable(medium);
-  const canDelete = permissions.canDelete(viewer, medium);
+  // Who can reply is the post's own setting, changed by whoever may edit
+  // the post.
+  // Not on a reply, which follows the post at the top of its thread.
+  const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
+  // Pinning is the profile's: the server says whether this viewer may.
+  const canPin = Boolean(medium.authorized && medium.authorized.pin);
   const report = useReport(viewer, medium);
   // A photo post's images are changed in a dialog of their own: their
   // order, their descriptions, and which there are.
@@ -60,9 +74,8 @@ const MediaMenu = ({
 
   // Somebody who may do nothing else here may still report it, so the
   // menu is drawn for them too.
-  if (!canEdit && !canSubscribe && !canComment && !canDelete && !report.canReport) {
-    return null;
-  }
+  // Always drawn for a post: its activity is there for anybody who can
+  // see it.
 
   return (
     <>
@@ -89,7 +102,9 @@ const MediaMenu = ({
             }}
             disabled={!canEdit}
           >
-            Edit
+            <MenuItemLabel icon={<EditIcon fontSize="small" />}>
+              {i18n.t('actions:edit')}
+            </MenuItemLabel>
           </MenuItem>}
         {canEditPhotos &&
           <MenuItem
@@ -98,7 +113,9 @@ const MediaMenu = ({
               setIsEditingPhotos(true);
             }}
           >
-            {i18n.t('photos:editor.edit')}
+            <MenuItemLabel icon={<PhotosIcon fontSize="small" />}>
+              {i18n.t('photos:editor.edit')}
+            </MenuItemLabel>
           </MenuItem>}
         {isSubscribable(medium) &&
           <NotificationSubActionWithRef
@@ -106,11 +123,38 @@ const MediaMenu = ({
             isSubscribedByViewer={medium.isSubscribedByViewer}
             key={`medium-notification-${medium.id}`}
           />}
-        {isCommentable(medium) &&
-          <CommentStatusActionWithRef
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setIsShowingActivity(true);
+          }}
+        >
+          <MenuItemLabel icon={<ActivityIcon fontSize="small" />}>
+            {i18n.t('media:activity.title')}
+          </MenuItemLabel>
+        </MenuItem>
+        <ControlSave
+          medium={medium}
+          onDone={handleClose}
+          key={`post-save-${medium.id}`}
+        />
+        {canPin &&
+          <ControlPin
             medium={medium}
-            key={`medium-comment-status-${medium.id}`}
+            onDone={handleClose}
+            key={`medium-pin-${medium.id}`}
           />}
+        {canSetReplies &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setIsSettingReplies(true);
+            }}
+          >
+            <MenuItemLabel icon={<RepliesIcon fontSize="small" />}>
+              {i18n.t('replies:access.menu')}
+            </MenuItemLabel>
+          </MenuItem>}
         <DeleteActionWithRef
           node={medium}
           key={`medium-delete-${medium.id}`}
@@ -125,10 +169,27 @@ const MediaMenu = ({
               report.open();
             }}
           >
-            {i18n.t('abuseReports:report')}
+            <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+              {i18n.t('abuseReports:report')}
+            </MenuItemLabel>
           </MenuItem>}
       </Menu>
       {report.dialog}
+      <PostActivity
+        post={medium}
+        open={isShowingActivity}
+        onClose={() => {
+          setIsShowingActivity(false);
+        }}
+      />
+      {canSetReplies &&
+        <ControlReplyAccess
+          medium={medium}
+          open={isSettingReplies}
+          onClose={() => {
+            setIsSettingReplies(false);
+          }}
+        />}
       {canEditPhotos &&
         <PhotoFilesDialog
           medium={medium}
