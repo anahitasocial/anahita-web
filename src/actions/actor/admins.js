@@ -67,12 +67,9 @@ const addRequest = (namespace) => {
 };
 
 const addSuccess = (result, namespace) => {
-  const node = result.data.objectType === 'com.stories.story' ?
-    result.data.object :
-    result.data;
   return {
     type: `${namespace.toUpperCase()}_ADD_SUCCESS`,
-    node,
+    node: result.data,
   };
 };
 

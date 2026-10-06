@@ -10,7 +10,6 @@ import notifications from './notifications';
 import search from './search';
 import session from './session';
 import socialgraph from './socialgraph';
-import stories from './stories';
 
 // creators
 import createActorAdmins from './actor/admins';
@@ -50,7 +49,6 @@ const reducers = {
   search,
   session,
   socialgraph,
-  stories,
 };
 
 namespaces.actors.forEach((ns) => {

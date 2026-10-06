@@ -10,7 +10,6 @@ import app from './app';
 import likes from './likes';
 import session from './session';
 import socialgraph from './socialgraph';
-import stories from './stories';
 import inbounds from './inbound';
 
 const namespaces = {
@@ -45,7 +44,6 @@ const actions = {
   likes,
   session,
   socialgraph,
-  stories,
   inbounds,
 };
 

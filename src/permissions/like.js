@@ -2,7 +2,7 @@
 //
 // The server answers it as authorized.like — from the check like-service
 // enforces — on posts, feed items and replies. Where a response does not
-// carry the answer yet (stories), liking stays offered and the server still
+// carry the answer, liking stays offered and the server still
 // refuses what it must.
 //
 // Only liking is gated. Taking a like back is always allowed, so callers pass

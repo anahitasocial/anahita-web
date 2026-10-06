@@ -20,7 +20,6 @@ import Search from './search';
 import Session from './session';
 import Socialgraph from './socialgraph';
 import Storage from './storage';
-import Stories from './stories';
 import Totp from './totp';
 
 export {
@@ -46,6 +45,5 @@ export {
   Session,
   Socialgraph,
   Storage,
-  Stories,
   Totp,
 };
