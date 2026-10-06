@@ -113,7 +113,7 @@ const ActorBody = ({
         </Tabs>
       </AppBar>
 
-      {['feed', 'replies', 'reposts'].includes(value) && (
+      {value === 'feed' && (
         <Grid
           container
           spacing={2}
@@ -143,18 +143,19 @@ const ActorBody = ({
             </Grid>
           </Grid>
           <Grid size={{ xs: 12, md: 8 }}>
-            {value === 'feed' &&
-              <Grid size={12}>
-                {composers}
-              </Grid>}
             <Grid size={12}>
-              {value === 'feed' && feed}
-              {value === 'replies' && replies}
-              {value === 'reposts' && reposts}
+              {composers}
+            </Grid>
+            <Grid size={12}>
+              {feed}
             </Grid>
           </Grid>
         </Grid>
       )}
+
+      {/* The whole width, like the lists of notes, articles and photos. */}
+      {value === 'replies' && replies}
+      {value === 'reposts' && reposts}
 
       {value === 'socialgraph' && socialgraph}
 

@@ -412,6 +412,9 @@ replies, made directly to the post.
   tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
   asked for with a different `filter` (`containers/feed/Actor`); they share
   one place in the store, so each is keyed and read when its tab is opened.
+  Posts are one column beside the profile's details; Replies and Reposts
+  fill the page in the same masonry as the lists of notes, articles and
+  photos (`components/BreakpointMasonry.jsx`).
   The tab is in the address. Whether reposts are among the posts is the
   profile's choice, switched under Settings › Access
   (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies

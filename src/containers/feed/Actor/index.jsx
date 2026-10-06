@@ -12,6 +12,7 @@ import LikesStats from '../../likes';
 import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
 
+import Masonry from '../../../components/BreakpointMasonry';
 import Progress from '../../../components/Progress';
 import FeedCardDefault from '../components/Default';
 import FeedCardRepost from '../components/Repost';
@@ -45,6 +46,10 @@ const FILTER = {
 //   replies   the replies its owner wrote, each under a line saying what it
 //             answers. A reply links to its own page, where its thread is.
 //   reposts   what its owner reposted.
+//
+// Posts are a single column, beside the profile's own details. Replies and
+// reposts fill the width of the page in a masonry, like the lists of notes,
+// articles and photos.
 //
 // The three share one place in the store, so the page shows one at a time
 // and gives each its own key: changing tab empties the list and reads the
@@ -104,6 +109,139 @@ const FeedActorBrowse = ({
     );
   }
 
+  const cards = items.allIds.map((itemId) => {
+    const node = items.byId[itemId];
+    const key = `feed_nodes_${node.id}`;
+    const Like = ControlLike('feed_actor');
+
+    // A reply, in the list of somebody's replies. Shown with what it
+    // answers, and without the menu and the repost button a post has:
+    // a reply is edited, removed and hidden in its thread.
+    if (node.rootId) {
+      return (
+        <FeedCardDefault
+          node={node}
+          key={key}
+          context={
+            <ReplyContext
+              answered={node.parent}
+              href={getURL(node)}
+            />
+            }
+          stats={[
+            <LikesStats
+              key={`node-like-stat-${node.id}`}
+              node={node}
+            />,
+            <ReplyStats
+              key={`node-reply-stat-${node.id}`}
+              node={node}
+            />,
+          ]}
+          actions={isAuthenticated && [
+            <Like
+              node={node}
+              repostNode={null}
+              key={`node-like-${node.id}`}
+            />,
+            <FeedReplyButton
+              key={`node-reply-${node.id}`}
+              post={node}
+            />,
+          ]}
+        />
+      );
+    }
+
+    if (isRepost(node)) {
+      return (
+        <FeedCardRepost
+          node={{
+            ...node,
+            owner: actor,
+          }}
+          key={key}
+          menu={isAuthenticated &&
+          <FeedMenu
+            node={{
+              ...node.parent,
+              owner: actor,
+            }}
+            viewer={viewer}
+          />}
+          stats={[
+            <LikesStats
+              key={`node-like-stat-${node.parent.id}`}
+              node={node.parent}
+            />,
+            <ReplyStats
+              key={`node-reply-stat-${node.parent.id}`}
+              node={node.parent}
+            />,
+          ]}
+          actions={isAuthenticated && [
+            <Like
+              node={node.parent}
+              repostNode={node}
+              key={`node-like-${node.id}`}
+            />,
+            <FeedReplyButton
+              key={`node-reply-${node.id}`}
+              post={node.parent}
+            />,
+            <ControlRepost
+              key={`node-repost-${node.id}`}
+              parent={node.parent}
+            />,
+          ]}
+        />
+      );
+    }
+
+    return (
+      <FeedCardDefault
+        node={{
+          ...node,
+          owner: actor,
+        }}
+        key={key}
+        menu={isAuthenticated &&
+        <FeedMenu
+          node={{
+            ...node,
+            owner: actor,
+          }}
+          viewer={viewer}
+        />}
+        stats={[
+          <LikesStats
+            key={`node-like-stat-${node.id}`}
+            node={node}
+          />,
+          <ReplyStats
+            key={`node-reply-stat-${node.id}`}
+            node={node}
+          />,
+        ]}
+        actions={isAuthenticated && [
+          <Like
+            node={node}
+            repostNode={null}
+            key={`node-like-${node.id}`}
+          />,
+          <FeedReplyButton
+            key={`node-reply-${node.id}`}
+            post={node}
+          />,
+          <ControlRepost
+            key={`node-repost-${node.id}`}
+            parent={node}
+          />,
+        ]}
+      />
+    );
+  });
+
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
@@ -113,138 +251,10 @@ const FeedActorBrowse = ({
         <Progress key="feed-progress" />
       }
     >
-      {items.allIds.map((itemId) => {
-        const node = items.byId[itemId];
-        const key = `feed_nodes_${node.id}`;
-        const Like = ControlLike('feed_actor');
-
-        // A reply, in the list of somebody's replies. Shown with what it
-        // answers, and without the menu and the repost button a post has:
-        // a reply is edited, removed and hidden in its thread.
-        if (node.rootId) {
-          return (
-            <FeedCardDefault
-              node={node}
-              key={key}
-              context={
-                <ReplyContext
-                  answered={node.parent}
-                  href={getURL(node)}
-                />
-              }
-              stats={[
-                <LikesStats
-                  key={`node-like-stat-${node.id}`}
-                  node={node}
-                />,
-                <ReplyStats
-                  key={`node-reply-stat-${node.id}`}
-                  node={node}
-                />,
-              ]}
-              actions={isAuthenticated && [
-                <Like
-                  node={node}
-                  repostNode={null}
-                  key={`node-like-${node.id}`}
-                />,
-                <FeedReplyButton
-                  key={`node-reply-${node.id}`}
-                  post={node}
-                />,
-              ]}
-            />
-          );
-        }
-
-        if (isRepost(node)) {
-          return (
-            <FeedCardRepost
-              node={{
-                ...node,
-                owner: actor,
-              }}
-              key={key}
-              menu={isAuthenticated &&
-                <FeedMenu
-                  node={{
-                    ...node.parent,
-                    owner: actor,
-                  }}
-                  viewer={viewer}
-                />}
-              stats={[
-                <LikesStats
-                  key={`node-like-stat-${node.parent.id}`}
-                  node={node.parent}
-                />,
-                <ReplyStats
-                  key={`node-reply-stat-${node.parent.id}`}
-                  node={node.parent}
-                />,
-              ]}
-              actions={isAuthenticated && [
-                <Like
-                  node={node.parent}
-                  repostNode={node}
-                  key={`node-like-${node.id}`}
-                />,
-                <FeedReplyButton
-                  key={`node-reply-${node.id}`}
-                  post={node.parent}
-                />,
-                <ControlRepost
-                  key={`node-repost-${node.id}`}
-                  parent={node.parent}
-                />,
-              ]}
-            />
-          );
-        }
-
-        return (
-          <FeedCardDefault
-            node={{
-              ...node,
-              owner: actor,
-            }}
-            key={key}
-            menu={isAuthenticated &&
-              <FeedMenu
-                node={{
-                  ...node,
-                  owner: actor,
-                }}
-                viewer={viewer}
-              />}
-            stats={[
-              <LikesStats
-                key={`node-like-stat-${node.id}`}
-                node={node}
-              />,
-              <ReplyStats
-                key={`node-reply-stat-${node.id}`}
-                node={node}
-              />,
-            ]}
-            actions={isAuthenticated && [
-              <Like
-                node={node}
-                repostNode={null}
-                key={`node-like-${node.id}`}
-              />,
-              <FeedReplyButton
-                key={`node-reply-${node.id}`}
-                post={node}
-              />,
-              <ControlRepost
-                key={`node-repost-${node.id}`}
-                parent={node}
-              />,
-            ]}
-          />
-        );
-      })}
+      {/* Posts are read in a column beside what the profile says about
+          itself. Replies and reposts have the width of the page, and are
+          laid out like the lists of notes, articles and photos. */}
+      {filter === FILTER.POSTS ? cards : <Masonry>{cards}</Masonry>}
     </InfiniteScroll>
   );
 };
