@@ -12,6 +12,7 @@ import i18n from '../../languages';
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
+import ControlSave from '../controls/medium/Save';
 import PostActivity from '../activity/PostActivity';
 import ControlFollow from '../controls/Follow';
 import useReport from '../reports/useReport';
@@ -112,6 +113,11 @@ const FeedItemMenu = ({
         >
           {i18n.t('media:activity.title')}
         </MenuItem>
+        <ControlSave
+          medium={node}
+          onDone={handleClose}
+          key={`post-save-${node.id}`}
+        />
         {canPin &&
           <ControlPin
             medium={node}

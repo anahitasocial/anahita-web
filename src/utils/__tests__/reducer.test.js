@@ -101,3 +101,33 @@ describe('pinChanged', () => {
     expect(reducer.pinChanged(undefined, { id: 1 })).toBe(undefined);
   });
 });
+
+describe('savedChanged', () => {
+  const list = {
+    byId: {
+      1: { id: 1, isSavedByViewer: false },
+      2: { id: 2, type: 'repost', parent: { id: 1, isSavedByViewer: false } },
+      3: { id: 3 },
+    },
+    allIds: [1, 2, 3],
+    current: { id: 1, isSavedByViewer: false },
+  };
+
+  it('marks the post wherever it is: itself, and under a repost of it', () => {
+    const next = reducer.savedChanged(list, 1, true);
+
+    expect(next.byId[1].isSavedByViewer).toBe(true);
+    expect(next.byId[2].parent.isSavedByViewer).toBe(true);
+    expect(next.byId[3].isSavedByViewer).toBeUndefined();
+    expect(next.current.isSavedByViewer).toBe(true);
+    // The list it was given is not written through.
+    expect(list.byId[1].isSavedByViewer).toBe(false);
+    expect(list.byId[2].parent.isSavedByViewer).toBe(false);
+  });
+
+  it('gives back the same list when nothing in it changes', () => {
+    expect(reducer.savedChanged(list, 99, true)).toBe(list);
+    expect(reducer.savedChanged(list, 1, false)).toBe(list);
+    expect(reducer.savedChanged(undefined, 1, true)).toBe(undefined);
+  });
+});

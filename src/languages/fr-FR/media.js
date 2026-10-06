@@ -36,6 +36,17 @@ export default {
     failed: 'Cette liste n\'a pas pu être chargée.',
     open: 'Ouvrir',
   },
+  // Enregistrer une publication pour la retrouver. Privé.
+  saved: {
+    save: 'Enregistrer',
+    remove: 'Retirer des enregistrements',
+    saved: 'Enregistrée. Elle est dans l\'onglet Enregistrements de votre profil.',
+    removed: 'Retirée des enregistrements.',
+    failed: 'Cette action n\'a pas pu être effectuée.',
+    empty: 'Rien d\'enregistré pour l\'instant.',
+    private: 'Vous seul pouvez voir ce que vous enregistrez. Personne n\'est informé que vous avez enregistré sa publication.',
+    loadFailed: 'Vos enregistrements n\'ont pas pu être chargés.',
+  },
   // The language button in the composer.
   language: {
     label: 'Langue : {{ name }}',

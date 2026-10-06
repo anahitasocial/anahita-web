@@ -8,6 +8,7 @@ import photos from './photos';
 import pins from './pins';
 import quotes from './quotes';
 import replies from './replies';
+import saved from './saved';
 import reposts from './reposts';
 
 import agreements from './agreements';
@@ -140,6 +141,7 @@ const apis = {
   quotes,
   replies,
   repost,
+  saved,
   reposts,
   session,
   socialgraph,

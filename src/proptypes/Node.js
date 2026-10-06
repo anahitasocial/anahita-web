@@ -39,6 +39,8 @@ export default shape({
   rootId: number,
   // Pinned to the profile it is on.
   pinned: bool,
+  // Whether the viewer has saved it. Known to them alone.
+  isSavedByViewer: bool,
   root: object,
   quoteId: number,
   quote: object,

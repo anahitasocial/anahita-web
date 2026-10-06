@@ -70,6 +70,7 @@ export default {
     posts: 'Posts',
     replies: 'Replies',
     reposts: 'Reposts',
+    saved: 'Saved',
   },
   none: {
     replies: 'No replies to show.',

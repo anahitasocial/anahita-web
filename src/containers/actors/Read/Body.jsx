@@ -36,6 +36,7 @@ const ActorBody = ({
   feed = null,
   replies = null,
   reposts = null,
+  saved = null,
   onTabChange = null,
   locations = null,
   socialgraph = null,
@@ -48,8 +49,16 @@ const ActorBody = ({
   // person, what they replied and what they reposted. Only people reply
   // and repost, so a group or any other kind of actor has the first alone.
   const hasOwnWords = utils.node.isPerson(actor);
+  // What somebody saved is theirs alone, so the tab for it is on their
+  // own profile and on nobody else's view of it.
+  const isOwnProfile = Boolean(viewer.id) && actor.id === viewer.id;
   const featureTabs = getActorFeatureTabs(actor).flatMap((tab) => {
-    return tab === 'feed' && hasOwnWords ? ['feed', 'replies', 'reposts'] : [tab];
+    if (tab !== 'feed' || !hasOwnWords) {
+      return [tab];
+    }
+    return isOwnProfile ?
+      ['feed', 'replies', 'reposts', 'saved'] :
+      ['feed', 'replies', 'reposts'];
   });
   const defaultTab = featureTabs[0] || 'feed';
   const known = (tab) => {
@@ -76,7 +85,7 @@ const ActorBody = ({
     if (tab === 'feed') {
       return i18n.t('replies:tabs.posts');
     }
-    if (tab === 'replies' || tab === 'reposts') {
+    if (tab === 'replies' || tab === 'reposts' || tab === 'saved') {
       return i18n.t(`replies:tabs.${tab}`);
     }
     if (tab === 'socialgraph') {
@@ -157,6 +166,7 @@ const ActorBody = ({
       {/* The whole width, like the lists of notes, articles and photos. */}
       {value === 'replies' && replies}
       {value === 'reposts' && reposts}
+      {isOwnProfile && value === 'saved' && saved}
 
       {value === 'socialgraph' && socialgraph}
 
@@ -176,6 +186,8 @@ ActorBody.propTypes = {
   // The profile's other two lists.
   replies: PropTypes.node,
   reposts: PropTypes.node,
+  // What the viewer saved. Drawn on their own profile only.
+  saved: PropTypes.node,
   // Called with the tab chosen, '' for the first one.
   onTabChange: PropTypes.func,
   locations: PropTypes.node,

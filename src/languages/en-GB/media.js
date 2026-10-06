@@ -36,6 +36,17 @@ export default {
     failed: 'This list could not be loaded.',
     open: 'Open',
   },
+  // Saving a post to find it again. Private to whoever saved it.
+  saved: {
+    save: 'Save',
+    remove: 'Remove from saved',
+    saved: 'Saved. It is in the Saved tab of your profile.',
+    removed: 'Removed from saved.',
+    failed: 'That could not be done.',
+    empty: 'Nothing saved yet.',
+    private: 'Only you can see what you save. Nobody is told that you saved their post.',
+    loadFailed: 'Your saved posts could not be loaded.',
+  },
   // The language button in the composer.
   language: {
     label: 'Language: {{ name }}',

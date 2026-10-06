@@ -112,7 +112,7 @@ history. The main paths:
 | `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
-| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
+| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts`, and on your own profile `saved` |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
@@ -448,6 +448,18 @@ custom feeds will be tabs on it.
 the change is told to every list on the page (`POST_PIN_CHANGED`, handled in
 `reducers/create.js` by `utils/reducer.js`), and the post that had the pin
 stops saying so. The new order shows when the list is next read.
+
+### Saved posts
+
+"Save" in a post's menu puts it on the viewer's own list; the same item reads
+"Remove from saved" once it is (`containers/controls/medium/Save.jsx`,
+`isSavedByViewer` on the post). The list is the **Saved** tab of their own
+profile (`containers/saved/Browse.jsx`), shown to them and on nobody else's
+view of it, in the same masonry as the other lists. There are no folders.
+
+It is private end to end: the server never says who saved a post, and the tab
+says so. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
+handled in `reducers/create.js`).
 
 ### A post's activity
 

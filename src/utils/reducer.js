@@ -83,6 +83,49 @@ const pinChanged = (list, node) => {
   return { ...list, byId, current };
 };
 
+// The list after the viewer saved a post, or took it out of what they
+// saved: the mark on that post, wherever it is in the list, and on a post a
+// feed item reposts. Returns the same list when nothing in it changes.
+const savedChanged = (list, id, saved) => {
+  if (!list || !list.byId || !id) {
+    return list;
+  }
+
+  const byId = { ...list.byId };
+  let changed = false;
+
+  Object.keys(byId).forEach((key) => {
+    const item = byId[key];
+    if (!item) {
+      return;
+    }
+
+    if (item.id === id && Boolean(item.isSavedByViewer) !== Boolean(saved)) {
+      byId[key] = { ...item, isSavedByViewer: Boolean(saved) };
+      changed = true;
+    }
+
+    const { parent } = item;
+    if (parent && parent.id === id && Boolean(parent.isSavedByViewer) !== Boolean(saved)) {
+      byId[key] = {
+        ...byId[key],
+        parent: { ...parent, isSavedByViewer: Boolean(saved) },
+      };
+      changed = true;
+    }
+  });
+
+  if (!changed) {
+    return list;
+  }
+
+  const current = list.current && list.current.id === id ?
+    { ...list.current, isSavedByViewer: Boolean(saved) } :
+    list.current;
+
+  return { ...list, byId, current };
+};
+
 const deleteItem = (list, item, defaultItem) => {
   const items = {
     ...emptyList(),
@@ -102,4 +145,5 @@ export default {
   editItem,
   deleteItem,
   pinChanged,
+  savedChanged,
 };

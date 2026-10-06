@@ -13,6 +13,7 @@ import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
+import ControlSave from '../controls/medium/Save';
 import PostActivity from '../activity/PostActivity';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
@@ -119,6 +120,11 @@ const MediaMenu = ({
         >
           {i18n.t('media:activity.title')}
         </MenuItem>
+        <ControlSave
+          medium={medium}
+          onDone={handleClose}
+          key={`post-save-${medium.id}`}
+        />
         {canPin &&
           <ControlPin
             medium={medium}
