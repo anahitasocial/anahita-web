@@ -1,63 +1,44 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
 
 import LikeIcon from '@mui/icons-material/Favorite';
 
-import LikesBrowse from './Browse';
-import NodeType from '../../proptypes/Node';
-import utils from '../../utils';
+import PostActivity from '../activity/PostActivity';
 import i18n from '../../languages';
+import NodeType from '../../proptypes/Node';
+import activity from '../../utils/activity';
 
-const Likes = ({
-  node,
-}) => {
+// The number of likes under a post, which opens the post's activity: who
+// liked it, reposted it, quoted it and replied to it.
+//
+// It is there to press whenever the post has any of the four, so that a
+// post with reposts and no likes can still be looked into.
+const Likes = ({ node }) => {
   const [open, setOpen] = useState(false);
 
-  const handleClose = () => {
-    setOpen(false);
-  };
-
-  const { likesCount } = node;
-  const namespace = utils.node.getNamespace(node);
-  const LikesStat = LikesBrowse(namespace);
+  const label = i18n.t('media:activity.title');
 
   return (
     <>
-      <Dialog
-        onClose={handleClose}
-        fullWidth
-        maxWidth="sm"
+      <PostActivity
+        post={node}
         open={open}
-      >
-        <DialogTitle>
-          {`${likesCount} Likes`}
-        </DialogTitle>
-        <DialogContent dividers style={{ padding: 0 }}>
-          {open && <LikesStat node={node} />}
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={handleClose}
-            fullWidth
-          >
-            {i18n.t('commons:close')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onClose={() => {
+          setOpen(false);
+        }}
+      />
       <Button
         variant="text"
         onClick={() => {
           setOpen(true);
         }}
-        disabled={!likesCount}
+        disabled={activity.total(node) === 0}
         startIcon={<LikeIcon />}
+        aria-label={label}
+        title={label}
         size="small"
       >
-        {likesCount}
+        {node.likesCount}
       </Button>
     </>
   );

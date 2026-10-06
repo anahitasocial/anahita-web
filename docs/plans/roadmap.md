@@ -45,7 +45,7 @@ Each milestone ends in a shippable state.
 | 15b | ✅ | 24 · Profile tabs for replies and reposts, with a "show my reposts" setting. Done 2026-10-05, with a page for a single reply | [profile-tabs-and-reposts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/profile-tabs-and-reposts.md) | services + web | 2 | 7 |
 | 15c | ✅ | 25 · Quote posts. Done 2026-10-05 | [quote-posts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/quote-posts.md) | services + web | 3–4 | 13 |
 | 16 | ✅ | 15 · Pinned posts (one a profile); story-service removed. Done 2026-10-05. The "New from people you follow" tray was built and taken out again: see Kept for later | [pinned-posts-and-activity-tray.md](done/pinned-posts-and-activity-tray.md) | services + web | 3–4 | 0 |
-| 16b | ⬜ | 22 · Post insights (views, replies, reposts, quotes, likes) | [post-insights.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/post-insights.md) | services + web | 2–3 | 7, 25 |
+| 16b | ✅ | 22 · Post activity: likes, reposts, quotes and replies, with who did each. Done 2026-10-05. Views and insights were set aside by the user's decision | [post-insights.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/post-insights.md) | services + web | 2–3 | 7, 25 |
 | **M6. Community** |  | | | | **about 10–13** | |
 | 17 | ⬜ | 11 · Invitations (plus 8 socialgraph bug fixes) | [actor-invitations.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-invitations.md) | services + web | 5–6 | 4b limiter |
 | 18 | ⬜ | 12 · Events | [events.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/events.md) | services + web | 5–7 | 11 |

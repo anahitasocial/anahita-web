@@ -25,6 +25,17 @@ export default {
     unpinned: 'Unpinned.',
     failed: 'That could not be done.',
   },
+  // A post's activity: who liked, reposted, quoted and replied.
+  activity: {
+    title: 'Post activity',
+    likes: 'Likes {{ count }}',
+    reposts: 'Reposts {{ count }}',
+    quotes: 'Quotes {{ count }}',
+    replies: 'Replies {{ count }}',
+    none: 'Nothing here that you can see.',
+    failed: 'This list could not be loaded.',
+    open: 'Open',
+  },
   // The language button in the composer.
   language: {
     label: 'Language: {{ name }}',

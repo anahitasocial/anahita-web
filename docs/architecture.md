@@ -449,6 +449,18 @@ the change is told to every list on the page (`POST_PIN_CHANGED`, handled in
 `reducers/create.js` by `utils/reducer.js`), and the post that had the pin
 stops saying so. The new order shows when the list is next read.
 
+### A post's activity
+
+"Post activity" is a dialog with four lists: who liked a post, reposted it,
+quoted it and replied to it, with the count of each on its tab
+(`containers/activity/PostActivity.jsx`, `utils/activity.js`). It opens from
+the number of likes under a post, which can be pressed whenever the post has
+any of the four, and from "Post activity" in a post's menu. Each list is read
+when its tab is first opened. People in the likes and reposts lists have a
+Follow button; quotes and replies show what was said and lead to the note.
+
+There are no views in it, and nothing anywhere counts them.
+
 ### Quote posts
 
 A quote is a note that carries another post under its own words. It is an

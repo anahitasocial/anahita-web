@@ -13,6 +13,7 @@ import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
+import PostActivity from '../activity/PostActivity';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
 
@@ -41,6 +42,7 @@ const MediaMenu = ({
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
   const [isEditingPhotos, setIsEditingPhotos] = React.useState(false);
   const [isSettingReplies, setIsSettingReplies] = React.useState(false);
+  const [isShowingActivity, setIsShowingActivity] = React.useState(false);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -51,12 +53,10 @@ const MediaMenu = ({
   };
 
   const canEdit = permissions.canEdit(viewer, medium);
-  const canSubscribe = isSubscribable(medium);
   // Who can reply is the post's own setting, changed by whoever may edit
   // the post.
   // Not on a reply, which follows the post at the top of its thread.
   const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
-  const canDelete = permissions.canDelete(viewer, medium);
   // Pinning is the profile's: the server says whether this viewer may.
   const canPin = Boolean(medium.authorized && medium.authorized.pin);
   const report = useReport(viewer, medium);
@@ -66,9 +66,8 @@ const MediaMenu = ({
 
   // Somebody who may do nothing else here may still report it, so the
   // menu is drawn for them too.
-  if (!canEdit && !canSubscribe && !canDelete && !report.canReport) {
-    return null;
-  }
+  // Always drawn for a post: its activity is there for anybody who can
+  // see it.
 
   return (
     <>
@@ -112,6 +111,14 @@ const MediaMenu = ({
             isSubscribedByViewer={medium.isSubscribedByViewer}
             key={`medium-notification-${medium.id}`}
           />}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setIsShowingActivity(true);
+          }}
+        >
+          {i18n.t('media:activity.title')}
+        </MenuItem>
         {canPin &&
           <ControlPin
             medium={medium}
@@ -145,6 +152,13 @@ const MediaMenu = ({
           </MenuItem>}
       </Menu>
       {report.dialog}
+      <PostActivity
+        post={medium}
+        open={isShowingActivity}
+        onClose={() => {
+          setIsShowingActivity(false);
+        }}
+      />
       {canSetReplies &&
         <ControlReplyAccess
           medium={medium}

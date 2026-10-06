@@ -25,6 +25,17 @@ export default {
     unpinned: 'Désépinglée.',
     failed: 'Cette action n\'a pas pu être effectuée.',
   },
+  // L'activité d'une publication : qui a aimé, repartagé, cité et répondu.
+  activity: {
+    title: 'Activité de la publication',
+    likes: 'J’aime {{ count }}',
+    reposts: 'Repartages {{ count }}',
+    quotes: 'Citations {{ count }}',
+    replies: 'Réponses {{ count }}',
+    none: 'Rien ici que vous puissiez voir.',
+    failed: 'Cette liste n\'a pas pu être chargée.',
+    open: 'Ouvrir',
+  },
   // The language button in the composer.
   language: {
     label: 'Langue : {{ name }}',

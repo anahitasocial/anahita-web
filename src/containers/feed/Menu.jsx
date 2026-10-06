@@ -12,6 +12,7 @@ import i18n from '../../languages';
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
+import PostActivity from '../activity/PostActivity';
 import ControlFollow from '../controls/Follow';
 import useReport from '../reports/useReport';
 
@@ -36,6 +37,7 @@ const FeedItemMenu = ({
 }) => {
   const [menuAnchorEl, setAnchorEl] = useState(null);
   const navigate = useNavigate();
+  const [isShowingActivity, setIsShowingActivity] = useState(false);
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -55,10 +57,6 @@ const FeedItemMenu = ({
   const canDelete = permissions.medium.canDelete(viewer, node);
   const canPin = Boolean(node.authorized && node.authorized.pin);
   const report = useReport(viewer, node);
-
-  if (!canSubscribe && !canFollow && !canEdit && !canPin && !canDelete && !report.canReport) {
-    return null;
-  }
 
   return (
     <>
@@ -106,6 +104,14 @@ const FeedItemMenu = ({
           >
             {i18n.t('actions:edit')}
           </MenuItem>}
+        <MenuItem
+          onClick={() => {
+            handleClose();
+            setIsShowingActivity(true);
+          }}
+        >
+          {i18n.t('media:activity.title')}
+        </MenuItem>
         {canPin &&
           <ControlPin
             medium={node}
@@ -130,6 +136,13 @@ const FeedItemMenu = ({
           </MenuItem>}
       </Menu>
       {report.dialog}
+      <PostActivity
+        post={node}
+        open={isShowingActivity}
+        onClose={() => {
+          setIsShowingActivity(false);
+        }}
+      />
     </>
   );
 };
