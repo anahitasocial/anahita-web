@@ -25,9 +25,9 @@ export default {
     unpinned: 'Unpinned.',
     failed: 'That could not be done.',
   },
-  // A post's activity: who liked, reposted, quoted and replied.
+  // A post's interactions: who liked, reposted, quoted and replied.
   activity: {
-    title: 'Post activity',
+    title: 'Interactions',
     likes: 'Likes {{ count }}',
     reposts: 'Reposts {{ count }}',
     quotes: 'Quotes {{ count }}',

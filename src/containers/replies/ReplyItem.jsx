@@ -8,6 +8,11 @@ import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import HideIcon from '@mui/icons-material/VisibilityOffOutlined';
+import ShowIcon from '@mui/icons-material/VisibilityOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
 import Typography from '@mui/material/Typography';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
@@ -20,6 +25,7 @@ import EntityBody from '../../components/NodeBody';
 import ReplyForm from './ReplyForm';
 import useReport from '../reports/useReport';
 import PersonType from '../../proptypes/Person';
+import MenuItemLabel from '../../components/MenuItemLabel';
 import i18n from '../../languages';
 import thread from '../../utils/thread';
 import utils from '../../utils';
@@ -217,7 +223,9 @@ const ReplyItem = ({
                     setIsEditing(true);
                   }}
                 >
-                  {i18n.t('replies:actions.edit')}
+                  <MenuItemLabel icon={<EditIcon fontSize="small" />}>
+                    {i18n.t('replies:actions.edit')}
+                  </MenuItemLabel>
                 </MenuItem>}
               {authorized.hide &&
                 <MenuItem
@@ -226,7 +234,9 @@ const ReplyItem = ({
                     onHide(reply, !reply.hidden);
                   }}
                 >
-                  {i18n.t(reply.hidden ? 'replies:actions.show' : 'replies:actions.hide')}
+                  <MenuItemLabel icon={reply.hidden ? <ShowIcon fontSize="small" /> : <HideIcon fontSize="small" />}>
+                    {i18n.t(reply.hidden ? 'replies:actions.show' : 'replies:actions.hide')}
+                  </MenuItemLabel>
                 </MenuItem>}
               {authorized.delete &&
                 <MenuItem
@@ -235,7 +245,9 @@ const ReplyItem = ({
                     onDelete(reply);
                   }}
                 >
-                  {i18n.t('replies:actions.delete')}
+                  <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
+                    {i18n.t('replies:actions.delete')}
+                  </MenuItemLabel>
                 </MenuItem>}
               {report.canReport &&
                 <MenuItem
@@ -244,7 +256,9 @@ const ReplyItem = ({
                     report.open();
                   }}
                 >
-                  {i18n.t('abuseReports:report')}
+                  <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+                    {i18n.t('abuseReports:report')}
+                  </MenuItemLabel>
                 </MenuItem>}
             </Menu>
             {report.dialog}

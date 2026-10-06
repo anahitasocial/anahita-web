@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MenuItem from '@mui/material/MenuItem';
+import SaveIcon from '@mui/icons-material/BookmarkBorder';
+import SavedIcon from '@mui/icons-material/Bookmark';
+
+import MenuItemLabel from '../../../components/MenuItemLabel';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -49,7 +53,9 @@ const ControlsMediumSave = React.forwardRef(({
       aria-label={label}
       ref={ref}
     >
-      {label}
+      <MenuItemLabel icon={saved ? <SavedIcon fontSize="small" /> : <SaveIcon fontSize="small" />}>
+        {label}
+      </MenuItemLabel>
     </MenuItem>
   );
 });

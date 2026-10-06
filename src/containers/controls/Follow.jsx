@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import FollowIcon from '@mui/icons-material/PersonAddAlt1Outlined';
+import UnfollowIcon from '@mui/icons-material/PersonRemoveOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import actions from '../../actions/socialgraph';
 import PersonType from '../../proptypes/Person';
@@ -51,7 +55,9 @@ const ControlsFollow = React.forwardRef((props, ref) => {
         disabled={waiting}
         ref={ref}
       >
-        {title}
+        <MenuItemLabel icon={leader ? <UnfollowIcon fontSize="small" /> : <FollowIcon fontSize="small" />}>
+          {title}
+        </MenuItemLabel>
       </MenuItem>
     );
   }

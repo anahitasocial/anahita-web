@@ -15,6 +15,10 @@ import ListItemText from '@mui/material/ListItemText';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
+import LikeIcon from '@mui/icons-material/Favorite';
+import RepostIcon from '@mui/icons-material/Repeat';
+import QuoteIcon from '@mui/icons-material/FormatQuote';
+import ReplyIcon from '@mui/icons-material/Comment';
 
 import ActorAvatar from '../../components/ActorAvatar';
 import Progress from '../../components/Progress';
@@ -27,6 +31,14 @@ import utils from '../../utils';
 import activity from '../../utils/activity';
 
 const { getActorName, getURL } = utils.node;
+
+// The icon on each tab: the one the same thing has under a post.
+const ICONS = {
+  [activity.LIKES]: <LikeIcon fontSize="small" />,
+  [activity.REPOSTS]: <RepostIcon fontSize="small" />,
+  [activity.QUOTES]: <QuoteIcon fontSize="small" />,
+  [activity.REPLIES]: <ReplyIcon fontSize="small" />,
+};
 
 // What reads each list. Likers and reposters come as people; quotes and
 // replies come as notes, each with who wrote it.
@@ -53,11 +65,12 @@ const READERS = {
   },
 };
 
-// A post's activity: how many times it was liked, reposted, quoted and
-// replied to, and who did each.
+// A post's interactions ("Interactions" on the page): how many times it was
+// liked, reposted, quoted and replied to, and who did each.
 //
-// Four lists, one at a time, each read when its tab is first opened. The
-// numbers on the tabs are the post's own counts. A list can be shorter than
+// Four lists, one at a time, each read when its tab is first opened. A tab
+// is an icon and a number, the post's own count; its name is there for a
+// screen reader and on hover. A list can be shorter than
 // its number: everybody is shown only the people and the notes they may
 // see.
 //
@@ -138,7 +151,12 @@ const PostActivity = ({
             <Tab
               key={each}
               value={each}
-              label={i18n.t(`media:activity.${each}`, { count: counts[each] })}
+              icon={ICONS[each]}
+              iconPosition="start"
+              label={counts[each]}
+              aria-label={i18n.t(`media:activity.${each}`, { count: counts[each] })}
+              title={i18n.t(`media:activity.${each}`, { count: counts[each] })}
+              sx={{ minHeight: 48, minWidth: 0 }}
             />
           );
         })}

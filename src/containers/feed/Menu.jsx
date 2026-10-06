@@ -5,6 +5,11 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import ActivityIcon from '@mui/icons-material/BarChartOutlined';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import utils from '../../utils';
 import i18n from '../../languages';
@@ -103,7 +108,9 @@ const FeedItemMenu = ({
               navigate(`${getURL(node)}?edit=1`);
             }}
           >
-            {i18n.t('actions:edit')}
+            <MenuItemLabel icon={<EditIcon fontSize="small" />}>
+              {i18n.t('actions:edit')}
+            </MenuItemLabel>
           </MenuItem>}
         <MenuItem
           onClick={() => {
@@ -111,7 +118,9 @@ const FeedItemMenu = ({
             setIsShowingActivity(true);
           }}
         >
-          {i18n.t('media:activity.title')}
+          <MenuItemLabel icon={<ActivityIcon fontSize="small" />}>
+            {i18n.t('media:activity.title')}
+          </MenuItemLabel>
         </MenuItem>
         <ControlSave
           medium={node}
@@ -138,7 +147,9 @@ const FeedItemMenu = ({
               report.open();
             }}
           >
-            {i18n.t('abuseReports:report')}
+            <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+              {i18n.t('abuseReports:report')}
+            </MenuItemLabel>
           </MenuItem>}
       </Menu>
       {report.dialog}

@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MenuItem from '@mui/material/MenuItem';
+import PinIcon from '@mui/icons-material/PushPinOutlined';
+import UnpinIcon from '@mui/icons-material/PushPin';
+
+import MenuItemLabel from '../../../components/MenuItemLabel';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -56,7 +60,9 @@ const ControlsMediumPin = React.forwardRef(({
       aria-label={label}
       ref={ref}
     >
-      {label}
+      <MenuItemLabel icon={pinned ? <UnpinIcon fontSize="small" /> : <PinIcon fontSize="small" />}>
+        {label}
+      </MenuItemLabel>
     </MenuItem>
   );
 });

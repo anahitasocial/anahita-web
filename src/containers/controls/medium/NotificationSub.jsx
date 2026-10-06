@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import MenuItem from '@mui/material/MenuItem';
+import SubscribeIcon from '@mui/icons-material/NotificationsNoneOutlined';
+import UnsubscribeIcon from '@mui/icons-material/NotificationsOffOutlined';
+
+import MenuItemLabel from '../../../components/MenuItemLabel';
 
 import actions from '../../../actions';
 import MediumType from '../../../proptypes/Medium';
@@ -39,7 +43,9 @@ const ControlsMediumNotification = React.forwardRef(({
       disabled={isFetching}
       ref={ref}
     >
-      {title}
+      <MenuItemLabel icon={subscribed ? <UnsubscribeIcon fontSize="small" /> : <SubscribeIcon fontSize="small" />}>
+        {title}
+      </MenuItemLabel>
     </MenuItem>
   );
 });

@@ -5,6 +5,13 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import PhotosIcon from '@mui/icons-material/PhotoLibraryOutlined';
+import ActivityIcon from '@mui/icons-material/BarChartOutlined';
+import RepliesIcon from '@mui/icons-material/ForumOutlined';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import permissions from '../../permissions/medium';
 import utils from '../../utils';
@@ -95,7 +102,9 @@ const MediaMenu = ({
             }}
             disabled={!canEdit}
           >
-            Edit
+            <MenuItemLabel icon={<EditIcon fontSize="small" />}>
+              {i18n.t('actions:edit')}
+            </MenuItemLabel>
           </MenuItem>}
         {canEditPhotos &&
           <MenuItem
@@ -104,7 +113,9 @@ const MediaMenu = ({
               setIsEditingPhotos(true);
             }}
           >
-            {i18n.t('photos:editor.edit')}
+            <MenuItemLabel icon={<PhotosIcon fontSize="small" />}>
+              {i18n.t('photos:editor.edit')}
+            </MenuItemLabel>
           </MenuItem>}
         {isSubscribable(medium) &&
           <NotificationSubActionWithRef
@@ -118,7 +129,9 @@ const MediaMenu = ({
             setIsShowingActivity(true);
           }}
         >
-          {i18n.t('media:activity.title')}
+          <MenuItemLabel icon={<ActivityIcon fontSize="small" />}>
+            {i18n.t('media:activity.title')}
+          </MenuItemLabel>
         </MenuItem>
         <ControlSave
           medium={medium}
@@ -138,7 +151,9 @@ const MediaMenu = ({
               setIsSettingReplies(true);
             }}
           >
-            {i18n.t('replies:access.menu')}
+            <MenuItemLabel icon={<RepliesIcon fontSize="small" />}>
+              {i18n.t('replies:access.menu')}
+            </MenuItemLabel>
           </MenuItem>}
         <DeleteActionWithRef
           node={medium}
@@ -154,7 +169,9 @@ const MediaMenu = ({
               report.open();
             }}
           >
-            {i18n.t('abuseReports:report')}
+            <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+              {i18n.t('abuseReports:report')}
+            </MenuItemLabel>
           </MenuItem>}
       </Menu>
       {report.dialog}

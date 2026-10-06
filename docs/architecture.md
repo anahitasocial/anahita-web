@@ -461,17 +461,23 @@ It is private end to end: the server never says who saved a post, and the tab
 says so. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
 handled in `reducers/create.js`).
 
-### A post's activity
+### A post's interactions
 
-"Post activity" is a dialog with four lists: who liked a post, reposted it,
-quoted it and replied to it, with the count of each on its tab
+"Interactions" is a dialog with four lists: who liked a post, reposted it,
+quoted it and replied to it, with an icon and the count of each on its tab
 (`containers/activity/PostActivity.jsx`, `utils/activity.js`). It opens from
 the number of likes under a post, which can be pressed whenever the post has
-any of the four, and from "Post activity" in a post's menu. Each list is read
+any of the four, and from "Interactions" in a post's menu. In the code it is
+still called activity. Each list is read
 when its tab is first opened. People in the likes and reposts lists have a
 Follow button; quotes and replies show what was said and lead to the note.
 
 There are no views in it, and nothing anywhere counts them.
+
+### Menus
+
+Every item in the menus on posts, feed items and replies has an icon before
+its words, through `components/MenuItemLabel.jsx`.
 
 ### Quote posts
 

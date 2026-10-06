@@ -25,9 +25,9 @@ export default {
     unpinned: 'Désépinglée.',
     failed: 'Cette action n\'a pas pu être effectuée.',
   },
-  // L'activité d'une publication : qui a aimé, repartagé, cité et répondu.
+  // Les interactions d'une publication : qui a aimé, repartagé, cité et répondu.
   activity: {
-    title: 'Activité de la publication',
+    title: 'Interactions',
     likes: 'J’aime {{ count }}',
     reposts: 'Repartages {{ count }}',
     quotes: 'Citations {{ count }}',
