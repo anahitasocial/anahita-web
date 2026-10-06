@@ -25,7 +25,7 @@ export default {
       note: 'Qui peut publier une note ?',
       article: 'Qui peut publier un article ?',
       topic: 'Qui peut lancer un sujet ?',
-      comment: 'Qui peut commenter ?',
+      comment: 'Qui peut répondre ?',
       like: 'Qui peut aimer ?',
     },
   },
@@ -35,7 +35,7 @@ export default {
     addPermissions: {
       title: 'Autorisations',
       photo: 'Qui peut publier une photo ?',
-      comment: 'Qui peut commenter ?',
+      comment: 'Qui peut répondre ?',
       like: 'Qui peut aimer ?',
     },
   },

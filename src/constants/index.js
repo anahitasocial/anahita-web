@@ -4,9 +4,7 @@ import Actor from './actor';
 import App from './app';
 import Auth from './auth';
 import Avatar from './avatar';
-import Comments from './comments';
 import Cover from './cover';
-import CommentsInline from './commentsInline';
 import Is from './is';
 import Likes from './likes';
 import Locations from './locations';
@@ -32,9 +30,7 @@ export {
   App,
   Auth,
   Avatar,
-  Comments,
   Cover,
-  CommentsInline,
   Is,
   Likes,
   Locations,

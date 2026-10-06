@@ -1,7 +1,7 @@
-// Whether the viewer may like a post or a comment.
+// Whether the viewer may like a post or a reply.
 //
 // The server answers it as authorized.like — from the check like-service
-// enforces — on posts, feed items and comments. Where a response does not
+// enforces — on posts, feed items and replies. Where a response does not
 // carry the answer yet (stories), liking stays offered and the server still
 // refuses what it must.
 //

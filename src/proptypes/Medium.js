@@ -8,7 +8,6 @@ import {
 } from 'prop-types';
 
 import ActorType from './Actor';
-import CommentType from './Comment';
 import PersonType from './Person';
 import ImageUrls from './ImageUrls';
 
@@ -38,9 +37,6 @@ export default shape({
   createdAt: string,
   editor: PersonType,
   updatedAt: string,
-  lastComment: CommentType,
-  lastCommenter: PersonType,
-  lastCommentTime: string,
   likesCount: number,
   dislikesCount: number,
   isLikedByViewer: bool,

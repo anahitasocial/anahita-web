@@ -6,13 +6,11 @@ import { makeStyles } from 'tss-react/mui';
 
 import AppBar from '@mui/material/AppBar';
 import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
-import Switch from '@mui/material/Switch';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Toolbar from '@mui/material/Toolbar';
@@ -90,7 +88,6 @@ const Search = () => {
 
   const [scope, setScope] = useState(SCOPE.ALL);
   const [sort, setSort] = useState(SORTING.RELEVANT);
-  const [searchComments, setSearchComments] = useState(false);
   const [searchRange, setSearchRange] = useState(125);
 
   const changeScope = (event, value) => {
@@ -164,18 +161,6 @@ const Search = () => {
                 marks={marks}
               />
             </FormControl>
-            <FormControlLabel
-              className={classes.formControlLabel}
-              control={
-                <Switch
-                  checked={searchComments}
-                  onChange={() => {
-                    setSearchComments(!searchComments);
-                  }}
-                />
-              }
-              label={i18n.t('search:includeComments')}
-            />
           </FormGroup>
         </Toolbar>
         <Tabs
@@ -202,13 +187,12 @@ const Search = () => {
       {useMemo(() => {
         return (
           <SearchList
-            key={`${sort}-${scope}-${searchRange}-${searchComments}`}
+            key={`${sort}-${scope}-${searchRange}`}
             queryParams={{
               q,
               sort,
               scope,
               searchRange: searchRange * 1000,
-              searchComments,
               coordLong,
               coordLat,
             }}
@@ -219,7 +203,6 @@ const Search = () => {
         sort,
         scope,
         searchRange,
-        searchComments,
         coordLong,
         coordLat,
       ])}

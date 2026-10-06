@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import CommentIcon from '@mui/icons-material/Comment';
+import ReplyIcon from '@mui/icons-material/Comment';
 
 import NodeType from '../proptypes/Node';
 import utils from '../utils';
 
 const { getURL } = utils.node;
 
-const CommentStats = (props) => {
+const ReplyStats = (props) => {
   const { node } = props;
   const url = getURL(node);
 
@@ -15,7 +15,7 @@ const CommentStats = (props) => {
     <Button
       component="a"
       href={url}
-      startIcon={<CommentIcon />}
+      startIcon={<ReplyIcon />}
       disabled={node.commentCount === 0}
       size="small"
     >
@@ -24,8 +24,8 @@ const CommentStats = (props) => {
   );
 };
 
-CommentStats.propTypes = {
+ReplyStats.propTypes = {
   node: NodeType.isRequired,
 };
 
-export default CommentStats;
+export default ReplyStats;

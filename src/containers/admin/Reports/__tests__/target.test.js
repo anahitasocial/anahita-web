@@ -36,17 +36,6 @@ describe('describing what was reported', () => {
     expect(target.title(item).endsWith('…')).toBe(true);
   });
 
-  it('links a comment to the post it is under, or nowhere', () => {
-    const comment = {
-      id: 20,
-      type: 'node.base.comment-service.comment.v1',
-      body: 'A reply.',
-      parent: { id: 100, type: note.type },
-    };
-
-    expect(target.url({ target: comment })).toBe('/notes/100/#20');
-    expect(target.url({ target: { ...comment, parent: undefined } })).toBe('');
-  });
 
   it('says so when the thing is gone, and links nowhere', () => {
     const item = { targetType: note.type, target: undefined };

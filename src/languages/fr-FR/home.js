@@ -12,10 +12,10 @@ export default {
   // visitors only the start of what is public (SITE_READ_ACCESS=preview).
   preview: {
     cTitle: 'Vous voyez un aperçu',
-    cDescription: 'Connectez-vous pour lire les publications en entier, les commentaires et tout ce qui suit la première page.',
+    cDescription: 'Connectez-vous pour lire les publications en entier, les réponses et tout ce qui suit la première page.',
     signIn: 'Se connecter',
     readMore: 'Connectez-vous pour lire la suite',
-    comments: 'Connectez-vous pour lire les commentaires',
+    comments: 'Connectez-vous pour lire les réponses',
     followers: 'Connectez-vous pour voir qui suit qui',
   },
 };

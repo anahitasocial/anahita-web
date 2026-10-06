@@ -1,38 +1,38 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Button from '@mui/material/Button';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import CommentIcon from '@mui/icons-material/Comment';
 
 import actions from '../../../actions';
 
 import ControlLike from '../../likes/controls/LikeFeed';
 import ControlRepost from '../../controls/Repost';
 import LikesStats from '../../likes';
-import CommentStats from '../../../components/CommentStats';
+import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
 
 import Progress from '../../../components/Progress';
 import FeedCardDefault from '../components/Default';
-import FeedCardComment from '../components/Comment';
 import FeedCardRepost from '../components/Repost';
+import FeedReplyButton from '../components/ReplyButton';
 import ActorType from '../../../proptypes/Actor';
 import ActorDefault from '../../../proptypes/ActorDefault';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
-import commentPerms from '../../../permissions/comment';
 import { App as APP } from '../../../constants';
 import utils from '../../../utils';
 
 const {
-  isMedium,
   isRepost,
-  isComment,
 } = utils.node;
 
 const { LIMIT } = APP.BROWSE;
 
+// A profile's feed: what was posted on it, and what its owner reposted.
+//
+// A feed holds posts and reposts. Replies are not in it: they are read in
+// their thread, on the post's own page, which is where the reply button
+// goes.
 const FeedActorBrowse = ({
   actor = { ...ActorDefault },
   browseList,
@@ -46,7 +46,6 @@ const FeedActorBrowse = ({
   isFetching,
 }) => {
   const [start, setStart] = useState(0);
-  const [openComments, setOpenComments] = useState([]);
 
   useEffect(() => {
     return () => {
@@ -86,69 +85,10 @@ const FeedActorBrowse = ({
     >
       {items.allIds.map((itemId) => {
         const node = items.byId[itemId];
-        const isMediumNode = isMedium(node);
-        const isRepostNode = isRepost(node);
-        const isCommentNode = isComment(node);
         const key = `feed_nodes_${node.id}`;
-        const canAddComment = commentPerms.canAdd(isMediumNode ? node : node.parent);
-        const isCommentsOpen = openComments.includes(node.id);
         const Like = ControlLike('feed_actor');
 
-        if (isCommentNode) {
-          return (
-            <FeedCardComment
-              node={{
-                ...node,
-                owner: actor,
-              }}
-              key={key}
-              menu={isAuthenticated &&
-                <FeedMenu
-                  node={{
-                    ...node.parent,
-                    owner: actor,
-                  }}
-                  viewer={viewer}
-                />}
-              stats={[
-                <LikesStats
-                  key={`node-like-stat-${node.id}`}
-                  node={node.parent}
-                  comment={node}
-                />,
-                <CommentStats
-                  key={`node-comment-stat-${node.id}`}
-                  node={node.parent}
-                  viewer={viewer}
-                />,
-              ]}
-              actions={isAuthenticated && [
-                <Like
-                  node={node.parent}
-                  comment={node}
-                  key={`node-like-${node.id}`}
-                />,
-                <Button
-                  onClick={() => {
-                    openComments.push(node.id);
-                    setOpenComments([...openComments]);
-                  }}
-                  disabled={isCommentsOpen || !canAddComment}
-                  aria-label="Show Comments"
-                  key={`node-comment-${node.id}`}
-                  fullWidth
-                  startIcon={
-                    <CommentIcon fontSize="small" />
-                  }
-                >
-                  {node.parent.numOfComments > 0 && node.parent.numOfComments}
-                </Button>,
-              ]}
-            />
-          );
-        }
-
-        if (isRepostNode) {
+        if (isRepost(node)) {
           return (
             <FeedCardRepost
               node={{
@@ -168,12 +108,10 @@ const FeedActorBrowse = ({
                 <LikesStats
                   key={`node-like-stat-${node.parent.id}`}
                   node={node.parent}
-                  comment={null}
                 />,
-                <CommentStats
-                  key={`node-comment-stat-${node.parent.id}`}
+                <ReplyStats
+                  key={`node-reply-stat-${node.parent.id}`}
                   node={node.parent}
-                  viewer={viewer}
                 />,
               ]}
               actions={isAuthenticated && [
@@ -182,23 +120,10 @@ const FeedActorBrowse = ({
                   repostNode={node}
                   key={`node-like-${node.id}`}
                 />,
-                <Button
-                  onClick={() => {
-                    if (!isCommentsOpen && canAddComment) {
-                      openComments.push(node.id);
-                      setOpenComments([...openComments]);
-                    }
-                  }}
-                  disabled={isCommentsOpen || !canAddComment}
-                  aria-label="Show Comments"
-                  key={`node-comment-${node.id}`}
-                  fullWidth
-                  startIcon={
-                    <CommentIcon fontSize="small" />
-                  }
-                >
-                  {node.parent.numOfComments > 0 && node.parent.numOfComments}
-                </Button>,
+                <FeedReplyButton
+                  key={`node-reply-${node.id}`}
+                  post={node.parent}
+                />,
                 <ControlRepost
                   key={`node-repost-${node.id}`}
                   parent={node.parent}
@@ -227,12 +152,10 @@ const FeedActorBrowse = ({
               <LikesStats
                 key={`node-like-stat-${node.id}`}
                 node={node}
-                comment={null}
               />,
-              <CommentStats
-                key={`node-comment-stat-${node.id}`}
+              <ReplyStats
+                key={`node-reply-stat-${node.id}`}
                 node={node}
-                viewer={viewer}
               />,
             ]}
             actions={isAuthenticated && [
@@ -241,23 +164,10 @@ const FeedActorBrowse = ({
                 repostNode={null}
                 key={`node-like-${node.id}`}
               />,
-              <Button
-                onClick={() => {
-                  if (!isCommentsOpen && canAddComment) {
-                    openComments.push(node.id);
-                    setOpenComments([...openComments]);
-                  }
-                }}
-                disabled={isCommentsOpen || !canAddComment}
-                aria-label="Show Comments"
-                key={`node-comment-${node.id}`}
-                fullWidth
-                startIcon={
-                  <CommentIcon fontSize="small" />
-                }
-              >
-                {node.numOfComments > 0 && node.numOfComments}
-              </Button>,
+              <FeedReplyButton
+                key={`node-reply-${node.id}`}
+                post={node}
+              />,
               <ControlRepost
                 key={`node-repost-${node.id}`}
                 parent={node}

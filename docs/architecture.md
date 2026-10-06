@@ -25,7 +25,7 @@ Everything is under `src/`:
 | `actions/` | Redux thunks that call the API and dispatch the result |
 | `reducers/` | Redux reducers, most of them made by shared factories |
 | `store/` | The Redux store, with a development and a production version |
-| `containers/` | Pages and components connected to the store, grouped by feature (`actors`, `media`, `comments`, `settings`, `auth`…) |
+| `containers/` | Pages and components connected to the store, grouped by feature (`actors`, `media`, `replies`, `settings`, `auth`…) |
 | `components/` | Presentational components with no store access |
 | `routes/` | The route table and the two route guards |
 | `permissions/` | What the viewer may do, mostly read from the server's answers |
@@ -154,7 +154,7 @@ lowers their total to what it sent.
 answers, from the session and NodeInfo, whether the viewer is a visitor and on
 which kind of site:
 
-- On a preview site the comments under a post and the lists of who follows
+- On a preview site the replies under a post and the lists of who follows
   whom are not requested. A sign-in prompt stands where they would be.
 - On a members-only site the search box and the People, Groups, Hashtags and
   Places menu entries are not shown.
@@ -216,7 +216,7 @@ approved or rejected (`actions.admin.readCounts`, `state.admin.counts`).
 ### Reporting
 
 Every menu that sits on a node has a **Report** item: profiles, posts, feed
-items, comments, hashtags and places. It is offered to anybody signed in,
+items, replies, hashtags and places. It is offered to anybody signed in,
 except on themselves and on what they wrote (`permissions/report.js`). A menu
 that somebody could do nothing else in is now drawn for them, holding Report.
 
@@ -235,7 +235,7 @@ anahita-services' `docs/abuse-reports.md`.
 ## What a viewer may do
 
 **The server decides, and the app follows.** Every person, group, post and
-comment the API returns carries an `authorized` object answering what the
+reply the API returns carries an `authorized` object answering what the
 viewer may do with it. The server works each answer out with the same checks it
 enforces:
 
@@ -245,8 +245,8 @@ enforces:
 | `composers` | People and groups | Which kinds of post the viewer may create on the profile |
 | `audiences` | People and groups | Who a post the viewer writes there may be shown to |
 | `addFollower` | Groups | Whether the viewer may add somebody else as a follower |
-| `comment` | Posts | Whether the viewer may comment |
-| `like` | Posts and comments | Whether the viewer may like it |
+| `comment` | Posts and replies | Whether the viewer may reply. The name is from when replies were comments |
+| `like` | Posts and replies | Whether the viewer may like it |
 
 The helpers in `src/permissions/` read these answers. Where a response does not
 carry an answer, the helpers fall back to a simple rule, and the server still
@@ -398,9 +398,14 @@ replies, made directly to the post.
   (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
   replies and says it when it is limited.
 
-The comment components (`containers/comments`, `CommentCard`, the comment
-like controls) are no longer shown anywhere. They are removed with the
-comment service.
+- **In a feed**, the reply button under a post is a link to the post's page,
+  where its thread is (`containers/feed/components/ReplyButton.jsx`), and
+  `components/ReplyStats.jsx` shows how many replies it has.
+
+There is no comment code left: the comment components, actions, reducers,
+API modules and prop types went with the comment service. Two names remain
+from then, because the server still uses them: `authorized.comment` and
+`commentCount`.
 
 The rules are the server's, in the services' `docs/permissions.md`, Replies.
 

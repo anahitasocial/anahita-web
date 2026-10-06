@@ -10,8 +10,6 @@ import replies from './replies';
 import agreements from './agreements';
 import authLogs from './authLogs';
 import avatar from './avatar';
-import comments from './comments';
-import commentStatus from './commentsStatus';
 import cover from './cover';
 import abuseReports from './abuseReports';
 import accounts from './accounts';
@@ -117,8 +115,6 @@ const apis = {
   authLogs,
   avatar,
   agreements,
-  comments,
-  commentStatus,
   cover,
   feed_leaders: feed.leaders,
   feed_actor: feed.actor,

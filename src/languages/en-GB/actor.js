@@ -56,7 +56,7 @@ export default {
   },
   permissions: {
     title: 'Permissions',
-    cDescription: 'Who can post, comment and like here. Until these are saved, the site defaults apply.',
+    cDescription: 'Who can post, reply and like here. Until these are saved, the site defaults apply.',
     empty: 'Nothing here has permissions to set.',
     restoreDefaults: 'Restore defaults',
     // Per actor type, because "Admins" of a person is that person.
@@ -90,7 +90,7 @@ export default {
         admins: 'Administrators of this group.',
       },
     },
-    // Comments on a profile narrower than registered follow its access.
+    // Replies on a profile narrower than registered follow its access.
     commentLocked: {
       followers: 'Followers — this profile is visible to followers only.',
       readers: 'Anyone who can see this profile, as set under Access.',

@@ -8,14 +8,12 @@ import DialogActions from '@mui/material/DialogActions';
 import LikeIcon from '@mui/icons-material/Favorite';
 
 import LikesBrowse from './Browse';
-import CommentType from '../../proptypes/Comment';
 import NodeType from '../../proptypes/Node';
 import utils from '../../utils';
 import i18n from '../../languages';
 
 const Likes = ({
   node,
-  comment = null,
 }) => {
   const [open, setOpen] = useState(false);
 
@@ -23,9 +21,8 @@ const Likes = ({
     setOpen(false);
   };
 
-  const likeableNode = comment || node;
-  const { likesCount } = likeableNode;
-  const namespace = utils.node.getNamespace(likeableNode);
+  const { likesCount } = node;
+  const namespace = utils.node.getNamespace(node);
   const LikesStat = LikesBrowse(namespace);
 
   return (
@@ -40,7 +37,7 @@ const Likes = ({
           {`${likesCount} Likes`}
         </DialogTitle>
         <DialogContent dividers style={{ padding: 0 }}>
-          {open && <LikesStat node={node} comment={comment} />}
+          {open && <LikesStat node={node} />}
         </DialogContent>
         <DialogActions>
           <Button
@@ -68,7 +65,6 @@ const Likes = ({
 
 Likes.propTypes = {
   node: NodeType.isRequired,
-  comment: CommentType,
 };
 
 export default Likes;

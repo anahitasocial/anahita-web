@@ -6,7 +6,7 @@ import MediumType from '../../../proptypes/Medium';
 
 import Article from './Article';
 import Default from './Default';
-import CommentStats from '../../../components/CommentStats';
+import ReplyStats from '../../../components/ReplyStats';
 import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
@@ -81,7 +81,7 @@ const MediaReadView = ({
     stats: (
       <>
         <Likes node={medium} />
-        <CommentStats node={medium} />
+        <ReplyStats node={medium} />
       </>
     ),
     // Every kind of post is answered with replies: notes, threaded, each

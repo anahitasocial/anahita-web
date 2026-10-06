@@ -9,7 +9,6 @@ import {
 import ActorType from './Actor';
 import PersonType from './Person';
 import ImageUrls from './ImageUrls';
-import CommentsType from './Comments';
 
 export default shape({
   id: number,
@@ -29,7 +28,6 @@ export default shape({
   updatedAt: string,
   isAdministrated: bool,
   isLeader: bool,
-  comments: CommentsType,
   isSubscribedByViewer: bool,
   repostCount: number,
   isRepostedByViewer: bool,

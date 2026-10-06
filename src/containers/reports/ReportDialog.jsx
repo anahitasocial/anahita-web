@@ -274,7 +274,7 @@ const ReportDialog = ({
 };
 
 ReportDialog.propTypes = {
-  // Anything with an id and a type: a person, a group, a post, a comment,
+  // Anything with an id and a type: a person, a group, a post, a reply,
   // a hashtag or a place.
   node: PropTypes.shape({
     id: PropTypes.number.isRequired,

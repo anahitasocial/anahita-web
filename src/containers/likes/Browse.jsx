@@ -14,8 +14,6 @@ import Avatar from '../../components/ActorAvatar';
 import actions from '../../actions';
 import Progress from '../../components/Progress';
 
-import CommentType from '../../proptypes/Comment';
-import CommentDefault from '../../proptypes/CommentDefault';
 import NodeType from '../../proptypes/Node';
 import NodesType from '../../proptypes/Nodes';
 import PersonType from '../../proptypes/Person';
@@ -29,7 +27,6 @@ const LikesBrowse = ({
   resetList,
   items,
   node,
-  comment = null,
   isFetching,
   error,
   viewer,
@@ -39,12 +36,11 @@ const LikesBrowse = ({
   useEffect(() => {
     browseList({
       node,
-      comment,
       limit: 1000, // TODO: Paginate likes
     });
 
     return () => {
-      resetList(comment);
+      resetList();
     };
   }, []);
 
@@ -129,17 +125,9 @@ const mapDispatchToProps = (namespace) => {
   return (dispatch) => {
     return {
       browseList: (params) => {
-        if (params.comment) {
-          return dispatch(actions.comments.likes.browse(params));
-        }
-
         return dispatch(actions[namespace].likes.browse(params));
       },
-      resetList: (comment = CommentDefault) => {
-        if (comment) {
-          return dispatch(actions.comments.likes.reset());
-        }
-
+      resetList: () => {
         return dispatch(actions[namespace].likes.reset());
       },
     };
@@ -149,7 +137,6 @@ const mapDispatchToProps = (namespace) => {
 LikesBrowse.propTypes = {
   items: NodesType.isRequired,
   node: NodeType.isRequired,
-  comment: CommentType,
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
   isFetching: PropTypes.bool.isRequired,

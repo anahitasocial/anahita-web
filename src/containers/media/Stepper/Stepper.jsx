@@ -21,7 +21,7 @@ import MediumType from '../../../proptypes/Medium';
 import RepliesThread from '../../replies/Thread';
 import LocationsGadget from '../../locations/Gadget';
 import Likes from '../../likes';
-import CommentStats from '../../../components/CommentStats';
+import ReplyStats from '../../../components/ReplyStats';
 import MediaMenu from '../MediaMenu';
 import Lightbox from './Lightbox';
 import MediumForm from '../EditForm';
@@ -183,7 +183,7 @@ const MediaStepperView = ({
         stats={
           <>
             <Likes node={medium} key={`likes-${medium.id}`} />
-            <CommentStats node={medium} />
+            <ReplyStats node={medium} />
           </>
         }
         // The thread of replies, a new one for each post stepped to.

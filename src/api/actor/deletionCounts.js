@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-// What deleting this profile would cost — posts, comments, followers,
+// What deleting this profile would cost — posts, replies, followers,
 // following, groups administered, and how long they have been a member.
 //
 // Read when the Danger zone opens, not when the page loads. It is only ever

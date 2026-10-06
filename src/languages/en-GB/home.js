@@ -12,10 +12,10 @@ export default {
   // visitors only the start of what is public (SITE_READ_ACCESS=preview).
   preview: {
     cTitle: 'You are seeing a preview',
-    cDescription: 'Sign in to read whole posts, comments and everything past the first page.',
+    cDescription: 'Sign in to read whole posts, replies and everything past the first page.',
     signIn: 'Sign in',
     readMore: 'Sign in to read more',
-    comments: 'Sign in to read the comments',
+    comments: 'Sign in to read the replies',
     followers: 'Sign in to see who follows whom',
   },
 };
