@@ -112,7 +112,7 @@ history. The main paths:
 | `/` | The home page when signed out, the dashboard when signed in |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
-| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: `replies`, `reposts`, or one of its kinds of post |
+| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
@@ -413,15 +413,17 @@ replies, made directly to the post.
   from `root.owner`. A reply is owned by whoever wrote it, so its own owner
   does not say. A post shows the profile it is on the same way when that is
   not its author's own.
-- **A profile has three lists**: Posts, Replies and Reposts, the first three
+- **A person's profile has three lists**: Posts, Replies and Reposts. Only
+  people reply and repost, so a group has Posts alone. They are the first
   tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
   asked for with a different `filter` (`containers/feed/Actor`); they share
   one place in the store, so each is keyed and read when its tab is opened.
   Posts are one column beside the profile's details; Replies and Reposts
   fill the page in the same masonry as the lists of notes, articles and
-  photos (`components/BreakpointMasonry.jsx`).
-  The tab is in the address. Whether reposts are among the posts is the
-  profile's choice, switched under Settings › Access
+  photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
+  is drawn as itself, not inside a card for whoever reposted it.
+  The tab is in the address. Reposts are not among the posts unless the
+  profile's owner asks for that, under Settings › Access
   (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
   it.
 

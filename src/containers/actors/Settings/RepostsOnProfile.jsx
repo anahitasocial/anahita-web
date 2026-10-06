@@ -14,12 +14,13 @@ import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
 
-// Whether what this person or group reposts is shown among the posts on its
-// profile. On unless they say otherwise.
+// Whether what this person reposts is also shown among the posts on their
+// profile. For people only: nothing else reposts.
+// Off unless they say otherwise: a profile's posts are what was
+// posted on it, and reposts have a tab of their own.
 //
 // Saved as soon as it is switched: one choice, with nothing else to send
-// along with it. The server keeps it as its opposite, "hide", so that a
-// profile from before the choice existed shows its reposts.
+// along with it.
 const ActorsSettingsRepostsOnProfile = ({
   actor,
   namespace,
@@ -29,7 +30,7 @@ const ActorsSettingsRepostsOnProfile = ({
 }) => {
   const [isSaving, setIsSaving] = useState(false);
 
-  const shown = !actor.hideRepostsOnProfile;
+  const shown = Boolean(actor.showRepostsOnProfile);
 
   const handleChange = (event) => {
     const show = event.target.checked;

@@ -44,11 +44,12 @@ const ActorBody = ({
   selectedTab = null,
 }) => {
   const namespace = getNamespace(actor);
-  // The profile's own lists come first: what was posted on it, what its
-  // owner replied, and what they reposted. The last two are the feed asked
-  // for differently, so they are there wherever the feed is.
+  // The profile's own lists come first: what was posted on it and, for a
+  // person, what they replied and what they reposted. Only people reply
+  // and repost, so a group or any other kind of actor has the first alone.
+  const hasOwnWords = utils.node.isPerson(actor);
   const featureTabs = getActorFeatureTabs(actor).flatMap((tab) => {
-    return tab === 'feed' ? ['feed', 'replies', 'reposts'] : [tab];
+    return tab === 'feed' && hasOwnWords ? ['feed', 'replies', 'reposts'] : [tab];
   });
   const defaultTab = featureTabs[0] || 'feed';
   const known = (tab) => {

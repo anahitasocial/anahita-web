@@ -307,16 +307,7 @@ const ActorsSettings = ({
   const groupPanels = {
     [ITEMS.INFO]: <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
-    // Two cards in one tab: who can see the group, and whether what it
-    // reposts shows among its posts.
-    [ITEMS.ACCESS]: (
-      <>
-        <ActorAccess />
-        <Box sx={{ mt: 2 }}>
-          <ActorReposts />
-        </Box>
-      </>
-    ),
+    [ITEMS.ACCESS]: <ActorAccess />,
     [ITEMS.PERMISSIONS]: <ActorPermissions />,
     [ITEMS.DANGER]: (
       <>

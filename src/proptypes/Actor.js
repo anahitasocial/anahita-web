@@ -43,8 +43,8 @@ export default shape({
   updatedAt: string,
   isAdministrated: bool,
   isLeader: bool,
-  // Whether what this actor reposts is kept out of its profile's posts.
-  hideRepostsOnProfile: bool,
+  // Whether what this actor reposts is also among its profile's posts.
+  showRepostsOnProfile: bool,
   websiteUrl: string,
   // When the installation featured this actor for onboarding, or absent.
   featuredAt: string,

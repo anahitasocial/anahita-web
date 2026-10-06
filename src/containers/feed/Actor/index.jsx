@@ -41,8 +41,8 @@ const FILTER = {
 
 // One of a profile's three lists, chosen by `filter`:
 //
-//   posts     what was posted on it, and what its owner reposted, unless
-//             they keep reposts off their profile. The server decides that.
+//   posts     what was posted on it. Also what its owner reposted, when
+//             they have asked for that. The server decides.
 //   replies   the replies its owner wrote, each under a line saying what it
 //             answers. A reply links to its own page, where its thread is.
 //   reposts   what its owner reposted.
@@ -148,6 +148,48 @@ const FeedActorBrowse = ({
             <FeedReplyButton
               key={`node-reply-${node.id}`}
               post={node}
+            />,
+          ]}
+        />
+      );
+    }
+
+    // In the list of reposts, the post that was reposted is shown as
+    // itself. Everything in that list is a repost by this person, so a
+    // frame around each one saying so adds nothing.
+    if (isRepost(node) && filter === FILTER.REPOSTS && node.parent) {
+      return (
+        <FeedCardDefault
+          node={node.parent}
+          key={key}
+          showOwner={Boolean(
+            node.parent.owner &&
+            node.parent.author &&
+            node.parent.owner.id !== node.parent.author.id,
+          )}
+          stats={[
+            <LikesStats
+              key={`node-like-stat-${node.parent.id}`}
+              node={node.parent}
+            />,
+            <ReplyStats
+              key={`node-reply-stat-${node.parent.id}`}
+              node={node.parent}
+            />,
+          ]}
+          actions={isAuthenticated && [
+            <Like
+              node={node.parent}
+              repostNode={node}
+              key={`node-like-${node.id}`}
+            />,
+            <FeedReplyButton
+              key={`node-reply-${node.id}`}
+              post={node.parent}
+            />,
+            <ControlRepost
+              key={`node-repost-${node.id}`}
+              parent={node.parent}
             />,
           ]}
         />

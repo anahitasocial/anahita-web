@@ -84,8 +84,8 @@ export default {
   // Le réglage qui affiche ou non les repartages parmi les publications d'un profil.
   repostsOnProfile: {
     title: 'Repartages',
-    label: 'Afficher les repartages dans l\'onglet Publications',
-    help: 'Désactivé, les repartages ne sont que dans l\'onglet Repartages de ce profil. Les abonnés les reçoivent toujours dans leurs propres fils.',
+    label: 'Afficher aussi les repartages dans l\'onglet Publications',
+    help: 'Les repartages sont toujours dans l\'onglet Repartages de ce profil, et les abonnés les reçoivent dans leurs propres fils. Activé, ils apparaissent aussi parmi les publications.',
     saved: 'Le réglage a été enregistré.',
     notSaved: 'Le réglage n\'a pas pu être enregistré.',
   },

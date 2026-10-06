@@ -84,8 +84,8 @@ export default {
   // The setting for whether reposts show among a profile's posts.
   repostsOnProfile: {
     title: 'Reposts',
-    label: 'Show reposts in the Posts tab',
-    help: 'Off, reposts are only in the Reposts tab of this profile. Followers still get them in their own feeds.',
+    label: 'Also show reposts in the Posts tab',
+    help: 'Reposts are always in the Reposts tab of this profile, and followers get them in their own feeds. On, they are among the posts as well.',
     saved: 'The setting was saved.',
     notSaved: 'The setting could not be saved.',
   },
