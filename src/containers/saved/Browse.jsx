@@ -15,11 +15,11 @@ import i18n from '../../languages';
 
 const LIMIT = 20;
 
-// Saved: the posts the viewer saved, most recently saved first. On their own
-// profile only, and theirs alone to see.
+// Saved: the posts the viewer saved, most recently saved first. Theirs alone
+// to see; the server sends this list to nobody else.
 //
 // Kept here and not in the store: nothing else on the page shows this list,
-// and it is read again each time the tab is opened. A post that its saver
+// and it is read again each time the page is opened. A post that its saver
 // can no longer see is not sent, so the list can be shorter than what was
 // saved.
 const SavedBrowse = () => {
@@ -81,59 +81,49 @@ const SavedBrowse = () => {
 
   if (posts.length === 0) {
     return (
-      <Box sx={{ p: 2 }}>
-        <Typography variant="body1">
-          {i18n.t('media:saved.empty')}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {i18n.t('media:saved.private')}
-        </Typography>
-      </Box>
+      <Typography variant="body1" sx={{ p: 2 }}>
+        {i18n.t('media:saved.empty')}
+      </Typography>
     );
   }
 
   return (
-    <>
-      <Typography variant="body2" color="textSecondary" sx={{ pb: 2 }}>
-        {i18n.t('media:saved.private')}
-      </Typography>
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={() => {
-          load(posts.length);
-        }}
-        hasMore={posts.length < total}
-        loader={<Progress key="saved-progress" />}
-      >
-        <Masonry>
-          {posts.map((post) => {
-            return (
-              <Box key={`saved-${post.id}`} sx={{ mb: 2 }}>
-                <MediumCard
-                  medium={post}
-                  stats={
-                    <>
-                      <LikesStats node={post} />
-                      <ReplyStats node={post} />
-                    </>
-                  }
-                  actions={
-                    <Button
-                      fullWidth
-                      onClick={() => {
-                        handleRemove(post);
-                      }}
-                    >
-                      {i18n.t('media:saved.remove')}
-                    </Button>
-                  }
-                />
-              </Box>
-            );
-          })}
-        </Masonry>
-      </InfiniteScroll>
-    </>
+    <InfiniteScroll
+      dataLength={posts.length}
+      next={() => {
+        load(posts.length);
+      }}
+      hasMore={posts.length < total}
+      loader={<Progress key="saved-progress" />}
+    >
+      <Masonry>
+        {posts.map((post) => {
+          return (
+            <Box key={`saved-${post.id}`} sx={{ mb: 2 }}>
+              <MediumCard
+                medium={post}
+                stats={
+                  <>
+                    <LikesStats node={post} />
+                    <ReplyStats node={post} />
+                  </>
+                }
+                actions={
+                  <Button
+                    fullWidth
+                    onClick={() => {
+                      handleRemove(post);
+                    }}
+                  >
+                    {i18n.t('media:saved.remove')}
+                  </Button>
+                }
+              />
+            </Box>
+          );
+        })}
+      </Masonry>
+    </InfiniteScroll>
   );
 };
 

@@ -46,7 +46,7 @@ Each milestone ends in a shippable state.
 | 15c | ✅ | 25 · Quote posts. Done 2026-10-05 | [quote-posts.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/quote-posts.md) | services + web | 3–4 | 13 |
 | 16 | ✅ | 15 · Pinned posts (one a profile); story-service removed. Done 2026-10-05. The "New from people you follow" tray was built and taken out again: see Kept for later | [pinned-posts-and-activity-tray.md](done/pinned-posts-and-activity-tray.md) | services + web | 3–4 | 0 |
 | 16b | ✅ | 22 · Interactions (first called Post activity): likes, reposts, quotes and replies, with who did each. Done 2026-10-05. Views and insights were set aside by the user's decision | [post-insights.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/post-insights.md) | services + web | 2–3 | 7, 25 |
-| 16c | ✅ | 33 · Saved posts: save a post privately, and a Saved tab on your own profile. No folders. Asked for and done 2026-10-06; no plan file, see the architecture pages of both repos | — | services + web | 1 | — |
+| 16c | ✅ | 33 · Saved posts: save a post privately, and a Saved page in the left menu (first a tab on your own profile). No folders; collections may come later. Asked for and done 2026-10-06; no plan file, see the architecture pages of both repos | — | services + web | 1 | — |
 | **M6. Community** |  | | | | **about 10–13** | |
 | 17 | ⬜ | 11 · Invitations (plus 8 socialgraph bug fixes) | [actor-invitations.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/actor-invitations.md) | services + web | 5–6 | 4b limiter |
 | 18 | ⬜ | 12 · Events | [events.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/events.md) | services + web | 5–7 | 11 |

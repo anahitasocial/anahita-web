@@ -38,13 +38,13 @@ export default {
   },
   // Enregistrer une publication pour la retrouver. Privé.
   saved: {
+    title: 'Enregistrements',
     save: 'Enregistrer',
     remove: 'Retirer des enregistrements',
-    saved: 'Enregistrée. Elle est dans l\'onglet Enregistrements de votre profil.',
+    saved: 'Enregistrée. Elle est sous Enregistrements dans le menu.',
     removed: 'Retirée des enregistrements.',
     failed: 'Cette action n\'a pas pu être effectuée.',
     empty: 'Rien d\'enregistré pour l\'instant.',
-    private: 'Vous seul pouvez voir ce que vous enregistrez. Personne n\'est informé que vous avez enregistré sa publication.',
     loadFailed: 'Vos enregistrements n\'ont pas pu être chargés.',
   },
   // The language button in the composer.

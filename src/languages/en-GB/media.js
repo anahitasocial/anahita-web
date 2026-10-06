@@ -38,13 +38,13 @@ export default {
   },
   // Saving a post to find it again. Private to whoever saved it.
   saved: {
+    title: 'Saved',
     save: 'Save',
     remove: 'Remove from saved',
-    saved: 'Saved. It is in the Saved tab of your profile.',
+    saved: 'Saved. It is under Saved in the menu.',
     removed: 'Removed from saved.',
     failed: 'That could not be done.',
     empty: 'Nothing saved yet.',
-    private: 'Only you can see what you save. Nobody is told that you saved their post.',
     loadFailed: 'Your saved posts could not be loaded.',
   },
   // The language button in the composer.

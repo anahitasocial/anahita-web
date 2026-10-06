@@ -9,6 +9,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
+import SavedIcon from '@mui/icons-material/Bookmark';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
 // ExitToApp, not LockOpen.
@@ -66,6 +67,19 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
+      {/* What the viewer saved: theirs, so it is here beside Home and not
+          on their profile, which is what other people look at. */}
+      {isAuthenticated &&
+        <ListItemButton
+          component={Link}
+          to="/saved"
+          selected={pathname === '/saved'}
+        >
+          <ListItemIcon>
+            <SavedIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('media:saved.title')} />
+        </ListItemButton>}
       {/* People, groups, hashtags and places: nothing a visitor to a
           members-only site can be shown, so they are not offered. Each
           would only lead to the same request to sign in. */}

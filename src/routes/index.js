@@ -46,6 +46,7 @@ import People from '../containers/people/Browse';
 import PeopleAdd from '../containers/people/Add';
 
 import FeedsPage from '../containers/feeds';
+import SavedPage from '../containers/saved';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
@@ -227,6 +228,15 @@ const AppRoutes = () => {
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />
             <Route path="/groups/:id" element={<GroupsRead />} />
 
+            {/* What the viewer saved. Reached from the left menu. */}
+            <Route
+              path="/saved"
+              element={
+                <AuthenticatedRoute>
+                  <SavedPage />
+                </AuthenticatedRoute>
+          }
+            />
             <Route
               path="/notifications"
               element={

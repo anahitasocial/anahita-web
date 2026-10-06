@@ -21,7 +21,6 @@ import MediaBrowse from '../../media/Browse';
 import Progress from '../../../components/Progress';
 import SocialgraphTabs from './SocialgraphTabs';
 import FeedActorBrowse from '../../feed/Actor';
-import SavedBrowse from '../../saved/Browse';
 import HeaderMeta from '../../../components/HeaderMeta';
 
 import actions from '../../../actions';
@@ -201,7 +200,6 @@ const ActorsRead = (props) => {
             filter="replies"
             key={`feed-replies-${actor.id}`}
           />}
-        saved={isViewer && <SavedBrowse />}
         reposts={actor.id &&
           <FeedActorBrowse
             actor={actor}

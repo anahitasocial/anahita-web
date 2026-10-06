@@ -70,7 +70,6 @@ export default {
     posts: 'Publications',
     replies: 'Réponses',
     reposts: 'Repartages',
-    saved: 'Enregistrements',
   },
   none: {
     replies: 'Aucune réponse à afficher.',
