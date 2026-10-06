@@ -399,6 +399,11 @@ replies, made directly to the post.
   (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
   replies and says it when it is limited.
 
+- **A post's menu in a feed** has Edit and Delete where the server says the
+  viewer may (`authorized.edit`, `authorized.delete`, sent with each feed
+  item). Edit opens the post's page with its form up (`?edit=1`, which is
+  then taken out of the address). A deleted post leaves every feed on the
+  page, with any repost of it (`reducers/createFeed.js`).
 - **In a feed**, the reply button under a post is a link to the post's page,
   where its thread is (`containers/feed/components/ReplyButton.jsx`), and
   `components/ReplyStats.jsx` shows how many replies it has.

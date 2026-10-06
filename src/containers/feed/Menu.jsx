@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -21,6 +22,7 @@ const { withRef } = utils.component;
 const {
   getOwnerName,
   isSubscribable,
+  getURL,
 } = utils.node;
 
 const FollowActionWithRef = withRef(ControlFollow);
@@ -32,6 +34,7 @@ const FeedItemMenu = ({
   viewer,
 }) => {
   const [menuAnchorEl, setAnchorEl] = useState(null);
+  const navigate = useNavigate();
 
   const handleOpenMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -45,10 +48,13 @@ const FeedItemMenu = ({
   const { id } = node;
   const canSubscribe = node.id && isSubscribable(node);
   const canFollow = permissions.actor.canFollow(node.owner, viewer);
-  const canDelete = node.commands && node.commands.includes('delete');
+  // Whether the viewer may edit and remove the post is the server's
+  // answer, sent with it in the feed as on its own page.
+  const canEdit = permissions.medium.canEdit(viewer, node);
+  const canDelete = permissions.medium.canDelete(viewer, node);
   const report = useReport(viewer, node);
 
-  if (!canSubscribe && !canFollow && !canDelete && !report.canReport) {
+  if (!canSubscribe && !canFollow && !canEdit && !canDelete && !report.canReport) {
     return null;
   }
 
@@ -87,10 +93,23 @@ const FeedItemMenu = ({
             isSubscribedByViewer={node.isSubscribedByViewer}
             key={`feed-notification-${id}`}
           />}
+        {/* Editing is done on the post's own page, which is opened with
+            its form already up. */}
+        {canEdit &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              navigate(`${getURL(node)}?edit=1`);
+            }}
+          >
+            {i18n.t('actions:edit')}
+          </MenuItem>}
         {canDelete &&
           <DeleteActionWithRef
             node={node}
             key={`feed-delete-${id}`}
+            component="menuitem"
+            confirmMessage={i18n.t('media:confirm.delete')}
           />}
         {report.canReport &&
           <MenuItem
