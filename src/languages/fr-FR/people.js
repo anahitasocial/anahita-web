@@ -13,6 +13,7 @@ export default {
     features: 'Fonctionnalités',
     permissions: 'Autorisations',
     access: 'Accès',
+    reposts: 'Repartages',
     delete: 'Supprimer',
     // The card title. Its text is in the accounts namespace, shared with
     // the accounts list.

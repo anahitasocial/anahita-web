@@ -48,4 +48,8 @@ export default shape({
   commentStatus: bool,
   // Who may reply: "anyone", "nobody", or groups joined by commas.
   replyAccess: string,
+  // On a reply: the post at the top of its thread, and what it answers.
+  rootId: number,
+  parentId: number,
+  root: object,
 });

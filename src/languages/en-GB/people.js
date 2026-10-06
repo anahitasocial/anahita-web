@@ -13,6 +13,7 @@ export default {
     features: 'Features',
     permissions: 'Permissions',
     access: 'Access',
+    reposts: 'Reposts',
     // Deletion copy, namespace-specific — groups carry their own in groups.js,
     // because the sign-in and passkey lines here are meaningless for a group.
     delete: 'Delete',

@@ -198,6 +198,7 @@ const AppRoutes = () => {
           }
             />
             <Route path="/people/:id/:tab/:subtab" element={<PeopleRead />} />
+            <Route path="/people/:id/:tab" element={<PeopleRead />} />
             <Route path="/people/:id" element={<PeopleRead />} />
 
             {/* Groups — static paths before parameterized */}
@@ -227,6 +228,7 @@ const AppRoutes = () => {
           }
             />
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
+            <Route path="/groups/:id/:tab" element={<GroupsRead />} />
             <Route path="/groups/:id" element={<GroupsRead />} />
 
             <Route

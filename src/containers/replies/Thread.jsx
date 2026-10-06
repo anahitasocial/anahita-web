@@ -41,6 +41,7 @@ import visitor from '../../utils/visitor';
 // the thread itself for whether they may reply at all.
 const RepliesThread = ({
   root,
+  under = null,
   viewer,
   isAuthenticated,
   heldBack = false,
@@ -197,7 +198,13 @@ const RepliesThread = ({
     );
   }
 
-  const { thread: shown, hidden } = thread.split(replies, root.id);
+  // On the page of a single reply, only what was said under that reply,
+  // and what is written here answers it.
+  const top = under || root;
+  const { thread: shown, hidden } = thread.split(
+    under ? thread.under(replies, under.id) : replies,
+    top.id,
+  );
 
   const item = (node) => {
     return (
@@ -219,7 +226,7 @@ const RepliesThread = ({
       {canReply &&
         <ReplyForm
           onSubmit={(body) => {
-            return handleReply(root, body);
+            return handleReply(top, body);
           }}
         />}
       {/* Said to everybody, the people who can still reply included, so
@@ -324,7 +331,12 @@ const RepliesThread = ({
 
 RepliesThread.propTypes = {
   // The post the thread hangs from.
-  root: MediumType.isRequired,
+  root: PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    replyAccess: PropTypes.string,
+  }).isRequired,
+  // A reply in the thread, to show only what is under it.
+  under: MediumType,
   viewer: PersonType.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   // True for a visitor on a site that shows only a preview.

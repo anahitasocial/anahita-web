@@ -152,4 +152,25 @@ describe('changing a thread without reading it again', () => {
       return item.hidden;
     })).toBe(false);
   });
+
+  it('picks out the part of a thread under one reply', () => {
+    const replies = [
+      { id: 1, parentId: ROOT },
+      { id: 2, parentId: 1 },
+      { id: 3, parentId: ROOT },
+      { id: 4, parentId: 2 },
+      { id: 5, parentId: 3 },
+    ];
+
+    expect(thread.under(replies, 1).map((reply) => {
+      return reply.id;
+    })).toEqual([2, 4]);
+    expect(thread.under(replies, 4)).toEqual([]);
+
+    // Arranged from the reply down, as the page that shows it draws them.
+    const nested = thread.nest(thread.under(replies, 1), 1);
+    expect(nested.length).toBe(1);
+    expect(nested[0].reply.id).toBe(2);
+    expect(nested[0].children[0].reply.id).toBe(4);
+  });
 });

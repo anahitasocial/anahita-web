@@ -112,6 +112,7 @@ history. The main paths:
 | `/` | The home page when signed out, the dashboard when signed in |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
+| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: `replies`, `reposts`, or one of its kinds of post |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
@@ -401,6 +402,20 @@ replies, made directly to the post.
 - **In a feed**, the reply button under a post is a link to the post's page,
   where its thread is (`containers/feed/components/ReplyButton.jsx`), and
   `components/ReplyStats.jsx` shows how many replies it has.
+
+- **A reply has a page of its own**, at `/notes/:id` like any note. It is
+  drawn as the post, with what it answers above it
+  (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
+  that is under it: the thread is read whole for the post at the top, and
+  `utils/thread.js` picks out the branch. Replying there answers that reply.
+- **A profile has three lists**: Posts, Replies and Reposts, the first three
+  tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
+  asked for with a different `filter` (`containers/feed/Actor`); they share
+  one place in the store, so each is keyed and read when its tab is opened.
+  The tab is in the address. Whether reposts are among the posts is the
+  profile's choice, switched under Settings › Access
+  (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
+  it.
 
 There is no comment code left: the comment components, actions, reducers,
 API modules and prop types went with the comment service. Two names remain

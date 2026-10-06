@@ -6,6 +6,7 @@ import createApi, { browseOwned } from './create';
 import createActor from './actor';
 import photos from './photos';
 import replies from './replies';
+import reposts from './reposts';
 
 import agreements from './agreements';
 import authLogs from './authLogs';
@@ -136,6 +137,7 @@ const apis = {
   reauth,
   replies,
   repost,
+  reposts,
   session,
   socialgraph,
   inbounds,

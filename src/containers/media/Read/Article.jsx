@@ -43,6 +43,7 @@ const MediumReadArticle = ({
   menu = null,
   locations = null,
   replies = null,
+  context = null,
   editing = false,
   form = null,
   stats = null,
@@ -75,6 +76,7 @@ const MediumReadArticle = ({
     >
       <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
+          {context}
           {medium.owner.objectType.split('.')[1] !== 'people' &&
             <CardHeaderOwner node={medium} />}
           {cover}
@@ -163,6 +165,8 @@ MediumReadArticle.propTypes = {
   medium: MediumType.isRequired,
   access: PropTypes.node,
   locations: PropTypes.node,
+  // What a reply is a reply to, above a reply shown on its own.
+  context: PropTypes.node,
   // The thread of replies under the article.
   replies: PropTypes.node,
   form: PropTypes.node,

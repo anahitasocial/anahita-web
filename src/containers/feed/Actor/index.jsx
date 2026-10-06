@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import Typography from '@mui/material/Typography';
 
 import actions from '../../../actions';
 
@@ -15,26 +16,42 @@ import Progress from '../../../components/Progress';
 import FeedCardDefault from '../components/Default';
 import FeedCardRepost from '../components/Repost';
 import FeedReplyButton from '../components/ReplyButton';
+import ReplyContext from '../../replies/ReplyContext';
 import ActorType from '../../../proptypes/Actor';
 import ActorDefault from '../../../proptypes/ActorDefault';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
+import i18n from '../../../languages';
 import utils from '../../../utils';
 
 const {
   isRepost,
+  getURL,
 } = utils.node;
 
 const { LIMIT } = APP.BROWSE;
 
-// A profile's feed: what was posted on it, and what its owner reposted.
+const FILTER = {
+  POSTS: 'posts',
+  REPLIES: 'replies',
+  REPOSTS: 'reposts',
+};
+
+// One of a profile's three lists, chosen by `filter`:
 //
-// A feed holds posts and reposts. Replies are not in it: they are read in
-// their thread, on the post's own page, which is where the reply button
-// goes.
+//   posts     what was posted on it, and what its owner reposted, unless
+//             they keep reposts off their profile. The server decides that.
+//   replies   the replies its owner wrote, each under a line saying what it
+//             answers. A reply links to its own page, where its thread is.
+//   reposts   what its owner reposted.
+//
+// The three share one place in the store, so the page shows one at a time
+// and gives each its own key: changing tab empties the list and reads the
+// next.
 const FeedActorBrowse = ({
   actor = { ...ActorDefault },
+  filter = FILTER.POSTS,
   browseList,
   resetList,
   alertError,
@@ -54,10 +71,13 @@ const FeedActorBrowse = ({
   }, []);
 
   useEffect(() => {
-    if (!isFetching) {
+    // The first page is always asked for. A list that was being read when
+    // the tab changed is still marked as reading, and waiting for it would
+    // leave this one empty.
+    if (!isFetching || start === 0) {
       browseList({
         id: actor.id,
-        include_reposts: true,
+        filter,
         start,
         limit: LIMIT,
       });
@@ -74,6 +94,16 @@ const FeedActorBrowse = ({
     return setStart(start + LIMIT);
   };
 
+  // The lists of replies and of reposts are often empty, and an empty
+  // tab with nothing in it reads as one that failed to load.
+  if (!isFetching && !hasMore && items.allIds.length === 0 && filter !== FILTER.POSTS) {
+    return (
+      <Typography variant="body2" color="textSecondary" sx={{ p: 2 }}>
+        {i18n.t(`replies:none.${filter}`)}
+      </Typography>
+    );
+  }
+
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
@@ -87,6 +117,45 @@ const FeedActorBrowse = ({
         const node = items.byId[itemId];
         const key = `feed_nodes_${node.id}`;
         const Like = ControlLike('feed_actor');
+
+        // A reply, in the list of somebody's replies. Shown with what it
+        // answers, and without the menu and the repost button a post has:
+        // a reply is edited, removed and hidden in its thread.
+        if (node.rootId) {
+          return (
+            <FeedCardDefault
+              node={node}
+              key={key}
+              context={
+                <ReplyContext
+                  answered={node.parent}
+                  href={getURL(node)}
+                />
+              }
+              stats={[
+                <LikesStats
+                  key={`node-like-stat-${node.id}`}
+                  node={node}
+                />,
+                <ReplyStats
+                  key={`node-reply-stat-${node.id}`}
+                  node={node}
+                />,
+              ]}
+              actions={isAuthenticated && [
+                <Like
+                  node={node}
+                  repostNode={null}
+                  key={`node-like-${node.id}`}
+                />,
+                <FeedReplyButton
+                  key={`node-reply-${node.id}`}
+                  post={node}
+                />,
+              ]}
+            />
+          );
+        }
 
         if (isRepost(node)) {
           return (
@@ -182,6 +251,7 @@ const FeedActorBrowse = ({
 
 FeedActorBrowse.propTypes = {
   actor: ActorType,
+  filter: PropTypes.oneOf(['posts', 'replies', 'reposts']),
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,

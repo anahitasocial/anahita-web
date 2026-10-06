@@ -31,6 +31,7 @@ import Info from './Info';
 import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
 import Permissions from './Permissions';
+import RepostsOnProfile from './RepostsOnProfile';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -107,6 +108,7 @@ const cardsFor = (namespace) => {
       ActorInfo: Info(namespace),
       ActorAccess: Access(namespace),
       ActorPermissions: Permissions(namespace),
+      ActorReposts: RepostsOnProfile(namespace),
       ActorDelete: Delete(namespace),
       ActorPurge: Purge(namespace),
       ActorArchive: Archive(namespace),
@@ -178,6 +180,7 @@ const ActorsSettings = ({
     ActorPurge,
     ActorArchive,
     ActorDisable,
+    ActorReposts,
   } = cardsFor(namespace);
 
   const canDelete = permissions.canDelete(actor);
@@ -219,6 +222,7 @@ const ActorsSettings = ({
       [ITEMS.WEBAUTHN]: <WebAuthn />,
       [ITEMS.AUTHLOGS]: <AuthLogs personId={actor.id} />,
       [ITEMS.ACCESS]: <ActorAccess />,
+      [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the
@@ -303,7 +307,16 @@ const ActorsSettings = ({
   const groupPanels = {
     [ITEMS.INFO]: <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
-    [ITEMS.ACCESS]: <ActorAccess />,
+    // Two cards in one tab: who can see the group, and whether what it
+    // reposts shows among its posts.
+    [ITEMS.ACCESS]: (
+      <>
+        <ActorAccess />
+        <Box sx={{ mt: 2 }}>
+          <ActorReposts />
+        </Box>
+      </>
+    ),
     [ITEMS.PERMISSIONS]: <ActorPermissions />,
     [ITEMS.DANGER]: (
       <>

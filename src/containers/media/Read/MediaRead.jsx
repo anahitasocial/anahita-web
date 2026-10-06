@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Link from '@mui/material/Link';
 
 import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
@@ -11,11 +12,13 @@ import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
 import RepliesThread from '../../replies/Thread';
+import ReplyContext from '../../replies/ReplyContext';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
+import i18n from '../../../languages';
 import utils from '../../../utils';
 
 const { getPortraitURL, getCoverURL } = utils.node;
@@ -40,6 +43,19 @@ const MediaReadView = ({
 }) => {
   const portrait = getPortraitURL(medium, 'large');
   const cover = getCoverURL(medium, 'large');
+
+  // A reply opened on its own page. It is shown as the post, with what it
+  // answers above it and what was said under it below. The thread it is in
+  // is the root's; a reply the viewer was not sent the root of has none to
+  // show.
+  const isReply = Boolean(medium.rootId);
+  const replyThread = isReply && medium.root ? (
+    <RepliesThread
+      root={medium.root}
+      under={medium}
+      key={`replies-${medium.id}`}
+    />
+  ) : null;
 
   const mediumProps = {
     medium,
@@ -88,8 +104,21 @@ const MediaReadView = ({
     // liked and removed like any post. What used to be comments are replies
     // now, made directly to the post. Keyed by the post, so a thread is not
     // carried from one post to the next.
-    replies: medium.id ? (
+    replies: medium.id && !isReply ? (
       <RepliesThread root={medium} key={`replies-${medium.id}`} />
+    ) : replyThread,
+    // Above a reply shown on its own: what it is a reply to.
+    context: isReply && medium.root ? (
+      <ReplyContext answered={medium.root}>
+        {medium.parentId !== medium.rootId &&
+          <Link
+            href={`/notes/${medium.parentId}/`}
+            variant="caption"
+            color="textSecondary"
+          >
+            {i18n.t('replies:context.answered')}
+          </Link>}
+      </ReplyContext>
     ) : null,
     locations: (
       <LocationsGadget

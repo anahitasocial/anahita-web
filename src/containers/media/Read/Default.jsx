@@ -47,6 +47,7 @@ const MediumReadDefault = ({
   menu = null,
   locations = null,
   replies = null,
+  context = null,
   editing = false,
   form = null,
   stats = null,
@@ -97,6 +98,7 @@ const MediumReadDefault = ({
     >
       <Grid size={{ xs: 12, md: 8 }}>
         <Card component="article">
+          {context}
           {medium.owner.type.includes('person') &&
             <CardHeaderOwner node={medium} />}
           {cover &&
@@ -203,6 +205,8 @@ MediumReadDefault.propTypes = {
   medium: MediumType.isRequired,
   access: PropTypes.node,
   locations: PropTypes.node,
+  // What a reply is a reply to, above a reply shown on its own.
+  context: PropTypes.node,
   // The thread of replies under the post.
   replies: PropTypes.node,
   form: PropTypes.node,

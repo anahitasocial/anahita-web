@@ -76,6 +76,23 @@ const split = (replies, rootId) => {
   };
 };
 
+// The part of a thread that is under one reply: the replies made to it, the
+// replies made to those, and so on. For the page that shows a reply on its
+// own, which is sent the whole thread it is in.
+//
+// The list is oldest first, so a reply always comes after what it answers
+// and one pass finds every descendant.
+const under = (replies, id) => {
+  const inBranch = { [id]: true };
+  return replies.filter((reply) => {
+    if (reply.id !== id && inBranch[reply.parentId]) {
+      inBranch[reply.id] = true;
+      return true;
+    }
+    return false;
+  });
+};
+
 const indentOf = (depth) => {
   return Math.min(depth, MAX_INDENT);
 };
@@ -132,17 +149,17 @@ const remove = (replies, id) => {
 // The list after a reply is hidden or shown again: it, and everything said
 // under it, to any depth.
 const setHidden = (replies, id, hidden) => {
-  const under = { [id]: true };
+  const branch = { [id]: true };
   // Oldest first, so a reply always comes after what it answers and one
   // pass finds every descendant.
   replies.forEach((reply) => {
-    if (under[reply.parentId]) {
-      under[reply.id] = true;
+    if (branch[reply.parentId]) {
+      branch[reply.id] = true;
     }
   });
 
   return replies.map((reply) => {
-    return under[reply.id] ? { ...reply, hidden } : reply;
+    return branch[reply.id] ? { ...reply, hidden } : reply;
   });
 };
 
@@ -157,4 +174,5 @@ export default {
   replace,
   setHidden,
   split,
+  under,
 };

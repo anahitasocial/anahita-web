@@ -53,7 +53,8 @@ const MediaMenu = ({
   const canSubscribe = isSubscribable(medium);
   // Who can reply is the post's own setting, changed by whoever may edit
   // the post.
-  const canSetReplies = canEdit && isCommentable(medium);
+  // Not on a reply, which follows the post at the top of its thread.
+  const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
   const canDelete = permissions.canDelete(viewer, medium);
   const report = useReport(viewer, medium);
   // A photo post's images are changed in a dialog of their own: their

@@ -65,6 +65,30 @@ export default {
     saved: 'Les personnes pouvant répondre ont été mises à jour.',
     notSaved: 'Ce réglage n\'a pas pu être mis à jour.',
   },
+  // Les trois listes d'un profil.
+  tabs: {
+    posts: 'Publications',
+    replies: 'Réponses',
+    reposts: 'Repartages',
+  },
+  none: {
+    replies: 'Aucune réponse à afficher.',
+    reposts: 'Aucun repartage à afficher.',
+  },
+  // Ce à quoi une réponse répond, quand elle est affichée hors de son fil.
+  context: {
+    replyingTo: 'En réponse à {{ name }}',
+    replying: 'En réponse à une publication',
+    answered: 'Voir la réponse à laquelle celle-ci répond',
+  },
+  // Le réglage qui affiche ou non les repartages parmi les publications d'un profil.
+  repostsOnProfile: {
+    title: 'Repartages',
+    label: 'Afficher les repartages dans l\'onglet Publications',
+    help: 'Désactivé, les repartages ne sont que dans l\'onglet Repartages de ce profil. Les abonnés les reçoivent toujours dans leurs propres fils.',
+    saved: 'Le réglage a été enregistré.',
+    notSaved: 'Le réglage n\'a pas pu être enregistré.',
+  },
   prompts: {
     added: 'Votre réponse a été publiée.',
     notAdded: 'Votre réponse n\'a pas pu être publiée.',

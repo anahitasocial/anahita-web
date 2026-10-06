@@ -65,6 +65,30 @@ export default {
     saved: 'Who can reply was updated.',
     notSaved: 'Who can reply could not be updated.',
   },
+  // The three lists on a profile.
+  tabs: {
+    posts: 'Posts',
+    replies: 'Replies',
+    reposts: 'Reposts',
+  },
+  none: {
+    replies: 'No replies to show.',
+    reposts: 'No reposts to show.',
+  },
+  // What a reply is a reply to, where it is shown away from its thread.
+  context: {
+    replyingTo: 'Replying to {{ name }}',
+    replying: 'Replying to a post',
+    answered: 'See the reply this answers',
+  },
+  // The setting for whether reposts show among a profile's posts.
+  repostsOnProfile: {
+    title: 'Reposts',
+    label: 'Show reposts in the Posts tab',
+    help: 'Off, reposts are only in the Reposts tab of this profile. Followers still get them in their own feeds.',
+    saved: 'The setting was saved.',
+    notSaved: 'The setting could not be saved.',
+  },
   prompts: {
     added: 'Your reply was posted.',
     notAdded: 'Your reply could not be posted.',
