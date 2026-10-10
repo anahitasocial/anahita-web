@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -40,7 +41,7 @@ const { LIMIT } = APP.BROWSE;
 //
 // It took the place of a Social Graph tab, to leave the row of tabs to what
 // the profile has posted. Each list is read when its tab is first opened,
-// and more of it when asked.
+// and more of it as the end of it is scrolled to.
 const SocialgraphDialog = ({
   actor,
   open,
@@ -55,10 +56,8 @@ const SocialgraphDialog = ({
   // By kind: { rows, total } once read.
   const [lists, setLists] = useState({});
   const [failed, setFailed] = useState({});
-  const [isLoading, setIsLoading] = useState(false);
 
   const load = (which, start) => {
-    setIsLoading(true);
     api.socialgraph.browse({
       filter: which,
       actor,
@@ -77,8 +76,6 @@ const SocialgraphDialog = ({
       setFailed((before) => {
         return { ...before, [which]: true };
       });
-    }).finally(() => {
-      setIsLoading(false);
     });
   };
 
@@ -136,7 +133,13 @@ const SocialgraphDialog = ({
           );
         })}
       </Tabs>
-      <DialogContent dividers sx={{ p: 0, minHeight: 240 }}>
+      {/* The list scrolls inside the dialog, so that is what is watched
+          for its end. */}
+      <DialogContent
+        dividers
+        id={`socialgraph-scroll-${actor.id}`}
+        sx={{ p: 0, minHeight: 240 }}
+      >
         {heldBack &&
           <Box sx={{ p: 2 }}>
             <SignInPrompt what="followers" />
@@ -151,48 +154,46 @@ const SocialgraphDialog = ({
             {i18n.t(`socialgraph:none.${kind}`)}
           </Typography>}
         {list && list.rows.length > 0 &&
-          <List disablePadding>
-            {list.rows.map((row) => {
-              const showFollow = isAuthenticated && permissions.canFollow(row, viewer);
-              const showRemove = canRemove && row.id !== viewer.id;
-              return (
-                <ListItem
-                  key={`socialgraph-${kind}-${row.id}`}
-                  divider
-                  secondaryAction={
-                    <>
-                      {showRemove && <ControlRemoveFollower actor={actor} follower={row} />}
-                      {showFollow && <ControlFollow actor={row} />}
-                    </>
-                  }
-                >
-                  <ListItemAvatar>
-                    <ActorAvatar actor={row} linked />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <Link href={getURL(row)} color="inherit" underline="hover">
-                        {getActorName(row)}
-                      </Link>
+          <InfiniteScroll
+            dataLength={list.rows.length}
+            next={() => {
+              load(kind, list.rows.length);
+            }}
+            hasMore={list.rows.length < list.total}
+            loader={<Progress key="socialgraph-progress" />}
+            scrollableTarget={`socialgraph-scroll-${actor.id}`}
+          >
+            <List disablePadding>
+              {list.rows.map((row) => {
+                const showFollow = isAuthenticated && permissions.canFollow(row, viewer);
+                const showRemove = canRemove && row.id !== viewer.id;
+                return (
+                  <ListItem
+                    key={`socialgraph-${kind}-${row.id}`}
+                    divider
+                    secondaryAction={
+                      <>
+                        {showRemove && <ControlRemoveFollower actor={actor} follower={row} />}
+                        {showFollow && <ControlFollow actor={row} />}
+                      </>
                     }
-                    secondary={row.alias ? `@${row.alias}` : null}
-                  />
-                </ListItem>
-              );
-            })}
-          </List>}
-        {list && list.rows.length < list.total &&
-          <Box sx={{ p: 1 }}>
-            <Button
-              fullWidth
-              disabled={isLoading}
-              onClick={() => {
-                load(kind, list.rows.length);
-              }}
-            >
-              {i18n.t('socialgraph:more')}
-            </Button>
-          </Box>}
+                  >
+                    <ListItemAvatar>
+                      <ActorAvatar actor={row} linked />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Link href={getURL(row)} color="inherit" underline="hover">
+                          {getActorName(row)}
+                        </Link>
+                      }
+                      secondary={socialgraph.rowNote(row, i18n.t('socialgraph:followsYou'))}
+                    />
+                  </ListItem>
+                );
+              })}
+            </List>
+          </InfiniteScroll>}
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} fullWidth>

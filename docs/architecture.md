@@ -485,7 +485,12 @@ dialog (`actors/Read/SocialgraphDialog.jsx`, `utils/socialgraph.js`) with up
 to three lists: **Followers**, **Leaders** (who the profile follows; people
 only), and **In common** (the people the viewer follows who follow this
 profile; for somebody signed in, on a profile that is not their own). Each is
-read when first opened. A group's administrators can remove a follower there.
+read when first opened and more of it as its end is scrolled to, whoever
+followed most lately first. A group's administrators can remove a follower
+there.
+
+A person who follows the viewer says so: "Follows you" under their name on
+their profile, and beside their name in these lists.
 
 There is no Social Graph tab. An old address such as
 `/people/ana/socialgraph/leaders` opens the profile with that list showing.

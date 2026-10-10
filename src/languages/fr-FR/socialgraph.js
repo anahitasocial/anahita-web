@@ -5,8 +5,8 @@ export default {
   leaders: 'Abonnements',
   mutuals: 'En commun',
   blocks: 'Bloqués',
+  followsYou: 'Vous suit',
   open: 'Abonnés : {{ count }}. Voir qui ils sont',
-  more: 'Afficher plus',
   failed: 'Cette liste n\'a pas pu être chargée.',
   none: {
     followers: 'Aucun abonné à afficher.',

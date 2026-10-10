@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 
 import SocialgraphDialog from './SocialgraphDialog';
@@ -49,6 +51,12 @@ const SocialgraphMeta = ({ actor, openOn = '' }) => {
           {actor.followerCount || 0}
         </Button>
       </Typography>
+      {/* Said here, where it is looked for: under the name of somebody
+          whose profile you are on. */}
+      {actor.isFollowingViewer &&
+        <Box sx={{ textAlign: 'center', mb: 2 }}>
+          <Chip size="small" label={i18n.t('socialgraph:followsYou')} />
+        </Box>}
       <SocialgraphDialog
         actor={actor}
         open={Boolean(startOn)}

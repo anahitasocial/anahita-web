@@ -67,6 +67,15 @@ const merge = (before, response = {}, start = 0) => {
   return { rows, total: page.length === 0 ? rows.length : total };
 };
 
+// The line under a name in a list: their alias, and that they follow the
+// viewer when they do.
+const rowNote = (row = {}, followsYou = '') => {
+  return [
+    row.alias ? `@${row.alias}` : '',
+    row.isFollowingViewer ? followsYou : '',
+  ].filter(Boolean).join(' · ');
+};
+
 export default {
   FOLLOWERS,
   LEADERS,
@@ -75,4 +84,5 @@ export default {
   known,
   counts,
   merge,
+  rowNote,
 };

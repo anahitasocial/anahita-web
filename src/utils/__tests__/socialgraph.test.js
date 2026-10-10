@@ -42,6 +42,15 @@ describe('the numbers on the tabs', () => {
   });
 });
 
+describe('the line under a name', () => {
+  it('is the alias, and that they follow you when they do', () => {
+    expect(socialgraph.rowNote({ alias: 'ana' }, 'Follows you')).toBe('@ana');
+    expect(socialgraph.rowNote({ alias: 'ana', isFollowingViewer: true }, 'Follows you'))
+      .toBe('@ana · Follows you');
+    expect(socialgraph.rowNote({}, 'Follows you')).toBe('');
+  });
+});
+
 describe('adding a page to a list', () => {
   it('starts with the first page', () => {
     const page = { data: [{ id: 1 }, { id: 2 }], pagination: { total: 3 } };

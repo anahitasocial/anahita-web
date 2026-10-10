@@ -5,8 +5,8 @@ export default {
   leaders: 'Leaders',
   mutuals: 'In common',
   blocks: 'Blocked',
+  followsYou: 'Follows you',
   open: 'Followers: {{ count }}. Show who they are',
-  more: 'Show more',
   failed: 'This list could not be loaded.',
   none: {
     followers: 'No followers to show.',
