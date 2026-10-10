@@ -6,6 +6,11 @@ export default {
   mutuals: 'In common',
   blocks: 'Blocked',
   followsYou: 'Follows you',
+  order: {
+    label: 'Order',
+    latest: 'Latest',
+    oldest: 'Oldest',
+  },
   open: 'Followers: {{ count }}. Show who they are',
   failed: 'This list could not be loaded.',
   none: {

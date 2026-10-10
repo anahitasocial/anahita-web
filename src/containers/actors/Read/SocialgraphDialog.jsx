@@ -16,6 +16,8 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 
 import ActorAvatar from '../../../components/ActorAvatar';
@@ -41,7 +43,8 @@ const { LIMIT } = APP.BROWSE;
 //
 // It took the place of a Social Graph tab, to leave the row of tabs to what
 // the profile has posted. Each list is read when its tab is first opened,
-// and more of it as the end of it is scrolled to.
+// and more of it as the end of it is scrolled to. They are in the order
+// people followed, the latest first, or the oldest when that is chosen.
 const SocialgraphDialog = ({
   actor,
   open,
@@ -56,6 +59,7 @@ const SocialgraphDialog = ({
   // By kind: { rows, total } once read.
   const [lists, setLists] = useState({});
   const [failed, setFailed] = useState({});
+  const [order, setOrder] = useState(socialgraph.LATEST);
 
   const load = (which, start) => {
     api.socialgraph.browse({
@@ -63,6 +67,7 @@ const SocialgraphDialog = ({
       actor,
       start,
       limit: LIMIT,
+      dir: socialgraph.direction(order),
     }).then((result) => {
       setLists((before) => {
         return {
@@ -81,6 +86,7 @@ const SocialgraphDialog = ({
   useEffect(() => {
     if (open) {
       setKind(socialgraph.known(kinds, startOn));
+      setOrder(socialgraph.LATEST);
       setLists({});
       setFailed({});
     }
@@ -90,7 +96,7 @@ const SocialgraphDialog = ({
     if (open && !heldBack && !lists[kind] && !failed[kind]) {
       load(kind, 0);
     }
-  }, [open, kind, lists[kind], failed[kind], heldBack]);
+  }, [open, kind, lists[kind], failed[kind], heldBack, order]);
 
   const list = lists[kind];
   // What is in common is counted by the server when it is read, so its
@@ -133,6 +139,36 @@ const SocialgraphDialog = ({
           );
         })}
       </Tabs>
+      {!heldBack &&
+        <Box sx={{
+          px: 2, py: 1, display: 'flex', justifyContent: 'flex-end',
+        }}
+        >
+          <ToggleButtonGroup
+            size="small"
+            color="primary"
+            exclusive
+            value={order}
+            aria-label={i18n.t('socialgraph:order.label')}
+            onChange={(event, value) => {
+              // Pressing the one that is on leaves it on.
+              if (value && value !== order) {
+                setOrder(value);
+                // Every list is read again in the new order.
+                setLists({});
+                setFailed({});
+              }
+            }}
+          >
+            {socialgraph.ORDERS.map((each) => {
+              return (
+                <ToggleButton key={each} value={each} sx={{ px: 2, py: 0 }}>
+                  {i18n.t(`socialgraph:order.${each}`)}
+                </ToggleButton>
+              );
+            })}
+          </ToggleButtonGroup>
+        </Box>}
       {/* The list scrolls inside the dialog, so that is what is watched
           for its end. */}
       <DialogContent

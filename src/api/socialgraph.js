@@ -7,6 +7,8 @@ function browse(params) {
     start,
     limit,
     q,
+    // 'asc' for whoever followed longest ago first. Latest first without.
+    dir,
   } = params;
 
   return axios.get(`/socialgraph/${actor.id}/${filter}/`, {
@@ -14,6 +16,7 @@ function browse(params) {
       start,
       limit,
       q,
+      dir,
     },
   });
 }

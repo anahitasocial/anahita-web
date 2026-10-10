@@ -7,6 +7,18 @@ const FOLLOWERS = 'followers';
 const LEADERS = 'leaders';
 const MUTUALS = 'mutuals';
 
+// The two orders a list can be in: by who followed most lately, or longest
+// ago.
+const LATEST = 'latest';
+const OLDEST = 'oldest';
+const ORDERS = [LATEST, OLDEST];
+
+// What the server is asked for each: nothing for the latest first, which is
+// what it does unasked.
+const direction = (order) => {
+  return order === OLDEST ? 'asc' : undefined;
+};
+
 const isPerson = (actor) => {
   return Boolean(actor && actor.type && actor.type.includes('.person.'));
 };
@@ -99,4 +111,8 @@ export default {
   merge,
   rowNote,
   followLabelKey,
+  LATEST,
+  OLDEST,
+  ORDERS,
+  direction,
 };

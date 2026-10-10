@@ -56,6 +56,15 @@ describe('the button that follows somebody', () => {
   });
 });
 
+describe('the order of a list', () => {
+  it('asks the server for the oldest first, and for nothing otherwise', () => {
+    expect(socialgraph.ORDERS).toEqual(['latest', 'oldest']);
+    expect(socialgraph.direction('oldest')).toBe('asc');
+    expect(socialgraph.direction('latest')).toBeUndefined();
+    expect(socialgraph.direction(undefined)).toBeUndefined();
+  });
+});
+
 describe('the line under a name', () => {
   it('is the alias, and that they follow you when they do', () => {
     expect(socialgraph.rowNote({ alias: 'ana' }, 'Follows you')).toBe('@ana');

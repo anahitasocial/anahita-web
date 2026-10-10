@@ -486,7 +486,8 @@ to three lists: **Followers**, **Following** (who the profile follows; people
 only; `leaders` in the code and the API, which is Anahita's own word for it), and **In common** (the people the viewer follows who follow this
 profile; for somebody signed in, on a profile that is not their own). Each is
 read when first opened and more of it as its end is scrolled to, whoever
-followed most lately first. A group's administrators can remove a follower
+followed most lately first. A Latest / Oldest switch above the list turns the
+order round (`?dir=asc`). A group's administrators can remove a follower
 there.
 
 What is in common is found by one query in the graph, so it is whole, paged

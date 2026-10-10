@@ -6,6 +6,11 @@ export default {
   mutuals: 'En commun',
   blocks: 'Bloqués',
   followsYou: 'Vous suit',
+  order: {
+    label: 'Ordre',
+    latest: 'Récents',
+    oldest: 'Anciens',
+  },
   open: 'Abonnés : {{ count }}. Voir qui ils sont',
   failed: 'Cette liste n\'a pas pu être chargée.',
   none: {
