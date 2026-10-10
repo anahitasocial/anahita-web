@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import BlockIcon from '@mui/icons-material/BlockOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import actions from '../../actions/socialgraph';
 import PersonType from '../../proptypes/Person';
@@ -49,7 +52,9 @@ const ControlsBlock = React.forwardRef(({
         disabled={waiting}
         ref={ref}
       >
-        {title}
+        <MenuItemLabel icon={<BlockIcon fontSize="small" />}>
+          {title}
+        </MenuItemLabel>
       </MenuItem>
     );
   }

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
+import Grid from '@mui/material/Grid';
+
 import ActorHeader from './ActorHeader';
 import ActorBody from './Body';
 import ActorsFollowRequests from './FollowRequests';
@@ -16,6 +18,8 @@ import Cover from '../../cover';
 import NotificationsDialog from '../Notifications/Dialog';
 
 import ControlFollow from '../../controls/Follow';
+import ControlFollowRequest from '../../controls/FollowRequest';
+import LimitedActorCard from '../../../components/LimitedActorCard';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
 import Progress from '../../../components/Progress';
@@ -76,6 +80,21 @@ const ActorsRead = (props) => {
     }
 
     return null;
+  }
+
+  // A profile the viewer may not see, which lets people ask to follow it.
+  // The server sent its name and picture, and that is the page.
+  if (actor.restricted) {
+    return (
+      <Grid container sx={{ justifyContent: 'center' }}>
+        <Grid size={{ xs: 12, sm: 8, md: 6 }}>
+          <LimitedActorCard
+            actor={actor}
+            action={isAuthenticated && <ControlFollowRequest actor={actor} />}
+          />
+        </Grid>
+      </Grid>
+    );
   }
 
   const canEdit = permissions.canEdit(actor);

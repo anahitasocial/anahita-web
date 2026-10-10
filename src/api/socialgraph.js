@@ -26,6 +26,15 @@ function unfollow({ actor, viewer }) {
   return axios.delete(`/socialgraph/${actor.id}/followers/${viewer.id}`);
 }
 
+// Asking to follow a profile the viewer may not see, and taking it back.
+function requestFollow({ actor, viewer }) {
+  return axios.post(`/socialgraph/${actor.id}/follow-requests/${viewer.id}`);
+}
+
+function withdrawFollowRequest({ actor, viewer }) {
+  return axios.delete(`/socialgraph/${actor.id}/follow-requests/${viewer.id}`);
+}
+
 function block({ actor, viewer }) {
   return axios.post(`/socialgraph/${actor.id}/blocks/${viewer.id}`);
 }
@@ -38,6 +47,8 @@ export default {
   browse,
   follow,
   unfollow,
+  requestFollow,
+  withdrawFollowRequest,
   block,
   unblock,
 };

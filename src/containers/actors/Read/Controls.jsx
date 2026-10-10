@@ -4,6 +4,9 @@ import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import SettingsIcon from '@mui/icons-material/SettingsOutlined';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
+import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
 import useReport from '../../reports/useReport';
@@ -59,7 +62,7 @@ const ActorsReadControls = ({
           paper: {
             style: {
               maxHeight: ITEM_HEIGHT * 4.5,
-              width: 200,
+              minWidth: 200,
             },
           },
         }}
@@ -81,7 +84,9 @@ const ActorsReadControls = ({
             component="a"
             href={`${node.getURL(actor)}settings`}
           >
-            {i18n.t('commons:settings')}
+            <MenuItemLabel icon={<SettingsIcon fontSize="small" />}>
+              {i18n.t('commons:settings')}
+            </MenuItemLabel>
           </MenuItem>}
         {/* No delete here. It deleted a whole profile behind a generic
             "Are you sure?", routing around the Danger zone card that states
@@ -95,7 +100,9 @@ const ActorsReadControls = ({
               report.open();
             }}
           >
-            {i18n.t('abuseReports:report')}
+            <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+              {i18n.t('abuseReports:report')}
+            </MenuItemLabel>
           </MenuItem>}
       </Menu>
       {report.dialog}

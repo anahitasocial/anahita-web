@@ -5,6 +5,14 @@ export default {
   website: 'Site web',
   body: 'Description',
   unknown: 'Inconnu',
+  // Un profil que l'on ne peut pas voir, mais auquel on peut demander.
+  limited: {
+    private: 'Ce profil est privé. Ses abonnés peuvent le voir.',
+    request: 'Demander à suivre',
+    requested: 'Demande envoyée',
+    withdraw: 'Retirer la demande',
+    failed: 'Cette action n\'a pas pu être effectuée.',
+  },
   featured: {
     feature: 'Mettre ce compte en avant',
     unfeature: 'Ne plus mettre en avant',

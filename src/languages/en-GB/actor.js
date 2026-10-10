@@ -5,6 +5,14 @@ export default {
   website: 'Website',
   body: 'Description',
   unknown: 'Unknown',
+  // A profile the viewer may not see, which lets people ask to follow it.
+  limited: {
+    private: 'This profile is private. Its followers can see it.',
+    request: 'Request to follow',
+    requested: 'Requested',
+    withdraw: 'Take the request back',
+    failed: 'That could not be done.',
+  },
   featured: {
     feature: 'Feature this account',
     unfeature: 'Stop featuring',

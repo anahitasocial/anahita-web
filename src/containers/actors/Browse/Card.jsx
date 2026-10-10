@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ControlFollow from '../../controls/Follow';
+import ControlFollowRequest from '../../controls/FollowRequest';
+import LimitedActorCard from '../../../components/LimitedActorCard';
 import ActorCard from '../../../components/ActorCard';
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -14,6 +16,17 @@ const ActorsCard = (props) => {
     viewer,
     isAuthenticated,
   } = props;
+
+  // One the viewer may not see, listed because it may be asked. The
+  // server sends its name and picture and nothing else.
+  if (actor.restricted) {
+    return (
+      <LimitedActorCard
+        actor={actor}
+        action={isAuthenticated && <ControlFollowRequest actor={actor} />}
+      />
+    );
+  }
 
   const showFollow = isAuthenticated && permissions.canFollow(actor, viewer);
 

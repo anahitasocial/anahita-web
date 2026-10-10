@@ -478,10 +478,23 @@ Follow button; quotes and replies show what was said and lead to the note.
 
 There are no views in it, and nothing anywhere counts them.
 
+### Private profiles and asking to follow
+
+A profile the viewer may not see is refused by the server, unless it lets
+people ask to follow it. Then the server sends its name and picture, marked
+`restricted`, and the web app draws `components/LimitedActorCard.jsx`: as the
+card in the lists of people and of groups (`actors/Browse/Card.jsx`), and as
+the whole page when the profile is opened (`actors/Read/index.jsx`).
+
+The button on it is `containers/controls/FollowRequest.jsx`: "Request to
+follow", then "Requested", which takes the request back when pressed. Whoever
+looks after the profile answers from the follow requests on their own
+profile, and is told by a notification.
+
 ### Menus
 
-Every item in the menus on posts, feed items and replies has an icon before
-its words, through `components/MenuItemLabel.jsx`.
+Every item in the menus on posts, feed items, replies and profiles has an
+icon before its words, through `components/MenuItemLabel.jsx`.
 
 ### Quote posts
 
