@@ -45,6 +45,35 @@ describe('a time chosen on the form, in the event\'s zone', () => {
   });
 });
 
+describe('the end a form fills in from its start', () => {
+  it('is an hour after a start chosen first', () => {
+    expect(events.endAfter('2026-10-14T19:00', '')).toBe('2026-10-14T20:00');
+  });
+
+  it('replaces an end that is not after the start', () => {
+    // The browser fills in the time it is now when a date is picked.
+    expect(events.endAfter('2026-10-14T19:00', '2026-10-14T12:45')).toBe('2026-10-14T20:00');
+    expect(events.endAfter('2026-10-14T19:00', '2026-10-14T19:00')).toBe('2026-10-14T20:00');
+  });
+
+  it('leaves an end that is already later', () => {
+    expect(events.endAfter('2026-10-14T19:00', '2026-10-14T23:30')).toBe('2026-10-14T23:30');
+    expect(events.endAfter('2026-10-14T19:00', '2026-10-16T10:00')).toBe('2026-10-16T10:00');
+  });
+
+  it('rolls over midnight, a month and a year', () => {
+    expect(events.endAfter('2026-10-14T23:30', '')).toBe('2026-10-15T00:30');
+    expect(events.endAfter('2026-10-31T23:30', '')).toBe('2026-11-01T00:30');
+    expect(events.endAfter('2026-12-31T23:30', '')).toBe('2027-01-01T00:30');
+  });
+
+  it('does nothing without a start', () => {
+    expect(events.endAfter('', '2026-10-14T12:45')).toBe('2026-10-14T12:45');
+    expect(events.endAfter('', '')).toBe('');
+    expect(events.addToWall('soon', 60)).toBe('');
+  });
+});
+
 describe('why a form cannot be sent', () => {
   it('says so in the server\'s words', () => {
     expect(events.timesError('2026-11-05T19:00', '2026-11-05T21:00', 'UTC')).toBe('');

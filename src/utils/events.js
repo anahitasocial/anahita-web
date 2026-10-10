@@ -138,6 +138,50 @@ const instantToWall = (instant, zone) => {
   return `${parts.year}-${pad(parts.month)}-${pad(parts.day)}T${pad(parts.hour)}:${pad(parts.minute)}`;
 };
 
+// A wall-clock time moved on by some minutes: "2026-10-14T19:00" and 60
+// give "2026-10-14T20:00". Clock arithmetic only, with no zone: it is for
+// filling in an end from a start on the same form, and rolls over midnight
+// and month ends as a calendar does. '' for something that is not a time.
+const addToWall = (wall, minutes) => {
+  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})/.exec(wall || '');
+  if (!match) {
+    return '';
+  }
+
+  const moved = new Date(Date.UTC(
+    Number(match[1]),
+    Number(match[2]) - 1,
+    Number(match[3]),
+    Number(match[4]),
+    Number(match[5]) + minutes,
+  ));
+
+  return [
+    `${moved.getUTCFullYear()}-${pad(moved.getUTCMonth() + 1)}-${pad(moved.getUTCDate())}`,
+    `${pad(moved.getUTCHours())}:${pad(moved.getUTCMinutes())}`,
+  ].join('T');
+};
+
+// How long an event is taken to last until somebody says otherwise.
+const DEFAULT_MINUTES = 60;
+
+// The end a form should hold after its start was changed: the end there
+// was when it is still after the new start, or else an hour after it.
+//
+// Both are wall-clock times in the same zone, written the same way, so
+// comparing them as text is comparing them as times.
+const endAfter = (startsWall, endsWall) => {
+  if (!startsWall) {
+    return endsWall || '';
+  }
+
+  if (endsWall && endsWall > startsWall) {
+    return endsWall;
+  }
+
+  return addToWall(startsWall, DEFAULT_MINUTES);
+};
+
 // What the server is sent: RFC 3339 in UTC. '' for something that is not a
 // time.
 const toServer = (wall, zone) => {
@@ -245,6 +289,8 @@ export default {
   wallToInstant,
   instantToWall,
   toServer,
+  addToWall,
+  endAfter,
   timesError,
   when,
   zoneLabel,

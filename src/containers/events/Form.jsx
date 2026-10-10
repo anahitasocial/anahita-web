@@ -156,7 +156,19 @@ const EventForm = ({
               type="datetime-local"
               label={i18n.t('events:event.form.startsAt')}
               value={values.startsAt}
-              onChange={set('startsAt')}
+              // Choosing when it starts also says when it ends, an hour
+              // later, unless a later end was chosen already. Left empty,
+              // the end is filled in by the browser with the time it is
+              // now, which is usually before the start.
+              onChange={(event) => {
+                const startsAt = event.target.value;
+                setValues({
+                  ...values,
+                  startsAt,
+                  endsAt: events.endAfter(startsAt, values.endsAt),
+                });
+                setError('');
+              }}
               disabled={isSaving}
               error={timeError}
               slotProps={{ inputLabel: { shrink: true } }}
@@ -170,10 +182,13 @@ const EventForm = ({
               onChange={set('endsAt')}
               disabled={isSaving}
               error={timeError}
-              slotProps={{
-                inputLabel: { shrink: true },
-                htmlInput: { min: values.startsAt || undefined },
-              }}
+              // No `min` on it: the browser would refuse an earlier end
+              // with a bubble of its own, in its own words, over the
+              // field below. The form says it instead.
+              helperText={error === 'ends_before_start' ?
+                i18n.t('events:event.form.errors.ends_before_start') :
+                undefined}
+              slotProps={{ inputLabel: { shrink: true } }}
             />
           </Stack>
           <Autocomplete
@@ -199,7 +214,7 @@ const EventForm = ({
               );
             }}
           />
-          {error &&
+          {error && error !== 'ends_before_start' &&
             <Typography variant="body2" color="error" role="alert">
               {i18n.t(`events:event.form.errors.${error}`)}
             </Typography>}
