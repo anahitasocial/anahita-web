@@ -159,18 +159,27 @@ describe('where an event is', () => {
     expect(events.addressLine(undefined)).toBe('');
   });
 
-  it('can be looked up on a map by whoever presses the link', () => {
-    expect(events.mapURL({ street: '123 Main St', city: 'Vancouver' }))
-      .toBe('https://www.openstreetmap.org/search?query=123%20Main%20St%2C%20Vancouver');
-    expect(events.mapURL({})).toBe('');
+  it('can be opened in a map of the reader\'s choosing, by its address', () => {
+    const links = events.mapLinks({ street: '123 Main St', city: 'Vancouver' });
+
+    expect(links.map((link) => { return link.key; })).toEqual(events.MAPS);
+    expect(links.map((link) => { return link.url; })).toEqual([
+      'https://maps.apple.com/?q=123%20Main%20St%2C%20Vancouver',
+      'https://www.google.com/maps/search/?api=1&query=123%20Main%20St%2C%20Vancouver',
+      'https://www.openstreetmap.org/search?query=123%20Main%20St%2C%20Vancouver',
+    ]);
+    expect(events.mapLinks({})).toEqual([]);
   });
 
-  it('opens the map at its point when it has one, sending no address', () => {
+  it('opens each map at its point when it has one', () => {
     const address = { street: '123 Main St', latitude: 49.28, longitude: -123.12 };
 
     expect(events.hasPoint(address)).toBe(true);
-    expect(events.mapURL(address))
-      .toBe('https://www.openstreetmap.org/?mlat=49.28&mlon=-123.12#map=16/49.28/-123.12');
+    expect(events.mapLinks(address).map((link) => { return link.url; })).toEqual([
+      'https://maps.apple.com/?q=123%20Main%20St&ll=49.28,-123.12',
+      'https://www.google.com/maps/search/?api=1&query=49.28%2C-123.12',
+      'https://www.openstreetmap.org/?mlat=49.28&mlon=-123.12#map=16/49.28/-123.12',
+    ]);
     expect(events.hasPoint({ street: '123 Main St' })).toBe(false);
     expect(events.hasPoint({ latitude: 0, longitude: 0 })).toBe(false);
     expect(events.hasPoint(undefined)).toBe(false);

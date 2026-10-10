@@ -330,22 +330,36 @@ const hasWhere = (actor) => {
   return Boolean(addressLine(event.address)) || Boolean(event.hasAddress);
 };
 
-// Where to look an address up on a map. The address goes to the map only
-// when somebody presses the link, from their own browser: nothing is looked
-// up for them beforehand.
-const mapURL = (address) => {
+// The maps an address can be opened in, each with where it opens there.
+// The address goes to a map only when somebody picks it, from their own
+// browser. With a point the map opens at it, and Apple's and Google's are
+// given the address beside it to name the pin; OpenStreetMap needs none.
+const MAPS = ['apple', 'google', 'osm'];
+
+const mapLinks = (address) => {
   const line = addressLine(address);
 
-  // Already found: open the map at the point, and send no address.
-  if (hasPoint(address)) {
-    const { latitude, longitude } = address;
-
-    return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
+  if (!line) {
+    return [];
   }
 
-  return line ?
-    `https://www.openstreetmap.org/search?query=${encodeURIComponent(line)}` :
-    '';
+  const query = encodeURIComponent(line);
+  const point = hasPoint(address) ? `${address.latitude},${address.longitude}` : '';
+
+  return [{
+    key: 'apple',
+    url: point ?
+      `https://maps.apple.com/?q=${query}&ll=${point}` :
+      `https://maps.apple.com/?q=${query}`,
+  }, {
+    key: 'google',
+    url: `https://www.google.com/maps/search/?api=1&query=${point ? encodeURIComponent(point) : query}`,
+  }, {
+    key: 'osm',
+    url: point ?
+      `https://www.openstreetmap.org/?mlat=${address.latitude}&mlon=${address.longitude}#map=16/${address.latitude}/${address.longitude}` :
+      `https://www.openstreetmap.org/search?query=${query}`,
+  }];
 };
 
 // A zone's name as people read it: "America/Toronto" as "Toronto".
@@ -389,7 +403,8 @@ export default {
   addressLine,
   hasPoint,
   hasWhere,
-  mapURL,
+  MAPS,
+  mapLinks,
   zoneLabel,
   takesAnswers,
   canGo,

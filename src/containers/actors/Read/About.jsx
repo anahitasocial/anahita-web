@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -8,9 +8,12 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
 import MapIcon from '@mui/icons-material/MapOutlined';
+import OpenIcon from '@mui/icons-material/ExpandMore';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 import WebsiteIcon from '@mui/icons-material/Web';
 
@@ -18,6 +21,7 @@ import i18n from '../../../languages';
 import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
 import AnahitaMap from '../../../components/Map';
+import MenuItemLabel from '../../../components/MenuItemLabel';
 import events from '../../../utils/events';
 import ActorType from '../../../proptypes/Actor';
 
@@ -34,6 +38,10 @@ const ActorBodyAbout = (props) => {
   const event = actor.event || {};
   const address = events.addressLine(event.address);
   const hasPoint = events.hasPoint(event.address);
+  const [mapsAnchor, setMapsAnchor] = useState(null);
+  const closeMaps = () => {
+    setMapsAnchor(null);
+  };
 
   return (
     <Card component="section">
@@ -60,8 +68,15 @@ const ActorBodyAbout = (props) => {
         </>}
       {address &&
         <>
+          {/* Pressing where it is offers the maps it can be opened in. */}
           <List>
-            <ListItem>
+            <ListItemButton
+              aria-haspopup="menu"
+              aria-expanded={Boolean(mapsAnchor)}
+              onClick={(e) => {
+                setMapsAnchor(e.currentTarget);
+              }}
+            >
               <ListItemIcon>
                 <PlaceIcon />
               </ListItemIcon>
@@ -69,8 +84,31 @@ const ActorBodyAbout = (props) => {
                 primary={i18n.t('events:event.address.title')}
                 secondary={address}
               />
-            </ListItem>
+              <OpenIcon color="action" />
+            </ListItemButton>
           </List>
+          <Menu
+            anchorEl={mapsAnchor}
+            open={Boolean(mapsAnchor)}
+            onClose={closeMaps}
+          >
+            {events.mapLinks(event.address).map((link) => {
+              return (
+                <MenuItem
+                  key={link.key}
+                  component="a"
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMaps}
+                >
+                  <MenuItemLabel icon={<MapIcon fontSize="small" />}>
+                    {i18n.t(`events:event.address.maps.${link.key}`)}
+                  </MenuItemLabel>
+                </MenuItem>
+              );
+            })}
+          </Menu>
           {hasPoint &&
             <AnahitaMap
               locations={[{
@@ -82,19 +120,6 @@ const ActorBodyAbout = (props) => {
               height={240}
               linked={false}
             />}
-          <List>
-            <ListItemButton
-              component="a"
-              href={events.mapURL(event.address)}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <ListItemIcon>
-                <MapIcon />
-              </ListItemIcon>
-              <ListItemText primary={i18n.t('events:event.address.openMap')} />
-            </ListItemButton>
-          </List>
         </>}
       {!address && event.hasAddress &&
         <List>

@@ -198,7 +198,11 @@ export default {
     host: 'Hosted by',
     address: {
       title: 'Where',
-      openMap: 'Find it on a map',
+      maps: {
+        apple: 'Apple Maps',
+        google: 'Google Maps',
+        osm: 'OpenStreetMap',
+      },
       forGoing: 'The address is shown to people who are going.',
     },
     viaHost: 'This event is for the followers of the group hosting it. You follow that group, so you can answer.',

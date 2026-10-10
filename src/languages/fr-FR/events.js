@@ -188,7 +188,11 @@ export default {
     host: 'Organisé par',
     address: {
       title: 'Où',
-      openMap: 'Voir sur une carte',
+      maps: {
+        apple: 'Plans (Apple)',
+        google: 'Google Maps',
+        osm: 'OpenStreetMap',
+      },
       forGoing: 'L’adresse est montrée aux personnes qui participent.',
     },
     viaHost: 'Cet événement est réservé aux abonnés du groupe qui l’organise. Vous suivez ce groupe : vous pouvez répondre.',
