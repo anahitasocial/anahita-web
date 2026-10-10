@@ -17,6 +17,7 @@ const RESULTS = [
   'requested',
   'unavailable',
   'full',
+  'closed',
 ];
 
 // The answers by person: { [personId]: result }.

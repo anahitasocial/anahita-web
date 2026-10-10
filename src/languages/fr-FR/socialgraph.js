@@ -56,6 +56,7 @@ export default {
       requested: 'A demandé à suivre et attend une réponse',
       unavailable: 'Ne peut pas être invité',
       full: 'Trop d\'invitations sont en attente',
+      closed: 'Cet événement est terminé ou a été annulé',
     },
   },
   blocked: {

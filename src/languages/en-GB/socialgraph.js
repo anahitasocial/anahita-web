@@ -56,6 +56,7 @@ export default {
       requested: 'Has asked to follow, and is waiting for an answer',
       unavailable: 'Cannot be invited',
       full: 'Too many invitations are waiting',
+      closed: 'This event is over or was called off',
     },
   },
   blocked: {
