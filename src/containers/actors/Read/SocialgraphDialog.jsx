@@ -62,9 +62,7 @@ const SocialgraphDialog = ({
       filter: which,
       actor,
       start,
-      // What is in common is worked out from one page of each side, so it
-      // is asked for with the largest page there is.
-      limit: which === socialgraph.MUTUALS ? 100 : LIMIT,
+      limit: LIMIT,
     }).then((result) => {
       setLists((before) => {
         return {
@@ -95,7 +93,9 @@ const SocialgraphDialog = ({
   }, [open, kind, lists[kind], failed[kind], heldBack]);
 
   const list = lists[kind];
-  const counts = socialgraph.counts(actor);
+  // What is in common is counted by the server when it is read, so its
+  // number is on its tab once it has been opened.
+  const counts = socialgraph.counts(actor, lists);
   // A group's administrators can remove a follower from it.
   const canRemove = kind === socialgraph.FOLLOWERS &&
     !isPerson(actor) &&

@@ -34,13 +34,26 @@ const known = (list, asked) => {
   return list.includes(asked) ? asked : list[0];
 };
 
-// The number on each tab. What is in common is not counted on the profile,
-// so that tab has none.
-const counts = (actor = {}) => {
-  return {
+// The number on each tab. Followers and leaders are counted on the profile.
+// What is in common is not, so that tab has a number only once its list has
+// been read.
+const counts = (actor = {}, lists = {}) => {
+  const all = {
     [FOLLOWERS]: actor.followerCount || 0,
     [LEADERS]: actor.leaderCount || 0,
   };
+
+  if (lists && lists[MUTUALS]) {
+    all[MUTUALS] = lists[MUTUALS].total;
+  }
+
+  return all;
+};
+
+// What the button that follows somebody says: "Follow back" for somebody
+// who follows the viewer and is not followed by them, "Follow" otherwise.
+const followLabelKey = (actor = {}) => {
+  return actor.isFollowingViewer ? 'actions:followBack' : 'actions:follow';
 };
 
 // One list after a page arrived: the page alone when it is the first, or
@@ -85,4 +98,5 @@ export default {
   counts,
   merge,
   rowNote,
+  followLabelKey,
 };

@@ -38,8 +38,6 @@ import { Actor as ACTOR } from '../../../constants';
 import ActorsType from '../../../proptypes/Actors';
 import PersonType from '../../../proptypes/Person';
 
-import AddFollower from '../Socialgraph/Add';
-
 const {
   getPortraitURL,
   getActorFeatureTabs,
@@ -117,15 +115,6 @@ const ActorsRead = (props) => {
   const canFollow = permissions.canFollow(actor, viewer);
 
   const showFollow = isAuthenticated && canFollow;
-  // Adding somebody else to a group follows the group's own "Who can add a
-  // follower?" setting, which can include its followers — not only its
-  // administrators. The server answers it as authorized.addFollower; a
-  // response without it keeps the old rule.
-  const addFollowerAnswer = actor.authorized && actor.authorized.addFollower;
-  const canAddFollower = typeof addFollowerAnswer === 'boolean' ?
-    addFollowerAnswer :
-    canAdminister;
-  const showAddFollower = isAuthenticated && canAddFollower && !utils.node.isPerson(actor);
   // Inviting follows the group's "who can invite" setting, which the
   // server answers as authorized.invite.
   const showInvite = isAuthenticated && Boolean(actor.authorized && actor.authorized.invite);
@@ -199,7 +188,6 @@ const ActorsRead = (props) => {
         followAction={
           <>
             {showEditNotifications && <NotificationsDialog actor={actor} />}
-            {showAddFollower && <AddFollower actor={actor} />}
             {showInvite && <ActorInvite actor={actor} canSeeWaiting={canAdminister} />}
             {showFollowRequests && <FollowRequests actor={actor} />}
             {showInviteAnswer &&

@@ -1,37 +1,15 @@
 import axios from 'axios';
 
-// The people the viewer can offer: their own followers, found by name.
+// Removing a follower from an actor, for whoever looks after it.
 //
-// It read `viewer` and `offset` from what it was given, and was given
-// neither, so the first letter typed into the picker threw.
-const browse = (params) => {
-  const {
-    viewer,
-    start = 0,
-    limit,
-    q,
-  } = params;
-  return axios.get(`/socialgraph/${viewer.id}/followers/`, {
-    params: {
-      start,
-      limit,
-      q,
-    },
-  });
-};
-
-const add = (params) => {
-  const { actor, follower } = params;
-  return axios.post(`/socialgraph/${actor.id}/followers/${follower.id}`);
-};
-
+// The file is named for what it used to hold as well: listing people to add
+// and adding them. That went with invitations. Nobody is added to a group
+// from the web app; they are invited (api/socialgraph.js) and choose.
 const deleteItem = (params) => {
   const { follower, actor } = params;
   return axios.delete(`/socialgraph/${actor.id}/followers/${follower.id}`);
 };
 
 export default {
-  browse,
-  add,
   deleteItem,
 };

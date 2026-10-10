@@ -57,8 +57,4 @@ export default {
     none: 'You have not blocked anybody.',
     failed: 'That could not be done.',
   },
-  add: {
-    cTitle: 'Add Followers',
-    mTitle: 'Followers',
-  },
 };

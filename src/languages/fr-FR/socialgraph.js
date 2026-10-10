@@ -57,8 +57,4 @@ export default {
     none: 'Vous n\'avez bloqué personne.',
     failed: 'Cette action n\'a pas pu être effectuée.',
   },
-  add: {
-    cTitle: 'Ajouter des abonnés',
-    mTitle: 'Abonnés',
-  },
 };

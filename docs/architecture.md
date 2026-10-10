@@ -489,8 +489,12 @@ read when first opened and more of it as its end is scrolled to, whoever
 followed most lately first. A group's administrators can remove a follower
 there.
 
+What is in common is found by one query in the graph, so it is whole, paged
+and counted; its number is on its tab once the tab has been opened.
+
 A person who follows the viewer says so: "Follows you" under their name on
-their profile, and beside their name in these lists.
+their profile, and beside their name in these lists. The button that follows
+them then reads "Follow back" (`utils/socialgraph.js`, `controls/Follow.jsx`).
 
 There is no Social Graph tab. An old address such as
 `/people/ana/socialgraph/leaders` opens the profile with that list showing.
@@ -513,7 +517,8 @@ Decline and Accept, in three places: on the notification, on the group's page,
 and on the limited card when the group is one they could not otherwise see.
 
 Who can invite is set under Settings › Permissions. The old "Who can add a
-follower?" row is gone: nobody is added without saying yes.
+follower?" row is gone: nobody is added without saying yes. The "+ Followers"
+button and its picker went with it.
 
 ### Private profiles and asking to follow
 

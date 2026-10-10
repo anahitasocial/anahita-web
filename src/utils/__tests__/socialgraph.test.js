@@ -40,6 +40,20 @@ describe('the numbers on the tabs', () => {
     expect(socialgraph.counts(group)).toEqual({ followers: 5, leaders: 0 });
     expect(socialgraph.counts(person).mutuals).toBeUndefined();
   });
+
+  it('has one for what is in common once that list has been read', () => {
+    const lists = { mutuals: { rows: [{ id: 4 }], total: 7 } };
+    expect(socialgraph.counts(person, lists).mutuals).toBe(7);
+    expect(socialgraph.counts(person, {}).mutuals).toBeUndefined();
+  });
+});
+
+describe('the button that follows somebody', () => {
+  it('says Follow back to somebody who follows you', () => {
+    expect(socialgraph.followLabelKey({ isFollowingViewer: true })).toBe('actions:followBack');
+    expect(socialgraph.followLabelKey({ isFollowingViewer: false })).toBe('actions:follow');
+    expect(socialgraph.followLabelKey(undefined)).toBe('actions:follow');
+  });
 });
 
 describe('the line under a name', () => {
