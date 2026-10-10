@@ -499,6 +499,22 @@ There is no Social Graph tab. An old address such as
 a card under Settings › Access (`actors/Settings/Blocked.jsx`), with Unblock
 on each.
 
+### Inviting people to a group
+
+A group's page has **Invite** for whoever the group lets invite
+(`authorized.invite`). It opens `containers/actors/Invite`: the viewer's own
+followers, found by name and ticked, up to 50 at a time. The server answers
+for each person, and its answer is shown beside the name (`utils/invites.js`).
+Whoever looks after the group has a second tab, **Invited**, with who is still
+to answer and a way to take an invitation back.
+
+The person invited answers with `containers/controls/InviteAnswer.jsx`,
+Decline and Accept, in three places: on the notification, on the group's page,
+and on the limited card when the group is one they could not otherwise see.
+
+Who can invite is set under Settings › Permissions. The old "Who can add a
+follower?" row is gone: nobody is added without saying yes.
+
 ### Private profiles and asking to follow
 
 A profile the viewer may not see is refused by the server, unless it lets

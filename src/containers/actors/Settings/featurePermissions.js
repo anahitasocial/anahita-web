@@ -25,14 +25,19 @@ const CHOICES = {
     comment: ['registered', 'followers'],
     like: ['registered', 'followers', 'admins'],
     content: ['followers', 'admins'],
-    follower: ['followers', 'admins'],
+    invite: ['followers', 'admins'],
   },
 };
 
-// Who can add somebody else as a follower. Only groups are gated by it —
-// socialgraph-service lets anybody follow a person before it reads this — so
-// on a person it would be a row with no effect.
+// Who could add somebody else as a follower. The server no longer reads it:
+// nobody is put in a group without saying yes, they are invited. So it has
+// no row, on a person or a group. It is still sent back as it was stored.
 const FOLLOWER = 'follower';
+// Who can invite people to follow a group. For groups only: nobody is
+// invited to follow a person.
+const INVITE = 'invite';
+const INVITE_DEFAULT = 'admins';
+const SOCIALGRAPH = 'socialgraph-service';
 const COMMENT = 'comment';
 
 // The profile access levels on which the comment setting applies. On anything
@@ -75,10 +80,23 @@ export const getPermissionGroups = (features = [], { isPerson, access }) => {
       return a.ordering - b.ordering;
     })
     .map((feature) => {
-      const rows = (feature.addPermissions || [])
+      const stored = (feature.addPermissions || [])
         .filter((permission) => {
-          return !(isPerson && permission.entity === FOLLOWER);
-        })
+          return permission.entity !== FOLLOWER &&
+            !(isPerson && permission.entity === INVITE);
+        });
+
+      // A group that saved this tab before invitations existed has no
+      // "invite" among what it stored. It is offered all the same, at what
+      // the server takes a missing one to mean.
+      const hasInvite = stored.some((permission) => {
+        return permission.entity === INVITE;
+      });
+      const offered = !isPerson && feature.service === SOCIALGRAPH && !hasInvite ?
+        [...stored, { entity: INVITE, access: INVITE_DEFAULT }] :
+        stored;
+
+      const rows = offered
         .map((permission) => {
           const choices = choicesFor(permission.entity, { isPerson });
 
@@ -128,6 +146,20 @@ export const toValues = (features = []) => {
 export const toFeatures = (features = [], values = {}) => {
   return (features || []).map((feature) => {
     const edited = values[feature.service] || {};
+    const addPermissions = (feature.addPermissions || []).map((permission) => {
+      return {
+        entity: permission.entity,
+        access: edited[permission.entity] || permission.access,
+      };
+    });
+
+    // Who can invite, chosen on a group that had never stored it.
+    const storesInvite = addPermissions.some((permission) => {
+      return permission.entity === INVITE;
+    });
+    if (feature.service === SOCIALGRAPH && edited[INVITE] && !storesInvite) {
+      addPermissions.push({ entity: INVITE, access: edited[INVITE] });
+    }
 
     return {
       service: feature.service,
@@ -135,12 +167,7 @@ export const toFeatures = (features = [], values = {}) => {
       composers: feature.composers || [],
       optional: Boolean(feature.optional),
       enabled: Boolean(feature.enabled),
-      addPermissions: (feature.addPermissions || []).map((permission) => {
-        return {
-          entity: permission.entity,
-          access: edited[permission.entity] || permission.access,
-        };
-      }),
+      addPermissions,
       ordering: feature.ordering,
     };
   });

@@ -22,7 +22,7 @@ const { getActorName, getURL } = utils.node;
 // That is all the server sends of it (`restricted`), so there is nothing
 // else to draw. Used as the card in the lists of people and of groups, and
 // as the whole page when such a profile is opened.
-const LimitedActorCard = ({ actor, action = null }) => {
+const LimitedActorCard = ({ actor, action = null, note = '' }) => {
   return (
     <Card>
       <CardHeader
@@ -46,6 +46,10 @@ const LimitedActorCard = ({ actor, action = null }) => {
           <LockIcon fontSize="small" />
           {i18n.t('actor:limited.private')}
         </Typography>
+        {note &&
+          <Typography variant="body1" sx={{ pt: 2 }}>
+            {note}
+          </Typography>}
       </CardContent>
       {action &&
         <CardActions sx={{ p: 1 }}>
@@ -58,6 +62,9 @@ const LimitedActorCard = ({ actor, action = null }) => {
 LimitedActorCard.propTypes = {
   actor: PropTypes.object.isRequired,
   action: PropTypes.node,
+  // A line of its own under the first, such as that the viewer was
+  // invited.
+  note: PropTypes.string,
 };
 
 export default LimitedActorCard;

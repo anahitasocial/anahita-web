@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 
 import Badge from '@mui/material/Badge';
+import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -14,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import ActorAvatar from '../../../components/ActorAvatar';
+import ControlInviteAnswer from '../../controls/InviteAnswer';
 import NotificationMessage from './NotificationMessage';
 
 import NotificationType from '../../../proptypes/Notification';
@@ -31,7 +33,20 @@ const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
       </ListItemAvatar>
       <ListItemText
         primary={<NotificationMessage notification={item} />}
-        secondary={moment.utc(item.createdAt).fromNow()}
+        secondary={
+          <>
+            {moment.utc(item.createdAt).fromNow()}
+            {/* An invitation is answered from where it is read. */}
+            {item.type === 'actor_invite' && item.target && item.target.id &&
+              <Box component="span" sx={{ display: 'block', pt: 1, maxWidth: 320 }}>
+                <ControlInviteAnswer actor={item.target} />
+              </Box>}
+          </>
+        }
+        // The buttons are not text, so the line that holds them is not a
+        // paragraph.
+        slotProps={{ secondary: { component: 'div' } }}
+        sx={{ pr: 6 }}
       />
       <ListItemSecondaryAction>
         <IconButton

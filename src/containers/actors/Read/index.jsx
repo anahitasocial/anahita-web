@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 
 import ActorHeader from './ActorHeader';
@@ -18,6 +19,8 @@ import NotificationsDialog from '../Notifications/Dialog';
 
 import ControlFollow from '../../controls/Follow';
 import ControlFollowRequest from '../../controls/FollowRequest';
+import ControlInviteAnswer from '../../controls/InviteAnswer';
+import ActorInvite from '../Invite';
 import LimitedActorCard from '../../../components/LimitedActorCard';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
@@ -29,6 +32,7 @@ import actions from '../../../actions';
 import permissions from '../../../permissions/actor';
 import reportPermissions from '../../../permissions/report';
 import utils from '../../../utils';
+import i18n from '../../../languages';
 import { Actor as ACTOR } from '../../../constants';
 
 import ActorsType from '../../../proptypes/Actors';
@@ -88,7 +92,20 @@ const ActorsRead = (props) => {
         <Grid size={{ xs: 12, sm: 8, md: 6 }}>
           <LimitedActorCard
             actor={actor}
-            action={isAuthenticated && <ControlFollowRequest actor={actor} />}
+            // Somebody invited answers the invitation, and on saying yes
+            // is shown the profile. Anybody else may ask, where the
+            // profile lets people ask.
+            action={isAuthenticated && (actor.isInvited ?
+              <ControlInviteAnswer
+                actor={actor}
+                onAnswered={(accepted) => {
+                  if (accepted) {
+                    readItem(id);
+                  }
+                }}
+              /> :
+              actor.allowFollowRequest && <ControlFollowRequest actor={actor} />)}
+            note={actor.isInvited ? i18n.t('socialgraph:invite.invited') : ''}
           />
         </Grid>
       </Grid>
@@ -109,6 +126,11 @@ const ActorsRead = (props) => {
     addFollowerAnswer :
     canAdminister;
   const showAddFollower = isAuthenticated && canAddFollower && !utils.node.isPerson(actor);
+  // Inviting follows the group's "who can invite" setting, which the
+  // server answers as authorized.invite.
+  const showInvite = isAuthenticated && Boolean(actor.authorized && actor.authorized.invite);
+  // Invited to a group the viewer can already see: answered from here.
+  const showInviteAnswer = isAuthenticated && Boolean(actor.isInvited) && !actor.isLeadingViewer;
   // Super administrators see the menu on every profile, for Feature, even
   // where they do not administer the actor.
   // And anybody signed in sees it on somebody else's profile, where it
@@ -178,8 +200,20 @@ const ActorsRead = (props) => {
           <>
             {showEditNotifications && <NotificationsDialog actor={actor} />}
             {showAddFollower && <AddFollower actor={actor} />}
+            {showInvite && <ActorInvite actor={actor} canSeeWaiting={canAdminister} />}
             {showFollowRequests && <FollowRequests actor={actor} />}
-            {showFollow && <ControlFollow actor={actor} />}
+            {showInviteAnswer &&
+              <Box sx={{ minWidth: 240 }}>
+                <ControlInviteAnswer
+                  actor={actor}
+                  onAnswered={(accepted) => {
+                    if (accepted) {
+                      readItem(id);
+                    }
+                  }}
+                />
+              </Box>}
+            {showFollow && !showInviteAnswer && <ControlFollow actor={actor} />}
           </>
         }
         headerActions={showCommands &&

@@ -15,6 +15,7 @@ export default {
     addPermissions: {
       title: 'Autorisations',
       follower: 'Qui peut ajouter un abonné ?',
+      invite: 'Qui peut inviter des personnes à suivre ?',
     },
   },
   text: {

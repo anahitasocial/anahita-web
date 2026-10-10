@@ -66,14 +66,48 @@ describe('getPermissionGroups', () => {
     })).toEqual(['socialgraph', 'text', 'photo']);
   });
 
-  // socialgraph-service lets anybody follow a person before it reads this
-  // permission, so on a person the row would change nothing.
-  it('hides who can add followers on a person', () => {
+  // Nobody is invited to follow a person, and nobody is added to anything
+  // without saying yes, so a person has no row under the social graph.
+  it('has nothing to set for the social graph on a person', () => {
     const groups = getPermissionGroups(FEATURES, { isPerson: true, access: 'public' });
 
     expect(groups.map((g) => {
       return g.key;
     })).toEqual(['text', 'photo']);
+  });
+
+  // The old "who can add a follower" is gone from a group too. In its place
+  // is who can invite, offered even to a group that never stored it.
+  it('offers who can invite on a group, and not who can add a follower', () => {
+    const groups = getPermissionGroups(FEATURES, { isPerson: false, access: 'public' });
+    const socialgraph = groups.find((g) => {
+      return g.key === 'socialgraph';
+    });
+
+    expect(socialgraph.rows).toEqual([
+      {
+        entity: 'invite',
+        access: 'admins',
+        choices: ['followers', 'admins'],
+        lock: null,
+      },
+    ]);
+  });
+
+  it('shows what a group stored for who can invite', () => {
+    const features = FEATURES.map((f) => {
+      return f.service === 'socialgraph-service' ?
+        { ...f, addPermissions: [...f.addPermissions, { entity: 'invite', access: 'followers' }] } :
+        f;
+    });
+    const socialgraph = getPermissionGroups(features, { isPerson: false, access: 'public' })
+      .find((g) => {
+        return g.key === 'socialgraph';
+      });
+
+    expect(socialgraph.rows.map((row) => {
+      return [row.entity, row.access];
+    })).toEqual([['invite', 'followers']]);
   });
 
   it('leaves out a service that is switched off', () => {
@@ -108,7 +142,7 @@ describe('choicesFor', () => {
     expect(choicesFor('like', group)).toEqual(['registered', 'followers', 'admins']);
     expect(choicesFor('photo', person)).toEqual(['followers', 'leaders', 'mutuals', 'admins']);
     expect(choicesFor('photo', group)).toEqual(['followers', 'admins']);
-    expect(choicesFor('follower', group)).toEqual(['followers', 'admins']);
+    expect(choicesFor('invite', group)).toEqual(['followers', 'admins']);
   });
 
   // MediumPermissions.CanAdd never admits "anyone signed in" to post.
@@ -186,12 +220,23 @@ describe('toFeatures', () => {
     })).toEqual(FEATURES[2]);
   });
 
-  // The follower row is hidden on a person but must still be sent.
+  // The follower row is not shown but must still be sent as it was stored.
   it('keeps permissions the tab does not show', () => {
     const features = toFeatures(FEATURES, {});
 
     expect(features.find((f) => {
       return f.service === 'socialgraph-service';
     }).addPermissions).toEqual([{ entity: 'follower', access: 'admins' }]);
+  });
+
+  it('stores who can invite when it is chosen on a group that had none', () => {
+    const features = toFeatures(FEATURES, { 'socialgraph-service': { invite: 'followers' } });
+
+    expect(features.find((f) => {
+      return f.service === 'socialgraph-service';
+    }).addPermissions).toEqual([
+      { entity: 'follower', access: 'admins' },
+      { entity: 'invite', access: 'followers' },
+    ]);
   });
 });

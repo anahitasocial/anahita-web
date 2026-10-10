@@ -23,7 +23,8 @@ const ActorsCard = (props) => {
     return (
       <LimitedActorCard
         actor={actor}
-        action={isAuthenticated && <ControlFollowRequest actor={actor} />}
+        action={isAuthenticated && actor.allowFollowRequest &&
+          <ControlFollowRequest actor={actor} />}
       />
     );
   }

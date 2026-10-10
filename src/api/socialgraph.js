@@ -35,6 +35,30 @@ function withdrawFollowRequest({ actor, viewer }) {
   return axios.delete(`/socialgraph/${actor.id}/follow-requests/${viewer.id}`);
 }
 
+// Inviting the viewer's followers to follow a group, and what waits.
+function invite({ actor, personIds }) {
+  return axios.post(`/socialgraph/${actor.id}/invites`, { personIds });
+}
+
+function invites({ actor, start = 0, limit = 20 }) {
+  return axios.get(`/socialgraph/${actor.id}/invites/`, {
+    params: { start, limit },
+  });
+}
+
+function withdrawInvite({ actor, person }) {
+  return axios.delete(`/socialgraph/${actor.id}/invites/${person.id}`);
+}
+
+// The viewer answering their own invitation to an actor.
+function acceptInvite({ actor }) {
+  return axios.post(`/socialgraph/${actor.id}/invites/accept`);
+}
+
+function declineInvite({ actor }) {
+  return axios.post(`/socialgraph/${actor.id}/invites/decline`);
+}
+
 function block({ actor, viewer }) {
   return axios.post(`/socialgraph/${actor.id}/blocks/${viewer.id}`);
 }
@@ -49,6 +73,11 @@ export default {
   unfollow,
   requestFollow,
   withdrawFollowRequest,
+  invite,
+  invites,
+  withdrawInvite,
+  acceptInvite,
+  declineInvite,
   block,
   unblock,
 };
