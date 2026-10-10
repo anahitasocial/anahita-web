@@ -45,6 +45,7 @@ const startingValues = (actor) => {
     endsAt: event.endsAt ? events.instantToWall(event.endsAt, zone) : '',
     capacity: event.capacity ? String(event.capacity) : '',
     onlineUrl: event.onlineUrl || '',
+    websiteUrl: (actor && actor.websiteUrl) || '',
     access: 'public',
     openToHostFollowers: Boolean(event.openToHostFollowers),
     // Where it is held. Sent back to whoever may change the event, who
@@ -111,6 +112,8 @@ const EventForm = ({
       timezoneName: values.timezoneName,
       capacity: Number(values.capacity) || 0,
       onlineUrl: values.onlineUrl.trim(),
+      // Always sent: left out, the server would take the website off.
+      websiteUrl: values.websiteUrl.trim(),
       // Always sent: left out, the server would take it for no.
       openToHostFollowers: Boolean(hostGroup) && values.openToHostFollowers,
       // Where it is held, every part of it, so one emptied is taken off.
@@ -265,6 +268,16 @@ const EventForm = ({
             onChange={set('onlineUrl')}
             disabled={isSaving}
             slotProps={{ htmlInput: { maxLength: 512 } }}
+          />
+          <TextField
+            fullWidth
+            type="url"
+            label={i18n.t('events:event.form.websiteUrl')}
+            helperText={i18n.t('events:event.form.websiteUrlHelp')}
+            value={values.websiteUrl}
+            onChange={set('websiteUrl')}
+            disabled={isSaving}
+            slotProps={{ htmlInput: { maxLength: 255 } }}
           />
           <Typography variant="subtitle2" component="h3">
             {i18n.t('events:event.form.address.title')}

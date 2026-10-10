@@ -120,6 +120,8 @@ export default {
       capacityHelp: 'How many people can go. Leave empty for no limit.',
       onlineUrl: 'Link to join online',
       onlineUrlHelp: 'Shown only to people who are going.',
+      websiteUrl: 'Website',
+      websiteUrlHelp: 'Shown to everyone who can see the event.',
       access: 'Who can see it?',
       accessOptions: {
         public: 'Anyone',

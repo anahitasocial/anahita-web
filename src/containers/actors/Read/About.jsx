@@ -66,10 +66,11 @@ const ActorBodyAbout = (props) => {
             </EntityBody>
           </CardContent>
         </>}
-      {address &&
-        <>
-          {/* Pressing where it is offers the maps it can be opened in. */}
-          <List>
+      {/* One list: where it is held, then its website under it. Pressing
+          where it is offers the maps it can be opened in. */}
+      {(address || event.hasAddress || websiteUrl) &&
+        <List>
+          {address &&
             <ListItemButton
               aria-haspopup="menu"
               aria-expanded={Boolean(mapsAnchor)}
@@ -85,85 +86,81 @@ const ActorBodyAbout = (props) => {
                 secondary={address}
               />
               <OpenIcon color="action" />
-            </ListItemButton>
-          </List>
-          <Menu
-            anchorEl={mapsAnchor}
-            open={Boolean(mapsAnchor)}
-            onClose={closeMaps}
-          >
-            {events.mapLinks(event.address).map((link) => {
-              return (
-                <MenuItem
-                  key={link.key}
-                  component="a"
-                  href={link.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMaps}
-                >
-                  <MenuItemLabel icon={<MapIcon fontSize="small" />}>
-                    {i18n.t(`events:event.address.maps.${link.key}`)}
-                  </MenuItemLabel>
-                </MenuItem>
-              );
-            })}
-          </Menu>
-          {hasPoint &&
-            <AnahitaMap
-              locations={[{
-                id: actor.id,
-                name: address,
-                latitude: event.address.latitude,
-                longitude: event.address.longitude,
-              }]}
-              height={240}
-              linked={false}
-            />}
-        </>}
-      {!address && event.hasAddress &&
-        <List>
-          <ListItem>
-            <ListItemIcon>
-              <PlaceIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={i18n.t('events:event.address.title')}
-              secondary={i18n.t('events:event.address.forGoing')}
-            />
-          </ListItem>
+            </ListItemButton>}
+          {!address && event.hasAddress &&
+            <ListItem>
+              <ListItemIcon>
+                <PlaceIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('events:event.address.title')}
+                secondary={i18n.t('events:event.address.forGoing')}
+              />
+            </ListItem>}
+          {websiteUrl &&
+            <ListItemButton
+              component="a"
+              href={websiteUrl}
+              target="_blank"
+              /*
+                nofollow because an arbitrary person-supplied link on a public
+                profile is an SEO-spam magnet; noopener/noreferrer because
+                target="_blank" otherwise hands the opened page a handle on this
+                one. rel="me" is the Mastodon convention for a profile link and
+                is what would let a site verify itself back to us later.
+              */
+              rel="me nofollow noopener noreferrer"
+            >
+              <ListItemIcon>
+                <WebsiteIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('actor:website')}
+                secondary={
+                  <Typography
+                    variant="body1"
+                    noWrap
+                  >
+                    {websiteUrl}
+                  </Typography>
+                }
+              />
+            </ListItemButton>}
         </List>}
-      {websiteUrl &&
-        <List>
-          <ListItemButton
-            component="a"
-            href={websiteUrl}
-            target="_blank"
-            /*
-              nofollow because an arbitrary person-supplied link on a public
-              profile is an SEO-spam magnet; noopener/noreferrer because
-              target="_blank" otherwise hands the opened page a handle on this
-              one. rel="me" is the Mastodon convention for a profile link and
-              is what would let a site verify itself back to us later.
-            */
-            rel="me nofollow noopener noreferrer"
-          >
-            <ListItemIcon>
-              <WebsiteIcon />
-            </ListItemIcon>
-            <ListItemText
-              primary={i18n.t('actor:website')}
-              secondary={
-                <Typography
-                  variant="body1"
-                  noWrap
-                >
-                  {websiteUrl}
-                </Typography>
-              }
-            />
-          </ListItemButton>
-        </List>}
+      {address &&
+        <Menu
+          anchorEl={mapsAnchor}
+          open={Boolean(mapsAnchor)}
+          onClose={closeMaps}
+        >
+          {events.mapLinks(event.address).map((link) => {
+            return (
+              <MenuItem
+                key={link.key}
+                component="a"
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={closeMaps}
+              >
+                <MenuItemLabel icon={<MapIcon fontSize="small" />}>
+                  {i18n.t(`events:event.address.maps.${link.key}`)}
+                </MenuItemLabel>
+              </MenuItem>
+            );
+          })}
+        </Menu>}
+      {address && hasPoint &&
+        <AnahitaMap
+          locations={[{
+            id: actor.id,
+            name: address,
+            latitude: event.address.latitude,
+            longitude: event.address.longitude,
+          }]}
+          height={240}
+          linked={false}
+        />}
     </Card>
   );
 };

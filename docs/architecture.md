@@ -544,7 +544,8 @@ means the server sending it to a geocoder. The marker opens nothing
 (`linked={false}` on `components/Map.jsx`). Pressing the "Where" row opens a
 menu of Apple Maps, Google Maps and OpenStreetMap (`events.mapLinks`). Each
 opens at the point when there is one, and otherwise looks the address up, from
-the reader's own browser and only when picked. A public venue can still be tagged from the
+the reader's own browser and only when picked. The event's website, a field
+on its form, is the row under "Where", above the map. A public venue can still be tagged from the
 event's Locations tab, and the panel names it.
 
 **An event for a group's followers.** An event hosted by a group has a

@@ -112,6 +112,8 @@ export default {
       capacityHelp: 'Combien de personnes peuvent venir. Laissez vide pour ne pas limiter.',
       onlineUrl: 'Lien pour participer en ligne',
       onlineUrlHelp: 'Montré uniquement aux personnes qui participent.',
+      websiteUrl: 'Site web',
+      websiteUrlHelp: 'Montré à toutes les personnes qui peuvent voir l’événement.',
       access: 'Qui peut le voir ?',
       accessOptions: {
         public: 'Tout le monde',

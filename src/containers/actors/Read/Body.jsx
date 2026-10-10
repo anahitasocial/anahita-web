@@ -129,7 +129,7 @@ const ActorBody = ({
         >
           <Grid size={{ xs: 12, md: 4 }}>
             <Grid container spacing={2}>
-              {(actor.body || eventDetails.hasWhere(actor)) && (
+              {(actor.body || actor.websiteUrl || eventDetails.hasWhere(actor)) && (
                 <Grid size={12}>
                   <ActorBodyAbout actor={actor} />
                 </Grid>
