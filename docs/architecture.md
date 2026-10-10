@@ -478,12 +478,12 @@ Follow button; quotes and replies show what was said and lead to the note.
 
 There are no views in it, and nothing anywhere counts them.
 
-### Followers, leaders and what is in common
+### Followers, following and what is in common
 
 Under a profile's name is the number of its followers. Pressing it opens a
 dialog (`actors/Read/SocialgraphDialog.jsx`, `utils/socialgraph.js`) with up
-to three lists: **Followers**, **Leaders** (who the profile follows; people
-only), and **In common** (the people the viewer follows who follow this
+to three lists: **Followers**, **Following** (who the profile follows; people
+only; `leaders` in the code and the API, which is Anahita's own word for it), and **In common** (the people the viewer follows who follow this
 profile; for somebody signed in, on a profile that is not their own). Each is
 read when first opened and more of it as its end is scrolled to, whoever
 followed most lately first. A group's administrators can remove a follower

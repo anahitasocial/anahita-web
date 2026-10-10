@@ -41,7 +41,7 @@ export default {
     title: 'Access',
     cDescription: 'Who can see this profile.',
     // One sentence per level, because the label alone does not say who
-    // it means — "Mutuals" and "Leaders" are the site's words, not
+    // it means — "Mutuals" and "Following" are the site's words, not
     // everybody's.
     descriptions: {
       public: 'Anyone, signed in or not.',
@@ -72,7 +72,7 @@ export default {
       person: {
         registered: 'Anyone signed in',
         followers: 'Followers',
-        leaders: 'Leaders',
+        leaders: 'Following',
         mutuals: 'Mutuals',
         admins: 'Only me',
       },
@@ -82,7 +82,7 @@ export default {
         admins: 'Admins',
       },
     },
-    // Shown under each choice in the open list — "Leaders" and "Mutuals"
+    // Shown under each choice in the open list — "Following" and "Mutuals"
     // are the site's words, not everybody's.
     descriptions: {
       person: {

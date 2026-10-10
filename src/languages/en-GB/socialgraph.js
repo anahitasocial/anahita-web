@@ -2,7 +2,7 @@ export default {
   cTitle: 'Social Graph',
   mTitle: 'Social Graph',
   followers: 'Followers',
-  leaders: 'Leaders',
+  leaders: 'Following',
   mutuals: 'In common',
   blocks: 'Blocked',
   followsYou: 'Follows you',
