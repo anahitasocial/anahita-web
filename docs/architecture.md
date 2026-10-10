@@ -513,7 +513,7 @@ administrators, its access. What only an event has is in `containers/events`.
 
 | Where | What |
 | --- | --- |
-| **Events** in the left menu, `/events` | The viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`). There is no list of every event |
+| **Events** in the left menu, `/events` | The viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`). There is no list of every event. Its + follows the installation's `eventsFrom` (`permissions/actor.js`), a setting apart from the one for groups |
 | `/events/add`, `/events/add?host=<group id>` | The form (`events/Form.jsx`). With a host it is the group's event |
 | `/events/:id` | The actor page with `events/Panel.jsx` above the tabs: when it is, who hosts it, how many are going, Going and Maybe, Add to calendar, and for its administrators Edit and Cancel |
 | `/events/:id/edit`, and Info under its settings | The same form, to change it |

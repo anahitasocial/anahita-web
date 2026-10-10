@@ -37,7 +37,7 @@ const EventsPage = ({ viewer, actorSettings = {} }) => {
     return api.eventDetails.mine({ filter: list, start, limit });
   }, [list]);
 
-  const canAdd = permissions.actor.canAdd(viewer, actorSettings);
+  const canAdd = permissions.actor.canAddEvent(viewer, actorSettings);
 
   return (
     <>

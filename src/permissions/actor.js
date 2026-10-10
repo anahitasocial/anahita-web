@@ -25,6 +25,17 @@ const canAdd = (viewer, { groupsFrom = '' } = {}) => {
   return meetsRoleLevel(viewer, groupsFrom);
 };
 
+// Whether the viewer may make an event of their own: the installation's
+// EVENTS_FROM, published in NodeInfo as eventsFrom. A setting of its own,
+// since an installation may keep groups to its administrators and let
+// anybody hold an event. Absent, as before NodeInfo answers, it ranks above
+// every role and nobody is offered the +.
+//
+// An event for a group is not this: that is for the group's administrators.
+const canAddEvent = (viewer, { eventsFrom = '' } = {}) => {
+  return meetsRoleLevel(viewer, eventsFrom);
+};
+
 const canEdit = (actor) => {
   const { authorized } = actor;
   return Boolean(authorized && authorized.edit);
@@ -76,6 +87,7 @@ const canViewCommands = (actor, exclude = []) => {
 
 export default {
   canAdd,
+  canAddEvent,
   canAdminister,
   canEdit,
   canDelete,
