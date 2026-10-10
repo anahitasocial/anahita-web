@@ -39,8 +39,10 @@ const EventDateTile = ({ actor, size = 'default' }) => {
       sx={{
         width: edge,
         height: edge,
-        bgcolor: 'primary.main',
-        color: 'primary.contrastText',
+        // The secondary colour, so it is not taken for a button: those
+        // are the primary one.
+        bgcolor: 'secondary.main',
+        color: 'secondary.contrastText',
         flexDirection: 'column',
         lineHeight: 1,
       }}
