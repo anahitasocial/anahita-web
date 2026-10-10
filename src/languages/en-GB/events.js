@@ -134,7 +134,6 @@ export default {
         street: 'Address',
         city: 'City',
         stateProvince: 'Province or state',
-        postalCode: 'Postal code',
         country: 'Country',
       },
       create: 'Create event',

@@ -52,7 +52,6 @@ const startingValues = (actor) => {
     street: (event.address && event.address.street) || '',
     city: (event.address && event.address.city) || '',
     stateProvince: (event.address && event.address.stateProvince) || '',
-    postalCode: (event.address && event.address.postalCode) || '',
     country: (event.address && event.address.country) || '',
   };
 };
@@ -115,7 +114,6 @@ const EventForm = ({
       address: values.street.trim(),
       city: values.city.trim(),
       stateProvince: values.stateProvince.trim(),
-      postalCode: values.postalCode.trim(),
       country: values.country.trim(),
     };
 
@@ -299,26 +297,15 @@ const EventForm = ({
               slotProps={{ htmlInput: { maxLength: 100 } }}
             />
           </Stack>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
-            <TextField
-              fullWidth
-              label={i18n.t('events:event.form.address.postalCode')}
-              value={values.postalCode}
-              onChange={set('postalCode')}
-              disabled={isSaving}
-              autoComplete="off"
-              slotProps={{ htmlInput: { maxLength: 20 } }}
-            />
-            <TextField
-              fullWidth
-              label={i18n.t('events:event.form.address.country')}
-              value={values.country}
-              onChange={set('country')}
-              disabled={isSaving}
-              autoComplete="off"
-              slotProps={{ htmlInput: { maxLength: 100 } }}
-            />
-          </Stack>
+          <TextField
+            fullWidth
+            label={i18n.t('events:event.form.address.country')}
+            value={values.country}
+            onChange={set('country')}
+            disabled={isSaving}
+            autoComplete="off"
+            slotProps={{ htmlInput: { maxLength: 100 } }}
+          />
           {hostGroup &&
             <FormControlLabel
               control={

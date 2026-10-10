@@ -126,7 +126,6 @@ export default {
         street: 'Adresse',
         city: 'Ville',
         stateProvince: 'Province ou état',
-        postalCode: 'Code postal',
         country: 'Pays',
       },
       create: 'Créer l’événement',
