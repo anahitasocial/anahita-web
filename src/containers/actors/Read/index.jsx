@@ -8,7 +8,6 @@ import Grid from '@mui/material/Grid';
 import ActorHeader from './ActorHeader';
 import ActorBody from './Body';
 import ActorsFollowRequests from './FollowRequests';
-import ActorsSocialgraph from '../Socialgraph/index';
 import ActorsBrowseFeature from '../Browse/Gadget';
 import Admins from './Admins';
 import Avatar from './Avatar';
@@ -23,7 +22,6 @@ import LimitedActorCard from '../../../components/LimitedActorCard';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
 import Progress from '../../../components/Progress';
-import SocialgraphTabs from './SocialgraphTabs';
 import FeedActorBrowse from '../../feed/Actor';
 import HeaderMeta from '../../../components/HeaderMeta';
 
@@ -122,15 +120,8 @@ const ActorsRead = (props) => {
   );
   const showEditNotifications = isAuthenticated && actor.isLeader;
   const showFollowRequests = isAuthenticated && canAdminister;
-  const isViewer = actor.id === viewer.id;
   const FollowRequests = ActorsFollowRequests(namespace);
   const featureTabs = getActorFeatureTabs(actor);
-
-  // socialgraph tabs
-  const showFollowers = actor.id;
-  const showLeaders = actor.id && utils.node.isPerson(actor);
-  const showBlocks = isViewer;
-  const showMutuals = viewer.id && viewer.id !== actor.id;
 
   const tabPanels = {};
 
@@ -180,6 +171,9 @@ const ActorsRead = (props) => {
           />
         }
         actor={actor}
+        // /people/ana/socialgraph/leaders was a tab of the profile. It now
+        // opens the profile with that list showing.
+        socialgraphOpenOn={tab === 'socialgraph' ? (subtab || 'followers') : ''}
         followAction={
           <>
             {showEditNotifications && <NotificationsDialog actor={actor} />}
@@ -230,31 +224,6 @@ const ActorsRead = (props) => {
             node={actor}
             viewer={viewer}
           />}
-        socialgraph={
-          <SocialgraphTabs
-            followers={showFollowers &&
-              <ActorsSocialgraph
-                actorNode={actor}
-                filter="followers"
-              />}
-            leaders={showLeaders &&
-              <ActorsSocialgraph
-                actorNode={actor}
-                filter="leaders"
-              />}
-            blocks={showBlocks &&
-              <ActorsSocialgraph
-                actorNode={actor}
-                filter="blocks"
-              />}
-            mutuals={showMutuals &&
-              <ActorsSocialgraph
-                actorNode={actor}
-                filter="mutuals"
-              />}
-            selectedTab={subtab}
-          />
-        }
       />
     </>
   );

@@ -33,6 +33,7 @@ import Access from './Access';
 import Permissions from './Permissions';
 import RepostsOnProfile from './RepostsOnProfile';
 import QuotePolicy from './QuotePolicy';
+import ActorBlocked from './Blocked';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -227,6 +228,7 @@ const ActorsSettings = ({
       [ITEMS.ACCESS]: <ActorAccess />,
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
+      [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the

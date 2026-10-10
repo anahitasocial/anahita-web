@@ -38,7 +38,6 @@ const ActorBody = ({
   reposts = null,
   onTabChange = null,
   locations = null,
-  socialgraph = null,
   tabPanels = {},
   mentions = null,
   selectedTab = null,
@@ -81,9 +80,6 @@ const ActorBody = ({
     }
     if (tab === 'replies' || tab === 'reposts') {
       return i18n.t(`replies:tabs.${tab}`);
-    }
-    if (tab === 'socialgraph') {
-      return i18n.t('socialgraph:mTitle');
     }
     return i18n.t(`${tab}:mTitle`);
   };
@@ -161,8 +157,6 @@ const ActorBody = ({
       {value === 'replies' && replies}
       {value === 'reposts' && reposts}
 
-      {value === 'socialgraph' && socialgraph}
-
       {tabPanels[value] && tabPanels[value]}
 
       {actor.id === viewer.id && value === 'mentions' && mentions}
@@ -183,7 +177,6 @@ ActorBody.propTypes = {
   onTabChange: PropTypes.func,
   locations: PropTypes.node,
   admins: PropTypes.node,
-  socialgraph: PropTypes.node,
   tabPanels: PropTypes.objectOf(PropTypes.node),
   mentions: PropTypes.node,
   selectedTab: PropTypes.string,

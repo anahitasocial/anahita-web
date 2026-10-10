@@ -54,6 +54,8 @@ export const ITEMS = {
   REPOSTS: 'reposts',
   // Who can quote this person's posts.
   QUOTES: 'quotes',
+  // The people the viewer has blocked.
+  BLOCKED: 'blocked',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -118,6 +120,8 @@ const ALL_SECTIONS = [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
       { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
       { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
+      // Who you have blocked is yours alone to see and to undo.
+      { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
     ],
   },
   {

@@ -478,6 +478,22 @@ Follow button; quotes and replies show what was said and lead to the note.
 
 There are no views in it, and nothing anywhere counts them.
 
+### Followers, leaders and what is in common
+
+Under a profile's name is the number of its followers. Pressing it opens a
+dialog (`actors/Read/SocialgraphDialog.jsx`, `utils/socialgraph.js`) with up
+to three lists: **Followers**, **Leaders** (who the profile follows; people
+only), and **In common** (the people the viewer follows who follow this
+profile; for somebody signed in, on a profile that is not their own). Each is
+read when first opened. A group's administrators can remove a follower there.
+
+There is no Social Graph tab. An old address such as
+`/people/ana/socialgraph/leaders` opens the profile with that list showing.
+
+**Blocked** is not in the dialog: who you have blocked is yours alone, and is
+a card under Settings › Access (`actors/Settings/Blocked.jsx`), with Unblock
+on each.
+
 ### Private profiles and asking to follow
 
 A profile the viewer may not see is refused by the server, unless it lets
