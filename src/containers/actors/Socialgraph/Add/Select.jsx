@@ -15,6 +15,7 @@ import ListItemText from '@mui/material/ListItemText';
 
 import ActorAvatar from '../../../../components/ActorAvatar';
 import ActorType from '../../../../proptypes/Actor';
+import PersonType from '../../../../proptypes/Person';
 import api from '../../../../api';
 import utils from '../../../../utils';
 import i18n from '../../../../languages';
@@ -26,6 +27,7 @@ const { LIMIT } = APP.BROWSE;
 
 const ActorsSocialgraphAddSelect = ({
   actor,
+  viewer,
   alertError,
   alertSuccess,
 }) => {
@@ -42,6 +44,7 @@ const ActorsSocialgraphAddSelect = ({
       start: 0,
       limit: LIMIT,
       actor,
+      viewer,
       q,
     }).then((resp) => {
       const { data } = resp.data;
@@ -146,12 +149,15 @@ const ActorsSocialgraphAddSelect = ({
 
 ActorsSocialgraphAddSelect.propTypes = {
   actor: ActorType.isRequired,
+  viewer: PersonType.isRequired,
   alertError: PropTypes.func.isRequired,
   alertSuccess: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = () => {
-  return {};
+const mapStateToProps = (state) => {
+  return {
+    viewer: state.session.viewer,
+  };
 };
 
 const mapDispatchToProps = (dispatch) => {

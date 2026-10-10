@@ -10,6 +10,8 @@ export default {
   setAdd: '<0>{{subject}}</0> created a <1>photo set</1>',
   setComment: '<0>{{subject}}</0> commented on <1>photo set</1>',
   actorFollow: '<0>{{subject}}</0> is following <2>{{target}}</2>',
+  actorFollowRequest: '<0>{{subject}}</0> asked to follow <2>{{target}}</2>',
+  actorFollowRequestAccept: '<0>{{subject}}</0> accepted your request to follow',
   actorFollowerAdd: '<0>{{subject}}</0> added <1>{{object}}</1> as a follower to <2>{{target}}</2>',
   actorMention: '<0>{{subject}}</0> mentioned you in a <1>post</1>',
   actorMentionComment: '<0>{{subject}}</0> mentioned you in a <1>comment</1>',

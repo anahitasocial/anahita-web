@@ -10,6 +10,8 @@ export default {
   setAdd: '<0>{{subject}}</0> a créé un <1>album photo</1>',
   setComment: '<0>{{subject}}</0> a commenté sur <1>album photo</1>',
   actorFollow: '<0>{{subject}}</0> suit <2>{{target}}</2>',
+  actorFollowRequest: '<0>{{subject}}</0> a demandé à suivre <2>{{target}}</2>',
+  actorFollowRequestAccept: '<0>{{subject}}</0> a accepté votre demande d’abonnement',
   actorFollowerAdd: '<0>{{subject}}</0> a ajouté <1>{{object}}</1> comme abonné à <2>{{target}}</2>',
   actorMention: '<0>{{subject}}</0> vous a mentionné dans un <1>post</1>',
   actorMentionComment: '<0>{{subject}}</0> vous a mentionné dans un <1>commentaire</1>',

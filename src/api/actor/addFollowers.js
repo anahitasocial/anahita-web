@@ -1,10 +1,19 @@
 import axios from 'axios';
 
+// The people the viewer can offer: their own followers, found by name.
+//
+// It read `viewer` and `offset` from what it was given, and was given
+// neither, so the first letter typed into the picker threw.
 const browse = (params) => {
-  const { viewer, limit, q } = params;
-  return axios.get(`/socialgraph/${viewer.id}/mutuals`, {
+  const {
+    viewer,
+    start = 0,
+    limit,
+    q,
+  } = params;
+  return axios.get(`/socialgraph/${viewer.id}/followers/`, {
     params: {
-      start: params.offset,
+      start,
       limit,
       q,
     },
