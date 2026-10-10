@@ -530,11 +530,12 @@ page has no Follow button. The number going opens who they are
 (`events/Attendees.jsx`). The link to join online is sent by the server only
 to whoever is going or looks after the event.
 
-**Where it is** is a location tagged on the event, as one is tagged on a
-post. The form has a field that finds a place by name among the ones the
-installation knows (`events/PlaceField.jsx`) and tags it once the event is
-saved; the panel on the event's page names the first. A place nobody has
-added yet is added from the event's Locations tab, which has the map.
+**Where it is** is an address typed on the event's form and kept on the
+event, not a place on the site's map: places are public, and an event at
+somebody's home should not put their home on it. The server sends the address
+only to whoever is going or looks after the event, and the panel shows it with
+a link that looks it up on OpenStreetMap when pressed. A public venue can
+still be tagged from the event's Locations tab, and the panel names it.
 
 **An event for a group's followers.** An event hosted by a group has a
 checkbox on its form: everyone who follows the group can see it and answer.

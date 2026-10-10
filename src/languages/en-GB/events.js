@@ -128,9 +128,15 @@ export default {
       },
       hostedBy: 'Hosted by {{ name }}',
       openToHostFollowers: 'Everyone who follows {{ name }} can see it and answer',
-      place: 'Where is it?',
-      placeHelp: 'Start typing the name of a place. One that is not listed can be added from the event\'s Locations tab.',
-      placeNone: 'No place by that name',
+      address: {
+        title: 'Where is it?',
+        help: 'Shown only to people who are going. It is not added to the site\'s places.',
+        street: 'Address',
+        city: 'City',
+        stateProvince: 'Province or state',
+        postalCode: 'Postal code',
+        country: 'Country',
+      },
       create: 'Create event',
       save: 'Save',
       edit: 'Edit event',
@@ -142,7 +148,6 @@ export default {
         already_over: 'That time has already passed.',
         host_not_allowed: 'You can only host an event with a group you administer.',
         generic: 'The event could not be saved.',
-        place: 'The event was saved, but its place could not be set.',
       },
     },
     when: {
@@ -190,6 +195,10 @@ export default {
       forGoing: 'There is a link to join online. It is shown to people who are going.',
     },
     host: 'Hosted by',
+    address: {
+      openMap: 'Find it on a map',
+      forGoing: 'The address is shown to people who are going.',
+    },
     viaHost: 'This event is for the followers of the group hosting it. You follow that group, so you can answer.',
     calendar: 'Add to calendar',
     cancel: {

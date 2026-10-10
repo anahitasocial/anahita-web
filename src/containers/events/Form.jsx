@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -19,7 +19,6 @@ import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 
-import EventPlaceField from './PlaceField';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -48,6 +47,13 @@ const startingValues = (actor) => {
     onlineUrl: event.onlineUrl || '',
     access: 'public',
     openToHostFollowers: Boolean(event.openToHostFollowers),
+    // Where it is held. Sent back to whoever may change the event, who
+    // is among those shown it.
+    street: (event.address && event.address.street) || '',
+    city: (event.address && event.address.city) || '',
+    stateProvince: (event.address && event.address.stateProvince) || '',
+    postalCode: (event.address && event.address.postalCode) || '',
+    country: (event.address && event.address.country) || '',
   };
 };
 
@@ -56,6 +62,12 @@ const startingValues = (actor) => {
 // The times are chosen as they will be on the clocks where the event is:
 // "7 pm" with the zone beside it, whatever zone the browser is in. They are
 // sent as instants with the zone's name, which is how they are kept.
+//
+// Where it is held is an address typed here and kept on the event. It is
+// not a place on the site's map, which anybody can see: an event at
+// somebody's home should not put their home on it. It is shown to whoever
+// is going. A public venue can still be tagged from the event's Locations
+// tab.
 //
 // Who can see it is asked when it is made. Afterwards that is under the
 // event's settings, with the rest of its access, as for a group.
@@ -69,29 +81,9 @@ const EventForm = ({
   const [values, setValues] = useState(startingValues(actor));
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
-  // Where it is: the place tagged on the event when the form opened, and
-  // the one chosen since. Tagged after the event is saved, since a place
-  // can only be put on something that exists.
-  const [placeBefore, setPlaceBefore] = useState(null);
-  const [place, setPlace] = useState(null);
-
   // The group hosting it: given for a new event, and on one being changed
   // its own, when the viewer may see that group.
   const hostGroup = host || (actor && actor.event && actor.event.host) || null;
-
-  useEffect(() => {
-    if (!actor) {
-      return;
-    }
-
-    api.locations.browse({ source_id: actor.id, start: 0, limit: 1 }).then((result) => {
-      const first = (result.data.data || [])[0] || null;
-      setPlaceBefore(first);
-      setPlace(first);
-    }).catch(() => {
-      // The form works without knowing: the place is then left as it is.
-    });
-  }, [actor && actor.id]);
 
   const set = (name) => {
     return (event) => {
@@ -119,6 +111,12 @@ const EventForm = ({
       onlineUrl: values.onlineUrl.trim(),
       // Always sent: left out, the server would take it for no.
       openToHostFollowers: Boolean(hostGroup) && values.openToHostFollowers,
+      // Where it is held, every part of it, so one emptied is taken off.
+      address: values.street.trim(),
+      city: values.city.trim(),
+      stateProvince: values.stateProvince.trim(),
+      postalCode: values.postalCode.trim(),
+      country: values.country.trim(),
     };
 
     if (isNew) {
@@ -133,25 +131,7 @@ const EventForm = ({
     const call = isNew ? api.eventDetails.add(fields) : api.eventDetails.edit(actor, fields);
 
     call.then((result) => {
-      const saved = result.data;
-      const change = events.placeChange(placeBefore, place);
-      const tags = api.tagGraph(saved);
-
-      // The place is put on once the event is there to put it on. If that
-      // fails the event is still saved, and its Locations tab can mend it.
-      return Promise.resolve()
-        .then(() => {
-          return change.remove ? tags.deleteItem(change.remove) : null;
-        })
-        .then(() => {
-          return change.add ? tags.add(change.add) : null;
-        })
-        .catch(() => {
-          alertError(i18n.t('events:event.form.errors.place'));
-        })
-        .then(() => {
-          navigate(getURL(saved));
-        });
+      navigate(getURL(result.data));
     }).catch((failure) => {
       const reason = failure.response && failure.response.data && failure.response.data.error;
       const known = i18n.exists(`events:event.form.errors.${reason}`);
@@ -284,11 +264,61 @@ const EventForm = ({
             disabled={isSaving}
             slotProps={{ htmlInput: { maxLength: 512 } }}
           />
-          <EventPlaceField
-            value={place}
-            onChange={setPlace}
+          <Typography variant="subtitle2" component="h3">
+            {i18n.t('events:event.form.address.title')}
+          </Typography>
+          <Typography variant="body2" color="textSecondary" sx={{ mt: '0 !important' }}>
+            {i18n.t('events:event.form.address.help')}
+          </Typography>
+          <TextField
+            fullWidth
+            label={i18n.t('events:event.form.address.street')}
+            value={values.street}
+            onChange={set('street')}
             disabled={isSaving}
+            autoComplete="off"
+            slotProps={{ htmlInput: { maxLength: 255 } }}
           />
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <TextField
+              fullWidth
+              label={i18n.t('events:event.form.address.city')}
+              value={values.city}
+              onChange={set('city')}
+              disabled={isSaving}
+              autoComplete="off"
+              slotProps={{ htmlInput: { maxLength: 100 } }}
+            />
+            <TextField
+              fullWidth
+              label={i18n.t('events:event.form.address.stateProvince')}
+              value={values.stateProvince}
+              onChange={set('stateProvince')}
+              disabled={isSaving}
+              autoComplete="off"
+              slotProps={{ htmlInput: { maxLength: 100 } }}
+            />
+          </Stack>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
+            <TextField
+              fullWidth
+              label={i18n.t('events:event.form.address.postalCode')}
+              value={values.postalCode}
+              onChange={set('postalCode')}
+              disabled={isSaving}
+              autoComplete="off"
+              slotProps={{ htmlInput: { maxLength: 20 } }}
+            />
+            <TextField
+              fullWidth
+              label={i18n.t('events:event.form.address.country')}
+              value={values.country}
+              onChange={set('country')}
+              disabled={isSaving}
+              autoComplete="off"
+              slotProps={{ htmlInput: { maxLength: 100 } }}
+            />
+          </Stack>
           {hostGroup &&
             <FormControlLabel
               control={

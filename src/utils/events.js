@@ -296,18 +296,32 @@ const placeLabel = (place) => {
   return place.name ? `${place.name}, ${where}` : where;
 };
 
-// What has to be done to an event's tagged place after its form is saved:
-// which to take off and which to put on. Nothing when it is the same place,
-// or still none.
-const placeChange = (before, after) => {
-  const had = before && before.id;
-  const has = after && after.id;
+// The parts of an event's address, in the order they are written.
+const ADDRESS_PARTS = ['street', 'city', 'stateProvince', 'postalCode', 'country'];
 
-  if (had === has) {
-    return { remove: null, add: null };
+// An event's address on one line, or '' when it has none.
+const addressLine = (address) => {
+  if (!address) {
+    return '';
   }
 
-  return { remove: had ? before : null, add: has ? after : null };
+  return ADDRESS_PARTS
+    .map((part) => {
+      return (address[part] || '').trim();
+    })
+    .filter(Boolean)
+    .join(', ');
+};
+
+// Where to look an address up on a map. The address goes to the map only
+// when somebody presses the link, from their own browser: nothing is looked
+// up for them beforehand.
+const mapURL = (address) => {
+  const line = addressLine(address);
+
+  return line ?
+    `https://www.openstreetmap.org/search?query=${encodeURIComponent(line)}` :
+    '';
 };
 
 // A zone's name as people read it: "America/Toronto" as "Toronto".
@@ -348,7 +362,8 @@ export default {
   dateTile,
   isEvent,
   placeLabel,
-  placeChange,
+  addressLine,
+  mapURL,
   zoneLabel,
   takesAnswers,
   canGo,

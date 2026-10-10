@@ -131,6 +131,29 @@ const EventPanel = ({
           <Box>
             <EventWhen event={event} />
           </Box>
+          {/* Where it is held: the address kept on the event, for whoever
+              the server sends it to, with a way to find it on a map. */}
+          {events.addressLine(event.address) &&
+            <Box>
+              <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                <PlaceIcon fontSize="small" />
+                {events.addressLine(event.address)}
+              </Typography>
+              <Link
+                href={events.mapURL(event.address)}
+                target="_blank"
+                rel="noopener noreferrer"
+                variant="body2"
+                underline="hover"
+                sx={{ pl: 4 }}
+              >
+                {i18n.t('events:event.address.openMap')}
+              </Link>
+            </Box>}
+          {!event.address && event.hasAddress &&
+            <Typography variant="body2" color="textSecondary">
+              {i18n.t('events:event.address.forGoing')}
+            </Typography>}
           {place &&
             <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
               <PlaceIcon fontSize="small" />

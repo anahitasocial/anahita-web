@@ -146,16 +146,23 @@ describe('where an event is', () => {
     expect(events.placeLabel(null)).toBe('');
   });
 
-  it('is changed by taking the old place off and putting the new one on', () => {
-    const beach = { id: 1 };
-    const park = { id: 2 };
+  it('has its address on one line, with what was left out left out', () => {
+    expect(events.addressLine({
+      street: '123 Main St',
+      city: 'Vancouver',
+      stateProvince: 'BC',
+      postalCode: 'V5K 0A1',
+      country: 'Canada',
+    })).toBe('123 Main St, Vancouver, BC, V5K 0A1, Canada');
+    expect(events.addressLine({ street: ' 123 Main St ', city: '' })).toBe('123 Main St');
+    expect(events.addressLine({})).toBe('');
+    expect(events.addressLine(undefined)).toBe('');
+  });
 
-    expect(events.placeChange(null, beach)).toEqual({ remove: null, add: beach });
-    expect(events.placeChange(beach, park)).toEqual({ remove: beach, add: park });
-    expect(events.placeChange(beach, null)).toEqual({ remove: beach, add: null });
-    // The same place, or still none: nothing to do.
-    expect(events.placeChange(beach, { id: 1 })).toEqual({ remove: null, add: null });
-    expect(events.placeChange(null, null)).toEqual({ remove: null, add: null });
+  it('can be looked up on a map by whoever presses the link', () => {
+    expect(events.mapURL({ street: '123 Main St', city: 'Vancouver' }))
+      .toBe('https://www.openstreetmap.org/search?query=123%20Main%20St%2C%20Vancouver');
+    expect(events.mapURL({})).toBe('');
   });
 });
 

@@ -120,9 +120,15 @@ export default {
       },
       hostedBy: 'Organisé par {{ name }}',
       openToHostFollowers: 'Toutes les personnes qui suivent {{ name }} peuvent le voir et répondre',
-      place: 'Où a-t-il lieu ?',
-      placeHelp: 'Commencez à saisir le nom d’un lieu. Un lieu absent de la liste peut être ajouté depuis l’onglet Lieux de l’événement.',
-      placeNone: 'Aucun lieu de ce nom',
+      address: {
+        title: 'Où a-t-il lieu ?',
+        help: 'Montrée uniquement aux personnes qui participent. Elle n’est pas ajoutée aux lieux du site.',
+        street: 'Adresse',
+        city: 'Ville',
+        stateProvince: 'Province ou état',
+        postalCode: 'Code postal',
+        country: 'Pays',
+      },
       create: 'Créer l’événement',
       save: 'Enregistrer',
       edit: 'Modifier l’événement',
@@ -134,7 +140,6 @@ export default {
         already_over: 'Cette date est déjà passée.',
         host_not_allowed: 'Vous ne pouvez organiser un événement qu’avec un groupe que vous administrez.',
         generic: 'L’événement n’a pas pu être enregistré.',
-        place: 'L’événement a été enregistré, mais son lieu n’a pas pu être défini.',
       },
     },
     when: {
@@ -180,6 +185,10 @@ export default {
       forGoing: 'Il y a un lien pour participer en ligne. Il est montré aux personnes qui participent.',
     },
     host: 'Organisé par',
+    address: {
+      openMap: 'Voir sur une carte',
+      forGoing: 'L’adresse est montrée aux personnes qui participent.',
+    },
     viaHost: 'Cet événement est réservé aux abonnés du groupe qui l’organise. Vous suivez ce groupe : vous pouvez répondre.',
     calendar: 'Ajouter au calendrier',
     cancel: {
