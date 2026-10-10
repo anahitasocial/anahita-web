@@ -15,6 +15,8 @@ import inbounds from './inbound';
 const namespaces = {
   actors: [
     'groups',
+    // An event is an actor like a group, with a time and a place.
+    'events',
     'people',
   ],
   media: [

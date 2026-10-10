@@ -25,6 +25,7 @@ const namespaces = {
   actors: [
     'people',
     'groups',
+    'events',
   ],
   media: [
     'articles',

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -22,7 +23,12 @@ const { getActorName, getURL } = utils.node;
 // That is all the server sends of it (`restricted`), so there is nothing
 // else to draw. Used as the card in the lists of people and of groups, and
 // as the whole page when such a profile is opened.
-const LimitedActorCard = ({ actor, action = null, note = '' }) => {
+const LimitedActorCard = ({
+  actor,
+  action = null,
+  note = '',
+  extra = null,
+}) => {
   return (
     <Card>
       <CardHeader
@@ -50,6 +56,10 @@ const LimitedActorCard = ({ actor, action = null, note = '' }) => {
           <Typography variant="body1" sx={{ pt: 2 }}>
             {note}
           </Typography>}
+        {extra &&
+          <Box sx={{ pt: 1 }}>
+            {extra}
+          </Box>}
       </CardContent>
       {action &&
         <CardActions sx={{ p: 1 }}>
@@ -65,6 +75,8 @@ LimitedActorCard.propTypes = {
   // A line of its own under the first, such as that the viewer was
   // invited.
   note: PropTypes.string,
+  // Something more under that, such as when an event is.
+  extra: PropTypes.node,
 };
 
 export default LimitedActorCard;

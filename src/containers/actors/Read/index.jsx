@@ -21,6 +21,9 @@ import ControlFollow from '../../controls/Follow';
 import ControlFollowRequest from '../../controls/FollowRequest';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
 import ActorInvite from '../Invite';
+import EventPanel from '../../events/Panel';
+import EventWhen from '../../events/When';
+import EventsHosted from '../../events/Hosted';
 import LimitedActorCard from '../../../components/LimitedActorCard';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
@@ -104,6 +107,8 @@ const ActorsRead = (props) => {
               /> :
               actor.allowFollowRequest && <ControlFollowRequest actor={actor} />)}
             note={actor.isInvited ? i18n.t('socialgraph:invite.invited') : ''}
+            // Somebody invited to an event is told when it is.
+            extra={actor.event ? <EventWhen event={actor.event} /> : null}
           />
         </Grid>
       </Grid>
@@ -114,7 +119,10 @@ const ActorsRead = (props) => {
   const canAdminister = permissions.canAdminister(actor);
   const canFollow = permissions.canFollow(actor, viewer);
 
-  const showFollow = isAuthenticated && canFollow;
+  // An event is answered, Going or Maybe, from its own panel. That is
+  // following it, so there is no Follow button beside.
+  const isEvent = namespace === 'events';
+  const showFollow = isAuthenticated && canFollow && !isEvent;
   // Inviting follows the group's "who can invite" setting, which the
   // server answers as authorized.invite.
   const showInvite = isAuthenticated && Boolean(actor.authorized && actor.authorized.invite);
@@ -211,8 +219,21 @@ const ActorsRead = (props) => {
             isAuthenticated={isAuthenticated}
           />}
       />
+      {isEvent &&
+        <EventPanel
+          actor={actor}
+          onChanged={() => {
+            readItem(id);
+          }}
+        />}
       <ActorBody
         actor={actor}
+        events={namespace === 'groups' && actor.id &&
+          <EventsHosted
+            group={actor}
+            canAdd={isAuthenticated && canAdminister}
+            key={`hosted-events-${actor.id}`}
+          />}
         viewer={viewer}
         selectedTab={tab}
         tabPanels={tabPanels}

@@ -114,6 +114,7 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
+| `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
@@ -503,6 +504,34 @@ There is no Social Graph tab. An old address such as
 **Blocked** is not in the dialog: who you have blocked is yours alone, and is
 a card under Settings › Access (`actors/Settings/Blocked.jsx`), with Unblock
 on each.
+
+### Events
+
+An event is an actor like a group, so most of it is the containers a group
+uses, told the `events` namespace: its page (`actors/Read`), its settings, its
+administrators, its access. What only an event has is in `containers/events`.
+
+| Where | What |
+| --- | --- |
+| **Events** in the left menu, `/events` | The viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`). There is no list of every event |
+| `/events/add`, `/events/add?host=<group id>` | The form (`events/Form.jsx`). With a host it is the group's event |
+| `/events/:id` | The actor page with `events/Panel.jsx` above the tabs: when it is, who hosts it, how many are going, Going and Maybe, Add to calendar, and for its administrators Edit and Cancel |
+| `/events/:id/edit`, and Info under its settings | The same form, to change it |
+| A group's **Events** tab | What the group hosts, upcoming or past, with Add event for its administrators (`events/Hosted.jsx`) |
+
+**Times** are kept as instants with the name of the zone they were chosen in.
+The form works on that zone's clocks, whatever zone the browser is in; a
+reader sees them on their own, with a second line for the event's zone when
+it differs. `utils/events.js` does both with `Intl`, clock changes included,
+and has the tests for it.
+
+**Answering** is Going or Maybe, and is following the event, so an event's
+page has no Follow button. The number going opens who they are
+(`events/Attendees.jsx`). The link to join online is sent by the server only
+to whoever is going or looks after the event.
+
+**Add to calendar** asks the server for the event as an `.ics` file and hands
+it to the browser to save.
 
 ### Inviting people to a group
 

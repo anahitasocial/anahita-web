@@ -36,6 +36,7 @@ const ActorBody = ({
   feed = null,
   replies = null,
   reposts = null,
+  events = null,
   onTabChange = null,
   locations = null,
   tabPanels = {},
@@ -47,12 +48,14 @@ const ActorBody = ({
   // person, what they replied and what they reposted. Only people reply
   // and repost, so a group or any other kind of actor has the first alone.
   const hasOwnWords = utils.node.isPerson(actor);
-  const featureTabs = getActorFeatureTabs(actor).flatMap((tab) => {
+  const ownTabs = getActorFeatureTabs(actor).flatMap((tab) => {
     if (tab !== 'feed' || !hasOwnWords) {
       return [tab];
     }
     return ['feed', 'replies', 'reposts'];
   });
+  // A group has the events it hosts, after what it has posted.
+  const featureTabs = events ? [...ownTabs, 'events'] : ownTabs;
   const defaultTab = featureTabs[0] || 'feed';
   const known = (tab) => {
     return featureTabs.includes(tab) ? tab : defaultTab;
@@ -156,6 +159,7 @@ const ActorBody = ({
       {/* The whole width, like the lists of notes, articles and photos. */}
       {value === 'replies' && replies}
       {value === 'reposts' && reposts}
+      {value === 'events' && events}
 
       {tabPanels[value] && tabPanels[value]}
 
@@ -173,6 +177,8 @@ ActorBody.propTypes = {
   // The profile's other two lists.
   replies: PropTypes.node,
   reposts: PropTypes.node,
+  // On a group: the events it hosts.
+  events: PropTypes.node,
   // Called with the tab chosen, '' for the first one.
   onTabChange: PropTypes.func,
   locations: PropTypes.node,

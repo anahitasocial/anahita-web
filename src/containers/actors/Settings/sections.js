@@ -295,9 +295,10 @@ export default getPersonSections;
 // `bare` follows the same rule as everywhere else: true when the component does
 // not render its own Card. Verified per component — Access brings one, Info,
 // Admins and Delete do not.
-export const getGroupTabs = ({ canDelete, isAdmin }) => {
+export const getGroupTabs = ({ canDelete, isAdmin, infoHasCard = false }) => {
   return [
-    { key: ITEMS.INFO, bare: true },
+    // An event's Info is the event form, which brings its own Card.
+    { key: ITEMS.INFO, bare: !infoHasCard },
     { key: ITEMS.ADMINS, bare: true },
     { key: ITEMS.ACCESS, bare: false },
     // Brings its own Card, like Access.
