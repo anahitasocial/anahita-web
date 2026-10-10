@@ -47,6 +47,9 @@ import PeopleAdd from '../containers/people/Add';
 
 import FeedsPage from '../containers/feeds';
 import SavedPage from '../containers/saved';
+import EventsPage from '../containers/events';
+import EventAdd from '../containers/events/Add';
+import EventEdit from '../containers/events/Edit';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
@@ -60,6 +63,12 @@ const GroupsRead = ActorsRead('groups');
 const GroupsAdd = ActorsAdd('groups');
 const GroupsSettings = ActorsSettings('groups');
 const GroupsNotificationsEdit = ActorsNotificationsEdit('groups');
+
+// An event is an actor like a group, so its page and its settings are the
+// same containers told a different namespace.
+const EventsRead = ActorsRead('events');
+const EventsSettings = ActorsSettings('events');
+const EventsNotificationsEdit = ActorsNotificationsEdit('events');
 
 const PeopleRead = ActorsRead('people');
 const PeopleSettings = ActorsSettings('people');
@@ -224,6 +233,52 @@ const AppRoutes = () => {
                 </AuthenticatedRoute>
           }
             />
+            {/* Events — static paths before parameterized. /events is the
+            viewer's own lists; there is no list of every event. */}
+            <Route
+              path="/events"
+              element={
+                <AuthenticatedRoute>
+                  <EventsPage />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/events/add"
+              element={
+                <AuthenticatedRoute>
+                  <EventAdd />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/events/:id/edit"
+              element={
+                <AuthenticatedRoute>
+                  <EventEdit />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/events/:id/settings"
+              element={
+                <AuthenticatedRoute>
+                  <EventsSettings />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/events/:id/notifications"
+              element={
+                <AuthenticatedRoute>
+                  <EventsNotificationsEdit />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route path="/events/:id/:tab/:subtab" element={<EventsRead />} />
+            <Route path="/events/:id/:tab" element={<EventsRead />} />
+            <Route path="/events/:id" element={<EventsRead />} />
+
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />
             <Route path="/groups/:id" element={<GroupsRead />} />

@@ -76,3 +76,26 @@ describe('actor.canFeature', () => {
     expect(actor.canFeature(someone, GUEST)).toBe(false);
   });
 });
+
+// A setting of its own: an installation may keep groups to its
+// administrators and let anybody hold an event.
+describe('actor.canAddEvent', () => {
+  it('follows eventsFrom, by rank', () => {
+    expect(actor.canAddEvent(REGISTERED, { eventsFrom: 'registered' })).toBe(true);
+    expect(actor.canAddEvent(ADMIN, { eventsFrom: 'registered' })).toBe(true);
+    expect(actor.canAddEvent(REGISTERED, { eventsFrom: 'administrators' })).toBe(false);
+    expect(actor.canAddEvent(ADMIN, { eventsFrom: 'administrators' })).toBe(true);
+  });
+
+  it('is not moved by the setting for groups', () => {
+    const settings = { groupsFrom: 'administrators', eventsFrom: 'registered' };
+    expect(actor.canAddEvent(REGISTERED, settings)).toBe(true);
+    expect(actor.canAdd(REGISTERED, settings)).toBe(false);
+  });
+
+  // Before NodeInfo answers, and against a server that does not say.
+  it('offers nothing until the installation has said', () => {
+    expect(actor.canAddEvent(SUPER_ADMIN, {})).toBe(false);
+    expect(actor.canAddEvent(REGISTERED, undefined)).toBe(false);
+  });
+});

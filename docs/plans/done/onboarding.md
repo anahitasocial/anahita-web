@@ -140,7 +140,7 @@ account, and a dashboard nudge.
 
 - `api/actor/featured.js`: `edit(namespace, actor, featured)` →
   `PATCH /<namespace>/:id/featured`.
-- `containers/controls/Feature.jsx`: a "Feature this account" / "Stop
+- `containers/controls/Feature.jsx`: a "Feature this profile" / "Stop
   featuring" item in the profile's menu (`actors/Read/Controls.jsx`), shown
   only to super administrators (`permissions/actor.js`
   `canFeature(actor, viewer)`), for people and groups. The state comes from

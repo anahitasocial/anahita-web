@@ -114,6 +114,7 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
+| `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
@@ -478,10 +479,124 @@ Follow button; quotes and replies show what was said and lead to the note.
 
 There are no views in it, and nothing anywhere counts them.
 
+### Followers, following and what is in common
+
+Under a profile's name is the number of its followers. Pressing it opens a
+dialog (`actors/Read/SocialgraphDialog.jsx`, `utils/socialgraph.js`) with up
+to three lists: **Followers**, **Following** (who the profile follows; people
+only; `leaders` in the code and the API, which is Anahita's own word for it), and **In common** (the people the viewer follows who follow this
+profile; for somebody signed in, on a profile that is not their own). Each is
+read when first opened and more of it as its end is scrolled to, whoever
+followed most lately first. A Latest / Oldest switch above the list turns the
+order round (`?dir=asc`). A group's administrators can remove a follower
+there.
+
+What is in common is found by one query in the graph, so it is whole, paged
+and counted; its number is on its tab once the tab has been opened.
+
+A person who follows the viewer says so: "Follows you" under their name on
+their profile, and beside their name in these lists. The button that follows
+them then reads "Follow back" (`utils/socialgraph.js`, `controls/Follow.jsx`).
+
+There is no Social Graph tab. An old address such as
+`/people/ana/socialgraph/leaders` opens the profile with that list showing.
+
+**Blocked** is not in the dialog: who you have blocked is yours alone, and is
+a card under Settings › Access (`actors/Settings/Blocked.jsx`), with Unblock
+on each.
+
+### Events
+
+An event is an actor like a group, so most of it is the containers a group
+uses, told the `events` namespace: its page (`actors/Read`), its settings, its
+administrators, its access. What only an event has is in `containers/events`.
+
+| Where | What |
+| --- | --- |
+| **Events** in the left menu, `/events` | The viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`). There is no list of every event. Its + follows the installation's `eventsFrom` (`permissions/actor.js`), a setting apart from the one for groups |
+| `/events/add`, `/events/add?host=<group id>` | The form (`events/Form.jsx`). With a host it is the group's event |
+| `/events/:id` | The actor page with `events/Panel.jsx` above the tabs: when it is, who hosts it, how many are going, Going and Maybe, Add to calendar, and for its administrators Edit and Cancel |
+| `/events/:id/edit`, and Info under its settings | The same form, to change it |
+| A group's **Events** tab | What the group hosts, upcoming or past, with Add event for its administrators (`events/Hosted.jsx`) |
+
+**Times** are kept as instants with the name of the zone they were chosen in.
+The form works on that zone's clocks, whatever zone the browser is in; a
+reader sees them on their own, with a second line for the event's zone when
+it differs. `utils/events.js` does both with `Intl`, clock changes included,
+and has the tests for it.
+
+**Answering** is Going or Maybe, and is following the event, so an event's
+page has no Follow button. The number going opens who they are
+(`events/Attendees.jsx`). The link to join online is sent by the server only
+to whoever is going or looks after the event.
+
+**Where it is** is an address typed on the event's form and kept on the
+event, not a place on the site's map: places are public, and an event at
+somebody's home should not put their home on it. The server sends the address
+only to whoever is going or looks after the event, and the About card on the
+event's page shows it (`actors/Read/About.jsx`), which is drawn for an event
+with an address even when it has no description. Everybody else is told there
+is an address for people who are going.
+
+**A map** is drawn in that card when the address came with a point. The form
+has a "Show a map" checkbox, off unless ticked, because finding an address
+means the server sending it to a geocoder. The marker opens nothing
+(`linked={false}` on `components/Map.jsx`). Pressing the "Where" row opens a
+menu of Apple Maps, Google Maps and OpenStreetMap (`events.mapLinks`). Each
+opens at the point when there is one, and otherwise looks the address up, from
+the reader's own browser and only when picked. The event's website, a field
+on its form, is the row above "Where", so the map sits right under the
+address. A public venue can still be tagged from the
+event's Locations tab, and the panel names it.
+
+**An event for a group's followers.** An event hosted by a group has a
+checkbox on its form: everyone who follows the group can see it and answer.
+A follower who has not answered is shown its name, time and description with
+Maybe and Going (`events/Answer.jsx`), on its page and in the group's Events
+tab. Once they answer they follow the event, and its page opens to them.
+
+**No avatar.** An event's picture is its cover. Wherever an avatar would be
+drawn, `components/ActorAvatar.jsx` draws `EventDateTile` for an event: the
+month over the day it starts on, on the reader's calendar, or a calendar icon
+where the event is named without its times. Its page has no avatar to upload.
+
+**Add to calendar** asks the server for the event as an `.ics` file and hands
+it to the browser to save.
+
+### Inviting people to a group
+
+A group's page has **Invite** for whoever the group lets invite
+(`authorized.invite`). It opens `containers/actors/Invite`: the viewer's own
+followers, found by name and ticked, up to 50 at a time. The server answers
+for each person, and its answer is shown beside the name (`utils/invites.js`).
+Whoever looks after the group has a second tab, **Invited**, with who is still
+to answer and a way to take an invitation back.
+
+The person invited answers with `containers/controls/InviteAnswer.jsx`,
+Decline and Accept, in three places: on the notification, on the group's page,
+and on the limited card when the group is one they could not otherwise see.
+
+Who can invite is set under Settings › Permissions. The old "Who can add a
+follower?" row is gone: nobody is added without saying yes. The "+ Followers"
+button and its picker went with it.
+
+### Private profiles and asking to follow
+
+A profile the viewer may not see is refused by the server, unless it lets
+people ask to follow it. Then the server sends its name and picture, marked
+`restricted`, and the web app draws `components/LimitedActorCard.jsx`: as the
+card in the lists of people and of groups (`actors/Browse/Card.jsx`), and as
+the whole page when the profile is opened (`actors/Read/index.jsx`).
+
+The button on it is `containers/controls/FollowRequest.jsx`: "Request to
+follow", then "Requested", which takes the request back when pressed. Whoever
+looks after the profile answers from the follow requests on their own
+profile, and is told by a notification.
+
 ### Menus
 
-Every item in the menus on posts, feed items and replies has an icon before
-its words, through `components/MenuItemLabel.jsx`.
+Every item in the menus on posts, feed items, replies and profiles has an
+icon before its words, through `components/MenuItemLabel.jsx`.
 
 ### Quote posts
 

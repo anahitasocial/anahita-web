@@ -3,6 +3,10 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import ControlFollow from '../../controls/Follow';
+import ControlFollowRequest from '../../controls/FollowRequest';
+import LimitedActorCard from '../../../components/LimitedActorCard';
+import EventCard from '../../events/Card';
+import events from '../../../utils/events';
 import ActorCard from '../../../components/ActorCard';
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -14,6 +18,26 @@ const ActorsCard = (props) => {
     viewer,
     isAuthenticated,
   } = props;
+
+  // An event has its own card wherever an actor's would be drawn, as in
+  // search results: its cover when it has one, when it is, how many are
+  // going. The general card gives every actor a tall cover, pictured or
+  // not, and a Follow button, and an event is answered, not followed.
+  if (events.isEvent(actor)) {
+    return <EventCard actor={actor} />;
+  }
+
+  // One the viewer may not see, listed because it may be asked. The
+  // server sends its name and picture and nothing else.
+  if (actor.restricted) {
+    return (
+      <LimitedActorCard
+        actor={actor}
+        action={isAuthenticated && actor.allowFollowRequest &&
+          <ControlFollowRequest actor={actor} />}
+      />
+    );
+  }
 
   const showFollow = isAuthenticated && permissions.canFollow(actor, viewer);
 

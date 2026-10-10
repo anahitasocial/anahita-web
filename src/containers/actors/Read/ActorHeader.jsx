@@ -54,6 +54,7 @@ const ActorHeader = ({
   actor,
   followAction = null,
   headerActions = null,
+  socialgraphOpenOn = '',
 }) => {
   return (
     <Card
@@ -86,7 +87,7 @@ const ActorHeader = ({
             >
               {actor.alias && `@${slugify(actor.alias.toLowerCase())}`}
             </Typography>
-            <SocialgraphMeta actor={actor} />
+            <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
           </>
         }
         action={headerActions}
@@ -107,6 +108,8 @@ ActorHeader.propTypes = {
   actor: ActorType.isRequired,
   followAction: PropTypes.node,
   headerActions: PropTypes.node,
+  // A list of followers to open on arriving. See SocialgraphMeta.
+  socialgraphOpenOn: PropTypes.string,
 };
 
 export default withStyles(ActorHeader, styles);

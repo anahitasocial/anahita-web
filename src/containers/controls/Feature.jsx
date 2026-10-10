@@ -3,6 +3,10 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { singularize } from 'inflection';
 import MenuItem from '@mui/material/MenuItem';
+import FeatureIcon from '@mui/icons-material/StarBorder';
+import FeaturedIcon from '@mui/icons-material/Star';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import actions from '../../actions';
 import api from '../../api';
@@ -45,9 +49,11 @@ const ControlsFeature = React.forwardRef(({
       disabled={waiting}
       ref={ref}
     >
-      {featured
-        ? i18n.t('actor:featured.unfeature')
-        : i18n.t('actor:featured.feature')}
+      <MenuItemLabel icon={featured ? <FeaturedIcon fontSize="small" /> : <FeatureIcon fontSize="small" />}>
+        {featured
+          ? i18n.t('actor:featured.unfeature')
+          : i18n.t('actor:featured.feature')}
+      </MenuItemLabel>
     </MenuItem>
   );
 });

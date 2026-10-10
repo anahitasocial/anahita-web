@@ -11,6 +11,7 @@ import MenuItemLabel from '../../components/MenuItemLabel';
 import actions from '../../actions/socialgraph';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
+import socialgraph from '../../utils/socialgraph';
 
 const ControlsFollow = React.forwardRef((props, ref) => {
   const {
@@ -18,7 +19,9 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     unfollowActor,
     actor,
     component = 'button',
-    followLabel = i18n.t('actions:follow'),
+    // "Follow back" for somebody who already follows the viewer: it says
+    // what pressing it would make of the two of them.
+    followLabel = i18n.t(socialgraph.followLabelKey(props.actor)),
     unfollowLabel = i18n.t('actions:unfollow'),
     viewer,
   } = props;

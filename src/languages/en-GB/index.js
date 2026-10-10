@@ -21,6 +21,7 @@ import settings from './settings';
 import signupRequests from './signupRequests';
 import invites from './invites';
 import support from './support';
+import events from './events';
 import groups from './groups';
 import password from './password';
 import username from './username';
@@ -65,6 +66,7 @@ export default {
   signupRequests,
   invites,
   support,
+  events,
   groups,
   people,
   password,

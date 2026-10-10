@@ -18,6 +18,7 @@ import cover from './cover';
 import abuseReports from './abuseReports';
 import accounts from './accounts';
 import email from './email';
+import eventDetails from './events';
 import feed from './feed';
 import hashtags from './hashtags';
 import is from './is';
@@ -99,6 +100,7 @@ axios.interceptors.response.use(
 const namespaces = {
   actors: [
     'groups',
+    'events',
     'people',
   ],
   media: [
@@ -119,6 +121,9 @@ const apis = {
   avatar,
   agreements,
   cover,
+  // What only an event has. The `events` namespace below is the event as
+  // an actor, like `groups`.
+  eventDetails,
   feed_leaders: feed.leaders,
   feed_actor: feed.actor,
   hashtags,

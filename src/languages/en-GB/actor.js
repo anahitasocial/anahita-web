@@ -5,12 +5,20 @@ export default {
   website: 'Website',
   body: 'Description',
   unknown: 'Unknown',
+  // A profile the viewer may not see, which lets people ask to follow it.
+  limited: {
+    private: 'This profile is private. Its followers can see it.',
+    request: 'Request to follow',
+    requested: 'Requested',
+    withdraw: 'Take the request back',
+    failed: 'That could not be done.',
+  },
   featured: {
-    feature: 'Feature this account',
+    feature: 'Feature this profile',
     unfeature: 'Stop featuring',
     errors: {
-      generic: 'Could not change whether this account is featured. Please try again.',
-      conflict: 'A disabled or archived account cannot be featured.',
+      generic: 'Could not change whether this profile is featured. Please try again.',
+      conflict: 'A disabled or archived profile cannot be featured.',
     },
   },
   delete: {
@@ -33,7 +41,7 @@ export default {
     title: 'Access',
     cDescription: 'Who can see this profile.',
     // One sentence per level, because the label alone does not say who
-    // it means — "Mutuals" and "Leaders" are the site's words, not
+    // it means — "Mutuals" and "Following" are the site's words, not
     // everybody's.
     descriptions: {
       public: 'Anyone, signed in or not.',
@@ -64,7 +72,7 @@ export default {
       person: {
         registered: 'Anyone signed in',
         followers: 'Followers',
-        leaders: 'Leaders',
+        leaders: 'Following',
         mutuals: 'Mutuals',
         admins: 'Only me',
       },
@@ -74,7 +82,7 @@ export default {
         admins: 'Admins',
       },
     },
-    // Shown under each choice in the open list — "Leaders" and "Mutuals"
+    // Shown under each choice in the open list — "Following" and "Mutuals"
     // are the site's words, not everybody's.
     descriptions: {
       person: {

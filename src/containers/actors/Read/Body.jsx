@@ -11,6 +11,7 @@ import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
 import ActorBodyAbout from './About';
 import i18n from '../../../languages';
+import eventDetails from '../../../utils/events';
 import utils from '../../../utils';
 
 const { getNamespace, getActorFeatureTabs } = utils.node;
@@ -36,9 +37,9 @@ const ActorBody = ({
   feed = null,
   replies = null,
   reposts = null,
+  events = null,
   onTabChange = null,
   locations = null,
-  socialgraph = null,
   tabPanels = {},
   mentions = null,
   selectedTab = null,
@@ -48,12 +49,14 @@ const ActorBody = ({
   // person, what they replied and what they reposted. Only people reply
   // and repost, so a group or any other kind of actor has the first alone.
   const hasOwnWords = utils.node.isPerson(actor);
-  const featureTabs = getActorFeatureTabs(actor).flatMap((tab) => {
+  const ownTabs = getActorFeatureTabs(actor).flatMap((tab) => {
     if (tab !== 'feed' || !hasOwnWords) {
       return [tab];
     }
     return ['feed', 'replies', 'reposts'];
   });
+  // A group has the events it hosts, after what it has posted.
+  const featureTabs = events ? [...ownTabs, 'events'] : ownTabs;
   const defaultTab = featureTabs[0] || 'feed';
   const known = (tab) => {
     return featureTabs.includes(tab) ? tab : defaultTab;
@@ -81,9 +84,6 @@ const ActorBody = ({
     }
     if (tab === 'replies' || tab === 'reposts') {
       return i18n.t(`replies:tabs.${tab}`);
-    }
-    if (tab === 'socialgraph') {
-      return i18n.t('socialgraph:mTitle');
     }
     return i18n.t(`${tab}:mTitle`);
   };
@@ -129,7 +129,7 @@ const ActorBody = ({
         >
           <Grid size={{ xs: 12, md: 4 }}>
             <Grid container spacing={2}>
-              {actor.body && (
+              {(actor.body || actor.websiteUrl || eventDetails.hasWhere(actor)) && (
                 <Grid size={12}>
                   <ActorBodyAbout actor={actor} />
                 </Grid>
@@ -160,8 +160,7 @@ const ActorBody = ({
       {/* The whole width, like the lists of notes, articles and photos. */}
       {value === 'replies' && replies}
       {value === 'reposts' && reposts}
-
-      {value === 'socialgraph' && socialgraph}
+      {value === 'events' && events}
 
       {tabPanels[value] && tabPanels[value]}
 
@@ -179,11 +178,12 @@ ActorBody.propTypes = {
   // The profile's other two lists.
   replies: PropTypes.node,
   reposts: PropTypes.node,
+  // On a group: the events it hosts.
+  events: PropTypes.node,
   // Called with the tab chosen, '' for the first one.
   onTabChange: PropTypes.func,
   locations: PropTypes.node,
   admins: PropTypes.node,
-  socialgraph: PropTypes.node,
   tabPanels: PropTypes.objectOf(PropTypes.node),
   mentions: PropTypes.node,
   selectedTab: PropTypes.string,

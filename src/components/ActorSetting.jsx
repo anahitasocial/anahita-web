@@ -8,6 +8,8 @@ import Divider from '@mui/material/Divider';
 
 import BackIcon from '@mui/icons-material/ArrowBackIos';
 
+import EventDateTile from './EventDateTile';
+import events from '../utils/events';
 import utils from '../utils';
 
 const {
@@ -41,13 +43,17 @@ const ActorSettingCard = ({
             variant="text"
             startIcon={<BackIcon />}
           >
-            <Avatar
-              aria-label={getActorName(actor)}
-              alt={getActorName(actor)}
-              src={src}
-            >
-              {!src && initials}
-            </Avatar>
+            {/* An event has no avatar. Where one would be is the day it
+                is on, as everywhere else an event is drawn. */}
+            {events.isEvent(actor) ?
+              <EventDateTile actor={actor} /> :
+              <Avatar
+                aria-label={getActorName(actor)}
+                alt={getActorName(actor)}
+                src={src}
+              >
+                {!src && initials}
+              </Avatar>}
           </Button>
         }
         title={getActorName(actor)}

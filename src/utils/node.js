@@ -374,9 +374,11 @@ const getEnabledNodeTypes = (actor) => {
 const getActorFeatureTabs = (actor) => {
   if (!actor.features) return [];
 
+  // Who follows whom has no tab: it opens from the number of followers
+  // under the profile's name. See actors/Read/SocialgraphMeta.
   const directMappings = {
     'feed-service': ['feed'],
-    'socialgraph-service': ['socialgraph'],
+    'socialgraph-service': [],
   };
 
   return actor.features

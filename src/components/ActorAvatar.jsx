@@ -5,6 +5,8 @@ import { withStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
 import Link from '@mui/material/Link';
 import ActorType from '../proptypes/Actor';
+import EventDateTile from './EventDateTile';
+import events from '../utils/events';
 import utils from '../utils';
 
 const {
@@ -50,6 +52,16 @@ const ActorAvatar = ({
   size = 'default',
 }) => {
   const url = getURL(actor);
+
+  // An event has no avatar. Where one would be is the day it is on.
+  if (events.isEvent(actor)) {
+    const tile = <EventDateTile actor={actor} size={size} />;
+
+    return linked ?
+      <Link href={url} className={classes.link}>{tile}</Link> :
+      tile;
+  }
+
   const avatar = getAvatarURL(actor);
   const initials = getActorInitials(actor);
 

@@ -54,6 +54,8 @@ export const ITEMS = {
   REPOSTS: 'reposts',
   // Who can quote this person's posts.
   QUOTES: 'quotes',
+  // The people the viewer has blocked.
+  BLOCKED: 'blocked',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -118,6 +120,8 @@ const ALL_SECTIONS = [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
       { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
       { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
+      // Who you have blocked is yours alone to see and to undo.
+      { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
     ],
   },
   {
@@ -291,9 +295,10 @@ export default getPersonSections;
 // `bare` follows the same rule as everywhere else: true when the component does
 // not render its own Card. Verified per component — Access brings one, Info,
 // Admins and Delete do not.
-export const getGroupTabs = ({ canDelete, isAdmin }) => {
+export const getGroupTabs = ({ canDelete, isAdmin, infoHasCard = false }) => {
   return [
-    { key: ITEMS.INFO, bare: true },
+    // An event's Info is the event form, which brings its own Card.
+    { key: ITEMS.INFO, bare: !infoHasCard },
     { key: ITEMS.ADMINS, bare: true },
     { key: ITEMS.ACCESS, bare: false },
     // Brings its own Card, like Access.

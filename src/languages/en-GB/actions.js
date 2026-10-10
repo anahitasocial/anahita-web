@@ -1,5 +1,6 @@
 export default {
   follow: 'Follow',
+  followBack: 'Follow back',
   unfollow: 'Unfollow',
   block: 'Block',
   unblock: 'Unblock',

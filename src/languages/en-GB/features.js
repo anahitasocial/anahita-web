@@ -15,6 +15,7 @@ export default {
     addPermissions: {
       title: 'Permissions',
       follower: 'Who can add a follower?',
+      invite: 'Who can invite people to follow?',
     },
   },
   text: {

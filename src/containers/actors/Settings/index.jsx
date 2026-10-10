@@ -33,6 +33,8 @@ import Access from './Access';
 import Permissions from './Permissions';
 import RepostsOnProfile from './RepostsOnProfile';
 import QuotePolicy from './QuotePolicy';
+import ActorBlocked from './Blocked';
+import EventForm from '../../events/Form';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -227,6 +229,7 @@ const ActorsSettings = ({
       [ITEMS.ACCESS]: <ActorAccess />,
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
+      [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the
@@ -295,7 +298,8 @@ const ActorsSettings = ({
   // Falls back rather than trusting the stored value. The default used to be a
   // tab groups never render, which handed MUI a Tabs value it could not match —
   // a console warning and an empty body on every /groups/:id/settings load.
-  const groupTabs = getGroupTabs({ canDelete, isAdmin });
+  const isEvent = namespace === 'events';
+  const groupTabs = getGroupTabs({ canDelete, isAdmin, infoHasCard: isEvent });
   const activeTab = groupTabs.find((entry) => {
     return entry.key === tab;
   }) || groupTabs[0];
@@ -309,7 +313,9 @@ const ActorsSettings = ({
   // actions the way the person page stacks a section's items, so the three can
   // be compared rather than hunted for.
   const groupPanels = {
-    [ITEMS.INFO]: <ActorInfo />,
+    // An event's name is saved with when it is and how many may go, so
+    // its Info is the event's own form and not the one a group has.
+    [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
     [ITEMS.ACCESS]: <ActorAccess />,
     [ITEMS.PERMISSIONS]: <ActorPermissions />,

@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
+import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
 // ExitToApp, not LockOpen.
@@ -105,6 +106,20 @@ const LeftMenu = ({
             </ListItemIcon>
             <ListItemText primary={i18n.t('groups:cTitle')} />
           </ListItemButton>
+          {/* The viewer's own events, after the groups that host most of
+              them: what they are going to, were invited to, and host.
+              There is no list of every event to show a visitor. */}
+          {isAuthenticated &&
+            <ListItemButton
+              component={Link}
+              to="/events"
+              selected={pathname === '/events'}
+            >
+              <ListItemIcon>
+                <EventsIcon />
+              </ListItemIcon>
+              <ListItemText primary={i18n.t('events:cTitle')} />
+            </ListItemButton>}
           <ListItemButton
             component={Link}
             to="/hashtags/"
