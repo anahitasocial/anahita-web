@@ -66,37 +66,11 @@ const ActorBodyAbout = (props) => {
             </EntityBody>
           </CardContent>
         </>}
-      {/* One list: where it is held, then its website under it. Pressing
-          where it is offers the maps it can be opened in. */}
+      {/* One list: its website, then where it is held, so the map sits
+          right under its address. Pressing where it is offers the maps it
+          can be opened in. */}
       {(address || event.hasAddress || websiteUrl) &&
         <List>
-          {address &&
-            <ListItemButton
-              aria-haspopup="menu"
-              aria-expanded={Boolean(mapsAnchor)}
-              onClick={(e) => {
-                setMapsAnchor(e.currentTarget);
-              }}
-            >
-              <ListItemIcon>
-                <PlaceIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={i18n.t('events:event.address.title')}
-                secondary={address}
-              />
-              <OpenIcon color="action" />
-            </ListItemButton>}
-          {!address && event.hasAddress &&
-            <ListItem>
-              <ListItemIcon>
-                <PlaceIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={i18n.t('events:event.address.title')}
-                secondary={i18n.t('events:event.address.forGoing')}
-              />
-            </ListItem>}
           {websiteUrl &&
             <ListItemButton
               component="a"
@@ -126,6 +100,33 @@ const ActorBodyAbout = (props) => {
                 }
               />
             </ListItemButton>}
+          {address &&
+            <ListItemButton
+              aria-haspopup="menu"
+              aria-expanded={Boolean(mapsAnchor)}
+              onClick={(e) => {
+                setMapsAnchor(e.currentTarget);
+              }}
+            >
+              <ListItemIcon>
+                <PlaceIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('events:event.address.title')}
+                secondary={address}
+              />
+              <OpenIcon color="action" />
+            </ListItemButton>}
+          {!address && event.hasAddress &&
+            <ListItem>
+              <ListItemIcon>
+                <PlaceIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('events:event.address.title')}
+                secondary={i18n.t('events:event.address.forGoing')}
+              />
+            </ListItem>}
         </List>}
       {address &&
         <Menu
