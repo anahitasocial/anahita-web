@@ -1,13 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import api from '../../api/cover';
 import CoverForm from '../../components/CoverForm';
 import NodeType from '../../proptypes/Node';
+import actions from '../../actions';
+import i18n from '../../languages';
+import upload from '../../utils/upload';
 
 const Cover = (props) => {
   const {
     node,
     canEdit,
+    alertError,
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -55,6 +60,11 @@ const Cover = (props) => {
     api.add(node, files[0]).then((result) => {
       const { data } = result;
       setCover(data.large.url);
+    }).catch((failure) => {
+      // Said, and why: too large, not an image. A refused upload used to
+      // leave the cover spinning for good with nothing to explain it.
+      alertError(i18n.t(upload.refusalKey(failure)));
+    }).finally(() => {
       setWaiting(false);
     });
   };
@@ -64,6 +74,9 @@ const Cover = (props) => {
     setWaiting(true);
     api.deleteItem(node).then(() => {
       setCover(null);
+    }).catch(() => {
+      alertError(i18n.t('media:image.failed'));
+    }).finally(() => {
       setWaiting(false);
     });
   };
@@ -95,6 +108,15 @@ const Cover = (props) => {
 Cover.propTypes = {
   node: NodeType.isRequired,
   canEdit: PropTypes.bool.isRequired,
+  alertError: PropTypes.func.isRequired,
 };
 
-export default Cover;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    alertError: (message) => {
+      return dispatch(actions.app.alert.error(message));
+    },
+  };
+};
+
+export default connect(null, mapDispatchToProps)(Cover);

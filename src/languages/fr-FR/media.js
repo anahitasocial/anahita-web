@@ -36,6 +36,13 @@ export default {
     failed: 'Cette liste n\'a pas pu être chargée.',
     open: 'Ouvrir',
   },
+  // Un avatar ou une couverture que le serveur a refusé.
+  image: {
+    tooLarge: 'Cette image est trop volumineuse. La limite est de 10 Mo.',
+    unsupported: 'Seules les images JPEG et PNG peuvent être envoyées.',
+    unreadable: 'Ce fichier n’a pas pu être lu comme une image.',
+    failed: 'L’image n’a pas pu être envoyée.',
+  },
   // Enregistrer une publication pour la retrouver. Privé.
   saved: {
     title: 'Enregistrements',

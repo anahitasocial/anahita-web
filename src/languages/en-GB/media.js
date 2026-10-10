@@ -36,6 +36,13 @@ export default {
     failed: 'This list could not be loaded.',
     open: 'Open',
   },
+  // An avatar or a cover the server would not take.
+  image: {
+    tooLarge: 'This image is too large. The limit is 10 MB.',
+    unsupported: 'Only JPEG and PNG images can be uploaded.',
+    unreadable: 'This file could not be read as an image.',
+    failed: 'The image could not be uploaded.',
+  },
   // Saving a post to find it again. Private to whoever saved it.
   saved: {
     title: 'Saved',

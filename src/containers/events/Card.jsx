@@ -5,6 +5,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import CardMedia from '@mui/material/CardMedia';
 import Chip from '@mui/material/Chip';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -16,7 +17,7 @@ import EventWhen from './When';
 import i18n from '../../languages';
 import utils from '../../utils';
 
-const { getActorName, getURL } = utils.node;
+const { getActorName, getCoverURL, getURL } = utils.node;
 
 // An event in a list: what it is called, when it is, and how it stands.
 //
@@ -25,9 +26,20 @@ const { getActorName, getURL } = utils.node;
 // (`restricted`), which is all this draws of it either way.
 const EventCard = ({ actor, onAnswered = null }) => {
   const { event } = actor;
+  // An event's one picture. Not sent of an event the viewer was only
+  // invited to, which is drawn without.
+  const cover = getCoverURL(actor);
 
   return (
     <Card>
+      {cover &&
+        <Link href={getURL(actor)} sx={{ display: 'block' }}>
+          <CardMedia
+            image={cover}
+            title={getActorName(actor)}
+            sx={{ height: 160 }}
+          />
+        </Link>}
       <CardHeader
         avatar={<ActorAvatar actor={actor} linked />}
         title={
