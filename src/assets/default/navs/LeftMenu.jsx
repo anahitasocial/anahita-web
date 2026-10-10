@@ -81,19 +81,6 @@ const LeftMenu = ({
           </ListItemIcon>
           <ListItemText primary={i18n.t('media:saved.title')} />
         </ListItemButton>}
-      {/* The viewer's own events: what they are going to, were invited to,
-          and host. There is no list of every event to show a visitor. */}
-      {isAuthenticated &&
-        <ListItemButton
-          component={Link}
-          to="/events"
-          selected={pathname === '/events'}
-        >
-          <ListItemIcon>
-            <EventsIcon />
-          </ListItemIcon>
-          <ListItemText primary={i18n.t('events:cTitle')} />
-        </ListItemButton>}
       {/* People, groups, hashtags and places: nothing a visitor to a
           members-only site can be shown, so they are not offered. Each
           would only lead to the same request to sign in. */}
@@ -119,6 +106,20 @@ const LeftMenu = ({
             </ListItemIcon>
             <ListItemText primary={i18n.t('groups:cTitle')} />
           </ListItemButton>
+          {/* The viewer's own events, after the groups that host most of
+              them: what they are going to, were invited to, and host.
+              There is no list of every event to show a visitor. */}
+          {isAuthenticated &&
+            <ListItemButton
+              component={Link}
+              to="/events"
+              selected={pathname === '/events'}
+            >
+              <ListItemIcon>
+                <EventsIcon />
+              </ListItemIcon>
+              <ListItemText primary={i18n.t('events:cTitle')} />
+            </ListItemButton>}
           <ListItemButton
             component={Link}
             to="/hashtags/"
