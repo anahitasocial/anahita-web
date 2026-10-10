@@ -14,11 +14,11 @@ export default {
     failed: 'That could not be done.',
   },
   featured: {
-    feature: 'Feature this account',
+    feature: 'Feature this profile',
     unfeature: 'Stop featuring',
     errors: {
-      generic: 'Could not change whether this account is featured. Please try again.',
-      conflict: 'A disabled or archived account cannot be featured.',
+      generic: 'Could not change whether this profile is featured. Please try again.',
+      conflict: 'A disabled or archived profile cannot be featured.',
     },
   },
   delete: {
