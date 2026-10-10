@@ -530,6 +530,11 @@ page has no Follow button. The number going opens who they are
 (`events/Attendees.jsx`). The link to join online is sent by the server only
 to whoever is going or looks after the event.
 
+**No avatar.** An event's picture is its cover. Wherever an avatar would be
+drawn, `components/ActorAvatar.jsx` draws `EventDateTile` for an event: the
+month over the day it starts on, on the reader's calendar, or a calendar icon
+where the event is named without its times. Its page has no avatar to upload.
+
 **Add to calendar** asks the server for the event as an `.ics` file and hands
 it to the browser to save.
 

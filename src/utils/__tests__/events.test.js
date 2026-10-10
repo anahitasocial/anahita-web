@@ -117,6 +117,25 @@ describe('when an event is, for somebody reading', () => {
   });
 });
 
+describe('the day on an event\'s tile', () => {
+  it('is the month and the day on the reader\'s calendar', () => {
+    // 7 pm on the 14th in Vancouver is 2 am on the 15th in UTC.
+    expect(events.dateTile('2026-10-15T02:00:00Z', 'America/Vancouver')).toEqual({ month: 'Oct', day: '14' });
+    expect(events.dateTile('2026-10-15T02:00:00Z', 'UTC')).toEqual({ month: 'Oct', day: '15' });
+  });
+
+  it('is nothing without a time', () => {
+    expect(events.dateTile(undefined, 'UTC')).toBeNull();
+    expect(events.dateTile('whenever', 'UTC')).toBeNull();
+  });
+
+  it('knows an event from any other actor', () => {
+    expect(events.isEvent({ type: 'node.actor.actor-service.event.v1' })).toBe(true);
+    expect(events.isEvent({ type: 'node.actor.group-service.group.v1' })).toBe(false);
+    expect(events.isEvent(undefined)).toBe(false);
+  });
+});
+
 describe('answering', () => {
   it('is open while the event is to come or on, and closed after', () => {
     expect(events.takesAnswers({ state: 'upcoming' })).toBe(true);

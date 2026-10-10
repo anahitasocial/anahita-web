@@ -258,6 +258,26 @@ const when = (startsAt, endsAt, zone, locale = 'en-GB') => {
     };
 };
 
+// The month and the day an event starts on, for the small square that
+// stands where an avatar would: { month: 'Oct', day: '14' }. Null when
+// there is no time to read.
+const dateTile = (startsAt, zone, locale = 'en-GB') => {
+  const starts = new Date(startsAt);
+  if (!startsAt || Number.isNaN(starts.getTime()) || !isZone(zone)) {
+    return null;
+  }
+
+  return {
+    month: new Intl.DateTimeFormat(locale, { timeZone: zone, month: 'short' }).format(starts),
+    day: new Intl.DateTimeFormat(locale, { timeZone: zone, day: 'numeric' }).format(starts),
+  };
+};
+
+// Whether an actor is an event.
+const isEvent = (actor) => {
+  return Boolean(actor && actor.type && actor.type.includes('.event.'));
+};
+
 // A zone's name as people read it: "America/Toronto" as "Toronto".
 const zoneLabel = (zone = '') => {
   const last = zone.split('/').pop() || zone;
@@ -293,6 +313,8 @@ export default {
   endAfter,
   timesError,
   when,
+  dateTile,
+  isEvent,
   zoneLabel,
   takesAnswers,
   canGo,

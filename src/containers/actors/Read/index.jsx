@@ -21,6 +21,7 @@ import ControlFollow from '../../controls/Follow';
 import ControlFollowRequest from '../../controls/FollowRequest';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
 import ActorInvite from '../Invite';
+import EventDateTile from '../../../components/EventDateTile';
 import EventPanel from '../../events/Panel';
 import EventWhen from '../../events/When';
 import EventsHosted from '../../events/Hosted';
@@ -183,12 +184,14 @@ const ActorsRead = (props) => {
             canEdit={canEdit}
           />
         }
-        avatar={
+        // An event has no avatar to show or to upload: its cover is its
+        // picture, and where the avatar would be is the day it is on.
+        avatar={isEvent ?
+          <EventDateTile actor={actor} size="large" /> :
           <Avatar
             node={actor}
             canEdit={canEdit}
-          />
-        }
+          />}
         actor={actor}
         // /people/ana/socialgraph/leaders was a tab of the profile. It now
         // opens the profile with that list showing.
