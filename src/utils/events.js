@@ -278,6 +278,38 @@ const isEvent = (actor) => {
   return Boolean(actor && actor.type && actor.type.includes('.event.'));
 };
 
+// A place as it is read in a list: its name, and where it is when that is
+// known and is not the name over again.
+const placeLabel = (place) => {
+  if (!place) {
+    return '';
+  }
+
+  const where = [place.geoAddress, place.geoCity, place.geoCountry]
+    .filter(Boolean)
+    .join(', ');
+
+  if (!where || where === place.name) {
+    return place.name || '';
+  }
+
+  return place.name ? `${place.name}, ${where}` : where;
+};
+
+// What has to be done to an event's tagged place after its form is saved:
+// which to take off and which to put on. Nothing when it is the same place,
+// or still none.
+const placeChange = (before, after) => {
+  const had = before && before.id;
+  const has = after && after.id;
+
+  if (had === has) {
+    return { remove: null, add: null };
+  }
+
+  return { remove: had ? before : null, add: has ? after : null };
+};
+
 // A zone's name as people read it: "America/Toronto" as "Toronto".
 const zoneLabel = (zone = '') => {
   const last = zone.split('/').pop() || zone;
@@ -315,6 +347,8 @@ export default {
   when,
   dateTile,
   isEvent,
+  placeLabel,
+  placeChange,
   zoneLabel,
   takesAnswers,
   canGo,

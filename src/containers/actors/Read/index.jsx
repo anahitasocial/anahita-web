@@ -5,6 +5,7 @@ import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
 
 import ActorHeader from './ActorHeader';
 import ActorBody from './Body';
@@ -22,6 +23,7 @@ import ControlFollowRequest from '../../controls/FollowRequest';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
 import ActorInvite from '../Invite';
 import EventDateTile from '../../../components/EventDateTile';
+import EventAnswer from '../../events/Answer';
 import EventPanel from '../../events/Panel';
 import EventWhen from '../../events/When';
 import EventsHosted from '../../events/Hosted';
@@ -48,6 +50,43 @@ const {
 } = utils.node;
 
 const { TAB_COMPONENTS } = ACTOR;
+
+// What somebody shown only the outside of a profile can do about it.
+//
+//   - Invited, to a group or an event: Decline and Accept.
+//   - Let into an event as a follower of the group hosting it: Maybe and
+//     Going. Nobody asked them one by one, so there is nothing to decline.
+//   - Otherwise, where the profile lets people ask: Request to follow.
+//
+// `reload` reads the profile again, which opens it once they are in.
+const limitedAction = (actor, reload) => {
+  if (actor.isInvited) {
+    return (
+      <ControlInviteAnswer
+        actor={actor}
+        onAnswered={(accepted) => {
+          if (accepted) {
+            reload();
+          }
+        }}
+      />
+    );
+  }
+
+  if (actor.viaHost && actor.event) {
+    return <EventAnswer actor={actor} onAnswered={reload} />;
+  }
+
+  return actor.allowFollowRequest ? <ControlFollowRequest actor={actor} /> : null;
+};
+
+const limitedNote = (actor) => {
+  if (actor.isInvited) {
+    return i18n.t('socialgraph:invite.invited');
+  }
+
+  return actor.viaHost ? i18n.t('events:event.viaHost') : '';
+};
 
 const ActorsRead = (props) => {
   const {
@@ -97,19 +136,20 @@ const ActorsRead = (props) => {
             // Somebody invited answers the invitation, and on saying yes
             // is shown the profile. Anybody else may ask, where the
             // profile lets people ask.
-            action={isAuthenticated && (actor.isInvited ?
-              <ControlInviteAnswer
-                actor={actor}
-                onAnswered={(accepted) => {
-                  if (accepted) {
-                    readItem(id);
-                  }
-                }}
-              /> :
-              actor.allowFollowRequest && <ControlFollowRequest actor={actor} />)}
-            note={actor.isInvited ? i18n.t('socialgraph:invite.invited') : ''}
-            // Somebody invited to an event is told when it is.
-            extra={actor.event ? <EventWhen event={actor.event} /> : null}
+            action={isAuthenticated && limitedAction(actor, () => {
+              readItem(id);
+            })}
+            note={limitedNote(actor)}
+            // Somebody invited to an event is told what it is and when.
+            extra={actor.event ?
+              <>
+                <EventWhen event={actor.event} />
+                {actor.body &&
+                  <Typography variant="body2" dir="auto" sx={{ pt: 1, whiteSpace: 'pre-wrap' }}>
+                    {actor.body}
+                  </Typography>}
+              </> :
+              null}
           />
         </Grid>
       </Grid>

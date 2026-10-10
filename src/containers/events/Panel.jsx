@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -14,6 +14,7 @@ import Typography from '@mui/material/Typography';
 
 import CalendarIcon from '@mui/icons-material/CalendarMonthOutlined';
 import OnlineIcon from '@mui/icons-material/VideocamOutlined';
+import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 
 import DialogConfirm from '../../components/DialogConfirm';
 import EventAttendees from './Attendees';
@@ -44,6 +45,25 @@ const EventPanel = ({
   const { event } = actor;
   const [waiting, setWaiting] = useState(false);
   const [showAttendees, setShowAttendees] = useState(false);
+  // Where it is: the first place tagged on it. The rest, and the map, are
+  // under its Locations tab.
+  const [place, setPlace] = useState(null);
+
+  useEffect(() => {
+    let current = true;
+
+    api.locations.browse({ source_id: actor.id, start: 0, limit: 1 }).then((result) => {
+      if (current) {
+        setPlace((result.data.data || [])[0] || null);
+      }
+    }).catch(() => {
+      // Left unsaid: the Locations tab still has it.
+    });
+
+    return () => {
+      current = false;
+    };
+  }, [actor.id]);
 
   if (!event) {
     return null;
@@ -111,6 +131,13 @@ const EventPanel = ({
           <Box>
             <EventWhen event={event} />
           </Box>
+          {place &&
+            <Typography variant="body2" sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <PlaceIcon fontSize="small" />
+              <Link href={getURL(place)} underline="hover">
+                {events.placeLabel(place)}
+              </Link>
+            </Typography>}
           {event.host &&
             <Typography variant="body2">
               {`${i18n.t('events:event.host')} `}

@@ -530,6 +530,18 @@ page has no Follow button. The number going opens who they are
 (`events/Attendees.jsx`). The link to join online is sent by the server only
 to whoever is going or looks after the event.
 
+**Where it is** is a location tagged on the event, as one is tagged on a
+post. The form has a field that finds a place by name among the ones the
+installation knows (`events/PlaceField.jsx`) and tags it once the event is
+saved; the panel on the event's page names the first. A place nobody has
+added yet is added from the event's Locations tab, which has the map.
+
+**An event for a group's followers.** An event hosted by a group has a
+checkbox on its form: everyone who follows the group can see it and answer.
+A follower who has not answered is shown its name, time and description with
+Maybe and Going (`events/Answer.jsx`), on its page and in the group's Events
+tab. Once they answer they follow the event, and its page opens to them.
+
 **No avatar.** An event's picture is its cover. Wherever an avatar would be
 drawn, `components/ActorAvatar.jsx` draws `EventDateTile` for an event: the
 month over the day it starts on, on the reader's calendar, or a calendar icon

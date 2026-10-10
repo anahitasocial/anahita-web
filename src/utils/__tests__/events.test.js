@@ -136,6 +136,29 @@ describe('the day on an event\'s tile', () => {
   });
 });
 
+describe('where an event is', () => {
+  it('reads as the name and where that is', () => {
+    expect(events.placeLabel({ name: 'Jericho Beach', geoCity: 'Vancouver', geoCountry: 'Canada' }))
+      .toBe('Jericho Beach, Vancouver, Canada');
+    expect(events.placeLabel({ name: 'Jericho Beach' })).toBe('Jericho Beach');
+    expect(events.placeLabel({ name: 'Vancouver', geoCity: 'Vancouver' })).toBe('Vancouver');
+    expect(events.placeLabel({ geoAddress: '1 Main St', geoCity: 'Vancouver' })).toBe('1 Main St, Vancouver');
+    expect(events.placeLabel(null)).toBe('');
+  });
+
+  it('is changed by taking the old place off and putting the new one on', () => {
+    const beach = { id: 1 };
+    const park = { id: 2 };
+
+    expect(events.placeChange(null, beach)).toEqual({ remove: null, add: beach });
+    expect(events.placeChange(beach, park)).toEqual({ remove: beach, add: park });
+    expect(events.placeChange(beach, null)).toEqual({ remove: beach, add: null });
+    // The same place, or still none: nothing to do.
+    expect(events.placeChange(beach, { id: 1 })).toEqual({ remove: null, add: null });
+    expect(events.placeChange(null, null)).toEqual({ remove: null, add: null });
+  });
+});
+
 describe('answering', () => {
   it('is open while the event is to come or on, and closed after', () => {
     expect(events.takesAnswers({ state: 'upcoming' })).toBe(true);

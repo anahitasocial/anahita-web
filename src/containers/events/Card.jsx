@@ -13,6 +13,7 @@ import Typography from '@mui/material/Typography';
 
 import ActorAvatar from '../../components/ActorAvatar';
 import ControlInviteAnswer from '../controls/InviteAnswer';
+import EventAnswer from './Answer';
 import EventWhen from './When';
 import i18n from '../../languages';
 import utils from '../../utils';
@@ -81,6 +82,11 @@ const EventCard = ({ actor, onAnswered = null }) => {
       {actor.isInvited &&
         <CardActions sx={{ p: 1 }}>
           <ControlInviteAnswer actor={actor} onAnswered={onAnswered} />
+        </CardActions>}
+      {/* Let in as a follower of the group hosting it, and yet to answer. */}
+      {!actor.isInvited && actor.restricted && actor.viaHost &&
+        <CardActions sx={{ p: 1 }}>
+          <EventAnswer actor={actor} onAnswered={onAnswered} />
         </CardActions>}
     </Card>
   );

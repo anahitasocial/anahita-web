@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -16,8 +16,10 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Checkbox from '@mui/material/Checkbox';
 import Typography from '@mui/material/Typography';
 
+import EventPlaceField from './PlaceField';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -45,6 +47,7 @@ const startingValues = (actor) => {
     capacity: event.capacity ? String(event.capacity) : '',
     onlineUrl: event.onlineUrl || '',
     access: 'public',
+    openToHostFollowers: Boolean(event.openToHostFollowers),
   };
 };
 
@@ -66,6 +69,29 @@ const EventForm = ({
   const [values, setValues] = useState(startingValues(actor));
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
+  // Where it is: the place tagged on the event when the form opened, and
+  // the one chosen since. Tagged after the event is saved, since a place
+  // can only be put on something that exists.
+  const [placeBefore, setPlaceBefore] = useState(null);
+  const [place, setPlace] = useState(null);
+
+  // The group hosting it: given for a new event, and on one being changed
+  // its own, when the viewer may see that group.
+  const hostGroup = host || (actor && actor.event && actor.event.host) || null;
+
+  useEffect(() => {
+    if (!actor) {
+      return;
+    }
+
+    api.locations.browse({ source_id: actor.id, start: 0, limit: 1 }).then((result) => {
+      const first = (result.data.data || [])[0] || null;
+      setPlaceBefore(first);
+      setPlace(first);
+    }).catch(() => {
+      // The form works without knowing: the place is then left as it is.
+    });
+  }, [actor && actor.id]);
 
   const set = (name) => {
     return (event) => {
@@ -91,6 +117,8 @@ const EventForm = ({
       timezoneName: values.timezoneName,
       capacity: Number(values.capacity) || 0,
       onlineUrl: values.onlineUrl.trim(),
+      // Always sent: left out, the server would take it for no.
+      openToHostFollowers: Boolean(hostGroup) && values.openToHostFollowers,
     };
 
     if (isNew) {
@@ -105,7 +133,25 @@ const EventForm = ({
     const call = isNew ? api.eventDetails.add(fields) : api.eventDetails.edit(actor, fields);
 
     call.then((result) => {
-      navigate(getURL(result.data));
+      const saved = result.data;
+      const change = events.placeChange(placeBefore, place);
+      const tags = api.tagGraph(saved);
+
+      // The place is put on once the event is there to put it on. If that
+      // fails the event is still saved, and its Locations tab can mend it.
+      return Promise.resolve()
+        .then(() => {
+          return change.remove ? tags.deleteItem(change.remove) : null;
+        })
+        .then(() => {
+          return change.add ? tags.add(change.add) : null;
+        })
+        .catch(() => {
+          alertError(i18n.t('events:event.form.errors.place'));
+        })
+        .then(() => {
+          navigate(getURL(saved));
+        });
     }).catch((failure) => {
       const reason = failure.response && failure.response.data && failure.response.data.error;
       const known = i18n.exists(`events:event.form.errors.${reason}`);
@@ -238,6 +284,24 @@ const EventForm = ({
             disabled={isSaving}
             slotProps={{ htmlInput: { maxLength: 512 } }}
           />
+          <EventPlaceField
+            value={place}
+            onChange={setPlace}
+            disabled={isSaving}
+          />
+          {hostGroup &&
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.openToHostFollowers}
+                  disabled={isSaving}
+                  onChange={(event) => {
+                    setValues({ ...values, openToHostFollowers: event.target.checked });
+                  }}
+                />
+              }
+              label={i18n.t('events:event.form.openToHostFollowers', { name: getActorName(hostGroup) })}
+            />}
           {isNew &&
             <FormControl disabled={isSaving}>
               <FormLabel id="event-access">
