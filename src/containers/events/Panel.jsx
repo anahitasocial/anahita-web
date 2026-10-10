@@ -13,6 +13,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import CalendarIcon from '@mui/icons-material/CalendarMonthOutlined';
+import CancelIcon from '@mui/icons-material/EventBusyOutlined';
+import EditIcon from '@mui/icons-material/EditOutlined';
+import NotGoingIcon from '@mui/icons-material/PersonRemoveOutlined';
 import OnlineIcon from '@mui/icons-material/VideocamOutlined';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 
@@ -218,6 +221,7 @@ const EventPanel = ({
             {isAuthenticated && event.viewerRsvp &&
               <Button
                 color="inherit"
+                startIcon={<NotGoingIcon />}
                 disabled={waiting}
                 onClick={() => {
                   answer('');
@@ -226,7 +230,12 @@ const EventPanel = ({
                 {i18n.t('events:event.rsvp.leave')}
               </Button>}
             {canEdit &&
-              <Button component={RouterLink} to={`${getURL(actor)}edit`} color="inherit">
+              <Button
+                component={RouterLink}
+                to={`${getURL(actor)}edit`}
+                color="inherit"
+                startIcon={<EditIcon />}
+              >
                 {i18n.t('events:event.form.edit')}
               </Button>}
             {canEdit && takesAnswers &&
@@ -236,7 +245,7 @@ const EventPanel = ({
                 confirm={i18n.t('events:event.cancel.confirm')}
                 dismiss={i18n.t('events:event.cancel.keep')}
               >
-                <Button color="error" onClick={handleCancel}>
+                <Button color="error" startIcon={<CancelIcon />} onClick={handleCancel}>
                   {i18n.t('events:event.cancel.action')}
                 </Button>
               </DialogConfirm>}
