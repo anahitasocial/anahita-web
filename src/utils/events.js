@@ -313,11 +313,35 @@ const addressLine = (address) => {
     .join(', ');
 };
 
+// Whether an address came with where it is on a map: whoever made the event
+// asked for one, and the address was found.
+const hasPoint = (address) => {
+  return Boolean(address) &&
+    Number.isFinite(address.latitude) &&
+    Number.isFinite(address.longitude) &&
+    (address.latitude !== 0 || address.longitude !== 0);
+};
+
+// Whether an event has anything to say about where it is held, to the
+// viewer: the address itself, or that there is one for people who are going.
+const hasWhere = (actor) => {
+  const event = (actor && actor.event) || {};
+
+  return Boolean(addressLine(event.address)) || Boolean(event.hasAddress);
+};
+
 // Where to look an address up on a map. The address goes to the map only
 // when somebody presses the link, from their own browser: nothing is looked
 // up for them beforehand.
 const mapURL = (address) => {
   const line = addressLine(address);
+
+  // Already found: open the map at the point, and send no address.
+  if (hasPoint(address)) {
+    const { latitude, longitude } = address;
+
+    return `https://www.openstreetmap.org/?mlat=${latitude}&mlon=${longitude}#map=16/${latitude}/${longitude}`;
+  }
 
   return line ?
     `https://www.openstreetmap.org/search?query=${encodeURIComponent(line)}` :
@@ -363,6 +387,8 @@ export default {
   isEvent,
   placeLabel,
   addressLine,
+  hasPoint,
+  hasWhere,
   mapURL,
   zoneLabel,
   takesAnswers,

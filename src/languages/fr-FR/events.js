@@ -127,6 +127,8 @@ export default {
         city: 'Ville',
         stateProvince: 'Province ou état',
         country: 'Pays',
+        showMap: 'Afficher une carte',
+        showMapHelp: 'L’adresse est envoyée à un service de cartographie pour la trouver. La carte est montrée uniquement aux personnes qui participent.',
       },
       create: 'Créer l’événement',
       save: 'Enregistrer',
@@ -185,6 +187,7 @@ export default {
     },
     host: 'Organisé par',
     address: {
+      title: 'Où',
       openMap: 'Voir sur une carte',
       forGoing: 'L’adresse est montrée aux personnes qui participent.',
     },

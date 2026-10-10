@@ -4,16 +4,21 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 
+import MapIcon from '@mui/icons-material/MapOutlined';
+import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 import WebsiteIcon from '@mui/icons-material/Web';
 
 import i18n from '../../../languages';
 import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
+import AnahitaMap from '../../../components/Map';
+import events from '../../../utils/events';
 import ActorType from '../../../proptypes/Actor';
 
 const ActorBodyAbout = (props) => {
@@ -22,6 +27,13 @@ const ActorBodyAbout = (props) => {
     body,
     websiteUrl,
   } = actor;
+
+  // Where an event is held: the address kept on it, which the server sends
+  // to whoever is going, and where that is on a map when whoever made the
+  // event asked for one. Everybody else is told only that there is one.
+  const event = actor.event || {};
+  const address = events.addressLine(event.address);
+  const hasPoint = events.hasPoint(event.address);
 
   return (
     <Card component="section">
@@ -46,6 +58,56 @@ const ActorBodyAbout = (props) => {
             </EntityBody>
           </CardContent>
         </>}
+      {address &&
+        <>
+          <List>
+            <ListItem>
+              <ListItemIcon>
+                <PlaceIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('events:event.address.title')}
+                secondary={address}
+              />
+            </ListItem>
+          </List>
+          {hasPoint &&
+            <AnahitaMap
+              locations={[{
+                id: actor.id,
+                name: address,
+                latitude: event.address.latitude,
+                longitude: event.address.longitude,
+              }]}
+              height={240}
+              linked={false}
+            />}
+          <List>
+            <ListItemButton
+              component="a"
+              href={events.mapURL(event.address)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <ListItemIcon>
+                <MapIcon />
+              </ListItemIcon>
+              <ListItemText primary={i18n.t('events:event.address.openMap')} />
+            </ListItemButton>
+          </List>
+        </>}
+      {!address && event.hasAddress &&
+        <List>
+          <ListItem>
+            <ListItemIcon>
+              <PlaceIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={i18n.t('events:event.address.title')}
+              secondary={i18n.t('events:event.address.forGoing')}
+            />
+          </ListItem>
+        </List>}
       {websiteUrl &&
         <List>
           <ListItemButton

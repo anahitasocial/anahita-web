@@ -11,6 +11,7 @@ import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
 import ActorBodyAbout from './About';
 import i18n from '../../../languages';
+import eventDetails from '../../../utils/events';
 import utils from '../../../utils';
 
 const { getNamespace, getActorFeatureTabs } = utils.node;
@@ -128,7 +129,7 @@ const ActorBody = ({
         >
           <Grid size={{ xs: 12, md: 4 }}>
             <Grid container spacing={2}>
-              {actor.body && (
+              {(actor.body || eventDetails.hasWhere(actor)) && (
                 <Grid size={12}>
                   <ActorBodyAbout actor={actor} />
                 </Grid>

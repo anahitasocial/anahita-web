@@ -79,10 +79,13 @@ FitBounds.propTypes = {
   locations: PropTypes.arrayOf(LocationType).isRequired,
 };
 
+// Pressing a marker opens the place it stands for. `linked` off is for a
+// point that is no place on the site, such as an event's own address.
 const AnahitaMap = ({
   locations = [],
   width = '100%',
   height = 400,
+  linked = true,
   ...other
 }) => {
   const navigate = useNavigate();
@@ -113,11 +116,12 @@ const AnahitaMap = ({
             position={[Number(latitude), Number(longitude)]}
             title={name}
             alt={name}
-            eventHandlers={{
+            interactive={linked}
+            eventHandlers={linked ? {
               click: () => {
                 navigate(getURL(location));
               },
-            }}
+            } : {}}
           />
         );
       })}
@@ -135,6 +139,7 @@ AnahitaMap.propTypes = {
     PropTypes.string,
     PropTypes.number,
   ]),
+  linked: PropTypes.bool,
 };
 
 export default AnahitaMap;

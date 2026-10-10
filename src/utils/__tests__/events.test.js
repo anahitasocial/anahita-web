@@ -164,6 +164,24 @@ describe('where an event is', () => {
       .toBe('https://www.openstreetmap.org/search?query=123%20Main%20St%2C%20Vancouver');
     expect(events.mapURL({})).toBe('');
   });
+
+  it('opens the map at its point when it has one, sending no address', () => {
+    const address = { street: '123 Main St', latitude: 49.28, longitude: -123.12 };
+
+    expect(events.hasPoint(address)).toBe(true);
+    expect(events.mapURL(address))
+      .toBe('https://www.openstreetmap.org/?mlat=49.28&mlon=-123.12#map=16/49.28/-123.12');
+    expect(events.hasPoint({ street: '123 Main St' })).toBe(false);
+    expect(events.hasPoint({ latitude: 0, longitude: 0 })).toBe(false);
+    expect(events.hasPoint(undefined)).toBe(false);
+  });
+
+  it('says where it is, or that there is somewhere, and nothing otherwise', () => {
+    expect(events.hasWhere({ event: { address: { city: 'Vancouver' } } })).toBe(true);
+    expect(events.hasWhere({ event: { hasAddress: true } })).toBe(true);
+    expect(events.hasWhere({ event: {} })).toBe(false);
+    expect(events.hasWhere({})).toBe(false);
+  });
 });
 
 describe('answering', () => {

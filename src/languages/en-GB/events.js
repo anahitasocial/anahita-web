@@ -135,6 +135,8 @@ export default {
         city: 'City',
         stateProvince: 'Province or state',
         country: 'Country',
+        showMap: 'Show a map',
+        showMapHelp: 'The address is sent to a mapping service to find it. The map is shown only to people who are going.',
       },
       create: 'Create event',
       save: 'Save',
@@ -195,6 +197,7 @@ export default {
     },
     host: 'Hosted by',
     address: {
+      title: 'Where',
       openMap: 'Find it on a map',
       forGoing: 'The address is shown to people who are going.',
     },

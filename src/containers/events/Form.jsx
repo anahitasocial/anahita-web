@@ -53,6 +53,9 @@ const startingValues = (actor) => {
     city: (event.address && event.address.city) || '',
     stateProvince: (event.address && event.address.stateProvince) || '',
     country: (event.address && event.address.country) || '',
+    // Ticked when the event has a point on a map already. Off for a new
+    // one: finding an address sends it to a mapping service.
+    showMap: events.hasPoint(event.address),
   };
 };
 
@@ -115,6 +118,7 @@ const EventForm = ({
       city: values.city.trim(),
       stateProvince: values.stateProvince.trim(),
       country: values.country.trim(),
+      showMap: values.showMap,
     };
 
     if (isNew) {
@@ -306,6 +310,23 @@ const EventForm = ({
             autoComplete="off"
             slotProps={{ htmlInput: { maxLength: 100 } }}
           />
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={values.showMap}
+                  disabled={isSaving}
+                  onChange={(event) => {
+                    setValues({ ...values, showMap: event.target.checked });
+                  }}
+                />
+              }
+              label={i18n.t('events:event.form.address.showMap')}
+            />
+            <Typography variant="body2" color="textSecondary" sx={{ pl: 4 }}>
+              {i18n.t('events:event.form.address.showMapHelp')}
+            </Typography>
+          </div>
           {hostGroup &&
             <FormControlLabel
               control={
