@@ -74,30 +74,22 @@ const setPinned = (feed, isPinned) => {
 
 const cursors = {};
 
-// A page of a feed, or of one not saved yet (`definition`), which has only
-// its first. `start` is how many the list holds already: 0 begins again.
-const browse = ({
-  feed = null,
-  definition = null,
-  start = 0,
-  limit = 20,
-}) => {
-  const key = feed ? `feed-${feed.id}` : 'preview';
+// A page of a feed. `start` is how many the list holds already: 0 begins
+// again.
+const browse = ({ feed, start = 0, limit = 20 }) => {
+  const key = `feed-${feed.id}`;
 
   if (start === 0) {
     delete cursors[key];
   }
 
-  const request = feed ?
-    axios.get(`/feeds/${feed.id}/items`, { params: { cursor: cursors[key], limit } }) :
-    axios.post('/feeds/preview', { definition });
-
-  return request.then((result) => {
+  return axios.get(`/feeds/${feed.id}/items`, {
+    params: { cursor: cursors[key], limit },
+  }).then((result) => {
     const { data } = result;
     const page = data.pagination || {};
     const count = (data.data || []).length;
-    // Only a saved feed has a second page.
-    const hasMore = Boolean(feed) && Boolean(page.hasMore);
+    const hasMore = Boolean(page.hasMore);
 
     cursors[key] = page.nextCursor || '';
     data.pagination = {

@@ -17,16 +17,12 @@ import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
-import Step from '@mui/material/Step';
-import StepLabel from '@mui/material/StepLabel';
-import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
-import FeedCustomBrowse from '../feed/Custom';
 import NodesField from '../../components/NodesField';
 import WordsField from '../../components/WordsField';
 import DialogConfirm from '../../components/DialogConfirm';
@@ -38,12 +34,8 @@ import postLanguage from '../../utils/postLanguage';
 
 const { LIMITS } = customFeeds;
 
-// The two steps: building the feed, then seeing what it would show.
-const BUILD = 0;
-const PREVIEW = 1;
-
-// The part of the dialog that scrolls, for the preview's list to watch.
-const SCROLLER = 'custom-feed-editor-content';
+// The form's id, for the button outside it that sends it.
+const FORM = 'custom-feed-editor-form';
 
 // What the form starts from: a feed being changed, or a new one of the
 // profiles the viewer follows.
@@ -84,14 +76,13 @@ const toggled = (list, item, isOn) => {
   return isOn ? [...without, item] : without;
 };
 
-// Making a custom feed, or changing one, in a dialog of two steps. On a
-// phone the dialog is the whole screen.
+// Making a custom feed, or changing one, in a dialog. On a phone the dialog
+// is the whole screen.
 //
-// The first step is the feed itself: where its posts come from, narrowed by
-// what they are about, less what is left out. The second is what that feed
-// would show right now, in a sentence and then as posts, and is where it is
-// saved. Nothing is saved before it has been seen. Posts are always newest
-// first.
+// A feed is where its posts come from, narrowed by what they are about, less
+// what is left out. Under the fields is the same thing in a sentence, which
+// follows every change. There is no preview: saving opens the feed itself,
+// and it can be changed again from there. Posts are always newest first.
 const CustomFeedForm = ({
   feed = null,
   onClose,
@@ -104,7 +95,6 @@ const CustomFeedForm = ({
   const isSmall = useMediaQuery((theme) => {
     return theme.breakpoints.down('sm');
   });
-  const [step, setStep] = useState(BUILD);
 
   const [values, setValues] = useState(() => {
     return startingValues(feed);
@@ -140,21 +130,6 @@ const CustomFeedForm = ({
   // The languages offered, with the feed's own among them whatever it is.
   const languages = postLanguage.optionsWith(definition.filters.language || postLanguage.CODES[0]);
 
-  // On to the preview, once the feed is one the server would take.
-  const handlePreview = () => {
-    if (!values.name.trim()) {
-      setError('name_required');
-      return;
-    }
-    if (problem) {
-      setError(problem);
-      return;
-    }
-
-    setError('');
-    setStep(PREVIEW);
-  };
-
   const handleDelete = () => {
     setIsSaving(true);
 
@@ -167,8 +142,18 @@ const CustomFeedForm = ({
     });
   };
 
-  const handleSave = () => {
+  const handleSave = (event) => {
+    event.preventDefault();
+
     if (isSaving) {
+      return;
+    }
+    if (!values.name.trim()) {
+      setError('name_required');
+      return;
+    }
+    if (problem) {
+      setError(problem);
       return;
     }
 
@@ -218,16 +203,8 @@ const CustomFeedForm = ({
       <DialogTitle id="custom-feed-editor-title">
         {stepTitle}
       </DialogTitle>
-      <Stepper activeStep={step} sx={{ px: 3, pb: 2 }}>
-        <Step>
-          <StepLabel>{i18n.t('customFeeds:form.stepBuild')}</StepLabel>
-        </Step>
-        <Step>
-          <StepLabel>{i18n.t('customFeeds:form.preview')}</StepLabel>
-        </Step>
-      </Stepper>
-      <DialogContent dividers id={SCROLLER}>
-        {step === BUILD &&
+      <DialogContent dividers>
+        <form id={FORM} onSubmit={handleSave} noValidate>
           <Stack spacing={2}>
             <TextField
               fullWidth
@@ -507,61 +484,36 @@ const CustomFeedForm = ({
                   </Button>
                 </DialogConfirm>
               </div>}
-          </Stack>}
-        {step === PREVIEW &&
-          <Stack spacing={2}>
-            <Typography variant="body1">
+            {/* What the feed shows, in a sentence. */}
+            <Typography variant="body2" color="textSecondary">
               {customFeeds.summary(definition, i18n.t.bind(i18n), { names })}
             </Typography>
-            <Typography variant="body2" color="textSecondary">
-              {i18n.t('customFeeds:form.previewHelp')}
-            </Typography>
-            <FeedCustomBrowse
-              definition={definition}
-              emptyText={i18n.t('customFeeds:form.previewEmpty')}
-              scrollableTarget={SCROLLER}
-            />
-          </Stack>}
+          </Stack>
+        </form>
         {error &&
           <Typography variant="body2" color="error" role="alert" sx={{ pt: 2 }}>
             {i18n.t(`customFeeds:form.errors.${error}`)}
           </Typography>}
       </DialogContent>
-      {/* Side by side, each half the width: the way back, then the way on. */}
+      {/* Side by side, each half the width: Cancel, then the one that saves. */}
       <DialogActions sx={{ p: 2 }}>
         <Button
           fullWidth
           disabled={isSaving}
-          onClick={() => {
-            if (step === PREVIEW) {
-              setError('');
-              setStep(BUILD);
-            } else {
-              onClose();
-            }
-          }}
+          onClick={onClose}
         >
-          {i18n.t(step === PREVIEW ? 'customFeeds:form.back' : 'customFeeds:form.cancel')}
+          {i18n.t('customFeeds:form.cancel')}
         </Button>
-        {step === BUILD &&
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            onClick={handlePreview}
-          >
-            {i18n.t('customFeeds:form.preview')}
-          </Button>}
-        {step === PREVIEW &&
-          <Button
-            fullWidth
-            variant="contained"
-            color="primary"
-            disabled={isSaving}
-            onClick={handleSave}
-          >
-            {i18n.t(isNew ? 'customFeeds:form.create' : 'customFeeds:form.save')}
-          </Button>}
+        <Button
+          fullWidth
+          type="submit"
+          form={FORM}
+          variant="contained"
+          color="primary"
+          disabled={isSaving}
+        >
+          {i18n.t(isNew ? 'customFeeds:form.create' : 'customFeeds:form.save')}
+        </Button>
       </DialogActions>
     </Dialog>
   );

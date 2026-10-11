@@ -12,9 +12,8 @@ import customFeeds from '../../utils/customFeeds';
 //
 // It has an address of its own, so the menu's "Custom feed" is a link like
 // any other and the browser's Back closes the dialog. Closed, it goes back
-// to wherever it was opened from. Saved, it opens Home on the new feed,
-// which the server has put there; with the home page full, the feed's own
-// page.
+// to wherever it was opened from. Saved, it opens the feed: Home on it,
+// where the server has put it, or its own page with the home page full.
 const CustomFeedAdd = () => {
   const navigate = useNavigate();
 
@@ -29,7 +28,7 @@ const CustomFeedAdd = () => {
           customFeeds.leave(navigate, '/feeds');
         }}
         onSaved={(feed) => {
-          navigate(feed.isPinned ? `/?feed=${feed.id}` : customFeeds.urlOf(feed));
+          navigate(customFeeds.whereToRead(feed));
         }}
       />
     </>

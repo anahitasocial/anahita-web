@@ -38,7 +38,6 @@ const namespaces = {
     'feed_leaders',
     'feed_actor',
     'feed_custom',
-    'feed_preview',
   ],
 };
 

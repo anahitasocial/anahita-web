@@ -238,6 +238,17 @@ const isShared = (feed) => {
   return Boolean(feed) && Boolean(feed.access) && feed.access !== 'myself';
 };
 
+// Where a feed is read.
+const urlOf = (feed) => {
+  return `/feeds/${feed.id}`;
+};
+
+// Where a feed is opened after it is saved: Home on its tab when it is kept
+// there, and its own page otherwise.
+const whereToRead = (feed) => {
+  return feed.isPinned ? `/?feed=${feed.id}` : urlOf(feed);
+};
+
 // Leaves a dialog that has an address of its own: back to wherever it was
 // opened from, or to `fallback` when it was opened by its address, with
 // nothing before it to go back to.
@@ -249,11 +260,6 @@ const leave = (navigate, fallback) => {
   } else {
     navigate(fallback, { replace: true });
   }
-};
-
-// Where a feed is read.
-const urlOf = (feed) => {
-  return `/feeds/${feed.id}`;
 };
 
 export default {
@@ -275,4 +281,5 @@ export default {
   isShared,
   leave,
   urlOf,
+  whereToRead,
 };

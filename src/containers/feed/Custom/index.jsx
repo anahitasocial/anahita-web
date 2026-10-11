@@ -7,7 +7,6 @@ import Typography from '@mui/material/Typography';
 
 import actions from '../../../actions';
 import i18n from '../../../languages';
-import customFeeds from '../../../utils/customFeeds';
 
 import Progress from '../../../components/Progress';
 import FeedItems from '../components/Items';
@@ -17,21 +16,14 @@ import { App as APP } from '../../../constants';
 
 const { LIMIT } = APP.BROWSE;
 
-// A custom feed's posts: the ones a saved feed shows (`feed`), or the first
-// page of one still being built (`definition`).
-//
-// The two are kept apart in the store (`feed_custom`, `feed_preview`): a feed
-// is built in a dialog over a page that may be showing one.
+// A custom feed's posts.
 //
 // Drawn with the cards every feed uses. Newest first, a page at a time as
 // the reader scrolls. Whatever the feed asks for, the server sends each
 // reader only what they could have seen anyway.
 const FeedCustomBrowse = ({
-  feed = null,
-  definition = null,
+  feed,
   emptyText = '',
-  namespace,
-  scrollableTarget = undefined,
   browseList,
   resetList,
   items,
@@ -44,13 +36,12 @@ const FeedCustomBrowse = ({
   const [failure, setFailure] = useState('');
 
   // One list in the store for whichever feed is on the page: begun again
-  // when the feed, or what an unsaved one shows, changes.
-  const key = feed ? `feed-${feed.id}` : customFeeds.fingerprint(definition);
+  // when the feed changes.
+  const key = `feed-${feed.id}`;
 
   const load = (start) => {
     browseList({
       feed,
-      definition,
       start,
       limit: LIMIT,
     }).catch((response) => {
@@ -97,11 +88,10 @@ const FeedCustomBrowse = ({
       }}
       hasMore={hasMore}
       loader={<Progress key="feed-custom-progress" />}
-      scrollableTarget={scrollableTarget}
     >
       <FeedItems
         items={items}
-        namespace={namespace}
+        namespace="feed_custom"
         isAuthenticated={isAuthenticated}
         viewer={viewer}
       />
@@ -110,13 +100,8 @@ const FeedCustomBrowse = ({
 };
 
 FeedCustomBrowse.propTypes = {
-  // A saved feed, or what one not saved yet would show. One of the two.
-  feed: PropTypes.object,
-  definition: PropTypes.object,
+  feed: PropTypes.object.isRequired,
   emptyText: PropTypes.string,
-  namespace: PropTypes.string.isRequired,
-  // The id of the element that scrolls, when it is not the page: a dialog.
-  scrollableTarget: PropTypes.string,
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
   items: NodesType.isRequired,
@@ -126,25 +111,17 @@ FeedCustomBrowse.propTypes = {
   viewer: PersonType.isRequired,
 };
 
-// A saved feed's posts, and an unsaved one's, each in a place of its own.
-const placeOf = (props) => {
-  return props.definition ?
-    { namespace: 'feed_preview', slice: 'feedPreview' } :
-    { namespace: 'feed_custom', slice: 'feedCustom' };
-};
-
-const mapStateToProps = (state, ownProps) => {
+const mapStateToProps = (state) => {
   const {
     isAuthenticated,
     viewer,
   } = state.session;
 
-  const { namespace, slice } = placeOf(ownProps);
   const {
-    [namespace]: items,
+    feed_custom: items,
     hasMore,
     isFetching,
-  } = state[slice];
+  } = state.feedCustom;
 
   return {
     items,
@@ -152,19 +129,16 @@ const mapStateToProps = (state, ownProps) => {
     isFetching,
     isAuthenticated,
     viewer,
-    namespace,
   };
 };
 
-const mapDispatchToProps = (dispatch, ownProps) => {
-  const { namespace } = placeOf(ownProps);
-
+const mapDispatchToProps = (dispatch) => {
   return {
     browseList: (params) => {
-      return dispatch(actions[namespace].browse(params));
+      return dispatch(actions.feed_custom.browse(params));
     },
     resetList: () => {
-      return dispatch(actions[namespace].reset());
+      return dispatch(actions.feed_custom.reset());
     },
   };
 };

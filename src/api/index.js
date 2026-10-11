@@ -129,9 +129,6 @@ const apis = {
   feed_actor: feed.actor,
   // A custom feed's posts, in the store as the other feeds are.
   feed_custom: { browse: customFeeds.browse },
-  // What a feed being built would show, apart from whatever feed is on
-  // the page behind the editor.
-  feed_preview: { browse: customFeeds.browse },
   customFeeds,
   hashtags,
   is,
