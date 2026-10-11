@@ -19,6 +19,8 @@ import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
 import Player from '../../../components/Player';
+import LinkPreviewCard from '../../../components/LinkPreviewCard';
+import linkPreviews from '../../../utils/linkPreviews';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 
@@ -143,6 +145,8 @@ const FeedCardDefault = ({
           <ReadMore contentFilter>
             {body}
           </ReadMore>}
+        {linkPreviews.isShown(node.linkPreview, body) &&
+          <LinkPreviewCard preview={node.linkPreview} />}
         <QuoteEmbed quote={node.quote} />
       </CardContent>
       {stats &&

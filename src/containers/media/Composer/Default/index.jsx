@@ -11,6 +11,7 @@ import replyAccess from '../../../../utils/replyAccess';
 import LanguageButton from '../../../../components/LanguageButton';
 import ReplyAccessButton from '../../../../components/ReplyAccessButton';
 import ComposerAudience from '../Audience';
+import useLinkPreview from '../useLinkPreview';
 
 import AcctorType from '../../../../proptypes/Actor';
 import PersonType from '../../../../proptypes/Person';
@@ -40,6 +41,10 @@ const MediaComposerDefault = ({
   // picked, and put in order here before the post is made from them.
   const [photoItems, setPhotoItems] = useState([]);
   const isPhotos = namespace === 'photos';
+
+  // The card for the first link in a note, shown while it is written and
+  // posted with it unless the writer takes it off.
+  const linkPreview = useLinkPreview(medium.body, namespace === 'notes');
 
   // Who can see the post. Starts on the last choice for this kind of
   // place, or the widest this profile allows; see utils/audience.
@@ -135,6 +140,8 @@ const MediaComposerDefault = ({
         language,
         ...replyAccess.toRequest(whoReplies),
         ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
+        // Which link the card is for. What the card says is the server's.
+        ...(linkPreview.url ? { link_preview_url: linkPreview.url } : {}),
         composed: 1,
       }, actor).then(() => {
         postLanguage.remember(viewer, language);
@@ -150,6 +157,7 @@ const MediaComposerDefault = ({
         setWhoReplies(replyAccess.ANYONE);
         setWhoQuotes('');
         setPhotoItems([]);
+        linkPreview.reset();
         setFields({ ...formFields });
       });
     }
@@ -172,6 +180,8 @@ const MediaComposerDefault = ({
       onPhotoItemsChange={setPhotoItems}
       maxFiles={maxFiles}
       namespace={namespace}
+      linkPreview={linkPreview.preview}
+      onLinkPreviewRemove={linkPreview.remove}
       // The choices that go with a post: who can see it, what language
       // it is in, and who can reply. Built here and handed over ready, so each form
       // only has to place them beside its button.

@@ -483,6 +483,30 @@ a request that fails as it does without the service
   well as people and groups, the way to the weights, and the
   suggestions they turned down, each to be taken back.
 
+### Link previews
+
+A note with a link in it can carry a card for the link: the page's picture,
+site, title and a line about it (`components/LinkPreviewCard.jsx`). The
+card comes from the installation's link preview service (`/link-previews`;
+the services' `docs/link-previews.md`), which is optional: with none there
+is simply no card.
+
+- **While a note is written**, `containers/media/Composer/useLinkPreview.js`
+  finds the first link once the writer has paused for half a second and
+  asks for its card. The ✕ on the card posts the note without it. A link
+  with nothing to show, or whose card was taken off, is not asked for
+  again.
+- **The note is sent with the link only** (`link_preview_url`). What the
+  card says is what the server read off the page, never what the browser
+  sends.
+- **On a post**, the card is `linkPreview` on the node, drawn under the
+  text on the feed, on cards and on the post's own page. Its picture is the
+  installation's own copy (`utils/linkPreviews.js#imageOf`), so reading a
+  note asks nothing of the other site.
+- **A link the player plays** (YouTube, Vimeo and the others in
+  `components/Player.jsx`) keeps the player and has no card
+  (`utils/linkPreviews.js#isShown`).
+
 ### Sharing
 
 Share is the paper plane. It opens one dialog for the whole app

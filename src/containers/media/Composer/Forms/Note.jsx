@@ -8,6 +8,8 @@ import CardActions from '@mui/material/CardActions';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
 
+import LinkPreviewCard from '../../../../components/LinkPreviewCard';
+
 import ActorType from '../../../../proptypes/Actor';
 import PersonType from '../../../../proptypes/Person';
 import { Medium as MEDIUM } from '../../../../constants';
@@ -30,6 +32,8 @@ const ComposersNote = ({
   actor,
   isFetching,
   postOptions = null,
+  linkPreview = null,
+  onLinkPreviewRemove = null,
 }) => {
   const placeholder = isPerson(actor) && actor.id !== viewer.id ? i18n.t('notes:composer.bodyPlaceholderPerson', {
     name: actor.name,
@@ -60,6 +64,10 @@ const ComposersNote = ({
               },
             }}
           />
+          <LinkPreviewCard
+            preview={linkPreview}
+            onRemove={isFetching ? null : onLinkPreviewRemove}
+          />
         </CardContent>
         <CardActions>
           {postOptions}
@@ -82,6 +90,9 @@ const ComposersNote = ({
 ComposersNote.propTypes = {
   // The audience and language buttons, built by the composer.
   postOptions: PropTypes.node,
+  // The card for the first link in the note, and a way to post without it.
+  linkPreview: PropTypes.object,
+  onLinkPreviewRemove: PropTypes.func,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,

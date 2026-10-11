@@ -20,6 +20,8 @@ import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import Player from '../../../components/Player';
+import LinkPreviewCard from '../../../components/LinkPreviewCard';
+import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
 import SignInPrompt from '../../../components/SignInPrompt';
@@ -170,6 +172,8 @@ const MediumReadDefault = ({
             <EntityBody contentFilter lang={medium.language}>
               {medium.body}
             </EntityBody>}
+            {linkPreviews.isShown(medium.linkPreview, medium.body) &&
+              <LinkPreviewCard preview={medium.linkPreview} />}
             {quote}
             <SignInPrompt show={Boolean(medium.truncated)} />
           </CardContent>

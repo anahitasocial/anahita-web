@@ -20,6 +20,8 @@ import PhotoSlides from './PhotoSlides';
 import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
 import Player from './Player';
+import LinkPreviewCard from './LinkPreviewCard';
+import linkPreviews from '../utils/linkPreviews';
 import Progress from './Progress';
 import ReadMore from './ReadMore';
 import SignInPrompt from './SignInPrompt';
@@ -188,6 +190,8 @@ const MediumCard = ({
           <ReadMore contentFilter lang={medium.language}>
             {medium.body}
           </ReadMore>}
+        {linkPreviews.isShown(medium.linkPreview, medium.body) &&
+          <LinkPreviewCard preview={medium.linkPreview} />}
         <QuoteEmbed quote={medium.quote} />
         <SignInPrompt show={Boolean(medium.truncated)} />
       </CardContent>
