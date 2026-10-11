@@ -24,9 +24,9 @@ import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/Home';
 import UpIcon from '@mui/icons-material/ArrowUpward';
 
-import CopyFeedLink from './CopyLink';
 import CustomFeedsDiscover from './Discover';
 import BrowseHeader from '../../components/BrowseHeader';
+import { ShareButton } from '../controls/Share';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import DialogConfirm from '../../components/DialogConfirm';
 import Progress from '../../components/Progress';
@@ -213,7 +213,8 @@ const CustomFeedsManage = ({
                   </IconButton>
                 </span>
               </Tooltip>
-              <CopyFeedLink feed={feed} />
+              {customFeeds.isShared(feed) &&
+                <ShareButton what={customFeeds.toShare(feed)} />}
               {feed.authorized && feed.authorized.edit &&
                 <Tooltip title={i18n.t('customFeeds:actions.edit')}>
                   <IconButton

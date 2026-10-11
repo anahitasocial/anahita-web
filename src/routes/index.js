@@ -50,6 +50,7 @@ import CustomFeedsManage from '../containers/feeds/Manage';
 import CustomFeedAdd from '../containers/feeds/Add';
 import CustomFeedEdit from '../containers/feeds/Edit';
 import CustomFeedRead from '../containers/feeds/Read';
+import ShareDialog from '../containers/share/Dialog';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';
@@ -120,6 +121,8 @@ const AppRoutes = () => {
     <MembersOnlyGate>
       <AgreementsGate>
         <OnboardingGate>
+          {/* The one share dialog, opened from any share button. */}
+          <ShareDialog />
           <Routes>
             <Route path="/oauth/callback" element={<OAuthCallback />} />
 

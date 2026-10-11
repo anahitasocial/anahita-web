@@ -21,6 +21,7 @@ import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
 import ControlSave from '../controls/medium/Save';
+import { ShareMenuItem, ofNode } from '../controls/Share';
 import PostActivity from '../activity/PostActivity';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
@@ -137,6 +138,11 @@ const MediaMenu = ({
           medium={medium}
           onDone={handleClose}
           key={`post-save-${medium.id}`}
+        />
+        <ShareMenuItem
+          what={ofNode(medium)}
+          onDone={handleClose}
+          key={`post-share-${medium.id}`}
         />
         {canPin &&
           <ControlPin

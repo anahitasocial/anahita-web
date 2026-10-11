@@ -243,6 +243,16 @@ const urlOf = (feed) => {
   return `/feeds/${feed.id}`;
 };
 
+// What to share of a feed: where it is, its name, and who can see it.
+const toShare = (feed) => {
+  return {
+    path: urlOf(feed),
+    title: feed.name,
+    text: feed.body,
+    access: feed.access,
+  };
+};
+
 // Where a feed is opened after it is saved: Home on its tab when it is kept
 // there, and its own page otherwise.
 const whereToRead = (feed) => {
@@ -280,6 +290,7 @@ export default {
   namesOf,
   isShared,
   leave,
+  toShare,
   urlOf,
   whereToRead,
 };

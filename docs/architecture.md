@@ -443,6 +443,26 @@ Home for somebody signed in is `containers/feeds/index.jsx` (it was
 of the people and groups the viewer follows, with the custom feeds the viewer
 keeps there as tabs after it.
 
+### Sharing
+
+Share is the paper plane. It opens one dialog for the whole app
+(`containers/share/Dialog.jsx`, drawn once beside the routes) with the link
+and the ways to send it: copy it, email it, post it on Mastodon or Bluesky,
+and, where the browser has one, the device's own share sheet ("More
+options"), which has every app the person uses. Mastodon asks for the
+person's server the first time and keeps it in the browser.
+
+- **Anything on a page opens it** through `utils/share.js#open`:
+  `ShareButton` and `ShareMenuItem` in `containers/controls/Share.jsx`. A
+  menu can close behind its item, since the dialog is not the menu's.
+- **Where it is:** a post's menu, in a feed and on its page; a profile's
+  menu; a shared custom feed.
+- **Only what a visitor could open is sent beyond the site.** Something that
+  is not public, and anything on a members-only site, is offered to copy and
+  nothing else, with a note saying who can open the link.
+- **Nothing is counted and nothing is sent to the server.** The links to
+  other networks are plain addresses, and no script of theirs is loaded.
+
 ### The width of a page
 
 `App.jsx` wraps every page in one `Container`, which sets the most a page can
@@ -517,9 +537,8 @@ are about, what to leave out. The server's side is in the services'
 - **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
   its owner edit and delete. Copying makes a feed of the viewer's own, seen
   by them alone, and opens it in the editor.
-- **Copy link** (`containers/feeds/CopyLink.jsx`), on a feed's card in the
-  list and on its page, copies the feed's address. Only for a feed somebody
-  else can open: not one kept to its owner.
+- **Share** is on a shared feed's card, in Discover and on the feed's page.
+  See [Sharing](#sharing). Not on a feed kept to its owner.
 - **Following a hashtag** (`containers/feeds/FollowHashtag.jsx`, on a
   hashtag's page) makes a feed of that one hashtag and puts it on the home
   page, or puts there the one the viewer already has.

@@ -21,7 +21,7 @@ import UnpinIcon from '@mui/icons-material/HomeOutlined';
 
 import FeedCustomBrowse from '../feed/Custom';
 import useFeed from './useFeed';
-import CopyFeedLink from './CopyLink';
+import { ShareButton } from '../controls/Share';
 import DialogConfirm from '../../components/DialogConfirm';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import Progress from '../../components/Progress';
@@ -127,7 +127,7 @@ const CustomFeedRead = ({
               </Link>
               {` · ${i18n.t(`customFeeds:access.${feed.access}`)}`}
             </>}
-            action={<CopyFeedLink feed={feed} />}
+            action={customFeeds.isShared(feed) && <ShareButton what={customFeeds.toShare(feed)} />}
             slotProps={{ title: { variant: 'h5', component: 'h1' } }}
           />
           <CardContent sx={{ pt: 0 }}>

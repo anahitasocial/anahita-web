@@ -58,4 +58,20 @@ A phase is finished only when these pages match the code. When a page is added, 
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-02 |
-| Implementation | not started |
+| Implementation | done 2026-10-11, on `m7-discovery` |
+
+## What was built: 2026-10-11
+
+Built ahead of its place in the order, when the user asked for a share button on custom feeds and pointed at this plan.
+
+- `utils/share.js` (the link, the message, the addresses of other places, who a link can be sent to, the one dialog's opening) with tests; `containers/share/Dialog.jsx`; `containers/controls/Share.jsx` (`ShareButton`, `ShareMenuItem`).
+- On a shared custom feed (card, Discover, its page), in a post's menu in a feed and on its page, and in a profile's menu.
+
+**Different from the plan**
+
+- **The dialog always opens,** at the user's asking, and the device's share sheet is one of its options ("More options") where the browser has one. The plan had the sheet first and a menu only without it.
+- **In menus, not in the row of buttons under a post.** A post's menu and a profile's menu have it. The action row under a post card was left as it is.
+- **No field to fall back on is needed for copying:** the link is always shown in the dialog, and Copy link is offered when the browser can copy.
+- **Remote posts** share our address: there are none yet (item 8).
+
+Not tried in a browser by me.

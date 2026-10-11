@@ -17,7 +17,7 @@ import Typography from '@mui/material/Typography';
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/Home';
 
-import CopyFeedLink from './CopyLink';
+import { ShareButton } from '../controls/Share';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import Progress from '../../components/Progress';
 import actions from '../../actions';
@@ -189,7 +189,7 @@ const CustomFeedsDiscover = ({
                 }
                 action={
                   <Stack direction="row">
-                    <CopyFeedLink feed={feed} />
+                    <ShareButton what={customFeeds.toShare(feed)} />
                     {feed.authorized && feed.authorized.pin &&
                       <Tooltip title={pinLabel}>
                         <span>

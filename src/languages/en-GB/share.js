@@ -1,0 +1,16 @@
+export default {
+  action: 'Share',
+  title: 'Share',
+  link: 'Link',
+  copy: 'Copy link',
+  copied: 'Link copied.',
+  email: 'Send by email',
+  mastodon: 'Post on Mastodon',
+  mastodonServer: 'Your Mastodon server',
+  bluesky: 'Post on Bluesky',
+  device: 'More options',
+  open: 'Open',
+  close: 'Close',
+  notPublic: 'This is not public. Only people who can already see it can open the link.',
+  membersOnly: 'This site is for members. Only people who are signed in can open the link.',
+};

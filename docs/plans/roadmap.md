@@ -54,7 +54,7 @@ Each milestone ends in a shippable state.
 | 19 | ✅ | 14 · Custom feeds. Done 2026-10-11: a feed is a node with what it shows as a definition, read for whoever is looking so that it never widens what they may see; made, changed, copied, deleted and previewed; kept as tabs on Home after Following, in the viewer's order; "Custom feeds" in the menu; following a hashtag is a feed of it. Newest first only. Not tried signed in by Claude | [feed-generators.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/feed-generators.md) (update) | services + web | 5–7 | 0 |
 | 20 | ⬜ | 3 · Recommendation service | [recommendation-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/recommendation-service.md) | services + web | 6 | 0, 1 |
 | 21 | ⬜ | 10 · Link previews + web shell (Open Graph) | [link-previews.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/link-previews.md) + [open-graph.md](open-graph.md) | services + web | 4–5 | 9 |
-| 21b | ⬜ | 23 · Share button | [share-button.md](share-button.md) | web | ½–1 | 10 |
+| 21b | ✅ | 23 · Share button. Done 2026-10-11, ahead of its place: one share dialog (copy, email, Mastodon, Bluesky, the device's sheet), on posts' and profiles' menus and on shared custom feeds | [share-button.md](share-button.md) | web | ½–1 | 10 |
 | **M8. Media and portability** |  | | | | **about 11–14** | |
 | 22 | ⬜ | 16 · Video service + worker | [video-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/video-service.md) | services + web | 5–7 | 9 |
 | 23 | ⬜ | 21 · Download your data | [data-export.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/data-export.md) | services + web | 6–7 | 9, 5 |
