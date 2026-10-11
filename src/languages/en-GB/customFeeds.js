@@ -10,12 +10,19 @@ export default {
   list: {
     subheader: 'Feeds you build yourself: choose where the posts come from and what they are about. Newest first, always.',
     create: 'Create a custom feed',
+    tabMine: 'My feeds',
+    tabDiscover: 'Discover',
     mine: 'Your feeds',
     kept: 'Feeds by other people',
     empty: 'You have no custom feeds yet.',
-    emptyKept: 'A feed somebody else made appears here when you add it to your home page.',
+    emptyKept: 'A feed somebody else made appears here when you add it to your home page. Find some under Discover.',
     by: 'by {{ name }}',
     loadFailed: 'Your feeds could not be loaded. Please try again.',
+  },
+  discover: {
+    search: 'Find a feed by name',
+    empty: 'Nobody has shared a feed yet.',
+    noMatch: 'No shared feed has that in its name.',
   },
   access: {
     myself: 'Only me',

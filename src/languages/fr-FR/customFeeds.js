@@ -10,12 +10,19 @@ export default {
   list: {
     subheader: 'Des fils que vous composez vous-même : choisissez d’où viennent les publications et de quoi elles parlent. Toujours les plus récentes d’abord.',
     create: 'Créer un fil personnalisé',
+    tabMine: 'Mes fils',
+    tabDiscover: 'Découvrir',
     mine: 'Vos fils',
     kept: 'Fils d’autres personnes',
     empty: 'Vous n’avez pas encore de fil personnalisé.',
-    emptyKept: 'Un fil créé par quelqu’un d’autre apparaît ici quand vous l’ajoutez à votre page d’accueil.',
+    emptyKept: 'Un fil créé par quelqu’un d’autre apparaît ici quand vous l’ajoutez à votre page d’accueil. Trouvez-en sous Découvrir.',
     by: 'par {{ name }}',
     loadFailed: 'Vos fils n’ont pas pu être chargés. Veuillez réessayer.',
+  },
+  discover: {
+    search: 'Trouver un fil par son nom',
+    empty: 'Personne n’a encore partagé de fil.',
+    noMatch: 'Aucun fil partagé ne porte ce nom.',
   },
   access: {
     myself: 'Moi uniquement',

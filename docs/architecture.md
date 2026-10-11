@@ -470,8 +470,12 @@ are about, what to leave out. The server's side is in the services'
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
   (`onChange`).
 - **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
-  the end of the tabs): the viewer's feeds and the ones of other people's
-  they keep.
+  the end of the tabs) has two tabs, the open one in the address. **My
+  feeds**: the viewer's feeds and the ones of other people's they keep.
+  **Discover** (`Discover.jsx`, `?tab=discover`): what other people have
+  shared and the viewer may see (`GET /feeds/discover`), newest first, found
+  by part of a name, each to be added to the home page. They are apart
+  because the second is the list that grows.
   The house adds a feed to the home page or takes it off, and the arrows move
   it among the tabs.
 - **The editor** (`containers/feeds/Form.jsx`) is one form drawn two ways.
