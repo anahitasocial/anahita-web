@@ -38,13 +38,19 @@ const WAIT = 300;
 // The server sends only feeds the viewer may see: public ones, ones for
 // anyone signed in, and ones for the followers of somebody they follow. A
 // feed added from here shows its reader what they could see anyway. The
-// list can be narrowed by part of a name.
+// list can be narrowed by part of a feed's name, of what it is for, or of
+// its owner's name.
+//
+// The site's search uses it too, for its Feeds tab: given `query`, it lists
+// what matches and has no field of its own.
 const CustomFeedsDiscover = ({
+  query = null,
   alertSuccess,
   alertError,
 }) => {
   const [feeds, setFeeds] = useState([]);
-  const [search, setSearch] = useState('');
+  const [typed, setTyped] = useState('');
+  const search = query === null ? typed : query;
   const [hasMore, setHasMore] = useState(true);
   const [hasFailed, setHasFailed] = useState(false);
   const [waiting, setWaiting] = useState(false);
@@ -123,17 +129,18 @@ const CustomFeedsDiscover = ({
 
   return (
     <>
-      <TextField
-        fullWidth
-        type="search"
-        label={i18n.t('customFeeds:discover.search')}
-        value={search}
-        onChange={(event) => {
-          setSearch(event.target.value);
-        }}
-        slotProps={{ htmlInput: { maxLength: 100 } }}
-        sx={{ mb: 2 }}
-      />
+      {query === null &&
+        <TextField
+          fullWidth
+          type="search"
+          label={i18n.t('customFeeds:discover.search')}
+          value={typed}
+          onChange={(event) => {
+            setTyped(event.target.value);
+          }}
+          slotProps={{ htmlInput: { maxLength: 100 } }}
+          sx={{ mb: 2 }}
+        />}
       {hasFailed &&
         <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
           {i18n.t('customFeeds:list.loadFailed')}
@@ -219,6 +226,8 @@ const CustomFeedsDiscover = ({
 };
 
 CustomFeedsDiscover.propTypes = {
+  // What to look for, when whoever draws this has the field for it.
+  query: PropTypes.string,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };

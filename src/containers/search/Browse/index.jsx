@@ -20,6 +20,8 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import SearchList from './SearchList';
 import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
+import CustomFeedsDiscover from '../../feeds/Discover';
+import PageColumn from '../../../components/PageColumn';
 
 const { SCOPE, SORTING } = SEARCH;
 
@@ -86,7 +88,10 @@ const Search = () => {
   let coordLong = 0.0;
   let coordLat = 0.0;
 
-  const [scope, setScope] = useState(SCOPE.ALL);
+  // The tab to open on can be named in the address (`?scope=feeds`), which
+  // is how the page of custom feeds leads to the feeds people have shared.
+  const asked = searchParams.get('scope');
+  const [scope, setScope] = useState(Object.values(SCOPE).includes(asked) ? asked : SCOPE.ALL);
   const [sort, setSort] = useState(SORTING.RELEVANT);
   const [searchRange, setSearchRange] = useState(125);
 
@@ -182,9 +187,24 @@ const Search = () => {
             label={i18n.t('search:filterNodeTypes.actors')}
             value={SCOPE.ACTORS}
           />
+          <Tab
+            label={i18n.t('search:filterNodeTypes.feeds')}
+            value={SCOPE.FEEDS}
+          />
         </Tabs>
       </AppBar>
+      {/* Feeds are found by name, by what they are for and by their owner's
+          name, among the ones shared with the viewer. The order and the
+          distance above are for the other three tabs. */}
+      {scope === SCOPE.FEEDS &&
+        <PageColumn>
+          <CustomFeedsDiscover query={q || ''} />
+        </PageColumn>}
       {useMemo(() => {
+        if (scope === SCOPE.FEEDS) {
+          return null;
+        }
+
         return (
           <SearchList
             key={`${sort}-${scope}-${searchRange}`}

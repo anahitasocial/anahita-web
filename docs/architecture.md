@@ -504,14 +504,16 @@ are about, what to leave out. The server's side is in the services'
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
   (`onChange`).
 - **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
-  the end of the tabs) has two tabs, the open one in the address. **My
-  feeds**: the viewer's feeds and the ones of other people's they keep.
-  **Discover** (`Discover.jsx`, `?tab=discover`): what other people have
-  shared and the viewer may see (`GET /feeds/discover`), newest first, found
-  by part of a name, each to be added to the home page. They are apart
-  because the second is the list that grows.
-  The house adds a feed to the home page or takes it off, and the arrows move
-  it among the tabs.
+  the end of the tabs and from "Customize feeds" in the menu): the viewer's
+  feeds and the ones of other people's they keep.
+- **Finding shared feeds** is in the site's search: a **Feeds** tab beside
+  All, Media and Actors (`containers/feeds/Discover.jsx`,
+  `GET /feeds/discover`). It lists the feeds people have shared that the
+  viewer may see, newest first, matching what was searched for in a feed's
+  name, in what it is for or in its owner's name, each to be added to the
+  home page. With nothing searched for it lists them all. The list page
+  links to it (`/search?scope=feeds`). It was a second tab on the list page
+  for a few hours, and was taken off as the same thing twice.
 - **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
   new feed at `/feeds/new` (`Add.jsx`) and for changing one at
   `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:

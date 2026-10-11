@@ -2,29 +2,28 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import DownIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/EditOutlined';
+import FindIcon from '@mui/icons-material/SearchOutlined';
 import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/Home';
 import UpIcon from '@mui/icons-material/ArrowUpward';
 
-import CustomFeedsDiscover from './Discover';
 import BrowseHeader from '../../components/BrowseHeader';
 import { ShareButton } from '../controls/Share';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
@@ -39,13 +38,10 @@ import PageColumn from '../../components/PageColumn';
 
 const { getActorName } = utils.node;
 
-const MINE = 'mine';
-const DISCOVER = 'discover';
-
-// Custom feeds, in two tabs. "My feeds": the ones the viewer made, and the
-// ones of other people's they keep on their home page. "Discover": what
-// other people have shared, which is the list that grows, and so is kept
-// out of the first. The open tab is in the address (`?tab=discover`).
+// Custom feeds: the ones the viewer made, and the ones of other people's
+// they keep on their home page. What other people have shared is found in
+// the site's search, under its Feeds tab, which this page links to: that
+// is the list that grows, and it is kept out of this one.
 //
 // A feed on the home page has a filled house; pressing it takes it off, and
 // the arrows move it among the tabs there. Making, changing and deleting a
@@ -60,8 +56,6 @@ const CustomFeedsManage = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasFailed, setHasFailed] = useState(false);
   const [waiting, setWaiting] = useState(false);
-  const [params, setParams] = useSearchParams();
-  const tab = params.get('tab') === DISCOVER ? DISCOVER : MINE;
 
   const load = () => {
     return Promise.all([api.customFeeds.mine(), api.customFeeds.pinned()]).then(([made, kept]) => {
@@ -75,13 +69,9 @@ const CustomFeedsManage = ({
     });
   };
 
-  // Read again on coming back to the tab: a feed may have been added to the
-  // home page from Discover.
   useEffect(() => {
-    if (tab === MINE) {
-      load();
-    }
-  }, [tab]);
+    load();
+  }, []);
 
   const failed = (response) => {
     const data = (response.response && response.response.data) || {};
@@ -283,24 +273,12 @@ const CustomFeedsManage = ({
             actionLabel={i18n.t('customFeeds:list.create')}
           />
         </Box>
-        <Tabs
-          value={tab}
-          variant="fullWidth"
-          onChange={(event, value) => {
-            setParams(value === DISCOVER ? { tab: DISCOVER } : {});
-          }}
-          sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
-        >
-          <Tab value={MINE} label={i18n.t('customFeeds:list.tabMine')} />
-          <Tab value={DISCOVER} label={i18n.t('customFeeds:list.tabDiscover')} />
-        </Tabs>
-        {tab === DISCOVER && <CustomFeedsDiscover />}
-        {tab === MINE && isLoading && <Progress />}
-        {tab === MINE && !isLoading && hasFailed &&
+        {isLoading && <Progress />}
+        {!isLoading && hasFailed &&
         <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
           {i18n.t('customFeeds:list.loadFailed')}
         </Typography>}
-        {tab === MINE && !isLoading && !hasFailed &&
+        {!isLoading && !hasFailed &&
         <>
           <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
             {i18n.t('customFeeds:list.mine')}
@@ -318,6 +296,14 @@ const CustomFeedsManage = ({
             {i18n.t('customFeeds:list.emptyKept')}
           </Typography>}
           {kept.map(row)}
+          <Button
+            component={RouterLink}
+            to="/search?scope=feeds"
+            startIcon={<FindIcon />}
+            sx={{ mx: 1, mb: 2 }}
+          >
+            {i18n.t('customFeeds:list.find')}
+          </Button>
         </>}
       </PageColumn>
     </>
