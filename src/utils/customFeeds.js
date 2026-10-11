@@ -243,6 +243,31 @@ const urlOf = (feed) => {
   return `/feeds/${feed.id}`;
 };
 
+const FEED_TYPE = 'node.feed.feed-service.generator.v1';
+
+// Whether a node, as search sends one, is a custom feed.
+const isFeed = (node) => {
+  return Boolean(node) && node.type === FEED_TYPE;
+};
+
+// A feed as search sends it, a node with a `feed` block, in the shape the
+// rest of the app has a feed in.
+const fromSearch = (node) => {
+  const details = node.feed || {};
+
+  return {
+    id: node.id,
+    type: node.type,
+    name: node.name || '',
+    body: node.body || '',
+    access: node.access || '',
+    icon: details.icon || 'feed',
+    definition: complete(details.definition),
+    owner: node.owner,
+    createdAt: node.createdAt,
+  };
+};
+
 // When a feed was made, as a date to read: "11 October 2026". '' for one
 // with no date.
 const madeOn = (feed, language) => {
@@ -305,6 +330,8 @@ export default {
   summary,
   namesOf,
   isShared,
+  isFeed,
+  fromSearch,
   leave,
   madeOn,
   toShare,

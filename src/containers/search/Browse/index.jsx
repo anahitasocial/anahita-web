@@ -20,7 +20,6 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import SearchList from './SearchList';
 import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
-import CustomFeedsDiscover from '../../feeds/Discover';
 
 const { SCOPE, SORTING } = SEARCH;
 
@@ -192,28 +191,7 @@ const Search = () => {
           />
         </Tabs>
       </AppBar>
-      {/* Feeds are found by name, by what they are for and by their owner's
-          name, among the ones shared with the viewer. The order and the
-          distance above are for the other three tabs. */}
-      {scope === SCOPE.FEEDS &&
-        <CustomFeedsDiscover query={q || ''} />}
-      {/* Under All, the first few feeds that match lead the rest: they are
-          listed by another service than the one that searches posts and
-          profiles, so they cannot be mixed in among them. */}
-      {scope === SCOPE.ALL && q &&
-        <CustomFeedsDiscover
-          key={`all-feeds-${q}`}
-          query={q}
-          max={3}
-          onMore={() => {
-            setScope(SCOPE.FEEDS);
-          }}
-        />}
       {useMemo(() => {
-        if (scope === SCOPE.FEEDS) {
-          return null;
-        }
-
         return (
           <SearchList
             key={`${sort}-${scope}-${searchRange}`}

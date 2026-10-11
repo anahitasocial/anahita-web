@@ -24,10 +24,11 @@ const { getActorName } = utils.node;
 // spacing `ActorCard` has.
 const CustomFeedCard = ({
   feed,
+  isMine = false,
   headerAction = null,
   action = null,
 }) => {
-  const isOwn = Boolean(feed.authorized && feed.authorized.edit);
+  const isOwn = Boolean(feed.authorized && feed.authorized.edit) || Boolean(isMine);
 
   return (
     <Card>
@@ -76,6 +77,8 @@ const CustomFeedCard = ({
 
 CustomFeedCard.propTypes = {
   feed: PropTypes.object.isRequired,
+  // The viewer's own, where the feed does not say so itself.
+  isMine: PropTypes.bool,
   // At the top right of the card: a share button.
   headerAction: PropTypes.node,
   // Along the bottom: the button that adds it to the home page.

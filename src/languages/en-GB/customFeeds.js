@@ -23,13 +23,6 @@ export default {
     by: 'by {{ name }}',
     loadFailed: 'Your feeds could not be loaded. Please try again.',
   },
-  discover: {
-    heading: 'Feeds',
-    more: 'More feeds',
-    search: 'Find a feed',
-    empty: 'Nobody has shared a feed yet.',
-    noMatch: 'No shared feed has that in its name.',
-  },
   access: {
     myself: 'Only me',
     followers: 'My followers',

@@ -23,13 +23,6 @@ export default {
     by: 'par {{ name }}',
     loadFailed: 'Vos fils n’ont pas pu être chargés. Veuillez réessayer.',
   },
-  discover: {
-    heading: 'Fils',
-    more: 'Plus de fils',
-    search: 'Trouver un fil',
-    empty: 'Personne n’a encore partagé de fil.',
-    noMatch: 'Aucun fil partagé ne porte ce nom.',
-  },
   access: {
     myself: 'Moi uniquement',
     followers: 'Mes abonnés',

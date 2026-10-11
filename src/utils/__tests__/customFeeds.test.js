@@ -79,6 +79,26 @@ describe('a custom feed\'s definition', () => {
     expect(feeds.madeOn({ createdAt: 'not a date' }, 'en-GB')).toBe('');
   });
 
+  it('is read from a search result', () => {
+    const node = {
+      id: 12,
+      type: 'node.feed.feed-service.generator.v1',
+      name: 'Gardens',
+      access: 'public',
+      feed: { icon: 'hashtag', definition: { filters: { hashtagsAny: ['garden'] } } },
+    };
+
+    expect(feeds.isFeed(node)).toBe(true);
+    expect(feeds.isFeed({ type: 'node.medium.text-service.note.v1' })).toBe(false);
+    expect(feeds.isFeed(undefined)).toBe(false);
+
+    const feed = feeds.fromSearch(node);
+    expect(feed.icon).toBe('hashtag');
+    expect(feed.definition.filters.hashtagsAny).toEqual(['garden']);
+    expect(feed.definition.sources.following).toBe(false);
+    expect(feeds.fromSearch({ id: 1, type: node.type }).icon).toBe('feed');
+  });
+
   it('tells two definitions apart by what they show', () => {
     expect(feeds.fingerprint({ sources: { following: true } }))
       .toBe(feeds.fingerprint(feeds.starting()));

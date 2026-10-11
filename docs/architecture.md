@@ -506,19 +506,13 @@ are about, what to leave out. The server's side is in the services'
 - **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
   the end of the tabs and from "Feeds" in the menu): the viewer's
   feeds and the ones of other people's they keep.
-- **Finding shared feeds** is in the site's search: a **Feeds** tab beside
-  All, Media and Actors (`containers/feeds/Discover.jsx`,
-  `GET /feeds/discover`). It lists the feeds people have shared that the
-  viewer may see, newest first, matching what was searched for in a feed's
-  name, in what it is for or in its owner's name, each to be added to the
-  home page, as cards (`components/CustomFeedCard.jsx`) in the same columns
-  as the profiles and posts of the other tabs. With nothing searched for it
-  lists them all. The **All** tab is led by the first three feeds that
-  match, with a button to the rest: feeds come from feed-service and the
-  other results from the search service, so they are shown above them and
-  not among them. The list page
-  links to it (`/search?scope=feeds`). It was a second tab on the list page
-  for a few hours, and was taken off as the same thing twice.
+- **Finding shared feeds** is the site's search. A feed that matches is a
+  result like any other, among the profiles and posts under **All**, and by
+  itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node
+  with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
+  (`components/CustomFeedCard.jsx`) in the same columns, with the button
+  that adds it to the home page. Feeds kept to their owners are never found.
+  The list page links to the tab (`/search?scope=feeds`).
 - **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
   new feed at `/feeds/new` (`Add.jsx`) and for changing one at
   `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:

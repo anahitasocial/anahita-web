@@ -13,6 +13,8 @@ import NodesType from '../../../proptypes/Nodes';
 import ActorsCard from '../../actors/Browse/Card';
 import Masonry from '../../../components/BreakpointMasonry';
 import MediaCard from '../../nodes/MediumNode';
+import CustomFeedSearchCard from '../../feeds/SearchCard';
+import customFeeds from '../../../utils/customFeeds';
 import Progress from '../../../components/Progress';
 import { App as APP, Search as SEARCH } from '../../../constants';
 
@@ -124,6 +126,8 @@ const SearchList = ({
                 <ActorsCard actor={node} />}
               {utils.isMedium(node) &&
                 <MediaCard medium={node} />}
+              {customFeeds.isFeed(node) &&
+                <CustomFeedSearchCard node={node} />}
             </div>
           );
         })}

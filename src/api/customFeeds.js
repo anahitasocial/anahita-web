@@ -58,12 +58,6 @@ const mine = () => {
   return axios.get('/feeds/mine');
 };
 
-// The feeds people have shared that the viewer may see, newest first, a
-// page at a time. `q` is part of a name.
-const discover = ({ q = '', start = 0, limit = 20 } = {}) => {
-  return axios.get('/feeds/discover', { params: { q: q || undefined, start, limit } });
-};
-
 // The feeds the viewer keeps on their home page, in order.
 const pinned = () => {
   return axios.get('/feeds/pinned');
@@ -118,7 +112,6 @@ export default {
   copy,
   mine,
   pinned,
-  discover,
   setPins,
   setPinned,
   browse,
