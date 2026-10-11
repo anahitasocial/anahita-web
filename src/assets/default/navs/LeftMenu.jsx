@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
-import CustomizeIcon from '@mui/icons-material/TuneOutlined';
+import FeedsIcon from '@mui/icons-material/DynamicFeed';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
@@ -79,9 +79,8 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
-      {/* Under Home: the viewer's custom feeds, in their order, and the way
-          to the page where feeds are made, changed, put in order and
-          found. Set in, so they read as parts of Home. */}
+      {/* Under Home: the viewer's custom feeds, in their order. Set in, so
+          they read as parts of Home. */}
       {isAuthenticated &&
         <List component="div" disablePadding>
           {feeds.map((feed) => {
@@ -103,18 +102,21 @@ const LeftMenu = ({
               </ListItemButton>
             );
           })}
-          <ListItemButton
-            component={Link}
-            to="/feeds"
-            selected={pathname === '/feeds' || pathname.startsWith('/feeds/')}
-            sx={{ pl: 4 }}
-          >
-            <ListItemIcon>
-              <CustomizeIcon fontSize="small" />
-            </ListItemIcon>
-            <ListItemText primary={i18n.t('customFeeds:menu.customize')} />
-          </ListItemButton>
         </List>}
+      {/* The page of feeds: where they are made, changed and put in order.
+          An entry of its own, like Saved, and not one of the feeds under
+          Home, which it looked like when it was listed with them. */}
+      {isAuthenticated &&
+        <ListItemButton
+          component={Link}
+          to="/feeds"
+          selected={pathname === '/feeds' || pathname.startsWith('/feeds/')}
+        >
+          <ListItemIcon>
+            <FeedsIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('customFeeds:menu.feeds')} />
+        </ListItemButton>}
       {/* What the viewer saved: theirs, so it is here beside Home and not
           on their profile, which is what other people look at. */}
       {isAuthenticated &&

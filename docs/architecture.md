@@ -497,14 +497,14 @@ are about, what to leave out. The server's side is in the services'
   keeps each list's cursor and reports a page to the store in the store's
   terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
 - **Under Home in the left menu** are the feeds on the viewer's home page, in
-  their order, each opening Home on that feed, and "Customize feeds", which
-  leads to the list page. A feed is made from the + there. A feed is put on its maker's home page when it is made, so it
+  their order, each opening Home on that feed. The list page is an entry of
+  its own below them, **Feeds**, like Saved. A feed is made from the + there. A feed is put on its maker's home page when it is made, so it
   appears there at once. The menu and the tabs read the same list
   (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
   (`onChange`).
 - **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
-  the end of the tabs and from "Customize feeds" in the menu): the viewer's
+  the end of the tabs and from "Feeds" in the menu): the viewer's
   feeds and the ones of other people's they keep.
 - **Finding shared feeds** is in the site's search: a **Feeds** tab beside
   All, Media and Actors (`containers/feeds/Discover.jsx`,

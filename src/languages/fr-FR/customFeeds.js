@@ -1,13 +1,13 @@
 export default {
   copyOf: 'Copie de {{ name }}',
   made: 'Créé le {{ date }}',
-  cTitle: 'Fils personnalisés',
+  cTitle: 'Fils',
   menu: {
-    customize: 'Personnaliser les fils',
+    feeds: 'Fils',
   },
   home: {
     following: 'Abonnements',
-    manage: 'Personnaliser les fils',
+    manage: 'Fils',
     view: 'Disposition',
     viewStream: 'Une colonne',
     viewColumns: 'Colonnes',

@@ -1,13 +1,13 @@
 export default {
   copyOf: 'Copy of {{ name }}',
   made: 'Created {{ date }}',
-  cTitle: 'Custom feeds',
+  cTitle: 'Feeds',
   menu: {
-    customize: 'Customize feeds',
+    feeds: 'Feeds',
   },
   home: {
     following: 'Following',
-    manage: 'Customize feeds',
+    manage: 'Feeds',
     view: 'Layout',
     viewStream: 'One column',
     viewColumns: 'Columns',
