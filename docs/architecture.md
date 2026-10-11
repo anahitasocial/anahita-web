@@ -478,21 +478,15 @@ are about, what to leave out. The server's side is in the services'
   because the second is the list that grows.
   The house adds a feed to the home page or takes it off, and the arrows move
   it among the tabs.
-- **The editor** (`containers/feeds/Form.jsx`) is one form drawn two ways.
-  A new feed is made in the page, at `/feeds/new` (`Add.jsx`), reached from
-  the + on the list of feeds. A feed is changed in
-  a dialog (`inDialog`), the whole screen on a phone. Hashtags and keywords
+- **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
+  new feed at `/feeds/new` (`Add.jsx`) and for changing one at
+  `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
+  the + in its header, and the pencil on a feed's card. Hashtags and keywords
   are typed as chips (`components/WordsField.jsx`); profiles and places are
   searched for and picked (`components/NodesField.jsx`). Under the fields is
-  what the feed shows, in a sentence. There is no preview: saving a new feed
-  opens it.
-- **Changing a feed from Home.** With one of the viewer's own feeds open, a
-  pencil sits at the end of the tabs, beside the way to the list, where a
-  phone has it too. It opens the editor over the page
-  (`containers/feeds/EditDialog.jsx`). On saving, the tabs and the menu read
-  the feeds again and the list under the dialog is begun again, since it is
-  keyed by when the feed was last changed. `/feeds/:id/edit` still opens the
-  same dialog over the feed's own page, for the links there and in the list.
+  what the feed shows, in a sentence. There is no preview: saving opens the
+  feed, Home on its tab when it is kept there. Everything done to a feed is
+  done from the list page. Home has only the way to it.
 - **A feed's icon** is one of sixteen, chosen in the editor from a list that
   names each, on the same line as the feed's name, and kept by name
   (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`

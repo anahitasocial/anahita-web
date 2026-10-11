@@ -7,10 +7,6 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Checkbox from '@mui/material/Checkbox';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
@@ -22,7 +18,6 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
@@ -82,8 +77,7 @@ const toggled = (list, item, isOn) => {
   return isOn ? [...without, item] : without;
 };
 
-// Making a custom feed, or changing one. In the page, or with `inDialog`
-// in a dialog over it, which on a phone is the whole screen.
+// Making a custom feed, or changing one, in the page.
 //
 // A feed is where its posts come from, narrowed by what they are about, less
 // what is left out. Under the fields is the same thing in a sentence, which
@@ -91,7 +85,6 @@ const toggled = (list, item, isOn) => {
 // and it can be changed again from there. Posts are always newest first.
 const CustomFeedForm = ({
   feed = null,
-  inDialog = false,
   onClose,
   onSaved,
   onDeleted = null,
@@ -99,9 +92,6 @@ const CustomFeedForm = ({
   alertError,
 }) => {
   const isNew = !feed;
-  const isSmall = useMediaQuery((theme) => {
-    return theme.breakpoints.down('sm');
-  });
 
   const [values, setValues] = useState(() => {
     return startingValues(feed);
@@ -560,52 +550,23 @@ const CustomFeedForm = ({
     </>
   );
 
-  // In the page, for a new feed.
-  if (!inDialog) {
-    return (
-      <Card>
-        <CardHeader
-          title={title}
-          slotProps={{ title: { variant: 'h5', component: 'h1' } }}
-        />
-        <CardContent>
-          <Stack spacing={2}>
-            <div>
-              {fields}
-            </div>
-            <Stack direction="row" spacing={1}>
-              {buttons}
-            </Stack>
-          </Stack>
-        </CardContent>
-      </Card>
-    );
-  }
-
-  // Over the page, for one being changed. The whole screen on a phone.
   return (
-    <Dialog
-      open
-      fullWidth
-      maxWidth="sm"
-      fullScreen={isSmall}
-      onClose={() => {
-        if (!isSaving) {
-          onClose();
-        }
-      }}
-      aria-labelledby="custom-feed-editor-title"
-    >
-      <DialogTitle id="custom-feed-editor-title">
-        {title}
-      </DialogTitle>
-      <DialogContent dividers>
-        {fields}
-      </DialogContent>
-      <DialogActions sx={{ p: 2 }}>
-        {buttons}
-      </DialogActions>
-    </Dialog>
+    <Card>
+      <CardHeader
+        title={title}
+        slotProps={{ title: { variant: 'h5', component: 'h1' } }}
+      />
+      <CardContent>
+        <Stack spacing={2}>
+          <div>
+            {fields}
+          </div>
+          <Stack direction="row" spacing={1}>
+            {buttons}
+          </Stack>
+        </Stack>
+      </CardContent>
+    </Card>
   );
 };
 
@@ -613,8 +574,6 @@ CustomFeedForm.propTypes = {
   // The feed being changed, as the server sent it with what it names. None
   // for a new one.
   feed: PropTypes.object,
-  // Drawn in a dialog over the page, and not in it.
-  inDialog: PropTypes.bool,
   // Closed without saving, and saved: each is told, and neither goes
   // anywhere by itself.
   onClose: PropTypes.func.isRequired,
