@@ -54,6 +54,7 @@ const ActorCard = ({
   viewer = null,
   action = null,
   note = '',
+  headerAction = null,
 }) => {
   const cover = getCoverURL(actor);
   const url = getURL(actor);
@@ -76,6 +77,7 @@ const ActorCard = ({
           />
         </Link>}
       <CardHeader
+        action={headerAction}
         avatar={
           <ActorAvatar
             actor={actor}
@@ -146,6 +148,8 @@ ActorCard.propTypes = {
   classes: PropTypes.object.isRequired,
   action: PropTypes.node,
   note: PropTypes.string,
+  // At the top right of the card: a way to turn a recommendation down.
+  headerAction: PropTypes.node,
   actor: ActorType.isRequired,
   viewer: PersonType,
 };
