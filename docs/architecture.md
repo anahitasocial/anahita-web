@@ -676,6 +676,12 @@ reader sees them on their own, with a second line for the event's zone when
 it differs. `utils/events.js` does both with `Intl`, clock changes included,
 and has the tests for it.
 
+**Capacity** is set on a slider on the form, not typed: its stops are close
+together where the numbers are small and further apart as they grow, and all
+the way up is no limit (`events.capacityStops`). An event whose number is
+not one of the stops has it added, so opening it to change something else
+does not change how many may go.
+
 **Changing and cancelling** are in the event's settings, reached from its
 menu like a group's. The Info tab is the event's own form
 (`events/Form.jsx`), so the event's page has no Edit button, and

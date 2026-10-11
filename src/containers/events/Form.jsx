@@ -14,6 +14,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Checkbox from '@mui/material/Checkbox';
@@ -43,7 +44,8 @@ const startingValues = (actor) => {
     // chosen.
     startsAt: event.startsAt ? events.instantToWall(event.startsAt, zone) : '',
     endsAt: event.endsAt ? events.instantToWall(event.endsAt, zone) : '',
-    capacity: event.capacity ? String(event.capacity) : '',
+    // How many may go. 0 for no limit.
+    capacity: Number(event.capacity) || 0,
     onlineUrl: event.onlineUrl || '',
     websiteUrl: (actor && actor.websiteUrl) || '',
     access: 'public',
@@ -82,6 +84,10 @@ const EventForm = ({
   const navigate = useNavigate();
   const isNew = !actor;
   const [values, setValues] = useState(startingValues(actor));
+  // The slider's stops, with this event's own capacity among them.
+  const [capacityStops] = useState(() => {
+    return events.capacityStops(actor && actor.event && actor.event.capacity);
+  });
   const [error, setError] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   // The group hosting it: given for a new event, and on one being changed
@@ -249,16 +255,35 @@ const EventForm = ({
             <Typography variant="body2" color="error" role="alert">
               {i18n.t(`events:event.form.errors.${error}`)}
             </Typography>}
-          <TextField
-            fullWidth
-            type="number"
-            label={i18n.t('events:event.form.capacity')}
-            helperText={i18n.t('events:event.form.capacityHelp')}
-            value={values.capacity}
-            onChange={set('capacity')}
-            disabled={isSaving}
-            slotProps={{ htmlInput: { min: 0, max: 100000, step: 1 } }}
-          />
+          {/* How many may go, on a slider: all the way up is no limit. */}
+          <div>
+            <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between' }}>
+              <Typography id="event-capacity-label" variant="body1">
+                {i18n.t('events:event.form.capacity')}
+              </Typography>
+              <Typography variant="body1">
+                {values.capacity > 0 ? values.capacity : i18n.t('events:event.form.capacityUnlimited')}
+              </Typography>
+            </Stack>
+            <Slider
+              aria-labelledby="event-capacity-label"
+              value={events.capacityToStop(values.capacity, capacityStops)}
+              min={0}
+              max={capacityStops.length}
+              step={1}
+              disabled={isSaving}
+              getAriaValueText={(stop) => {
+                const capacity = events.stopToCapacity(stop, capacityStops);
+                return capacity > 0 ? String(capacity) : i18n.t('events:event.form.capacityUnlimited');
+              }}
+              onChange={(event, stop) => {
+                setValues({ ...values, capacity: events.stopToCapacity(stop, capacityStops) });
+              }}
+            />
+            <Typography variant="body2" color="textSecondary">
+              {i18n.t('events:event.form.capacityHelp')}
+            </Typography>
+          </div>
           <TextField
             fullWidth
             type="url"

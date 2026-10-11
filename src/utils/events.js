@@ -379,6 +379,42 @@ const canGo = (event) => {
   return takesAnswers(event) && (!event.isFull || event.viewerRsvp === GOING);
 };
 
+// How many may go, as the stops of a slider: close together where the
+// numbers are small, further apart as they grow. The stop past the last is
+// no limit, which the server keeps as 0.
+const CAPACITIES = [
+  2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 40, 50, 60, 75,
+  100, 150, 200, 250, 300, 400, 500, 750, 1000, 2000, 5000,
+];
+
+// The stops for an event: the usual ones, with its own capacity among them
+// when it is not one, so that opening an event to change it does not change
+// how many may go.
+const capacityStops = (capacity = 0) => {
+  const current = Number(capacity) || 0;
+
+  if (current <= 0 || CAPACITIES.includes(current)) {
+    return CAPACITIES;
+  }
+
+  return [...CAPACITIES, current].sort((a, b) => {
+    return a - b;
+  });
+};
+
+// Where a capacity is on its slider. No limit is one past the last stop.
+const capacityToStop = (capacity, stops = CAPACITIES) => {
+  const current = Number(capacity) || 0;
+  const at = stops.indexOf(current);
+
+  return current <= 0 || at < 0 ? stops.length : at;
+};
+
+// The capacity at a place on the slider: 0, no limit, past the last stop.
+const stopToCapacity = (stop, stops = CAPACITIES) => {
+  return stop >= stops.length ? 0 : (stops[stop] || 0);
+};
+
 export default {
   GOING,
   MAYBE,
@@ -408,4 +444,7 @@ export default {
   zoneLabel,
   takesAnswers,
   canGo,
+  capacityStops,
+  capacityToStop,
+  stopToCapacity,
 };
