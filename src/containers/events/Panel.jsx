@@ -176,6 +176,7 @@ const EventPanel = ({
                   for it to do. */}
               <ButtonGroup fullWidth aria-label={i18n.t('events:event.rsvp.label')}>
                 <Button
+                  color="secondary"
                   disabled={waiting || !event.viewerRsvp}
                   onClick={() => {
                     answer('');
