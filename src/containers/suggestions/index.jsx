@@ -69,8 +69,6 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
         const removeButton = (
           <Button
             fullWidth
-            variant="outlined"
-            color="inherit"
             key={`suggestion-remove-${actor.id}`}
             onClick={() => {
               handleDismiss(actor);
