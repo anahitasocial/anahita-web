@@ -233,6 +233,11 @@ const namesOf = (references) => {
   return names;
 };
 
+// Whether anybody but its owner can open a feed.
+const isShared = (feed) => {
+  return Boolean(feed) && Boolean(feed.access) && feed.access !== 'myself';
+};
+
 // Where a feed is read.
 const urlOf = (feed) => {
   return `/feeds/${feed.id}`;
@@ -254,5 +259,6 @@ export default {
   fingerprint,
   summary,
   namesOf,
+  isShared,
   urlOf,
 };

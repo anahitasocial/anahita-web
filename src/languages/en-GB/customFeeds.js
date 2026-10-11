@@ -33,6 +33,7 @@ export default {
     moveUp: 'Move up',
     moveDown: 'Move down',
     follow: 'Follow #{{ tag }}',
+    copyLink: 'Copy link',
   },
   prompts: {
     pinned: 'Added to your home page.',
@@ -42,6 +43,8 @@ export default {
     saved: 'Feed saved.',
     followed: '#{{ tag }} is now a feed on your home page.',
     failed: 'That did not work. Please try again.',
+    linkCopied: 'Link copied.',
+    linkFailed: 'The link could not be copied. It is {{ address }}',
   },
   delete: {
     title: 'Delete this feed?',

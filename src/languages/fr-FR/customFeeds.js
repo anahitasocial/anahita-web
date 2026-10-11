@@ -33,6 +33,7 @@ export default {
     moveUp: 'Monter',
     moveDown: 'Descendre',
     follow: 'Suivre #{{ tag }}',
+    copyLink: 'Copier le lien',
   },
   prompts: {
     pinned: 'Ajouté à votre page d’accueil.',
@@ -42,6 +43,8 @@ export default {
     saved: 'Fil enregistré.',
     followed: '#{{ tag }} est maintenant un fil sur votre page d’accueil.',
     failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
+    linkCopied: 'Lien copié.',
+    linkFailed: 'Le lien n’a pas pu être copié. Le voici : {{ address }}',
   },
   delete: {
     title: 'Supprimer ce fil ?',

@@ -488,6 +488,9 @@ are about, what to leave out. The server's side is in the services'
 - **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
   its owner edit and delete. Copying makes a feed of the viewer's own, seen
   by them alone, and opens it in the editor.
+- **Copy link** (`containers/feeds/CopyLink.jsx`), on a feed's card in the
+  list and on its page, copies the feed's address. Only for a feed somebody
+  else can open: not one kept to its owner.
 - **Following a hashtag** (`containers/feeds/FollowHashtag.jsx`, on a
   hashtag's page) makes a feed of that one hashtag and puts it on the home
   page, or puts there the one the viewer already has.

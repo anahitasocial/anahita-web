@@ -63,6 +63,14 @@ describe('a custom feed\'s definition', () => {
       .toBe('too_many_actors');
   });
 
+  it('has a link worth sending only when somebody else can open it', () => {
+    expect(feeds.isShared({ access: 'myself' })).toBe(false);
+    expect(feeds.isShared({ access: 'followers' })).toBe(true);
+    expect(feeds.isShared({ access: 'public' })).toBe(true);
+    expect(feeds.isShared({})).toBe(false);
+    expect(feeds.urlOf({ id: 12 })).toBe('/feeds/12');
+  });
+
   it('tells two definitions apart by what they show', () => {
     expect(feeds.fingerprint({ sources: { following: true } })).toBe(feeds.fingerprint(feeds.starting()));
     expect(feeds.fingerprint(feeds.starting())).not.toBe(feeds.fingerprint(feeds.ofHashtag('garden')));
