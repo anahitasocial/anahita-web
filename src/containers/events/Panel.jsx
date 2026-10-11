@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
@@ -12,7 +13,6 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import CalendarIcon from '@mui/icons-material/CalendarMonthOutlined';
-import NotGoingIcon from '@mui/icons-material/PersonRemoveOutlined';
 import OnlineIcon from '@mui/icons-material/VideocamOutlined';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 
@@ -170,11 +170,22 @@ const EventPanel = ({
             </Typography>}
           {isAuthenticated && takesAnswers &&
             <Box>
-              {/* Side by side, each half the width. */}
-              <Stack direction="row" spacing={1}>
+              {/* One group, the width of the card: Not going, Maybe, Going.
+                  Whichever the viewer chose is the filled one. Not going
+                  takes an answer back, so with none given there is nothing
+                  for it to do. */}
+              <ButtonGroup fullWidth aria-label={i18n.t('events:event.rsvp.label')}>
                 <Button
-                  fullWidth
+                  disabled={waiting || !event.viewerRsvp}
+                  onClick={() => {
+                    answer('');
+                  }}
+                >
+                  {i18n.t('events:event.rsvp.leave')}
+                </Button>
+                <Button
                   variant={event.viewerRsvp === events.MAYBE ? 'contained' : 'outlined'}
+                  aria-pressed={event.viewerRsvp === events.MAYBE}
                   disabled={waiting}
                   onClick={() => {
                     answer(events.MAYBE);
@@ -183,9 +194,8 @@ const EventPanel = ({
                   {i18n.t('events:event.rsvp.maybe')}
                 </Button>
                 <Button
-                  fullWidth
                   variant={event.viewerRsvp === events.GOING ? 'contained' : 'outlined'}
-                  color="primary"
+                  aria-pressed={event.viewerRsvp === events.GOING}
                   disabled={waiting || !events.canGo(event)}
                   onClick={() => {
                     answer(events.GOING);
@@ -193,7 +203,7 @@ const EventPanel = ({
                 >
                   {i18n.t('events:event.rsvp.going')}
                 </Button>
-              </Stack>
+              </ButtonGroup>
               {event.isFull && event.viewerRsvp !== events.GOING &&
                 <Typography variant="body2" color="textSecondary" sx={{ pt: 1 }}>
                   {i18n.t('events:event.rsvp.full')}
@@ -203,17 +213,6 @@ const EventPanel = ({
             <Button startIcon={<CalendarIcon />} onClick={handleCalendar}>
               {i18n.t('events:event.calendar')}
             </Button>
-            {isAuthenticated && event.viewerRsvp &&
-              <Button
-                color="inherit"
-                startIcon={<NotGoingIcon />}
-                disabled={waiting}
-                onClick={() => {
-                  answer('');
-                }}
-              >
-                {i18n.t('events:event.rsvp.leave')}
-              </Button>}
           </Stack>
         </Stack>
       </CardContent>

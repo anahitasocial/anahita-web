@@ -159,6 +159,7 @@ export default {
       cancelled: 'Cet événement a été annulé.',
     },
     rsvp: {
+      label: 'Votre réponse',
       going: 'Je participe',
       maybe: 'Peut-être',
       leave: 'Je ne participe pas',

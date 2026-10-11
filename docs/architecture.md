@@ -638,7 +638,9 @@ Danger zone (`events/CancelSetting.jsx`): it cannot be undone, and it is the
 thing to weigh against archiving and deleting.
 
 **Answering** is Going or Maybe, and is following the event, so an event's
-page has no Follow button. The number going opens who they are
+page has no Follow button. Not going, Maybe and Going are one group of
+buttons the width of the card, the chosen one filled; Not going takes an
+answer back. The number going opens who they are
 (`events/Attendees.jsx`). The link to join online is sent by the server only
 to whoever is going or looks after the event.
 

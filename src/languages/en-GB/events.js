@@ -169,6 +169,7 @@ export default {
       cancelled: 'This event was cancelled.',
     },
     rsvp: {
+      label: 'Your answer',
       going: 'Going',
       maybe: 'Maybe',
       leave: 'Not going',
