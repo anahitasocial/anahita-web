@@ -59,8 +59,10 @@ describe('a custom feed\'s definition', () => {
     expect(feeds.problem({ sources: { following: true }, exclude: { keywords: many(11) } })).toBe('too_many_keywords');
     expect(feeds.problem({ filters: { locationsAny: [1, 2, 3, 4, 5, 6] } })).toBe('too_many_locations');
     expect(feeds.problem({ filters: { keywordsAny: ['a'] } })).toBe('keyword_length');
-    expect(feeds.problem({ sources: { actors: Array.from({ length: 51 }, (unused, index) => { return index + 1; }) } }))
-      .toBe('too_many_actors');
+    const ids = Array.from({ length: 51 }, (unused, index) => {
+      return index + 1;
+    });
+    expect(feeds.problem({ sources: { actors: ids } })).toBe('too_many_actors');
   });
 
   it('has a link worth sending only when somebody else can open it', () => {
@@ -72,7 +74,8 @@ describe('a custom feed\'s definition', () => {
   });
 
   it('tells two definitions apart by what they show', () => {
-    expect(feeds.fingerprint({ sources: { following: true } })).toBe(feeds.fingerprint(feeds.starting()));
+    expect(feeds.fingerprint({ sources: { following: true } }))
+      .toBe(feeds.fingerprint(feeds.starting()));
     expect(feeds.fingerprint(feeds.starting())).not.toBe(feeds.fingerprint(feeds.ofHashtag('garden')));
   });
 });
