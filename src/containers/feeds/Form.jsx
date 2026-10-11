@@ -110,6 +110,9 @@ const CustomFeedForm = ({
     return chosenFrom(values.definition.exclude.actors, references);
   });
   const [error, setError] = useState('');
+  // Whether "Profiles I follow" is as the form set it, or as the person
+  // did. A new feed starts with it ticked so that it shows something.
+  const [choseFollowing, setChoseFollowing] = useState(!isNew);
   const [isSaving, setIsSaving] = useState(false);
 
   const { definition } = values;
@@ -242,6 +245,7 @@ const CustomFeedForm = ({
                     checked={definition.sources.following}
                     disabled={isSaving}
                     onChange={(event) => {
+                      setChoseFollowing(true);
                       setDefinition('sources', { following: event.target.checked });
                     }}
                   />
@@ -261,7 +265,12 @@ const CustomFeedForm = ({
               disabled={isSaving}
               onChange={(nodes) => {
                 setActors(nodes);
-                setDefinition('sources', { actors: idsOf(nodes) });
+                // Sources add together. Somebody who names profiles in a
+                // new feed means those profiles, so the tick the form
+                // started with comes off, unless they put it there.
+                setDefinition('sources', choseFollowing || nodes.length === 0 ?
+                  { actors: idsOf(nodes) } :
+                  { actors: idsOf(nodes), following: false });
               }}
             />
             {!customFeeds.hasSources(definition) &&
