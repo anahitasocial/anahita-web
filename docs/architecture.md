@@ -474,12 +474,18 @@ are about, what to leave out. The server's side is in the services'
   they keep.
   The house adds a feed to the home page or takes it off, and the arrows move
   it among the tabs.
-- **The editor** (`containers/feeds/Form.jsx`, used by `Add.jsx` and
-  `Edit.jsx`): on one side the form, on the other what the feed shows in a
-  sentence and, under it, the posts it would show now, read again a moment
-  after each change (`POST /feeds/preview`). Hashtags and keywords are typed
-  as chips (`components/WordsField.jsx`); profiles and places are searched
-  for and picked (`components/NodesField.jsx`).
+- **The editor** (`containers/feeds/Form.jsx`) is a dialog of two steps, and
+  the whole screen on a phone. Step one builds the feed; step two shows what
+  it would show, in a sentence and then as posts (`POST /feeds/preview`), and
+  is where it is saved. Hashtags and keywords are typed as chips
+  (`components/WordsField.jsx`); profiles and places are searched for and
+  picked (`components/NodesField.jsx`). The dialog has an address
+  (`/feeds/new`, `/feeds/:id/edit`): `Add.jsx` draws it over the list of
+  feeds and `Edit.jsx` over the feed's page, so a link opens it and Back
+  closes it. A new feed opens Home on itself when saved, and the menu under
+  Home lists it. The preview's posts are kept apart from the page's in the
+  store (`feed_preview`), so the feed behind the dialog keeps its list.
+- **Ten feeds** is the most a person owns, the number the home page holds.
 - **The sentence** is `utils/customFeeds.js#summary`, from the definition
   alone. It is on the editor, on a feed's page and in the list, so nothing
   about what a feed shows is hidden. The same file repeats the server's

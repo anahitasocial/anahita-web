@@ -238,6 +238,19 @@ const isShared = (feed) => {
   return Boolean(feed) && Boolean(feed.access) && feed.access !== 'myself';
 };
 
+// Leaves a dialog that has an address of its own: back to wherever it was
+// opened from, or to `fallback` when it was opened by its address, with
+// nothing before it to go back to.
+const leave = (navigate, fallback) => {
+  const state = (typeof window !== 'undefined' && window.history && window.history.state) || {};
+
+  if (state.idx > 0) {
+    navigate(-1);
+  } else {
+    navigate(fallback, { replace: true });
+  }
+};
+
 // Where a feed is read.
 const urlOf = (feed) => {
   return `/feeds/${feed.id}`;
@@ -260,5 +273,6 @@ export default {
   summary,
   namesOf,
   isShared,
+  leave,
   urlOf,
 };

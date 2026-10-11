@@ -20,6 +20,9 @@ const { LIMIT } = APP.BROWSE;
 // A custom feed's posts: the ones a saved feed shows (`feed`), or the first
 // page of one still being built (`definition`).
 //
+// The two are kept apart in the store (`feed_custom`, `feed_preview`): a feed
+// is built in a dialog over a page that may be showing one.
+//
 // Drawn with the cards every feed uses. Newest first, a page at a time as
 // the reader scrolls. Whatever the feed asks for, the server sends each
 // reader only what they could have seen anyway.
@@ -27,6 +30,8 @@ const FeedCustomBrowse = ({
   feed = null,
   definition = null,
   emptyText = '',
+  namespace,
+  scrollableTarget = undefined,
   browseList,
   resetList,
   items,
@@ -92,10 +97,11 @@ const FeedCustomBrowse = ({
       }}
       hasMore={hasMore}
       loader={<Progress key="feed-custom-progress" />}
+      scrollableTarget={scrollableTarget}
     >
       <FeedItems
         items={items}
-        namespace="feed_custom"
+        namespace={namespace}
         isAuthenticated={isAuthenticated}
         viewer={viewer}
       />
@@ -108,6 +114,9 @@ FeedCustomBrowse.propTypes = {
   feed: PropTypes.object,
   definition: PropTypes.object,
   emptyText: PropTypes.string,
+  namespace: PropTypes.string.isRequired,
+  // The id of the element that scrolls, when it is not the page: a dialog.
+  scrollableTarget: PropTypes.string,
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
   items: NodesType.isRequired,
@@ -117,17 +126,25 @@ FeedCustomBrowse.propTypes = {
   viewer: PersonType.isRequired,
 };
 
-const mapStateToProps = (state) => {
+// A saved feed's posts, and an unsaved one's, each in a place of its own.
+const placeOf = (props) => {
+  return props.definition ?
+    { namespace: 'feed_preview', slice: 'feedPreview' } :
+    { namespace: 'feed_custom', slice: 'feedCustom' };
+};
+
+const mapStateToProps = (state, ownProps) => {
   const {
     isAuthenticated,
     viewer,
   } = state.session;
 
+  const { namespace, slice } = placeOf(ownProps);
   const {
-    feed_custom: items,
+    [namespace]: items,
     hasMore,
     isFetching,
-  } = state.feedCustom;
+  } = state[slice];
 
   return {
     items,
@@ -135,16 +152,19 @@ const mapStateToProps = (state) => {
     isFetching,
     isAuthenticated,
     viewer,
+    namespace,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
+const mapDispatchToProps = (dispatch, ownProps) => {
+  const { namespace } = placeOf(ownProps);
+
   return {
     browseList: (params) => {
-      return dispatch(actions.feed_custom.browse(params));
+      return dispatch(actions[namespace].browse(params));
     },
     resetList: () => {
-      return dispatch(actions.feed_custom.reset());
+      return dispatch(actions[namespace].reset());
     },
   };
 };
