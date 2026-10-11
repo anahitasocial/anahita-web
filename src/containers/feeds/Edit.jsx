@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
-import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import CustomFeedForm from './Form';
@@ -10,6 +9,7 @@ import useFeed from './useFeed';
 import Progress from '../../components/Progress';
 import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
+import PageColumn from '../../components/PageColumn';
 
 // Changing a custom feed, on a page of its own beside the list of feeds,
 // which is where it is reached from.
@@ -43,23 +43,21 @@ const CustomFeedEdit = () => {
       <Helmet>
         <title>{i18n.t('customFeeds:form.titleEdit')}</title>
       </Helmet>
-      <Grid container sx={{ justifyContent: 'center' }}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <CustomFeedForm
-            key={feed.id}
-            feed={feed}
-            onClose={() => {
-              navigate('/feeds');
-            }}
-            onSaved={(saved) => {
-              navigate(customFeeds.whereToRead(saved));
-            }}
-            onDeleted={() => {
-              navigate('/feeds', { replace: true });
-            }}
-          />
-        </Grid>
-      </Grid>
+      <PageColumn>
+        <CustomFeedForm
+          key={feed.id}
+          feed={feed}
+          onClose={() => {
+            navigate('/feeds');
+          }}
+          onSaved={(saved) => {
+            navigate(customFeeds.whereToRead(saved));
+          }}
+          onDeleted={() => {
+            navigate('/feeds', { replace: true });
+          }}
+        />
+      </PageColumn>
     </>
   );
 };

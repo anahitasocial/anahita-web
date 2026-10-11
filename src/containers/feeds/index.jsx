@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -24,6 +23,7 @@ import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
 import usePinnedFeeds from './usePinnedFeeds';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
+import PageColumn from '../../components/PageColumn';
 import actions from '../../actions';
 import i18n from '../../languages';
 
@@ -94,103 +94,95 @@ const FeedsPage = ({
       <Helmet>
         <title>{i18n.t('home:cTitle')}</title>
       </Helmet>
-      <Grid
-        container
-        sx={{ justifyContent: 'center' }}
-      >
-        <Grid size={{ xs: 12, md: 8 }}>
-          <CompleteProfileCard viewer={viewer} />
-        </Grid>
-        <Grid size={{ xs: 12, md: 8 }}>
-          {person.id &&
-            <Composers actor={person} />}
-        </Grid>
-        <Grid size={{ xs: 12, md: columns ? 12 : 8 }}>
-          <Box
-            sx={{
-              display: 'flex',
-              alignItems: 'center',
-              borderBottom: 1,
-              borderColor: 'divider',
-              mb: 2,
+      <PageColumn>
+        <CompleteProfileCard viewer={viewer} />
+        {person.id &&
+          <Composers actor={person} />}
+      </PageColumn>
+      <PageColumn wide={columns}>
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            borderBottom: 1,
+            borderColor: 'divider',
+            mb: 2,
+          }}
+        >
+          <Tabs
+            value={open ? open.id : FOLLOWING}
+            variant="scrollable"
+            scrollButtons="auto"
+            allowScrollButtonsMobile
+            onChange={(event, feedId) => {
+              setParams(feedId === FOLLOWING ? {} : { feed: String(feedId) });
             }}
+            sx={{ flexGrow: 1, minWidth: 0 }}
           >
-            <Tabs
-              value={open ? open.id : FOLLOWING}
-              variant="scrollable"
-              scrollButtons="auto"
-              allowScrollButtonsMobile
-              onChange={(event, feedId) => {
-                setParams(feedId === FOLLOWING ? {} : { feed: String(feedId) });
-              }}
-              sx={{ flexGrow: 1, minWidth: 0 }}
+            <Tab value={FOLLOWING} label={i18n.t('customFeeds:home.following')} />
+            {pinned.map((feed) => {
+              return (
+                <Tab
+                  key={`home-feed-${feed.id}`}
+                  value={feed.id}
+                  label={feed.name}
+                  icon={<CustomFeedIcon name={feed.icon} fontSize="small" />}
+                  iconPosition="start"
+                  sx={{ minHeight: 48 }}
+                />
+              );
+            })}
+          </Tabs>
+          {isWide &&
+          <ToggleButtonGroup
+            exclusive
+            size="small"
+            value={view}
+            aria-label={i18n.t('customFeeds:home.view')}
+            onChange={(event, chosen) => {
+              // Pressing the one that is on leaves it on.
+              if (chosen) {
+                setView(chosen);
+                rememberView(chosen);
+              }
+            }}
+            sx={{ mx: 1 }}
+          >
+            <ToggleButton
+              value={STREAM}
+              aria-label={i18n.t('customFeeds:home.viewStream')}
+              title={i18n.t('customFeeds:home.viewStream')}
             >
-              <Tab value={FOLLOWING} label={i18n.t('customFeeds:home.following')} />
-              {pinned.map((feed) => {
-                return (
-                  <Tab
-                    key={`home-feed-${feed.id}`}
-                    value={feed.id}
-                    label={feed.name}
-                    icon={<CustomFeedIcon name={feed.icon} fontSize="small" />}
-                    iconPosition="start"
-                    sx={{ minHeight: 48 }}
-                  />
-                );
-              })}
-            </Tabs>
-            {isWide &&
-              <ToggleButtonGroup
-                exclusive
-                size="small"
-                value={view}
-                aria-label={i18n.t('customFeeds:home.view')}
-                onChange={(event, chosen) => {
-                  // Pressing the one that is on leaves it on.
-                  if (chosen) {
-                    setView(chosen);
-                    rememberView(chosen);
-                  }
-                }}
-                sx={{ mx: 1 }}
-              >
-                <ToggleButton
-                  value={STREAM}
-                  aria-label={i18n.t('customFeeds:home.viewStream')}
-                  title={i18n.t('customFeeds:home.viewStream')}
-                >
-                  <StreamIcon fontSize="small" />
-                </ToggleButton>
-                <ToggleButton
-                  value={COLUMNS}
-                  aria-label={i18n.t('customFeeds:home.viewColumns')}
-                  title={i18n.t('customFeeds:home.viewColumns')}
-                >
-                  <ColumnsIcon fontSize="small" />
-                </ToggleButton>
-              </ToggleButtonGroup>}
-            <Tooltip title={i18n.t('customFeeds:home.manage')}>
-              <IconButton
-                component={RouterLink}
-                to="/feeds"
-                aria-label={i18n.t('customFeeds:home.manage')}
-              >
-                <ManageIcon />
-              </IconButton>
-            </Tooltip>
-          </Box>
-          {/* Keyed by when it was last changed, so a feed that was just
+              <StreamIcon fontSize="small" />
+            </ToggleButton>
+            <ToggleButton
+              value={COLUMNS}
+              aria-label={i18n.t('customFeeds:home.viewColumns')}
+              title={i18n.t('customFeeds:home.viewColumns')}
+            >
+              <ColumnsIcon fontSize="small" />
+            </ToggleButton>
+          </ToggleButtonGroup>}
+          <Tooltip title={i18n.t('customFeeds:home.manage')}>
+            <IconButton
+              component={RouterLink}
+              to="/feeds"
+              aria-label={i18n.t('customFeeds:home.manage')}
+            >
+              <ManageIcon />
+            </IconButton>
+          </Tooltip>
+        </Box>
+        {/* Keyed by when it was last changed, so a feed that was just
               edited is read again from the top. */}
-          {open ?
-            <FeedCustomBrowse
-              key={`home-feed-${open.id}-${open.updatedAt}`}
-              feed={open}
-              columns={columns}
-            /> :
-            <FeedBrowse columns={columns} />}
-
-        </Grid>
-      </Grid>
+        {open ?
+          <FeedCustomBrowse
+            key={`home-feed-${open.id}-${open.updatedAt}`}
+            feed={open}
+            columns={columns}
+          /> :
+          <FeedBrowse columns={columns} />}
+      </PageColumn>
     </>
   );
 };

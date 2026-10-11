@@ -9,7 +9,6 @@ import CardMedia from '@mui/material/CardMedia';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
-import Grid from '@mui/material/Grid';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
@@ -28,6 +27,7 @@ import i18n from '../../../languages';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import styles from './styles';
+import PageColumn from '../../../components/PageColumn';
 
 const {
   getAuthor,
@@ -94,114 +94,109 @@ const MediumReadDefault = ({
   );
 
   return (
-    <Grid
-      container
-      sx={{ justifyContent: 'center' }}
-    >
-      <Grid size={{ xs: 12, md: 8 }}>
-        <Card component="article">
-          <PinnedLabel show={Boolean(medium.pinned)} />
-          {context}
-          {/* The profile it was posted on, when that is not its author's
+    <PageColumn>
+      <Card component="article">
+        <PinnedLabel show={Boolean(medium.pinned)} />
+        {context}
+        {/* The profile it was posted on, when that is not its author's
               own: a group, or somebody else's profile. A reply says where
               it was said in its context, below. */}
-          {!context && medium.owner && medium.owner.id !== author.id &&
-            <CardHeaderOwner owner={medium.owner} />}
-          {cover &&
-            <CardMedia
-              className={classes.cover}
-              title={medium.name}
-              image={cover}
-              src="picture"
-            />}
-          {hasSlides &&
-            <PhotoSlides
-              medium={medium}
-              size="large"
-              onOpen={handleView ? () => {
-                handleView();
-              } : null}
-            />}
-          {!hasSlides && portrait && isLoaded && handleView &&
-            <ButtonBase
-              className={classes.portraitButton}
-              onClick={handleView}
-              aria-label={i18n.t('media:stepper.open')}
-            >
-              {portraitMedia}
-            </ButtonBase>}
-          {!hasSlides && portrait && isLoaded && !handleView && portraitMedia}
-          {!hasSlides && !isLoaded &&
-            <CardContent>
-              <Progress />
-            </CardContent>}
-          <CardHeader
-            avatar={
-              <ActorAvatar
-                actor={author}
-                linked={Boolean(author.id)}
-              />
-            }
-            title={
-              <ActorTitle
-                actor={author}
-                linked={Boolean(author.id)}
-              />
-            }
-            subheader={
-              <>
-                {createdAt}
-                {access}
-              </>
-            }
-            action={menu}
-          />
-          {editing && form}
-          {!editing &&
-            <>
-              {medium.body && <Player text={medium.body} />}
-              <CardContent component="article">
-                {medium.name &&
-                  <Typography
-                    variant="h2"
-                    dir="auto"
-                    lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
-                    className={classes.title}
-                  >
-                    {medium.name}
-                  </Typography>}
-                {medium.body &&
-                  <EntityBody contentFilter lang={medium.language}>
-                    {medium.body}
-                  </EntityBody>}
-                {quote}
-                <SignInPrompt show={Boolean(medium.truncated)} />
-              </CardContent>
-              {stats &&
-                <CardActions>
-                  {stats}
-                </CardActions>}
-              {actions &&
-                <CardActions>
-                  {actions}
-                </CardActions>}
-            </>}
-        </Card>
-        <Tabs
-          value={tab}
-          onChange={changeTab}
-          centered
-          variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
+        {!context && medium.owner && medium.owner.id !== author.id &&
+        <CardHeaderOwner owner={medium.owner} />}
+        {cover &&
+        <CardMedia
+          className={classes.cover}
+          title={medium.name}
+          image={cover}
+          src="picture"
+        />}
+        {hasSlides &&
+        <PhotoSlides
+          medium={medium}
+          size="large"
+          onOpen={handleView ? () => {
+            handleView();
+          } : null}
+        />}
+        {!hasSlides && portrait && isLoaded && handleView &&
+        <ButtonBase
+          className={classes.portraitButton}
+          onClick={handleView}
+          aria-label={i18n.t('media:stepper.open')}
         >
-          <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
-          <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
-        </Tabs>
-        {tab === TABS.REPLIES && replies}
-        {tab === TABS.LOCATIONS && locations}
-      </Grid>
-    </Grid>
+          {portraitMedia}
+        </ButtonBase>}
+        {!hasSlides && portrait && isLoaded && !handleView && portraitMedia}
+        {!hasSlides && !isLoaded &&
+        <CardContent>
+          <Progress />
+        </CardContent>}
+        <CardHeader
+          avatar={
+            <ActorAvatar
+              actor={author}
+              linked={Boolean(author.id)}
+            />
+            }
+          title={
+            <ActorTitle
+              actor={author}
+              linked={Boolean(author.id)}
+            />
+            }
+          subheader={
+            <>
+              {createdAt}
+              {access}
+            </>
+            }
+          action={menu}
+        />
+        {editing && form}
+        {!editing &&
+        <>
+          {medium.body && <Player text={medium.body} />}
+          <CardContent component="article">
+            {medium.name &&
+            <Typography
+              variant="h2"
+              dir="auto"
+              lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
+              className={classes.title}
+            >
+              {medium.name}
+            </Typography>}
+            {medium.body &&
+            <EntityBody contentFilter lang={medium.language}>
+              {medium.body}
+            </EntityBody>}
+            {quote}
+            <SignInPrompt show={Boolean(medium.truncated)} />
+          </CardContent>
+          {stats &&
+          <CardActions>
+            {stats}
+          </CardActions>}
+          {actions &&
+          <CardActions>
+            {actions}
+          </CardActions>}
+        </>}
+      </Card>
+      <Tabs
+        value={tab}
+        onChange={changeTab}
+        centered
+        variant="fullWidth"
+        indicatorColor="primary"
+        textColor="primary"
+      >
+        <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
+        <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
+      </Tabs>
+      {tab === TABS.REPLIES && replies}
+      {tab === TABS.LOCATIONS && locations}
+    </PageColumn>
   );
 };
 

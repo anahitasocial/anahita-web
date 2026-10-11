@@ -2,13 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Helmet } from 'react-helmet-async';
 import { Navigate, useParams } from 'react-router-dom';
 
-import Grid from '@mui/material/Grid';
-
 import Progress from '../../components/Progress';
 import EventForm from './Form';
 import api from '../../api';
 import i18n from '../../languages';
 import utils from '../../utils';
+import PageColumn from '../../components/PageColumn';
 
 // Changing an event: what it is called, when it is, how many may go.
 //
@@ -46,11 +45,9 @@ const EventEdit = () => {
       <Helmet>
         <title>{i18n.t('events:event.form.edit')}</title>
       </Helmet>
-      <Grid container sx={{ justifyContent: 'center' }}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <EventForm actor={actor} />
-        </Grid>
-      </Grid>
+      <PageColumn>
+        <EventForm actor={actor} />
+      </PageColumn>
     </>
   );
 };

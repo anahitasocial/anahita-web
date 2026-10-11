@@ -8,7 +8,6 @@ import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -36,6 +35,7 @@ import api from '../../api';
 import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
 import utils from '../../utils';
+import PageColumn from '../../components/PageColumn';
 
 const { getActorName } = utils.node;
 
@@ -272,55 +272,53 @@ const CustomFeedsManage = ({
       <Helmet>
         <title>{i18n.t('customFeeds:cTitle')}</title>
       </Helmet>
-      <Grid container sx={{ justifyContent: 'center' }}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Box sx={{ mb: 2 }}>
-            <BrowseHeader
-              icon={<FeedIcon />}
-              title={i18n.t('customFeeds:cTitle')}
-              subheader={i18n.t('customFeeds:list.subheader')}
-              actionTo="/feeds/new"
-              actionLabel={i18n.t('customFeeds:list.create')}
-            />
-          </Box>
-          <Tabs
-            value={tab}
-            variant="fullWidth"
-            onChange={(event, value) => {
-              setParams(value === DISCOVER ? { tab: DISCOVER } : {});
-            }}
-            sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
-          >
-            <Tab value={MINE} label={i18n.t('customFeeds:list.tabMine')} />
-            <Tab value={DISCOVER} label={i18n.t('customFeeds:list.tabDiscover')} />
-          </Tabs>
-          {tab === DISCOVER && <CustomFeedsDiscover />}
-          {tab === MINE && isLoading && <Progress />}
-          {tab === MINE && !isLoading && hasFailed &&
-            <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
-              {i18n.t('customFeeds:list.loadFailed')}
-            </Typography>}
-          {tab === MINE && !isLoading && !hasFailed &&
-            <>
-              <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
-                {i18n.t('customFeeds:list.mine')}
-              </Typography>
-              {mine.length === 0 &&
-                <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
-                  {i18n.t('customFeeds:list.empty')}
-                </Typography>}
-              {[...ownPinned, ...ownOthers].map(row)}
-              <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
-                {i18n.t('customFeeds:list.kept')}
-              </Typography>
-              {kept.length === 0 &&
-                <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
-                  {i18n.t('customFeeds:list.emptyKept')}
-                </Typography>}
-              {kept.map(row)}
-            </>}
-        </Grid>
-      </Grid>
+      <PageColumn>
+        <Box sx={{ mb: 2 }}>
+          <BrowseHeader
+            icon={<FeedIcon />}
+            title={i18n.t('customFeeds:cTitle')}
+            subheader={i18n.t('customFeeds:list.subheader')}
+            actionTo="/feeds/new"
+            actionLabel={i18n.t('customFeeds:list.create')}
+          />
+        </Box>
+        <Tabs
+          value={tab}
+          variant="fullWidth"
+          onChange={(event, value) => {
+            setParams(value === DISCOVER ? { tab: DISCOVER } : {});
+          }}
+          sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
+        >
+          <Tab value={MINE} label={i18n.t('customFeeds:list.tabMine')} />
+          <Tab value={DISCOVER} label={i18n.t('customFeeds:list.tabDiscover')} />
+        </Tabs>
+        {tab === DISCOVER && <CustomFeedsDiscover />}
+        {tab === MINE && isLoading && <Progress />}
+        {tab === MINE && !isLoading && hasFailed &&
+        <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
+          {i18n.t('customFeeds:list.loadFailed')}
+        </Typography>}
+        {tab === MINE && !isLoading && !hasFailed &&
+        <>
+          <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
+            {i18n.t('customFeeds:list.mine')}
+          </Typography>
+          {mine.length === 0 &&
+          <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
+            {i18n.t('customFeeds:list.empty')}
+          </Typography>}
+          {[...ownPinned, ...ownOthers].map(row)}
+          <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
+            {i18n.t('customFeeds:list.kept')}
+          </Typography>
+          {kept.length === 0 &&
+          <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
+            {i18n.t('customFeeds:list.emptyKept')}
+          </Typography>}
+          {kept.map(row)}
+        </>}
+      </PageColumn>
     </>
   );
 };

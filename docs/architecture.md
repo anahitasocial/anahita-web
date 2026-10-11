@@ -443,6 +443,15 @@ Home for somebody signed in is `containers/feeds/index.jsx` (it was
 of the people and groups the viewer follows, with the custom feeds the viewer
 keeps there as tabs after it.
 
+### The width of a page
+
+`App.jsx` wraps every page in one `Container`, which sets the most a page can
+be and its gutters. Inside it a page chooses its own width.
+`components/PageColumn.jsx` is the usual choice: the whole width on a phone,
+two thirds of the page, centred, on a wide screen, or all of it with `wide`.
+Home, the pages of custom feeds, a post's own page and the event forms use
+it. A profile, with its side column, lays itself out.
+
 ### Custom feeds
 
 A custom feed is one somebody builds: where its posts come from, what they

@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
@@ -31,6 +30,7 @@ import api from '../../api';
 import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
 import utils from '../../utils';
+import PageColumn from '../../components/PageColumn';
 
 const { getActorName, getURL } = utils.node;
 
@@ -110,90 +110,88 @@ const CustomFeedRead = ({
       <Helmet>
         <title>{feed.name}</title>
       </Helmet>
-      <Grid container sx={{ justifyContent: 'center' }}>
-        <Grid size={{ xs: 12, md: 8 }}>
-          <Card sx={{ mb: 2 }}>
-            <CardHeader
-              avatar={
-                <Avatar>
-                  <CustomFeedIcon name={feed.icon} />
-                </Avatar>
+      <PageColumn>
+        <Card sx={{ mb: 2 }}>
+          <CardHeader
+            avatar={
+              <Avatar>
+                <CustomFeedIcon name={feed.icon} />
+              </Avatar>
               }
-              title={feed.name}
-              subheader={feed.owner &&
-                <>
-                  {`${i18n.t('customFeeds:list.by', { name: '' }).trim()} `}
-                  <Link component={RouterLink} to={getURL(feed.owner)} underline="hover">
-                    {getActorName(feed.owner)}
-                  </Link>
-                  {` · ${i18n.t(`customFeeds:access.${feed.access}`)}`}
-                </>}
-              action={<CopyFeedLink feed={feed} />}
-              slotProps={{ title: { variant: 'h5', component: 'h1' } }}
-            />
-            <CardContent sx={{ pt: 0 }}>
-              <Stack spacing={2}>
-                {feed.body &&
-                  <Typography variant="body1">
-                    {feed.body}
-                  </Typography>}
-                <Typography variant="body2" color="textSecondary">
-                  {customFeeds.summary(feed.definition, i18n.t.bind(i18n), {
-                    names: customFeeds.namesOf(feed.references),
-                    isOwn,
-                  })}
-                </Typography>
-                <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
-                  {authorized.pin &&
-                    <Button
-                      variant={feed.isPinned ? 'outlined' : 'contained'}
-                      startIcon={feed.isPinned ? <UnpinIcon /> : <PinIcon />}
-                      disabled={waiting}
-                      onClick={handlePin}
-                    >
-                      {i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin')}
-                    </Button>}
-                  {authorized.copy &&
-                    <Button
-                      color="inherit"
-                      startIcon={<CopyIcon />}
-                      disabled={waiting}
-                      onClick={handleCopy}
-                    >
-                      {i18n.t('customFeeds:actions.copy')}
-                    </Button>}
-                  {authorized.edit &&
-                    <Button
-                      color="inherit"
-                      startIcon={<EditIcon />}
-                      component={RouterLink}
-                      to={`${customFeeds.urlOf(feed)}/edit`}
-                    >
-                      {i18n.t('customFeeds:actions.edit')}
-                    </Button>}
-                  {authorized.delete &&
-                    <DialogConfirm
-                      title={i18n.t('customFeeds:delete.title')}
-                      message={i18n.t('customFeeds:delete.message')}
-                      confirm={i18n.t('customFeeds:delete.confirm')}
-                      dismiss={i18n.t('customFeeds:delete.dismiss')}
-                    >
-                      <Button
-                        color="error"
-                        startIcon={<DeleteIcon />}
-                        disabled={waiting}
-                        onClick={handleDelete}
-                      >
-                        {i18n.t('customFeeds:actions.delete')}
-                      </Button>
-                    </DialogConfirm>}
-                </Stack>
+            title={feed.name}
+            subheader={feed.owner &&
+            <>
+              {`${i18n.t('customFeeds:list.by', { name: '' }).trim()} `}
+              <Link component={RouterLink} to={getURL(feed.owner)} underline="hover">
+                {getActorName(feed.owner)}
+              </Link>
+              {` · ${i18n.t(`customFeeds:access.${feed.access}`)}`}
+            </>}
+            action={<CopyFeedLink feed={feed} />}
+            slotProps={{ title: { variant: 'h5', component: 'h1' } }}
+          />
+          <CardContent sx={{ pt: 0 }}>
+            <Stack spacing={2}>
+              {feed.body &&
+              <Typography variant="body1">
+                {feed.body}
+              </Typography>}
+              <Typography variant="body2" color="textSecondary">
+                {customFeeds.summary(feed.definition, i18n.t.bind(i18n), {
+                  names: customFeeds.namesOf(feed.references),
+                  isOwn,
+                })}
+              </Typography>
+              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+                {authorized.pin &&
+                <Button
+                  variant={feed.isPinned ? 'outlined' : 'contained'}
+                  startIcon={feed.isPinned ? <UnpinIcon /> : <PinIcon />}
+                  disabled={waiting}
+                  onClick={handlePin}
+                >
+                  {i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin')}
+                </Button>}
+                {authorized.copy &&
+                <Button
+                  color="inherit"
+                  startIcon={<CopyIcon />}
+                  disabled={waiting}
+                  onClick={handleCopy}
+                >
+                  {i18n.t('customFeeds:actions.copy')}
+                </Button>}
+                {authorized.edit &&
+                <Button
+                  color="inherit"
+                  startIcon={<EditIcon />}
+                  component={RouterLink}
+                  to={`${customFeeds.urlOf(feed)}/edit`}
+                >
+                  {i18n.t('customFeeds:actions.edit')}
+                </Button>}
+                {authorized.delete &&
+                <DialogConfirm
+                  title={i18n.t('customFeeds:delete.title')}
+                  message={i18n.t('customFeeds:delete.message')}
+                  confirm={i18n.t('customFeeds:delete.confirm')}
+                  dismiss={i18n.t('customFeeds:delete.dismiss')}
+                >
+                  <Button
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    disabled={waiting}
+                    onClick={handleDelete}
+                  >
+                    {i18n.t('customFeeds:actions.delete')}
+                  </Button>
+                </DialogConfirm>}
               </Stack>
-            </CardContent>
-          </Card>
-          <FeedCustomBrowse feed={feed} />
-        </Grid>
-      </Grid>
+            </Stack>
+          </CardContent>
+        </Card>
+        <FeedCustomBrowse feed={feed} />
+      </PageColumn>
     </>
   );
 };
