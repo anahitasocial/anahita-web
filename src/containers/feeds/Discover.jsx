@@ -36,8 +36,14 @@ const WAIT = 300;
 // This is the Feeds tab of the site's search: given `query`, it lists what
 // matches and has no field of its own. The feeds are drawn as cards in the
 // columns the other search results are in.
+//
+// With `max`, it is the few that lead the All tab: that many at most, no
+// more as the reader scrolls, nothing at all when none match, and a button
+// to the rest (`onMore`) when there are more.
 const CustomFeedsDiscover = ({
   query = null,
+  max = 0,
+  onMore = null,
   alertSuccess,
   alertError,
 }) => {
@@ -57,7 +63,7 @@ const CustomFeedsDiscover = ({
     const mine = asked.current;
     const start = fromStart ? 0 : nextStart.current;
 
-    api.customFeeds.discover({ q, start, limit: LIMIT }).then((result) => {
+    api.customFeeds.discover({ q, start, limit: max || LIMIT }).then((result) => {
       if (mine !== asked.current) {
         return;
       }
@@ -120,8 +126,19 @@ const CustomFeedsDiscover = ({
     });
   };
 
+  const isShort = max > 0;
+
+  // The few on the All tab: there only when something matches.
+  if (isShort && feeds.length === 0) {
+    return null;
+  }
+
   return (
     <>
+      {isShort &&
+        <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
+          {i18n.t('customFeeds:discover.heading')}
+        </Typography>}
       {query === null &&
         <TextField
           fullWidth
@@ -147,7 +164,7 @@ const CustomFeedsDiscover = ({
         next={() => {
           load(search.trim(), false);
         }}
-        hasMore={hasMore}
+        hasMore={hasMore && !isShort}
         loader={<Progress key="discover-progress" />}
       >
         <Masonry>
@@ -177,6 +194,10 @@ const CustomFeedsDiscover = ({
           })}
         </Masonry>
       </InfiniteScroll>
+      {isShort && hasMore && onMore &&
+        <Button onClick={onMore} sx={{ mx: 1, mb: 2 }}>
+          {i18n.t('customFeeds:discover.more')}
+        </Button>}
     </>
   );
 };
@@ -184,6 +205,10 @@ const CustomFeedsDiscover = ({
 CustomFeedsDiscover.propTypes = {
   // What to look for, when whoever draws this has the field for it.
   query: PropTypes.string,
+  // How many to show at most, when it is a few above other results.
+  max: PropTypes.number,
+  // Asked for the rest of them.
+  onMore: PropTypes.func,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };

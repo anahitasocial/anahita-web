@@ -197,6 +197,18 @@ const Search = () => {
           distance above are for the other three tabs. */}
       {scope === SCOPE.FEEDS &&
         <CustomFeedsDiscover query={q || ''} />}
+      {/* Under All, the first few feeds that match lead the rest: they are
+          listed by another service than the one that searches posts and
+          profiles, so they cannot be mixed in among them. */}
+      {scope === SCOPE.ALL && q &&
+        <CustomFeedsDiscover
+          key={`all-feeds-${q}`}
+          query={q}
+          max={3}
+          onMore={() => {
+            setScope(SCOPE.FEEDS);
+          }}
+        />}
       {useMemo(() => {
         if (scope === SCOPE.FEEDS) {
           return null;

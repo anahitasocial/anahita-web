@@ -513,7 +513,10 @@ are about, what to leave out. The server's side is in the services'
   name, in what it is for or in its owner's name, each to be added to the
   home page, as cards (`components/CustomFeedCard.jsx`) in the same columns
   as the profiles and posts of the other tabs. With nothing searched for it
-  lists them all. The list page
+  lists them all. The **All** tab is led by the first three feeds that
+  match, with a button to the rest: feeds come from feed-service and the
+  other results from the search service, so they are shown above them and
+  not among them. The list page
   links to it (`/search?scope=feeds`). It was a second tab on the list page
   for a few hours, and was taken off as the same thing twice.
 - **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
