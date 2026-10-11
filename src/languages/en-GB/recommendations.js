@@ -12,7 +12,7 @@ export default {
     group: 'There are no groups to suggest right now.',
     event: 'There are no events to suggest right now.',
   },
-  subheader: 'People and groups you might want to follow, each with the reason it is suggested.',
+  subheader: 'People, groups and events you might want to follow, each with the reason it is recommended.',
   dismiss: 'Not interested',
   dismissed: 'You will not be shown that suggestion again.',
   failed: 'That did not work. Please try again.',

@@ -63,46 +63,44 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
     <Masonry>
       {items.map((item) => {
         const { actor } = item;
+        const why = recommendations.reasonText(item, related, i18n.t.bind(i18n), kind);
+        // Side by side with Follow, each half the width; by itself on an
+        // event, the whole of it.
+        const dismissButton = (
+          <Button
+            fullWidth
+            key={`suggestion-dismiss-${actor.id}`}
+            onClick={() => {
+              handleDismiss(actor);
+            }}
+          >
+            {i18n.t('recommendations:dismiss')}
+          </Button>
+        );
 
         return (
           <Box key={`suggestion-${actor.id}`} sx={{ mb: 2 }}>
-            {/* Why, above the profile it is said of. */}
-            <Typography variant="body2" color="textSecondary" sx={{ px: 2, pb: 1 }}>
-              {recommendations.reasonText(item, related, i18n.t.bind(i18n), kind)}
-            </Typography>
-            {/* An event has its own card, which leads to where it is
-                answered, and is not followed from here. */}
-            {kind === 'event' &&
-              <>
-                <EventCard actor={actor} />
-                <Button
-                  fullWidth
-                  onClick={() => {
-                    handleDismiss(actor);
-                  }}
-                >
-                  {i18n.t('recommendations:dismiss')}
-                </Button>
-              </>}
-            {kind !== 'event' &&
-            <ActorCard
-              actor={actor}
-              action={[
-                <Button
-                  fullWidth
-                  key={`suggestion-dismiss-${actor.id}`}
-                  onClick={() => {
-                    handleDismiss(actor);
-                  }}
-                >
-                  {i18n.t('recommendations:dismiss')}
-                </Button>,
-                <ControlFollow
-                  actor={actor}
-                  key={`suggestion-follow-${actor.id}`}
-                />,
-              ]}
-            />}
+            {/* Why is said inside the card, under the name. An event has
+                its own card, which leads to where it is answered, and is
+                not followed from here. */}
+            {kind === 'event' ?
+              <EventCard
+                actor={actor}
+                note={why}
+                action={dismissButton}
+              /> :
+              <ActorCard
+                actor={actor}
+                note={why}
+                action={[
+                  dismissButton,
+                  <ControlFollow
+                    fullWidth
+                    actor={actor}
+                    key={`suggestion-follow-${actor.id}`}
+                  />,
+                ]}
+              />}
           </Box>
         );
       })}

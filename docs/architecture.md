@@ -458,7 +458,7 @@ a request that fails as it does without the service
   to the rest. Not drawn while it is read or when there is nobody.
 - **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
   People, Groups and Events, the open tab in the address (`?kind=group`),
-  as cards with the reason above each. An event is drawn with the event's
+  as cards with the reason inside each, under the name. An event is drawn with the event's
   own card and is not followed from here. It is in the left menu as
   **Recommendations** (the page keeps the address `/suggestions`, since
   `/recommendations/` is the service's own path on the same site), where the installation has the service

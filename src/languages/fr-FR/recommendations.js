@@ -12,7 +12,7 @@ export default {
     group: 'Aucun groupe à suggérer pour l’instant.',
     event: 'Aucun événement à suggérer pour l’instant.',
   },
-  subheader: 'Des personnes et des groupes que vous pourriez suivre, chacun avec la raison de la suggestion.',
+  subheader: 'Des personnes, des groupes et des événements que vous pourriez suivre, chacun avec la raison de la recommandation.',
   dismiss: 'Pas intéressé',
   dismissed: 'Cette suggestion ne vous sera plus proposée.',
   failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',

@@ -53,6 +53,7 @@ const ActorCard = ({
   actor,
   viewer = null,
   action = null,
+  note = '',
 }) => {
   const cover = getCoverURL(actor);
   const url = getURL(actor);
@@ -102,6 +103,14 @@ const ActorCard = ({
           </Typography>
         }
       />
+      {/* A line about the profile from whoever lists it: why it is
+          recommended. Inside the card, under the name it is said of. */}
+      {note &&
+        <CardContent sx={{ py: 0 }}>
+          <Typography variant="body2" color="textSecondary">
+            {note}
+          </Typography>
+        </CardContent>}
       {actor.body &&
       <CardContent>
         <ReadMore charLimit={160} contentFilter>
@@ -136,6 +145,7 @@ const ActorCard = ({
 ActorCard.propTypes = {
   classes: PropTypes.object.isRequired,
   action: PropTypes.node,
+  note: PropTypes.string,
   actor: ActorType.isRequired,
   viewer: PersonType,
 };

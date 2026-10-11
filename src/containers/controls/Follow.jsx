@@ -24,6 +24,8 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     followLabel = i18n.t(socialgraph.followLabelKey(props.actor)),
     unfollowLabel = i18n.t('actions:unfollow'),
     viewer,
+    // The width of what it is in, for a row of buttons of one width.
+    fullWidth = false,
   } = props;
 
   const [leader, setLeader] = useState(actor.isLeadingViewer);
@@ -70,6 +72,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
       onClick={onClick}
       disabled={waiting}
       color={color}
+      fullWidth={fullWidth}
       ref={ref}
     >
       {title}
@@ -84,6 +87,7 @@ ControlsFollow.propTypes = {
   component: PropTypes.oneOf(['button', 'menuitem']),
   followLabel: PropTypes.string,
   unfollowLabel: PropTypes.string,
+  fullWidth: PropTypes.bool,
   viewer: PersonType.isRequired,
 };
 
