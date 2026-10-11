@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -17,7 +16,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
-import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -31,6 +29,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import NodesField from '../../components/NodesField';
 import WordsField from '../../components/WordsField';
 import DialogConfirm from '../../components/DialogConfirm';
+import MenuItemLabel from '../../components/MenuItemLabel';
 import CustomFeedIcon, { FEED_ICONS } from '../../components/CustomFeedIcon';
 import actions from '../../actions';
 import api from '../../api';
@@ -203,19 +202,57 @@ const CustomFeedForm = ({
     <>
       <form id={FORM} onSubmit={handleSave} noValidate>
         <Stack spacing={2}>
-          <TextField
-            fullWidth
-            required
-            label={i18n.t('customFeeds:form.name')}
-            value={values.name}
-            error={error === 'name_required'}
-            disabled={isSaving}
-            onChange={(event) => {
-              setError('');
-              setValues({ ...values, name: event.target.value });
-            }}
-            slotProps={{ htmlInput: { maxLength: 100 } }}
-          />
+          {/* Its picture, then its name, on one line: they are shown
+              together in the menu and on the tabs. The list names each
+              picture; closed, it shows the picture alone. */}
+          <Stack direction="row" spacing={2}>
+            <TextField
+              select
+              label={i18n.t('customFeeds:form.icon')}
+              value={values.icon}
+              disabled={isSaving}
+              onChange={(event) => {
+                setValues({ ...values, icon: event.target.value });
+              }}
+              slotProps={{
+                select: {
+                  renderValue: (name) => {
+                    return (
+                      <CustomFeedIcon
+                        name={name}
+                        titleAccess={i18n.t(`customFeeds:icons.${name}`)}
+                        sx={{ display: 'block' }}
+                      />
+                    );
+                  },
+                },
+              }}
+              sx={{ width: 96, flexShrink: 0 }}
+            >
+              {FEED_ICONS.map((name) => {
+                return (
+                  <MenuItem key={name} value={name}>
+                    <MenuItemLabel icon={<CustomFeedIcon name={name} fontSize="small" />}>
+                      {i18n.t(`customFeeds:icons.${name}`)}
+                    </MenuItemLabel>
+                  </MenuItem>
+                );
+              })}
+            </TextField>
+            <TextField
+              fullWidth
+              required
+              label={i18n.t('customFeeds:form.name')}
+              value={values.name}
+              error={error === 'name_required'}
+              disabled={isSaving}
+              onChange={(event) => {
+                setError('');
+                setValues({ ...values, name: event.target.value });
+              }}
+              slotProps={{ htmlInput: { maxLength: 100 } }}
+            />
+          </Stack>
           <TextField
             fullWidth
             multiline
@@ -228,40 +265,6 @@ const CustomFeedForm = ({
             }}
             slotProps={{ htmlInput: { maxLength: 500 } }}
           />
-          {/* Its picture, shown beside its name in the menu and the tabs. */}
-          <FormControl component="fieldset" disabled={isSaving}>
-            <FormLabel component="legend">
-              {i18n.t('customFeeds:form.icon')}
-            </FormLabel>
-            <Box sx={{
-              display: 'flex', flexWrap: 'wrap', gap: 1, pt: 1,
-            }}
-            >
-              {FEED_ICONS.map((name) => {
-                const isChosen = values.icon === name;
-
-                return (
-                  <IconButton
-                    key={name}
-                    color={isChosen ? 'primary' : 'default'}
-                    aria-label={i18n.t(`customFeeds:icons.${name}`)}
-                    title={i18n.t(`customFeeds:icons.${name}`)}
-                    aria-pressed={isChosen}
-                    disabled={isSaving}
-                    onClick={() => {
-                      setValues({ ...values, icon: name });
-                    }}
-                    sx={{
-                      border: 1,
-                      borderColor: isChosen ? 'primary.main' : 'divider',
-                    }}
-                  >
-                    <CustomFeedIcon name={name} />
-                  </IconButton>
-                );
-              })}
-            </Box>
-          </FormControl>
 
           <Typography variant="subtitle1" component="h2">
             {i18n.t('customFeeds:form.sources')}

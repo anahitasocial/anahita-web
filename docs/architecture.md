@@ -493,7 +493,8 @@ are about, what to leave out. The server's side is in the services'
   the feeds again and the list under the dialog is begun again, since it is
   keyed by when the feed was last changed. `/feeds/:id/edit` still opens the
   same dialog over the feed's own page, for the links there and in the list.
-- **A feed's icon** is one of sixteen, chosen in the editor and kept by name
+- **A feed's icon** is one of sixteen, chosen in the editor from a list that
+  names each, on the same line as the feed's name, and kept by name
   (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
   draws it: in the menu under Home, on the tabs, in the list and on the
   feed's page.
