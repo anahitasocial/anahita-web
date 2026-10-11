@@ -91,7 +91,12 @@ describe('settings tabs and panels agree', () => {
     const end = indexSource.indexOf('};', start);
     const dangerBlock = indexSource.slice(start, end);
 
-    getGroupDangerItems({ canDelete: true, isAdmin: true }).forEach((item) => {
+    getGroupDangerItems({
+      canDelete: true,
+      isAdmin: true,
+      isSuperAdmin: true,
+      canCancel: true,
+    }).forEach((item) => {
       expect(dangerBlock).toContain(`[ITEMS.${keyNameFor(item.key)}]:`);
     });
   });
@@ -201,5 +206,33 @@ describe('settings tabs and panels agree', () => {
     expect(getGroupDangerItems({ canDelete: true, isAdmin: false }).map((i) => {
       return i.key;
     })).toEqual([ITEMS.ARCHIVE, ITEMS.DELETE]);
+  });
+});
+
+describe('an event\'s Danger zone', () => {
+  const keys = (options) => {
+    return getGroupDangerItems(options).map((item) => {
+      return item.key;
+    });
+  };
+
+  it('has calling the event off, first', () => {
+    expect(keys({ canDelete: true, isAdmin: true, canCancel: true })[0]).toBe(ITEMS.CANCEL);
+  });
+
+  it('has none of it for a group', () => {
+    expect(keys({ canDelete: true, isAdmin: true })).not.toContain(ITEMS.CANCEL);
+  });
+
+  it('is there for whoever may only call it off', () => {
+    const tabs = getGroupTabs({ canDelete: false, isAdmin: false, canCancel: true }).map((tab) => {
+      return tab.key;
+    });
+
+    expect(tabs).toContain(ITEMS.DANGER);
+    expect(keys({ canDelete: false, isAdmin: false, canCancel: true })).toEqual([ITEMS.CANCEL]);
+    expect(getGroupTabs({ canDelete: false, isAdmin: false }).map((tab) => {
+      return tab.key;
+    })).not.toContain(ITEMS.DANGER);
   });
 });

@@ -6,6 +6,7 @@ export default {
     mTitle: 'Create event',
   },
   settings: {
+    cancel: 'Cancel event',
     info: 'Info',
     admins: 'Admins',
     features: 'Features',
@@ -210,6 +211,8 @@ export default {
     viaHost: 'This event is for the followers of the group hosting it. You follow that group, so you can answer.',
     calendar: 'Add to calendar',
     cancel: {
+      already: 'This event was cancelled.',
+      over: 'This event is over, so there is nothing to cancel.',
       action: 'Cancel event',
       title: 'Cancel this event?',
       message: 'Everyone going will see that it was cancelled. The event stays where it is, and this cannot be undone.',

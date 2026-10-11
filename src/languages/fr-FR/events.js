@@ -6,6 +6,7 @@ export default {
     mTitle: 'Créer un événement',
   },
   settings: {
+    cancel: 'Annuler l’événement',
     info: 'Infos',
     admins: 'Administrateurs',
     features: 'Fonctionnalités',
@@ -200,6 +201,8 @@ export default {
     viaHost: 'Cet événement est réservé aux abonnés du groupe qui l’organise. Vous suivez ce groupe : vous pouvez répondre.',
     calendar: 'Ajouter au calendrier',
     cancel: {
+      already: 'Cet événement a été annulé.',
+      over: 'Cet événement est terminé : il n’y a rien à annuler.',
       action: 'Annuler l’événement',
       title: 'Annuler cet événement ?',
       message: 'Toutes les personnes qui participent verront qu’il a été annulé. L’événement reste en place, et cette action est définitive.',

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
@@ -13,13 +12,10 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import CalendarIcon from '@mui/icons-material/CalendarMonthOutlined';
-import CancelIcon from '@mui/icons-material/EventBusyOutlined';
-import EditIcon from '@mui/icons-material/EditOutlined';
 import NotGoingIcon from '@mui/icons-material/PersonRemoveOutlined';
 import OnlineIcon from '@mui/icons-material/VideocamOutlined';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 
-import DialogConfirm from '../../components/DialogConfirm';
 import EventAttendees from './Attendees';
 import EventWhen from './When';
 import actions from '../../actions';
@@ -43,7 +39,6 @@ const EventPanel = ({
   onChanged,
   isAuthenticated,
   alertError,
-  alertSuccess,
 }) => {
   const { event } = actor;
   const [waiting, setWaiting] = useState(false);
@@ -73,7 +68,6 @@ const EventPanel = ({
   }
 
   const takesAnswers = events.takesAnswers(event);
-  const canEdit = Boolean(actor.authorized && actor.authorized.edit);
 
   const answer = (rsvp) => {
     setWaiting(true);
@@ -111,15 +105,6 @@ const EventPanel = ({
       URL.revokeObjectURL(url);
     }).catch(() => {
       alertError(i18n.t('events:event.rsvp.failed'));
-    });
-  };
-
-  const handleCancel = () => {
-    api.eventDetails.cancel(actor).then(() => {
-      alertSuccess(i18n.t('events:event.cancel.done'));
-      onChanged();
-    }).catch(() => {
-      alertError(i18n.t('events:event.cancel.failed'));
     });
   };
 
@@ -229,26 +214,6 @@ const EventPanel = ({
               >
                 {i18n.t('events:event.rsvp.leave')}
               </Button>}
-            {canEdit &&
-              <Button
-                component={RouterLink}
-                to={`${getURL(actor)}edit`}
-                color="inherit"
-                startIcon={<EditIcon />}
-              >
-                {i18n.t('events:event.form.edit')}
-              </Button>}
-            {canEdit && takesAnswers &&
-              <DialogConfirm
-                title={i18n.t('events:event.cancel.title')}
-                message={i18n.t('events:event.cancel.message')}
-                confirm={i18n.t('events:event.cancel.confirm')}
-                dismiss={i18n.t('events:event.cancel.keep')}
-              >
-                <Button color="error" startIcon={<CancelIcon />} onClick={handleCancel}>
-                  {i18n.t('events:event.cancel.action')}
-                </Button>
-              </DialogConfirm>}
           </Stack>
         </Stack>
       </CardContent>
@@ -270,7 +235,6 @@ EventPanel.propTypes = {
   onChanged: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   alertError: PropTypes.func.isRequired,
-  alertSuccess: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -283,9 +247,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     alertError: (message) => {
       return dispatch(actions.app.alert.error(message));
-    },
-    alertSuccess: (message) => {
-      return dispatch(actions.app.alert.success(message));
     },
   };
 };

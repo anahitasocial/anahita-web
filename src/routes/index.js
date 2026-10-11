@@ -54,7 +54,6 @@ import ShareDialog from '../containers/share/Dialog';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';
-import EventEdit from '../containers/events/Edit';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
@@ -71,6 +70,14 @@ const GroupsNotificationsEdit = ActorsNotificationsEdit('groups');
 
 // An event is an actor like a group, so its page and its settings are the
 // same containers told a different namespace.
+// An event is changed in its settings, where its form is the Info tab. The
+// page it used to have of its own leads there, for links already made.
+const EventEditRedirect = () => {
+  const { id } = useParams();
+
+  return <Navigate to={`/events/${id}/settings`} replace />;
+};
+
 const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
 const EventsNotificationsEdit = ActorsNotificationsEdit('events');
@@ -260,11 +267,7 @@ const AppRoutes = () => {
             />
             <Route
               path="/events/:id/edit"
-              element={
-                <AuthenticatedRoute>
-                  <EventEdit />
-                </AuthenticatedRoute>
-          }
+              element={<EventEditRedirect />}
             />
             <Route
               path="/events/:id/settings"

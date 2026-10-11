@@ -630,6 +630,13 @@ reader sees them on their own, with a second line for the event's zone when
 it differs. `utils/events.js` does both with `Intl`, clock changes included,
 and has the tests for it.
 
+**Changing and cancelling** are in the event's settings, reached from its
+menu like a group's. The Info tab is the event's own form
+(`events/Form.jsx`), so the event's page has no Edit button, and
+`/events/:id/edit` leads to the settings. Cancelling is the first card of the
+Danger zone (`events/CancelSetting.jsx`): it cannot be undone, and it is the
+thing to weigh against archiving and deleting.
+
 **Answering** is Going or Maybe, and is following the event, so an event's
 page has no Follow button. The number going opens who they are
 (`events/Attendees.jsx`). The link to join online is sent by the server only
