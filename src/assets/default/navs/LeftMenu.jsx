@@ -10,7 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
-import FeedsIcon from '@mui/icons-material/DynamicFeed';
+import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
+import AddIcon from '@mui/icons-material/Add';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
@@ -38,6 +39,7 @@ import PersonType from '../../../proptypes/Person';
 import NodeInfoType from '../../../proptypes/NodeInfo';
 import permissions from '../../../permissions';
 import adminTabs from '../../../containers/admin/tabs';
+import usePinnedFeeds from '../../../containers/feeds/usePinnedFeeds';
 
 const LeftMenu = ({
   isAuthenticated,
@@ -48,7 +50,15 @@ const LeftMenu = ({
   isShutOut = false,
 }) => {
   const location = useLocation();
-  const { pathname = '/' } = location;
+  const { pathname = '/', search = '' } = location;
+
+  // The custom feeds the viewer keeps on their home page, listed under
+  // Home. Each opens Home on that feed, which is in the address.
+  const feeds = usePinnedFeeds(isAuthenticated);
+  const openFeed = pathname === '/' ? Number(new URLSearchParams(search).get('feed')) || 0 : 0;
+  const isFeedOpen = feeds.some((feed) => {
+    return feed.id === openFeed;
+  });
 
   // Whether invitations are being issued at all, and who may issue one.
   // Both are server settings published through NodeInfo, and both are
@@ -62,25 +72,48 @@ const LeftMenu = ({
       <ListItemButton
         component={Link}
         to="/"
-        selected={pathname === '/'}
+        selected={pathname === '/' && !isFeedOpen}
       >
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
-      {/* The feeds the viewer builds, which become tabs on Home. */}
+      {/* Under Home: the viewer's custom feeds, in their order, and the way
+          to make another. Set in, so they read as parts of Home. */}
       {isAuthenticated &&
-        <ListItemButton
-          component={Link}
-          to="/feeds"
-          selected={pathname === '/feeds'}
-        >
-          <ListItemIcon>
-            <FeedsIcon />
-          </ListItemIcon>
-          <ListItemText primary={i18n.t('customFeeds:cTitle')} />
-        </ListItemButton>}
+        <List component="div" disablePadding>
+          {feeds.map((feed) => {
+            return (
+              <ListItemButton
+                key={`menu-feed-${feed.id}`}
+                component={Link}
+                to={`/?feed=${feed.id}`}
+                selected={openFeed === feed.id}
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>
+                  <FeedIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={feed.name}
+                  slotProps={{ primary: { noWrap: true } }}
+                />
+              </ListItemButton>
+            );
+          })}
+          <ListItemButton
+            component={Link}
+            to="/feeds/new"
+            selected={pathname === '/feeds/new'}
+            sx={{ pl: 4 }}
+          >
+            <ListItemIcon>
+              <AddIcon fontSize="small" />
+            </ListItemIcon>
+            <ListItemText primary={i18n.t('customFeeds:menu.add')} />
+          </ListItemButton>
+        </List>}
       {/* What the viewer saved: theirs, so it is here beside Home and not
           on their profile, which is what other people look at. */}
       {isAuthenticated &&

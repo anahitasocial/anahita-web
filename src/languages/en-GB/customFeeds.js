@@ -1,5 +1,8 @@
 export default {
   cTitle: 'Custom feeds',
+  menu: {
+    add: 'Custom feed',
+  },
   home: {
     following: 'Following',
     manage: 'Custom feeds',

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
@@ -17,7 +17,7 @@ import CompleteProfileCard from './CompleteProfileCard';
 import Composers from '../media/Composer';
 import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
-import api from '../../api';
+import usePinnedFeeds from './usePinnedFeeds';
 import actions from '../../actions';
 import i18n from '../../languages';
 
@@ -37,21 +37,12 @@ const FeedsPage = ({
   viewer,
   person,
 }) => {
-  const [pinned, setPinned] = useState([]);
+  const pinned = usePinnedFeeds(true);
   const [params, setParams] = useSearchParams();
 
   useEffect(() => {
     readPerson(viewer.alias);
   }, [readPerson, viewer.alias]);
-
-  useEffect(() => {
-    // Without them the page is the one feed it always was.
-    api.customFeeds.pinned().then((result) => {
-      setPinned(result.data.data || []);
-    }).catch(() => {
-      setPinned([]);
-    });
-  }, []);
 
   const asked = Number(params.get('feed')) || FOLLOWING;
   const open = pinned.find((feed) => {

@@ -8,8 +8,30 @@ import axios from 'axios';
 // `items` remembers each list's cursor here and reports a page to the store
 // in the terms it knows.
 
+// Whoever shows the viewer's feeds (the menu, the tabs of the home page) asks
+// to be told when one is made, changed, deleted or moved, and reads them
+// again. `onChange` returns the way to stop being told.
+const listeners = new Set();
+
+const onChange = (listener) => {
+  listeners.add(listener);
+
+  return () => {
+    listeners.delete(listener);
+  };
+};
+
+const changed = (result) => {
+  listeners.forEach((listener) => {
+    listener();
+  });
+
+  return result;
+};
+
+// A feed is put on its maker's home page when it is made.
 const add = (feed) => {
-  return axios.post('/feeds/', feed);
+  return axios.post('/feeds/', feed).then(changed);
 };
 
 const read = (id) => {
@@ -18,16 +40,16 @@ const read = (id) => {
 
 const edit = (feed) => {
   const { id, ...fields } = feed;
-  return axios.patch(`/feeds/${id}`, fields);
+  return axios.patch(`/feeds/${id}`, fields).then(changed);
 };
 
 const remove = (feed) => {
-  return axios.delete(`/feeds/${feed.id}`);
+  return axios.delete(`/feeds/${feed.id}`).then(changed);
 };
 
 // A feed of the viewer's own, showing what this one shows.
 const copy = (feed) => {
-  return axios.post(`/feeds/${feed.id}/copy`);
+  return axios.post(`/feeds/${feed.id}/copy`).then(changed);
 };
 
 // The feeds the viewer made.
@@ -42,12 +64,12 @@ const pinned = () => {
 
 // Replaces the feeds on the home page with these, in this order.
 const setPins = (ids) => {
-  return axios.put('/feeds/pins', { ids });
+  return axios.put('/feeds/pins', { ids }).then(changed);
 };
 
 const setPinned = (feed, isPinned) => {
   const path = `/feeds/${feed.id}/pin`;
-  return isPinned ? axios.put(path) : axios.delete(path);
+  return (isPinned ? axios.put(path) : axios.delete(path)).then(changed);
 };
 
 const cursors = {};
@@ -100,4 +122,5 @@ export default {
   setPins,
   setPinned,
   browse,
+  onChange,
 };

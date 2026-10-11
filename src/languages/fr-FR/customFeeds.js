@@ -1,5 +1,8 @@
 export default {
   cTitle: 'Fils personnalisés',
+  menu: {
+    add: 'Fil personnalisé',
+  },
   home: {
     following: 'Abonnements',
     manage: 'Fils personnalisés',

@@ -462,8 +462,16 @@ are about, what to leave out. The server's side is in the services'
   the store's lists are kept by how far down they are. `api/customFeeds.js`
   keeps each list's cursor and reports a page to the store in the store's
   terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
-- **The list page** (`containers/feeds/Manage.jsx`, "Custom feeds" in the
-  left menu): the viewer's feeds and the ones of other people's they keep.
+- **Under Home in the left menu** are the feeds on the viewer's home page, in
+  their order, each opening Home on that feed, and "Custom feed" to make
+  another. A feed is put on its maker's home page when it is made, so it
+  appears there at once. The menu and the tabs read the same list
+  (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
+  changed, deleted or moved: `api/customFeeds.js` tells whoever asked
+  (`onChange`).
+- **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
+  the end of the tabs): the viewer's feeds and the ones of other people's
+  they keep.
   The house adds a feed to the home page or takes it off, and the arrows move
   it among the tabs.
 - **The editor** (`containers/feeds/Form.jsx`, used by `Add.jsx` and
