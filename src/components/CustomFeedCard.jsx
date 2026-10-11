@@ -20,7 +20,8 @@ const { getActorName } = utils.node;
 // A custom feed as a card among other cards: its picture and name, whose it
 // is, what it is for, and what it shows in a sentence. Built like the cards
 // of profiles and posts it sits beside in search results: a header, the
-// text, and its buttons along the bottom.
+// text, and its buttons along the bottom, with the sizes of type and the
+// spacing `ActorCard` has.
 const CustomFeedCard = ({
   feed,
   headerAction = null,
@@ -46,13 +47,17 @@ const CustomFeedCard = ({
             {feed.name}
           </Link>
         }
-        subheader={i18n.t('customFeeds:list.by', { name: getActorName(feed.owner || {}) })}
+        subheader={
+          <Typography variant="subtitle1" sx={{ fontSize: 12 }}>
+            {i18n.t('customFeeds:list.by', { name: getActorName(feed.owner || {}) })}
+          </Typography>
+        }
         action={headerAction}
         slotProps={{
-          title: { variant: 'h6' },
+          title: { variant: 'h6', sx: { fontSize: 16 } },
         }}
       />
-      <CardContent sx={{ pt: 0 }}>
+      <CardContent>
         {feed.body &&
           <Typography variant="body1" sx={{ pb: 1 }}>
             {feed.body}
