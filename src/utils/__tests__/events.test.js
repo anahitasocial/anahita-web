@@ -206,6 +206,10 @@ describe('how many may go', () => {
     }));
   });
 
+  it('starts a new event at a number that is a stop', () => {
+    expect(events.capacityStops(0)).toContain(events.DEFAULT_CAPACITY);
+  });
+
   it('keeps an event\'s own number when it is not one of the usual ones', () => {
     const stops = events.capacityStops(37);
 

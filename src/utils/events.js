@@ -387,6 +387,9 @@ const CAPACITIES = [
   100, 150, 200, 250, 300, 400, 500, 750, 1000, 2000, 5000,
 ];
 
+// How many a new event takes until its maker says otherwise.
+const DEFAULT_CAPACITY = 20;
+
 // The stops for an event: the usual ones, with its own capacity among them
 // when it is not one, so that opening an event to change it does not change
 // how many may go.
@@ -444,6 +447,7 @@ export default {
   zoneLabel,
   takesAnswers,
   canGo,
+  DEFAULT_CAPACITY,
   capacityStops,
   capacityToStop,
   stopToCapacity,

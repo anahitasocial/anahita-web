@@ -44,8 +44,10 @@ const startingValues = (actor) => {
     // chosen.
     startsAt: event.startsAt ? events.instantToWall(event.startsAt, zone) : '',
     endsAt: event.endsAt ? events.instantToWall(event.endsAt, zone) : '',
-    // How many may go. 0 for no limit.
-    capacity: Number(event.capacity) || 0,
+    // How many may go. 0 for no limit. A new event starts at a number
+    // and not at no limit: whoever makes it then says how many, or slides
+    // it up on purpose. One being changed keeps what it has.
+    capacity: actor ? (Number(event.capacity) || 0) : events.DEFAULT_CAPACITY,
     onlineUrl: event.onlineUrl || '',
     websiteUrl: (actor && actor.websiteUrl) || '',
     access: 'public',
