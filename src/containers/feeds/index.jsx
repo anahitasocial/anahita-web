@@ -1,32 +1,62 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
+import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
+import IconButton from '@mui/material/IconButton';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
+import Tooltip from '@mui/material/Tooltip';
+
+import ManageIcon from '@mui/icons-material/TuneOutlined';
 
 import CompleteProfileCard from './CompleteProfileCard';
 import Composers from '../media/Composer';
 import FeedBrowse from '../feed/Leaders';
+import FeedCustomBrowse from '../feed/Custom';
+import api from '../../api';
 import actions from '../../actions';
 import i18n from '../../languages';
 
 import PersonType from '../../proptypes/Person';
 
-// Home, for somebody signed in: a place to post, and the feed of the people
-// and groups they follow.
+// Which tab is the feed of the people and groups the viewer follows.
+const FOLLOWING = 0;
+
+// Home, for somebody signed in: a place to post, and their feeds.
 //
-// This is the page that will hold more than one feed. Custom feeds (the
-// roadmap's item 14) become tabs here beside the one there is now, which is
-// why it lives under `feeds` and is not called a dashboard.
+// The first tab is always the feed of the people and groups they follow,
+// newest first. After it come the custom feeds they keep here, their own and
+// other people's, in the order they put them in. The tab that is open is in
+// the address (`?feed=`), so it survives a reload and can be linked to.
 const FeedsPage = ({
   readPerson,
   viewer,
   person,
 }) => {
+  const [pinned, setPinned] = useState([]);
+  const [params, setParams] = useSearchParams();
+
   useEffect(() => {
     readPerson(viewer.alias);
   }, [readPerson, viewer.alias]);
+
+  useEffect(() => {
+    // Without them the page is the one feed it always was.
+    api.customFeeds.pinned().then((result) => {
+      setPinned(result.data.data || []);
+    }).catch(() => {
+      setPinned([]);
+    });
+  }, []);
+
+  const asked = Number(params.get('feed')) || FOLLOWING;
+  const open = pinned.find((feed) => {
+    return feed.id === asked;
+  });
 
   return (
     <>
@@ -45,7 +75,49 @@ const FeedsPage = ({
             <Composers actor={person} />}
         </Grid>
         <Grid size={{ xs: 12, md: 8 }}>
-          <FeedBrowse />
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              borderBottom: 1,
+              borderColor: 'divider',
+              mb: 2,
+            }}
+          >
+            <Tabs
+              value={open ? open.id : FOLLOWING}
+              variant="scrollable"
+              scrollButtons="auto"
+              allowScrollButtonsMobile
+              onChange={(event, feedId) => {
+                setParams(feedId === FOLLOWING ? {} : { feed: String(feedId) });
+              }}
+              sx={{ flexGrow: 1, minWidth: 0 }}
+            >
+              <Tab value={FOLLOWING} label={i18n.t('customFeeds:home.following')} />
+              {pinned.map((feed) => {
+                return (
+                  <Tab
+                    key={`home-feed-${feed.id}`}
+                    value={feed.id}
+                    label={feed.name}
+                  />
+                );
+              })}
+            </Tabs>
+            <Tooltip title={i18n.t('customFeeds:home.manage')}>
+              <IconButton
+                component={RouterLink}
+                to="/feeds"
+                aria-label={i18n.t('customFeeds:home.manage')}
+              >
+                <ManageIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+          {open ?
+            <FeedCustomBrowse key={`home-feed-${open.id}`} feed={open} /> :
+            <FeedBrowse />}
         </Grid>
       </Grid>
     </>

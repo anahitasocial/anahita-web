@@ -5,25 +5,11 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import actions from '../../../actions';
 
-import ControlLike from '../../likes/controls/LikeFeed';
-import ControlRepost from '../../controls/Repost';
-import LikesStats from '../../likes';
-import ReplyStats from '../../../components/ReplyStats';
-import FeedMenu from '../Menu';
-
 import Progress from '../../../components/Progress';
-import FeedCardDefault from '../components/Default';
-import FeedCardRepost from '../components/Repost';
-import FeedReplyButton from '../components/ReplyButton';
+import FeedItems from '../components/Items';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
-import utils from '../../../utils';
-
-const {
-  isPerson,
-  isRepost,
-} = utils.node;
 
 const { LIMIT } = APP.BROWSE;
 
@@ -81,89 +67,12 @@ const FeedLeadersBrowse = ({
         <Progress key="feed-progress" />
       }
     >
-      {items.allIds.map((itemId) => {
-        const node = items.byId[itemId];
-        const key = `feed_nodes_${node.id}`;
-        const Like = ControlLike('feed_leaders');
-
-        if (isRepost(node)) {
-          return (
-            <FeedCardRepost
-              node={node}
-              key={key}
-              menu={isAuthenticated &&
-                <FeedMenu
-                  node={node.parent}
-                  viewer={viewer}
-                />}
-              stats={[
-                <LikesStats
-                  key={`node-like-stat-${node.parent.id}`}
-                  node={node.parent}
-                />,
-                <ReplyStats
-                  key={`node-reply-stat-${node.parent.id}`}
-                  node={node.parent}
-                />,
-              ]}
-              actions={isAuthenticated && [
-                <Like
-                  node={node.parent}
-                  repostNode={node}
-                  key={`node-like-${node.id}`}
-                />,
-                <FeedReplyButton
-                  key={`node-reply-${node.id}`}
-                  post={node.parent}
-                />,
-                <ControlRepost
-                  key={`node-repost-${node.id}`}
-                  parent={node.parent}
-                />,
-              ]}
-              showOwner={node.parent && node.parent.owner && !isPerson(node.parent.owner)}
-            />
-          );
-        }
-
-        return (
-          <FeedCardDefault
-            node={node}
-            key={key}
-            menu={isAuthenticated &&
-              <FeedMenu
-                node={node}
-                viewer={viewer}
-              />}
-            stats={[
-              <LikesStats
-                key={`node-like-stat-${node.id}`}
-                node={node}
-              />,
-              <ReplyStats
-                key={`node-reply-stat-${node.id}`}
-                node={node}
-              />,
-            ]}
-            actions={isAuthenticated && [
-              <Like
-                node={node}
-                repostNode={null}
-                key={`node-like-${node.id}`}
-              />,
-              <FeedReplyButton
-                key={`node-reply-${node.id}`}
-                post={node}
-              />,
-              <ControlRepost
-                key={`node-repost-${node.id}`}
-                parent={node}
-              />,
-            ]}
-            showOwner={node.owner && !isPerson(node.owner)}
-          />
-        );
-      })}
+      <FeedItems
+        items={items}
+        namespace="feed_leaders"
+        isAuthenticated={isAuthenticated}
+        viewer={viewer}
+      />
     </InfiniteScroll>
   );
 };

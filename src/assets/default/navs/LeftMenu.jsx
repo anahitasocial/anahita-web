@@ -10,6 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
+import FeedsIcon from '@mui/icons-material/DynamicFeed';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
@@ -68,6 +69,18 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
+      {/* The feeds the viewer builds, which become tabs on Home. */}
+      {isAuthenticated &&
+        <ListItemButton
+          component={Link}
+          to="/feeds"
+          selected={pathname === '/feeds'}
+        >
+          <ListItemIcon>
+            <FeedsIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('customFeeds:cTitle')} />
+        </ListItemButton>}
       {/* What the viewer saved: theirs, so it is here beside Home and not
           on their profile, which is what other people look at. */}
       {isAuthenticated &&

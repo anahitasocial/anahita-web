@@ -7,6 +7,7 @@ import features from './features';
 import pages from './pages';
 import social from './social';
 import feed from './feed';
+import customFeeds from './customFeeds';
 import replies from './replies';
 import auth from './auth';
 import actor from './actor';
@@ -49,6 +50,7 @@ export default {
   pages,
   social,
   feed,
+  customFeeds,
   replies,
   auth,
   actor,

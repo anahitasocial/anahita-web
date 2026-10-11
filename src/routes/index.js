@@ -46,6 +46,10 @@ import People from '../containers/people/Browse';
 import PeopleAdd from '../containers/people/Add';
 
 import FeedsPage from '../containers/feeds';
+import CustomFeedsManage from '../containers/feeds/Manage';
+import CustomFeedAdd from '../containers/feeds/Add';
+import CustomFeedEdit from '../containers/feeds/Edit';
+import CustomFeedRead from '../containers/feeds/Read';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';
@@ -282,6 +286,35 @@ const AppRoutes = () => {
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />
             <Route path="/groups/:id" element={<GroupsRead />} />
+
+            {/* Custom feeds: the viewer's list, making one, and a feed's own
+            page. A public feed is read without signing in. Static paths
+            before the parameterized one. */}
+            <Route
+              path="/feeds"
+              element={
+                <AuthenticatedRoute>
+                  <CustomFeedsManage />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/feeds/new"
+              element={
+                <AuthenticatedRoute>
+                  <CustomFeedAdd />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/feeds/:id/edit"
+              element={
+                <AuthenticatedRoute>
+                  <CustomFeedEdit />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route path="/feeds/:id" element={<CustomFeedRead />} />
 
             {/* What the viewer saved. Reached from the left menu. */}
             <Route

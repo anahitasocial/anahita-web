@@ -114,6 +114,8 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
+| `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
+| `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
@@ -438,8 +440,52 @@ replies, made directly to the post.
 
 Home for somebody signed in is `containers/feeds/index.jsx` (it was
 `Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
-of the people and groups the viewer follows. It lives under `feeds` because
-custom feeds will be tabs on it.
+of the people and groups the viewer follows, with the custom feeds the viewer
+keeps there as tabs after it.
+
+### Custom feeds
+
+A custom feed is one somebody builds: where its posts come from, what they
+are about, what to leave out. The server's side is in the services'
+`docs/feeds.md`. The words a person reads are always "custom feed", never
+"algorithm".
+
+- **Home tabs.** The first tab is Following, the feed there always was
+  (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
+  in the viewer's order. The open tab is in the address as `?feed=<id>`. The
+  button at the end of the tabs leads to `/feeds`.
+- **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
+  posts and reposts, with their menus and buttons, for Following and for
+  custom feeds alike. `containers/feed/Custom` is the list for a custom feed,
+  given a saved `feed` or an unsaved `definition`.
+- **Paging.** A custom feed is paged by a cursor the server hands back, and
+  the store's lists are kept by how far down they are. `api/customFeeds.js`
+  keeps each list's cursor and reports a page to the store in the store's
+  terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
+- **The list page** (`containers/feeds/Manage.jsx`, "Custom feeds" in the
+  left menu): the viewer's feeds and the ones of other people's they keep.
+  The house adds a feed to the home page or takes it off, and the arrows move
+  it among the tabs.
+- **The editor** (`containers/feeds/Form.jsx`, used by `Add.jsx` and
+  `Edit.jsx`): on one side the form, on the other what the feed shows in a
+  sentence and, under it, the posts it would show now, read again a moment
+  after each change (`POST /feeds/preview`). Hashtags and keywords are typed
+  as chips (`components/WordsField.jsx`); profiles and places are searched
+  for and picked (`components/NodesField.jsx`).
+- **The sentence** is `utils/customFeeds.js#summary`, from the definition
+  alone. It is on the editor, on a feed's page and in the list, so nothing
+  about what a feed shows is hidden. The same file repeats the server's
+  limits so the editor can say what would be refused before it is sent. The
+  server decides.
+- **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
+  its owner edit and delete. Copying makes a feed of the viewer's own, seen
+  by them alone, and opens it in the editor.
+- **Following a hashtag** (`containers/feeds/FollowHashtag.jsx`, on a
+  hashtag's page) makes a feed of that one hashtag and puts it on the home
+  page, or puts there the one the viewer already has.
+- **Naming in requests.** The definition's keys are snake case on the server
+  (`hashtags_any`) and camel case here (`hashtagsAny`), converted both ways
+  by the interceptors like every other body.
 
 ### Pinned posts
 

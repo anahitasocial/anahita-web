@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Navigate, useParams } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
@@ -17,6 +18,8 @@ import PersonType from '../../../proptypes/Person';
 import HashtagMenu from '../Menu';
 import Progress from '../../../components/Progress';
 import Inbounds from '../../inbounds';
+import FollowHashtag from '../../feeds/FollowHashtag';
+import customFeeds from '../../../utils/customFeeds';
 
 const HashtagsRead = (props) => {
   const {
@@ -28,6 +31,7 @@ const HashtagsRead = (props) => {
     isFetching,
     error,
     viewer,
+    isAuthenticated,
   } = props;
   const { alias: aliasParam } = useParams();
 
@@ -73,6 +77,11 @@ const HashtagsRead = (props) => {
               canAdminister={Boolean(canAdminister)}
             />}
         />
+        {/* Following a hashtag is keeping a feed of it on the home page. */}
+        {isAuthenticated && hashtag.id > 0 &&
+          <CardActions>
+            <FollowHashtag tag={customFeeds.cleanHashtag(hashtag.alias || hashtag.name)} />
+          </CardActions>}
       </Card>
       {hashtag.id > 0 && <Inbounds tag={hashtag} />}
     </>
@@ -92,7 +101,7 @@ const mapStateToProps = (state) => {
 
   const inboundsCount = total;
 
-  const { viewer } = state.session;
+  const { viewer, isAuthenticated } = state.session;
 
   return {
     hashtags,
@@ -100,6 +109,7 @@ const mapStateToProps = (state) => {
     error,
     isFetching,
     viewer,
+    isAuthenticated,
   };
 };
 
@@ -110,6 +120,7 @@ HashtagsRead.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   error: PropTypes.string.isRequired,
   viewer: PersonType.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => {

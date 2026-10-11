@@ -74,6 +74,7 @@ namespaces.nodes.forEach((ns) => {
 
 reducers.feedLeaders = createFeed('feed_leaders');
 reducers.feedActor = createFeed('feed_actor');
+reducers.feedCustom = createFeed('feed_custom');
 
 // No oauthClients entry, and no settingsAbout.
 //
