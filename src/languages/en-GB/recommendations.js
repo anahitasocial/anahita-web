@@ -1,5 +1,5 @@
 export default {
-  cTitle: 'Suggestions',
+  cTitle: 'Recommendations',
   whoToFollow: 'Who to follow',
   seeMore: 'See more',
   kinds: {
@@ -41,14 +41,14 @@ export default {
     popular: 'Many people followed them lately',
   },
   weights: {
-    action: 'Adjust suggestions',
-    title: 'What counts in your suggestions',
+    action: 'Adjust recommendations',
+    title: 'What counts in your recommendations',
     help: 'Slide each reason up to make it count for more when choosing for you, or down to nothing to leave it out. It changes only what you are suggested.',
     off: 'Off',
     reset: 'Reset',
     save: 'Save',
     cancel: 'Cancel',
-    saved: 'Saved. Your suggestions follow it from now on.',
+    saved: 'Saved. Your recommendations follow it from now on.',
     notSaved: 'That could not be saved. Please try again.',
     followsYou: 'They follow you',
     followedByLeaders: 'People you follow, follow them or are going',
@@ -60,7 +60,7 @@ export default {
     popular: 'Many people followed them lately',
   },
   settings: {
-    title: 'Suggestions',
+    title: 'Recommendations',
     help: 'Suggestions of who to follow are worked out from who you follow and what you like. No profile is suggested to you without the reason being shown.',
     suggestPeople: 'Suggest people to me',
     suggestGroups: 'Suggest groups to me',
@@ -70,7 +70,7 @@ export default {
     discoverable: 'Suggest me to other people',
     saved: 'Saved.',
     notSaved: 'That could not be saved. Please try again.',
-    dismissedTitle: 'Suggestions you turned down',
+    dismissedTitle: 'Recommendations you turned down',
     dismissedEmpty: 'You have not turned any down.',
     undo: 'Suggest again',
   },

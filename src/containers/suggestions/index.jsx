@@ -12,7 +12,7 @@ import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-import SuggestionsIcon from '@mui/icons-material/Explore';
+import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
 import TuneIcon from '@mui/icons-material/TuneOutlined';
 
 import useSuggestions from './useSuggestions';

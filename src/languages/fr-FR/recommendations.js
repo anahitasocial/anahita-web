@@ -1,5 +1,5 @@
 export default {
-  cTitle: 'Suggestions',
+  cTitle: 'Recommandations',
   whoToFollow: 'Qui suivre',
   seeMore: 'Voir plus',
   kinds: {
@@ -41,14 +41,14 @@ export default {
     popular: 'Beaucoup de personnes l’ont suivi récemment',
   },
   weights: {
-    action: 'Ajuster les suggestions',
-    title: 'Ce qui compte dans vos suggestions',
+    action: 'Ajuster les recommandations',
+    title: 'Ce qui compte dans vos recommandations',
     help: 'Faites glisser chaque raison vers le haut pour qu’elle compte davantage, ou jusqu’à zéro pour l’écarter. Cela ne change que ce qui vous est suggéré.',
     off: 'Désactivé',
     reset: 'Réinitialiser',
     save: 'Enregistrer',
     cancel: 'Annuler',
-    saved: 'Enregistré. Vos suggestions en tiennent compte dès maintenant.',
+    saved: 'Enregistré. Vos recommandations en tiennent compte dès maintenant.',
     notSaved: 'L’enregistrement a échoué. Veuillez réessayer.',
     followsYou: 'Ils vous suivent',
     followedByLeaders: 'Des personnes que vous suivez les suivent ou y vont',
@@ -60,7 +60,7 @@ export default {
     popular: 'Beaucoup de personnes les ont suivis récemment',
   },
   settings: {
-    title: 'Suggestions',
+    title: 'Recommandations',
     help: 'Les suggestions de profils à suivre sont établies à partir des personnes que vous suivez et de ce que vous aimez. Aucun profil ne vous est suggéré sans que la raison soit indiquée.',
     suggestPeople: 'Me suggérer des personnes',
     suggestGroups: 'Me suggérer des groupes',
@@ -70,7 +70,7 @@ export default {
     discoverable: 'Me suggérer à d’autres personnes',
     saved: 'Enregistré.',
     notSaved: 'L’enregistrement a échoué. Veuillez réessayer.',
-    dismissedTitle: 'Suggestions écartées',
+    dismissedTitle: 'Recommandations écartées',
     dismissedEmpty: 'Vous n’en avez écarté aucune.',
     undo: 'Suggérer à nouveau',
   },

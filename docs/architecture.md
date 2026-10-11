@@ -460,7 +460,8 @@ a request that fails as it does without the service
   People, Groups and Events, the open tab in the address (`?kind=group`),
   as cards with the reason above each. An event is drawn with the event's
   own card and is not followed from here. It is in the left menu as
-  **Suggestions**, where the installation has the service
+  **Recommendations** (the page keeps the address `/suggestions`, since
+  `/recommendations/` is the service's own path on the same site), where the installation has the service
   (`useHasSuggestions.js` asks once).
 - **What counts** is the viewer's to weigh. The button beside the tabs, and
   one in settings, opens a dialog of sliders
