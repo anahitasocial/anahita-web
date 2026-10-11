@@ -485,6 +485,8 @@ are about, what to leave out. The server's side is in the services'
   closes it. A new feed opens Home on itself when saved, and the menu under
   Home lists it. The preview's posts are kept apart from the page's in the
   store (`feed_preview`), so the feed behind the dialog keeps its list.
+- **Deleting a feed** is offered to its owner in three places, each asking
+  first: its card in the list, its own page, and the editor.
 - **Ten feeds** is the most a person owns, the number the home page holds.
 - **The sentence** is `utils/customFeeds.js#summary`, from the definition
   alone. It is on the editor, on a feed's page and in the list, so nothing

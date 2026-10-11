@@ -39,6 +39,9 @@ const CustomFeedEdit = () => {
             onSaved={(saved) => {
               navigate(customFeeds.urlOf(saved));
             }}
+            onDeleted={() => {
+              navigate('/feeds', { replace: true });
+            }}
           />
         </>}
     </>

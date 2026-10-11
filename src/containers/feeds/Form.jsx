@@ -24,9 +24,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+
 import FeedCustomBrowse from '../feed/Custom';
 import NodesField from '../../components/NodesField';
 import WordsField from '../../components/WordsField';
+import DialogConfirm from '../../components/DialogConfirm';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -93,6 +96,7 @@ const CustomFeedForm = ({
   feed = null,
   onClose,
   onSaved,
+  onDeleted = null,
   alertSuccess,
   alertError,
 }) => {
@@ -149,6 +153,18 @@ const CustomFeedForm = ({
 
     setError('');
     setStep(PREVIEW);
+  };
+
+  const handleDelete = () => {
+    setIsSaving(true);
+
+    api.customFeeds.remove(feed).then(() => {
+      alertSuccess(i18n.t('customFeeds:prompts.deleted'));
+      onDeleted();
+    }).catch(() => {
+      alertError(i18n.t('customFeeds:prompts.failed'));
+      setIsSaving(false);
+    });
   };
 
   const handleSave = () => {
@@ -472,6 +488,25 @@ const CustomFeedForm = ({
                 {i18n.t('customFeeds:form.accessHelp')}
               </FormHelperText>
             </FormControl>
+            {/* Changing a feed is also where it is deleted. */}
+            {!isNew && onDeleted &&
+              <div>
+                <DialogConfirm
+                  title={i18n.t('customFeeds:delete.title')}
+                  message={i18n.t('customFeeds:delete.message')}
+                  confirm={i18n.t('customFeeds:delete.confirm')}
+                  dismiss={i18n.t('customFeeds:delete.dismiss')}
+                >
+                  <Button
+                    color="error"
+                    startIcon={<DeleteIcon />}
+                    disabled={isSaving}
+                    onClick={handleDelete}
+                  >
+                    {i18n.t('customFeeds:actions.delete')}
+                  </Button>
+                </DialogConfirm>
+              </div>}
           </Stack>}
         {step === PREVIEW &&
           <Stack spacing={2}>
@@ -540,6 +575,8 @@ CustomFeedForm.propTypes = {
   // anywhere by itself.
   onClose: PropTypes.func.isRequired,
   onSaved: PropTypes.func.isRequired,
+  // Deleted, from the editor. Without it the editor does not offer to.
+  onDeleted: PropTypes.func,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };

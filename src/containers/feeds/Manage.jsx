@@ -14,6 +14,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import DownIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
@@ -23,6 +24,7 @@ import UpIcon from '@mui/icons-material/ArrowUpward';
 
 import CopyFeedLink from './CopyLink';
 import BrowseHeader from '../../components/BrowseHeader';
+import DialogConfirm from '../../components/DialogConfirm';
 import Progress from '../../components/Progress';
 import actions from '../../actions';
 import api from '../../api';
@@ -82,6 +84,16 @@ const CustomFeedsManage = ({
     setWaiting(true);
     api.customFeeds.setPinned(feed, isPinned).then(() => {
       alertSuccess(i18n.t(isPinned ? 'customFeeds:prompts.pinned' : 'customFeeds:prompts.unpinned'));
+      return load();
+    }).catch(failed).finally(() => {
+      setWaiting(false);
+    });
+  };
+
+  const handleDelete = (feed) => {
+    setWaiting(true);
+    api.customFeeds.remove(feed).then(() => {
+      alertSuccess(i18n.t('customFeeds:prompts.deleted'));
       return load();
     }).catch(failed).finally(() => {
       setWaiting(false);
@@ -191,6 +203,25 @@ const CustomFeedsManage = ({
                     <EditIcon />
                   </IconButton>
                 </Tooltip>}
+              {feed.authorized && feed.authorized.delete &&
+                <DialogConfirm
+                  title={i18n.t('customFeeds:delete.title')}
+                  message={i18n.t('customFeeds:delete.message')}
+                  confirm={i18n.t('customFeeds:delete.confirm')}
+                  dismiss={i18n.t('customFeeds:delete.dismiss')}
+                >
+                  <IconButton
+                    color="error"
+                    aria-label={i18n.t('customFeeds:actions.delete')}
+                    title={i18n.t('customFeeds:actions.delete')}
+                    disabled={waiting}
+                    onClick={() => {
+                      handleDelete(feed);
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </DialogConfirm>}
             </Stack>
           }
           slotProps={{ title: { variant: 'h6', component: 'h3' } }}
