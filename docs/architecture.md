@@ -114,6 +114,7 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
+| `/suggestions` | People and groups the viewer might follow. Signed in only; reached from the home page |
 | `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
@@ -442,6 +443,32 @@ Home for somebody signed in is `containers/feeds/index.jsx` (it was
 `Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
 of the people and groups the viewer follows, with the custom feeds the viewer
 keeps there as tabs after it.
+
+### Suggestions
+
+Suggestions of who to follow come from the installation's recommendation
+service (`/recommendations/`; the services' `docs/recommendations.md`). The
+service is optional, and everything here draws nothing where there is none:
+a request that fails as it does without the service
+(`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
+
+- **Who to follow** on the home page, under the composer
+  (`containers/suggestions/WhoToFollow.jsx`): three people, each with the
+  reason, a Follow button and a way to say not interested, and a button on
+  to the rest. Not drawn while it is read or when there is nobody.
+- **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
+  People and Groups, the open tab in the address (`?kind=group`), as
+  profile cards with the reason above each.
+- **The reason is always shown.** `utils/recommendations.js#reasonText`
+  puts the first reason into words from what the service sent with it
+  ("Followed by Ana and 2 others"), and counts where it may name nobody.
+- **Not interested** takes a suggestion out at once and tells the service,
+  which does not make it again.
+- **Settings › Access › Suggestions**
+  (`containers/actors/Settings/Suggestions.jsx`), on the viewer's own
+  settings: whether to be suggested people and groups, whether what they
+  like and post is used, whether they are suggested to others, and the
+  suggestions they turned down, each to be taken back.
 
 ### Sharing
 

@@ -51,6 +51,7 @@ import CustomFeedAdd from '../containers/feeds/Add';
 import CustomFeedEdit from '../containers/feeds/Edit';
 import CustomFeedRead from '../containers/feeds/Read';
 import ShareDialog from '../containers/share/Dialog';
+import SuggestionsPage from '../containers/suggestions';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';
@@ -321,6 +322,17 @@ const AppRoutes = () => {
           }
             />
             <Route path="/feeds/:id" element={<CustomFeedRead />} />
+
+            {/* People and groups the viewer might follow. Reached from the
+            card on the home page. */}
+            <Route
+              path="/suggestions"
+              element={
+                <AuthenticatedRoute>
+                  <SuggestionsPage />
+                </AuthenticatedRoute>
+          }
+            />
 
             {/* What the viewer saved. Reached from the left menu. */}
             <Route

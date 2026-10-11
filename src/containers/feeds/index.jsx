@@ -22,6 +22,7 @@ import Composers from '../media/Composer';
 import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
 import usePinnedFeeds from './usePinnedFeeds';
+import WhoToFollow from '../suggestions/WhoToFollow';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import PageColumn from '../../components/PageColumn';
 import actions from '../../actions';
@@ -98,6 +99,8 @@ const FeedsPage = ({
         <CompleteProfileCard viewer={viewer} />
         {person.id &&
           <Composers actor={person} />}
+        {/* A few people to follow, when the installation suggests any. */}
+        <WhoToFollow />
       </PageColumn>
       <PageColumn wide={columns}>
         <Box

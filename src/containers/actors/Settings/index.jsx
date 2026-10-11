@@ -35,6 +35,7 @@ import Permissions from './Permissions';
 import RepostsOnProfile from './RepostsOnProfile';
 import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
+import ActorSuggestions from './Suggestions';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
 import Progress from '../../../components/Progress';
@@ -233,6 +234,7 @@ const ActorsSettings = ({
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
+      [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the

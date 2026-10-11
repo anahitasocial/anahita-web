@@ -9,6 +9,7 @@ import social from './social';
 import feed from './feed';
 import customFeeds from './customFeeds';
 import share from './share';
+import recommendations from './recommendations';
 import replies from './replies';
 import auth from './auth';
 import actor from './actor';
@@ -53,6 +54,7 @@ export default {
   feed,
   customFeeds,
   share,
+  recommendations,
   replies,
   auth,
   actor,
