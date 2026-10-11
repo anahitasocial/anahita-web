@@ -28,6 +28,7 @@ const FeedLeadersBrowse = ({
   viewer,
   error,
   isFetching,
+  columns = false,
 }) => {
   const [start, setStart] = useState(0);
 
@@ -70,6 +71,7 @@ const FeedLeadersBrowse = ({
       <FeedItems
         items={items}
         namespace="feed_leaders"
+        columns={columns}
         isAuthenticated={isAuthenticated}
         viewer={viewer}
       />
@@ -87,6 +89,7 @@ FeedLeadersBrowse.propTypes = {
   error: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   viewer: PersonType.isRequired,
+  columns: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

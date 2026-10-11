@@ -6,6 +6,9 @@ export default {
   home: {
     following: 'Following',
     manage: 'Customize feeds',
+    view: 'Layout',
+    viewStream: 'One column',
+    viewColumns: 'Columns',
   },
   list: {
     subheader: 'Feeds you build yourself: choose where the posts come from and what they are about. Newest first, always.',

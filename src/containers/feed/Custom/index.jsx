@@ -31,6 +31,7 @@ const FeedCustomBrowse = ({
   isFetching,
   isAuthenticated,
   viewer,
+  columns = false,
 }) => {
   // Why the feed could not be read, as the server's word for it.
   const [failure, setFailure] = useState('');
@@ -92,6 +93,7 @@ const FeedCustomBrowse = ({
       <FeedItems
         items={items}
         namespace="feed_custom"
+        columns={columns}
         isAuthenticated={isAuthenticated}
         viewer={viewer}
       />
@@ -109,6 +111,7 @@ FeedCustomBrowse.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   viewer: PersonType.isRequired,
+  columns: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

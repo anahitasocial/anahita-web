@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
@@ -9,9 +9,14 @@ import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Tooltip from '@mui/material/Tooltip';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
+import ColumnsIcon from '@mui/icons-material/ViewColumnOutlined';
 import ManageIcon from '@mui/icons-material/TuneOutlined';
+import StreamIcon from '@mui/icons-material/ViewStreamOutlined';
 
 import CompleteProfileCard from './CompleteProfileCard';
 import Composers from '../media/Composer';
@@ -27,6 +32,28 @@ import PersonType from '../../proptypes/Person';
 // Which tab is the feed of the people and groups the viewer follows.
 const FOLLOWING = 0;
 
+// How a feed is laid out on a wide screen: one post under another, or in
+// columns. The choice is the viewer's, kept in their browser.
+const STREAM = 'stream';
+const COLUMNS = 'columns';
+const VIEW_KEY = 'home.feedView';
+
+const rememberedView = () => {
+  try {
+    return window.localStorage.getItem(VIEW_KEY) === COLUMNS ? COLUMNS : STREAM;
+  } catch (e) {
+    return STREAM;
+  }
+};
+
+const rememberView = (view) => {
+  try {
+    window.localStorage.setItem(VIEW_KEY, view);
+  } catch (e) {
+    // Not kept, and chosen again next time.
+  }
+};
+
 // Home, for somebody signed in: a place to post, and their feeds.
 //
 // The first tab is always the feed of the people and groups they follow,
@@ -36,12 +63,21 @@ const FOLLOWING = 0;
 //
 // At the end of the tabs, where a phone has it too, is the way to the list
 // of feeds, which is where a feed is made, changed and deleted.
+//
+// On a wide screen the feeds can be read in columns, by a pair of buttons
+// beside it, and then take the width of the page. On a narrow one there is
+// one column either way, and the buttons are not shown.
 const FeedsPage = ({
   readPerson,
   viewer,
   person,
 }) => {
   const pinned = usePinnedFeeds(true);
+  const [view, setView] = useState(rememberedView);
+  const isWide = useMediaQuery((theme) => {
+    return theme.breakpoints.up('md');
+  });
+  const columns = isWide && view === COLUMNS;
   const [params, setParams] = useSearchParams();
 
   useEffect(() => {
@@ -69,7 +105,7 @@ const FeedsPage = ({
           {person.id &&
             <Composers actor={person} />}
         </Grid>
-        <Grid size={{ xs: 12, md: 8 }}>
+        <Grid size={{ xs: 12, md: columns ? 12 : 8 }}>
           <Box
             sx={{
               display: 'flex',
@@ -103,6 +139,36 @@ const FeedsPage = ({
                 );
               })}
             </Tabs>
+            {isWide &&
+              <ToggleButtonGroup
+                exclusive
+                size="small"
+                value={view}
+                aria-label={i18n.t('customFeeds:home.view')}
+                onChange={(event, chosen) => {
+                  // Pressing the one that is on leaves it on.
+                  if (chosen) {
+                    setView(chosen);
+                    rememberView(chosen);
+                  }
+                }}
+                sx={{ mx: 1 }}
+              >
+                <ToggleButton
+                  value={STREAM}
+                  aria-label={i18n.t('customFeeds:home.viewStream')}
+                  title={i18n.t('customFeeds:home.viewStream')}
+                >
+                  <StreamIcon fontSize="small" />
+                </ToggleButton>
+                <ToggleButton
+                  value={COLUMNS}
+                  aria-label={i18n.t('customFeeds:home.viewColumns')}
+                  title={i18n.t('customFeeds:home.viewColumns')}
+                >
+                  <ColumnsIcon fontSize="small" />
+                </ToggleButton>
+              </ToggleButtonGroup>}
             <Tooltip title={i18n.t('customFeeds:home.manage')}>
               <IconButton
                 component={RouterLink}
@@ -116,8 +182,12 @@ const FeedsPage = ({
           {/* Keyed by when it was last changed, so a feed that was just
               edited is read again from the top. */}
           {open ?
-            <FeedCustomBrowse key={`home-feed-${open.id}-${open.updatedAt}`} feed={open} /> :
-            <FeedBrowse />}
+            <FeedCustomBrowse
+              key={`home-feed-${open.id}-${open.updatedAt}`}
+              feed={open}
+              columns={columns}
+            /> :
+            <FeedBrowse columns={columns} />}
 
         </Grid>
       </Grid>

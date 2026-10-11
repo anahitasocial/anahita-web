@@ -6,6 +6,9 @@ export default {
   home: {
     following: 'Abonnements',
     manage: 'Personnaliser les fils',
+    view: 'Disposition',
+    viewStream: 'Une colonne',
+    viewColumns: 'Colonnes',
   },
   list: {
     subheader: 'Des fils que vous composez vous-même : choisissez d’où viennent les publications et de quoi elles parlent. Toujours les plus récentes d’abord.',

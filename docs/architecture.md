@@ -454,6 +454,11 @@ are about, what to leave out. The server's side is in the services'
   (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
   in the viewer's order. The open tab is in the address as `?feed=<id>`. The
   button at the end of the tabs leads to `/feeds`.
+- **One column or several.** On a wide screen a pair of buttons at the end
+  of the tabs lays the open feed out one post under another or in columns
+  (`components/BreakpointMasonry`), when it takes the width of the page. The
+  choice is kept in the browser (`home.feedView`). On a narrow screen there
+  is one column and no buttons.
 - **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
   posts and reposts, with their menus and buttons, for Following and for
   custom feeds alike. `containers/feed/Custom` is the list for a custom feed,

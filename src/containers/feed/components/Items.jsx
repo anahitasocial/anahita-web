@@ -7,6 +7,7 @@ import LikesStats from '../../likes';
 import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
 
+import Masonry from '../../../components/BreakpointMasonry';
 import FeedCardDefault from './Default';
 import FeedCardRepost from './Repost';
 import FeedReplyButton from './ReplyButton';
@@ -31,97 +32,98 @@ const FeedItems = ({
   namespace,
   isAuthenticated,
   viewer,
+  columns = false,
 }) => {
   const Like = useMemo(() => {
     return ControlLike(namespace);
   }, [namespace]);
 
-  return (
-    <>
-      {items.allIds.map((itemId) => {
-        const node = items.byId[itemId];
-        const key = `feed_nodes_${node.id}`;
+  const cards = items.allIds.map((itemId) => {
+    const node = items.byId[itemId];
+    const key = `feed_nodes_${node.id}`;
 
-        if (isRepost(node)) {
-          return (
-            <FeedCardRepost
-              node={node}
-              key={key}
-              menu={isAuthenticated &&
-                <FeedMenu
-                  node={node.parent}
-                  viewer={viewer}
-                />}
-              stats={[
-                <LikesStats
-                  key={`node-like-stat-${node.parent.id}`}
-                  node={node.parent}
-                />,
-                <ReplyStats
-                  key={`node-reply-stat-${node.parent.id}`}
-                  node={node.parent}
-                />,
-              ]}
-              actions={isAuthenticated && [
-                <Like
-                  node={node.parent}
-                  repostNode={node}
-                  key={`node-like-${node.id}`}
-                />,
-                <FeedReplyButton
-                  key={`node-reply-${node.id}`}
-                  post={node.parent}
-                />,
-                <ControlRepost
-                  key={`node-repost-${node.id}`}
-                  parent={node.parent}
-                />,
-              ]}
-              showOwner={node.parent && node.parent.owner && !isPerson(node.parent.owner)}
-            />
-          );
-        }
+    if (isRepost(node)) {
+      return (
+        <FeedCardRepost
+          node={node}
+          key={key}
+          menu={isAuthenticated &&
+          <FeedMenu
+            node={node.parent}
+            viewer={viewer}
+          />}
+          stats={[
+            <LikesStats
+              key={`node-like-stat-${node.parent.id}`}
+              node={node.parent}
+            />,
+            <ReplyStats
+              key={`node-reply-stat-${node.parent.id}`}
+              node={node.parent}
+            />,
+          ]}
+          actions={isAuthenticated && [
+            <Like
+              node={node.parent}
+              repostNode={node}
+              key={`node-like-${node.id}`}
+            />,
+            <FeedReplyButton
+              key={`node-reply-${node.id}`}
+              post={node.parent}
+            />,
+            <ControlRepost
+              key={`node-repost-${node.id}`}
+              parent={node.parent}
+            />,
+          ]}
+          showOwner={node.parent && node.parent.owner && !isPerson(node.parent.owner)}
+        />
+      );
+    }
 
-        return (
-          <FeedCardDefault
+    return (
+      <FeedCardDefault
+        node={node}
+        key={key}
+        menu={isAuthenticated &&
+        <FeedMenu
+          node={node}
+          viewer={viewer}
+        />}
+        stats={[
+          <LikesStats
+            key={`node-like-stat-${node.id}`}
             node={node}
-            key={key}
-            menu={isAuthenticated &&
-              <FeedMenu
-                node={node}
-                viewer={viewer}
-              />}
-            stats={[
-              <LikesStats
-                key={`node-like-stat-${node.id}`}
-                node={node}
-              />,
-              <ReplyStats
-                key={`node-reply-stat-${node.id}`}
-                node={node}
-              />,
-            ]}
-            actions={isAuthenticated && [
-              <Like
-                node={node}
-                repostNode={null}
-                key={`node-like-${node.id}`}
-              />,
-              <FeedReplyButton
-                key={`node-reply-${node.id}`}
-                post={node}
-              />,
-              <ControlRepost
-                key={`node-repost-${node.id}`}
-                parent={node}
-              />,
-            ]}
-            showOwner={node.owner && !isPerson(node.owner)}
-          />
-        );
-      })}
-    </>
-  );
+          />,
+          <ReplyStats
+            key={`node-reply-stat-${node.id}`}
+            node={node}
+          />,
+        ]}
+        actions={isAuthenticated && [
+          <Like
+            node={node}
+            repostNode={null}
+            key={`node-like-${node.id}`}
+          />,
+          <FeedReplyButton
+            key={`node-reply-${node.id}`}
+            post={node}
+          />,
+          <ControlRepost
+            key={`node-repost-${node.id}`}
+            parent={node}
+          />,
+        ]}
+        showOwner={node.owner && !isPerson(node.owner)}
+      />
+    );
+  });
+
+  // In columns, each card takes the width of its column and the cards run
+  // across them in order.
+  return columns ? <Masonry>{cards}</Masonry> : cards;
 };
 
 FeedItems.propTypes = {
@@ -129,6 +131,8 @@ FeedItems.propTypes = {
   namespace: PropTypes.string.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   viewer: PersonType.isRequired,
+  // Laid out in columns across the page, and not one under another.
+  columns: PropTypes.bool,
 };
 
 export default FeedItems;
