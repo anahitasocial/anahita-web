@@ -48,8 +48,9 @@ const remove = (feed) => {
 };
 
 // A feed of the viewer's own, showing what this one shows.
-const copy = (feed) => {
-  return axios.post(`/feeds/${feed.id}/copy`).then(changed);
+// `name` is what to call it, to tell it from the one it was copied from.
+const copy = (feed, name) => {
+  return axios.post(`/feeds/${feed.id}/copy`, { name }).then(changed);
 };
 
 // The feeds the viewer made.

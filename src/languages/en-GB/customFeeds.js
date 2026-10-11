@@ -1,4 +1,6 @@
 export default {
+  copyOf: 'Copy of {{ name }}',
+  made: 'Created {{ date }}',
   cTitle: 'Custom feeds',
   menu: {
     customize: 'Customize feeds',

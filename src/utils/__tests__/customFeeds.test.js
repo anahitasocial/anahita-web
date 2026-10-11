@@ -73,6 +73,12 @@ describe('a custom feed\'s definition', () => {
     expect(feeds.urlOf({ id: 12 })).toBe('/feeds/12');
   });
 
+  it('says when it was made, or nothing when it does not know', () => {
+    expect(feeds.madeOn({ createdAt: '2026-10-11T18:30:00Z' }, 'en-GB')).toMatch(/1[01] October 2026/);
+    expect(feeds.madeOn({}, 'en-GB')).toBe('');
+    expect(feeds.madeOn({ createdAt: 'not a date' }, 'en-GB')).toBe('');
+  });
+
   it('tells two definitions apart by what they show', () => {
     expect(feeds.fingerprint({ sources: { following: true } }))
       .toBe(feeds.fingerprint(feeds.starting()));

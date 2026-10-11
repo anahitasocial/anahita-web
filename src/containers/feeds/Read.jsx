@@ -86,7 +86,9 @@ const CustomFeedRead = ({
 
   const handleCopy = () => {
     setWaiting(true);
-    api.customFeeds.copy(feed).then((result) => {
+    const name = i18n.t('customFeeds:copyOf', { name: feed.name }).slice(0, 100);
+
+    api.customFeeds.copy(feed, name).then((result) => {
       alertSuccess(i18n.t('customFeeds:prompts.copied'));
       navigate(`${customFeeds.urlOf(result.data)}/edit`);
     }).catch(failed).finally(() => {
@@ -126,6 +128,8 @@ const CustomFeedRead = ({
                 {getActorName(feed.owner)}
               </Link>
               {` · ${i18n.t(`customFeeds:access.${feed.access}`)}`}
+              {customFeeds.madeOn(feed, i18n.language) &&
+                ` · ${i18n.t('customFeeds:made', { date: customFeeds.madeOn(feed, i18n.language) })}`}
             </>}
             action={customFeeds.isShared(feed) && <ShareButton what={customFeeds.toShare(feed)} />}
             slotProps={{ title: { variant: 'h5', component: 'h1' } }}

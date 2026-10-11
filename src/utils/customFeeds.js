@@ -243,6 +243,22 @@ const urlOf = (feed) => {
   return `/feeds/${feed.id}`;
 };
 
+// When a feed was made, as a date to read: "11 October 2026". '' for one
+// with no date.
+const madeOn = (feed, language) => {
+  const made = feed && feed.createdAt ? new Date(feed.createdAt) : null;
+
+  if (!made || Number.isNaN(made.getTime())) {
+    return '';
+  }
+
+  try {
+    return new Intl.DateTimeFormat(language, { dateStyle: 'long' }).format(made);
+  } catch (e) {
+    return made.toDateString();
+  }
+};
+
 // What to share of a feed: where it is, its name, and who can see it.
 const toShare = (feed) => {
   return {
@@ -290,6 +306,7 @@ export default {
   namesOf,
   isShared,
   leave,
+  madeOn,
   toShare,
   urlOf,
   whereToRead,

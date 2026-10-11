@@ -1,4 +1,6 @@
 export default {
+  copyOf: 'Copie de {{ name }}',
+  made: 'Créé le {{ date }}',
   cTitle: 'Fils personnalisés',
   menu: {
     customize: 'Personnaliser les fils',

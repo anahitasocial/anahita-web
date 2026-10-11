@@ -151,6 +151,9 @@ const CustomFeedsManage = ({
                 {isOwn ?
                   i18n.t(`customFeeds:access.${feed.access}`) :
                   i18n.t('customFeeds:list.by', { name: getActorName(feed.owner || {}) })}
+                {/* When it was made, to tell one from another like it. */}
+                {customFeeds.madeOn(feed, i18n.language) &&
+                  ` · ${i18n.t('customFeeds:made', { date: customFeeds.madeOn(feed, i18n.language) })}`}
               </Typography>
               <Typography variant="body2" color="textSecondary" component="span" sx={{ display: 'block' }}>
                 {customFeeds.summary(feed.definition, i18n.t.bind(i18n), { isOwn })}
