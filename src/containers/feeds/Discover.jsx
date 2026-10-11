@@ -1,32 +1,24 @@
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Avatar from '@mui/material/Avatar';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
-import UnpinIcon from '@mui/icons-material/Home';
+import UnpinIcon from '@mui/icons-material/HomeOutlined';
 
 import { ShareButton } from '../controls/Share';
-import CustomFeedIcon from '../../components/CustomFeedIcon';
+import CustomFeedCard from '../../components/CustomFeedCard';
+import Masonry from '../../components/BreakpointMasonry';
 import Progress from '../../components/Progress';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
-import utils from '../../utils';
-
-const { getActorName } = utils.node;
 
 const LIMIT = 20;
 const WAIT = 300;
@@ -41,8 +33,9 @@ const WAIT = 300;
 // list can be narrowed by part of a feed's name, of what it is for, or of
 // its owner's name.
 //
-// The site's search uses it too, for its Feeds tab: given `query`, it lists
-// what matches and has no field of its own.
+// This is the Feeds tab of the site's search: given `query`, it lists what
+// matches and has no field of its own. The feeds are drawn as cards in the
+// columns the other search results are in.
 const CustomFeedsDiscover = ({
   query = null,
   alertSuccess,
@@ -157,69 +150,32 @@ const CustomFeedsDiscover = ({
         hasMore={hasMore}
         loader={<Progress key="discover-progress" />}
       >
-        {feeds.map((feed) => {
-          const pinLabel = i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin');
+        <Masonry>
+          {feeds.map((feed) => {
+            const canPin = Boolean(feed.authorized && feed.authorized.pin);
 
-          return (
-            <Card key={`discover-feed-${feed.id}`} sx={{ mb: 2 }}>
-              <CardHeader
-                avatar={
-                  <Avatar>
-                    <CustomFeedIcon name={feed.icon} />
-                  </Avatar>
-                }
-                title={
-                  <Link
-                    component={RouterLink}
-                    to={customFeeds.urlOf(feed)}
-                    underline="hover"
-                    color="inherit"
-                  >
-                    {feed.name}
-                  </Link>
-                }
-                subheader={
-                  <>
-                    <Typography variant="body2" color="textSecondary" component="span" sx={{ display: 'block' }}>
-                      {i18n.t('customFeeds:list.by', { name: getActorName(feed.owner || {}) })}
-                    </Typography>
-                    {feed.body &&
-                      <Typography variant="body2" color="textPrimary" component="span" sx={{ display: 'block' }}>
-                        {feed.body}
-                      </Typography>}
-                    <Typography variant="body2" color="textSecondary" component="span" sx={{ display: 'block' }}>
-                      {customFeeds.summary(feed.definition, i18n.t.bind(i18n), {
-                        isOwn: Boolean(feed.authorized && feed.authorized.edit),
-                      })}
-                    </Typography>
-                  </>
-                }
-                action={
-                  <Stack direction="row">
-                    <ShareButton what={customFeeds.toShare(feed)} />
-                    {feed.authorized && feed.authorized.pin &&
-                      <Tooltip title={pinLabel}>
-                        <span>
-                          <IconButton
-                            color={feed.isPinned ? 'primary' : 'default'}
-                            aria-label={pinLabel}
-                            aria-pressed={feed.isPinned}
-                            disabled={waiting}
-                            onClick={() => {
-                              handlePin(feed);
-                            }}
-                          >
-                            {feed.isPinned ? <UnpinIcon /> : <PinIcon />}
-                          </IconButton>
-                        </span>
-                      </Tooltip>}
-                  </Stack>
-                }
-                slotProps={{ title: { variant: 'h6', component: 'h3' } }}
-              />
-            </Card>
-          );
-        })}
+            return (
+              <Box key={`discover-feed-${feed.id}`} sx={{ mb: 2 }}>
+                <CustomFeedCard
+                  feed={feed}
+                  headerAction={<ShareButton what={customFeeds.toShare(feed)} />}
+                  action={canPin &&
+                    <Button
+                      fullWidth
+                      variant={feed.isPinned ? 'outlined' : 'contained'}
+                      startIcon={feed.isPinned ? <UnpinIcon /> : <PinIcon />}
+                      disabled={waiting}
+                      onClick={() => {
+                        handlePin(feed);
+                      }}
+                    >
+                      {i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin')}
+                    </Button>}
+                />
+              </Box>
+            );
+          })}
+        </Masonry>
       </InfiniteScroll>
     </>
   );

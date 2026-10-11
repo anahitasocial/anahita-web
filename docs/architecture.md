@@ -511,7 +511,9 @@ are about, what to leave out. The server's side is in the services'
   `GET /feeds/discover`). It lists the feeds people have shared that the
   viewer may see, newest first, matching what was searched for in a feed's
   name, in what it is for or in its owner's name, each to be added to the
-  home page. With nothing searched for it lists them all. The list page
+  home page, as cards (`components/CustomFeedCard.jsx`) in the same columns
+  as the profiles and posts of the other tabs. With nothing searched for it
+  lists them all. The list page
   links to it (`/search?scope=feeds`). It was a second tab on the list page
   for a few hours, and was taken off as the same thing twice.
 - **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a

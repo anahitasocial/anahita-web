@@ -21,7 +21,6 @@ import SearchList from './SearchList';
 import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
 import CustomFeedsDiscover from '../../feeds/Discover';
-import PageColumn from '../../../components/PageColumn';
 
 const { SCOPE, SORTING } = SEARCH;
 
@@ -197,9 +196,7 @@ const Search = () => {
           name, among the ones shared with the viewer. The order and the
           distance above are for the other three tabs. */}
       {scope === SCOPE.FEEDS &&
-        <PageColumn>
-          <CustomFeedsDiscover query={q || ''} />
-        </PageColumn>}
+        <CustomFeedsDiscover query={q || ''} />}
       {useMemo(() => {
         if (scope === SCOPE.FEEDS) {
           return null;
