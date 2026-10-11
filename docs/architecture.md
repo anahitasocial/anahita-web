@@ -457,8 +457,19 @@ a request that fails as it does without the service
   reason, a Follow button and a way to say not interested, and a button on
   to the rest. Not drawn while it is read or when there is nobody.
 - **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
-  People and Groups, the open tab in the address (`?kind=group`), as
-  profile cards with the reason above each.
+  People, Groups and Events, the open tab in the address (`?kind=group`),
+  as cards with the reason above each. An event is drawn with the event's
+  own card and is not followed from here. It is in the left menu as
+  **Suggestions**, where the installation has the service
+  (`useHasSuggestions.js` asks once).
+- **What counts** is the viewer's to weigh. The button beside the tabs, and
+  one in settings, opens a dialog of sliders
+  (`containers/suggestions/WeightsDialog.jsx`), one a reason, from nothing,
+  which leaves the reason out, to the most there is; Reset puts them back
+  to the installation's own. Saved, the list is read again. The server
+  names a reason in snake case and the keys of what it sends are put in
+  camel case on the way in: `utils/recommendations.js#weightKey` is the one
+  place that knows.
 - **The reason is always shown.** `utils/recommendations.js#reasonText`
   puts the first reason into words from what the service sent with it
   ("Followed by Ana and 2 others"), and counts where it may name nobody.
@@ -467,7 +478,8 @@ a request that fails as it does without the service
 - **Settings › Access › Suggestions**
   (`containers/actors/Settings/Suggestions.jsx`), on the viewer's own
   settings: whether to be suggested people and groups, whether what they
-  like and post is used, whether they are suggested to others, and the
+  like and post is used, whether they are suggested to others, events as
+  well as people and groups, the way to the weights, and the
   suggestions they turned down, each to be taken back.
 
 ### Sharing

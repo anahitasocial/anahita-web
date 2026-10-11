@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
@@ -6,13 +6,18 @@ import { useSearchParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import SuggestionsIcon from '@mui/icons-material/PersonAddAlt1';
+import TuneIcon from '@mui/icons-material/TuneOutlined';
 
 import useSuggestions from './useSuggestions';
+import SuggestionWeightsDialog from './WeightsDialog';
+import EventCard from '../events/Card';
 import ActorCard from '../../components/ActorCard';
 import BrowseHeader from '../../components/BrowseHeader';
 import Masonry from '../../components/BreakpointMasonry';
@@ -63,8 +68,23 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
           <Box key={`suggestion-${actor.id}`} sx={{ mb: 2 }}>
             {/* Why, above the profile it is said of. */}
             <Typography variant="body2" color="textSecondary" sx={{ px: 2, pb: 1 }}>
-              {recommendations.reasonText(item, related, i18n.t.bind(i18n))}
+              {recommendations.reasonText(item, related, i18n.t.bind(i18n), kind)}
             </Typography>
+            {/* An event has its own card, which leads to where it is
+                answered, and is not followed from here. */}
+            {kind === 'event' &&
+              <>
+                <EventCard actor={actor} />
+                <Button
+                  fullWidth
+                  onClick={() => {
+                    handleDismiss(actor);
+                  }}
+                >
+                  {i18n.t('recommendations:dismiss')}
+                </Button>
+              </>}
+            {kind !== 'event' &&
             <ActorCard
               actor={actor}
               action={[
@@ -82,7 +102,7 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
                   key={`suggestion-follow-${actor.id}`}
                 />,
               ]}
-            />
+            />}
           </Box>
         );
       })}
@@ -96,12 +116,19 @@ SuggestionsList.propTypes = {
   alertError: PropTypes.func.isRequired,
 };
 
-// Suggestions: people and groups the viewer might follow, each with the
-// reason it is suggested, to follow or to turn down. The open tab is in the
-// address (`?kind=group`).
+// Suggestions: people, groups and events the viewer might follow, each with
+// the reason it is suggested, to follow or to turn down. The open tab is in
+// the address (`?kind=group`).
+//
+// The button beside the tabs opens what counts in the choosing, for the
+// viewer to weigh for themselves. Saved, the list is read again.
 const SuggestionsPage = ({ alertSuccess, alertError }) => {
   const [params, setParams] = useSearchParams();
-  const kind = params.get('kind') === 'group' ? 'group' : 'person';
+  const asked = params.get('kind');
+  const kind = recommendations.KINDS.includes(asked) ? asked : 'person';
+  const [isTuning, setIsTuning] = useState(false);
+  // Read again when the weights were changed.
+  const [version, setVersion] = useState(0);
 
   return (
     <>
@@ -115,26 +142,56 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
           subheader={i18n.t('recommendations:subheader')}
         />
       </Box>
-      <Tabs
-        value={kind}
-        variant="fullWidth"
-        onChange={(event, chosen) => {
-          setParams(chosen === 'group' ? { kind: 'group' } : {});
+      <Box
+        sx={{
+          display: 'flex',
+          alignItems: 'center',
+          borderBottom: 1,
+          borderColor: 'divider',
+          mb: 2,
         }}
-        sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}
       >
-        {recommendations.KINDS.map((each) => {
-          return (
-            <Tab
-              key={each}
-              value={each}
-              label={i18n.t(`recommendations:kinds.${each}`)}
-            />
-          );
-        })}
-      </Tabs>
+        <Tabs
+          value={kind}
+          variant="fullWidth"
+          onChange={(event, chosen) => {
+            setParams(chosen === 'person' ? {} : { kind: chosen });
+          }}
+          sx={{ flexGrow: 1, minWidth: 0 }}
+        >
+          {recommendations.KINDS.map((each) => {
+            return (
+              <Tab
+                key={each}
+                value={each}
+                label={i18n.t(`recommendations:kinds.${each}`)}
+              />
+            );
+          })}
+        </Tabs>
+        <Tooltip title={i18n.t('recommendations:weights.action')}>
+          <IconButton
+            aria-label={i18n.t('recommendations:weights.action')}
+            onClick={() => {
+              setIsTuning(true);
+            }}
+          >
+            <TuneIcon />
+          </IconButton>
+        </Tooltip>
+      </Box>
+      {isTuning &&
+        <SuggestionWeightsDialog
+          onClose={() => {
+            setIsTuning(false);
+          }}
+          onSaved={() => {
+            setIsTuning(false);
+            setVersion(version + 1);
+          }}
+        />}
       <SuggestionsList
-        key={kind}
+        key={`${kind}-${version}`}
         kind={kind}
         alertSuccess={alertSuccess}
         alertError={alertError}

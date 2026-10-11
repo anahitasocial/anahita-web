@@ -11,6 +11,7 @@ import ListItemText from '@mui/material/ListItemText';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
 import FeedsIcon from '@mui/icons-material/DynamicFeed';
+import SuggestionsIcon from '@mui/icons-material/PersonAddAlt1';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
@@ -39,6 +40,7 @@ import NodeInfoType from '../../../proptypes/NodeInfo';
 import permissions from '../../../permissions';
 import adminTabs from '../../../containers/admin/tabs';
 import usePinnedFeeds from '../../../containers/feeds/usePinnedFeeds';
+import useHasSuggestions from '../../../containers/suggestions/useHasSuggestions';
 import CustomFeedIcon from '../../../components/CustomFeedIcon';
 
 const LeftMenu = ({
@@ -55,6 +57,8 @@ const LeftMenu = ({
   // The custom feeds the viewer keeps on their home page, listed under
   // Home. Each opens Home on that feed, which is in the address.
   const feeds = usePinnedFeeds(isAuthenticated);
+  // Suggestions of who to follow, where the installation makes any.
+  const hasSuggestions = useHasSuggestions(isAuthenticated);
   const openFeed = pathname === '/' ? Number(new URLSearchParams(search).get('feed')) || 0 : 0;
   const isFeedOpen = feeds.some((feed) => {
     return feed.id === openFeed;
@@ -116,6 +120,17 @@ const LeftMenu = ({
             <FeedsIcon />
           </ListItemIcon>
           <ListItemText primary={i18n.t('customFeeds:menu.feeds')} />
+        </ListItemButton>}
+      {hasSuggestions &&
+        <ListItemButton
+          component={Link}
+          to="/suggestions"
+          selected={pathname === '/suggestions'}
+        >
+          <ListItemIcon>
+            <SuggestionsIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('recommendations:cTitle')} />
         </ListItemButton>}
       {/* What the viewer saved: theirs, so it is here beside Home and not
           on their profile, which is what other people look at. */}

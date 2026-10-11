@@ -15,7 +15,10 @@ import Stack from '@mui/material/Stack';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
+import TuneIcon from '@mui/icons-material/TuneOutlined';
+
 import ActorAvatar from '../../../components/ActorAvatar';
+import SuggestionWeightsDialog from '../../suggestions/WeightsDialog';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -25,10 +28,11 @@ import utils from '../../../utils';
 const { getActorName } = utils.node;
 
 // The choices, in the order they are shown.
-const CHOICES = ['suggestPeople', 'suggestGroups', 'useActivity', 'discoverable'];
+const CHOICES = ['suggestPeople', 'suggestGroups', 'suggestEvents', 'useActivity', 'discoverable'];
 
-// What the viewer has chosen about suggestions of who to follow, and the
-// suggestions they turned down, each to be taken back.
+// What the viewer has chosen about suggestions of who to follow, the way
+// to weigh the reasons for themselves, and the suggestions they turned
+// down, each to be taken back.
 //
 // Each choice is saved as it is switched. Their own, and shown on their own
 // settings only. On an installation with no recommendation service nothing
@@ -38,6 +42,7 @@ const ActorsSettingsSuggestions = ({ alertSuccess, alertError }) => {
   const [dismissed, setDismissed] = useState([]);
   const [isAbsent, setIsAbsent] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isTuning, setIsTuning] = useState(false);
 
   useEffect(() => {
     api.recommendations.preferences().then((result) => {
@@ -111,6 +116,25 @@ const ActorsSettingsSuggestions = ({ alertSuccess, alertError }) => {
               </div>
             );
           })}
+          <div>
+            <Button
+              startIcon={<TuneIcon />}
+              onClick={() => {
+                setIsTuning(true);
+              }}
+            >
+              {i18n.t('recommendations:weights.action')}
+            </Button>
+          </div>
+          {isTuning &&
+            <SuggestionWeightsDialog
+              onClose={() => {
+                setIsTuning(false);
+              }}
+              onSaved={() => {
+                setIsTuning(false);
+              }}
+            />}
           <Typography variant="subtitle2" component="h3" sx={{ pt: 2 }}>
             {i18n.t('recommendations:settings.dismissedTitle')}
           </Typography>

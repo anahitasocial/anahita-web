@@ -50,6 +50,30 @@ describe('why somebody is suggested', () => {
     expect(why({ type: 'popular', count: 9 })).toBe('Many people followed them lately');
   });
 
+  it('says who is going to an event, and who hosts it', () => {
+    const forEvent = (reason) => {
+      return recommendations.reasonText({ reasons: [reason] }, related, t, 'event');
+    };
+
+    expect(forEvent({ type: 'followed_by_leaders', count: 1, ids: [2] })).toBe('Ana is going');
+    expect(forEvent({ type: 'followed_by_leaders', count: 2, ids: [2, 3] })).toBe('Ana and Bo are going');
+    expect(forEvent({ type: 'followed_by_leaders', count: 4, ids: [2, 3] }))
+      .toBe('Ana and 3 others are going');
+    expect(forEvent({ type: 'followed_by_leaders', count: 2, ids: [9] }))
+      .toBe('2 people you follow are going');
+    expect(forEvent({ type: 'hosted_by_leader', count: 1, ids: [3] })).toBe('Hosted by Bo');
+    expect(forEvent({ type: 'hosted_by_leader', count: 1, ids: [9] }))
+      .toBe('Hosted by a group you follow');
+    expect(forEvent({ type: 'popular', count: 9 })).toBe('Many people answered lately');
+  });
+
+  it('knows a reason by the name its weight is sent under', () => {
+    expect(recommendations.weightKey('follows_you')).toBe('followsYou');
+    expect(recommendations.weightKey('followed_by_leaders')).toBe('followedByLeaders');
+    expect(recommendations.weightKey('popular')).toBe('popular');
+    expect(i18n.exists('recommendations:weights.hostedByLeader', { lng: 'en-GB' })).toBe(true);
+  });
+
   it('gives the first reason, and nothing for none or one it does not know', () => {
     expect(recommendations.reasonText({
       reasons: [{ type: 'follows_you', count: 1 }, { type: 'popular', count: 9 }],
