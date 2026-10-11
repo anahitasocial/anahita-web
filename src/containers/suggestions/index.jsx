@@ -5,7 +5,6 @@ import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -13,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
+import DismissIcon from '@mui/icons-material/Close';
 import TuneIcon from '@mui/icons-material/TuneOutlined';
 
 import useSuggestions from './useSuggestions';
@@ -64,18 +64,18 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
       {items.map((item) => {
         const { actor } = item;
         const why = recommendations.reasonText(item, related, i18n.t.bind(i18n), kind);
-        // Side by side with Follow, each half the width; by itself on an
-        // event, the whole of it.
+        // Not interested: an x at the top right of the card.
         const dismissButton = (
-          <Button
-            fullWidth
-            key={`suggestion-dismiss-${actor.id}`}
-            onClick={() => {
-              handleDismiss(actor);
-            }}
-          >
-            {i18n.t('recommendations:dismiss')}
-          </Button>
+          <Tooltip title={i18n.t('recommendations:dismiss')}>
+            <IconButton
+              aria-label={i18n.t('recommendations:dismiss')}
+              onClick={() => {
+                handleDismiss(actor);
+              }}
+            >
+              <DismissIcon />
+            </IconButton>
+          </Tooltip>
         );
 
         return (
@@ -87,13 +87,13 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
               <EventCard
                 actor={actor}
                 note={why}
-                action={dismissButton}
+                headerAction={dismissButton}
               /> :
               <ActorCard
                 actor={actor}
                 note={why}
+                headerAction={dismissButton}
                 action={[
-                  dismissButton,
                   <ControlFollow
                     fullWidth
                     actor={actor}

@@ -26,7 +26,11 @@ const { getActorName, getCoverURL, getURL } = utils.node;
 // Accept. The server may have sent only its name, picture and time
 // (`restricted`), which is all this draws of it either way.
 const EventCard = ({
-  actor, onAnswered = null, note = '', action = null,
+  actor,
+  onAnswered = null,
+  note = '',
+  action = null,
+  headerAction = null,
 }) => {
   const { event } = actor;
   // An event's one picture. Not sent of an event the viewer was only
@@ -44,6 +48,7 @@ const EventCard = ({
           />
         </Link>}
       <CardHeader
+        action={headerAction}
         avatar={<ActorAvatar actor={actor} linked />}
         title={
           <Link href={getURL(actor)} color="inherit" underline="hover">
@@ -112,6 +117,7 @@ EventCard.propTypes = {
   // along the bottom: why it is recommended, and not interested.
   note: PropTypes.string,
   action: PropTypes.node,
+  headerAction: PropTypes.node,
   // Called with true or false when an invitation on the card is answered.
   onAnswered: PropTypes.func,
 };
