@@ -17,7 +17,6 @@ import Typography from '@mui/material/Typography';
 import CopyIcon from '@mui/icons-material/ContentCopyOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
-import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/HomeOutlined';
 
@@ -25,6 +24,7 @@ import FeedCustomBrowse from '../feed/Custom';
 import useFeed from './useFeed';
 import CopyFeedLink from './CopyLink';
 import DialogConfirm from '../../components/DialogConfirm';
+import CustomFeedIcon from '../../components/CustomFeedIcon';
 import Progress from '../../components/Progress';
 import actions from '../../actions';
 import api from '../../api';
@@ -116,7 +116,7 @@ const CustomFeedRead = ({
             <CardHeader
               avatar={
                 <Avatar>
-                  <FeedIcon />
+                  <CustomFeedIcon name={feed.icon} />
                 </Avatar>
               }
               title={feed.name}

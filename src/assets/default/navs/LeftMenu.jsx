@@ -10,7 +10,6 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
-import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
@@ -40,6 +39,7 @@ import NodeInfoType from '../../../proptypes/NodeInfo';
 import permissions from '../../../permissions';
 import adminTabs from '../../../containers/admin/tabs';
 import usePinnedFeeds from '../../../containers/feeds/usePinnedFeeds';
+import CustomFeedIcon from '../../../components/CustomFeedIcon';
 
 const LeftMenu = ({
   isAuthenticated,
@@ -93,7 +93,7 @@ const LeftMenu = ({
                 sx={{ pl: 4 }}
               >
                 <ListItemIcon>
-                  <FeedIcon fontSize="small" />
+                  <CustomFeedIcon name={feed.icon} fontSize="small" />
                 </ListItemIcon>
                 <ListItemText
                   primary={feed.name}

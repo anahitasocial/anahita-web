@@ -474,15 +474,25 @@ are about, what to leave out. The server's side is in the services'
   they keep.
   The house adds a feed to the home page or takes it off, and the arrows move
   it among the tabs.
-- **The editor** (`containers/feeds/Form.jsx`) is a dialog, and the whole
-  screen on a phone. Hashtags and keywords are typed as chips
-  (`components/WordsField.jsx`); profiles and places are searched for and
-  picked (`components/NodesField.jsx`). Under the fields is what the feed
-  shows, in a sentence. There is no preview: saving opens the feed itself,
-  Home on its tab when it is kept there and its own page otherwise. The
-  dialog has an address (`/feeds/new`, `/feeds/:id/edit`): `Add.jsx` draws it
-  over the list of feeds and `Edit.jsx` over the feed's page, so a link opens
-  it and Back closes it.
+- **The editor** (`containers/feeds/Form.jsx`) is one form drawn two ways.
+  A new feed is made in the page, at `/feeds/new` (`Add.jsx`), reached from
+  the list of feeds and from "Custom feed" in the menu. A feed is changed in
+  a dialog (`inDialog`), the whole screen on a phone. Hashtags and keywords
+  are typed as chips (`components/WordsField.jsx`); profiles and places are
+  searched for and picked (`components/NodesField.jsx`). Under the fields is
+  what the feed shows, in a sentence. There is no preview: saving a new feed
+  opens it.
+- **Changing a feed from Home.** With one of the viewer's own feeds open, a
+  pencil sits at the end of the tabs, beside the way to the list, where a
+  phone has it too. It opens the editor over the page
+  (`containers/feeds/EditDialog.jsx`). On saving, the tabs and the menu read
+  the feeds again and the list under the dialog is begun again, since it is
+  keyed by when the feed was last changed. `/feeds/:id/edit` still opens the
+  same dialog over the feed's own page, for the links there and in the list.
+- **A feed's icon** is one of sixteen, chosen in the editor and kept by name
+  (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
+  draws it: in the menu under Home, on the tabs, in the list and on the
+  feed's page.
 - **Deleting a feed** is offered to its owner in three places, each asking
   first: its card in the list, its own page, and the editor.
 - **Ten feeds** is the most a person owns, the number the home page holds.

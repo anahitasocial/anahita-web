@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink } from 'react-router-dom';
 
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -24,6 +25,7 @@ import UpIcon from '@mui/icons-material/ArrowUpward';
 
 import CopyFeedLink from './CopyLink';
 import BrowseHeader from '../../components/BrowseHeader';
+import CustomFeedIcon from '../../components/CustomFeedIcon';
 import DialogConfirm from '../../components/DialogConfirm';
 import Progress from '../../components/Progress';
 import actions from '../../actions';
@@ -129,6 +131,11 @@ const CustomFeedsManage = ({
     return (
       <Card key={`custom-feed-${feed.id}`} sx={{ mb: 2 }}>
         <CardHeader
+          avatar={
+            <Avatar>
+              <CustomFeedIcon name={feed.icon} />
+            </Avatar>
+          }
           title={
             <Link component={RouterLink} to={customFeeds.urlOf(feed)} underline="hover" color="inherit">
               {feed.name}

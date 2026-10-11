@@ -2,18 +2,17 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
+import Grid from '@mui/material/Grid';
+
 import CustomFeedForm from './Form';
-import CustomFeedsManage from './Manage';
 import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
 
-// Making a custom feed: the editor, in a dialog over the list of the
-// viewer's feeds.
+// Making a custom feed, on a page of its own beside the list of feeds.
 //
-// It has an address of its own, so the menu's "Custom feed" is a link like
-// any other and the browser's Back closes the dialog. Closed, it goes back
-// to wherever it was opened from. Saved, it opens the feed: Home on it,
-// where the server has put it, or its own page with the home page full.
+// Cancelled, it goes back to the list. Saved, it opens the feed: Home on
+// its tab, where the server has put it, or its own page with the home page
+// full.
 const CustomFeedAdd = () => {
   const navigate = useNavigate();
 
@@ -22,15 +21,18 @@ const CustomFeedAdd = () => {
       <Helmet>
         <title>{i18n.t('customFeeds:form.titleAdd')}</title>
       </Helmet>
-      <CustomFeedsManage />
-      <CustomFeedForm
-        onClose={() => {
-          customFeeds.leave(navigate, '/feeds');
-        }}
-        onSaved={(feed) => {
-          navigate(customFeeds.whereToRead(feed));
-        }}
-      />
+      <Grid container sx={{ justifyContent: 'center' }}>
+        <Grid size={{ xs: 12, md: 8 }}>
+          <CustomFeedForm
+            onClose={() => {
+              navigate('/feeds');
+            }}
+            onSaved={(feed) => {
+              navigate(customFeeds.whereToRead(feed));
+            }}
+          />
+        </Grid>
+      </Grid>
     </>
   );
 };

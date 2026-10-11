@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardHeader from '@mui/material/CardHeader';
 import Checkbox from '@mui/material/Checkbox';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,6 +17,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import FormHelperText from '@mui/material/FormHelperText';
 import FormLabel from '@mui/material/FormLabel';
+import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
@@ -26,6 +31,7 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import NodesField from '../../components/NodesField';
 import WordsField from '../../components/WordsField';
 import DialogConfirm from '../../components/DialogConfirm';
+import CustomFeedIcon, { FEED_ICONS } from '../../components/CustomFeedIcon';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -44,6 +50,7 @@ const startingValues = (feed) => {
     name: (feed && feed.name) || '',
     body: (feed && feed.body) || '',
     access: (feed && feed.access) || 'myself',
+    icon: (feed && feed.icon) || 'feed',
     definition: feed ? customFeeds.complete(feed.definition) : customFeeds.starting(),
   };
 };
@@ -76,8 +83,8 @@ const toggled = (list, item, isOn) => {
   return isOn ? [...without, item] : without;
 };
 
-// Making a custom feed, or changing one, in a dialog. On a phone the dialog
-// is the whole screen.
+// Making a custom feed, or changing one. In the page, or with `inDialog`
+// in a dialog over it, which on a phone is the whole screen.
 //
 // A feed is where its posts come from, narrowed by what they are about, less
 // what is left out. Under the fields is the same thing in a sentence, which
@@ -85,6 +92,7 @@ const toggled = (list, item, isOn) => {
 // and it can be changed again from there. Posts are always newest first.
 const CustomFeedForm = ({
   feed = null,
+  inDialog = false,
   onClose,
   onSaved,
   onDeleted = null,
@@ -166,6 +174,7 @@ const CustomFeedForm = ({
       name: values.name.trim(),
       body: values.body.trim(),
       access: values.access,
+      icon: values.icon,
       definition,
     };
     const call = isNew ?
@@ -188,8 +197,389 @@ const CustomFeedForm = ({
     });
   };
 
-  const stepTitle = i18n.t(isNew ? 'customFeeds:form.titleAdd' : 'customFeeds:form.titleEdit');
+  const title = i18n.t(isNew ? 'customFeeds:form.titleAdd' : 'customFeeds:form.titleEdit');
 
+  const fields = (
+    <>
+      <form id={FORM} onSubmit={handleSave} noValidate>
+        <Stack spacing={2}>
+          <TextField
+            fullWidth
+            required
+            label={i18n.t('customFeeds:form.name')}
+            value={values.name}
+            error={error === 'name_required'}
+            disabled={isSaving}
+            onChange={(event) => {
+              setError('');
+              setValues({ ...values, name: event.target.value });
+            }}
+            slotProps={{ htmlInput: { maxLength: 100 } }}
+          />
+          <TextField
+            fullWidth
+            multiline
+            minRows={2}
+            label={i18n.t('customFeeds:form.body')}
+            value={values.body}
+            disabled={isSaving}
+            onChange={(event) => {
+              setValues({ ...values, body: event.target.value });
+            }}
+            slotProps={{ htmlInput: { maxLength: 500 } }}
+          />
+          {/* Its picture, shown beside its name in the menu and the tabs. */}
+          <FormControl component="fieldset" disabled={isSaving}>
+            <FormLabel component="legend">
+              {i18n.t('customFeeds:form.icon')}
+            </FormLabel>
+            <Box sx={{
+              display: 'flex', flexWrap: 'wrap', gap: 1, pt: 1,
+            }}
+            >
+              {FEED_ICONS.map((name) => {
+                const isChosen = values.icon === name;
+
+                return (
+                  <IconButton
+                    key={name}
+                    color={isChosen ? 'primary' : 'default'}
+                    aria-label={i18n.t(`customFeeds:icons.${name}`)}
+                    title={i18n.t(`customFeeds:icons.${name}`)}
+                    aria-pressed={isChosen}
+                    disabled={isSaving}
+                    onClick={() => {
+                      setValues({ ...values, icon: name });
+                    }}
+                    sx={{
+                      border: 1,
+                      borderColor: isChosen ? 'primary.main' : 'divider',
+                    }}
+                  >
+                    <CustomFeedIcon name={name} />
+                  </IconButton>
+                );
+              })}
+            </Box>
+          </FormControl>
+
+          <Typography variant="subtitle1" component="h2">
+            {i18n.t('customFeeds:form.sources')}
+          </Typography>
+          <div>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={definition.sources.following}
+                  disabled={isSaving}
+                  onChange={(event) => {
+                    setChoseFollowing(true);
+                    setDefinition('sources', { following: event.target.checked });
+                  }}
+                />
+              }
+              label={i18n.t('customFeeds:form.following')}
+            />
+            <Typography variant="body2" color="textSecondary" sx={{ pl: 4 }}>
+              {i18n.t('customFeeds:form.followingHelp')}
+            </Typography>
+          </div>
+          <NodesField
+            label={i18n.t('customFeeds:form.actors')}
+            helperText={i18n.t('customFeeds:form.actorsHelp')}
+            namespaces={['people', 'groups']}
+            value={actors}
+            max={LIMITS.actors}
+            disabled={isSaving}
+            onChange={(nodes) => {
+              setActors(nodes);
+              // Sources add together. Somebody who names profiles in a
+              // new feed means those profiles, so the tick the form
+              // started with comes off, unless they put it there.
+              setDefinition('sources', choseFollowing || nodes.length === 0 ?
+                { actors: idsOf(nodes) } :
+                { actors: idsOf(nodes), following: false });
+            }}
+          />
+          {!customFeeds.hasSources(definition) &&
+            <Typography variant="body2" color="textSecondary">
+              {i18n.t('customFeeds:form.noSources')}
+            </Typography>}
+
+          <Typography variant="subtitle1" component="h2">
+            {i18n.t('customFeeds:form.filters')}
+          </Typography>
+          <FormControl component="fieldset" disabled={isSaving}>
+            <FormLabel component="legend">
+              {i18n.t('customFeeds:form.mediaTypes')}
+            </FormLabel>
+            <FormGroup row>
+              {customFeeds.MEDIA_TYPES.map((kind) => {
+                return (
+                  <FormControlLabel
+                    key={kind}
+                    control={
+                      <Checkbox
+                        checked={definition.filters.mediaTypes.includes(kind)}
+                        onChange={(event) => {
+                          const { mediaTypes: chosen } = definition.filters;
+                          setDefinition('filters', {
+                            mediaTypes: toggled(chosen, kind, event.target.checked),
+                          });
+                        }}
+                      />
+                    }
+                    label={i18n.t(`customFeeds:kinds.${kind}`)}
+                  />
+                );
+              })}
+            </FormGroup>
+            <FormHelperText sx={{ ml: 0 }}>
+              {i18n.t('customFeeds:form.mediaTypesHelp')}
+            </FormHelperText>
+          </FormControl>
+          <FormControl component="fieldset" disabled={isSaving}>
+            <FormLabel component="legend">
+              {i18n.t('customFeeds:form.actorTypes')}
+            </FormLabel>
+            <FormGroup row>
+              {customFeeds.ACTOR_TYPES.map((kind) => {
+                return (
+                  <FormControlLabel
+                    key={kind}
+                    control={
+                      <Checkbox
+                        checked={definition.filters.actorTypes.includes(kind)}
+                        onChange={(event) => {
+                          const { actorTypes: chosen } = definition.filters;
+                          setDefinition('filters', {
+                            actorTypes: toggled(chosen, kind, event.target.checked),
+                          });
+                        }}
+                      />
+                    }
+                    label={i18n.t(`customFeeds:kinds.${kind}`)}
+                  />
+                );
+              })}
+            </FormGroup>
+            <FormHelperText sx={{ ml: 0 }}>
+              {i18n.t('customFeeds:form.actorTypesHelp')}
+            </FormHelperText>
+          </FormControl>
+          <WordsField
+            label={i18n.t('customFeeds:form.hashtags')}
+            helperText={i18n.t('customFeeds:form.hashtagsHelp')}
+            value={definition.filters.hashtagsAny}
+            clean={customFeeds.cleanHashtag}
+            max={LIMITS.hashtags}
+            disabled={isSaving}
+            onChange={(words) => {
+              setDefinition('filters', { hashtagsAny: words });
+            }}
+          />
+          <WordsField
+            label={i18n.t('customFeeds:form.keywords')}
+            helperText={i18n.t('customFeeds:form.keywordsHelp')}
+            value={definition.filters.keywordsAny}
+            clean={customFeeds.cleanKeyword}
+            max={LIMITS.keywords}
+            disabled={isSaving}
+            onChange={(words) => {
+              setDefinition('filters', { keywordsAny: words });
+            }}
+          />
+          <NodesField
+            label={i18n.t('customFeeds:form.locations')}
+            helperText={i18n.t('customFeeds:form.locationsHelp')}
+            namespaces={['locations']}
+            value={locations}
+            max={LIMITS.locations}
+            disabled={isSaving}
+            onChange={(nodes) => {
+              setLocations(nodes);
+              setDefinition('filters', { locationsAny: idsOf(nodes) });
+            }}
+          />
+          <TextField
+            select
+            fullWidth
+            label={i18n.t('customFeeds:form.language')}
+            value={definition.filters.language}
+            disabled={isSaving}
+            onChange={(event) => {
+              setDefinition('filters', { language: event.target.value });
+            }}
+          >
+            <MenuItem value="">
+              {i18n.t('customFeeds:form.languageAny')}
+            </MenuItem>
+            {languages.map((code) => {
+              return (
+                <MenuItem key={code} value={code}>
+                  {postLanguage.nameOf(code, i18n.language)}
+                </MenuItem>
+              );
+            })}
+          </TextField>
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={definition.includeReplies}
+                disabled={isSaving}
+                onChange={(event) => {
+                  setError('');
+                  setValues({
+                    ...values,
+                    definition: { ...definition, includeReplies: event.target.checked },
+                  });
+                }}
+              />
+            }
+            label={i18n.t('customFeeds:form.includeReplies')}
+          />
+
+          <Typography variant="subtitle1" component="h2">
+            {i18n.t('customFeeds:form.exclude')}
+          </Typography>
+          <WordsField
+            label={i18n.t('customFeeds:form.excludeHashtags')}
+            value={definition.exclude.hashtags}
+            clean={customFeeds.cleanHashtag}
+            max={LIMITS.hashtags}
+            disabled={isSaving}
+            onChange={(words) => {
+              setDefinition('exclude', { hashtags: words });
+            }}
+          />
+          <WordsField
+            label={i18n.t('customFeeds:form.excludeKeywords')}
+            value={definition.exclude.keywords}
+            clean={customFeeds.cleanKeyword}
+            max={LIMITS.keywords}
+            disabled={isSaving}
+            onChange={(words) => {
+              setDefinition('exclude', { keywords: words });
+            }}
+          />
+          <NodesField
+            label={i18n.t('customFeeds:form.excludeActors')}
+            namespaces={['people', 'groups']}
+            value={excluded}
+            max={LIMITS.actors}
+            disabled={isSaving}
+            onChange={(nodes) => {
+              setExcluded(nodes);
+              setDefinition('exclude', { actors: idsOf(nodes) });
+            }}
+          />
+
+          <FormControl disabled={isSaving}>
+            <FormLabel id="custom-feed-access">
+              {i18n.t('customFeeds:form.access')}
+            </FormLabel>
+            <RadioGroup
+              aria-labelledby="custom-feed-access"
+              name="custom-feed-access"
+              value={values.access}
+              onChange={(event) => {
+                setError('');
+                setValues({ ...values, access: event.target.value });
+              }}
+            >
+              {customFeeds.ACCESS.map((access) => {
+                return (
+                  <FormControlLabel
+                    key={access}
+                    value={access}
+                    control={<Radio />}
+                    label={i18n.t(`customFeeds:access.${access}`)}
+                  />
+                );
+              })}
+            </RadioGroup>
+            <FormHelperText sx={{ ml: 0 }}>
+              {i18n.t('customFeeds:form.accessHelp')}
+            </FormHelperText>
+          </FormControl>
+          {/* Changing a feed is also where it is deleted. */}
+          {!isNew && onDeleted &&
+            <div>
+              <DialogConfirm
+                title={i18n.t('customFeeds:delete.title')}
+                message={i18n.t('customFeeds:delete.message')}
+                confirm={i18n.t('customFeeds:delete.confirm')}
+                dismiss={i18n.t('customFeeds:delete.dismiss')}
+              >
+                <Button
+                  color="error"
+                  startIcon={<DeleteIcon />}
+                  disabled={isSaving}
+                  onClick={handleDelete}
+                >
+                  {i18n.t('customFeeds:actions.delete')}
+                </Button>
+              </DialogConfirm>
+            </div>}
+          {/* What the feed shows, in a sentence. */}
+          <Typography variant="body2" color="textSecondary">
+            {customFeeds.summary(definition, i18n.t.bind(i18n), { names })}
+          </Typography>
+        </Stack>
+      </form>
+      {error &&
+        <Typography variant="body2" color="error" role="alert" sx={{ pt: 2 }}>
+          {i18n.t(`customFeeds:form.errors.${error}`)}
+        </Typography>}
+    </>
+  );
+
+  // Side by side, each half the width: Cancel, then the one that saves.
+  const buttons = (
+    <>
+      <Button
+        fullWidth
+        disabled={isSaving}
+        onClick={onClose}
+      >
+        {i18n.t('customFeeds:form.cancel')}
+      </Button>
+      <Button
+        fullWidth
+        type="submit"
+        form={FORM}
+        variant="contained"
+        color="primary"
+        disabled={isSaving}
+      >
+        {i18n.t(isNew ? 'customFeeds:form.create' : 'customFeeds:form.save')}
+      </Button>
+    </>
+  );
+
+  // In the page, for a new feed.
+  if (!inDialog) {
+    return (
+      <Card>
+        <CardHeader
+          title={title}
+          slotProps={{ title: { variant: 'h5', component: 'h1' } }}
+        />
+        <CardContent>
+          <Stack spacing={2}>
+            <div>
+              {fields}
+            </div>
+            <Stack direction="row" spacing={1}>
+              {buttons}
+            </Stack>
+          </Stack>
+        </CardContent>
+      </Card>
+    );
+  }
+
+  // Over the page, for one being changed. The whole screen on a phone.
   return (
     <Dialog
       open
@@ -204,325 +594,13 @@ const CustomFeedForm = ({
       aria-labelledby="custom-feed-editor-title"
     >
       <DialogTitle id="custom-feed-editor-title">
-        {stepTitle}
+        {title}
       </DialogTitle>
       <DialogContent dividers>
-        <form id={FORM} onSubmit={handleSave} noValidate>
-          <Stack spacing={2}>
-            <TextField
-              fullWidth
-              required
-              label={i18n.t('customFeeds:form.name')}
-              value={values.name}
-              error={error === 'name_required'}
-              disabled={isSaving}
-              onChange={(event) => {
-                setError('');
-                setValues({ ...values, name: event.target.value });
-              }}
-              slotProps={{ htmlInput: { maxLength: 100 } }}
-            />
-            <TextField
-              fullWidth
-              multiline
-              minRows={2}
-              label={i18n.t('customFeeds:form.body')}
-              value={values.body}
-              disabled={isSaving}
-              onChange={(event) => {
-                setValues({ ...values, body: event.target.value });
-              }}
-              slotProps={{ htmlInput: { maxLength: 500 } }}
-            />
-
-            <Typography variant="subtitle1" component="h2">
-              {i18n.t('customFeeds:form.sources')}
-            </Typography>
-            <div>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={definition.sources.following}
-                    disabled={isSaving}
-                    onChange={(event) => {
-                      setChoseFollowing(true);
-                      setDefinition('sources', { following: event.target.checked });
-                    }}
-                  />
-                }
-                label={i18n.t('customFeeds:form.following')}
-              />
-              <Typography variant="body2" color="textSecondary" sx={{ pl: 4 }}>
-                {i18n.t('customFeeds:form.followingHelp')}
-              </Typography>
-            </div>
-            <NodesField
-              label={i18n.t('customFeeds:form.actors')}
-              helperText={i18n.t('customFeeds:form.actorsHelp')}
-              namespaces={['people', 'groups']}
-              value={actors}
-              max={LIMITS.actors}
-              disabled={isSaving}
-              onChange={(nodes) => {
-                setActors(nodes);
-                // Sources add together. Somebody who names profiles in a
-                // new feed means those profiles, so the tick the form
-                // started with comes off, unless they put it there.
-                setDefinition('sources', choseFollowing || nodes.length === 0 ?
-                  { actors: idsOf(nodes) } :
-                  { actors: idsOf(nodes), following: false });
-              }}
-            />
-            {!customFeeds.hasSources(definition) &&
-              <Typography variant="body2" color="textSecondary">
-                {i18n.t('customFeeds:form.noSources')}
-              </Typography>}
-
-            <Typography variant="subtitle1" component="h2">
-              {i18n.t('customFeeds:form.filters')}
-            </Typography>
-            <FormControl component="fieldset" disabled={isSaving}>
-              <FormLabel component="legend">
-                {i18n.t('customFeeds:form.mediaTypes')}
-              </FormLabel>
-              <FormGroup row>
-                {customFeeds.MEDIA_TYPES.map((kind) => {
-                  return (
-                    <FormControlLabel
-                      key={kind}
-                      control={
-                        <Checkbox
-                          checked={definition.filters.mediaTypes.includes(kind)}
-                          onChange={(event) => {
-                            const { mediaTypes: chosen } = definition.filters;
-                            setDefinition('filters', {
-                              mediaTypes: toggled(chosen, kind, event.target.checked),
-                            });
-                          }}
-                        />
-                      }
-                      label={i18n.t(`customFeeds:kinds.${kind}`)}
-                    />
-                  );
-                })}
-              </FormGroup>
-              <FormHelperText sx={{ ml: 0 }}>
-                {i18n.t('customFeeds:form.mediaTypesHelp')}
-              </FormHelperText>
-            </FormControl>
-            <FormControl component="fieldset" disabled={isSaving}>
-              <FormLabel component="legend">
-                {i18n.t('customFeeds:form.actorTypes')}
-              </FormLabel>
-              <FormGroup row>
-                {customFeeds.ACTOR_TYPES.map((kind) => {
-                  return (
-                    <FormControlLabel
-                      key={kind}
-                      control={
-                        <Checkbox
-                          checked={definition.filters.actorTypes.includes(kind)}
-                          onChange={(event) => {
-                            const { actorTypes: chosen } = definition.filters;
-                            setDefinition('filters', {
-                              actorTypes: toggled(chosen, kind, event.target.checked),
-                            });
-                          }}
-                        />
-                      }
-                      label={i18n.t(`customFeeds:kinds.${kind}`)}
-                    />
-                  );
-                })}
-              </FormGroup>
-              <FormHelperText sx={{ ml: 0 }}>
-                {i18n.t('customFeeds:form.actorTypesHelp')}
-              </FormHelperText>
-            </FormControl>
-            <WordsField
-              label={i18n.t('customFeeds:form.hashtags')}
-              helperText={i18n.t('customFeeds:form.hashtagsHelp')}
-              value={definition.filters.hashtagsAny}
-              clean={customFeeds.cleanHashtag}
-              max={LIMITS.hashtags}
-              disabled={isSaving}
-              onChange={(words) => {
-                setDefinition('filters', { hashtagsAny: words });
-              }}
-            />
-            <WordsField
-              label={i18n.t('customFeeds:form.keywords')}
-              helperText={i18n.t('customFeeds:form.keywordsHelp')}
-              value={definition.filters.keywordsAny}
-              clean={customFeeds.cleanKeyword}
-              max={LIMITS.keywords}
-              disabled={isSaving}
-              onChange={(words) => {
-                setDefinition('filters', { keywordsAny: words });
-              }}
-            />
-            <NodesField
-              label={i18n.t('customFeeds:form.locations')}
-              helperText={i18n.t('customFeeds:form.locationsHelp')}
-              namespaces={['locations']}
-              value={locations}
-              max={LIMITS.locations}
-              disabled={isSaving}
-              onChange={(nodes) => {
-                setLocations(nodes);
-                setDefinition('filters', { locationsAny: idsOf(nodes) });
-              }}
-            />
-            <TextField
-              select
-              fullWidth
-              label={i18n.t('customFeeds:form.language')}
-              value={definition.filters.language}
-              disabled={isSaving}
-              onChange={(event) => {
-                setDefinition('filters', { language: event.target.value });
-              }}
-            >
-              <MenuItem value="">
-                {i18n.t('customFeeds:form.languageAny')}
-              </MenuItem>
-              {languages.map((code) => {
-                return (
-                  <MenuItem key={code} value={code}>
-                    {postLanguage.nameOf(code, i18n.language)}
-                  </MenuItem>
-                );
-              })}
-            </TextField>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={definition.includeReplies}
-                  disabled={isSaving}
-                  onChange={(event) => {
-                    setError('');
-                    setValues({
-                      ...values,
-                      definition: { ...definition, includeReplies: event.target.checked },
-                    });
-                  }}
-                />
-              }
-              label={i18n.t('customFeeds:form.includeReplies')}
-            />
-
-            <Typography variant="subtitle1" component="h2">
-              {i18n.t('customFeeds:form.exclude')}
-            </Typography>
-            <WordsField
-              label={i18n.t('customFeeds:form.excludeHashtags')}
-              value={definition.exclude.hashtags}
-              clean={customFeeds.cleanHashtag}
-              max={LIMITS.hashtags}
-              disabled={isSaving}
-              onChange={(words) => {
-                setDefinition('exclude', { hashtags: words });
-              }}
-            />
-            <WordsField
-              label={i18n.t('customFeeds:form.excludeKeywords')}
-              value={definition.exclude.keywords}
-              clean={customFeeds.cleanKeyword}
-              max={LIMITS.keywords}
-              disabled={isSaving}
-              onChange={(words) => {
-                setDefinition('exclude', { keywords: words });
-              }}
-            />
-            <NodesField
-              label={i18n.t('customFeeds:form.excludeActors')}
-              namespaces={['people', 'groups']}
-              value={excluded}
-              max={LIMITS.actors}
-              disabled={isSaving}
-              onChange={(nodes) => {
-                setExcluded(nodes);
-                setDefinition('exclude', { actors: idsOf(nodes) });
-              }}
-            />
-
-            <FormControl disabled={isSaving}>
-              <FormLabel id="custom-feed-access">
-                {i18n.t('customFeeds:form.access')}
-              </FormLabel>
-              <RadioGroup
-                aria-labelledby="custom-feed-access"
-                name="custom-feed-access"
-                value={values.access}
-                onChange={(event) => {
-                  setError('');
-                  setValues({ ...values, access: event.target.value });
-                }}
-              >
-                {customFeeds.ACCESS.map((access) => {
-                  return (
-                    <FormControlLabel
-                      key={access}
-                      value={access}
-                      control={<Radio />}
-                      label={i18n.t(`customFeeds:access.${access}`)}
-                    />
-                  );
-                })}
-              </RadioGroup>
-              <FormHelperText sx={{ ml: 0 }}>
-                {i18n.t('customFeeds:form.accessHelp')}
-              </FormHelperText>
-            </FormControl>
-            {/* Changing a feed is also where it is deleted. */}
-            {!isNew && onDeleted &&
-              <div>
-                <DialogConfirm
-                  title={i18n.t('customFeeds:delete.title')}
-                  message={i18n.t('customFeeds:delete.message')}
-                  confirm={i18n.t('customFeeds:delete.confirm')}
-                  dismiss={i18n.t('customFeeds:delete.dismiss')}
-                >
-                  <Button
-                    color="error"
-                    startIcon={<DeleteIcon />}
-                    disabled={isSaving}
-                    onClick={handleDelete}
-                  >
-                    {i18n.t('customFeeds:actions.delete')}
-                  </Button>
-                </DialogConfirm>
-              </div>}
-            {/* What the feed shows, in a sentence. */}
-            <Typography variant="body2" color="textSecondary">
-              {customFeeds.summary(definition, i18n.t.bind(i18n), { names })}
-            </Typography>
-          </Stack>
-        </form>
-        {error &&
-          <Typography variant="body2" color="error" role="alert" sx={{ pt: 2 }}>
-            {i18n.t(`customFeeds:form.errors.${error}`)}
-          </Typography>}
+        {fields}
       </DialogContent>
-      {/* Side by side, each half the width: Cancel, then the one that saves. */}
       <DialogActions sx={{ p: 2 }}>
-        <Button
-          fullWidth
-          disabled={isSaving}
-          onClick={onClose}
-        >
-          {i18n.t('customFeeds:form.cancel')}
-        </Button>
-        <Button
-          fullWidth
-          type="submit"
-          form={FORM}
-          variant="contained"
-          color="primary"
-          disabled={isSaving}
-        >
-          {i18n.t(isNew ? 'customFeeds:form.create' : 'customFeeds:form.save')}
-        </Button>
+        {buttons}
       </DialogActions>
     </Dialog>
   );
@@ -532,6 +610,8 @@ CustomFeedForm.propTypes = {
   // The feed being changed, as the server sent it with what it names. None
   // for a new one.
   feed: PropTypes.object,
+  // Drawn in a dialog over the page, and not in it.
+  inDialog: PropTypes.bool,
   // Closed without saving, and saved: each is told, and neither goes
   // anywhere by itself.
   onClose: PropTypes.func.isRequired,

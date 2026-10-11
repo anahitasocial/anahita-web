@@ -33,6 +33,7 @@ const CustomFeedEdit = () => {
           <CustomFeedForm
             key={feed.id}
             feed={feed}
+            inDialog
             onClose={() => {
               customFeeds.leave(navigate, customFeeds.urlOf(feed));
             }}
