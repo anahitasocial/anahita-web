@@ -506,6 +506,11 @@ are about, what to leave out. The server's side is in the services'
 - **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
   the end of the tabs and from "Feeds" in the menu): the viewer's
   feeds and the ones of other people's they keep.
+- **Rows of one height.** A feed's row in the list is its name, who can
+  see it and when it was made, and one line cut short: what it is for, or
+  what it shows when it does not say. Pressing the name opens the feed in
+  full in a dialog (`containers/feeds/DetailsDialog.jsx`): its description
+  and every setting it has, one line each, with a button on to the feed.
 - **Finding shared feeds** is the site's search. A feed that matches is a
   result like any other, among the profiles and posts under **All**, and by
   itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node

@@ -7,10 +7,10 @@ import { Link as RouterLink } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -24,6 +24,7 @@ import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/Home';
 import UpIcon from '@mui/icons-material/ArrowUpward';
 
+import CustomFeedDetailsDialog from './DetailsDialog';
 import BrowseHeader from '../../components/BrowseHeader';
 import { ShareButton } from '../controls/Share';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
@@ -56,6 +57,8 @@ const CustomFeedsManage = ({
   const [isLoading, setIsLoading] = useState(true);
   const [hasFailed, setHasFailed] = useState(false);
   const [waiting, setWaiting] = useState(false);
+  // The feed whose details are open in the dialog, or 0.
+  const [detailsOf, setDetailsOf] = useState(0);
 
   const load = () => {
     return Promise.all([api.customFeeds.mine(), api.customFeeds.pinned()]).then(([made, kept]) => {
@@ -141,13 +144,33 @@ const CustomFeedsManage = ({
             </Avatar>
           }
           title={
-            <Link component={RouterLink} to={customFeeds.urlOf(feed)} underline="hover" color="inherit">
+            <ButtonBase
+              onClick={() => {
+                setDetailsOf(feed.id);
+              }}
+              sx={{
+                display: 'block',
+                maxWidth: '100%',
+                font: 'inherit',
+                textAlign: 'left',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                '&:hover': { textDecoration: 'underline' },
+              }}
+            >
               {feed.name}
-            </Link>
+            </ButtonBase>
           }
           subheader={
             <>
-              <Typography variant="body2" color="textSecondary" component="span" sx={{ display: 'block' }}>
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="span"
+                noWrap
+                sx={{ display: 'block' }}
+              >
                 {isOwn ?
                   i18n.t(`customFeeds:access.${feed.access}`) :
                   i18n.t('customFeeds:list.by', { name: getActorName(feed.owner || {}) })}
@@ -155,8 +178,17 @@ const CustomFeedsManage = ({
                 {customFeeds.madeOn(feed, i18n.language) &&
                   ` · ${i18n.t('customFeeds:made', { date: customFeeds.madeOn(feed, i18n.language) })}`}
               </Typography>
-              <Typography variant="body2" color="textSecondary" component="span" sx={{ display: 'block' }}>
-                {customFeeds.summary(feed.definition, i18n.t.bind(i18n), { isOwn })}
+              {/* One line, cut short: what it is for, or what it shows when
+                  it does not say. The whole of it is in the dialog its
+                  name opens, so every row here is the same height. */}
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                component="span"
+                noWrap
+                sx={{ display: 'block' }}
+              >
+                {feed.body || customFeeds.summary(feed.definition, i18n.t.bind(i18n), { isOwn })}
               </Typography>
             </>
           }
@@ -239,7 +271,12 @@ const CustomFeedsManage = ({
                 </DialogConfirm>}
             </Stack>
           }
-          slotProps={{ title: { variant: 'h6', component: 'h3' } }}
+          slotProps={{
+            title: { variant: 'h6', component: 'h3', noWrap: true },
+            // Lets the lines be cut short instead of pushing the buttons
+            // off the card.
+            content: { sx: { minWidth: 0 } },
+          }}
         />
       </Card>
     );
@@ -309,6 +346,13 @@ const CustomFeedsManage = ({
           </Button>
         </>}
       </PageColumn>
+      {detailsOf > 0 &&
+        <CustomFeedDetailsDialog
+          feedId={detailsOf}
+          onClose={() => {
+            setDetailsOf(0);
+          }}
+        />}
     </>
   );
 };
