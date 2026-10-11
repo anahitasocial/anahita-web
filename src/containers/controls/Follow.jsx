@@ -26,6 +26,9 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     viewer,
     // The width of what it is in, for a row of buttons of one width.
     fullWidth = false,
+    // How the button is drawn, where the place it is in wants more than
+    // the plain one: 'outlined' beside another outlined button.
+    variant = 'text',
   } = props;
 
   const [leader, setLeader] = useState(actor.isLeadingViewer);
@@ -73,6 +76,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
       disabled={waiting}
       color={color}
       fullWidth={fullWidth}
+      variant={variant}
       ref={ref}
     >
       {title}
@@ -88,6 +92,7 @@ ControlsFollow.propTypes = {
   followLabel: PropTypes.string,
   unfollowLabel: PropTypes.string,
   fullWidth: PropTypes.bool,
+  variant: PropTypes.oneOf(['text', 'outlined', 'contained']),
   viewer: PersonType.isRequired,
 };
 

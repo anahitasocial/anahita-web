@@ -13,8 +13,8 @@ export default {
     event: 'Aucun événement à suggérer pour l’instant.',
   },
   subheader: 'Des personnes, des groupes et des événements que vous pourriez suivre, chacun avec la raison de la recommandation.',
-  dismiss: 'Pas intéressé',
-  dismissed: 'Cette suggestion ne vous sera plus proposée.',
+  dismiss: 'Retirer',
+  dismissed: 'Retiré. Cela ne vous sera plus recommandé.',
   failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
   reasons: {
     goingOne: '{{ name }} y va',

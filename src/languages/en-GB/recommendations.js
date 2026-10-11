@@ -13,8 +13,8 @@ export default {
     event: 'There are no events to suggest right now.',
   },
   subheader: 'People, groups and events you might want to follow, each with the reason it is recommended.',
-  dismiss: 'Not interested',
-  dismissed: 'You will not be shown that suggestion again.',
+  dismiss: 'Remove',
+  dismissed: 'Removed. You will not be recommended that again.',
   failed: 'That did not work. Please try again.',
   reasons: {
     goingOne: '{{ name }} is going',
