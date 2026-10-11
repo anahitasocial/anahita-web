@@ -10,7 +10,7 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
-import AddIcon from '@mui/icons-material/Add';
+import CustomizeIcon from '@mui/icons-material/TuneOutlined';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
@@ -80,7 +80,8 @@ const LeftMenu = ({
         <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
       {/* Under Home: the viewer's custom feeds, in their order, and the way
-          to make another. Set in, so they read as parts of Home. */}
+          to the page where feeds are made, changed, put in order and
+          found. Set in, so they read as parts of Home. */}
       {isAuthenticated &&
         <List component="div" disablePadding>
           {feeds.map((feed) => {
@@ -104,14 +105,14 @@ const LeftMenu = ({
           })}
           <ListItemButton
             component={Link}
-            to="/feeds/new"
-            selected={pathname === '/feeds/new'}
+            to="/feeds"
+            selected={pathname === '/feeds' || pathname.startsWith('/feeds/')}
             sx={{ pl: 4 }}
           >
             <ListItemIcon>
-              <AddIcon fontSize="small" />
+              <CustomizeIcon fontSize="small" />
             </ListItemIcon>
-            <ListItemText primary={i18n.t('customFeeds:menu.add')} />
+            <ListItemText primary={i18n.t('customFeeds:menu.customize')} />
           </ListItemButton>
         </List>}
       {/* What the viewer saved: theirs, so it is here beside Home and not

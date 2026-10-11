@@ -1,11 +1,11 @@
 export default {
   cTitle: 'Fils personnalisés',
   menu: {
-    add: 'Fil personnalisé',
+    customize: 'Personnaliser les fils',
   },
   home: {
     following: 'Abonnements',
-    manage: 'Fils personnalisés',
+    manage: 'Personnaliser les fils',
   },
   list: {
     subheader: 'Des fils que vous composez vous-même : choisissez d’où viennent les publications et de quoi elles parlent. Toujours les plus récentes d’abord.',

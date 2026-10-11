@@ -463,8 +463,8 @@ are about, what to leave out. The server's side is in the services'
   keeps each list's cursor and reports a page to the store in the store's
   terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
 - **Under Home in the left menu** are the feeds on the viewer's home page, in
-  their order, each opening Home on that feed, and "Custom feed" to make
-  another. A feed is put on its maker's home page when it is made, so it
+  their order, each opening Home on that feed, and "Customize feeds", which
+  leads to the list page. A feed is made from the + there. A feed is put on its maker's home page when it is made, so it
   appears there at once. The menu and the tabs read the same list
   (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
@@ -480,7 +480,7 @@ are about, what to leave out. The server's side is in the services'
   it among the tabs.
 - **The editor** (`containers/feeds/Form.jsx`) is one form drawn two ways.
   A new feed is made in the page, at `/feeds/new` (`Add.jsx`), reached from
-  the list of feeds and from "Custom feed" in the menu. A feed is changed in
+  the + on the list of feeds. A feed is changed in
   a dialog (`inDialog`), the whole screen on a phone. Hashtags and keywords
   are typed as chips (`components/WordsField.jsx`); profiles and places are
   searched for and picked (`components/NodesField.jsx`). Under the fields is

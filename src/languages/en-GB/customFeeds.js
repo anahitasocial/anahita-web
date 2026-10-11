@@ -1,11 +1,11 @@
 export default {
   cTitle: 'Custom feeds',
   menu: {
-    add: 'Custom feed',
+    customize: 'Customize feeds',
   },
   home: {
     following: 'Following',
-    manage: 'Custom feeds',
+    manage: 'Customize feeds',
   },
   list: {
     subheader: 'Feeds you build yourself: choose where the posts come from and what they are about. Newest first, always.',
