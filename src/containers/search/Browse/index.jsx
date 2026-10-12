@@ -86,7 +86,10 @@ const Search = () => {
   let coordLong = 0.0;
   let coordLat = 0.0;
 
-  const [scope, setScope] = useState(SCOPE.ALL);
+  // The tab to open on can be named in the address (`?scope=feeds`), which
+  // is how the page of custom feeds leads to the feeds people have shared.
+  const asked = searchParams.get('scope');
+  const [scope, setScope] = useState(Object.values(SCOPE).includes(asked) ? asked : SCOPE.ALL);
   const [sort, setSort] = useState(SORTING.RELEVANT);
   const [searchRange, setSearchRange] = useState(125);
 
@@ -181,6 +184,10 @@ const Search = () => {
           <Tab
             label={i18n.t('search:filterNodeTypes.actors')}
             value={SCOPE.ACTORS}
+          />
+          <Tab
+            label={i18n.t('search:filterNodeTypes.feeds')}
+            value={SCOPE.FEEDS}
           />
         </Tabs>
       </AppBar>

@@ -193,6 +193,33 @@ describe('where an event is', () => {
   });
 });
 
+describe('how many may go', () => {
+  it('is a stop on a slider, with no limit past the last', () => {
+    const stops = events.capacityStops(0);
+
+    expect(events.capacityToStop(0, stops)).toBe(stops.length);
+    expect(events.stopToCapacity(stops.length, stops)).toBe(0);
+    expect(events.stopToCapacity(events.capacityToStop(50, stops), stops)).toBe(50);
+    expect(events.stopToCapacity(0, stops)).toBe(2);
+    expect(stops).toEqual([...stops].sort((a, b) => {
+      return a - b;
+    }));
+  });
+
+  it('starts a new event at a number that is a stop', () => {
+    expect(events.capacityStops(0)).toContain(events.DEFAULT_CAPACITY);
+  });
+
+  it('keeps an event\'s own number when it is not one of the usual ones', () => {
+    const stops = events.capacityStops(37);
+
+    expect(stops).toContain(37);
+    expect(events.stopToCapacity(events.capacityToStop(37, stops), stops)).toBe(37);
+    expect(events.capacityStops(50)).toEqual(events.capacityStops(0));
+    expect(events.capacityStops(undefined)).toEqual(events.capacityStops(0));
+  });
+});
+
 describe('answering', () => {
   it('is open while the event is to come or on, and closed after', () => {
     expect(events.takesAnswers({ state: 'upcoming' })).toBe(true);

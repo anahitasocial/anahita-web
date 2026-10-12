@@ -7,6 +7,10 @@ import features from './features';
 import pages from './pages';
 import social from './social';
 import feed from './feed';
+import customFeeds from './customFeeds';
+import share from './share';
+import linkPreviews from './linkPreviews';
+import recommendations from './recommendations';
 import replies from './replies';
 import auth from './auth';
 import actor from './actor';
@@ -49,6 +53,10 @@ export default {
   pages,
   social,
   feed,
+  customFeeds,
+  share,
+  linkPreviews,
+  recommendations,
   replies,
   auth,
   actor,

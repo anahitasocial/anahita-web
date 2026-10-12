@@ -25,7 +25,13 @@ const { getActorName, getCoverURL, getURL } = utils.node;
 // One the viewer was invited to and has not answered carries Decline and
 // Accept. The server may have sent only its name, picture and time
 // (`restricted`), which is all this draws of it either way.
-const EventCard = ({ actor, onAnswered = null }) => {
+const EventCard = ({
+  actor,
+  onAnswered = null,
+  note = '',
+  action = null,
+  headerAction = null,
+}) => {
   const { event } = actor;
   // An event's one picture. Not sent of an event the viewer was only
   // invited to, which is drawn without.
@@ -42,6 +48,7 @@ const EventCard = ({ actor, onAnswered = null }) => {
           />
         </Link>}
       <CardHeader
+        action={headerAction}
         avatar={<ActorAvatar actor={actor} linked />}
         title={
           <Link href={getURL(actor)} color="inherit" underline="hover">
@@ -55,6 +62,12 @@ const EventCard = ({ actor, onAnswered = null }) => {
           title: { variant: 'h6' },
         }}
       />
+      {note &&
+        <CardContent sx={{ pt: 0, pb: 1 }}>
+          <Typography variant="body2" color="textSecondary">
+            {note}
+          </Typography>
+        </CardContent>}
       {event &&
         <CardContent sx={{ pt: 0 }}>
           <EventWhen event={event} dense />
@@ -88,6 +101,10 @@ const EventCard = ({ actor, onAnswered = null }) => {
         <CardActions sx={{ p: 1 }}>
           <EventAnswer actor={actor} onAnswered={onAnswered} />
         </CardActions>}
+      {action &&
+        <CardActions sx={{ p: 1 }}>
+          {action}
+        </CardActions>}
     </Card>
   );
 };
@@ -96,6 +113,11 @@ EventCard.propTypes = {
   // An event actor, or what the server sends of one the viewer was only
   // invited to.
   actor: PropTypes.object.isRequired,
+  // A line about the event from whoever lists it, and buttons of theirs
+  // along the bottom: why it is recommended, and not interested.
+  note: PropTypes.string,
+  action: PropTypes.node,
+  headerAction: PropTypes.node,
   // Called with true or false when an invitation on the card is answered.
   onAnswered: PropTypes.func,
 };

@@ -11,6 +11,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import AdminsIcon from '@mui/icons-material/SupervisorAccount';
 import DisableIcon from '@mui/icons-material/Block';
 import ArchiveIcon from '@mui/icons-material/Archive';
+import CancelIcon from '@mui/icons-material/EventBusy';
 import DeleteIcon from '@mui/icons-material/DeleteForever';
 import PurgeIcon from '@mui/icons-material/DeleteSweep';
 import DangerIcon from '@mui/icons-material/Warning';
@@ -34,7 +35,9 @@ import Permissions from './Permissions';
 import RepostsOnProfile from './RepostsOnProfile';
 import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
+import ActorSuggestions from './Suggestions';
 import EventForm from '../../events/Form';
+import EventCancelSetting from '../../events/CancelSetting';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -69,6 +72,7 @@ const ITEM_ICONS = {
   [ITEMS.INFO]: <InfoIcon />,
   [ITEMS.ADMINS]: <AdminsIcon />,
   [ITEMS.DISABLE]: <DisableIcon />,
+  [ITEMS.CANCEL]: <CancelIcon />,
   [ITEMS.ARCHIVE]: <ArchiveIcon />,
   [ITEMS.DELETE]: <DeleteIcon />,
   [ITEMS.PURGE]: <PurgeIcon />,
@@ -230,6 +234,7 @@ const ActorsSettings = ({
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
+      [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the
@@ -299,12 +304,25 @@ const ActorsSettings = ({
   // tab groups never render, which handed MUI a Tabs value it could not match —
   // a console warning and an empty body on every /groups/:id/settings load.
   const isEvent = namespace === 'events';
-  const groupTabs = getGroupTabs({ canDelete, isAdmin, infoHasCard: isEvent });
+  // Whoever can open an event's settings looks after it, and may call it
+  // off. The server decides.
+  const canCancel = isEvent;
+  const groupTabs = getGroupTabs({
+    canDelete,
+    isAdmin,
+    infoHasCard: isEvent,
+    canCancel,
+  });
   const activeTab = groupTabs.find((entry) => {
     return entry.key === tab;
   }) || groupTabs[0];
 
-  const groupDangerItems = getGroupDangerItems({ canDelete, isAdmin, isSuperAdmin });
+  const groupDangerItems = getGroupDangerItems({
+    canDelete,
+    isAdmin,
+    isSuperAdmin,
+    canCancel,
+  });
 
   // Every key getGroupTabs can return needs an entry here, or selecting that
   // tab renders undefined — a tab that opens onto nothing, with no error.
@@ -330,6 +348,7 @@ const ActorsSettings = ({
               title={i18n.t(`${namespace}:settings.${item.key}`)}
             >
               {{
+                [ITEMS.CANCEL]: <EventCancelSetting />,
                 [ITEMS.DISABLE]: <ActorDisable />,
                 [ITEMS.ARCHIVE]: <ActorArchive />,
                 [ITEMS.DELETE]: <ActorDelete />,

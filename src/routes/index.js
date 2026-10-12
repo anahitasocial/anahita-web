@@ -46,10 +46,15 @@ import People from '../containers/people/Browse';
 import PeopleAdd from '../containers/people/Add';
 
 import FeedsPage from '../containers/feeds';
+import CustomFeedsManage from '../containers/feeds/Manage';
+import CustomFeedAdd from '../containers/feeds/Add';
+import CustomFeedEdit from '../containers/feeds/Edit';
+import CustomFeedRead from '../containers/feeds/Read';
+import ShareDialog from '../containers/share/Dialog';
+import SuggestionsPage from '../containers/suggestions';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';
-import EventEdit from '../containers/events/Edit';
 import SearchPage from '../containers/search/Browse';
 import About from '../containers/about';
 import Admin from '../containers/admin';
@@ -66,6 +71,14 @@ const GroupsNotificationsEdit = ActorsNotificationsEdit('groups');
 
 // An event is an actor like a group, so its page and its settings are the
 // same containers told a different namespace.
+// An event is changed in its settings, where its form is the Info tab. The
+// page it used to have of its own leads there, for links already made.
+const EventEditRedirect = () => {
+  const { id } = useParams();
+
+  return <Navigate to={`/events/${id}/settings`} replace />;
+};
+
 const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
 const EventsNotificationsEdit = ActorsNotificationsEdit('events');
@@ -116,6 +129,8 @@ const AppRoutes = () => {
     <MembersOnlyGate>
       <AgreementsGate>
         <OnboardingGate>
+          {/* The one share dialog, opened from any share button. */}
+          <ShareDialog />
           <Routes>
             <Route path="/oauth/callback" element={<OAuthCallback />} />
 
@@ -253,11 +268,7 @@ const AppRoutes = () => {
             />
             <Route
               path="/events/:id/edit"
-              element={
-                <AuthenticatedRoute>
-                  <EventEdit />
-                </AuthenticatedRoute>
-          }
+              element={<EventEditRedirect />}
             />
             <Route
               path="/events/:id/settings"
@@ -282,6 +293,46 @@ const AppRoutes = () => {
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />
             <Route path="/groups/:id" element={<GroupsRead />} />
+
+            {/* Custom feeds: the viewer's list, making one, and a feed's own
+            page. A public feed is read without signing in. Static paths
+            before the parameterized one. */}
+            <Route
+              path="/feeds"
+              element={
+                <AuthenticatedRoute>
+                  <CustomFeedsManage />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/feeds/new"
+              element={
+                <AuthenticatedRoute>
+                  <CustomFeedAdd />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/feeds/:id/edit"
+              element={
+                <AuthenticatedRoute>
+                  <CustomFeedEdit />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route path="/feeds/:id" element={<CustomFeedRead />} />
+
+            {/* People and groups the viewer might follow. Reached from the
+            card on the home page. */}
+            <Route
+              path="/suggestions"
+              element={
+                <AuthenticatedRoute>
+                  <SuggestionsPage />
+                </AuthenticatedRoute>
+          }
+            />
 
             {/* What the viewer saved. Reached from the left menu. */}
             <Route

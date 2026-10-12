@@ -11,6 +11,7 @@ export default {
     all: 'All',
     media: 'Media',
     actors: 'Actors',
+    feeds: 'Feeds',
   },
   boxPlaceholder: 'Search...',
 };

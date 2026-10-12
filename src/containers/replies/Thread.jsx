@@ -86,9 +86,10 @@ const RepliesThread = ({
     load();
   }, [load, heldBack]);
 
-  const handleReply = (parent, body) => {
+  const handleReply = (parent, body, card = {}) => {
     return api.replies.add(parent, {
       body,
+      card,
       // The language this person writes in, as for any post.
       language: postLanguage.defaultFor(viewer),
     }).then((result) => {
@@ -104,8 +105,8 @@ const RepliesThread = ({
     });
   };
 
-  const handleEdit = (reply, body) => {
-    return api.replies.edit(reply, { body }).then((result) => {
+  const handleEdit = (reply, body, card = {}) => {
+    return api.replies.edit(reply, { body, card }).then((result) => {
       setReplies((current) => {
         // Only what an edit changes. The answer to an edit is the note as
         // any note is sent, and the thread's own answers about this reply
@@ -114,6 +115,8 @@ const RepliesThread = ({
           id: reply.id,
           body: result.data.body,
           language: result.data.language,
+          // Its card follows the edit: kept, changed or gone.
+          linkPreview: result.data.linkPreview || null,
         });
       });
       alertSuccess(i18n.t('replies:prompts.saved'));
@@ -225,8 +228,8 @@ const RepliesThread = ({
     <Card sx={{ pb: 1 }}>
       {canReply &&
         <ReplyForm
-          onSubmit={(body) => {
-            return handleReply(top, body);
+          onSubmit={(body, card) => {
+            return handleReply(top, body, card);
           }}
         />}
       {/* Said to everybody, the people who can still reply included, so

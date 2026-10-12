@@ -20,6 +20,8 @@ import accounts from './accounts';
 import email from './email';
 import eventDetails from './events';
 import feed from './feed';
+import customFeeds from './customFeeds';
+import recommendations from './recommendations';
 import hashtags from './hashtags';
 import is from './is';
 import likes from './likes';
@@ -126,6 +128,10 @@ const apis = {
   eventDetails,
   feed_leaders: feed.leaders,
   feed_actor: feed.actor,
+  // A custom feed's posts, in the store as the other feeds are.
+  feed_custom: { browse: customFeeds.browse },
+  customFeeds,
+  recommendations,
   hashtags,
   is,
   likes,

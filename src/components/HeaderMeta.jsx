@@ -3,6 +3,12 @@ import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import striptags from 'striptags';
 
+// The title and tags of the page that is open, kept in step as the viewer
+// moves through the app.
+//
+// For the browser's tab and history. A site a link is pasted into runs no
+// JavaScript and never sees these: what it reads is written into the page
+// by the services' web shell (their docs/web-shell.md).
 const HeaderMeta = ({
   title = '',
   description = process.env.REACT_APP_DESCRIPTION,
@@ -27,7 +33,7 @@ const HeaderMeta = ({
         <meta property="og:image" content={image} key="og-image" />,
       ]}
       {url && [
-        <meta property="og:site" content={url} key="og-site" />,
+        <meta property="og:url" content={url} key="og-url" />,
       ]}
       {type && [
         <meta property="og:type" content={type} key="og-type" />,

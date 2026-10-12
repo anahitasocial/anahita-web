@@ -53,6 +53,8 @@ const ActorCard = ({
   actor,
   viewer = null,
   action = null,
+  note = '',
+  headerAction = null,
 }) => {
   const cover = getCoverURL(actor);
   const url = getURL(actor);
@@ -75,6 +77,7 @@ const ActorCard = ({
           />
         </Link>}
       <CardHeader
+        action={headerAction}
         avatar={
           <ActorAvatar
             actor={actor}
@@ -102,6 +105,14 @@ const ActorCard = ({
           </Typography>
         }
       />
+      {/* A line about the profile from whoever lists it: why it is
+          recommended. Inside the card, under the name it is said of. */}
+      {note &&
+        <CardContent sx={{ py: 0 }}>
+          <Typography variant="body2" color="textSecondary">
+            {note}
+          </Typography>
+        </CardContent>}
       {actor.body &&
       <CardContent>
         <ReadMore charLimit={160} contentFilter>
@@ -136,6 +147,9 @@ const ActorCard = ({
 ActorCard.propTypes = {
   classes: PropTypes.object.isRequired,
   action: PropTypes.node,
+  note: PropTypes.string,
+  // At the top right of the card: a way to turn a recommendation down.
+  headerAction: PropTypes.node,
   actor: ActorType.isRequired,
   viewer: PersonType,
 };

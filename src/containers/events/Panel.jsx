@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
@@ -13,13 +13,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import CalendarIcon from '@mui/icons-material/CalendarMonthOutlined';
-import CancelIcon from '@mui/icons-material/EventBusyOutlined';
-import EditIcon from '@mui/icons-material/EditOutlined';
-import NotGoingIcon from '@mui/icons-material/PersonRemoveOutlined';
 import OnlineIcon from '@mui/icons-material/VideocamOutlined';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 
-import DialogConfirm from '../../components/DialogConfirm';
 import EventAttendees from './Attendees';
 import EventWhen from './When';
 import actions from '../../actions';
@@ -43,7 +39,6 @@ const EventPanel = ({
   onChanged,
   isAuthenticated,
   alertError,
-  alertSuccess,
 }) => {
   const { event } = actor;
   const [waiting, setWaiting] = useState(false);
@@ -73,7 +68,6 @@ const EventPanel = ({
   }
 
   const takesAnswers = events.takesAnswers(event);
-  const canEdit = Boolean(actor.authorized && actor.authorized.edit);
 
   const answer = (rsvp) => {
     setWaiting(true);
@@ -111,15 +105,6 @@ const EventPanel = ({
       URL.revokeObjectURL(url);
     }).catch(() => {
       alertError(i18n.t('events:event.rsvp.failed'));
-    });
-  };
-
-  const handleCancel = () => {
-    api.eventDetails.cancel(actor).then(() => {
-      alertSuccess(i18n.t('events:event.cancel.done'));
-      onChanged();
-    }).catch(() => {
-      alertError(i18n.t('events:event.cancel.failed'));
     });
   };
 
@@ -185,11 +170,23 @@ const EventPanel = ({
             </Typography>}
           {isAuthenticated && takesAnswers &&
             <Box>
-              {/* Side by side, each half the width. */}
-              <Stack direction="row" spacing={1}>
+              {/* One group, the width of the card: Not going, Maybe, Going.
+                  Whichever the viewer chose is the filled one. Not going
+                  takes an answer back, so with none given there is nothing
+                  for it to do. */}
+              <ButtonGroup fullWidth aria-label={i18n.t('events:event.rsvp.label')}>
                 <Button
-                  fullWidth
+                  color="secondary"
+                  disabled={waiting || !event.viewerRsvp}
+                  onClick={() => {
+                    answer('');
+                  }}
+                >
+                  {i18n.t('events:event.rsvp.leave')}
+                </Button>
+                <Button
                   variant={event.viewerRsvp === events.MAYBE ? 'contained' : 'outlined'}
+                  aria-pressed={event.viewerRsvp === events.MAYBE}
                   disabled={waiting}
                   onClick={() => {
                     answer(events.MAYBE);
@@ -198,9 +195,8 @@ const EventPanel = ({
                   {i18n.t('events:event.rsvp.maybe')}
                 </Button>
                 <Button
-                  fullWidth
                   variant={event.viewerRsvp === events.GOING ? 'contained' : 'outlined'}
-                  color="primary"
+                  aria-pressed={event.viewerRsvp === events.GOING}
                   disabled={waiting || !events.canGo(event)}
                   onClick={() => {
                     answer(events.GOING);
@@ -208,7 +204,7 @@ const EventPanel = ({
                 >
                   {i18n.t('events:event.rsvp.going')}
                 </Button>
-              </Stack>
+              </ButtonGroup>
               {event.isFull && event.viewerRsvp !== events.GOING &&
                 <Typography variant="body2" color="textSecondary" sx={{ pt: 1 }}>
                   {i18n.t('events:event.rsvp.full')}
@@ -218,37 +214,6 @@ const EventPanel = ({
             <Button startIcon={<CalendarIcon />} onClick={handleCalendar}>
               {i18n.t('events:event.calendar')}
             </Button>
-            {isAuthenticated && event.viewerRsvp &&
-              <Button
-                color="inherit"
-                startIcon={<NotGoingIcon />}
-                disabled={waiting}
-                onClick={() => {
-                  answer('');
-                }}
-              >
-                {i18n.t('events:event.rsvp.leave')}
-              </Button>}
-            {canEdit &&
-              <Button
-                component={RouterLink}
-                to={`${getURL(actor)}edit`}
-                color="inherit"
-                startIcon={<EditIcon />}
-              >
-                {i18n.t('events:event.form.edit')}
-              </Button>}
-            {canEdit && takesAnswers &&
-              <DialogConfirm
-                title={i18n.t('events:event.cancel.title')}
-                message={i18n.t('events:event.cancel.message')}
-                confirm={i18n.t('events:event.cancel.confirm')}
-                dismiss={i18n.t('events:event.cancel.keep')}
-              >
-                <Button color="error" startIcon={<CancelIcon />} onClick={handleCancel}>
-                  {i18n.t('events:event.cancel.action')}
-                </Button>
-              </DialogConfirm>}
           </Stack>
         </Stack>
       </CardContent>
@@ -270,7 +235,6 @@ EventPanel.propTypes = {
   onChanged: PropTypes.func.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   alertError: PropTypes.func.isRequired,
-  alertSuccess: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state) => {
@@ -283,9 +247,6 @@ const mapDispatchToProps = (dispatch) => {
   return {
     alertError: (message) => {
       return dispatch(actions.app.alert.error(message));
-    },
-    alertSuccess: (message) => {
-      return dispatch(actions.app.alert.success(message));
     },
   };
 };

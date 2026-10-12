@@ -13,12 +13,16 @@ const thread = (root) => {
 };
 
 // Answers a post or a reply.
-const add = (parent, { body, language }) => {
-  return axios.post(`/notes/${parent.id}/replies`, { body, language });
+//
+// `card` says which link in it to show a card for (`linkPreviewUrl`), or,
+// for an edit, that its card was taken off (`linkPreviewRemove`). What the
+// card says is the server's.
+const add = (parent, { body, language, card = {} }) => {
+  return axios.post(`/notes/${parent.id}/replies`, { body, language, ...card });
 };
 
-const edit = (reply, { body }) => {
-  return axios.patch(`/notes/${reply.id}`, { body });
+const edit = (reply, { body, card = {} }) => {
+  return axios.patch(`/notes/${reply.id}`, { body, ...card });
 };
 
 const remove = (reply) => {

@@ -23,6 +23,8 @@ import ActorAvatar from '../../components/ActorAvatar';
 import ActorTitle from '../../components/ActorTitle';
 import EntityBody from '../../components/NodeBody';
 import ReplyForm from './ReplyForm';
+import LinkPreviewCard from '../../components/LinkPreviewCard';
+import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
@@ -150,6 +152,8 @@ const ReplyItem = ({
             <EntityBody contentFilter size="body2" lang={reply.language}>
               {reply.body || ''}
             </EntityBody>}
+          {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.body) &&
+            <LinkPreviewCard preview={reply.linkPreview} />}
           {isEditing &&
             <ReplyForm
               initial={reply.body || ''}
@@ -159,8 +163,9 @@ const ReplyItem = ({
               onCancel={() => {
                 setIsEditing(false);
               }}
-              onSubmit={(body) => {
-                return onEdit(reply, body).then(() => {
+              linkPreview={reply.linkPreview}
+              onSubmit={(body, card) => {
+                return onEdit(reply, body, card).then(() => {
                   setIsEditing(false);
                 });
               }}
@@ -274,8 +279,8 @@ const ReplyItem = ({
             onCancel={() => {
               setIsReplying(false);
             }}
-            onSubmit={(body) => {
-              return onReply(reply, body).then(() => {
+            onSubmit={(body, card) => {
+              return onReply(reply, body, card).then(() => {
                 setIsReplying(false);
               });
             }}

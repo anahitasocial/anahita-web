@@ -103,4 +103,19 @@ A phase is finished only when these pages match the code. anahita-services pages
 | Item | State |
 | --- | --- |
 | Plan | written 2026-09-28 |
-| Implementation | not started |
+| Implementation | built 2026-10-11 |
+
+## What was built
+
+2026-10-11, in anahita-services as `web-shell`. The page that describes it is that repository's `docs/web-shell.md`; part A is in its `docs/link-previews.md`.
+
+- The shell sends the build's files and, for every page, `index.html` with the page's own tags. The same page for everybody, no user-agent sniffing.
+- Described: people, groups, events, photos, articles, topics, notes and hashtags. Only what is public on a public profile, read as a visitor; everything else gets the site's own tags. A members-only site describes nothing.
+- In the web app: `HeaderMeta` says `og:url` where it said `og:site`, and `docs/deploying.md` has the shell as the first way to host.
+
+**Different from the plan:**
+
+- **The shell is on the web app's host, not behind the API's gateway.** The plan had nginx send "API prefixes to their services and everything else to the shell" on one host. That cannot be done: the app's pages and the API's calls have the same paths (`/people/alice`, `/notes/12`). So the app keeps its own host, as it has today, and the shell is what answers on it. It serves the build's files itself, so there is no separate nginx image for them.
+- **The site's name and description are read from the build's `index.html`**, not set again on the server, and the build's own tags are taken out rather than left as markers.
+- **Pictures go through `/_shell/image/<name>` on the shell**, which redirects to a freshly signed address. The plan depended on stable public media addresses, which do not exist yet; this gives crawlers an address that does not change without one, and answers 404 for anything not public.
+- **Not built:** the place's name on a location's page, a custom feed's page, picture sizes, and the ActivityPub `alternate` link, which comes with federation.

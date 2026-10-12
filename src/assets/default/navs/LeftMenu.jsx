@@ -10,6 +10,8 @@ import ListItemText from '@mui/material/ListItemText';
 // import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
+import FeedsIcon from '@mui/icons-material/DynamicFeed';
+import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
@@ -37,6 +39,9 @@ import PersonType from '../../../proptypes/Person';
 import NodeInfoType from '../../../proptypes/NodeInfo';
 import permissions from '../../../permissions';
 import adminTabs from '../../../containers/admin/tabs';
+import usePinnedFeeds from '../../../containers/feeds/usePinnedFeeds';
+import useHasSuggestions from '../../../containers/suggestions/useHasSuggestions';
+import CustomFeedIcon from '../../../components/CustomFeedIcon';
 
 const LeftMenu = ({
   isAuthenticated,
@@ -47,7 +52,17 @@ const LeftMenu = ({
   isShutOut = false,
 }) => {
   const location = useLocation();
-  const { pathname = '/' } = location;
+  const { pathname = '/', search = '' } = location;
+
+  // The custom feeds the viewer keeps on their home page, listed under
+  // Home. Each opens Home on that feed, which is in the address.
+  const feeds = usePinnedFeeds(isAuthenticated);
+  // Suggestions of who to follow, where the installation makes any.
+  const hasSuggestions = useHasSuggestions(isAuthenticated);
+  const openFeed = pathname === '/' ? Number(new URLSearchParams(search).get('feed')) || 0 : 0;
+  const isFeedOpen = feeds.some((feed) => {
+    return feed.id === openFeed;
+  });
 
   // Whether invitations are being issued at all, and who may issue one.
   // Both are server settings published through NodeInfo, and both are
@@ -61,13 +76,62 @@ const LeftMenu = ({
       <ListItemButton
         component={Link}
         to="/"
-        selected={pathname === '/'}
+        selected={pathname === '/' && !isFeedOpen}
       >
         <ListItemIcon>
           <HomeIcon />
         </ListItemIcon>
         <ListItemText primary={i18n.t('home:cTitle')} />
       </ListItemButton>
+      {/* Under Home: the viewer's custom feeds, in their order. Set in, so
+          they read as parts of Home. */}
+      {isAuthenticated &&
+        <List component="div" disablePadding>
+          {feeds.map((feed) => {
+            return (
+              <ListItemButton
+                key={`menu-feed-${feed.id}`}
+                component={Link}
+                to={`/?feed=${feed.id}`}
+                selected={openFeed === feed.id}
+                sx={{ pl: 4 }}
+              >
+                <ListItemIcon>
+                  <CustomFeedIcon name={feed.icon} fontSize="small" />
+                </ListItemIcon>
+                <ListItemText
+                  primary={feed.name}
+                  slotProps={{ primary: { noWrap: true } }}
+                />
+              </ListItemButton>
+            );
+          })}
+        </List>}
+      {/* The page of feeds: where they are made, changed and put in order.
+          An entry of its own, like Saved, and not one of the feeds under
+          Home, which it looked like when it was listed with them. */}
+      {isAuthenticated &&
+        <ListItemButton
+          component={Link}
+          to="/feeds"
+          selected={pathname === '/feeds' || pathname.startsWith('/feeds/')}
+        >
+          <ListItemIcon>
+            <FeedsIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('customFeeds:menu.feeds')} />
+        </ListItemButton>}
+      {hasSuggestions &&
+        <ListItemButton
+          component={Link}
+          to="/suggestions"
+          selected={pathname === '/suggestions'}
+        >
+          <ListItemIcon>
+            <SuggestionsIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('recommendations:cTitle')} />
+        </ListItemButton>}
       {/* What the viewer saved: theirs, so it is here beside Home and not
           on their profile, which is what other people look at. */}
       {isAuthenticated &&

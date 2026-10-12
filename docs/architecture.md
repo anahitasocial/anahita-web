@@ -114,6 +114,9 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
+| `/suggestions` | People and groups the viewer might follow. Signed in only; reached from the home page |
+| `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
+| `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
@@ -438,8 +441,199 @@ replies, made directly to the post.
 
 Home for somebody signed in is `containers/feeds/index.jsx` (it was
 `Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
-of the people and groups the viewer follows. It lives under `feeds` because
-custom feeds will be tabs on it.
+of the people and groups the viewer follows, with the custom feeds the viewer
+keeps there as tabs after it.
+
+### Suggestions
+
+Suggestions of who to follow come from the installation's recommendation
+service (`/recommendations/`; the services' `docs/recommendations.md`). The
+service is optional, and everything here draws nothing where there is none:
+a request that fails as it does without the service
+(`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
+
+- **Who to follow** on the home page, under the composer
+  (`containers/suggestions/WhoToFollow.jsx`): three people, each with the
+  reason, a Follow button and a way to say not interested, and a button on
+  to the rest. Not drawn while it is read or when there is nobody.
+- **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
+  People, Groups and Events, the open tab in the address (`?kind=group`),
+  as cards with the reason inside each, under the name. An event is drawn with the event's
+  own card and is not followed from here. It is in the left menu as
+  **Recommendations** (the page keeps the address `/suggestions`, since
+  `/recommendations/` is the service's own path on the same site), where the installation has the service
+  (`useHasSuggestions.js` asks once).
+- **What counts** is the viewer's to weigh. The button beside the tabs, and
+  one in settings, opens a dialog of sliders
+  (`containers/suggestions/WeightsDialog.jsx`), one a reason, from nothing,
+  which leaves the reason out, to the most there is; Reset puts them back
+  to the installation's own. Saved, the list is read again. The server
+  names a reason in snake case and the keys of what it sends are put in
+  camel case on the way in: `utils/recommendations.js#weightKey` is the one
+  place that knows.
+- **The reason is always shown.** `utils/recommendations.js#reasonText`
+  puts the first reason into words from what the service sent with it
+  ("Followed by Ana and 2 others"), and counts where it may name nobody.
+- **Not interested** takes a suggestion out at once and tells the service,
+  which does not make it again.
+- **Settings › Access › Suggestions**
+  (`containers/actors/Settings/Suggestions.jsx`), on the viewer's own
+  settings: whether to be suggested people and groups, whether what they
+  like and post is used, whether they are suggested to others, events as
+  well as people and groups, the way to the weights, and the
+  suggestions they turned down, each to be taken back.
+
+### Link previews
+
+A note with a link in it can carry a card for the link: the page's picture,
+site, title and a line about it (`components/LinkPreviewCard.jsx`). The
+card comes from the installation's link preview service (`/link-previews`;
+the services' `docs/link-previews.md`), which is optional: with none there
+is simply no card.
+
+- **While a note is written**, `containers/media/Composer/useLinkPreview.js`
+  finds the first link once the writer has paused for half a second, or
+  at once when it was pasted, and asks for its card. The ✕ on the card posts the note without it. A link
+  with nothing to show, or whose card was taken off, is not asked for
+  again.
+- **While a note is edited** on its own page the same hook is used, given
+  the card the note already has, which it shows without asking again. A
+  different link gets its own card, and the ✕ saves the note without one
+  (`link_preview_remove`).
+- **A reply is a note** and has the card the same way: the reply box
+  (`containers/replies/ReplyForm.jsx`) uses the same hook, for a new reply
+  and for one being changed, and a reply shows its card under its text.
+- **The note is sent with the link only** (`link_preview_url`). What the
+  card says is what the server read off the page, never what the browser
+  sends.
+- **On a post**, the card is `linkPreview` on the node, drawn under the
+  text on the feed, on cards and on the post's own page. Its picture is the
+  installation's own copy (`utils/linkPreviews.js#imageOf`), so reading a
+  note asks nothing of the other site.
+- **A link the player plays** (YouTube, Vimeo and the others in
+  `components/Player.jsx`) keeps the player and has no card
+  (`utils/linkPreviews.js#isShown`).
+
+### Titles and tags
+
+`components/HeaderMeta.jsx` keeps the tab's title and the page's tags in
+step as the viewer moves about. A site a link is pasted into never sees
+them: it runs no JavaScript. What it reads is written into `index.html` by
+the services' `web-shell`, when the app is hosted through it
+([Deploying](deploying.md#through-the-web-shell)). The site's name and
+description in the build's `index.html` are what the shell uses for pages
+with nothing of their own to say.
+
+### Sharing
+
+Share is the paper plane. It opens one dialog for the whole app
+(`containers/share/Dialog.jsx`, drawn once beside the routes) with the link
+and the ways to send it: copy it, email it, post it on Mastodon or Bluesky,
+and, where the browser has one, the device's own share sheet ("More
+options"), which has every app the person uses. Mastodon asks for the
+person's server the first time and keeps it in the browser.
+
+- **Anything on a page opens it** through `utils/share.js#open`:
+  `ShareAction`, `ShareButton` and `ShareMenuItem` in
+  `containers/controls/Share.jsx`. A menu can close behind its item, since
+  the dialog is not the menu's.
+- **Where it is:** under a post, in the row with like, reply and repost, in
+  a feed, in a list and on its page; a profile's menu; a shared custom
+  feed.
+- **Only what a visitor could open is sent beyond the site.** Something that
+  is not public, and anything on a members-only site, is offered to copy and
+  nothing else, with a note saying who can open the link.
+- **Nothing is counted and nothing is sent to the server.** The links to
+  other networks are plain addresses, and no script of theirs is loaded.
+
+### The width of a page
+
+`App.jsx` wraps every page in one `Container`, which sets the most a page can
+be and its gutters. Inside it a page chooses its own width.
+`components/PageColumn.jsx` is the usual choice: the whole width on a phone,
+two thirds of the page, centred, on a wide screen, or all of it with `wide`.
+Home, the pages of custom feeds, a post's own page and the event forms use
+it. A profile, with its side column, lays itself out.
+
+### Custom feeds
+
+A custom feed is one somebody builds: where its posts come from, what they
+are about, what to leave out. The server's side is in the services'
+`docs/feeds.md`. The words a person reads are always "custom feed", never
+"algorithm".
+
+- **Home tabs.** The first tab is Following, the feed there always was
+  (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
+  in the viewer's order. The open tab is in the address as `?feed=<id>`. The
+  button at the end of the tabs leads to `/feeds`.
+- **One column or several.** On a wide screen a pair of buttons at the end
+  of the tabs lays the open feed out one post under another or in columns
+  (`components/BreakpointMasonry`), when it takes the width of the page. The
+  choice is kept in the browser (`home.feedView`). On a narrow screen there
+  is one column and no buttons.
+- **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
+  posts and reposts, with their menus and buttons, for Following and for
+  custom feeds alike. `containers/feed/Custom` is the list for a custom feed,
+  given a saved `feed` or an unsaved `definition`.
+- **Paging.** A custom feed is paged by a cursor the server hands back, and
+  the store's lists are kept by how far down they are. `api/customFeeds.js`
+  keeps each list's cursor and reports a page to the store in the store's
+  terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
+- **Under Home in the left menu** are the feeds on the viewer's home page, in
+  their order, each opening Home on that feed. The list page is an entry of
+  its own below them, **Feeds**, like Saved. A feed is made from the + there. A feed is put on its maker's home page when it is made, so it
+  appears there at once. The menu and the tabs read the same list
+  (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
+  changed, deleted or moved: `api/customFeeds.js` tells whoever asked
+  (`onChange`).
+- **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
+  the end of the tabs and from "Feeds" in the menu): the viewer's
+  feeds and the ones of other people's they keep.
+- **Rows of one height.** A feed's row in the list is its name, who can
+  see it and when it was made, and one line cut short: what it is for, or
+  what it shows when it does not say. Pressing the name opens the feed in
+  full in a dialog (`containers/feeds/DetailsDialog.jsx`): its description
+  and every setting it has, one line each, with a button on to the feed.
+- **Finding shared feeds** is the site's search. A feed that matches is a
+  result like any other, among the profiles and posts under **All**, and by
+  itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node
+  with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
+  (`components/CustomFeedCard.jsx`) in the same columns, with the button
+  that adds it to the home page. Feeds kept to their owners are never found.
+  The list page links to the tab (`/search?scope=feeds`).
+- **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
+  new feed at `/feeds/new` (`Add.jsx`) and for changing one at
+  `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
+  the + in its header, and the pencil on a feed's card. Hashtags and keywords
+  are typed as chips (`components/WordsField.jsx`); profiles and places are
+  searched for and picked (`components/NodesField.jsx`). Under the fields is
+  what the feed shows, in a sentence. There is no preview: saving opens the
+  feed, Home on its tab when it is kept there. Everything done to a feed is
+  done from the list page. Home has only the way to it.
+- **A feed's icon** is one of sixteen, chosen in the editor from a list that
+  names each, on the same line as the feed's name, and kept by name
+  (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
+  draws it: in the menu under Home, on the tabs, in the list and on the
+  feed's page.
+- **Deleting a feed** is offered to its owner in three places, each asking
+  first: its card in the list, its own page, and the editor.
+- **Ten feeds** is the most a person owns, the number the home page holds.
+- **The sentence** is `utils/customFeeds.js#summary`, from the definition
+  alone. It is on the editor, on a feed's page and in the list, so nothing
+  about what a feed shows is hidden. The same file repeats the server's
+  limits so the editor can say what would be refused before it is sent. The
+  server decides.
+- **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
+  its owner edit and delete. Copying makes a feed of the viewer's own, seen
+  by them alone, and opens it in the editor.
+- **Share** is on a shared feed's card, in Discover and on the feed's page.
+  See [Sharing](#sharing). Not on a feed kept to its owner.
+- **Following a hashtag** (`containers/feeds/FollowHashtag.jsx`, on a
+  hashtag's page) makes a feed of that one hashtag and puts it on the home
+  page, or puts there the one the viewer already has.
+- **Naming in requests.** The definition's keys are snake case on the server
+  (`hashtags_any`) and camel case here (`hashtagsAny`), converted both ways
+  by the interceptors like every other body.
 
 ### Pinned posts
 
@@ -525,8 +719,23 @@ reader sees them on their own, with a second line for the event's zone when
 it differs. `utils/events.js` does both with `Intl`, clock changes included,
 and has the tests for it.
 
+**Capacity** is set on a slider on the form, not typed: its stops are close
+together where the numbers are small and further apart as they grow, and all
+the way up is no limit (`events.capacityStops`). An event whose number is
+not one of the stops has it added, so opening it to change something else
+does not change how many may go.
+
+**Changing and cancelling** are in the event's settings, reached from its
+menu like a group's. The Info tab is the event's own form
+(`events/Form.jsx`), so the event's page has no Edit button, and
+`/events/:id/edit` leads to the settings. Cancelling is the first card of the
+Danger zone (`events/CancelSetting.jsx`): it cannot be undone, and it is the
+thing to weigh against archiving and deleting.
+
 **Answering** is Going or Maybe, and is following the event, so an event's
-page has no Follow button. The number going opens who they are
+page has no Follow button. Not going, Maybe and Going are one group of
+buttons the width of the card, the chosen one filled; Not going takes an
+answer back. The number going opens who they are
 (`events/Attendees.jsx`). The link to join online is sent by the server only
 to whoever is going or looks after the event.
 

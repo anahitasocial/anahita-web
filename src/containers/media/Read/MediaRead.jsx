@@ -17,6 +17,7 @@ import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
 import ControlRepost from '../../controls/Repost';
+import { ShareAction, ofNode } from '../../controls/Share';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
@@ -38,6 +39,7 @@ const MediaReadView = ({
   Access,
   canEdit,
   handleView,
+  linkPreview = null,
   handleEdit,
   handleCancel,
   handleOnChange,
@@ -78,6 +80,9 @@ const MediaReadView = ({
         handleOnSubmit={handleOnSubmit}
         handleCancel={handleCancel}
         isFetching={isFetching}
+        linkPreview={linkPreview ? linkPreview.preview : null}
+        onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
+        onBodyPaste={linkPreview ? linkPreview.onPaste : null}
       />
     ),
     menu: isAuthenticated && (
@@ -92,6 +97,9 @@ const MediaReadView = ({
       // Repost or quote. Not a reply: it is not passed on without its thread.
       isAuthenticated && !isReply && (
         <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />
+      ),
+      isAuthenticated && (
+        <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />
       ),
       namespace === 'documents' && (
         <ControlDownload
@@ -152,6 +160,8 @@ const MediaReadView = ({
 };
 
 MediaReadView.propTypes = {
+  // A note's card while it is edited, from useLinkPreview.
+  linkPreview: PropTypes.object,
   medium: MediumType.isRequired,
   current: PropTypes.object.isRequired,
   namespace: PropTypes.string.isRequired,

@@ -9,6 +9,7 @@ import ReportIcon from '@mui/icons-material/FlagOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
+import { ShareMenuItem, ofNode } from '../../controls/Share';
 import useReport from '../../reports/useReport';
 
 import ActorType from '../../../proptypes/Actor';
@@ -67,6 +68,11 @@ const ActorsReadControls = ({
           },
         }}
       >
+        <ShareMenuItem
+          what={ofNode(actor)}
+          onDone={handleClose}
+          key="actor-share"
+        />
         {showBlock &&
           <ControlBlock
             actor={actor}

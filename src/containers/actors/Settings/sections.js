@@ -56,6 +56,8 @@ export const ITEMS = {
   QUOTES: 'quotes',
   // The people the viewer has blocked.
   BLOCKED: 'blocked',
+  // What the viewer chose about suggestions of who to follow.
+  SUGGESTIONS: 'suggestions',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -63,6 +65,8 @@ export const ITEMS = {
   REVOKE_TOTP: 'revokeTotp',
   DANGER: 'danger',
   DISABLE: 'disable',
+  // Calling an event off. Events only.
+  CANCEL: 'cancel',
   ARCHIVE: 'archive',
   DELETE: 'delete',
   PURGE: 'purge',
@@ -122,6 +126,7 @@ const ALL_SECTIONS = [
       { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
       // Who you have blocked is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
+      { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },
     ],
   },
   {
@@ -295,7 +300,12 @@ export default getPersonSections;
 // `bare` follows the same rule as everywhere else: true when the component does
 // not render its own Card. Verified per component — Access brings one, Info,
 // Admins and Delete do not.
-export const getGroupTabs = ({ canDelete, isAdmin, infoHasCard = false }) => {
+export const getGroupTabs = ({
+  canDelete,
+  isAdmin,
+  infoHasCard = false,
+  canCancel = false,
+}) => {
   return [
     // An event's Info is the event form, which brings its own Card.
     { key: ITEMS.INFO, bare: !infoHasCard },
@@ -317,7 +327,7 @@ export const getGroupTabs = ({ canDelete, isAdmin, infoHasCard = false }) => {
   ].filter((item) => {
     // The Danger tab earns its place if ANY of the actions inside it does.
     // Hiding it when only one applies would leave that action unreachable.
-    if (item.requiresDanger && !canDelete && !isAdmin) {
+    if (item.requiresDanger && !canDelete && !isAdmin && !canCancel) {
       return false;
     }
 
@@ -328,8 +338,16 @@ export const getGroupTabs = ({ canDelete, isAdmin, infoHasCard = false }) => {
 // The lifecycle actions inside a group's Danger zone, in the same order and by
 // the same rules as the person page: the reversible one first, then the two
 // that are not.
-export const getGroupDangerItems = ({ canDelete, isAdmin, isSuperAdmin = false }) => {
+//
+// An event has one more, first: calling it off, for whoever looks after it.
+export const getGroupDangerItems = ({
+  canDelete,
+  isAdmin,
+  isSuperAdmin = false,
+  canCancel = false,
+}) => {
   return [
+    { key: ITEMS.CANCEL, bare: true, requiresCancel: true },
     { key: ITEMS.DISABLE, bare: true, requiresAdmin: true },
     { key: ITEMS.ARCHIVE, bare: true, requiresDelete: true },
     { key: ITEMS.DELETE, bare: true, requiresDelete: true },
@@ -337,6 +355,10 @@ export const getGroupDangerItems = ({ canDelete, isAdmin, isSuperAdmin = false }
     { key: ITEMS.PURGE, bare: true, requiresSuperAdmin: true },
   ].filter((item) => {
     if (item.requiresSuperAdmin && !isSuperAdmin) {
+      return false;
+    }
+
+    if (item.requiresCancel && !canCancel) {
       return false;
     }
 
