@@ -5,6 +5,12 @@ export default {
     help: 'Les personnes sur Mastodon et les autres serveurs du fédivers peuvent alors vous trouver par votre identifiant et vous suivre, et vos notes publiques leur sont envoyées. Vous pouvez aussi suivre des personnes là-bas.',
     handle: 'Votre identifiant',
     warning: 'Ce qui est envoyé à un autre serveur ne peut pas être repris. Supprimer une note demande à ces serveurs de la supprimer aussi, et la plupart le font, mais aucun n’y est tenu.',
+    leavesWhenPrivate: 'Si votre profil cesse d’être visible par tout le monde, ou s’il est désactivé ou supprimé, vous quittez aussi le fédivers, comme si vous aviez désactivé cette option.',
+    leave: {
+      title: 'Quitter le fédivers ?',
+      body: 'Tous les serveurs qui vous connaissent seront invités à vous retirer, ainsi que vos notes et vos abonnés là-bas, et vous cesserez de suivre des personnes sur d’autres serveurs. Cela ne peut pas être annulé d’ici : si vous réactivez cette option plus tard, les serveurs qui vous ont retiré pourraient ne pas vous reprendre, et les personnes qui vous suivaient ne vous suivront plus.',
+      confirm: 'Quitter',
+    },
     saved: 'Enregistré.',
     notSaved: 'Cela n’a pas pu être enregistré. Veuillez réessayer.',
     unavailable: {
@@ -28,6 +34,7 @@ export default {
       lookup_unreadable: 'Ce n’est ni un identifiant ni l’adresse d’un profil.',
       lookup_is_here: 'C’est quelqu’un de ce site. Cherchez cette personne par son nom.',
       lookup_not_found: 'Personne n’a été trouvé sous ce nom.',
+      lookup_refused: 'Ce site ne se connecte pas à ce serveur.',
       lookup_not_a_person: 'Ce n’est pas quelqu’un que l’on peut suivre d’ici.',
       lookup_failed: 'Ce serveur n’a pas pu être joint, ou n’a pas répondu d’une façon que ce site comprend.',
       too_many_lookups: 'Cela fait beaucoup de recherches. Veuillez patienter quelques minutes.',

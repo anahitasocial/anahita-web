@@ -5,6 +5,12 @@ export default {
     help: 'People on Mastodon and other servers of the fediverse can then find you by your handle and follow you, and your public notes are sent to them. You can also follow people there.',
     handle: 'Your handle',
     warning: 'What is sent to another server cannot be called back. Deleting a note asks those servers to delete it too, and most do, but none has to.',
+    leavesWhenPrivate: 'If you stop your profile being open to everybody, or your profile is disabled or deleted, you leave the fediverse as well, as if you had turned this off.',
+    leave: {
+      title: 'Leave the fediverse?',
+      body: 'Every server that knows you will be told to remove you, your notes and your followers there, and you will stop following people on other servers. This cannot be undone from here: if you turn this on again later, servers that removed you may not take you back, and nobody who followed you will be following you.',
+      confirm: 'Leave',
+    },
     saved: 'Saved.',
     notSaved: 'That could not be saved. Please try again.',
     unavailable: {
@@ -28,6 +34,7 @@ export default {
       lookup_unreadable: 'That is not a handle or the address of a profile.',
       lookup_is_here: 'That is somebody on this site. Search for them by name.',
       lookup_not_found: 'Nobody was found by that name.',
+      lookup_refused: 'This site does not connect to that server.',
       lookup_not_a_person: 'That is not somebody who can be followed from here.',
       lookup_failed: 'That server could not be reached, or did not answer in a way this site understands.',
       too_many_lookups: 'That is a lot of lookups. Please wait a few minutes.',

@@ -3,9 +3,15 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
@@ -23,12 +29,15 @@ import federation from '../../../utils/federation';
 // whose profile everybody can see can turn it on; when they cannot, the
 // switch is there, off and disabled, with the reason beside it.
 //
-// Saved as it is switched. On an installation with no fediverse service
+// Turned on as it is switched. Turned off after asking: other servers are
+// told to remove the person, and in the lab the one tried did not take them
+// back when they turned it on again. On an installation with no fediverse service
 // nothing is drawn.
 const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
   const [settings, setSettings] = useState(null);
   const [isAbsent, setIsAbsent] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
+  const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
     api.federation.settings().then((result) => {
@@ -42,9 +51,10 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
     return null;
   }
 
-  const handleChange = (event) => {
+  const save = (enabled) => {
     setIsSaving(true);
-    api.federation.setEnabled(event.target.checked).then((result) => {
+    setIsLeaving(false);
+    api.federation.setEnabled(enabled).then((result) => {
       setSettings(result.data);
       alertSuccess(i18n.t('federation:settings.saved'));
     }).catch(() => {
@@ -52,6 +62,17 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
     }).finally(() => {
       setIsSaving(false);
     });
+  };
+
+  // Turning it on is done at once. Turning it off is asked about first: it
+  // tells every server that knows them to remove them, and most will not
+  // take the same person back.
+  const handleChange = (event) => {
+    if (event.target.checked) {
+      save(true);
+    } else {
+      setIsLeaving(true);
+    }
   };
 
   // Turning it off is always allowed. Turning it on, only when they could
@@ -89,7 +110,37 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
           <Alert severity="warning" sx={{ mt: 2 }}>
             {i18n.t('federation:settings.warning')}
           </Alert>}
+        {settings.enabled &&
+          <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+            {i18n.t('federation:settings.leavesWhenPrivate')}
+          </Typography>}
       </CardContent>
+      <Dialog
+        open={isLeaving}
+        onClose={() => { setIsLeaving(false); }}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>{i18n.t('federation:settings.leave.title')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {i18n.t('federation:settings.leave.body')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button fullWidth onClick={() => { setIsLeaving(false); }}>
+            {i18n.t('actions:cancel')}
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            color="error"
+            onClick={() => { save(false); }}
+          >
+            {i18n.t('federation:settings.leave.confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Card>
   );
 };

@@ -914,6 +914,9 @@ draws nothing (`utils/federation.js#isAbsent`).
   (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
   follow me". Off until the person turns it on, and theirs alone to turn
   on. It shows their handle, says that what is sent cannot be called back,
+  asks before it is turned off (other servers are told to remove the
+  person, and may not take them back), says that making a profile private
+  has the same effect,
   and when they cannot turn it on (their profile is not open to everybody,
   or the site does not federate) it is disabled with the server's reason
   beside it.
