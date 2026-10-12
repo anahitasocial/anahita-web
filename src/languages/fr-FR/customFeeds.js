@@ -50,8 +50,6 @@ export default {
     open: 'Ouvrir',
     moveUp: 'Monter',
     moveDown: 'Descendre',
-    follow: 'Suivre #{{ tag }}',
-    followPlace: 'Suivre',
   },
   prompts: {
     pinned: 'Ajouté à votre page d’accueil.',

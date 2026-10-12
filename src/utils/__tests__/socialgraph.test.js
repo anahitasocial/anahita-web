@@ -48,14 +48,6 @@ describe('the numbers on the tabs', () => {
   });
 });
 
-describe('the button that follows somebody', () => {
-  it('says Follow back to somebody who follows you', () => {
-    expect(socialgraph.followLabelKey({ isFollowingViewer: true })).toBe('actions:followBack');
-    expect(socialgraph.followLabelKey({ isFollowingViewer: false })).toBe('actions:follow');
-    expect(socialgraph.followLabelKey(undefined)).toBe('actions:follow');
-  });
-});
-
 describe('the order of a list', () => {
   it('asks the server for the oldest first, and for nothing otherwise', () => {
     expect(socialgraph.ORDERS).toEqual(['latest', 'oldest']);

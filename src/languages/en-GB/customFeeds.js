@@ -50,8 +50,6 @@ export default {
     open: 'Open',
     moveUp: 'Move up',
     moveDown: 'Move down',
-    follow: 'Follow #{{ tag }}',
-    followPlace: 'Follow',
   },
   prompts: {
     pinned: 'Added to your home page.',

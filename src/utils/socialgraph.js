@@ -62,12 +62,6 @@ const counts = (actor = {}, lists = {}) => {
   return all;
 };
 
-// What the button that follows somebody says: "Follow back" for somebody
-// who follows the viewer and is not followed by them, "Follow" otherwise.
-const followLabelKey = (actor = {}) => {
-  return actor.isFollowingViewer ? 'actions:followBack' : 'actions:follow';
-};
-
 // One list after a page arrived: the page alone when it is the first, or
 // added to what there was, without anybody twice.
 const merge = (before, response = {}, start = 0) => {
@@ -110,7 +104,6 @@ export default {
   counts,
   merge,
   rowNote,
-  followLabelKey,
   LATEST,
   OLDEST,
   ORDERS,

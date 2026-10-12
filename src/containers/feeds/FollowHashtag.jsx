@@ -12,7 +12,6 @@ const FollowHashtag = ({ tag }) => {
       name={`#${tag}`}
       icon="hashtag"
       definition={customFeeds.ofHashtag(tag)}
-      label={i18n.t('customFeeds:actions.follow', { tag })}
       done={i18n.t('customFeeds:prompts.followed', { tag })}
     />
   );

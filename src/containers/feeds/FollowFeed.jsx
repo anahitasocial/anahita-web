@@ -4,7 +4,8 @@ import { connect } from 'react-redux';
 
 import Button from '@mui/material/Button';
 
-import CustomFeedIcon from '../../components/CustomFeedIcon';
+import AddIcon from '@mui/icons-material/Add';
+
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -21,7 +22,6 @@ const FollowFeed = ({
   name,
   icon,
   definition,
-  label,
   done,
   alertSuccess,
   alertError,
@@ -71,11 +71,11 @@ const FollowFeed = ({
 
   return (
     <Button
-      startIcon={<CustomFeedIcon name={icon} />}
+      startIcon={<AddIcon />}
       disabled={waiting}
       onClick={handleFollow}
     >
-      {label}
+      {i18n.t('actions:follow')}
     </Button>
   );
 };
@@ -83,11 +83,11 @@ const FollowFeed = ({
 FollowFeed.propTypes = {
   // What the feed is called, and what it shows.
   name: PropTypes.string.isRequired,
-  // Its picture, one of the feed icons: on the button, and the feed's own.
+  // The feed's picture, one of the feed icons.
   icon: PropTypes.string.isRequired,
   definition: PropTypes.object.isRequired,
-  // What the button says, and what is said when it is done.
-  label: PropTypes.string.isRequired,
+  // What is said when it is done. The button says Follow, as every
+  // button that follows anything does.
   done: PropTypes.string.isRequired,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,

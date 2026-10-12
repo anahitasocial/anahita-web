@@ -734,8 +734,8 @@ are about, what to leave out. The server's side is in the services'
   and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
   `FollowFeed.jsx`) makes a feed of that one hashtag or place, the viewer's
   alone, and puts it on the home page, or puts there the one the viewer
-  already has. The feed is given the hashtag's or the place's own picture,
-  which the button shows too. It goes into no other feed. A feed of a place shows only
+  already has. The feed is given the hashtag's or the place's own picture.
+  It goes into no other feed. A feed of a place shows only
   what the viewer could see anyway, and who follows a place is kept
   nowhere.
 - **Naming in requests.** The definition's keys are snake case on the server
@@ -796,8 +796,16 @@ What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 
 A person who follows the viewer says so: "Follows you" under their name on
-their profile, and beside their name in these lists. The button that follows
-them then reads "Follow back" (`utils/socialgraph.js`, `controls/Follow.jsx`).
+their profile, and beside their name in these lists.
+
+**One word for following.** Every button that follows anything, a profile,
+a hashtag or a place, reads "Follow" with a plus before it
+(`controls/Follow.jsx`, `feeds/FollowFeed.jsx`). It does not read "Follow
+back" for somebody who follows the viewer: "Follows you" beside their name
+says that. Two things keep words of their own because they are not that
+button: "Request to follow", which asks and does not follow, and "Follow
+<name>" in a post's menu, where what is followed is not what the menu
+belongs to.
 
 There is no Social Graph tab. An old address such as
 `/people/ana/socialgraph/leaders` opens the profile with that list showing.
