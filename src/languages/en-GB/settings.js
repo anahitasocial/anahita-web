@@ -25,6 +25,12 @@ export default {
     cDescription: 'Nothing is taken from these servers or sent to them, and nobody on them can be looked up. A name covers every name under it.',
     absent: 'This site does not run the service that connects it to the fediverse.',
     none: 'No server is refused.',
+    noneFound: 'No server refused matches that.',
+    count: '{{ count }} server refused',
+    count_plural: '{{ count }} servers refused',
+    search: 'Search by name or reason',
+    cancel: 'Cancel',
+    open: 'Refuse a server',
     noReason: 'No reason given',
     staysHere: 'Refusing a server does not remove what already came from it: people from it who are kept here stay, with their posts. Nothing more arrives, and nothing more is sent.',
     domain: {

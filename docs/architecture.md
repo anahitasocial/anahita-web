@@ -912,9 +912,11 @@ draws nothing (`utils/federation.js#isAbsent`).
 
 - **The servers the site refuses** are in Site settings, under Fediverse
   (`settings/Fediverse.jsx`), for super administrators as every tab there
-  is: the list with why, a form to refuse another, and a button to stop
-  refusing one. It says that refusing a server does not remove what already
-  came from it, since the opposite is what most would expect.
+  is: the list with why, and a button to stop refusing one. The list is
+  read fifty at a time as it is scrolled and searched on the server, by
+  name or reason, since an installation that takes up somebody else's list
+  has thousands; a server is refused from a dialog, which says that
+  refusing it does not remove what already came from it.
 
 - **The switch** is a card under Settings › Privacy
   (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and

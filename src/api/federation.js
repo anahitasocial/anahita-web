@@ -29,8 +29,14 @@ const lookup = (query) => {
 
 // The servers this installation refuses: nothing is taken from them or
 // sent to them. For super administrators, in the site's settings.
-const blocks = () => {
-  return axios.get('/activitypub/blocks');
+//
+// A page at a time, by name: an installation that takes somebody else's
+// list of servers to refuse has thousands. `q` narrows it to the names and
+// reasons it is found in.
+const blocks = ({ q = '', limit = 50, offset = 0 } = {}) => {
+  return axios.get('/activitypub/blocks', {
+    params: { q, limit, offset },
+  });
 };
 
 // `domain` may be typed as a name, an address or a handle; the server keeps

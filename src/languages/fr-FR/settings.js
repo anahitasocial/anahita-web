@@ -25,6 +25,12 @@ export default {
     cDescription: 'Rien n’est accepté de ces serveurs ni ne leur est envoyé, et personne ne peut y être recherché. Un nom couvre tous les noms qui en dépendent.',
     absent: 'Ce site ne fait pas tourner le service qui le relie au fédivers.',
     none: 'Aucun serveur n’est refusé.',
+    noneFound: 'Aucun serveur refusé ne correspond.',
+    count: '{{ count }} serveur refusé',
+    count_plural: '{{ count }} serveurs refusés',
+    search: 'Rechercher par nom ou par raison',
+    cancel: 'Annuler',
+    open: 'Refuser un serveur',
     noReason: 'Aucune raison donnée',
     staysHere: 'Refuser un serveur ne retire pas ce qui en est déjà venu : les personnes de ce serveur conservées ici restent, avec leurs publications. Rien de plus n’arrive, et rien de plus n’est envoyé.',
     domain: {
