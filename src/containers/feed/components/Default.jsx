@@ -71,7 +71,10 @@ const FeedCardDefault = ({
   const authorName = getPersonName(node.author);
   const portrait = getPortraitURL(node, 'medium');
   const cover = getCoverURL(node, 'medium');
-  const { title, body } = node;
+  // A post's title is its name. This read `title`, which no post is sent
+  // with, so no title was ever drawn on a card in a feed.
+  const { body } = node;
+  const title = node.name || '';
   const url = getURL(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
   const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
