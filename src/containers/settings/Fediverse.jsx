@@ -49,8 +49,8 @@ const SEARCH_WAIT = 300;
 // The list is read a page at a time and searched on the server. Most
 // installations refuse a few dozen servers, but one that takes up a list
 // somebody else keeps has thousands, and nobody finds a name in that by
-// scrolling. Refusing one is done in a dialog for the same reason: a form
-// under the list would be under all of it.
+// scrolling. Refusing one is done in a dialog, opened from the foot of the
+// card: a form there would be a long way to read past.
 //
 // Refusing a server does not reach back. People from it who are already
 // kept here stay, with their posts; that is said where one is refused,
@@ -200,19 +200,6 @@ const SettingsFediverse = ({
 
         {!absent &&
           <>
-            <CardActions>
-              <Button
-                color="secondary"
-                variant="contained"
-                onClick={() => {
-                  setOpen(true);
-                }}
-                fullWidth
-              >
-                {i18n.t('settings:fediverse.open')}
-              </Button>
-            </CardActions>
-
             {showSearch &&
               <CardContent sx={{ pb: 0 }}>
                 <TextField
@@ -280,6 +267,21 @@ const SettingsFediverse = ({
                   })}
                 </List>
               </InfiniteScroll>}
+
+            {/* Last, so the list ends on its own line and not on the
+                edge of the card. */}
+            <CardActions>
+              <Button
+                color="secondary"
+                variant="contained"
+                onClick={() => {
+                  setOpen(true);
+                }}
+                fullWidth
+              >
+                {i18n.t('settings:fediverse.open')}
+              </Button>
+            </CardActions>
           </>}
       </Card>
 
