@@ -37,6 +37,7 @@ import RepostsOnProfile from './RepostsOnProfile';
 import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
+import DataExport from './DataExport';
 import ActorSuggestions from './Suggestions';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
@@ -239,6 +240,7 @@ const ActorsSettings = ({
       [ITEMS.QUOTES]: <ActorQuotes />,
       [ITEMS.DOWNLOADS]: <ActorDownloads />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
+      [ITEMS.DATA_EXPORT]: <DataExport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked

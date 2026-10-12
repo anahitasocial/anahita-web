@@ -539,6 +539,28 @@ say otherwise.
   which answers with something to save, so the page stays where it is. A
   post with several images offers each in a short menu.
 
+### Download your data
+
+**Settings › Account › Download your data**
+(`containers/actors/Settings/DataExport.jsx`), on the viewer's own
+settings: a copy of everything they put here, as one file, from the
+installation's export service (`/exports`; the services'
+`docs/data-export.md`).
+
+- **Asking** opens the step-up dialog (`containers/auth/StepUp`) when the
+  server says a fresh proof is needed, and asks again once it is given.
+- **While it is made**, the card asks after it every five seconds and can
+  be left; it can be cancelled.
+- **When it is ready**, the card says how big it is and until when it is
+  kept. Download asks the server for the file's address at the press: the
+  address is good for a few minutes, so one read with the page may have
+  run out.
+- **One at a time, and one a week** unless the installation says
+  otherwise. The card says when the next can be asked for
+  (`utils/exports.js#canAsk`).
+- **Where there is no export service**, the card says the download is not
+  available here (`utils/exports.js#isAbsent`).
+
 ### Link previews
 
 A note with a link in it can carry a card for the link: the page's picture,

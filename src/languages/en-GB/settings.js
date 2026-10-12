@@ -1,4 +1,17 @@
 export default {
+  dataExport: {
+    title: 'Download your data',
+    about_one: 'A copy of everything you have put here, as one file: your posts, replies, photos and videos, who you follow and who follows you. It includes what only you can see. It is made for you when you ask, and kept for a day.',
+    about_other: 'A copy of everything you have put here, as one file: your posts, replies, photos and videos, who you follow and who follows you. It includes what only you can see. It is made for you when you ask, and kept for {{count}} days.',
+    ask: 'Ask for my data',
+    asked: 'Your data is being gathered. This page will say when it is ready.',
+    making: 'Gathering your data. This can take a few minutes, and you can leave this page.',
+    ready: 'Your data is ready: {{size}}. It is kept until {{day}}.',
+    couldNot: 'Your data could not be gathered. You can ask again.',
+    nextAt: 'You can ask again on {{day}}.',
+    absent: 'Downloading your data is not available on this site.',
+    failed: 'That could not be done.',
+  },
   cTitle: 'Site Settings',
   cDescription: 'Configuration only super administrators can change.',
   mTitle: 'Settings',

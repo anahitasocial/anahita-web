@@ -56,6 +56,8 @@ export const ITEMS = {
   QUOTES: 'quotes',
   // Whether new photos and videos start out downloadable.
   DOWNLOADS: 'downloads',
+  // A copy of everything the viewer put here, as one file.
+  DATA_EXPORT: 'dataExport',
   // The people the viewer has blocked.
   BLOCKED: 'blocked',
   // What the viewer chose about suggestions of who to follow.
@@ -99,6 +101,8 @@ const ALL_SECTIONS = [
       // subject. Administrators see the same card about somebody else
       // in the Administration section.
       { key: ITEMS.AGREEMENTS, bare: false, viewerOnly: true },
+      // Their own data, to take away. Theirs alone to ask for.
+      { key: ITEMS.DATA_EXPORT, bare: false, viewerOnly: true },
     ],
   },
   {

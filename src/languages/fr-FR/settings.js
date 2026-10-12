@@ -1,4 +1,17 @@
 export default {
+  dataExport: {
+    title: 'Télécharger vos données',
+    about_one: 'Une copie de tout ce que vous avez publié ici, en un seul fichier : vos publications, réponses, photos et vidéos, les personnes que vous suivez et celles qui vous suivent. Elle comprend ce que vous seul·e pouvez voir. Elle est préparée à votre demande et conservée un jour.',
+    about_other: 'Une copie de tout ce que vous avez publié ici, en un seul fichier : vos publications, réponses, photos et vidéos, les personnes que vous suivez et celles qui vous suivent. Elle comprend ce que vous seul·e pouvez voir. Elle est préparée à votre demande et conservée {{count}} jours.',
+    ask: 'Demander mes données',
+    asked: 'Vos données sont en cours de préparation. Cette page indiquera quand elles seront prêtes.',
+    making: 'Préparation de vos données. Cela peut prendre quelques minutes ; vous pouvez quitter cette page.',
+    ready: 'Vos données sont prêtes : {{size}}. Elles sont conservées jusqu’au {{day}}.',
+    couldNot: 'Vos données n’ont pas pu être préparées. Vous pouvez refaire la demande.',
+    nextAt: 'Vous pourrez refaire la demande le {{day}}.',
+    absent: 'Le téléchargement de vos données n’est pas disponible sur ce site.',
+    failed: 'Cela n’a pas pu être fait.',
+  },
   cTitle: 'Paramètres du site',
   cDescription: 'Configuration réservée aux super administrateurs.',
   mTitle: 'Paramètres',
