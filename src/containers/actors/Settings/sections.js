@@ -54,6 +54,8 @@ export const ITEMS = {
   REPOSTS: 'reposts',
   // Who can quote this person's posts.
   QUOTES: 'quotes',
+  // Whether new photos and videos start out downloadable.
+  DOWNLOADS: 'downloads',
   // The people the viewer has blocked.
   BLOCKED: 'blocked',
   // What the viewer chose about suggestions of who to follow.
@@ -124,6 +126,7 @@ const ALL_SECTIONS = [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
       { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
       { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
+      { key: ITEMS.DOWNLOADS, bare: false, viewerOnly: false },
       // Who you have blocked is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
       { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },

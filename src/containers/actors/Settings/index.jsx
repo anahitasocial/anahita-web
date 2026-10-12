@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -33,6 +34,7 @@ import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
 import Permissions from './Permissions';
 import RepostsOnProfile from './RepostsOnProfile';
+import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
 import ActorSuggestions from './Suggestions';
@@ -116,6 +118,7 @@ const cardsFor = (namespace) => {
       ActorAccess: Access(namespace),
       ActorPermissions: Permissions(namespace),
       ActorReposts: RepostsOnProfile(namespace),
+      ActorDownloads: DownloadDefault(namespace),
       ActorQuotes: QuotePolicy(namespace),
       ActorDelete: Delete(namespace),
       ActorPurge: Purge(namespace),
@@ -190,6 +193,7 @@ const ActorsSettings = ({
     ActorDisable,
     ActorReposts,
     ActorQuotes,
+    ActorDownloads,
   } = cardsFor(namespace);
 
   const canDelete = permissions.canDelete(actor);
@@ -233,6 +237,7 @@ const ActorsSettings = ({
       [ITEMS.ACCESS]: <ActorAccess />,
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
+      [ITEMS.DOWNLOADS]: <ActorDownloads />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
@@ -335,7 +340,14 @@ const ActorsSettings = ({
     // its Info is the event's own form and not the one a group has.
     [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
-    [ITEMS.ACCESS]: <ActorAccess />,
+    // With who can see the group, what its new photos and videos start
+    // with about being downloaded. Not an event's: nothing is set there.
+    [ITEMS.ACCESS]: isEvent ? <ActorAccess /> : (
+      <Stack spacing={2}>
+        <ActorAccess />
+        <ActorDownloads />
+      </Stack>
+    ),
     [ITEMS.PERMISSIONS]: <ActorPermissions />,
     [ITEMS.DANGER]: (
       <>

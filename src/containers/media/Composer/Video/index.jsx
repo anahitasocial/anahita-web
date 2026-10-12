@@ -20,6 +20,7 @@ import audience from '../../../../utils/audience';
 import postLanguage from '../../../../utils/postLanguage';
 import replyAccess from '../../../../utils/replyAccess';
 import videos from '../../../../utils/videos';
+import DownloadOptionButton from '../../../../components/DownloadOptionButton';
 import LanguageButton from '../../../../components/LanguageButton';
 import ReplyAccessButton from '../../../../components/ReplyAccessButton';
 import ComposerAudience from '../Audience';
@@ -69,6 +70,11 @@ const ComposerVideo = ({
   });
   const [whoReplies, setWhoReplies] = useState(replyAccess.ANYONE);
   const [whoQuotes, setWhoQuotes] = useState('');
+  // Whether it may be downloaded. Starts on what the profile says.
+  const [allowDownload, setAllowDownload] = useState(Boolean(actor.allowDownload));
+  useEffect(() => {
+    setAllowDownload(Boolean(actor.allowDownload));
+  }, [actor.id, actor.allowDownload]);
 
   // What was handed over before this page was opened.
   const [earlier, setEarlier] = useState([]);
@@ -149,6 +155,7 @@ const ComposerVideo = ({
       language,
       ...replyAccess.toRequest(whoReplies),
       ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
+      allowDownload,
     }, file).then((handedOver) => {
       if (!handedOver) {
         return;
@@ -292,6 +299,7 @@ const ComposerVideo = ({
                 defaultQuotePolicy={viewer.quotePolicy}
                 onQuotePolicyChange={setWhoQuotes}
               />
+              <DownloadOptionButton value={allowDownload} onChange={setAllowDownload} />
             </>}
           {busy &&
             <Button onClick={upload.cancel} fullWidth>

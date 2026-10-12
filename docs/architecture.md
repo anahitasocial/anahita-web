@@ -519,6 +519,26 @@ own, because a video is too big to be sent with the post (the services'
 - A video is a kind of post like the others: `/videos/:id`, the `videos`
   namespace in the store, and the kind `video` in custom feeds.
 
+### Downloading
+
+A photo or a video has a Download button in the row under it, where the
+server said this viewer may download it (`authorized.download`;
+`utils/downloads.js`). Whoever posted it decides, and it is off until they
+say otherwise.
+
+- **When posting**, the photo and video composers have a download button
+  among the post's options (`components/DownloadOptionButton.jsx`), which
+  starts on what the profile being posted on says.
+- **Afterwards**, "Allow download" and "Do not allow download" are in the
+  post's menu on its own page, for whoever may edit it
+  (`containers/controls/medium/Download.jsx`).
+- **The default** is a switch in settings: Access for a person, and under
+  who can see the group for a group
+  (`containers/actors/Settings/DownloadDefault.jsx`).
+- **The download** sends the browser to the API's address for the file,
+  which answers with something to save, so the page stays where it is. A
+  post with several images offers each in a short menu.
+
 ### Link previews
 
 A note with a link in it can carry a card for the link: the page's picture,
