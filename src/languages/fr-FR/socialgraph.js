@@ -60,6 +60,8 @@ export default {
     },
   },
   blocked: {
+    title: 'Personnes que vous avez bloquées',
+    manage: 'Gérer',
     count_one: '1 personne',
     count_other: '{{count}} personnes',
     search: 'Trouver une personne bloquée',

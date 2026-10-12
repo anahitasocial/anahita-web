@@ -5,8 +5,11 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -33,19 +36,23 @@ const { getActorName, getURL } = utils.node;
 const PAGE = 20;
 const PAUSE = 300;
 
-// The people the viewer has blocked, with a way to unblock each.
-//
-// Theirs alone, so it is in their settings. It was a tab of the Social
-// Graph on their profile, which is what other people look at.
+// The people the viewer has blocked, each with a way to unblock them, in
+// a dialog of their own.
 //
 // The list can be long. It is read a page at a time, most lately blocked
-// first, with more read as the page is scrolled, and it can be searched by
-// name, which is asked of the server: somebody blocked long ago is found
+// first, with more read as the dialog is scrolled, and it can be searched
+// by name, which is asked of the server: somebody blocked long ago is found
 // without scrolling to them.
-const ActorsSettingsBlocked = ({
+//
+// `onCount` is told how many there are, whenever that is learned or
+// changes, for whoever shows the number.
+const BlockedDialog = ({
   actor,
   viewer,
   alertError,
+  open,
+  onClose,
+  onCount,
 }) => {
   const [rows, setRows] = useState(null);
   const [total, setTotal] = useState(0);
@@ -81,6 +88,10 @@ const ActorsSettingsBlocked = ({
 
   // From the top, whenever what is searched for changes.
   useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+
     let current = true;
     setHasFailed(false);
 
@@ -93,6 +104,7 @@ const ActorsSettingsBlocked = ({
       setTotal(found);
       if (!query) {
         setEverybody(found);
+        onCount(found);
       }
     }).catch(() => {
       if (current) {
@@ -103,7 +115,7 @@ const ActorsSettingsBlocked = ({
     return () => {
       current = false;
     };
-  }, [actor.id, query]);
+  }, [actor.id, query, open]);
 
   const readMore = () => {
     const asked = query;
@@ -138,7 +150,9 @@ const ActorsSettingsBlocked = ({
         return Math.max(0, before - 1);
       });
       setEverybody((before) => {
-        return Math.max(0, before - 1);
+        const left = Math.max(0, before - 1);
+        onCount(left);
+        return left;
       });
     }).catch(() => {
       alertError(i18n.t('socialgraph:blocked.failed'));
@@ -151,13 +165,20 @@ const ActorsSettingsBlocked = ({
   // something is typed in it.
   const canSearch = everybody > PAGE || typed !== '';
 
+  const scrollId = `blocked-scroll-${actor.id}`;
+
   return (
-    <Card>
-      <CardHeader
-        title={i18n.t('socialgraph:blocks')}
-        subheader={everybody > 0 ? i18n.t('socialgraph:blocked.count', { count: everybody }) : null}
-      />
-      <CardContent sx={{ pt: 0 }}>
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="sm"
+      aria-labelledby={`blocked-title-${actor.id}`}
+    >
+      <DialogTitle id={`blocked-title-${actor.id}`}>
+        {i18n.t('socialgraph:blocked.title')}
+      </DialogTitle>
+      <DialogContent dividers id={scrollId} sx={{ minHeight: 240 }}>
         {canSearch &&
           <TextField
             value={typed}
@@ -195,6 +216,7 @@ const ActorsSettingsBlocked = ({
             next={readMore}
             hasMore={rows.length < total && !hasFailed}
             loader={<Progress key="blocked-progress" />}
+            scrollableTarget={scrollId}
           >
             <List disablePadding>
               {rows.map((person) => {
@@ -235,7 +257,82 @@ const ActorsSettingsBlocked = ({
               })}
             </List>
           </InfiniteScroll>}
-      </CardContent>
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={onClose} fullWidth>
+          {i18n.t('commons:close')}
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+};
+
+BlockedDialog.propTypes = {
+  actor: ActorType.isRequired,
+  viewer: PersonType.isRequired,
+  alertError: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onCount: PropTypes.func.isRequired,
+};
+
+// Who the viewer has blocked, in their settings: how many, and the way to
+// the list.
+//
+// Theirs alone, so it is in their settings. One line, however many there
+// are: the list itself opens in a dialog, so that a long one does not push
+// the rest of the page out of reach.
+const ActorsSettingsBlocked = ({
+  actor,
+  viewer,
+  alertError,
+}) => {
+  // null until it is known.
+  const [count, setCount] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    api.socialgraph.browse({
+      filter: 'blocks',
+      actor,
+      start: 0,
+      limit: 1,
+    }).then((result) => {
+      setCount((result.data.pagination && result.data.pagination.total) || 0);
+    }).catch(() => {
+      // The number is left out. The list says what went wrong, if asked.
+    });
+  }, [actor.id]);
+
+  return (
+    <Card>
+      <CardHeader
+        title={i18n.t('socialgraph:blocks')}
+        subheader={count === null ? null : i18n.t(count > 0 ?
+          'socialgraph:blocked.count' :
+          'socialgraph:blocked.none', { count })}
+        action={
+          <Button
+            onClick={() => {
+              setIsOpen(true);
+            }}
+            disabled={count === 0}
+          >
+            {i18n.t('socialgraph:blocked.manage')}
+          </Button>
+        }
+        sx={{ '& .MuiCardHeader-action': { alignSelf: 'center', m: 0 } }}
+      />
+      <BlockedDialog
+        actor={actor}
+        viewer={viewer}
+        alertError={alertError}
+        open={isOpen}
+        onClose={() => {
+          setIsOpen(false);
+        }}
+        onCount={setCount}
+      />
     </Card>
   );
 };

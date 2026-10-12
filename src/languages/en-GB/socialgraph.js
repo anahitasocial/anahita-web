@@ -60,6 +60,8 @@ export default {
     },
   },
   blocked: {
+    title: 'People you have blocked',
+    manage: 'Manage',
     count_one: '1 person',
     count_other: '{{count}} people',
     search: 'Find somebody you blocked',
