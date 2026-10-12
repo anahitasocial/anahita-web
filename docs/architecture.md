@@ -486,7 +486,7 @@ a request that fails as it does without the service
 ### Videos
 
 A video post plays in `components/VideoPlayer.jsx`, the browser's own
-player with a button in its top corner that says which size is playing (a gear, `720p`, an arrow) and opens the others in a menu. Posting one is a composer of its
+player with a cog in its top corner that opens the sizes in a menu, the one playing ticked. Posting one is a composer of its
 own, because a video is too big to be sent with the post (the services'
 `docs/videos.md`).
 

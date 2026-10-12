@@ -4,13 +4,12 @@ import React, {
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListSubheader from '@mui/material/ListSubheader';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import QualityIcon from '@mui/icons-material/Settings';
-import OpenIcon from '@mui/icons-material/ArrowDropDown';
 import ChosenIcon from '@mui/icons-material/Check';
 
 import i18n from '../languages';
@@ -20,8 +19,8 @@ import videos from '../utils/videos';
 //
 // The video is kept at a few sizes. It starts at 720p, or at the smallest
 // where the browser says the connection is slow, or at the size this person
-// chose last time. A button in its corner says which is playing and opens
-// the others; a choice is remembered in the browser.
+// chose last time. A cog in its corner opens the sizes, the one playing
+// ticked; a choice is remembered in the browser.
 // Changing size carries on from where the video was. Nothing changes size
 // while it plays: the sizes are whole files, not a stream.
 //
@@ -123,17 +122,13 @@ const VideoPlayer = ({
             aspectRatio: video.width && video.height ? `${video.width} / ${video.height}` : '16 / 9',
           }}
         />
-        {/* The size, on the video: a button in its corner that says which
-            is playing and opens the others. In the top corner, clear of
+        {/* The size, on the video: a cog in its corner that opens the sizes,
+            the one playing ticked. In the top corner, clear of
             the browser's own controls along the bottom. */}
         {files.length > 1 &&
           <>
-            <Button
+            <IconButton
               size="small"
-              variant="contained"
-              disableElevation
-              startIcon={<QualityIcon />}
-              endIcon={<OpenIcon />}
               onClick={(event) => {
                 setAnchorEl(event.currentTarget);
               }}
@@ -145,14 +140,13 @@ const VideoPlayer = ({
                 position: 'absolute',
                 top: 8,
                 right: 8,
-                lineHeight: 1.5,
                 color: 'common.white',
                 bgcolor: 'rgba(0, 0, 0, 0.7)',
                 '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.9)' },
               }}
             >
-              {videos.label(file)}
-            </Button>
+              <QualityIcon />
+            </IconButton>
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
