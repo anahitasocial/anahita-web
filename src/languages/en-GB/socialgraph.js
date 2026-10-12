@@ -60,6 +60,10 @@ export default {
     },
   },
   blocked: {
+    count_one: '1 person',
+    count_other: '{{count}} people',
+    search: 'Find somebody you blocked',
+    noMatch: 'Nobody you blocked has that name.',
     none: 'You have not blocked anybody.',
     failed: 'That could not be done.',
   },
