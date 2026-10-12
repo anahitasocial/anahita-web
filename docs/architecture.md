@@ -121,7 +121,7 @@ history. The main paths:
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
+| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags/:alias`, `/locations/:id` | Hashtags and places |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
@@ -129,6 +129,9 @@ history. The main paths:
 | `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, and Privacy, which shows what the installation lets visitors read and can make everything public members-only |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
+| `/onboarding` | Where somebody signed in with an incomplete profile is sent, once (`routes/OnboardingGate.jsx`): a picture, a name and a few words, then profiles the site features to follow. A step with nothing to show is left out, and every step can be skipped (`containers/onboarding`) |
+| `/pages/:alias` | A page of the installation's own, from `statics/`. `/pages/tos` and `/pages/privacy` redirect to `/legal` |
+| `/404`, and any address not above | The not-found page |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
 
 ### A members-only site
@@ -433,7 +436,7 @@ replies, made directly to the post.
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
   is drawn as itself, not inside a card for whoever reposted it.
   The tab is in the address. Reposts are not among the posts unless the
-  profile's owner asks for that, under Settings › Access
+  profile's owner asks for that, under Settings › Privacy
   (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
   it.
 
@@ -455,7 +458,10 @@ a request that fails as it does without the service
 - **Who to follow** on the home page, under the composer
   (`containers/suggestions/WhoToFollow.jsx`): three people, each with the
   reason, a Follow button and a way to say not interested, and a button on
-  to the rest. Not drawn while it is read or when there is nobody.
+  to the rest. Not drawn while it is read or when there is nobody. The ✕ in
+  its header puts the whole card away for seven days, remembered in the
+  browser (`utils/recommendations.js#hide`); Reset on the Recommendations
+  page brings it back.
 - **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
   People, Groups and Events, the open tab in the address (`?kind=group`),
   as cards with the reason inside each, under the name. An event is drawn with the event's
@@ -788,9 +794,11 @@ them then reads "Follow back" (`utils/socialgraph.js`, `controls/Follow.jsx`).
 There is no Social Graph tab. An old address such as
 `/people/ana/socialgraph/leaders` opens the profile with that list showing.
 
-**Blocked** is not in the dialog: who you have blocked is yours alone, and is
-a card under Settings › Access (`actors/Settings/Blocked.jsx`), with Unblock
-on each.
+**Blocked** is not in the dialog: who you have blocked is yours alone. It is
+one row under Settings › Privacy (`actors/Settings/Blocked.jsx`) saying how
+many there are, which opens a dialog: everybody blocked, with their picture,
+read a page at a time as the list is scrolled, a box to search it by name,
+and Unblock on each.
 
 ### Events
 
@@ -921,7 +929,7 @@ ordinary note in every other way: its own audience, likes and replies.
 - **Who can quote** is the third part of a post's interaction settings
   (`components/ReplyAccessDialog.jsx`): anyone, the author's followers, or
   nobody. A post that has never been asked follows its author's own setting,
-  "Who can quote my posts", under Settings › Access
+  "Who can quote my posts", under Settings › Permissions
   (`containers/actors/Settings/QuotePolicy.jsx`).
 
 There is no comment code left: the comment components, actions, reducers,

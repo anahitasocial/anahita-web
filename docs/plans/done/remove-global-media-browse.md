@@ -1,13 +1,13 @@
 # Remove the site-wide media browse views
 
-*Roadmap item 2, planned 2026-09-28. See the [roadmap](roadmap.md) for order and dependencies.*
+*Roadmap item 2, planned 2026-09-28. See the [roadmap](../roadmap.md) for order and dependencies.*
 
 ## Answer: no, we don't need them
 Media discovery should go through feeds, search, hashtags and actor profiles.
 - The site-wide lists are just the profile list with the owner filter left off. They show every post on the site in date order, with no ranking and no context.
 - They are reachable only from four left-menu entries.
 - On a federated network, a "list every note on the server" page means little. Discovery belongs to feeds.
-- `anahita-services/docs/plans/feed-generators.md` already makes feed generators the discovery surface, including a first-party "Trending" feed ranked by degree and trending score. That feed replaces these pages.
+- `anahita-services/docs/plans/done/feed-generators.md` already makes feed generators the discovery surface, including a first-party "Trending" feed ranked by degree and trending score. That feed replaces these pages.
 
 ## What exists today
 **anahita-web**

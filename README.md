@@ -3,12 +3,13 @@
 # Anahita Web
 
 The web app for [Anahita](https://www.anahita.io), an open source social
-networking platform and framework. It is a single-page app built with React 18,
+networking platform and framework. It is a single-page app built with React 19,
 Material UI 9 and Redux. It is a client of **anahita-services**, the Go
 microservices back end, and talks to it only through its HTTP API.
 
-People use it to keep a profile, follow people and groups, post notes,
-articles, topics and photos, comment and like, and run their account. Site
+People use it to keep a profile, follow people, groups and events, post
+notes, articles, topics, photos and videos, reply, like, repost and quote,
+build their own feeds, and run their account. Site
 administrators use it to run the installation.
 
 > **anahita-services is not public yet.** The back end will be released later
@@ -50,7 +51,7 @@ The documentation is in [`docs/`](docs/README.md):
   `/oauth/callback`. Tokens stay on the server behind a session cookie; the app
   never sees a password.
 - **The server decides what each viewer may do.** Whether someone can post,
-  comment, like or edit is sent with each response, and the app shows only the
+  reply, like or edit is sent with each response, and the app shows only the
   controls that will work.
 - **Operator settings live on the server.** Registration mode, support
   contacts and the other settings an operator changes without a rebuild are

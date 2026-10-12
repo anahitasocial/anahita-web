@@ -11,6 +11,6 @@ question or change involving Material UI:
 3. Repeat until everything relevant is gathered, then answer from what was
    fetched, not from memory.
 
-The app is being upgraded from Material-UI v4 (`@material-ui/*`) to
-`@mui/material` v9; see `docs/plans/done/mui-upgrade.md`. Check which version a file
-is on before applying docs for the other.
+The app is on `@mui/material` v9 throughout. The upgrade from Material-UI v4
+(`@material-ui/*`) is finished and nothing imports the old packages; see
+`docs/plans/done/mui-upgrade.md`.
