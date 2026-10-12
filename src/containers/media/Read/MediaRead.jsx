@@ -17,6 +17,7 @@ import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
 import ControlDownload from '../../controls/medium/Download';
 import ControlRepost from '../../controls/Repost';
+import { ShareAction, ofNode } from '../../controls/Share';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
@@ -96,6 +97,9 @@ const MediaReadView = ({
       // Repost or quote. Not a reply: it is not passed on without its thread.
       isAuthenticated && !isReply && (
         <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />
+      ),
+      isAuthenticated && (
+        <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />
       ),
       namespace === 'documents' && (
         <ControlDownload

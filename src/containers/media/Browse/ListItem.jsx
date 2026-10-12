@@ -12,6 +12,7 @@ import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
 
 import MediumMenu from '../MediaMenu';
+import { ShareAction, ofNode } from '../../controls/Share';
 import utils from '../../../utils';
 import perms from '../../../permissions';
 
@@ -52,7 +53,10 @@ const MediaListItem = ({
           <ReplyStats node={medium} />
         </>
       }
-      actions={isAuthenticated && <Like node={medium} />}
+      actions={isAuthenticated && [
+        <Like node={medium} key={`medium-like-${medium.id}`} />,
+        <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />,
+      ]}
     />
   );
 };

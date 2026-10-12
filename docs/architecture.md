@@ -534,10 +534,12 @@ options"), which has every app the person uses. Mastodon asks for the
 person's server the first time and keeps it in the browser.
 
 - **Anything on a page opens it** through `utils/share.js#open`:
-  `ShareButton` and `ShareMenuItem` in `containers/controls/Share.jsx`. A
-  menu can close behind its item, since the dialog is not the menu's.
-- **Where it is:** a post's menu, in a feed and on its page; a profile's
-  menu; a shared custom feed.
+  `ShareAction`, `ShareButton` and `ShareMenuItem` in
+  `containers/controls/Share.jsx`. A menu can close behind its item, since
+  the dialog is not the menu's.
+- **Where it is:** under a post, in the row with like, reply and repost, in
+  a feed, in a list and on its page; a profile's menu; a shared custom
+  feed.
 - **Only what a visitor could open is sent beyond the site.** Something that
   is not public, and anything on a members-only site, is offered to copy and
   nothing else, with a note saying who can open the link.

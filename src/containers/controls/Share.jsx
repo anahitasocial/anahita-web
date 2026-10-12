@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
@@ -50,6 +51,29 @@ ShareButton.propTypes = {
   what: PropTypes.object.isRequired,
 };
 
+// Share, in the row of buttons under a post, beside like, reply and
+// repost and drawn as they are: the width of its place in the row.
+const ShareAction = ({ what }) => {
+  const label = i18n.t('share:action');
+
+  return (
+    <Button
+      onClick={() => {
+        share.open(what);
+      }}
+      startIcon={<ShareIcon />}
+      color="default"
+      aria-label={label}
+      title={label}
+      fullWidth
+    />
+  );
+};
+
+ShareAction.propTypes = {
+  what: PropTypes.object.isRequired,
+};
+
 // Share, as an item in a menu. `onDone` closes the menu: the dialog is the
 // app's and stays when the menu goes.
 const ShareMenuItem = React.forwardRef(({ what, onDone = null }, ref) => {
@@ -75,4 +99,9 @@ ShareMenuItem.propTypes = {
   onDone: PropTypes.func,
 };
 
-export { ShareButton, ShareMenuItem, ofNode };
+export {
+  ShareAction,
+  ShareButton,
+  ShareMenuItem,
+  ofNode,
+};

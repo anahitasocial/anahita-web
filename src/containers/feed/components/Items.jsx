@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import ControlLike from '../../likes/controls/LikeFeed';
 import ControlRepost from '../../controls/Repost';
+import { ShareAction, ofNode } from '../../controls/Share';
 import LikesStats from '../../likes';
 import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
@@ -76,6 +77,10 @@ const FeedItems = ({
               key={`node-repost-${node.id}`}
               parent={node.parent}
             />,
+            <ShareAction
+              key={`node-share-${node.id}`}
+              what={ofNode(node.parent)}
+            />,
           ]}
           showOwner={node.parent && node.parent.owner && !isPerson(node.parent.owner)}
         />
@@ -114,6 +119,10 @@ const FeedItems = ({
           <ControlRepost
             key={`node-repost-${node.id}`}
             parent={node}
+          />,
+          <ShareAction
+            key={`node-share-${node.id}`}
+            what={ofNode(node)}
           />,
         ]}
         showOwner={node.owner && !isPerson(node.owner)}

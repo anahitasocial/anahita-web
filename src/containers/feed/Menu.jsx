@@ -18,7 +18,6 @@ import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
 import ControlSave from '../controls/medium/Save';
-import { ShareMenuItem, ofNode } from '../controls/Share';
 import PostActivity from '../activity/PostActivity';
 import ControlFollow from '../controls/Follow';
 import useReport from '../reports/useReport';
@@ -127,11 +126,6 @@ const FeedItemMenu = ({
           medium={node}
           onDone={handleClose}
           key={`post-save-${node.id}`}
-        />
-        <ShareMenuItem
-          what={ofNode(node)}
-          onDone={handleClose}
-          key={`post-share-${node.id}`}
         />
         {canPin &&
           <ControlPin
