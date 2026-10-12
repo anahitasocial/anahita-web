@@ -21,6 +21,7 @@ import PersonType from '../../proptypes/Person';
 import SettingsOAuthClients from './OAuthClients';
 import SettingsOAuthSigningKeys from './OAuthSigningKeys';
 import SettingsPrivacy from './Privacy';
+import SettingsFediverse from './Fediverse';
 
 const SITE_NAME = process.env.REACT_APP_NAME;
 
@@ -30,12 +31,16 @@ const TABS = {
   // What the installation shows to whom. Last: it is looked at rarely,
   // and the page keeps opening on what it always has.
   PRIVACY: 'privacy',
+  // The servers the installation refuses. Beside Privacy: both are what
+  // the installation as a whole lets in and out.
+  FEDIVERSE: 'fediverse',
 };
 
 const TAB_ORDER = [
   TABS.OAUTH_CLIENTS,
   TABS.OAUTH_SIGNING_KEYS,
   TABS.PRIVACY,
+  TABS.FEDIVERSE,
 ];
 
 // Site settings. Super admin only, every tab.
@@ -140,6 +145,8 @@ const Settings = ({
         <SettingsOAuthSigningKeys />}
       {tab === TABS.PRIVACY &&
         <SettingsPrivacy />}
+      {tab === TABS.FEDIVERSE &&
+        <SettingsFediverse />}
     </>
   );
 };

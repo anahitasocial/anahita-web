@@ -910,6 +910,12 @@ server's side is `activitypub-service`, described in the services'
 `docs/federation.md`. It is optional: where there is none, everything here
 draws nothing (`utils/federation.js#isAbsent`).
 
+- **The servers the site refuses** are in Site settings, under Fediverse
+  (`settings/Fediverse.jsx`), for super administrators as every tab there
+  is: the list with why, a form to refuse another, and a button to stop
+  refusing one. It says that refusing a server does not remove what already
+  came from it, since the opposite is what most would expect.
+
 - **The switch** is a card under Settings › Privacy
   (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
   follow me". Off until the person turns it on, and theirs alone to turn

@@ -27,8 +27,27 @@ const lookup = (query) => {
   return axios.get('/activitypub/lookup', { params: { q: query } });
 };
 
+// The servers this installation refuses: nothing is taken from them or
+// sent to them. For super administrators, in the site's settings.
+const blocks = () => {
+  return axios.get('/activitypub/blocks');
+};
+
+// `domain` may be typed as a name, an address or a handle; the server keeps
+// the name.
+const addBlock = ({ domain, reason = '' }) => {
+  return axios.post('/activitypub/blocks', { domain, reason });
+};
+
+const removeBlock = (domain) => {
+  return axios.delete(`/activitypub/blocks/${encodeURIComponent(domain)}`);
+};
+
 export default {
   settings,
   setEnabled,
   lookup,
+  blocks,
+  addBlock,
+  removeBlock,
 };
