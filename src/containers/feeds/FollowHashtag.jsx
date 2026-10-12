@@ -9,7 +9,9 @@ import customFeeds from '../../utils/customFeeds';
 const FollowHashtag = ({ tag }) => {
   return (
     <FollowFeed
-      name={`#${tag}`}
+      // Called by the hashtag's word alone, as it is kept: no "#", lower
+      // case. The feed's picture says that it is a hashtag.
+      name={tag}
       icon="hashtag"
       definition={customFeeds.ofHashtag(tag)}
       done={i18n.t('customFeeds:prompts.followed', { tag })}
