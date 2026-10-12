@@ -55,8 +55,9 @@ Each milestone ends in a shippable state.
 | 20 | ✅ | 3 · Recommendation service. Done 2026-10-11: an optional `recommendation-service` that suggests people and groups from who follows whom, who invited whom, what was liked and posted about, each with its reason; nobody suggested whom the viewer may not see or who asked not to be; Who to follow on Home, a Suggestions page, and the choices in settings. Left out: interests picked by hand, suggestions in onboarding, nearby. Not tried signed in by Claude | [recommendation-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/recommendation-service.md) | services + web | 6 | 0, 1 |
 | 21 | ✅ | 10 · Link previews + web shell (Open Graph). Done 2026-10-11: an optional `link-preview-service` reads the page a link points to, safely, and a note carries its card, with the picture kept on this installation; an optional `web-shell` sends the app with each public page's own title, description and picture, so a shared link shows as itself. The shell is on the app's own host, since the app's pages and the API's calls share paths. Left out: oEmbed, places' and feeds' pages | [link-previews.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/link-previews.md) + [open-graph.md](open-graph.md) | services + web | 4–5 | 9 |
 | 21b | ✅ | 23 · Share button. Done 2026-10-11, ahead of its place: one share dialog (copy, email, Mastodon, Bluesky, the device's sheet), on posts' and profiles' menus and on shared custom feeds | [share-button.md](share-button.md) | web | ½–1 | 10 |
-| **M8. Media and portability** |  | | | | **about 11–14** | |
+| **M8. Media and portability** |  | | | | **about 13–17** | |
 | 22 | ⬜ | 16 · Video service + worker | [video-service.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/video-service.md) | services + web | 5–7 | 9 |
+| 22b | ⬜ | 37 · Downloading what a post holds: an "Allow download" switch on each post, off unless turned on, with a default on each person's and group's profile; a Download button for whoever can see the post. Photos, then video. Raised by the user 2026-10-11 | [downloads.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/downloads.md) | services + web | 2–3 | 16 |
 | 23 | ⬜ | 21 · Download your data | [data-export.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/data-export.md) | services + web | 6–7 | 9, 5 |
 | **M9. Federation** |  | | | | **about 23–30** | |
 | 24 | ⬜ | 8 · Phase 0 groundwork | [federation.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/federation.md) | services | 5–6 | 0, 9, 10 |
@@ -73,7 +74,7 @@ Each milestone ends in a shippable state.
 | — | ⬜ | 35 · Refinements the user asked to come back to on 2026-10-09: the followers dialog (Followers, Following, In common), and the header of an actor's profile. **Not specified yet** | — | web | not estimated | 11 |
 | — | ⬜ | 19 · Creative Commons licences. Taken out of M4 on 2026-10-04: the licence label does not reach Mastodon or Bluesky. Look again after items 16 and 17 | [content-licences.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/content-licences.md) | services + web | 3–4, or 1 for a badge only | 16, 17 |
 
-**Total: about 463–610 hours, roughly 114–153 sessions** at about 4 h per session. Shared pieces built once save a few percent:
+**Total: about 472–622 hours, roughly 116–156 sessions** at about 4 h per session. Shared pieces built once save a few percent:
 - the rate limiter;
 - `FilterNodesForViewer`;
 - the jobs queue;
