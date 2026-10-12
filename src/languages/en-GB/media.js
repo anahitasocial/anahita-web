@@ -59,4 +59,20 @@ export default {
   language: {
     label: 'Language: {{ name }}',
   },
+  // Downloading a photo or a video, where whoever posted it allows it.
+  download: {
+    allowed: 'Downloads allowed. Press to stop people downloading this.',
+    notAllowed: 'Downloads not allowed. Press to let people who can see this download it.',
+    allow: 'Allow download',
+    stop: 'Do not allow download',
+    failed: 'That could not be changed.',
+    photo: 'Photo {{number}} of {{count}}',
+    default: {
+      title: 'Downloads',
+      label: 'Let people download the photos and videos posted here',
+      help: 'What a new photo or video starts with. Only people who can see a post can download it, each post can be set its own way, and changing this changes nothing already posted.',
+      saved: 'Saved.',
+      notSaved: 'That could not be saved.',
+    },
+  },
 };

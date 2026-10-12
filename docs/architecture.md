@@ -476,12 +476,92 @@ a request that fails as it does without the service
   ("Followed by Ana and 2 others"), and counts where it may name nobody.
 - **Not interested** takes a suggestion out at once and tells the service,
   which does not make it again.
-- **Settings › Access › Suggestions**
-  (`containers/actors/Settings/Suggestions.jsx`), on the viewer's own
-  settings: whether to be suggested people and groups, whether what they
-  like and post is used, whether they are suggested to others, events as
-  well as people and groups, the way to the weights, and the
-  suggestions they turned down, each to be taken back.
+- **What the viewer is recommended** is chosen on the Recommendations page
+  itself, from the cog beside the weights
+  (`containers/suggestions/PreferencesDialog.jsx`): whether people, groups
+  and events are suggested, whether what they like and post is used, and
+  the suggestions they removed, each to be taken back.
+- **Whether they are suggested to others** is a privacy choice, and is the
+  one switch in Settings › Privacy
+  (`containers/actors/Settings/Suggestions.jsx`).
+
+### Videos
+
+A video post plays in `components/VideoPlayer.jsx`, the browser's own
+player with a cog in its top corner that opens the sizes in a menu, the one playing ticked. Posting one is a composer of its
+own, because a video is too big to be sent with the post (the services'
+`docs/videos.md`).
+
+- **Whether there is video at all** is the installation's choice. Where it
+  is off, the server leaves the video feature off every profile, so there
+  is no Video composer and no Videos tab, and nothing here has to hide
+  them. NodeInfo's `videoUploads`, `videoMaxBytes` and `videoMaxSeconds`
+  say what is allowed (`utils/videos.js`).
+- **Posting** (`containers/media/Composer/Video`): the file is refused at
+  once if it is not a video or is too large. `useVideoUpload.js` then
+  begins the upload, cuts the file into parts and sends them to storage
+  three at a time, each tried again when it fails, asking for addresses a
+  few at a time. The page has to stay open for that, and says so. When
+  everything is sent the server prepares the video, and the page can be
+  left: the composer asks after it and says when it is posted.
+- **Videos on the way** are listed under the composer: ones still being
+  prepared, and ones that failed in the last day, each with why.
+- **The parts go to storage, not to the API**, through an axios instance
+  of their own (`api/videos.js#sendPart`) that sends no cookies and none
+  of the API's handling.
+- **Playing:** a video is kept at a few sizes. It starts at 720p, at the
+  smallest where the browser says the connection is slow, or at the size
+  chosen last time, which is kept in the browser (`utils/videos.js#pick`).
+  1080p and above are played only when chosen. Changing size carries on
+  from the same moment. Nothing changes size while playing.
+- **A video's files are paths under the API** (`video.files[].url`,
+  `video.poster`), which ask each time whether the viewer may see the post
+  and send the browser on to storage. The player is a plain `<video>`, so
+  the browser sends the session cookie itself.
+- A video is a kind of post like the others: `/videos/:id`, the `videos`
+  namespace in the store, and the kind `video` in custom feeds.
+
+### Downloading
+
+A photo or a video has a Download button in the row under it, where the
+server said this viewer may download it (`authorized.download`;
+`utils/downloads.js`). Whoever posted it decides, and it is off until they
+say otherwise.
+
+- **When posting**, the photo and video composers have a download button
+  among the post's options (`components/DownloadOptionButton.jsx`), which
+  starts on what the profile being posted on says.
+- **Afterwards**, "Allow download" and "Do not allow download" are in the
+  post's menu on its own page, for whoever may edit it
+  (`containers/controls/medium/Download.jsx`).
+- **The default** is a switch in settings: Access for a person, and under
+  who can see the group for a group
+  (`containers/actors/Settings/DownloadDefault.jsx`).
+- **The download** sends the browser to the API's address for the file,
+  which answers with something to save, so the page stays where it is. A
+  post with several images offers each in a short menu.
+
+### Download your data
+
+**Settings › Account › Download your data**
+(`containers/actors/Settings/DataExport.jsx`), on the viewer's own
+settings: a copy of everything they put here, as one file, from the
+installation's export service (`/exports`; the services'
+`docs/data-export.md`).
+
+- **Asking** opens the step-up dialog (`containers/auth/StepUp`) when the
+  server says a fresh proof is needed, and asks again once it is given.
+- **While it is made**, the card asks after it every five seconds and can
+  be left; it can be cancelled.
+- **When it is ready**, the card says how big it is and until when it is
+  kept. Download asks the server for the file's address at the press: the
+  address is good for a few minutes, so one read with the page may have
+  run out.
+- **One at a time, and one a week** unless the installation says
+  otherwise. The card says when the next can be asked for
+  (`utils/exports.js#canAsk`).
+- **Where there is no export service**, the card says the download is not
+  available here (`utils/exports.js#isAbsent`).
 
 ### Link previews
 
@@ -523,6 +603,19 @@ the services' `web-shell`, when the app is hosted through it
 ([Deploying](deploying.md#through-the-web-shell)). The site's name and
 description in the build's `index.html` are what the shell uses for pages
 with nothing of their own to say.
+
+### Privacy and permissions in settings
+
+A profile's settings keep two things apart:
+
+- **Privacy** is who can see what: who can see the profile, whether
+  reposts show on it, who is blocked, and whether the person is suggested
+  to others. (Its key in the code and in the address is still `access`.)
+- **Permissions** is who can do what: who can post and reply, who can
+  quote, and whether new photos and videos start out downloadable.
+
+A setting goes where its question does. What somebody is shown, such as
+which recommendations, is neither, and is chosen where it is shown.
 
 ### Sharing
 

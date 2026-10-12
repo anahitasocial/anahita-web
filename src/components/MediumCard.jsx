@@ -21,6 +21,7 @@ import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
 import Player from './Player';
 import LinkPreviewCard from './LinkPreviewCard';
+import VideoPlayer from './VideoPlayer';
 import linkPreviews from '../utils/linkPreviews';
 import Progress from './Progress';
 import ReadMore from './ReadMore';
@@ -173,6 +174,7 @@ const MediumCard = ({
         <CardContent>
           <Progress />
         </CardContent>}
+      {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
       {medium.body && <Player text={medium.body} />}
       <CardContent component="article" className={classes.content}>
         {medium.name &&

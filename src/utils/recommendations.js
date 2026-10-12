@@ -105,7 +105,48 @@ const isAbsent = (error) => {
   return !status || status === 404 || status >= 502;
 };
 
+// "Who to follow" on the home page can be put away for a while. How long,
+// and until when for this person, which is kept in their browser: it is
+// about how one screen looks, not a choice about being suggested people,
+// which is in their settings.
+const HIDE_DAYS = 7;
+const HIDDEN_KEY = 'whoToFollow.hiddenUntil';
+
+// Whether the card is put away at this moment.
+const isHidden = (now = Date.now()) => {
+  try {
+    return Number(window.localStorage.getItem(HIDDEN_KEY)) > now;
+  } catch (e) {
+    return false;
+  }
+};
+
+// Puts it away from now, and answers with when it comes back.
+const hide = (now = Date.now()) => {
+  const until = now + (HIDE_DAYS * 24 * 60 * 60 * 1000);
+  try {
+    window.localStorage.setItem(HIDDEN_KEY, String(until));
+  } catch (e) {
+    // Not kept: it is back on the next visit.
+  }
+  return until;
+};
+
+// Brings it back before its time: what Reset in the recommendations
+// settings does, with the weights.
+const unhide = () => {
+  try {
+    window.localStorage.removeItem(HIDDEN_KEY);
+  } catch (e) {
+    // Nothing was kept, so there is nothing to take back.
+  }
+};
+
 export default {
+  HIDE_DAYS,
+  isHidden,
+  hide,
+  unhide,
   KINDS,
   relatedById,
   reasonText,

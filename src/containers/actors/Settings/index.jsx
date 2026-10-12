@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
@@ -33,8 +34,10 @@ import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
 import Permissions from './Permissions';
 import RepostsOnProfile from './RepostsOnProfile';
+import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
+import DataExport from './DataExport';
 import ActorSuggestions from './Suggestions';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
@@ -116,6 +119,7 @@ const cardsFor = (namespace) => {
       ActorAccess: Access(namespace),
       ActorPermissions: Permissions(namespace),
       ActorReposts: RepostsOnProfile(namespace),
+      ActorDownloads: DownloadDefault(namespace),
       ActorQuotes: QuotePolicy(namespace),
       ActorDelete: Delete(namespace),
       ActorPurge: Purge(namespace),
@@ -190,6 +194,7 @@ const ActorsSettings = ({
     ActorDisable,
     ActorReposts,
     ActorQuotes,
+    ActorDownloads,
   } = cardsFor(namespace);
 
   const canDelete = permissions.canDelete(actor);
@@ -233,7 +238,9 @@ const ActorsSettings = ({
       [ITEMS.ACCESS]: <ActorAccess />,
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
+      [ITEMS.DOWNLOADS]: <ActorDownloads />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
+      [ITEMS.DATA_EXPORT]: <DataExport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
@@ -336,7 +343,14 @@ const ActorsSettings = ({
     [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
     [ITEMS.ACCESS]: <ActorAccess />,
-    [ITEMS.PERMISSIONS]: <ActorPermissions />,
+    // Who can do what in the group, and with what is posted in it: whether
+    // its new photos and videos start out downloadable. Not an event's.
+    [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (
+      <Stack spacing={2}>
+        <ActorPermissions />
+        <ActorDownloads />
+      </Stack>
+    ),
     [ITEMS.DANGER]: (
       <>
         {groupDangerItems.map((item) => {

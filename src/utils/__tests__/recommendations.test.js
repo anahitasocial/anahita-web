@@ -94,3 +94,67 @@ describe('an installation without the service', () => {
     expect(recommendations.isAbsent({ response: { status: 403 } })).toBe(false);
   });
 });
+
+describe('putting Who to follow away', () => {
+  const kept = {};
+
+  beforeEach(() => {
+    Object.keys(kept).forEach((key) => {
+      delete kept[key];
+    });
+    global.window = {
+      localStorage: {
+        getItem: (key) => {
+          return key in kept ? kept[key] : null;
+        },
+        setItem: (key, value) => {
+          kept[key] = String(value);
+        },
+        removeItem: (key) => {
+          delete kept[key];
+        },
+      },
+    };
+  });
+
+  afterEach(() => {
+    delete global.window;
+  });
+
+  it('hides it for a week and then shows it again', () => {
+    const now = Date.UTC(2026, 9, 11);
+    const day = 24 * 60 * 60 * 1000;
+
+    expect(recommendations.isHidden(now)).toBe(false);
+    expect(recommendations.hide(now)).toBe(now + (7 * day));
+    expect(recommendations.isHidden(now + day)).toBe(true);
+    expect(recommendations.isHidden(now + (7 * day) - 1)).toBe(true);
+    expect(recommendations.isHidden(now + (7 * day) + 1)).toBe(false);
+  });
+
+  it('comes back at once when recommendations are reset', () => {
+    const now = Date.UTC(2026, 9, 11);
+
+    recommendations.hide(now);
+    expect(recommendations.isHidden(now + 1000)).toBe(true);
+    recommendations.unhide();
+    expect(recommendations.isHidden(now + 1000)).toBe(false);
+  });
+
+  it('is shown where the browser keeps nothing', () => {
+    global.window = {
+      localStorage: {
+        getItem: () => {
+          throw new Error('blocked');
+        },
+        setItem: () => {
+          throw new Error('blocked');
+        },
+      },
+    };
+    expect(recommendations.isHidden()).toBe(false);
+    expect(() => {
+      return recommendations.hide();
+    }).not.toThrow();
+  });
+});

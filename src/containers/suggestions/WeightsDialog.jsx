@@ -125,6 +125,9 @@ const SuggestionWeightsDialog = ({
           disabled={isSaving || !settings}
           onClick={() => {
             setWeights({ ...(settings.defaultWeights || {}) });
+            // Everything as it was at the start: Who to follow on the home
+            // page too, if it was put away.
+            recommendations.unhide();
           }}
         >
           {i18n.t('recommendations:weights.reset')}

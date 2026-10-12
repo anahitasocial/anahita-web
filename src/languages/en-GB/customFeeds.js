@@ -152,6 +152,7 @@ export default {
       article: 'articles',
       topic: 'topics',
       photo: 'photos',
+      video: 'videos',
     },
     actor: {
       person: 'people\'s profiles',
@@ -168,6 +169,7 @@ export default {
     article: 'Article',
     topic: 'Topic',
     photo: 'Photo',
+    video: 'Video',
     hashtag: 'Hashtag',
     place: 'Place',
     keyword: 'Keyword',
@@ -182,6 +184,7 @@ export default {
     article: 'Articles',
     topic: 'Topics',
     photo: 'Photos',
+    video: 'Videos',
     person: 'People',
     group: 'Groups',
     event: 'Events',

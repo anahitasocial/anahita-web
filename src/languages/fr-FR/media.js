@@ -59,4 +59,20 @@ export default {
   language: {
     label: 'Langue : {{ name }}',
   },
+  // Télécharger une photo ou une vidéo, lorsque son auteur le permet.
+  download: {
+    allowed: 'Téléchargement autorisé. Appuyez pour l’interdire.',
+    notAllowed: 'Téléchargement non autorisé. Appuyez pour le permettre aux personnes qui peuvent voir cette publication.',
+    allow: 'Autoriser le téléchargement',
+    stop: 'Ne pas autoriser le téléchargement',
+    failed: 'Cela n’a pas pu être modifié.',
+    photo: 'Photo {{number}} sur {{count}}',
+    default: {
+      title: 'Téléchargements',
+      label: 'Permettre de télécharger les photos et vidéos publiées ici',
+      help: 'Ce avec quoi commence une nouvelle photo ou vidéo. Seules les personnes qui peuvent voir une publication peuvent la télécharger, chaque publication peut être réglée à part, et ce réglage ne change rien à ce qui est déjà publié.',
+      saved: 'Enregistré.',
+      notSaved: 'Cela n’a pas pu être enregistré.',
+    },
+  },
 };

@@ -14,9 +14,11 @@ import Typography from '@mui/material/Typography';
 
 import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
 import TuneIcon from '@mui/icons-material/TuneOutlined';
+import PreferencesIcon from '@mui/icons-material/SettingsOutlined';
 
 import useSuggestions from './useSuggestions';
 import SuggestionWeightsDialog from './WeightsDialog';
+import SuggestionPreferencesDialog from './PreferencesDialog';
 import EventCard from '../events/Card';
 import ActorCard from '../../components/ActorCard';
 import BrowseHeader from '../../components/BrowseHeader';
@@ -126,6 +128,7 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
   const asked = params.get('kind');
   const kind = recommendations.KINDS.includes(asked) ? asked : 'person';
   const [isTuning, setIsTuning] = useState(false);
+  const [isChoosing, setIsChoosing] = useState(false);
   // Read again when the weights were changed.
   const [version, setVersion] = useState(0);
 
@@ -178,7 +181,26 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
             <TuneIcon />
           </IconButton>
         </Tooltip>
+        <Tooltip title={i18n.t('recommendations:preferences.action')}>
+          <IconButton
+            aria-label={i18n.t('recommendations:preferences.action')}
+            onClick={() => {
+              setIsChoosing(true);
+            }}
+          >
+            <PreferencesIcon />
+          </IconButton>
+        </Tooltip>
       </Box>
+      {isChoosing &&
+        <SuggestionPreferencesDialog
+          onClose={() => {
+            setIsChoosing(false);
+          }}
+          onChanged={() => {
+            setVersion(version + 1);
+          }}
+        />}
       {isTuning &&
         <SuggestionWeightsDialog
           onClose={() => {

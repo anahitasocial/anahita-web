@@ -15,7 +15,7 @@ import RepliesThread from '../../replies/Thread';
 import ReplyContext from '../../replies/ReplyContext';
 import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
-import ControlDownload from '../../controls/medium/Download';
+import { DownloadAction } from '../../controls/medium/Download';
 import ControlRepost from '../../controls/Repost';
 import { ShareAction, ofNode } from '../../controls/Share';
 import MediumMenu from '../MediaMenu';
@@ -83,6 +83,7 @@ const MediaReadView = ({
         linkPreview={linkPreview ? linkPreview.preview : null}
         onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
         onBodyPaste={linkPreview ? linkPreview.onPaste : null}
+        bodyOptional={namespace === 'videos'}
       />
     ),
     menu: isAuthenticated && (
@@ -101,12 +102,7 @@ const MediaReadView = ({
       isAuthenticated && (
         <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />
       ),
-      namespace === 'documents' && (
-        <ControlDownload
-          node={medium}
-          key={`medium-download-${medium.id}`}
-        />
-      ),
+      <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
     ],
     stats: (
       <>

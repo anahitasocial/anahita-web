@@ -11,7 +11,7 @@ export default {
     admins: 'Admins',
     features: 'Features',
     permissions: 'Permissions',
-    access: 'Access',
+    access: 'Privacy',
     // Deletion copy, namespace-specific. The shared actor:delete strings told
     // event administrators to "sign in to restore", which an event cannot do,
     // and that their passkeys would be removed, which an event has none of.

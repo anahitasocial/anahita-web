@@ -1,6 +1,10 @@
 export default {
   cTitle: 'Recommendations',
   whoToFollow: 'Who to follow',
+  hide_one: 'Hide for a day',
+  hide_other: 'Hide for {{count}} days',
+  hidden_one: 'Hidden for a day. Recommendations are still in the menu.',
+  hidden_other: 'Hidden for {{count}} days. Recommendations are still in the menu.',
   seeMore: 'See more',
   kinds: {
     person: 'People',
@@ -59,6 +63,10 @@ export default {
     featured: 'Featured on this site',
     popular: 'Many people followed them lately',
   },
+  preferences: {
+    title: 'What you are recommended',
+    action: 'What you are recommended',
+  },
   settings: {
     title: 'Recommendations',
     help: 'Suggestions of who to follow are worked out from who you follow and what you like. No profile is suggested to you without the reason being shown.',
@@ -68,6 +76,7 @@ export default {
     useActivity: 'Use what I like and post to choose',
     useActivityHelp: 'Off, suggestions come only from who you follow.',
     discoverable: 'Suggest me to other people',
+    discoverableHelp: 'Whether other people may be suggested your profile. What you are suggested yourself is chosen on the Recommendations page.',
     saved: 'Saved.',
     notSaved: 'That could not be saved. Please try again.',
     dismissedTitle: 'Recommendations you turned down',

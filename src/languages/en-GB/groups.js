@@ -10,7 +10,7 @@ export default {
     admins: 'Admins',
     features: 'Features',
     permissions: 'Permissions',
-    access: 'Access',
+    access: 'Privacy',
     // Deletion copy, namespace-specific. The shared actor:delete strings told
     // group administrators to "sign in to restore", which a group cannot do,
     // and that their passkeys would be removed, which a group has none of.

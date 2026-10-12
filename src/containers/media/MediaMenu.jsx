@@ -21,6 +21,7 @@ import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
 import ControlSave from '../controls/medium/Save';
+import { DownloadSwitchMenuItem } from '../controls/medium/Download';
 import PostActivity from '../activity/PostActivity';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
@@ -143,6 +144,12 @@ const MediaMenu = ({
             medium={medium}
             onDone={handleClose}
             key={`medium-pin-${medium.id}`}
+          />}
+        {canEdit &&
+          <DownloadSwitchMenuItem
+            medium={medium}
+            onDone={handleClose}
+            key={`medium-download-switch-${medium.id}`}
           />}
         {canSetReplies &&
           <MenuItem

@@ -89,7 +89,7 @@ export default {
     sections: {
       account: 'Account',
       security: 'Security',
-      access: 'Access',
+      access: 'Privacy',
       permissions: 'Permissions',
       administration: 'Administration',
       danger: 'Danger zone',

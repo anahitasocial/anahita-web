@@ -111,6 +111,7 @@ const namespaces = {
     'notes',
     'photos',
     'topics',
+    'videos',
   ],
   nodes: [
     'search',

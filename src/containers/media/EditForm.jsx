@@ -28,6 +28,7 @@ const MediumFormEdit = (props) => {
     linkPreview = null,
     onLinkPreviewRemove = null,
     onBodyPaste = null,
+    bodyOptional = false,
   } = props;
 
   return (
@@ -69,7 +70,7 @@ const MediumFormEdit = (props) => {
             fullWidth
             margin="normal"
             disabled={isFetching}
-            required
+            required={!bodyOptional}
             slotProps={{
               htmlInput: {
                 dir: 'auto',
@@ -116,6 +117,8 @@ MediumFormEdit.propTypes = {
   linkPreview: PropTypes.object,
   onLinkPreviewRemove: PropTypes.func,
   onBodyPaste: PropTypes.func,
+  // A video needs a title and may have nothing more said of it.
+  bodyOptional: PropTypes.bool,
 };
 
 export default MediumFormEdit;

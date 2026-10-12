@@ -1,6 +1,10 @@
 export default {
   cTitle: 'Recommandations',
   whoToFollow: 'Qui suivre',
+  hide_one: 'Masquer pendant un jour',
+  hide_other: 'Masquer pendant {{count}} jours',
+  hidden_one: 'Masqué pendant un jour. Les recommandations restent dans le menu.',
+  hidden_other: 'Masqué pendant {{count}} jours. Les recommandations restent dans le menu.',
   seeMore: 'Voir plus',
   kinds: {
     person: 'Personnes',
@@ -59,6 +63,10 @@ export default {
     featured: 'Mis en avant sur ce site',
     popular: 'Beaucoup de personnes les ont suivis récemment',
   },
+  preferences: {
+    title: 'Ce qui vous est recommandé',
+    action: 'Ce qui vous est recommandé',
+  },
   settings: {
     title: 'Recommandations',
     help: 'Les suggestions de profils à suivre sont établies à partir des personnes que vous suivez et de ce que vous aimez. Aucun profil ne vous est suggéré sans que la raison soit indiquée.',
@@ -68,6 +76,7 @@ export default {
     useActivity: 'Utiliser ce que j’aime et publie pour choisir',
     useActivityHelp: 'Désactivé, les suggestions viennent uniquement des personnes que vous suivez.',
     discoverable: 'Me suggérer à d’autres personnes',
+    discoverableHelp: 'Si votre profil peut être suggéré à d’autres personnes. Ce qui vous est suggéré se choisit sur la page Recommandations.',
     saved: 'Enregistré.',
     notSaved: 'L’enregistrement a échoué. Veuillez réessayer.',
     dismissedTitle: 'Recommandations écartées',

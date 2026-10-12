@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -7,6 +7,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
@@ -35,6 +36,8 @@ const SHOWN = 3;
 // each with the reason it is suggested, a Follow button and a way to say
 // not interested.
 //
+// The ✕ in its corner puts the whole card away for a week.
+//
 // Nothing is drawn while it is being read, when there is nobody to suggest,
 // or on an installation with no recommendation service: the home page is
 // then as it was without it.
@@ -45,8 +48,12 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
     isLoading,
     dismiss,
   } = useSuggestions('person', SHOWN);
+  // Put away by the ✕ in its corner, for a week. Kept in the browser.
+  const [isHidden, setIsHidden] = useState(() => {
+    return recommendations.isHidden();
+  });
 
-  if (isLoading || items.length === 0) {
+  if (isHidden || isLoading || items.length === 0) {
     return null;
   }
 
@@ -63,8 +70,22 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
       <CardHeader
         title={i18n.t('recommendations:whoToFollow')}
         slotProps={{ title: { variant: 'h6', component: 'h2' } }}
-        sx={{ pb: 0 }}
+        action={
+          <Tooltip title={i18n.t('recommendations:hide', { count: recommendations.HIDE_DAYS })}>
+            <IconButton
+              aria-label={i18n.t('recommendations:hide', { count: recommendations.HIDE_DAYS })}
+              onClick={() => {
+                recommendations.hide();
+                setIsHidden(true);
+                alertSuccess(i18n.t('recommendations:hidden', { count: recommendations.HIDE_DAYS }));
+              }}
+            >
+              <DismissIcon />
+            </IconButton>
+          </Tooltip>
+        }
       />
+      <Divider />
       <List>
         {items.map((item) => {
           const { actor } = item;

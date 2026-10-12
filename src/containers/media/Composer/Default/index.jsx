@@ -8,6 +8,7 @@ import audience from '../../../../utils/audience';
 import postLanguage from '../../../../utils/postLanguage';
 import photoFiles from '../../../../utils/photoFiles';
 import replyAccess from '../../../../utils/replyAccess';
+import DownloadOptionButton from '../../../../components/DownloadOptionButton';
 import LanguageButton from '../../../../components/LanguageButton';
 import ReplyAccessButton from '../../../../components/ReplyAccessButton';
 import ComposerAudience from '../Audience';
@@ -74,6 +75,15 @@ const MediaComposerDefault = ({
   // closed to replies by habit is a surprise.
   const [whoReplies, setWhoReplies] = useState(replyAccess.ANYONE);
 
+  // Whether a photo may be downloaded by whoever can see it. Starts on
+  // what the profile it is posted on says, which is no unless that was
+  // changed.
+  const [allowDownload, setAllowDownload] = useState(Boolean(actor.allowDownload));
+
+  useEffect(() => {
+    setAllowDownload(Boolean(actor.allowDownload));
+  }, [actor.id, actor.allowDownload]);
+
   // Who can quote. Not said unless the author chooses, which leaves the
   // post on their own setting.
   const [whoQuotes, setWhoQuotes] = useState('');
@@ -127,6 +137,7 @@ const MediaComposerDefault = ({
       const formData = isPhotos ? {
         ...form.fieldsToData(newFields),
         uploads: photoFiles.toRequest(photoItems),
+        allow_download: allowDownload,
       } : {
         ...form.fieldsToData(newFields),
         file,
@@ -208,6 +219,12 @@ const MediaComposerDefault = ({
             onQuotePolicyChange={setWhoQuotes}
             disabled={isFetching}
           />
+          {isPhotos &&
+            <DownloadOptionButton
+              value={allowDownload}
+              onChange={setAllowDownload}
+              disabled={isFetching}
+            />}
         </>
       }
     />

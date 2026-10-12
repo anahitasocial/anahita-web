@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ControlLike from '../../likes/controls/LikeFeed';
 import ControlRepost from '../../controls/Repost';
 import { ShareAction, ofNode } from '../../controls/Share';
+import { DownloadAction } from '../../controls/medium/Download';
 import LikesStats from '../../likes';
 import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
@@ -81,6 +82,10 @@ const FeedItems = ({
               key={`node-share-${node.id}`}
               what={ofNode(node.parent)}
             />,
+            <DownloadAction
+              key={`node-download-${node.id}`}
+              node={node.parent}
+            />,
           ]}
           showOwner={node.parent && node.parent.owner && !isPerson(node.parent.owner)}
         />
@@ -123,6 +128,10 @@ const FeedItems = ({
           <ShareAction
             key={`node-share-${node.id}`}
             what={ofNode(node)}
+          />,
+          <DownloadAction
+            key={`node-download-${node.id}`}
+            node={node}
           />,
         ]}
         showOwner={node.owner && !isPerson(node.owner)}
