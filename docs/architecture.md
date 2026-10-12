@@ -507,6 +507,16 @@ is simply no card.
   `components/Player.jsx`) keeps the player and has no card
   (`utils/linkPreviews.js#isShown`).
 
+### Titles and tags
+
+`components/HeaderMeta.jsx` keeps the tab's title and the page's tags in
+step as the viewer moves about. A site a link is pasted into never sees
+them: it runs no JavaScript. What it reads is written into `index.html` by
+the services' `web-shell`, when the app is hosted through it
+([Deploying](deploying.md#through-the-web-shell)). The site's name and
+description in the build's `index.html` are what the shell uses for pages
+with nothing of their own to say.
+
 ### Sharing
 
 Share is the paper plane. It opens one dialog for the whole app

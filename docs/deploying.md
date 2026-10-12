@@ -46,8 +46,35 @@ over HTTPS.
 
 ## Hosting
 
+There are two ways to put the app on the web.
+
+### Through the web shell
+
+anahita-services has a small server for the app, `web-shell`. It sends the
+build's files, and for every page it sends `index.html` with that page's
+own title, description and picture written in. That is what makes a link to
+a profile or a post show as itself when it is pasted into Mastodon,
+Bluesky, Slack or a message: those sites read the page's tags and run no
+JavaScript, so on a plain static host every link to the app looks the same.
+
+Build the app, then give the shell the `build/` folder:
+
+```sh
+yarn build
+cd ../anahita-services
+make web_shell WEB_BUILD=/path/to/anahita-web/build
+```
+
+It answers on the web app's own host (`www.example.com`), separate from the
+API's, and needs no rewrite rule. Set `PUBLIC_WEB_URL` to that address.
+Start it again after each new build. Everything else is in
+anahita-services' `docs/web-shell.md`.
+
+### On a static host
+
 Any static host works: a CDN in front of object storage, nginx, Netlify, AWS
-Amplify and so on.
+Amplify and so on. The app works the same; every shared link shows the
+site's own title and picture, whatever page it is to.
 
 **Every path has to serve `index.html`.** The app uses browser history, so a
 link such as `/people/alice` is a real URL. The host must answer any path that
