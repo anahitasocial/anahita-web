@@ -60,7 +60,11 @@ const ActorCard = ({
   const url = getURL(actor);
   const slug = utils.federation.displayHandle(actor, slugify);
   const createdAt = moment.utc(actor.createdAt).local().format('LLL').toString();
-  const lastVisitedAt = isPerson(actor) ? moment.utc(actor.lastVisitedAt).local().format('LLL').toString() : null;
+  // Only when the server says when. It does not send this for anybody, and
+  // a date made from nothing is this very moment: every card then said its
+  // person had last visited just now.
+  const lastVisitedAt = isPerson(actor) && actor.lastVisitedAt ?
+    moment.utc(actor.lastVisitedAt).local().format('LLL').toString() : null;
 
   return (
     <Card
