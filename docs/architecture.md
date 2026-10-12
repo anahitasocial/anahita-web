@@ -729,9 +729,13 @@ are about, what to leave out. The server's side is in the services'
   by them alone, and opens it in the editor.
 - **Share** is on a shared feed's card, in Discover and on the feed's page.
   See [Sharing](#sharing). Not on a feed kept to its owner.
-- **Following a hashtag** (`containers/feeds/FollowHashtag.jsx`, on a
-  hashtag's page) makes a feed of that one hashtag and puts it on the home
-  page, or puts there the one the viewer already has.
+- **Following a hashtag or a place** (`containers/feeds/FollowHashtag.jsx`
+  and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
+  `FollowFeed.jsx`) makes a feed of that one hashtag or place, the viewer's
+  alone, and puts it on the home page, or puts there the one the viewer
+  already has. It goes into no other feed. A feed of a place shows only
+  what the viewer could see anyway, and who follows a place is kept
+  nowhere.
 - **Naming in requests.** The definition's keys are snake case on the server
   (`hashtags_any`) and camel case here (`hashtagsAny`), converted both ways
   by the interceptors like every other body.

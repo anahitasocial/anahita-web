@@ -4,6 +4,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import PropTypes from 'prop-types';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ReportIcon from '@mui/icons-material/FlagOutlined';
+
+import MenuItemLabel from '../../components/MenuItemLabel';
 
 import utils from '../../utils';
 import i18n from '../../languages';
@@ -67,7 +70,9 @@ const HashtagMenu = ({
               report.open();
             }}
           >
-            {i18n.t('abuseReports:report')}
+            <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
+              {i18n.t('abuseReports:report')}
+            </MenuItemLabel>
           </MenuItem>}
       </Menu>
       {report.dialog}

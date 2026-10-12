@@ -51,6 +51,7 @@ export default {
     moveUp: 'Monter',
     moveDown: 'Descendre',
     follow: 'Suivre #{{ tag }}',
+    followPlace: 'Suivre ce lieu',
   },
   prompts: {
     pinned: 'Ajouté à votre page d’accueil.',
@@ -59,6 +60,7 @@ export default {
     deleted: 'Fil supprimé.',
     saved: 'Fil enregistré.',
     followed: '#{{ tag }} est maintenant un fil sur votre page d’accueil.',
+    followedPlace: '{{ name }} est maintenant un fil sur votre page d’accueil.',
     failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
   },
   delete: {

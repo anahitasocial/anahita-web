@@ -51,6 +51,7 @@ export default {
     moveUp: 'Move up',
     moveDown: 'Move down',
     follow: 'Follow #{{ tag }}',
+    followPlace: 'Follow this place',
   },
   prompts: {
     pinned: 'Added to your home page.',
@@ -59,6 +60,7 @@ export default {
     deleted: 'Feed deleted.',
     saved: 'Feed saved.',
     followed: '#{{ tag }} is now a feed on your home page.',
+    followedPlace: '{{ name }} is now a feed on your home page.',
     failed: 'That did not work. Please try again.',
   },
   delete: {
