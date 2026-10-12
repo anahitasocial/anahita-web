@@ -51,7 +51,7 @@ import CustomFeedAdd from '../containers/feeds/Add';
 import CustomFeedEdit from '../containers/feeds/Edit';
 import CustomFeedRead from '../containers/feeds/Read';
 import ShareDialog from '../containers/share/Dialog';
-import SuggestionsPage from '../containers/suggestions';
+import SuggestionsPage from '../containers/recommendations';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';

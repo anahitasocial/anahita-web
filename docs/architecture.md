@@ -456,13 +456,13 @@ a request that fails as it does without the service
 (`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
 
 - **Who to follow** on the home page, under the composer
-  (`containers/suggestions/WhoToFollow.jsx`): three people, each with the
+  (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
   reason, a Follow button and a way to say not interested, and a button on
   to the rest. Not drawn while it is read or when there is nobody. The ✕ in
   its header puts the whole card away for seven days, remembered in the
   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
   page brings it back.
-- **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
+- **The page** at `/suggestions` (`containers/recommendations/index.jsx`):
   People, Groups and Events, the open tab in the address (`?kind=group`),
   as cards with the reason inside each, under the name. An event is drawn with the event's
   own card and is not followed from here. It is in the left menu as
@@ -471,7 +471,7 @@ a request that fails as it does without the service
   (`useHasSuggestions.js` asks once).
 - **What counts** is the viewer's to weigh. The button beside the tabs, and
   one in settings, opens a dialog of sliders
-  (`containers/suggestions/WeightsDialog.jsx`), one a reason, from nothing,
+  (`containers/recommendations/WeightsDialog.jsx`), one a reason, from nothing,
   which leaves the reason out, to the most there is; Reset puts them back
   to the installation's own. Saved, the list is read again. The server
   names a reason in snake case and the keys of what it sends are put in
@@ -484,7 +484,7 @@ a request that fails as it does without the service
   which does not make it again.
 - **What the viewer is recommended** is chosen on the Recommendations page
   itself, from the cog beside the weights
-  (`containers/suggestions/PreferencesDialog.jsx`): whether people, groups
+  (`containers/recommendations/PreferencesDialog.jsx`): whether people, groups
   and events are suggested, whether what they like and post is used, and
   the suggestions they removed, each to be taken back.
 - **Whether they are suggested to others** is a privacy choice, and is the

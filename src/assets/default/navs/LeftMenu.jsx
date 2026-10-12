@@ -40,7 +40,7 @@ import NodeInfoType from '../../../proptypes/NodeInfo';
 import permissions from '../../../permissions';
 import adminTabs from '../../../containers/admin/tabs';
 import usePinnedFeeds from '../../../containers/feeds/usePinnedFeeds';
-import useHasSuggestions from '../../../containers/suggestions/useHasSuggestions';
+import useHasSuggestions from '../../../containers/recommendations/useHasSuggestions';
 import CustomFeedIcon from '../../../components/CustomFeedIcon';
 
 const LeftMenu = ({
