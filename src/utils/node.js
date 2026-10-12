@@ -2,6 +2,7 @@ import slugify from 'slugify';
 import { pluralize } from 'inflection';
 import countryList from 'country-list';
 import i18n from '../languages';
+import federation from './federation';
 import {
   Node as NODE,
   Person as PERSON,
@@ -384,8 +385,17 @@ const getEnabledNodeTypes = (actor) => {
     });
 };
 
+// What there can be on the profile of somebody on another server: what
+// was posted, which is their public notes. Their replies, reposts,
+// articles, photos and videos are not taken in from there, so those lists
+// would be empty for ever and say that the person has none. Each comes
+// back here when it is taken in.
+const REMOTE_TABS = ['feed', 'notes'];
+
 const getActorFeatureTabs = (actor) => {
   if (!actor.features) return [];
+
+  const remote = federation.isRemote(actor);
 
   // Who follows whom has no tab: it opens from the number of followers
   // under the profile's name. See actors/Read/SocialgraphMeta.
@@ -408,6 +418,9 @@ const getActorFeatureTabs = (actor) => {
       return (feature.nodeTypes || []).map((nodeType) => {
         return pluralize(nodeType);
       });
+    })
+    .filter((tab) => {
+      return !remote || REMOTE_TABS.includes(tab);
     });
 };
 

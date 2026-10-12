@@ -912,6 +912,12 @@ server's side is `activitypub-service`, described in the services'
 `docs/federation.md`. It is optional: where there is none, everything here
 draws nothing (`utils/federation.js#isAbsent`).
 
+- **A profile from another server has two lists,** what was posted and
+  Notes (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`). Replies,
+  reposts, articles, photos and videos are not taken in from other servers,
+  so those lists would be empty for ever and say the person has none; each
+  comes back when it is taken in. Nor is there the box of locations: where
+  somebody is is theirs to say, and their server says nothing of it.
 - **The servers the site refuses** are in Site settings, under Fediverse
   (`settings/Fediverse.jsx`), for super administrators as every tab there
   is: the list with why, and a button to stop refusing one. The list is

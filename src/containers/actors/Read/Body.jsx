@@ -48,7 +48,9 @@ const ActorBody = ({
   // The profile's own lists come first: what was posted on it and, for a
   // person, what they replied and what they reposted. Only people reply
   // and repost, so a group or any other kind of actor has the first alone.
-  const hasOwnWords = utils.node.isPerson(actor);
+  // Nor somebody on another server: their replies and reposts are not
+  // taken in from there.
+  const hasOwnWords = utils.node.isPerson(actor) && !utils.federation.isRemote(actor);
   const ownTabs = getActorFeatureTabs(actor).flatMap((tab) => {
     if (tab !== 'feed' || !hasOwnWords) {
       return [tab];

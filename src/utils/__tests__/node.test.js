@@ -155,3 +155,36 @@ describe('getActorInitials', () => {
     expect(node.getActorInitials(null)).toBe('??');
   });
 });
+
+// A profile from another server showed Articles, Photos and Videos, which
+// are never taken in from there: empty lists that said the person had none.
+describe('getActorFeatureTabs', () => {
+  const features = [
+    { service: 'feed-service', enabled: true, ordering: 1 },
+    {
+      service: 'text-service', enabled: true, ordering: 2, nodeTypes: ['note', 'article'],
+    },
+    {
+      service: 'photo-service', enabled: true, ordering: 3, nodeTypes: ['photo'],
+    },
+    {
+      service: 'video-service', enabled: false, ordering: 4, nodeTypes: ['video'],
+    },
+  ];
+
+  it('gives somebody here every list that is on', () => {
+    const tabs = node.getActorFeatureTabs({ type: 'node.actor.person-service.person.v1', features });
+
+    expect(tabs).toEqual(['feed', 'notes', 'articles', 'photos']);
+  });
+
+  it('gives somebody on another server only what is taken in from there', () => {
+    const tabs = node.getActorFeatureTabs({
+      type: 'node.actor.activitypub-service.person.v1',
+      uri: 'https://mastodon.example/users/alice',
+      features,
+    });
+
+    expect(tabs).toEqual(['feed', 'notes']);
+  });
+});
