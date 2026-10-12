@@ -20,6 +20,7 @@ const FollowLocation = ({ location }) => {
   return (
     <FollowFeed
       name={name.slice(0, NAME_MAX)}
+      icon="place"
       definition={customFeeds.ofLocation(location.id)}
       label={i18n.t('customFeeds:actions.followPlace')}
       done={i18n.t('customFeeds:prompts.followedPlace', { name })}

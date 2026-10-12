@@ -1,6 +1,39 @@
 export default {
   cTitle: 'Accueil',
   mTitle: 'Accueil',
+  // La page d'accueil d'une personne non connectée.
+  guest: {
+    signIn: 'Se connecter',
+    join: 'Créer un profil',
+    people: '{{ formatted }} personne',
+    people_plural: '{{ formatted }} personnes',
+    posts: '{{ formatted }} publication',
+    posts_plural: '{{ formatted }} publications',
+    federated: 'Fait partie du fédivers',
+    reasons: {
+      follow: {
+        title: 'Personnes, groupes et événements',
+        body: 'Suivez les personnes, les groupes et les événements qui comptent pour vous, et lisez ce qu’ils publient au même endroit.',
+      },
+      feeds: {
+        title: 'Des fils que vous composez',
+        body: 'Composez vos propres fils à partir de hashtags, de lieux et des profils que vous choisissez. Rien n’est classé à votre insu : le plus récent vient en premier.',
+      },
+      yours: {
+        title: 'Ce que vous publiez reste à vous',
+        body: 'Vous choisissez qui voit chaque publication, et vous pouvez emporter une copie de tout ce que vous avez créé quand vous le voulez.',
+      },
+    },
+    lookAround: 'Jetez un coup d’œil',
+    places: {
+      people: 'Personnes',
+      groups: 'Groupes',
+      hashtags: 'Hashtags',
+      about: 'À propos de ce site',
+    },
+    runsOn: 'Ce site fonctionne avec',
+    runsOnAfter: ', un logiciel libre pour les communautés.',
+  },
   // Shown in place of every page to somebody who is not signed in, on an
   // installation that is members-only (SITE_READ_ACCESS=registered).
   membersOnly: {

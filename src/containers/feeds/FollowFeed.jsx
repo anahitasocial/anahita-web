@@ -4,8 +4,7 @@ import { connect } from 'react-redux';
 
 import Button from '@mui/material/Button';
 
-import FollowIcon from '@mui/icons-material/AddHomeOutlined';
-
+import CustomFeedIcon from '../../components/CustomFeedIcon';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -20,6 +19,7 @@ import customFeeds from '../../utils/customFeeds';
 // home page as it is, and no second one is made.
 const FollowFeed = ({
   name,
+  icon,
   definition,
   label,
   done,
@@ -44,6 +44,8 @@ const FollowFeed = ({
 
       return api.customFeeds.add({
         name,
+        // The feed's picture is what it is a feed of: a hashtag, a place.
+        icon,
         access: 'myself',
         definition,
       }).then((added) => {
@@ -69,7 +71,7 @@ const FollowFeed = ({
 
   return (
     <Button
-      startIcon={<FollowIcon />}
+      startIcon={<CustomFeedIcon name={icon} />}
       disabled={waiting}
       onClick={handleFollow}
     >
@@ -81,6 +83,8 @@ const FollowFeed = ({
 FollowFeed.propTypes = {
   // What the feed is called, and what it shows.
   name: PropTypes.string.isRequired,
+  // Its picture, one of the feed icons: on the button, and the feed's own.
+  icon: PropTypes.string.isRequired,
   definition: PropTypes.object.isRequired,
   // What the button says, and what is said when it is done.
   label: PropTypes.string.isRequired,

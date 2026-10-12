@@ -30,7 +30,7 @@ Everything is under `src/`:
 | `routes/` | The route table and the two route guards |
 | `permissions/` | What the viewer may do, mostly read from the server's answers |
 | `languages/` | Translations, one directory per language |
-| `assets/` | Themes: logo, home page, left menu, styles and static pages |
+| `assets/` | Themes: logo, home page (what somebody not signed in sees at `/`), left menu, styles and static pages |
 | `statics/` | Files shipped with the app, including the Terms of Service and Privacy Policy |
 | `proptypes/` | PropTypes shapes and matching default objects for the API's entities |
 | `styles/` | Builds the Material UI theme from the active theme's `styles` |
@@ -733,7 +733,8 @@ are about, what to leave out. The server's side is in the services'
   and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
   `FollowFeed.jsx`) makes a feed of that one hashtag or place, the viewer's
   alone, and puts it on the home page, or puts there the one the viewer
-  already has. It goes into no other feed. A feed of a place shows only
+  already has. The feed is given the hashtag's or the place's own picture,
+  which the button shows too. It goes into no other feed. A feed of a place shows only
   what the viewer could see anyway, and who follows a place is kept
   nowhere.
 - **Naming in requests.** The definition's keys are snake case on the server
@@ -908,6 +909,19 @@ The button on it is `containers/controls/FollowRequest.jsx`: "Request to
 follow", then "Requested", which takes the request back when pressed. Whoever
 looks after the profile answers from the follow requests on their own
 profile, and is told by a notification.
+
+### The home page of somebody not signed in
+
+`assets/default/home`, the theme's, drawn at `/` in place of the feeds. It is
+about the installation and not about Anahita: its name and description as
+its operator set them (NodeInfo's `nodeName` and `nodeDescription`, the
+build's until that has answered), how many people and posts are on it,
+whether it is part of the fediverse, and the two ways in, Sign in and, where
+NodeInfo says profiles can be made, Create a profile. Under that, three
+cards on what can be done here, and links to what may be looked at without a
+profile: people, groups, hashtags and About. That it runs on Anahita is one
+line at the foot. A members-only installation never draws it
+(`routes/MembersOnlyGate.jsx`).
 
 ### The fediverse
 

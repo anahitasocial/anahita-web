@@ -1,6 +1,39 @@
 export default {
   cTitle: 'Home',
   mTitle: 'Home',
+  // The home page of somebody who is not signed in.
+  guest: {
+    signIn: 'Sign in',
+    join: 'Create a profile',
+    people: '{{ formatted }} person',
+    people_plural: '{{ formatted }} people',
+    posts: '{{ formatted }} post',
+    posts_plural: '{{ formatted }} posts',
+    federated: 'Part of the fediverse',
+    reasons: {
+      follow: {
+        title: 'People, groups and events',
+        body: 'Follow the people, groups and events that matter to you, and read what they post in one place.',
+      },
+      feeds: {
+        title: 'Feeds you shape yourself',
+        body: 'Build your own feeds from hashtags, places and the profiles you choose. Nothing is ranked behind your back: the newest comes first.',
+      },
+      yours: {
+        title: 'What you post stays yours',
+        body: 'You choose who sees each post, and you can take a copy of everything you have made whenever you like.',
+      },
+    },
+    lookAround: 'Have a look around',
+    places: {
+      people: 'People',
+      groups: 'Groups',
+      hashtags: 'Hashtags',
+      about: 'About this site',
+    },
+    runsOn: 'This site runs on',
+    runsOnAfter: ', open source software for communities.',
+  },
   // Shown in place of every page to somebody who is not signed in, on an
   // installation that is members-only (SITE_READ_ACCESS=registered).
   membersOnly: {
