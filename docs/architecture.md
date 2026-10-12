@@ -500,6 +500,9 @@ is simply no card.
   the card the note already has, which it shows without asking again. A
   different link gets its own card, and the ✕ saves the note without one
   (`link_preview_remove`).
+- **A reply is a note** and has the card the same way: the reply box
+  (`containers/replies/ReplyForm.jsx`) uses the same hook, for a new reply
+  and for one being changed, and a reply shows its card under its text.
 - **The note is sent with the link only** (`link_preview_url`). What the
   card says is what the server read off the page, never what the browser
   sends.

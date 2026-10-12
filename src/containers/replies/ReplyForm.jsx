@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -6,6 +6,9 @@ import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
 
+import LinkPreviewCard from '../../components/LinkPreviewCard';
+import useLinkPreview from '../media/Composer/useLinkPreview';
+import linkPreviews from '../../utils/linkPreviews';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
 
@@ -14,7 +17,9 @@ const { BODY } = MEDIUM.FIELDS;
 // The box a reply is written in: under a post, under a reply, or in place of
 // a reply that is being changed.
 //
-// It holds the text while it is being written and hands it over when sent.
+// It holds the text while it is being written and hands it over when sent,
+// with the card for the first link in it: a reply is a note, and carries
+// one the same way. `linkPreview` is the card of a reply being changed.
 // Sending is the caller's: it returns a promise, and the box empties itself
 // only when that succeeds, so a reply that could not be posted is still
 // there to send again.
@@ -26,11 +31,19 @@ const ReplyForm = ({
   submitLabel = i18n.t('replies:send'),
   autoFocus = false,
   flush = false,
+  linkPreview = null,
 }) => {
   const [body, setBody] = useState(initial);
   const [isSending, setIsSending] = useState(false);
 
   const text = body.trim();
+
+  const known = useMemo(() => {
+    return linkPreview ?
+      { url: linkPreviews.urlToPreview(initial), preview: linkPreview } :
+      null;
+  }, [linkPreview, initial]);
+  const card = useLinkPreview(body, true, known);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -39,7 +52,11 @@ const ReplyForm = ({
     }
 
     setIsSending(true);
-    onSubmit(text).then(() => {
+    onSubmit(text, {
+      ...(card.url ? { linkPreviewUrl: card.url } : {}),
+      ...(card.isRemoved ? { linkPreviewRemove: true } : {}),
+    }).then(() => {
+      card.reset();
       setBody('');
     }).catch(() => {
       // The caller has said what went wrong. The text stays.
@@ -62,6 +79,7 @@ const ReplyForm = ({
         onChange={(event) => {
           setBody(event.target.value);
         }}
+        onPaste={card.onPaste}
         placeholder={placeholder}
         aria-label={placeholder}
         autoFocus={autoFocus}
@@ -76,6 +94,10 @@ const ReplyForm = ({
             maxLength: BODY.MAX_LENGTH,
           },
         }}
+      />
+      <LinkPreviewCard
+        preview={card.preview}
+        onRemove={isSending ? null : card.remove}
       />
       {/* Buttons the width of the box, as in the composer and the edit
           forms: one for sending, and beside it one for backing out where
@@ -101,7 +123,7 @@ const ReplyForm = ({
 };
 
 ReplyForm.propTypes = {
-  // Called with the text. Returns a promise.
+  // Called with the text and what to do about its card. Returns a promise.
   onSubmit: PropTypes.func.isRequired,
   onCancel: PropTypes.func,
   initial: PropTypes.string,
@@ -111,6 +133,8 @@ ReplyForm.propTypes = {
   // Without padding of its own, for where it sits inside a reply that
   // already has some.
   flush: PropTypes.bool,
+  // The card a reply being changed already has.
+  linkPreview: PropTypes.object,
 };
 
 export default ReplyForm;
