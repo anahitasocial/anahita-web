@@ -476,6 +476,9 @@ a request that fails as it does without the service
   names a reason in snake case and the keys of what it sends are put in
   camel case on the way in: `utils/recommendations.js#weightKey` is the one
   place that knows.
+  The last slider is not a reason: how lately a person must have been here
+  to be suggested at all, over the steps the server gives, from the last
+  month to any time. A year unless the viewer says.
 - **The reason is always shown.** `utils/recommendations.js#reasonText`
   puts the first reason into words from what the service sent with it
   ("Followed by Ana and 2 others"), and counts where it may name nobody.

@@ -62,6 +62,18 @@ export default {
     sharedInterest: 'Ils publient sur vos sujets',
     featured: 'Mis en avant sur ce site',
     popular: 'Beaucoup de personnes les ont suivis récemment',
+    activeWithin: {
+      label: 'Personnes venues ici pour la dernière fois',
+      help: 'Une personne qui n’est pas venue ici, ni n’a rien publié, depuis plus longtemps ne vous est pas suggérée. Les groupes et les événements ne sont pas concernés.',
+      days: 'Au cours des {{ count }} derniers jours',
+      days30: 'Au cours du dernier mois',
+      days90: 'Au cours des 3 derniers mois',
+      days180: 'Au cours des 6 derniers mois',
+      days365: 'Au cours de la dernière année',
+      days730: 'Au cours des 2 dernières années',
+      days1825: 'Au cours des 5 dernières années',
+      days0: 'À tout moment',
+    },
   },
   preferences: {
     title: 'Ce qui vous est recommandé',

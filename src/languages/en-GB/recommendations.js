@@ -62,6 +62,18 @@ export default {
     sharedInterest: 'They post about what you post about',
     featured: 'Featured on this site',
     popular: 'Many people followed them lately',
+    activeWithin: {
+      label: 'People who were last here',
+      help: 'Somebody who has not been here, or posted, for longer than this is not suggested to you. Groups and events are not left out by it.',
+      days: 'In the last {{ count }} days',
+      days30: 'In the last month',
+      days90: 'In the last 3 months',
+      days180: 'In the last 6 months',
+      days365: 'In the last year',
+      days730: 'In the last 2 years',
+      days1825: 'In the last 5 years',
+      days0: 'At any time',
+    },
   },
   preferences: {
     title: 'What you are recommended',

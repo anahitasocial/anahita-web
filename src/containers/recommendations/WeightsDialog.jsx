@@ -23,6 +23,11 @@ const STEP = 0.5;
 // slider a reason, from nothing, which leaves the reason out, to the most
 // there is.
 //
+// Under them, one more that is not a reason: how lately a person must have
+// been here to be suggested at all, from the last month to any time. It is
+// a slider over the choices the server gives, not over days: the steps are
+// a month, a season, a year, and so on, and the last is no limit.
+//
 // These are the viewer's own, and change only what they are suggested.
 // Nothing is saved until Save; Reset puts the sliders back to the
 // installation's own, to be saved or not.
@@ -36,21 +41,39 @@ const SuggestionWeightsDialog = ({
   // and its own weights to go back to.
   const [settings, setSettings] = useState(null);
   const [weights, setWeights] = useState({});
+  const [activeWithin, setActiveWithin] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
     api.recommendations.preferences().then((result) => {
       setSettings(result.data);
       setWeights(result.data.weights || {});
+      setActiveWithin(result.data.activeWithinDays);
     }).catch(() => {
       alertError(i18n.t('recommendations:weights.notSaved'));
       onClose();
     });
   }, []);
 
+  const activeChoices = (settings && settings.activeWithinChoices) || [];
+  // Where the slider stands: the place of the choice among the choices.
+  const activeIndex = Math.max(activeChoices.indexOf(activeWithin), 0);
+  const activeLabel = (days) => {
+    return i18n.t(`recommendations:weights.activeWithin.days${days}`, {
+      defaultValue: i18n.t('recommendations:weights.activeWithin.days', { count: days }),
+    });
+  };
+
   const handleSave = () => {
     setIsSaving(true);
-    api.recommendations.setPreferences({ weights }).then(() => {
+    const choices = { weights };
+
+    // Left alone where the server does not know of it.
+    if (activeChoices.length > 0) {
+      choices.activeWithinDays = activeWithin;
+    }
+
+    api.recommendations.setPreferences(choices).then(() => {
       alertSuccess(i18n.t('recommendations:weights.saved'));
       onSaved();
     }).catch(() => {
@@ -113,6 +136,35 @@ const SuggestionWeightsDialog = ({
                 </div>
               );
             })}
+            {activeChoices.length > 1 &&
+              <div>
+                <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between' }}>
+                  <Typography id="suggestion-active-within" variant="body1">
+                    {i18n.t('recommendations:weights.activeWithin.label')}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" sx={{ flexShrink: 0 }}>
+                    {activeLabel(activeChoices[activeIndex])}
+                  </Typography>
+                </Stack>
+                <Slider
+                  aria-labelledby="suggestion-active-within"
+                  value={activeIndex}
+                  min={0}
+                  max={activeChoices.length - 1}
+                  step={1}
+                  marks
+                  disabled={isSaving}
+                  getAriaValueText={(index) => {
+                    return activeLabel(activeChoices[index]);
+                  }}
+                  onChange={(event, index) => {
+                    setActiveWithin(activeChoices[index]);
+                  }}
+                />
+                <Typography variant="body2" color="textSecondary">
+                  {i18n.t('recommendations:weights.activeWithin.help')}
+                </Typography>
+              </div>}
           </Stack>}
       </DialogContent>
       {/* Side by side: Cancel, Reset, then the one that saves. */}
@@ -125,6 +177,9 @@ const SuggestionWeightsDialog = ({
           disabled={isSaving || !settings}
           onClick={() => {
             setWeights({ ...(settings.defaultWeights || {}) });
+            if (activeChoices.length > 0) {
+              setActiveWithin(settings.activeWithinDefault);
+            }
             // Everything as it was at the start: Who to follow on the home
             // page too, if it was put away.
             recommendations.unhide();
