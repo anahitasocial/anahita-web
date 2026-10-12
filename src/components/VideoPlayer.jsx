@@ -1,14 +1,17 @@
 import React, {
-  useEffect, useMemo, useId, useRef, useState,
+  useEffect, useMemo, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import Typography from '@mui/material/Typography';
-import QualityIcon from '@mui/icons-material/HighQuality';
+import Button from '@mui/material/Button';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListSubheader from '@mui/material/ListSubheader';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import QualityIcon from '@mui/icons-material/Settings';
+import OpenIcon from '@mui/icons-material/ArrowDropDown';
+import ChosenIcon from '@mui/icons-material/Check';
 
 import i18n from '../languages';
 import videos from '../utils/videos';
@@ -17,8 +20,8 @@ import videos from '../utils/videos';
 //
 // The video is kept at a few sizes. It starts at 720p, or at the smallest
 // where the browser says the connection is slow, or at the size this person
-// chose last time. The sizes are in a row under it, the one playing marked,
-// and a choice is remembered in the browser.
+// chose last time. A button in its corner says which is playing and opens
+// the others; a choice is remembered in the browser.
 // Changing size carries on from where the video was. Nothing changes size
 // while it plays: the sizes are whole files, not a stream.
 //
@@ -39,7 +42,7 @@ const VideoPlayer = ({
     });
     return first ? first.height : 0;
   });
-  const groupId = useId();
+  const [anchorEl, setAnchorEl] = useState(null);
   const element = useRef(null);
   // Where to carry on from, and whether it was playing, across a change
   // of size.
@@ -99,7 +102,7 @@ const VideoPlayer = ({
 
   return (
     <Box>
-      <Box sx={{ bgcolor: 'common.black', lineHeight: 0 }}>
+      <Box sx={{ position: 'relative', bgcolor: 'common.black', lineHeight: 0 }}>
         {/* The key makes a new element for each size: a browser does not
           reliably start again from a changed src on the same one. */}
         <Box
@@ -120,52 +123,68 @@ const VideoPlayer = ({
             aspectRatio: video.width && video.height ? `${video.width} / ${video.height}` : '16 / 9',
           }}
         />
+        {/* The size, on the video: a button in its corner that says which
+            is playing and opens the others. In the top corner, clear of
+            the browser's own controls along the bottom. */}
+        {files.length > 1 &&
+          <>
+            <Button
+              size="small"
+              variant="contained"
+              disableElevation
+              startIcon={<QualityIcon />}
+              endIcon={<OpenIcon />}
+              onClick={(event) => {
+                setAnchorEl(event.currentTarget);
+              }}
+              aria-haspopup="menu"
+              aria-expanded={anchorEl ? 'true' : undefined}
+              aria-label={i18n.t('videos:player.qualityOf', { label: videos.label(file) })}
+              title={i18n.t('videos:player.quality')}
+              sx={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                lineHeight: 1.5,
+                color: 'common.white',
+                bgcolor: 'rgba(0, 0, 0, 0.7)',
+                '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.9)' },
+              }}
+            >
+              {videos.label(file)}
+            </Button>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => {
+                setAnchorEl(null);
+              }}
+              anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+              transformOrigin={{ vertical: 'top', horizontal: 'right' }}
+            >
+              <ListSubheader sx={{ lineHeight: 2 }}>
+                {i18n.t('videos:player.quality')}
+              </ListSubheader>
+              {files.map((candidate) => {
+                return (
+                  <MenuItem
+                    key={`quality-${candidate.height}`}
+                    selected={candidate.height === file.height}
+                    onClick={() => {
+                      setAnchorEl(null);
+                      choose(candidate);
+                    }}
+                  >
+                    <ListItemIcon>
+                      {candidate.height === file.height && <ChosenIcon fontSize="small" />}
+                    </ListItemIcon>
+                    {videos.label(candidate)}
+                  </MenuItem>
+                );
+              })}
+            </Menu>
+          </>}
       </Box>
-      {/* The sizes, in a row under the video and always in view: one press
-          each, with the one playing marked. */}
-      {files.length > 1 &&
-        <Stack
-          direction="row"
-          spacing={1}
-          sx={{
-            px: 2, py: 1, alignItems: 'center', justifyContent: 'space-between',
-          }}
-        >
-          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-            <QualityIcon fontSize="small" color="action" />
-            <Typography variant="body2" color="textSecondary" id={groupId}>
-              {i18n.t('videos:player.quality')}
-            </Typography>
-          </Stack>
-          <ToggleButtonGroup
-            exclusive
-            size="small"
-            color="primary"
-            value={file.height}
-            aria-labelledby={groupId}
-            onChange={(event, chosen) => {
-              const next = files.find((candidate) => {
-                return candidate.height === chosen;
-              });
-              // Pressing the one that is playing chooses nothing.
-              if (next) {
-                choose(next);
-              }
-            }}
-          >
-            {files.map((candidate) => {
-              return (
-                <ToggleButton
-                  key={`quality-${candidate.height}`}
-                  value={candidate.height}
-                  sx={{ px: 2 }}
-                >
-                  {videos.label(candidate)}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-        </Stack>}
     </Box>
   );
 };

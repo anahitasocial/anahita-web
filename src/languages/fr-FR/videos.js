@@ -34,6 +34,7 @@ export default {
     failed: 'Une erreur est survenue et la vidéo n’a pas pu être publiée.',
   },
   player: {
+    qualityOf: 'Qualité : {{label}}',
     quality: 'Qualité',
   },
 };

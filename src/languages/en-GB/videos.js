@@ -34,6 +34,7 @@ export default {
     failed: 'Something went wrong and the video could not be posted.',
   },
   player: {
+    qualityOf: 'Quality: {{label}}',
     quality: 'Quality',
   },
 };
