@@ -51,7 +51,7 @@ export default {
     moveUp: 'Move up',
     moveDown: 'Move down',
     follow: 'Follow #{{ tag }}',
-    followPlace: 'Follow this place',
+    followPlace: 'Follow',
   },
   prompts: {
     pinned: 'Added to your home page.',

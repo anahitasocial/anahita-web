@@ -716,8 +716,9 @@ are about, what to leave out. The server's side is in the services'
   (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
   draws it: in the menu under Home, on the tabs, in the list and on the
   feed's page.
-- **Deleting a feed** is offered to its owner in three places, each asking
-  first: its card in the list, its own page, and the editor.
+- **Deleting a feed** is offered to its owner in two places, each asking
+  first: its card in the list and its own page. Not in the editor, which is
+  for changing a feed.
 - **Ten feeds** is the most a person owns, the number the home page holds.
 - **The sentence** is `utils/customFeeds.js#summary`, from the definition
   alone. It is on the editor, on a feed's page and in the list, so nothing

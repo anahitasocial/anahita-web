@@ -51,7 +51,7 @@ export default {
     moveUp: 'Monter',
     moveDown: 'Descendre',
     follow: 'Suivre #{{ tag }}',
-    followPlace: 'Suivre ce lieu',
+    followPlace: 'Suivre',
   },
   prompts: {
     pinned: 'Ajouté à votre page d’accueil.',
