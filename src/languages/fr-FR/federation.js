@@ -19,6 +19,11 @@ export default {
       profile_not_public: 'Seul un profil visible par tout le monde peut être sur le fédivers. Le vôtre ne l’est pas : vous pouvez le changer ci-dessus, sous « Accès ».',
     },
   },
+  leaving: {
+    byClosing: 'Ce profil est sur le fédivers, où seul un profil visible par tout le monde peut être. Enregistrer ce choix le retire du fédivers : les autres serveurs seront invités à le retirer, ainsi que ses notes et ses abonnés là-bas, et pourraient ne pas le reprendre s’il est rouvert.',
+    byClosingConfirm: 'Fermer ce profil le retire aussi du fédivers. Tous les serveurs qui le connaissent seront invités à le retirer, ainsi que ses notes et ses abonnés là-bas. Rouvrir le profil plus tard n’annulera pas cela : les serveurs qui l’ont retiré pourraient ne pas le reprendre.',
+    confirm: 'Enregistrer et quitter',
+  },
   remote: {
     badge: 'De {{ domain }}',
     onAnotherServer: 'Cette personne est sur un autre serveur, {{ domain }}. Ce que vous voyez ici est ce que ce serveur partage avec tout le monde.',

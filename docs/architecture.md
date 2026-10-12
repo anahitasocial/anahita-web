@@ -920,6 +920,13 @@ draws nothing (`utils/federation.js#isAbsent`).
   and when they cannot turn it on (their profile is not open to everybody,
   or the site does not federate) it is disabled with the server's reason
   beside it.
+- **Closing a profile is the one way to leave by accident,** so the card
+  where a profile's audience is chosen (`actors/Settings/Access.jsx`) asks
+  whether the person is on the fediverse, warns beside the choice as soon
+  as anything but "everybody" is picked, and asks once more before saving.
+  It is the only choice on that card that is confirmed, because it is the
+  only one that cannot be undone. An administrator changing somebody
+  else's profile is warned the same way.
 - **Somebody from another server is a person like any other** to the app:
   their type ends in `person`, so they are opened at `/people/<handle>`,
   where the handle is whole, `alice@mastodon.example`, and the same page

@@ -9,8 +9,12 @@ import axios from 'axios';
 
 // Whether the viewer is on the fediverse, whether they could be, and what
 // they are or would be called there.
-const settings = () => {
-  return axios.get('/activitypub/settings');
+//
+// With a person, it is asked about them: for themselves, or for an
+// administrator, who can read it and not change it.
+const settings = (person) => {
+  const params = person && person.id ? { person_id: person.id } : undefined;
+  return axios.get('/activitypub/settings', { params });
 };
 
 const setEnabled = (enabled) => {
