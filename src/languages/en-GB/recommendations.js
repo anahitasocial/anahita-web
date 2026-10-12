@@ -1,6 +1,10 @@
 export default {
   cTitle: 'Recommendations',
   whoToFollow: 'Who to follow',
+  hide_one: 'Hide for a day',
+  hide_other: 'Hide for {{count}} days',
+  hidden_one: 'Hidden for a day. Recommendations are still in the menu.',
+  hidden_other: 'Hidden for {{count}} days. Recommendations are still in the menu.',
   seeMore: 'See more',
   kinds: {
     person: 'People',

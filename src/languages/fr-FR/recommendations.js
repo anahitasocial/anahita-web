@@ -1,6 +1,10 @@
 export default {
   cTitle: 'Recommandations',
   whoToFollow: 'Qui suivre',
+  hide_one: 'Masquer pendant un jour',
+  hide_other: 'Masquer pendant {{count}} jours',
+  hidden_one: 'Masqué pendant un jour. Les recommandations restent dans le menu.',
+  hidden_other: 'Masqué pendant {{count}} jours. Les recommandations restent dans le menu.',
   seeMore: 'Voir plus',
   kinds: {
     person: 'Personnes',
