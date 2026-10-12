@@ -12,6 +12,8 @@ import ControlEditAccess from '../../controls/medium/Access';
 import Progress from '../../../components/Progress';
 import MediumStepper from '../Stepper';
 import MediaReadView from './MediaRead';
+import useLinkPreview from '../Composer/useLinkPreview';
+import linkPreviews from '../../../utils/linkPreviews';
 
 import actions from '../../../actions';
 import utils from '../../../utils';
@@ -116,6 +118,20 @@ const MediaRead = ({
     setFields({ ...newFields, [name]: { ...newFields[name], value } });
   };
 
+  // A note's card while it is edited: the one it has for as long as its
+  // link is still the first in it, and the card of another link put in its
+  // place. See the composer's useLinkPreview.
+  const knownCard = useMemo(() => {
+    return medium && medium.linkPreview ?
+      { url: linkPreviews.urlToPreview(medium.body), preview: medium.linkPreview } :
+      null;
+  }, [medium && medium.id, medium && medium.linkPreview, medium && medium.body]);
+  const linkPreview = useLinkPreview(
+    isEditing ? current.body : '',
+    isEditing && namespace === 'notes',
+    knownCard,
+  );
+
   const handleOnSubmit = (event) => {
     event.preventDefault();
     const { target } = event;
@@ -126,7 +142,14 @@ const MediaRead = ({
       editItem({
         id: current.id,
         ...formData,
-      }).then(handleCancel).catch(() => {
+        // Which link the card is for, or that the card was taken off. What
+        // the card says is the server's.
+        ...(linkPreview.url ? { link_preview_url: linkPreview.url } : {}),
+        ...(linkPreview.isRemoved ? { link_preview_remove: 1 } : {}),
+      }).then(() => {
+        linkPreview.reset();
+        handleCancel();
+      }).catch(() => {
         // The error alert already reports the failure; leave the form open so
         // the edit is not thrown away.
       });
@@ -174,6 +197,7 @@ const MediaRead = ({
         handleCancel={handleCancel}
         handleOnChange={handleOnChange}
         handleOnSubmit={handleOnSubmit}
+        linkPreview={namespace === 'notes' ? linkPreview : null}
       />
     </>
   );

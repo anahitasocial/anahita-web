@@ -38,6 +38,7 @@ const MediaReadView = ({
   Access,
   canEdit,
   handleView,
+  linkPreview = null,
   handleEdit,
   handleCancel,
   handleOnChange,
@@ -78,6 +79,9 @@ const MediaReadView = ({
         handleOnSubmit={handleOnSubmit}
         handleCancel={handleCancel}
         isFetching={isFetching}
+        linkPreview={linkPreview ? linkPreview.preview : null}
+        onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
+        onBodyPaste={linkPreview ? linkPreview.onPaste : null}
       />
     ),
     menu: isAuthenticated && (
@@ -152,6 +156,8 @@ const MediaReadView = ({
 };
 
 MediaReadView.propTypes = {
+  // A note's card while it is edited, from useLinkPreview.
+  linkPreview: PropTypes.object,
   medium: MediumType.isRequired,
   current: PropTypes.object.isRequired,
   namespace: PropTypes.string.isRequired,

@@ -492,10 +492,14 @@ the services' `docs/link-previews.md`), which is optional: with none there
 is simply no card.
 
 - **While a note is written**, `containers/media/Composer/useLinkPreview.js`
-  finds the first link once the writer has paused for half a second and
-  asks for its card. The ✕ on the card posts the note without it. A link
+  finds the first link once the writer has paused for half a second, or
+  at once when it was pasted, and asks for its card. The ✕ on the card posts the note without it. A link
   with nothing to show, or whose card was taken off, is not asked for
   again.
+- **While a note is edited** on its own page the same hook is used, given
+  the card the note already has, which it shows without asking again. A
+  different link gets its own card, and the ✕ saves the note without one
+  (`link_preview_remove`).
 - **The note is sent with the link only** (`link_preview_url`). What the
   card says is what the server read off the page, never what the browser
   sends.

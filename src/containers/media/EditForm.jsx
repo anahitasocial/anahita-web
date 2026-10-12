@@ -6,6 +6,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
 
+import LinkPreviewCard from '../../components/LinkPreviewCard';
 import MediumType from '../../proptypes/Medium';
 import { Medium as MEDIUM } from '../../constants';
 
@@ -24,6 +25,9 @@ const MediumFormEdit = (props) => {
     fields,
     medium,
     isFetching,
+    linkPreview = null,
+    onLinkPreviewRemove = null,
+    onBodyPaste = null,
   } = props;
 
   return (
@@ -57,6 +61,7 @@ const MediumFormEdit = (props) => {
             name="body"
             value={medium.body || ''}
             onChange={handleOnChange}
+            onPaste={onBodyPaste}
             label={i18n.t('media:medium.description')}
             error={fields.body.error !== ''}
             helperText={fields.body.error}
@@ -72,6 +77,10 @@ const MediumFormEdit = (props) => {
               },
             }}
           />}
+        <LinkPreviewCard
+          preview={linkPreview}
+          onRemove={isFetching ? null : onLinkPreviewRemove}
+        />
       </CardContent>
       <CardActions>
         <Button
@@ -102,6 +111,11 @@ MediumFormEdit.propTypes = {
   fields: PropTypes.objectOf(PropTypes.any).isRequired,
   medium: MediumType.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  // A note's card for the first link in it, a way to save without it, and
+  // word of a paste so a pasted link is looked up at once.
+  linkPreview: PropTypes.object,
+  onLinkPreviewRemove: PropTypes.func,
+  onBodyPaste: PropTypes.func,
 };
 
 export default MediumFormEdit;

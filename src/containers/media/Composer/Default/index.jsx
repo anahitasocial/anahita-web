@@ -182,6 +182,7 @@ const MediaComposerDefault = ({
       namespace={namespace}
       linkPreview={linkPreview.preview}
       onLinkPreviewRemove={linkPreview.remove}
+      onBodyPaste={linkPreview.onPaste}
       // The choices that go with a post: who can see it, what language
       // it is in, and who can reply. Built here and handed over ready, so each form
       // only has to place them beside its button.
