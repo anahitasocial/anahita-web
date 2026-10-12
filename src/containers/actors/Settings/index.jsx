@@ -342,15 +342,15 @@ const ActorsSettings = ({
     // its Info is the event's own form and not the one a group has.
     [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
-    // With who can see the group, what its new photos and videos start
-    // with about being downloaded. Not an event's: nothing is set there.
-    [ITEMS.ACCESS]: isEvent ? <ActorAccess /> : (
+    [ITEMS.ACCESS]: <ActorAccess />,
+    // Who can do what in the group, and with what is posted in it: whether
+    // its new photos and videos start out downloadable. Not an event's.
+    [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (
       <Stack spacing={2}>
-        <ActorAccess />
+        <ActorPermissions />
         <ActorDownloads />
       </Stack>
     ),
-    [ITEMS.PERMISSIONS]: <ActorPermissions />,
     [ITEMS.DANGER]: (
       <>
         {groupDangerItems.map((item) => {

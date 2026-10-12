@@ -121,6 +121,8 @@ const ALL_SECTIONS = [
     ],
   },
   {
+    // Shown as "Privacy": who can see what. The key is kept, since it is
+    // in the address of the page.
     key: SECTIONS.ACCESS,
     // Who can see the profile, and what the profile shows of what the
     // person reposts. (A group's Access tab has the first only: a group
@@ -129,8 +131,6 @@ const ALL_SECTIONS = [
     items: [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
       { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
-      { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
-      { key: ITEMS.DOWNLOADS, bare: false, viewerOnly: false },
       // Who you have blocked is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
       { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },
@@ -140,8 +140,13 @@ const ALL_SECTIONS = [
     key: SECTIONS.PERMISSIONS,
     // Not viewerOnly: an administrator can set these on somebody else's
     // profile, and the server authorizes the edit the way it does Access.
+    //
+    // Who can do what: post and reply here, quote this person's posts,
+    // download what they post. Who can SEE what is the section before.
     items: [
       { key: ITEMS.PERMISSIONS, bare: false, viewerOnly: false },
+      { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
+      { key: ITEMS.DOWNLOADS, bare: false, viewerOnly: false },
     ],
   },
   {

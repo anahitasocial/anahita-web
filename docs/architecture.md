@@ -476,12 +476,14 @@ a request that fails as it does without the service
   ("Followed by Ana and 2 others"), and counts where it may name nobody.
 - **Not interested** takes a suggestion out at once and tells the service,
   which does not make it again.
-- **Settings › Access › Suggestions**
-  (`containers/actors/Settings/Suggestions.jsx`), on the viewer's own
-  settings: whether to be suggested people and groups, whether what they
-  like and post is used, whether they are suggested to others, events as
-  well as people and groups, the way to the weights, and the
-  suggestions they turned down, each to be taken back.
+- **What the viewer is recommended** is chosen on the Recommendations page
+  itself, from the cog beside the weights
+  (`containers/suggestions/PreferencesDialog.jsx`): whether people, groups
+  and events are suggested, whether what they like and post is used, and
+  the suggestions they removed, each to be taken back.
+- **Whether they are suggested to others** is a privacy choice, and is the
+  one switch in Settings › Privacy
+  (`containers/actors/Settings/Suggestions.jsx`).
 
 ### Videos
 
@@ -601,6 +603,19 @@ the services' `web-shell`, when the app is hosted through it
 ([Deploying](deploying.md#through-the-web-shell)). The site's name and
 description in the build's `index.html` are what the shell uses for pages
 with nothing of their own to say.
+
+### Privacy and permissions in settings
+
+A profile's settings keep two things apart:
+
+- **Privacy** is who can see what: who can see the profile, whether
+  reposts show on it, who is blocked, and whether the person is suggested
+  to others. (Its key in the code and in the address is still `access`.)
+- **Permissions** is who can do what: who can post and reply, who can
+  quote, and whether new photos and videos start out downloadable.
+
+A setting goes where its question does. What somebody is shown, such as
+which recommendations, is neither, and is chosen where it is shown.
 
 ### Sharing
 
