@@ -114,7 +114,7 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username, or for somebody on another server their whole handle, `alice@mastodon.example` |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
-| `/suggestions` | People and groups the viewer might follow. Signed in only; reached from the home page |
+| `/recommendations` | People and groups the viewer might follow. Signed in only; reached from the home page. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
@@ -462,12 +462,11 @@ a request that fails as it does without the service
   its header puts the whole card away for seven days, remembered in the
   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
   page brings it back.
-- **The page** at `/suggestions` (`containers/recommendations/index.jsx`):
+- **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
   People, Groups and Events, the open tab in the address (`?kind=group`),
   as cards with the reason inside each, under the name. An event is drawn with the event's
   own card and is not followed from here. It is in the left menu as
-  **Recommendations** (the page keeps the address `/suggestions`, since
-  `/recommendations/` is the service's own path on the same site), where the installation has the service
+  **Recommendations**, where the installation has the service
   (`useHasSuggestions.js` asks once).
 - **What counts** is the viewer's to weigh. The button beside the tabs, and
   one in settings, opens a dialog of sliders

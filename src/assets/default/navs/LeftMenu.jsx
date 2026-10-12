@@ -124,8 +124,8 @@ const LeftMenu = ({
       {hasSuggestions &&
         <ListItemButton
           component={Link}
-          to="/suggestions"
-          selected={pathname === '/suggestions'}
+          to="/recommendations"
+          selected={pathname === '/recommendations'}
         >
           <ListItemIcon>
             <SuggestionsIcon />

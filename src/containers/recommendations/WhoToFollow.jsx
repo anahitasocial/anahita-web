@@ -133,7 +133,7 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
         })}
       </List>
       <CardActions sx={{ p: 1, pt: 0 }}>
-        <Button fullWidth component={RouterLink} to="/suggestions">
+        <Button fullWidth component={RouterLink} to="/recommendations">
           {i18n.t('recommendations:seeMore')}
         </Button>
       </CardActions>
