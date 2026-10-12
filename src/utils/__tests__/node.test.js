@@ -126,3 +126,32 @@ describe('authority checks', () => {
     expect(node.isAdmin(null)).toBe(false);
   });
 });
+
+// "Alice (lab)" was drawn as A(: the first character of each of the first
+// two words, whatever it was.
+describe('getActorInitials', () => {
+  const initialsOf = (name) => {
+    return node.getActorInitials({ id: 1, name, alias: 'somebody' });
+  };
+
+  it('takes letters and digits, and nothing else', () => {
+    expect(initialsOf('Alice (lab)')).toBe('AL');
+    expect(initialsOf('"Bob" [admin]')).toBe('BA');
+    expect(initialsOf('Ana & Ben')).toBe('AB');
+    expect(initialsOf('(alice)')).toBe('AL');
+    expect(initialsOf('Route 66')).toBe('R6');
+  });
+
+  it('takes them in any script', () => {
+    expect(initialsOf('Élodie Ñandú')).toBe('ÉÑ');
+    expect(initialsOf('آناهیتا (آزمایش)')).toBe('آآ');
+  });
+
+  it('keeps what it has when a name has no letter in it', () => {
+    expect(initialsOf('***')).toBe('**');
+  });
+
+  it('says so when there is nobody', () => {
+    expect(node.getActorInitials(null)).toBe('??');
+  });
+});

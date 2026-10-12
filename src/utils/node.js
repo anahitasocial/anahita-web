@@ -130,12 +130,25 @@ const getActorInitials = (actor) => {
     return '??';
   }
 
-  const words = name.trim().split(/\s+/).filter(Boolean);
+  // Letters and digits only, in any script: "Alice (lab)" is AL, not A(.
+  // A word with neither in it, such as "&" or "-", is not a word here.
+  const words = name.trim().split(/\s+/)
+    .map((word) => {
+      return word.match(/[\p{L}\p{N}]/gu) || [];
+    })
+    .filter((letters) => {
+      return letters.length > 0;
+    });
+
   if (words.length > 1) {
-    return `${words[0].charAt(0)}${words[1].charAt(0)}`.toUpperCase();
+    return `${words[0][0]}${words[1][0]}`.toUpperCase();
+  }
+  if (words.length === 1) {
+    return words[0].slice(0, 2).join('').toUpperCase();
   }
 
-  return name.substring(0, 2).toUpperCase();
+  // A name with no letter in it at all: whatever it starts with.
+  return Array.from(name.trim()).slice(0, 2).join('').toUpperCase();
 };
 
 // A person is an actor; there is nothing person-specific about initials any
