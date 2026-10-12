@@ -132,10 +132,21 @@ const hide = (now = Date.now()) => {
   return until;
 };
 
+// Brings it back before its time: what Reset in the recommendations
+// settings does, with the weights.
+const unhide = () => {
+  try {
+    window.localStorage.removeItem(HIDDEN_KEY);
+  } catch (e) {
+    // Nothing was kept, so there is nothing to take back.
+  }
+};
+
 export default {
   HIDE_DAYS,
   isHidden,
   hide,
+  unhide,
   KINDS,
   relatedById,
   reasonText,

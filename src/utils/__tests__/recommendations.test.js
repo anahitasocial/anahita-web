@@ -110,6 +110,9 @@ describe('putting Who to follow away', () => {
         setItem: (key, value) => {
           kept[key] = String(value);
         },
+        removeItem: (key) => {
+          delete kept[key];
+        },
       },
     };
   });
@@ -127,6 +130,15 @@ describe('putting Who to follow away', () => {
     expect(recommendations.isHidden(now + day)).toBe(true);
     expect(recommendations.isHidden(now + (7 * day) - 1)).toBe(true);
     expect(recommendations.isHidden(now + (7 * day) + 1)).toBe(false);
+  });
+
+  it('comes back at once when recommendations are reset', () => {
+    const now = Date.UTC(2026, 9, 11);
+
+    recommendations.hide(now);
+    expect(recommendations.isHidden(now + 1000)).toBe(true);
+    recommendations.unhide();
+    expect(recommendations.isHidden(now + 1000)).toBe(false);
   });
 
   it('is shown where the browser keeps nothing', () => {
