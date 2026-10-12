@@ -18,6 +18,7 @@ import Toolbar from '@mui/material/Toolbar';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 import SearchList from './SearchList';
+import RemoteLookup from '../RemoteLookup';
 import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
 
@@ -191,6 +192,7 @@ const Search = () => {
           />
         </Tabs>
       </AppBar>
+      <RemoteLookup query={q} />
       {useMemo(() => {
         return (
           <SearchList

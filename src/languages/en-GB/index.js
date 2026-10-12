@@ -10,6 +10,7 @@ import feed from './feed';
 import customFeeds from './customFeeds';
 import share from './share';
 import linkPreviews from './linkPreviews';
+import federation from './federation';
 import recommendations from './recommendations';
 import replies from './replies';
 import auth from './auth';
@@ -60,6 +61,7 @@ export default {
   customFeeds,
   share,
   linkPreviews,
+  federation,
   recommendations,
   replies,
   auth,

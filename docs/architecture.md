@@ -111,7 +111,7 @@ history. The main paths:
 | --- | --- |
 | `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
-| `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
+| `/people`, `/people/:id` | People, and a person's profile. `:id` is their username, or for somebody on another server their whole handle, `alice@mastodon.example` |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
 | `/suggestions` | People and groups the viewer might follow. Signed in only; reached from the home page |
@@ -902,6 +902,40 @@ The button on it is `containers/controls/FollowRequest.jsx`: "Request to
 follow", then "Requested", which takes the request back when pressed. Whoever
 looks after the profile answers from the follow requests on their own
 profile, and is told by a notification.
+
+### The fediverse
+
+People on other servers (Mastodon and the like), and what they post. The
+server's side is `activitypub-service`, described in the services'
+`docs/federation.md`. It is optional: where there is none, everything here
+draws nothing (`utils/federation.js#isAbsent`).
+
+- **The switch** is a card under Settings › Privacy
+  (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
+  follow me". Off until the person turns it on, and theirs alone to turn
+  on. It shows their handle, says that what is sent cannot be called back,
+  and when they cannot turn it on (their profile is not open to everybody,
+  or the site does not federate) it is disabled with the server's reason
+  beside it.
+- **Somebody from another server is a person like any other** to the app:
+  their type ends in `person`, so they are opened at `/people/<handle>`,
+  where the handle is whole, `alice@mastodon.example`, and the same page
+  draws them. What differs is told by `utils/federation.js`:
+  - their handle is drawn whole (`displayHandle`), where a username here
+    is made safe first;
+  - their profile says they are on another server, with a button to their
+    own page there (`components/RemoteNotice.jsx`);
+  - the server sends nothing they can be edited, run or posted on by, so
+    none of those controls is drawn. Follow is, and works as for anybody.
+- **A post from another server** is an ordinary note with a `uri`. Its menu
+  has "View on <server>" (`media/MediaMenu.jsx`). It cannot be edited,
+  liked or replied to: the server says so in `authorized`, and
+  `permissions/node.js#canEdit` refuses whatever the viewer's role.
+- **Looking somebody up** is on the search page
+  (`search/RemoteLookup.jsx`): when what was searched for is a handle with
+  a server in it or the address of a profile, a card offers to ask that
+  server. It asks only when the button is pressed, since asking tells
+  another server that this site did; then it opens the person.
 
 ### Menus
 

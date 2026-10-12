@@ -8,6 +8,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 
+import RemoteNotice from '../../../components/RemoteNotice';
 import SocialgraphMeta from './SocialgraphMeta';
 import ActorType from '../../../proptypes/Actor';
 import utils from '../../../utils';
@@ -85,13 +86,14 @@ const ActorHeader = ({
               className={classes.subheader}
               align="center"
             >
-              {actor.alias && `@${slugify(actor.alias.toLowerCase())}`}
+              {utils.federation.displayHandle(actor, slugify)}
             </Typography>
             <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
           </>
         }
         action={headerActions}
       />
+      {utils.federation.isRemote(actor) && <RemoteNotice node={actor} />}
       {followAction &&
         <CardActions>
           <div className={classes.grow} />

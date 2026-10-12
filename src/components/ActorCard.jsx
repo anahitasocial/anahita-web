@@ -58,7 +58,7 @@ const ActorCard = ({
 }) => {
   const cover = getCoverURL(actor);
   const url = getURL(actor);
-  const slug = `@${slugify(actor.alias.toLowerCase())}`;
+  const slug = utils.federation.displayHandle(actor, slugify);
   const createdAt = moment.utc(actor.createdAt).local().format('LLL').toString();
   const lastVisitedAt = isPerson(actor) ? moment.utc(actor.lastVisitedAt).local().format('LLL').toString() : null;
 

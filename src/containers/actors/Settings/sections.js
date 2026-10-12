@@ -62,6 +62,7 @@ export const ITEMS = {
   BLOCKED: 'blocked',
   // What the viewer chose about suggestions of who to follow.
   SUGGESTIONS: 'suggestions',
+  FEDIVERSE: 'fediverse',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -134,6 +135,9 @@ const ALL_SECTIONS = [
       // Who you have blocked is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
       { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },
+      // Whether people on other servers can find and follow them. Their
+      // own choice, and nobody else's to make for them.
+      { key: ITEMS.FEDIVERSE, bare: false, viewerOnly: true },
     ],
   },
   {
