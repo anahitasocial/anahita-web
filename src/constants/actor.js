@@ -27,5 +27,6 @@ export default {
     articles: 'medium',
     topics: 'medium',
     photos: 'medium',
+    videos: 'medium',
   },
 };

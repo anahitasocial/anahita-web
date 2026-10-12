@@ -25,6 +25,7 @@ const namespaces = {
     'notes',
     'photos',
     'topics',
+    'videos',
   ],
   tags: [
     'hashtags',

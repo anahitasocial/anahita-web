@@ -483,6 +483,42 @@ a request that fails as it does without the service
   well as people and groups, the way to the weights, and the
   suggestions they turned down, each to be taken back.
 
+### Videos
+
+A video post plays in `components/VideoPlayer.jsx`, the browser's own
+player with a **Quality** button over it. Posting one is a composer of its
+own, because a video is too big to be sent with the post (the services'
+`docs/videos.md`).
+
+- **Whether there is video at all** is the installation's choice. Where it
+  is off, the server leaves the video feature off every profile, so there
+  is no Video composer and no Videos tab, and nothing here has to hide
+  them. NodeInfo's `videoUploads`, `videoMaxBytes` and `videoMaxSeconds`
+  say what is allowed (`utils/videos.js`).
+- **Posting** (`containers/media/Composer/Video`): the file is refused at
+  once if it is not a video or is too large. `useVideoUpload.js` then
+  begins the upload, cuts the file into parts and sends them to storage
+  three at a time, each tried again when it fails, asking for addresses a
+  few at a time. The page has to stay open for that, and says so. When
+  everything is sent the server prepares the video, and the page can be
+  left: the composer asks after it and says when it is posted.
+- **Videos on the way** are listed under the composer: ones still being
+  prepared, and ones that failed in the last day, each with why.
+- **The parts go to storage, not to the API**, through an axios instance
+  of their own (`api/videos.js#sendPart`) that sends no cookies and none
+  of the API's handling.
+- **Playing:** a video is kept at a few sizes. It starts at 720p, at the
+  smallest where the browser says the connection is slow, or at the size
+  chosen last time, which is kept in the browser (`utils/videos.js#pick`).
+  1080p and above are played only when chosen. Changing size carries on
+  from the same moment. Nothing changes size while playing.
+- **A video's files are paths under the API** (`video.files[].url`,
+  `video.poster`), which ask each time whether the viewer may see the post
+  and send the browser on to storage. The player is a plain `<video>`, so
+  the browser sends the session cookie itself.
+- A video is a kind of post like the others: `/videos/:id`, the `videos`
+  namespace in the store, and the kind `video` in custom feeds.
+
 ### Link previews
 
 A note with a link in it can carry a card for the link: the page's picture,

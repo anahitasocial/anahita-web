@@ -30,6 +30,7 @@ import groups from './groups';
 import people from './people';
 import notes from './notes';
 import photos from './photos';
+import videos from './videos';
 import media from './media';
 import topics from './topics';
 import articles from './articles';
@@ -76,6 +77,7 @@ export default {
   people,
   notes,
   photos,
+  videos,
   media,
   topics,
   articles,

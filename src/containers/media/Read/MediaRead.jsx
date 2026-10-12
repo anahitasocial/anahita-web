@@ -83,6 +83,7 @@ const MediaReadView = ({
         linkPreview={linkPreview ? linkPreview.preview : null}
         onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
         onBodyPaste={linkPreview ? linkPreview.onPaste : null}
+        bodyOptional={namespace === 'videos'}
       />
     ),
     menu: isAuthenticated && (

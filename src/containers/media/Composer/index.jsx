@@ -13,6 +13,7 @@ import NoteForm from './Forms/Note';
 import PhotoForm from './Forms/Photo';
 import TopicForm from './Forms/Topic';
 import ComposerDefault from './Default';
+import ComposerVideo from './Video';
 
 import i18n from '../../../languages';
 import appIcons from '../../../components/AppIcons';
@@ -62,6 +63,11 @@ const COMPOSER_CONFIGS = {
     Composer: ComposerDefault('notes'),
     formFields: form.createFormFields(['name', 'body']),
     formComponent: NoteForm,
+  },
+  // Sent to storage in parts and posted when it has been prepared: a
+  // composer of its own. See ./Video.
+  videos: {
+    Composer: ComposerVideo,
   },
   topics: {
     Composer: ComposerDefault('topics'),

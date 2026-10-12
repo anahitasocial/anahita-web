@@ -21,6 +21,7 @@ import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import Player from '../../../components/Player';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
+import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
@@ -157,6 +158,7 @@ const MediumReadDefault = ({
         {editing && form}
         {!editing &&
         <>
+          {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
           {medium.body && <Player text={medium.body} />}
           <CardContent component="article">
             {medium.name &&

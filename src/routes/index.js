@@ -104,6 +104,7 @@ const ArticlesRead = MediaRead('articles');
 const NotesRead = MediaRead('notes');
 
 const PhotosRead = MediaRead('photos');
+const VideosRead = MediaRead('videos');
 
 const TopicsRead = MediaRead('topics');
 
@@ -432,6 +433,9 @@ const AppRoutes = () => {
 
             <Route path="/photos" element={<Navigate to="/" replace />} />
             <Route path="/photos/:id" element={<PhotosRead />} />
+
+            <Route path="/videos" element={<Navigate to="/" replace />} />
+            <Route path="/videos/:id" element={<VideosRead />} />
 
             <Route path="/topics" element={<Navigate to="/" replace />} />
             <Route path="/topics/:id" element={<TopicsRead />} />

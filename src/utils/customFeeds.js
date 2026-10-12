@@ -6,7 +6,7 @@
 // sentence what a feed shows, so that nothing about a feed is hidden from
 // whoever reads it.
 
-const MEDIA_TYPES = ['note', 'article', 'topic', 'photo'];
+const MEDIA_TYPES = ['note', 'article', 'topic', 'photo', 'video'];
 const ACTOR_TYPES = ['person', 'group', 'event'];
 const ACCESS = ['myself', 'followers', 'registered', 'public'];
 

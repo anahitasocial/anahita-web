@@ -20,6 +20,7 @@ import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
 import Player from '../../../components/Player';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
+import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
@@ -130,6 +131,7 @@ const FeedCardDefault = ({
             image={portrait}
           />
         </Link>}
+      {node.video && <VideoPlayer video={node.video} title={title} />}
       {body && <Player text={body} />}
       <CardContent>
         {title &&
