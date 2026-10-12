@@ -81,11 +81,18 @@ const Composers = ({
 }) => {
   const { classes } = useStyles();
   const composers = node.getComposers(actor);
-  const [tab, setTab] = useState(composers[0]);
+  const [chosen, setTab] = useState(composers[0]);
 
   if (composers.length === 0) {
     return null;
   }
+
+  // The tab that was chosen, when this profile has it, and otherwise the
+  // first it has. What was chosen is remembered from one profile to the
+  // next, and the next may not have it: somebody on another server has no
+  // composers at all, so coming from their profile to one that has them
+  // left nothing chosen, and the page fell over naming it.
+  const tab = composers.includes(chosen) ? chosen : composers[0];
 
   const namespace = pluralize(tab);
   const config = COMPOSER_CONFIGS[namespace];
