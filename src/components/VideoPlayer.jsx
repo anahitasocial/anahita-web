@@ -1,12 +1,14 @@
 import React, {
-  useEffect, useMemo, useRef, useState,
+  useEffect, useMemo, useId, useRef, useState,
 } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+import Stack from '@mui/material/Stack';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Typography from '@mui/material/Typography';
+import QualityIcon from '@mui/icons-material/HighQuality';
 
 import i18n from '../languages';
 import videos from '../utils/videos';
@@ -15,7 +17,8 @@ import videos from '../utils/videos';
 //
 // The video is kept at a few sizes. It starts at 720p, or at the smallest
 // where the browser says the connection is slow, or at the size this person
-// chose last time; "Quality" changes it and is remembered in the browser.
+// chose last time. The sizes are in a row under it, the one playing marked,
+// and a choice is remembered in the browser.
 // Changing size carries on from where the video was. Nothing changes size
 // while it plays: the sizes are whole files, not a stream.
 //
@@ -36,7 +39,7 @@ const VideoPlayer = ({
     });
     return first ? first.height : 0;
   });
-  const [anchorEl, setAnchorEl] = useState(null);
+  const groupId = useId();
   const element = useRef(null);
   // Where to carry on from, and whether it was playing, across a change
   // of size.
@@ -68,7 +71,6 @@ const VideoPlayer = ({
   }
 
   const choose = (chosen) => {
-    setAnchorEl(null);
     if (chosen.height === file.height) {
       return;
     }
@@ -95,76 +97,75 @@ const VideoPlayer = ({
     }
   };
 
-  const label = videos.label(file);
-
   return (
-    <Box sx={{ position: 'relative', bgcolor: 'common.black', lineHeight: 0 }}>
-      {/* The key makes a new element for each size: a browser does not
+    <Box>
+      <Box sx={{ bgcolor: 'common.black', lineHeight: 0 }}>
+        {/* The key makes a new element for each size: a browser does not
           reliably start again from a changed src on the same one. */}
-      <Box
-        component="video"
-        key={file.url}
-        ref={element}
-        src={videos.urlOf(file.url)}
-        poster={videos.urlOf(video.poster) || undefined}
-        title={title || undefined}
-        controls
-        playsInline
-        preload={resume.current ? 'auto' : 'metadata'}
-        onLoadedMetadata={handleLoaded}
-        sx={{
-          display: 'block',
-          width: '100%',
-          maxHeight: '80vh',
-          aspectRatio: video.width && video.height ? `${video.width} / ${video.height}` : '16 / 9',
-        }}
-      />
+        <Box
+          component="video"
+          key={file.url}
+          ref={element}
+          src={videos.urlOf(file.url)}
+          poster={videos.urlOf(video.poster) || undefined}
+          title={title || undefined}
+          controls
+          playsInline
+          preload={resume.current ? 'auto' : 'metadata'}
+          onLoadedMetadata={handleLoaded}
+          sx={{
+            display: 'block',
+            width: '100%',
+            maxHeight: '80vh',
+            aspectRatio: video.width && video.height ? `${video.width} / ${video.height}` : '16 / 9',
+          }}
+        />
+      </Box>
+      {/* The sizes, in a row under the video and always in view: one press
+          each, with the one playing marked. */}
       {files.length > 1 &&
-        <>
-          <Button
+        <Stack
+          direction="row"
+          spacing={1}
+          sx={{
+            px: 2, py: 1, alignItems: 'center', justifyContent: 'space-between',
+          }}
+        >
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <QualityIcon fontSize="small" color="action" />
+            <Typography variant="body2" color="textSecondary" id={groupId}>
+              {i18n.t('videos:player.quality')}
+            </Typography>
+          </Stack>
+          <ToggleButtonGroup
+            exclusive
             size="small"
-            onClick={(event) => {
-              setAnchorEl(event.currentTarget);
-            }}
-            aria-haspopup="menu"
-            aria-expanded={anchorEl ? 'true' : undefined}
-            aria-label={i18n.t('videos:player.qualityOf', { label })}
-            title={i18n.t('videos:player.quality')}
-            sx={{
-              position: 'absolute',
-              top: 8,
-              right: 8,
-              minWidth: 0,
-              lineHeight: 1.5,
-              color: 'common.white',
-              bgcolor: 'rgba(0, 0, 0, 0.6)',
-              '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.8)' },
-            }}
-          >
-            {label}
-          </Button>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={() => {
-              setAnchorEl(null);
+            color="primary"
+            value={file.height}
+            aria-labelledby={groupId}
+            onChange={(event, chosen) => {
+              const next = files.find((candidate) => {
+                return candidate.height === chosen;
+              });
+              // Pressing the one that is playing chooses nothing.
+              if (next) {
+                choose(next);
+              }
             }}
           >
             {files.map((candidate) => {
               return (
-                <MenuItem
+                <ToggleButton
                   key={`quality-${candidate.height}`}
-                  selected={candidate.height === file.height}
-                  onClick={() => {
-                    choose(candidate);
-                  }}
+                  value={candidate.height}
+                  sx={{ px: 2 }}
                 >
                   {videos.label(candidate)}
-                </MenuItem>
+                </ToggleButton>
               );
             })}
-          </Menu>
-        </>}
+          </ToggleButtonGroup>
+        </Stack>}
     </Box>
   );
 };

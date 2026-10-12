@@ -35,6 +35,5 @@ export default {
   },
   player: {
     quality: 'Qualité',
-    qualityOf: 'Qualité : {{label}}',
   },
 };
