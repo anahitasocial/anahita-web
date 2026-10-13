@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -17,6 +18,7 @@ import Link from '@mui/material/Link';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import BlueskyIcon from '../../../components/BlueskyIcon';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -46,6 +48,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
   const [password, setPassword] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
+  const [isImported, setIsImported] = useState(false);
 
   useEffect(() => {
     api.federation.blueskySettings().then((result) => {
@@ -101,11 +104,31 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
     });
   };
 
+  // Begun once: the server carries on with it after it has answered.
+  const handleImport = () => {
+    setIsSaving(true);
+
+    api.federation.importBlueskyFollows().then(() => {
+      setIsImported(true);
+      alertSuccess(i18n.t('federation:bluesky.import.started'));
+    }).catch((error) => {
+      const reason = federation.reasonOf(error);
+      alertError(i18n.t(i18n.exists(`federation:bluesky.errors.${reason}`) ?
+        `federation:bluesky.errors.${reason}` :
+        'federation:bluesky.errors.failed'));
+    }).finally(() => {
+      setIsSaving(false);
+    });
+  };
+
   const works = settings.connected && !settings.broken;
 
   return (
     <Card component={works ? 'div' : 'form'} onSubmit={works ? undefined : handleConnect}>
-      <CardHeader title={i18n.t('federation:bluesky.title')} />
+      <CardHeader
+        avatar={<Avatar><BlueskyIcon /></Avatar>}
+        title={i18n.t('federation:bluesky.title')}
+      />
       <CardContent sx={{ pt: 0 }}>
         <Typography variant="body2" color="textSecondary">
           {i18n.t('federation:bluesky.help')}
@@ -116,6 +139,11 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
             {i18n.t('federation:bluesky.as')}
             {': '}
             <strong>{`@${settings.handle}`}</strong>
+          </Typography>}
+
+        {works &&
+          <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
+            {i18n.t('federation:bluesky.import.help')}
           </Typography>}
 
         {settings.broken &&
@@ -160,15 +188,26 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
       </CardContent>
       <CardActions>
         {works ?
-          <Button
-            fullWidth
-            variant="outlined"
-            color="error"
-            disabled={isSaving}
-            onClick={() => { setIsLeaving(true); }}
-          >
-            {i18n.t('federation:bluesky.disconnect')}
-          </Button> :
+          <>
+            <Button
+              fullWidth
+              variant="outlined"
+              color="error"
+              disabled={isSaving}
+              onClick={() => { setIsLeaving(true); }}
+            >
+              {i18n.t('federation:bluesky.disconnect')}
+            </Button>
+            <Button
+              fullWidth
+              variant="contained"
+              color="secondary"
+              disabled={isSaving || isImported}
+              onClick={handleImport}
+            >
+              {i18n.t('federation:bluesky.import.action')}
+            </Button>
+          </> :
           <>
             {settings.connected &&
               <Button

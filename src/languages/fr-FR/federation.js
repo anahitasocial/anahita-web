@@ -53,6 +53,11 @@ export default {
       help: 'Utilisez un mot de passe d’application, pas le mot de passe de votre compte. Ce site ne le conserve pas.',
       where: 'En créer un sur Bluesky',
     },
+    import: {
+      action: 'Les suivre ici',
+      help: 'Vous pouvez suivre ici les comptes que vous suivez déjà sur Bluesky, pour retrouver leurs publications dans votre fil. Rien ne change sur Bluesky.',
+      started: 'Suivi des comptes que vous suivez sur Bluesky en cours. Leurs publications arriveront dans les prochaines minutes.',
+    },
     leave: {
       title: 'Se déconnecter de Bluesky ?',
       body: 'Ce que vous faites ici n’atteindra plus Bluesky. Les réponses, j’aime et partages déjà faits là-bas en votre nom y restent, et ne pourront alors être retirés que sur Bluesky.',
@@ -63,6 +68,7 @@ export default {
       bluesky_denied: 'Bluesky n’a pas accepté ce mot de passe d’application.',
       bluesky_taken: 'Ce compte Bluesky est connecté par quelqu’un d’autre sur ce site.',
       bluesky_failed: 'Bluesky est injoignable. Veuillez réessayer.',
+      bluesky_not_connected: 'Connectez d’abord votre compte Bluesky.',
       lookup_refused: 'Ce site ne se connecte pas à ce serveur.',
       too_many_tries: 'Cela fait beaucoup d’essais. Veuillez patienter quelques minutes.',
       failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',

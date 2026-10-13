@@ -1058,6 +1058,8 @@ draws nothing (`utils/federation.js#isAbsent`).
   password, with a link to where Bluesky makes one, then "Connected as"
   and a button to disconnect, which asks first. When Bluesky no longer
   takes the connection the card says so and offers the form again.
+  Once connected, a second button follows here the accounts they follow
+  on Bluesky already; the server carries on with it after answering.
   Nothing is drawn where the installation does not write to Bluesky.
 
 ### Menus

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -15,6 +16,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
+
+import FediverseIcon from '@mui/icons-material/Hub';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -84,7 +87,10 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
 
   return (
     <Card>
-      <CardHeader title={i18n.t('federation:settings.title')} />
+      <CardHeader
+        avatar={<Avatar><FediverseIcon /></Avatar>}
+        title={i18n.t('federation:settings.title')}
+      />
       <CardContent sx={{ pt: 0 }}>
         <FormControlLabel
           control={

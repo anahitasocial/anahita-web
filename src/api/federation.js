@@ -50,6 +50,12 @@ const disconnectBluesky = () => {
   return axios.delete('/atproto/settings');
 };
 
+// Follows here the accounts the viewer's Bluesky account follows already.
+// It is begun and not waited for: a long list takes minutes.
+const importBlueskyFollows = () => {
+  return axios.post('/atproto/settings/import-follows');
+};
+
 // The servers this installation refuses: nothing is taken from them or
 // sent to them. For super administrators, in the site's settings.
 //
@@ -79,6 +85,7 @@ export default {
   blueskySettings,
   connectBluesky,
   disconnectBluesky,
+  importBlueskyFollows,
   blocks,
   addBlock,
   removeBlock,

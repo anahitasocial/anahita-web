@@ -53,6 +53,11 @@ export default {
       help: 'Use an app password, not the password of your account. This site does not keep it.',
       where: 'Make one on Bluesky',
     },
+    import: {
+      action: 'Follow them here',
+      help: 'You can follow here the accounts you already follow on Bluesky, so that their posts are in your feed. Nothing changes on Bluesky.',
+      started: 'Following the accounts you follow on Bluesky. Their posts will arrive over the next few minutes.',
+    },
     leave: {
       title: 'Disconnect from Bluesky?',
       body: 'What you do here will no longer reach Bluesky. Replies, likes and reposts already made there as you stay there, and can then be removed only on Bluesky.',
@@ -63,6 +68,7 @@ export default {
       bluesky_denied: 'Bluesky did not accept that app password.',
       bluesky_taken: 'That Bluesky account is connected by somebody else on this site.',
       bluesky_failed: 'Bluesky could not be reached. Please try again.',
+      bluesky_not_connected: 'Connect your Bluesky account first.',
       lookup_refused: 'This site does not connect to that server.',
       too_many_tries: 'That is a lot of tries. Please wait a few minutes.',
       failed: 'That did not work. Please try again.',
