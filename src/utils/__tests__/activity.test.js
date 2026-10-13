@@ -29,6 +29,10 @@ describe('activity', () => {
       return row.actor.id;
     })).toEqual([1, 2]);
     expect(activity.peopleRows(undefined)).toEqual([]);
+    // A list with nobody in it arrives as null, which is nobody and not
+    // an error: the dialog said the list could not be loaded.
+    expect(activity.peopleRows(null)).toEqual([]);
+    expect(activity.noteRows(null)).toEqual([]);
   });
 
   it('lists quotes and replies by who said them, not the removed or hidden', () => {
