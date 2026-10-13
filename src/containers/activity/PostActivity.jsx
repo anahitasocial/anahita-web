@@ -70,7 +70,8 @@ const READERS = {
 //
 // Four lists, one at a time, each read when its tab is first opened. A tab
 // is an icon and a number, the post's own count; its name is there for a
-// screen reader and on hover. A list can be shorter than its number: everybody is shown only the people and the notes they may
+// screen reader and on hover. A list can be shorter than its number:
+// everybody is shown only the people and the notes they may
 // see.
 //
 // There is nothing here about who has looked at the post. That is not
