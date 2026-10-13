@@ -63,10 +63,12 @@ No change to how it is kept: each image already has its own description
 to four images and each shows something different. A field on the post
 itself could hold one description for all of them.
 
-- **Writing it.** In the composer and in "Edit photos", each photo is a
-  row: the photo, and beside it a field labelled "Description" with the
-  hint in it, there to be written in (`components/PhotoFilesEditor.jsx`).
-  The small "ALT" mark and the dialog behind it are gone.
+- **Writing it.** In the composer and in "Edit photos", the photos are a
+  carousel, one at a time and swiped through, each with a field labelled
+  "Description" under it with the hint in it, there to be written in
+  (`components/PhotoFilesEditor.jsx`). The small "ALT" mark and the dialog
+  behind it are gone. (First built as a stack of rows; made a carousel the
+  same day at the user's word, for phones.)
 - **Photos without one.** Under the list: "2 photos have no description
   yet", with why one matters. Said, and never in the way of posting.
 - **Reading it.** An "ALT" badge in the corner of a photo that has a

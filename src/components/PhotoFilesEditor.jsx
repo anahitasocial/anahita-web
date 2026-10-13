@@ -6,6 +6,7 @@ import { makeStyles } from 'tss-react/mui';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
+import MobileStepper from '@mui/material/MobileStepper';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -15,6 +16,8 @@ import EarlierIcon from '@mui/icons-material/ArrowBack';
 import LaterIcon from '@mui/icons-material/ArrowForward';
 import RemoveIcon from '@mui/icons-material/Close';
 import FailedIcon from '@mui/icons-material/ErrorOutlined';
+import NextIcon from '@mui/icons-material/NavigateNext';
+import PrevIcon from '@mui/icons-material/NavigateBefore';
 
 import api from '../api';
 import i18n from '../languages';
@@ -22,36 +25,38 @@ import photoFiles from '../utils/photoFiles';
 
 const { STATUS } = photoFiles;
 
-const TILE = 112;
-
 const useStyles = makeStyles()((theme) => {
   return {
-    // One photo to a row: the photo, and beside it what it shows, in
-    // words, where nobody can miss that it is asked for.
-    list: {
-      display: 'flex',
-      flexDirection: 'column',
-      gap: theme.spacing(2),
-      marginBottom: theme.spacing(2),
-    },
-    item: {
-      display: 'flex',
-      alignItems: 'flex-start',
-      gap: theme.spacing(2),
-    },
-    tile: {
-      width: TILE,
-      flex: 'none',
-    },
-    field: {
-      flex: '1 1 auto',
-      minWidth: 0,
-      margin: 0,
+    root: {
+      marginBottom: theme.spacing(1),
     },
     frame: {
       position: 'relative',
-      width: TILE,
-      height: TILE,
+    },
+    // A row of photos, each as wide as the editor, that the browser itself
+    // scrolls sideways and brings to rest on a photo: the same as the
+    // slides a reader swipes through (PhotoSlides).
+    scroller: {
+      display: 'flex',
+      overflowX: 'auto',
+      overflowY: 'hidden',
+      scrollSnapType: 'x mandatory',
+      overscrollBehaviorX: 'contain',
+      WebkitOverflowScrolling: 'touch',
+      scrollbarWidth: 'none',
+      '&::-webkit-scrollbar': {
+        display: 'none',
+      },
+    },
+    slide: {
+      flex: '0 0 100%',
+      minWidth: 0,
+      scrollSnapAlign: 'center',
+      scrollSnapStop: 'always',
+    },
+    photo: {
+      position: 'relative',
+      height: 240,
       borderRadius: theme.shape.borderRadius,
       overflow: 'hidden',
       backgroundColor: theme.palette.action.hover,
@@ -59,8 +64,10 @@ const useStyles = makeStyles()((theme) => {
     image: {
       width: '100%',
       height: '100%',
-      objectFit: 'cover',
+      // The whole photo, as it will be seen.
+      objectFit: 'contain',
       display: 'block',
+      userSelect: 'none',
     },
     dimmed: {
       opacity: 0.4,
@@ -75,20 +82,21 @@ const useStyles = makeStyles()((theme) => {
       },
     },
     remove: {
-      top: 4,
-      right: 4,
-      padding: 2,
+      top: 8,
+      right: 8,
+      padding: 4,
     },
-    first: {
+    label: {
       position: 'absolute',
-      top: 4,
-      left: 4,
-      padding: '0 6px',
-      borderRadius: 10,
-      fontSize: 11,
-      lineHeight: '20px',
+      top: 8,
+      left: 8,
+      padding: '0 8px',
+      borderRadius: 12,
+      fontSize: 12,
+      lineHeight: '24px',
       color: theme.palette.common.white,
       backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      pointerEvents: 'none',
     },
     centre: {
       position: 'absolute',
@@ -97,17 +105,40 @@ const useStyles = makeStyles()((theme) => {
       alignItems: 'center',
       justifyContent: 'center',
     },
+    // To the photo before and after, where there is a pointer to press
+    // them with. A finger swipes.
+    nav: {
+      position: 'absolute',
+      top: 120,
+      transform: 'translateY(-50%)',
+      color: theme.palette.common.white,
+      backgroundColor: 'rgba(0, 0, 0, 0.5)',
+      '&:hover': {
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
+      },
+      '@media (hover: none)': {
+        display: 'none',
+      },
+    },
+    prev: {
+      left: theme.spacing(1),
+    },
+    next: {
+      right: theme.spacing(1),
+    },
     order: {
       display: 'flex',
       justifyContent: 'center',
+      gap: theme.spacing(1),
+      margin: theme.spacing(1, 0),
     },
-    add: {
-      width: TILE,
-      height: TILE,
-      flexDirection: 'column',
-      textTransform: 'none',
-      fontSize: 12,
-      lineHeight: 1.3,
+    field: {
+      marginTop: theme.spacing(1.5),
+    },
+    dots: {
+      justifyContent: 'center',
+      background: 'none',
+      padding: theme.spacing(0.5),
     },
   };
 });
@@ -130,18 +161,14 @@ const failureText = (error) => {
 // The images of a photo post while somebody arranges them: picking, putting
 // in order, describing, removing.
 //
-// Each photo has its description beside it, as a field that is there to be
-// written in. It used to be behind a small "ALT" mark on the photo, and
-// people kept asking for a feature that was already there. Under the list
-// it says how many photos have none yet: said, never insisted on, since a
+// One photo at a time, as wide as the editor, swiped through like the
+// slides a reader sees, with its description under it: a field that is
+// there to be written in. A stack of small photos and fields was a long
+// way to scroll on a phone, and before that the description was behind a
+// small "ALT" mark that people did not find. Under the photos it says how
+// many have no description yet: said, never insisted on, since a
 // description that had to be given is how photos come to be described as
-// "photo". Used by the composer for a new post and
-// by the dialog that changes the images of one that exists.
-//
-// It holds nothing itself. The list lives with whoever uses it, and every
-// change is handed back as a function of the list as it then is, because
-// uploads finish at their own pace and each has to change the list that is
-// there when it does, not the one that was there when it started.
+// "photo".
 const PhotoFilesEditor = ({
   owner,
   items,
@@ -151,6 +178,9 @@ const PhotoFilesEditor = ({
   disabled = false,
 }) => {
   const { classes, cx } = useStyles();
+  // Which photo is on show, read from where the row has been scrolled to.
+  const [index, setIndex] = useState(0);
+  const scroller = useRef(null);
   // How many photos of the last pick did not fit. The system's own file
   // window cannot be told how many to allow, so somebody can pick more
   // than a post holds; the extra ones are left out and this says so.
@@ -213,149 +243,238 @@ const PhotoFilesEditor = ({
   });
 
   const undescribed = photoFiles.undescribed(items);
+  const count = items.length;
+
+  const show = (to, smooth = true) => {
+    const row = scroller.current;
+    if (!row) {
+      return;
+    }
+    const still = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    row.scrollTo({
+      left: Math.min(Math.max(to, 0), Math.max(count - 1, 0)) * row.clientWidth,
+      behavior: smooth && !still ? 'smooth' : 'auto',
+    });
+  };
+
+  const handleScroll = () => {
+    const row = scroller.current;
+    if (!row || !row.clientWidth) {
+      return;
+    }
+    const at = Math.round(Math.abs(row.scrollLeft) / row.clientWidth);
+    setIndex(Math.min(Math.max(at, 0), Math.max(count - 1, 0)));
+  };
+
+  // A photo that was just picked is the one shown: it is the one to
+  // describe. And when one is removed, the row comes to rest on what is
+  // there.
+  const before = useRef(count);
+  useEffect(() => {
+    if (count > before.current) {
+      show(count - 1);
+    } else if (count < before.current) {
+      show(Math.min(index, count - 1), false);
+    }
+    before.current = count;
+  }, [count]);
+
+  // Moving a photo earlier or later takes the view with it.
+  const move = (key, delta) => {
+    onChange((current) => {
+      return photoFiles.move(current, key, delta);
+    });
+    show(index + delta);
+  };
 
   return (
-    <>
-      <div className={classes.list}>
-        {items.map((item, index) => {
-          const position = i18n.t('photos:slides.position', {
-            index: index + 1,
-            total: items.length,
-          });
-          const isReady = item.status === STATUS.READY;
-
-          const described = (item.altText || '').length;
-
-          return (
-            <div className={classes.item} key={item.key}>
-              <div className={classes.tile}>
-                <div className={classes.frame}>
-                  <img
-                    className={cx(classes.image, !isReady && classes.dimmed)}
-                    src={item.previewUrl}
-                    alt={item.altText || position}
-                  />
-                  {index === 0 && items.length > 1 &&
-                  <span className={classes.first}>
-                    {i18n.t('photos:editor.first')}
-                  </span>}
-                  {item.status === STATUS.UPLOADING &&
-                  <div className={classes.centre}>
-                    <CircularProgress size={28} aria-label={i18n.t('photos:editor.uploading')} />
-                  </div>}
-                  {item.status === STATUS.FAILED &&
-                  <Tooltip title={item.error || i18n.t('photos:editor.failed')}>
-                    <div className={classes.centre} role="alert">
-                      <FailedIcon color="error" aria-label={item.error} />
-                    </div>
-                  </Tooltip>}
-                  <Tooltip title={i18n.t('photos:editor.remove')}>
-                    <IconButton
-                      className={cx(classes.over, classes.remove)}
-                      aria-label={`${i18n.t('photos:editor.remove')} (${position})`}
-                      onClick={() => {
-                        setLeftOut(0);
-                        onChange((current) => {
-                          return photoFiles.remove(current, item.key);
-                        });
-                      }}
-                      disabled={disabled}
-                      size="small"
-                    >
-                      <RemoveIcon fontSize="small" />
-                    </IconButton>
-                  </Tooltip>
-                </div>
-                {items.length > 1 &&
-                <div className={classes.order}>
-                  <IconButton
-                    aria-label={`${i18n.t('photos:editor.earlier')} (${position})`}
-                    title={i18n.t('photos:editor.earlier')}
-                    onClick={() => {
-                      onChange((current) => {
-                        return photoFiles.move(current, item.key, -1);
-                      });
-                    }}
-                    disabled={disabled || index === 0}
-                    size="small"
-                  >
-                    <EarlierIcon fontSize="small" />
-                  </IconButton>
-                  <IconButton
-                    aria-label={`${i18n.t('photos:editor.later')} (${position})`}
-                    title={i18n.t('photos:editor.later')}
-                    onClick={() => {
-                      onChange((current) => {
-                        return photoFiles.move(current, item.key, 1);
-                      });
-                    }}
-                    disabled={disabled || index === items.length - 1}
-                    size="small"
-                  >
-                    <LaterIcon fontSize="small" />
-                  </IconButton>
-                </div>}
-              </div>
-              <TextField
-                className={classes.field}
-                multiline
-                minRows={3}
-                maxRows={6}
-                size="small"
-                variant="outlined"
-                label={i18n.t('photos:editor.altLabel')}
-                placeholder={i18n.t('photos:editor.altHelp')}
-                // Said only when it is getting long: most are a sentence.
-                helperText={described > photoFiles.ALT_TEXT_MAX_LENGTH * 0.8 ?
-                  `${described} / ${photoFiles.ALT_TEXT_MAX_LENGTH}` :
-                  undefined}
-                value={item.altText || ''}
-                onChange={(event) => {
-                  const altText = event.target.value;
-                  onChange((current) => {
-                    return photoFiles.update(current, item.key, { altText });
-                  });
-                }}
-                disabled={disabled}
-                slotProps={{
-                  inputLabel: { shrink: true },
-                  htmlInput: {
-                    dir: 'auto',
-                    maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
-                    'aria-label': `${i18n.t('photos:editor.altLabel')} (${position})`,
-                  },
-                }}
-              />
-            </div>
-          );
-        })}
-      </div>
-      <div>
-        {room > 0 &&
-          <Button
-            {...getRootProps()}
-            className={classes.add}
-            variant="outlined"
-            color="primary"
-            disabled={disabled}
+    <div className={classes.root}>
+      {count > 0 &&
+        <div className={classes.frame}>
+          <div
+            ref={scroller}
+            className={classes.scroller}
+            // Left to right whatever the page, so "the next photo" is
+            // always the same way.
+            dir="ltr"
+            onScroll={handleScroll}
           >
-            <input {...getInputProps()} />
-            <AddIcon />
-            {i18n.t(items.length ? 'photos:editor.addMore' : 'photos:editor.add')}
-          </Button>}
-      </div>
+            {items.map((item, at) => {
+              const position = i18n.t('photos:slides.position', {
+                index: at + 1,
+                total: count,
+              });
+              const isReady = item.status === STATUS.READY;
+              const described = (item.altText || '').length;
+
+              return (
+                <div
+                  className={classes.slide}
+                  key={item.key}
+                  role="group"
+                  aria-roledescription="slide"
+                  aria-label={position}
+                >
+                  <div className={classes.photo}>
+                    <img
+                      className={cx(classes.image, !isReady && classes.dimmed)}
+                      src={item.previewUrl}
+                      alt={item.altText || position}
+                      draggable={false}
+                    />
+                    <span className={classes.label}>
+                      {at === 0 && count > 1 ?
+                        `${i18n.t('photos:editor.first')} · ${position}` :
+                        position}
+                    </span>
+                    {item.status === STATUS.UPLOADING &&
+                      <div className={classes.centre}>
+                        <CircularProgress size={32} aria-label={i18n.t('photos:editor.uploading')} />
+                      </div>}
+                    {item.status === STATUS.FAILED &&
+                      <Tooltip title={item.error || i18n.t('photos:editor.failed')}>
+                        <div className={classes.centre} role="alert">
+                          <FailedIcon color="error" aria-label={item.error} />
+                        </div>
+                      </Tooltip>}
+                    <Tooltip title={i18n.t('photos:editor.remove')}>
+                      <IconButton
+                        className={cx(classes.over, classes.remove)}
+                        aria-label={`${i18n.t('photos:editor.remove')} (${position})`}
+                        onClick={() => {
+                          setLeftOut(0);
+                          onChange((current) => {
+                            return photoFiles.remove(current, item.key);
+                          });
+                        }}
+                        disabled={disabled}
+                        size="small"
+                      >
+                        <RemoveIcon fontSize="small" />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                  {count > 1 &&
+                    <div className={classes.order}>
+                      <Button
+                        size="small"
+                        startIcon={<EarlierIcon fontSize="small" />}
+                        onClick={() => {
+                          move(item.key, -1);
+                        }}
+                        disabled={disabled || at === 0}
+                      >
+                        {i18n.t('photos:editor.earlier')}
+                      </Button>
+                      <Button
+                        size="small"
+                        endIcon={<LaterIcon fontSize="small" />}
+                        onClick={() => {
+                          move(item.key, 1);
+                        }}
+                        disabled={disabled || at === count - 1}
+                      >
+                        {i18n.t('photos:editor.later')}
+                      </Button>
+                    </div>}
+                  <TextField
+                    className={classes.field}
+                    fullWidth
+                    multiline
+                    minRows={2}
+                    maxRows={6}
+                    size="small"
+                    variant="outlined"
+                    label={i18n.t('photos:editor.altLabel')}
+                    placeholder={i18n.t('photos:editor.altHelp')}
+                    // Said only when it is getting long: most are a
+                    // sentence.
+                    helperText={described > photoFiles.ALT_TEXT_MAX_LENGTH * 0.8 ?
+                      `${described} / ${photoFiles.ALT_TEXT_MAX_LENGTH}` :
+                      undefined}
+                    value={item.altText || ''}
+                    onChange={(event) => {
+                      const altText = event.target.value;
+                      onChange((current) => {
+                        return photoFiles.update(current, item.key, { altText });
+                      });
+                    }}
+                    disabled={disabled}
+                    slotProps={{
+                      inputLabel: { shrink: true },
+                      htmlInput: {
+                        dir: 'auto',
+                        maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
+                        'aria-label': `${i18n.t('photos:editor.altLabel')} (${position})`,
+                        // Only the photo on show takes the keyboard.
+                        tabIndex: at === index ? 0 : -1,
+                      },
+                    }}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          {index > 0 &&
+            <IconButton
+              className={cx(classes.nav, classes.prev)}
+              aria-label={i18n.t('photos:slides.previous')}
+              onClick={() => {
+                show(index - 1);
+              }}
+              size="small"
+            >
+              <PrevIcon />
+            </IconButton>}
+          {index < count - 1 &&
+            <IconButton
+              className={cx(classes.nav, classes.next)}
+              aria-label={i18n.t('photos:slides.next')}
+              onClick={() => {
+                show(index + 1);
+              }}
+              size="small"
+            >
+              <NextIcon />
+            </IconButton>}
+          {count > 1 &&
+            <MobileStepper
+              className={classes.dots}
+              variant="dots"
+              position="static"
+              steps={count}
+              activeStep={Math.min(index, count - 1)}
+              backButton={null}
+              nextButton={null}
+              elevation={0}
+              aria-hidden
+            />}
+        </div>}
+      {room > 0 &&
+        <Button
+          {...getRootProps()}
+          variant="outlined"
+          color="primary"
+          startIcon={<AddIcon />}
+          disabled={disabled}
+          fullWidth
+        >
+          <input {...getInputProps()} />
+          {i18n.t(count ? 'photos:editor.addMore' : 'photos:editor.add')}
+        </Button>}
       {leftOut > 0 &&
-        <Typography variant="caption" color="error" component="p" role="alert">
+        <Typography variant="caption" color="error" component="p" role="alert" sx={{ mt: 1 }}>
           {i18n.t('photos:editor.leftOut', { count: leftOut, max })}
         </Typography>}
-      <Typography variant="caption" color="textSecondary" component="p">
+      <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
         {i18n.t('photos:editor.limit', { max })}
       </Typography>
       {undescribed > 0 &&
         <Typography variant="caption" color="textSecondary" component="p">
           {i18n.t('photos:editor.undescribed', { count: undescribed })}
         </Typography>}
-    </>
+    </div>
   );
 };
 

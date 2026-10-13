@@ -661,9 +661,12 @@ it. A profile, with its side column, lays itself out.
 Each image of a photo post has its own description, for people who cannot
 see it (`altText` on each of `medium.files`).
 
-- **Writing it** is a field beside each photo in the composer and in
-  "Edit photos" (`components/PhotoFilesEditor.jsx`), with a line under the
-  list saying how many photos have none. It is never required.
+- **Writing it** is a field under each photo in the composer and in
+  "Edit photos" (`components/PhotoFilesEditor.jsx`). The photos are a row
+  that is swiped through one at a time, like the slides a reader sees,
+  each with its description, its place in the order and the way to remove
+  it; a photo just picked is the one shown. A line underneath says how
+  many photos have no description. It is never required.
 - **Hearing it:** it is the `alt` of the image wherever a photo is drawn
   (`utils/photoFiles.js#altOf`, which falls back to the post's title).
 - **Reading it:** `components/AltBadge.jsx` puts "ALT" in the corner of a
