@@ -20,6 +20,7 @@ export default {
     },
   },
   composer: {
+    replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Privacy.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
   },
   leaving: {

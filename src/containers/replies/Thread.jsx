@@ -21,6 +21,7 @@ import ReplyItem from './ReplyItem';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
+import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import MediumType from '../../proptypes/Medium';
 import PersonType from '../../proptypes/Person';
 import postLanguage from '../../utils/postLanguage';
@@ -75,6 +76,11 @@ const RepliesThread = ({
     });
   // Read again when who can reply is changed from the post's menu.
   }, [root.id, root.replyAccess]);
+
+  // Answering something from another server, and not on the fediverse:
+  // said before it is sent. Asked here, before anything is returned, as
+  // every hook is.
+  const staysHere = useReplyStaysHere(viewer, under || root);
 
   useEffect(() => {
     // Not asked for when the answer is known to be no: on a site that
@@ -228,6 +234,7 @@ const RepliesThread = ({
     <Card sx={{ pb: 1 }}>
       {canReply &&
         <ReplyForm
+          hint={staysHere ? i18n.t('federation:composer.replyStaysHere') : ''}
           onSubmit={(body, card) => {
             return handleReply(top, body, card);
           }}

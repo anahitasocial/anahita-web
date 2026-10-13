@@ -945,6 +945,17 @@ draws nothing (`utils/federation.js#isAbsent`).
   fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
   date by the switch in settings). Nothing is said to anybody else, or
   about any other kind of post: only public notes go out.
+- **Answering something from another server** is offered where the server
+  says the viewer may (`authorized.comment`), as for any post: the reply is
+  the viewer's own note and is sent to whoever it answers when the viewer
+  is on the fediverse. When they are not, the reply form says that it will
+  be read here and not there (`useReplyStaysHere`, in
+  `media/Composer/useOnFediverse.js`). Liking something from elsewhere is
+  still refused.
+- **A hashtag at `/tags/<name>`** leads to `/hashtags/<name>`
+  (`routes/index.js#HashtagMoved`). It is the address other servers are
+  given for a hashtag's page, where Mastodon has its own, because some of
+  the apps people read with know a hashtag's link by that shape.
 - **A profile from another server has two lists,** what was posted and
   Notes (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`). Replies,
   reposts, articles, photos and videos are not taken in from other servers,

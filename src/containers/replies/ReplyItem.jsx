@@ -26,6 +26,7 @@ import ReplyForm from './ReplyForm';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
+import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import i18n from '../../languages';
@@ -58,6 +59,9 @@ const ReplyItem = ({
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const report = useReport(viewer, reply);
+  // Answering something from another server, and not on the fediverse:
+  // said before it is sent.
+  const staysHere = useReplyStaysHere(viewer, reply);
 
   const authorized = reply.authorized || {};
   const author = reply.deleted ? {} : getAuthor(reply);
@@ -273,6 +277,7 @@ const ReplyItem = ({
         <Box sx={{ ml: STEP }}>
           <ReplyForm
             autoFocus
+            hint={staysHere ? i18n.t('federation:composer.replyStaysHere') : ''}
             placeholder={author.name ?
               i18n.t('replies:placeholderTo', { name: author.name }) :
               i18n.t('replies:placeholder')}

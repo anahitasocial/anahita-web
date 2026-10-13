@@ -62,4 +62,16 @@ const useOnFediverse = (viewer) => {
   return onFediverse;
 };
 
+// What to say under a reply being written to something from another
+// server by somebody who is not on the fediverse: it will be read here and
+// not there. Nothing, where the reply will reach whoever it answers, or
+// where what is answered was written here.
+export const useReplyStaysHere = (viewer, answered) => {
+  const onFediverse = useOnFediverse(viewer);
+  const fromElsewhere = Boolean(answered && (answered.uri ||
+    (typeof answered.type === 'string' && answered.type.includes('.activitypub-service.'))));
+
+  return fromElsewhere && !onFediverse;
+};
+
 export default useOnFediverse;
