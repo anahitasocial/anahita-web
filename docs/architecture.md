@@ -656,6 +656,21 @@ two thirds of the page, centred, on a wide screen, or all of it with `wide`.
 Home, the pages of custom feeds, a post's own page and the event forms use
 it. A profile, with its side column, lays itself out.
 
+### Describing photos
+
+Each image of a photo post has its own description, for people who cannot
+see it (`altText` on each of `medium.files`).
+
+- **Writing it** is a field beside each photo in the composer and in
+  "Edit photos" (`components/PhotoFilesEditor.jsx`), with a line under the
+  list saying how many photos have none. It is never required.
+- **Hearing it:** it is the `alt` of the image wherever a photo is drawn
+  (`utils/photoFiles.js#altOf`, which falls back to the post's title).
+- **Reading it:** `components/AltBadge.jsx` puts "ALT" in the corner of a
+  photo that has a description of its own (`descriptionOf`, which does not
+  fall back), and shows it when pressed. It sits over photos that are
+  links or open the lightbox, and pressing it does neither.
+
 ### New posts in an open feed
 
 A feed that is open asks again, now and then, for its first page

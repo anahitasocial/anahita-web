@@ -59,6 +59,21 @@ const altOf = (medium, index = 0) => {
   return (file && file.altText) || (medium && medium.name) || '';
 };
 
+// What its author said an image shows, and nothing else: no falling back
+// to the post's title, which is what a screen reader is given when there
+// is no description. For telling a reader that a photo has one.
+const descriptionOf = (medium, index = 0) => {
+  const file = filesOf(medium)[index];
+  return ((file && file.altText) || '').trim();
+};
+
+// How many of the images being arranged have no description yet.
+const undescribed = (items) => {
+  return (items || []).filter((item) => {
+    return !(item.altText || '').trim();
+  }).length;
+};
+
 // The post as if the image at this index were its only one. Everything
 // that draws a photo reads portraitUrls, so handing it this draws any image
 // of the post without teaching each of them about the list.
@@ -175,6 +190,8 @@ export default {
   DEFAULT_MAX,
   STATUS,
   altOf,
+  descriptionOf,
+  undescribed,
   asSingle,
   canSubmit,
   countOf,

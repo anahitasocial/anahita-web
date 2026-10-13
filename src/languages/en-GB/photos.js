@@ -25,6 +25,8 @@ export default {
     describeTitle: 'Describe this photo',
     altLabel: 'Description',
     altHelp: 'Say what the photo shows, for people who cannot see it.',
+    undescribed_one: '1 photo has no description yet. A description tells people who cannot see the photo what it shows.',
+    undescribed_other: '{{count}} photos have no description yet. A description tells people who cannot see a photo what it shows.',
     uploading: 'Uploading',
     failed: 'This photo could not be uploaded. Remove it and try again.',
     unsupported: 'Only JPEG and PNG photos can be uploaded.',
@@ -37,6 +39,11 @@ export default {
     altTooLong: 'One of the descriptions is too long.',
     saved: 'The photos were updated.',
     notSaved: 'The photos could not be updated.',
+  },
+  // On a photo that has a description, for somebody who can see it.
+  alt: {
+    show: 'Read the description of this photo',
+    title: 'Description',
   },
   slides: {
     position: '{{index}} of {{total}}',

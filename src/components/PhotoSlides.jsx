@@ -20,6 +20,7 @@ import MediumType from '../proptypes/Medium';
 import i18n from '../languages';
 import utils from '../utils';
 import photoFiles from '../utils/photoFiles';
+import AltBadge from './AltBadge';
 
 const { getPortraitURLs } = utils.node;
 
@@ -304,6 +305,7 @@ const PhotoSlides = ({
         <span className={classes.count} aria-live="polite">
           {position}
         </span>
+        <AltBadge text={photoFiles.descriptionOf(medium, index)} />
         {index > 0 &&
           <IconButton
             className={clsx(classes.nav, classes.prev)}

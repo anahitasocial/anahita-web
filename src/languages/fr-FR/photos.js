@@ -25,6 +25,8 @@ export default {
     describeTitle: 'Décrire cette photo',
     altLabel: 'Description',
     altHelp: 'Dites ce que montre la photo, pour les personnes qui ne peuvent pas la voir.',
+    undescribed_one: '1 photo n’a pas encore de description. Une description dit aux personnes qui ne peuvent pas voir la photo ce qu’elle montre.',
+    undescribed_other: '{{count}} photos n’ont pas encore de description. Une description dit aux personnes qui ne peuvent pas voir une photo ce qu’elle montre.',
     uploading: 'Envoi en cours',
     failed: 'Cette photo n\'a pas pu être envoyée. Retirez-la et réessayez.',
     unsupported: 'Seules les photos JPEG et PNG peuvent être envoyées.',
@@ -37,6 +39,10 @@ export default {
     altTooLong: 'L\'une des descriptions est trop longue.',
     saved: 'Les photos ont été mises à jour.',
     notSaved: 'Les photos n\'ont pas pu être mises à jour.',
+  },
+  alt: {
+    show: 'Lire la description de cette photo',
+    title: 'Description',
   },
   slides: {
     position: '{{index}} sur {{total}}',

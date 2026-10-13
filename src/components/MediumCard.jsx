@@ -7,6 +7,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
@@ -28,6 +29,7 @@ import ReadMore from './ReadMore';
 import SignInPrompt from './SignInPrompt';
 import utils from '../utils';
 import photoFiles from '../utils/photoFiles';
+import AltBadge from './AltBadge';
 
 const {
   getAuthor,
@@ -151,25 +153,28 @@ const MediumCard = ({
           }}
         />}
       {!hasSlides && portrait && isPortraitLoaded &&
-        <ButtonBase
-          style={{
-            width: '100%',
-            display: 'inline',
-          }}
-          onClick={() => {
-            if (handleView) {
-              return handleView(medium.id);
-            }
-            return navigate(url);
-          }}
-        >
-          <CardMedia
-            component="img"
-            title={medium.name}
-            alt={photoFiles.altOf(medium)}
-            image={portrait}
-          />
-        </ButtonBase>}
+        <Box sx={{ position: 'relative' }}>
+          <ButtonBase
+            style={{
+              width: '100%',
+              display: 'inline',
+            }}
+            onClick={() => {
+              if (handleView) {
+                return handleView(medium.id);
+              }
+              return navigate(url);
+            }}
+          >
+            <CardMedia
+              component="img"
+              title={medium.name}
+              alt={photoFiles.altOf(medium)}
+              image={portrait}
+            />
+          </ButtonBase>
+          <AltBadge text={photoFiles.descriptionOf(medium)} />
+        </Box>}
       {!hasSlides && !isPortraitLoaded &&
         <CardContent>
           <Progress />

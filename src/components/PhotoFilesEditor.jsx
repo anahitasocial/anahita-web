@@ -5,10 +5,6 @@ import { makeStyles } from 'tss-react/mui';
 
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
 import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
@@ -30,14 +26,27 @@ const TILE = 112;
 
 const useStyles = makeStyles()((theme) => {
   return {
-    row: {
+    // One photo to a row: the photo, and beside it what it shows, in
+    // words, where nobody can miss that it is asked for.
+    list: {
       display: 'flex',
-      flexWrap: 'wrap',
-      gap: theme.spacing(1),
-      marginBottom: theme.spacing(1),
+      flexDirection: 'column',
+      gap: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
+    item: {
+      display: 'flex',
+      alignItems: 'flex-start',
+      gap: theme.spacing(2),
     },
     tile: {
       width: TILE,
+      flex: 'none',
+    },
+    field: {
+      flex: '1 1 auto',
+      minWidth: 0,
+      margin: 0,
     },
     frame: {
       position: 'relative',
@@ -70,20 +79,6 @@ const useStyles = makeStyles()((theme) => {
       right: 4,
       padding: 2,
     },
-    alt: {
-      left: 4,
-      bottom: 4,
-      minWidth: 0,
-      padding: '0 6px',
-      fontSize: 11,
-      lineHeight: '20px',
-    },
-    altSet: {
-      backgroundColor: theme.palette.primary.main,
-      '&:hover': {
-        backgroundColor: theme.palette.primary.dark,
-      },
-    },
     first: {
       position: 'absolute',
       top: 4,
@@ -114,13 +109,6 @@ const useStyles = makeStyles()((theme) => {
       fontSize: 12,
       lineHeight: 1.3,
     },
-    preview: {
-      display: 'block',
-      maxWidth: '100%',
-      maxHeight: 240,
-      margin: '0 auto',
-      borderRadius: theme.shape.borderRadius,
-    },
   };
 });
 
@@ -140,7 +128,14 @@ const failureText = (error) => {
 };
 
 // The images of a photo post while somebody arranges them: picking, putting
-// in order, describing, removing. Used by the composer for a new post and
+// in order, describing, removing.
+//
+// Each photo has its description beside it, as a field that is there to be
+// written in. It used to be behind a small "ALT" mark on the photo, and
+// people kept asking for a feature that was already there. Under the list
+// it says how many photos have none yet: said, never insisted on, since a
+// description that had to be given is how photos come to be described as
+// "photo". Used by the composer for a new post and
 // by the dialog that changes the images of one that exists.
 //
 // It holds nothing itself. The list lives with whoever uses it, and every
@@ -156,8 +151,6 @@ const PhotoFilesEditor = ({
   disabled = false,
 }) => {
   const { classes, cx } = useStyles();
-  const [describing, setDescribing] = useState(null);
-  const [draft, setDraft] = useState('');
   // How many photos of the last pick did not fit. The system's own file
   // window cannot be told how many to allow, so somebody can pick more
   // than a post holds; the extra ones are left out and this says so.
@@ -219,22 +212,11 @@ const PhotoFilesEditor = ({
     onDrop: handleDrop,
   });
 
-  const openDescription = (item) => {
-    setDraft(item.altText || '');
-    setDescribing(item);
-  };
-
-  const saveDescription = () => {
-    const { key } = describing;
-    onChange((current) => {
-      return photoFiles.update(current, key, { altText: draft });
-    });
-    setDescribing(null);
-  };
+  const undescribed = photoFiles.undescribed(items);
 
   return (
     <>
-      <div className={classes.row}>
+      <div className={classes.list}>
         {items.map((item, index) => {
           const position = i18n.t('photos:slides.position', {
             index: index + 1,
@@ -242,60 +224,49 @@ const PhotoFilesEditor = ({
           });
           const isReady = item.status === STATUS.READY;
 
+          const described = (item.altText || '').length;
+
           return (
-            <div className={classes.tile} key={item.key}>
-              <div className={classes.frame}>
-                <img
-                  className={cx(classes.image, !isReady && classes.dimmed)}
-                  src={item.previewUrl}
-                  alt={item.altText || position}
-                />
-                {index === 0 && items.length > 1 &&
+            <div className={classes.item} key={item.key}>
+              <div className={classes.tile}>
+                <div className={classes.frame}>
+                  <img
+                    className={cx(classes.image, !isReady && classes.dimmed)}
+                    src={item.previewUrl}
+                    alt={item.altText || position}
+                  />
+                  {index === 0 && items.length > 1 &&
                   <span className={classes.first}>
                     {i18n.t('photos:editor.first')}
                   </span>}
-                {item.status === STATUS.UPLOADING &&
+                  {item.status === STATUS.UPLOADING &&
                   <div className={classes.centre}>
                     <CircularProgress size={28} aria-label={i18n.t('photos:editor.uploading')} />
                   </div>}
-                {item.status === STATUS.FAILED &&
+                  {item.status === STATUS.FAILED &&
                   <Tooltip title={item.error || i18n.t('photos:editor.failed')}>
                     <div className={classes.centre} role="alert">
                       <FailedIcon color="error" aria-label={item.error} />
                     </div>
                   </Tooltip>}
-                <Tooltip title={i18n.t('photos:editor.remove')}>
-                  <IconButton
-                    className={cx(classes.over, classes.remove)}
-                    aria-label={`${i18n.t('photos:editor.remove')} (${position})`}
-                    onClick={() => {
-                      setLeftOut(0);
-                      onChange((current) => {
-                        return photoFiles.remove(current, item.key);
-                      });
-                    }}
-                    disabled={disabled}
-                    size="small"
-                  >
-                    <RemoveIcon fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-                {isReady &&
-                  <Tooltip title={i18n.t(item.altText ? 'photos:editor.described' : 'photos:editor.describe')}>
-                    <Button
-                      className={cx(classes.over, classes.alt, item.altText && classes.altSet)}
-                      aria-label={`${i18n.t(item.altText ? 'photos:editor.described' : 'photos:editor.describe')} (${position})`}
+                  <Tooltip title={i18n.t('photos:editor.remove')}>
+                    <IconButton
+                      className={cx(classes.over, classes.remove)}
+                      aria-label={`${i18n.t('photos:editor.remove')} (${position})`}
                       onClick={() => {
-                        openDescription(item);
+                        setLeftOut(0);
+                        onChange((current) => {
+                          return photoFiles.remove(current, item.key);
+                        });
                       }}
                       disabled={disabled}
                       size="small"
                     >
-                      {i18n.t('photos:editor.alt')}
-                    </Button>
-                  </Tooltip>}
-              </div>
-              {items.length > 1 &&
+                      <RemoveIcon fontSize="small" />
+                    </IconButton>
+                  </Tooltip>
+                </div>
+                {items.length > 1 &&
                 <div className={classes.order}>
                   <IconButton
                     aria-label={`${i18n.t('photos:editor.earlier')} (${position})`}
@@ -324,9 +295,42 @@ const PhotoFilesEditor = ({
                     <LaterIcon fontSize="small" />
                   </IconButton>
                 </div>}
+              </div>
+              <TextField
+                className={classes.field}
+                multiline
+                minRows={3}
+                maxRows={6}
+                size="small"
+                variant="outlined"
+                label={i18n.t('photos:editor.altLabel')}
+                placeholder={i18n.t('photos:editor.altHelp')}
+                // Said only when it is getting long: most are a sentence.
+                helperText={described > photoFiles.ALT_TEXT_MAX_LENGTH * 0.8 ?
+                  `${described} / ${photoFiles.ALT_TEXT_MAX_LENGTH}` :
+                  undefined}
+                value={item.altText || ''}
+                onChange={(event) => {
+                  const altText = event.target.value;
+                  onChange((current) => {
+                    return photoFiles.update(current, item.key, { altText });
+                  });
+                }}
+                disabled={disabled}
+                slotProps={{
+                  inputLabel: { shrink: true },
+                  htmlInput: {
+                    dir: 'auto',
+                    maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
+                    'aria-label': `${i18n.t('photos:editor.altLabel')} (${position})`,
+                  },
+                }}
+              />
             </div>
           );
         })}
+      </div>
+      <div>
         {room > 0 &&
           <Button
             {...getRootProps()}
@@ -347,63 +351,10 @@ const PhotoFilesEditor = ({
       <Typography variant="caption" color="textSecondary" component="p">
         {i18n.t('photos:editor.limit', { max })}
       </Typography>
-      <Dialog
-        open={Boolean(describing)}
-        onClose={() => {
-          setDescribing(null);
-        }}
-        fullWidth
-        maxWidth="xs"
-        aria-labelledby="photo-description-title"
-      >
-        <DialogTitle id="photo-description-title">
-          {i18n.t('photos:editor.describeTitle')}
-        </DialogTitle>
-        <DialogContent>
-          {describing &&
-            <img
-              className={classes.preview}
-              src={describing.previewUrl}
-              alt=""
-            />}
-          <TextField
-            autoFocus
-            fullWidth
-            multiline
-            minRows={3}
-            margin="normal"
-            variant="outlined"
-            label={i18n.t('photos:editor.altLabel')}
-            helperText={`${i18n.t('photos:editor.altHelp')} ${draft.length} / ${photoFiles.ALT_TEXT_MAX_LENGTH}`}
-            value={draft}
-            onChange={(event) => {
-              setDraft(event.target.value);
-            }}
-            slotProps={{
-              htmlInput: {
-                dir: 'auto',
-                maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
-              },
-            }}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button
-            onClick={() => {
-              setDescribing(null);
-            }}
-          >
-            {i18n.t('actions:cancel')}
-          </Button>
-          <Button
-            onClick={saveDescription}
-            variant="contained"
-            color="primary"
-          >
-            {i18n.t('actions:done')}
-          </Button>
-        </DialogActions>
-      </Dialog>
+      {undescribed > 0 &&
+        <Typography variant="caption" color="textSecondary" component="p">
+          {i18n.t('photos:editor.undescribed', { count: undescribed })}
+        </Typography>}
     </>
   );
 };

@@ -6,6 +6,7 @@ import { withStyles } from 'tss-react/mui';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
 import Tabs from '@mui/material/Tabs';
@@ -29,6 +30,7 @@ import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
+import AltBadge from '../../../components/AltBadge';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
 
@@ -122,14 +124,21 @@ const MediumReadDefault = ({
           } : null}
         />}
         {!hasSlides && portrait && isLoaded && handleView &&
-        <ButtonBase
-          className={classes.portraitButton}
-          onClick={handleView}
-          aria-label={i18n.t('media:stepper.open')}
-        >
+        <Box sx={{ position: 'relative' }}>
+          <ButtonBase
+            className={classes.portraitButton}
+            onClick={handleView}
+            aria-label={i18n.t('media:stepper.open')}
+          >
+            {portraitMedia}
+          </ButtonBase>
+          <AltBadge text={photoFiles.descriptionOf(medium)} />
+        </Box>}
+        {!hasSlides && portrait && isLoaded && !handleView &&
+        <Box sx={{ position: 'relative' }}>
           {portraitMedia}
-        </ButtonBase>}
-        {!hasSlides && portrait && isLoaded && !handleView && portraitMedia}
+          <AltBadge text={photoFiles.descriptionOf(medium)} />
+        </Box>}
         {!hasSlides && !isLoaded &&
         <CardContent>
           <Progress />
