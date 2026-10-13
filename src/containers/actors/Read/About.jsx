@@ -16,12 +16,15 @@ import MapIcon from '@mui/icons-material/MapOutlined';
 import OpenIcon from '@mui/icons-material/ExpandMore';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 import WebsiteIcon from '@mui/icons-material/Web';
+import FediverseIcon from '@mui/icons-material/Hub';
 
 import i18n from '../../../languages';
 import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
 import AnahitaMap from '../../../components/Map';
 import MenuItemLabel from '../../../components/MenuItemLabel';
+import BlueskyIcon from '../../../components/BlueskyIcon';
+import federation from '../../../utils/federation';
 import events from '../../../utils/events';
 import ActorType from '../../../proptypes/Actor';
 
@@ -42,6 +45,13 @@ const ActorBodyAbout = (props) => {
   const closeMaps = () => {
     setMapsAnchor(null);
   };
+
+  // Somebody on another network: where they are, and what of them is
+  // here, said in place of a website. The page it leads to is theirs
+  // there, which is what was kept as their website.
+  const remote = federation.isRemote(actor);
+  const onBluesky = remote && (actor.type || '').includes('.atproto-service.');
+  const domain = federation.domainOf(actor);
 
   return (
     <Card component="section">
@@ -86,19 +96,27 @@ const ActorBodyAbout = (props) => {
               rel="me nofollow noopener noreferrer"
             >
               <ListItemIcon>
-                <WebsiteIcon />
+                {remote && (onBluesky ? <BlueskyIcon /> : <FediverseIcon />)}
+                {!remote && <WebsiteIcon />}
               </ListItemIcon>
-              <ListItemText
-                primary={i18n.t('actor:website')}
-                secondary={
-                  <Typography
-                    variant="body1"
-                    noWrap
-                  >
-                    {websiteUrl}
-                  </Typography>
-                }
-              />
+              {remote ?
+                <ListItemText
+                  primary={onBluesky ?
+                    i18n.t('federation:remote.onBluesky') :
+                    i18n.t('federation:remote.on', { domain })}
+                  secondary={i18n.t('federation:remote.shared')}
+                /> :
+                <ListItemText
+                  primary={i18n.t('actor:website')}
+                  secondary={
+                    <Typography
+                      variant="body1"
+                      noWrap
+                    >
+                      {websiteUrl}
+                    </Typography>
+                  }
+                />}
             </ListItemButton>}
           {address &&
             <ListItemButton

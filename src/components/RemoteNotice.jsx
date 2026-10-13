@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
-import Tooltip from '@mui/material/Tooltip';
 
 import FediverseIcon from '@mui/icons-material/Hub';
 
@@ -21,9 +20,10 @@ import federation from '../utils/federation';
 //
 // In two small parts, and not as a notice across the page: a notice is for
 // something the reader must act on, and this is only a fact about whose
-// profile it is. RemoteBadge sits under their handle, with the longer
-// words for whoever points at it; RemoteLink sits with the profile's other
-// buttons.
+// profile it is. RemoteBadge sits under their handle; RemoteLink sits
+// with the profile's other buttons; and the longer words, what of them is
+// here and where the rest is, are in the About card
+// (containers/actors/Read/About.jsx).
 
 const onBluesky = (node) => {
   const type = (node && typeof node.type === 'string') ? node.type : '';
@@ -39,16 +39,14 @@ export const RemoteBadge = ({ node }) => {
 
   return (
     <Box sx={{ display: 'flex', justifyContent: 'center', mt: 1 }}>
-      <Tooltip title={i18n.t('federation:remote.onAnotherServer', { domain })}>
-        <Chip
-          size="small"
-          variant="outlined"
-          icon={bluesky ? <BlueskyIcon /> : <FediverseIcon />}
-          label={bluesky ?
-            i18n.t('federation:remote.onBluesky') :
-            i18n.t('federation:remote.on', { domain })}
-        />
-      </Tooltip>
+      <Chip
+        size="small"
+        variant="outlined"
+        icon={bluesky ? <BlueskyIcon /> : <FediverseIcon />}
+        label={bluesky ?
+          i18n.t('federation:remote.onBluesky') :
+          i18n.t('federation:remote.on', { domain })}
+      />
     </Box>
   );
 };

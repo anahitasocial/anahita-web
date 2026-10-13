@@ -35,6 +35,7 @@ export default {
     viewOriginal: 'View on {{ domain }}',
     on: 'On {{ domain }}',
     onBluesky: 'On Bluesky',
+    shared: 'What you see here is what their own server shares with everybody. Their page there has the rest.',
     replyThere: 'Reply on {{ domain }}',
   },
   bluesky: {

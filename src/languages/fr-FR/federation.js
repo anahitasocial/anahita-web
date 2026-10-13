@@ -34,6 +34,7 @@ export default {
     onAnotherServer: 'Cette personne est sur un autre serveur, {{ domain }}. Ce que vous voyez ici est ce que ce serveur partage avec tout le monde.',
     on: 'Sur {{ domain }}',
     onBluesky: 'Sur Bluesky',
+    shared: 'Ce que vous voyez ici est ce que son propre serveur partage avec tout le monde. Sa page là-bas contient le reste.',
     viewOriginal: 'Voir sur {{ domain }}',
     replyThere: 'Répondre sur {{ domain }}',
   },
