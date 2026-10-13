@@ -72,7 +72,8 @@ const ReplyItem = ({
 
   // A reply from another server can be read where it was written.
   const original = utils.federation.isRemote(reply) && reply.uri ? reply.uri : '';
-  const hasMenu = authorized.edit || authorized.delete || authorized.hide || report.canReport || original;
+  const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
+    report.canReport || original;
 
   const under = children.length > 0 && (
     <Box
