@@ -14,7 +14,13 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormLabel from '@mui/material/FormLabel';
+import LinearProgress from '@mui/material/LinearProgress';
 import Link from '@mui/material/Link';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
@@ -25,8 +31,25 @@ import i18n from '../../../languages';
 import federation from '../../../utils/federation';
 import { rememberOnBluesky } from '../../media/Composer/useOnFediverse';
 
+// How many accounts may be followed here in one go: a few, to see what it
+// is like, before many.
+const IMPORT_CHOICES = [25, 100, 500];
+
 // Where an account makes a password for an app, on Bluesky.
 const APP_PASSWORDS = 'https://bsky.app/settings/app-passwords';
+
+// The numbers offered for somebody who follows this many: each choice
+// that is fewer than they follow, and then all of them, up to the most
+// the server takes.
+const importChoices = (preview) => {
+  const following = preview.following || 0;
+  const most = preview.most || IMPORT_CHOICES[IMPORT_CHOICES.length - 1];
+  const fewer = IMPORT_CHOICES.filter((choice) => {
+    return choice < following && choice <= most;
+  });
+
+  return following <= most ? [...fewer, following] : fewer;
+};
 
 // The viewer's own Bluesky account, connected or not.
 //
@@ -49,6 +72,9 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
   const [isSaving, setIsSaving] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
   const [isImported, setIsImported] = useState(false);
+  const [isChoosing, setIsChoosing] = useState(false);
+  const [preview, setPreview] = useState(null);
+  const [howMany, setHowMany] = useState(0);
 
   useEffect(() => {
     api.federation.blueskySettings().then((result) => {
@@ -104,11 +130,29 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
     });
   };
 
+  // Asked about before it is done: it follows many accounts at once, and
+  // is not undone in one step. The dialog says how many there are and
+  // lets a number be chosen.
+  const openImport = () => {
+    setPreview(null);
+    setIsChoosing(true);
+
+    api.federation.previewBlueskyFollows().then((result) => {
+      const found = result.data || {};
+      setPreview(found);
+      setHowMany(Math.min(IMPORT_CHOICES[0], found.following || 0));
+    }).catch(() => {
+      setIsChoosing(false);
+      alertError(i18n.t('federation:bluesky.errors.bluesky_failed'));
+    });
+  };
+
   // Begun once: the server carries on with it after it has answered.
   const handleImport = () => {
+    setIsChoosing(false);
     setIsSaving(true);
 
-    api.federation.importBlueskyFollows().then(() => {
+    api.federation.importBlueskyFollows(howMany).then(() => {
       setIsImported(true);
       alertSuccess(i18n.t('federation:bluesky.import.started'));
     }).catch((error) => {
@@ -203,7 +247,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
               variant="contained"
               color="secondary"
               disabled={isSaving || isImported}
-              onClick={handleImport}
+              onClick={openImport}
             >
               {i18n.t('federation:bluesky.import.action')}
             </Button>
@@ -230,6 +274,72 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
             </Button>
           </>}
       </CardActions>
+      <Dialog
+        open={isChoosing}
+        onClose={() => { setIsChoosing(false); }}
+        fullWidth
+        maxWidth="sm"
+        aria-labelledby="bluesky-import-title"
+      >
+        <DialogTitle id="bluesky-import-title">
+          {i18n.t('federation:bluesky.import.title')}
+        </DialogTitle>
+        <DialogContent>
+          {!preview && <LinearProgress />}
+          {preview &&
+            <>
+              <DialogContentText>
+                {i18n.t('federation:bluesky.import.following', {
+                  count: preview.following || 0,
+                  formatted: (preview.following || 0).toLocaleString(),
+                })}
+              </DialogContentText>
+              {preview.following > 0 &&
+                <>
+                  <FormControl sx={{ mt: 2 }}>
+                    <FormLabel id="bluesky-import-how-many">
+                      {i18n.t('federation:bluesky.import.howMany')}
+                    </FormLabel>
+                    <RadioGroup
+                      aria-labelledby="bluesky-import-how-many"
+                      value={String(howMany)}
+                      onChange={(event) => { setHowMany(Number(event.target.value)); }}
+                    >
+                      {importChoices(preview).map((choice) => {
+                        return (
+                          <FormControlLabel
+                            key={choice}
+                            value={String(choice)}
+                            control={<Radio />}
+                            label={choice >= preview.following ?
+                              i18n.t('federation:bluesky.import.all', { count: choice }) :
+                              i18n.t('federation:bluesky.import.latest', { count: choice })}
+                          />
+                        );
+                      })}
+                    </RadioGroup>
+                  </FormControl>
+                  <DialogContentText sx={{ mt: 2 }}>
+                    {i18n.t('federation:bluesky.import.what', { posts: preview.posts_of_each || 20 })}
+                  </DialogContentText>
+                </>}
+            </>}
+        </DialogContent>
+        <DialogActions>
+          <Button fullWidth variant="outlined" onClick={() => { setIsChoosing(false); }}>
+            {i18n.t('actions:cancel')}
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            color="secondary"
+            disabled={!preview || !howMany}
+            onClick={handleImport}
+          >
+            {i18n.t('federation:bluesky.import.confirm', { count: howMany })}
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Dialog
         open={isLeaving}
         onClose={() => { setIsLeaving(false); }}

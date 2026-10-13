@@ -52,8 +52,16 @@ const disconnectBluesky = () => {
 
 // Follows here the accounts the viewer's Bluesky account follows already.
 // It is begun and not waited for: a long list takes minutes.
-const importBlueskyFollows = () => {
-  return axios.post('/atproto/settings/import-follows');
+//
+// `limit` is how many, beginning with the ones followed most lately.
+const importBlueskyFollows = (limit) => {
+  return axios.post('/atproto/settings/import-follows', { limit });
+};
+
+// What that would do, before it is done: how many accounts the viewer
+// follows on Bluesky, and the most that are followed here in one go.
+const previewBlueskyFollows = () => {
+  return axios.get('/atproto/settings/import-follows');
 };
 
 // The servers this installation refuses: nothing is taken from them or
@@ -86,6 +94,7 @@ export default {
   connectBluesky,
   disconnectBluesky,
   importBlueskyFollows,
+  previewBlueskyFollows,
   blocks,
   addBlock,
   removeBlock,

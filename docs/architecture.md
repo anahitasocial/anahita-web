@@ -1080,7 +1080,10 @@ draws nothing (`utils/federation.js#isAbsent`).
   and a button to disconnect, which asks first. When Bluesky no longer
   takes the connection the card says so and offers the form again.
   Once connected, a second button follows here the accounts they follow
-  on Bluesky already; the server carries on with it after answering.
+  on Bluesky already. It asks first: a dialog says how many they follow
+  there, offers a number (the 25, 100 or 500 followed most recently, or
+  all of them when there are fewer), and says what it does and that it is
+  not undone in one step. The server carries on with it after answering.
   Nothing is drawn where the installation does not write to Bluesky.
 
 ### Menus
