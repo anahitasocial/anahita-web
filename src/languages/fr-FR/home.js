@@ -23,6 +23,20 @@ export default {
         title: 'Ce que vous publiez reste à vous',
         body: 'Vous choisissez qui voit chaque publication, et vous pouvez emporter une copie de tout ce que vous avez créé quand vous le voulez.',
       },
+      networks: {
+        both: {
+          title: 'Fait partie du fédivers',
+          body: 'Suivez des personnes sur Mastodon et Bluesky, et soyez suivi et lu par elles, sans quitter ce site. Il parle leurs deux protocoles : ActivityPub et le protocole AT.',
+        },
+        activitypub: {
+          title: 'Fait partie du fédivers',
+          body: 'Suivez des personnes sur Mastodon et les autres serveurs du fédivers, et soyez suivi et lu par elles, sans quitter ce site. Il parle leur protocole, ActivityPub.',
+        },
+        atproto: {
+          title: 'Relié à Bluesky',
+          body: 'Suivez des personnes sur Bluesky, et répondez-leur avec votre propre compte Bluesky, sans quitter ce site. Il parle le protocole de Bluesky, le protocole AT.',
+        },
+      },
     },
     lookAround: 'Jetez un coup d’œil',
     places: {

@@ -23,6 +23,21 @@ export default {
         title: 'What you post stays yours',
         body: 'You choose who sees each post, and you can take a copy of everything you have made whenever you like.',
       },
+      // On an installation that takes part in other networks: which.
+      networks: {
+        both: {
+          title: 'Part of the fediverse',
+          body: 'Follow people on Mastodon and Bluesky, and be followed and answered by them, without leaving this site. It speaks both of their protocols: ActivityPub and the AT Protocol.',
+        },
+        activitypub: {
+          title: 'Part of the fediverse',
+          body: 'Follow people on Mastodon and the other servers of the fediverse, and be followed and answered by them, without leaving this site. It speaks their protocol, ActivityPub.',
+        },
+        atproto: {
+          title: 'Connected to Bluesky',
+          body: 'Follow people on Bluesky, and answer them as your own Bluesky account, without leaving this site. It speaks Bluesky’s protocol, the AT Protocol.',
+        },
+      },
     },
     lookAround: 'Have a look around',
     places: {

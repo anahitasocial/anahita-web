@@ -16,6 +16,7 @@ import Typography from '@mui/material/Typography';
 import FollowIcon from '@mui/icons-material/Diversity3Outlined';
 import FeedsIcon from '@mui/icons-material/TuneOutlined';
 import YoursIcon from '@mui/icons-material/LockPersonOutlined';
+import NetworksIcon from '@mui/icons-material/Hub';
 import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import GroupsIcon from '@mui/icons-material/GroupsOutlined';
 import HashtagsIcon from '@mui/icons-material/Tag';
@@ -32,6 +33,21 @@ const REASONS = [
   { key: 'feeds', Icon: FeedsIcon },
   { key: 'yours', Icon: YoursIcon },
 ];
+
+// The other networks an installation can take part in, as it names them
+// in NodeInfo, and which words say so: one, the other, or both.
+const networksKey = (networks) => {
+  const mastodon = networks.includes('activitypub');
+  const bluesky = networks.includes('atproto');
+
+  if (mastodon && bluesky) {
+    return 'both';
+  }
+  if (mastodon) {
+    return 'activitypub';
+  }
+  return bluesky ? 'atproto' : '';
+};
 
 // What somebody who is not signed in may look at.
 const PLACES = [
@@ -63,6 +79,17 @@ const Home = ({
   const name = metadata.nodeName || process.env.REACT_APP_NAME || '';
   const description = metadata.nodeDescription || process.env.REACT_APP_DESCRIPTION || '';
 
+  // What the installation says it is part of. An older server says only
+  // `protocols`.
+  const networks = Array.isArray(metadata.networks) ? metadata.networks : (protocols || []);
+  const partOf = networksKey(networks);
+
+  // A fourth card, on an installation that is part of other networks:
+  // which, by the names people know them by, and by what they speak.
+  const reasons = partOf ?
+    [...REASONS, { key: `networks.${partOf}`, Icon: NetworksIcon }] :
+    REASONS;
+
   return (
     <Box>
       <HeaderMeta />
@@ -71,14 +98,17 @@ const Home = ({
         description={description}
         people={Number((usage.users || {}).total) || 0}
         posts={Number(usage.localPosts) || 0}
-        federated={(protocols || []).includes('activitypub')}
+        federated={Boolean(partOf)}
         canJoin={Boolean(openRegistrations)}
       />
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        {REASONS.map(({ key, Icon }) => {
+        {reasons.map(({ key, Icon }) => {
           return (
-            <Grid key={key} size={{ xs: 12, md: 4 }}>
+            <Grid
+              key={key}
+              size={{ xs: 12, sm: reasons.length === 4 ? 6 : 12, md: 12 / reasons.length }}
+            >
               <Card sx={{ height: '100%' }}>
                 <CardContent>
                   <Avatar sx={{ bgcolor: 'primary.main', mb: 2 }}>
