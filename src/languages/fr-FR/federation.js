@@ -37,7 +37,7 @@ export default {
   },
   bluesky: {
     title: 'Bluesky',
-    help: 'Tout le monde ici peut suivre des comptes sur Bluesky et les lire. Connectez le compte que vous y avez, et ce que vous faites ici sur une publication venue de Bluesky s’y fait aussi, en votre nom : un j’aime, un partage, une réponse.',
+    help: 'Tout le monde ici peut suivre des comptes sur Bluesky et les lire. Connectez le compte que vous y avez, et vous y participez aussi, en votre nom : vos notes publiques sont publiées sur Bluesky, de même qu’un j’aime, un partage ou une réponse que vous donnez ici à une publication venue de Bluesky.',
     as: 'Connecté en tant que',
     connect: 'Connecter',
     disconnect: 'Déconnecter',

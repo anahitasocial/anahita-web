@@ -37,7 +37,7 @@ export default {
   },
   bluesky: {
     title: 'Bluesky',
-    help: 'Anybody here can follow accounts on Bluesky and read them. Connect the account you have there, and what you do here to a post from Bluesky is done there too, as you: a like, a repost, a reply.',
+    help: 'Anybody here can follow accounts on Bluesky and read them. Connect the account you have there, and you take part there too, as you: your public notes are posted on Bluesky, and so is a like, a repost or a reply you give here to a post from Bluesky.',
     as: 'Connected as',
     connect: 'Connect',
     disconnect: 'Disconnect',
