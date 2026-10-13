@@ -1021,8 +1021,13 @@ draws nothing (`utils/federation.js#isAbsent`).
   draws them. What differs is told by `utils/federation.js`:
   - their handle is drawn whole (`displayHandle`), where a username here
     is made safe first;
-  - their profile says they are on another server, with a button to their
-    own page there (`components/RemoteNotice.jsx`);
+  - their profile says which network they are on in a small badge under
+    their handle, the butterfly for Bluesky and the hub for the fediverse,
+    with the longer explanation for whoever points at it; a button to
+    their own page there sits beside Follow
+    (`components/RemoteNotice.jsx`: `RemoteBadge`, `RemoteLink`). Not a
+    notice across the page: it is a fact about the profile, not something
+    to act on;
   - the server sends nothing they can be edited, run or posted on by, so
     none of those controls is drawn. Follow is, and works as for anybody.
 - **A post from another server** is an ordinary note with a `uri`. Its menu

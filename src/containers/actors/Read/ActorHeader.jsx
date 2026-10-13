@@ -8,7 +8,7 @@ import CardHeader from '@mui/material/CardHeader';
 import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 
-import RemoteNotice from '../../../components/RemoteNotice';
+import { RemoteBadge, RemoteLink } from '../../../components/RemoteNotice';
 import SocialgraphMeta from './SocialgraphMeta';
 import ActorType from '../../../proptypes/Actor';
 import utils from '../../../utils';
@@ -57,6 +57,8 @@ const ActorHeader = ({
   headerActions = null,
   socialgraphOpenOn = '',
 }) => {
+  const remote = utils.federation.isRemote(actor);
+
   return (
     <Card
       className={!actor.enabled ? classes.disabled : ''}
@@ -88,15 +90,18 @@ const ActorHeader = ({
             >
               {utils.federation.displayHandle(actor, slugify)}
             </Typography>
+            {remote && <RemoteBadge node={actor} />}
             <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
           </>
         }
         action={headerActions}
       />
-      {utils.federation.isRemote(actor) && <RemoteNotice node={actor} />}
-      {followAction &&
+      {/* Their page on their own server goes with the follow button, and
+          is there for somebody who cannot follow, too. */}
+      {(followAction || remote) &&
         <CardActions>
           <div className={classes.grow} />
+          {remote && <RemoteLink node={actor} />}
           {followAction}
         </CardActions>}
     </Card>

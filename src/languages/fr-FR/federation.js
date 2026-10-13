@@ -32,6 +32,8 @@ export default {
   remote: {
     badge: 'De {{ domain }}',
     onAnotherServer: 'Cette personne est sur un autre serveur, {{ domain }}. Ce que vous voyez ici est ce que ce serveur partage avec tout le monde.',
+    on: 'Sur {{ domain }}',
+    onBluesky: 'Sur Bluesky',
     viewOriginal: 'Voir sur {{ domain }}',
     replyThere: 'Répondre sur {{ domain }}',
   },

@@ -33,6 +33,8 @@ export default {
     badge: 'From {{ domain }}',
     onAnotherServer: 'This person is on another server, {{ domain }}. What you see here is what that server shares with everybody.',
     viewOriginal: 'View on {{ domain }}',
+    on: 'On {{ domain }}',
+    onBluesky: 'On Bluesky',
     replyThere: 'Reply on {{ domain }}',
   },
   bluesky: {
