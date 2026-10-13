@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import IconButton from '@mui/material/IconButton';
+import Button from '@mui/material/Button';
 
 import InteractionsIcon from '@mui/icons-material/BarChartOutlined';
 
@@ -30,16 +30,19 @@ const Interactions = ({ node }) => {
           setOpen(false);
         }}
       />
-      <IconButton
+      {/* The same kind of button as the others in the row, and as wide, so
+          the row is shared out evenly between them. */}
+      <Button
         onClick={() => {
           setOpen(true);
         }}
         disabled={total === 0}
+        startIcon={<InteractionsIcon />}
+        color="default"
         aria-label={label}
         title={label}
-      >
-        <InteractionsIcon />
-      </IconButton>
+        fullWidth
+      />
     </>
   );
 };

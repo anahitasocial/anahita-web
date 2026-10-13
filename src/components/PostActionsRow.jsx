@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Box from '@mui/material/Box';
 import CardActions from '@mui/material/CardActions';
 
 // The one row under a post: what can be done with it (like, reply, repost,
-// share), spread across as they always were, and at the end the one icon
-// that opens its interactions.
+// share) and, last, what opens its interactions. Every one is the same
+// kind of button and as wide as the others, so the row is shared out
+// evenly between them.
 //
 // There were two rows, counts above and actions below, which said some of
 // the same things twice and left reposts and quotes uncounted. Every
@@ -19,9 +19,6 @@ const PostActionsRow = ({ actions = null, stats = null }) => {
   return (
     <CardActions>
       {actions}
-      {/* Alone in the row, for somebody who is not signed in, it keeps to
-          the end where it always is. */}
-      {!actions && <Box sx={{ flex: 1 }} />}
       {stats}
     </CardActions>
   );

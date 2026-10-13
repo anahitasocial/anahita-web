@@ -775,13 +775,13 @@ it and replied to it (`containers/activity/PostActivity.jsx`,
 its number; under the tabs is the list of who, each row a link. In the code it is still
 called activity. Each list is read when its tab is first opened.
 
-It opens from **one icon at the end of the row under a post**
+It opens from **the last button in the row under a post**
 (`containers/likes`, drawn by `components/PostActionsRow.jsx`, which every
 layout of a post uses), there to press when the post has any of the four,
-and from "Interactions" in a post's menu. There is one row under a post, the
-actions spread across it and that icon at the end: the separate row of
-counts, of likes and of replies, is gone. People in the likes and reposts lists have a
-Follow button; quotes and replies show what was said and lead to the note.
+and from "Interactions" in a post's menu. There is one row under a post:
+like, reply, repost, share and interactions, each the same kind of button
+and as wide as the others, so the row is shared out evenly. None is an
+icon button. The separate row of counts, of likes and of replies, is gone.
 
 There are no views in it, and nothing anywhere counts them.
 
