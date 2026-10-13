@@ -531,10 +531,10 @@ own, because a video is too big to be sent with the post (the services'
 
 ### Downloading
 
-A photo or a video has a Download button in the row under it, where the
-server said this viewer may download it (`authorized.download`;
-`utils/downloads.js`). Whoever posted it decides, and it is off until they
-say otherwise.
+A photo or a video has a Download button in the row under it on its own
+page, where the server says it may be downloaded. Not on its card in a
+feed or a list: a card is narrow, and one more button did not fit on a
+phone (user, 2026-10-13).
 
 - **When posting**, the photo and video composers have a download button
   among the post's options (`components/DownloadOptionButton.jsx`), which

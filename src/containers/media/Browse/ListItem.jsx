@@ -12,7 +12,6 @@ import MediumType from '../../../proptypes/Medium';
 
 import MediumMenu from '../MediaMenu';
 import { ShareAction, ofNode } from '../../controls/Share';
-import { DownloadAction } from '../../controls/medium/Download';
 import utils from '../../../utils';
 import perms from '../../../permissions';
 
@@ -52,7 +51,6 @@ const MediaListItem = ({
       }
       actions={isAuthenticated && [
         <Like node={medium} key={`medium-like-${medium.id}`} />,
-        <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
         <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />,
       ]}
     />
