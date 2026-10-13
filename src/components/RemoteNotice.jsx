@@ -7,7 +7,6 @@ import Chip from '@mui/material/Chip';
 import Tooltip from '@mui/material/Tooltip';
 
 import FediverseIcon from '@mui/icons-material/Hub';
-import OpenIcon from '@mui/icons-material/OpenInNew';
 
 import BlueskyIcon from './BlueskyIcon';
 import i18n from '../languages';
@@ -63,7 +62,8 @@ RemoteBadge.propTypes = {
   }).isRequired,
 };
 
-// Their page there: kept as their website when they were looked up.
+// Their page there: kept as their website when they were looked up. The
+// button carries the mark of the network it leads to.
 export const RemoteLink = ({ node }) => {
   const page = node.websiteUrl || federation.pageOf(node);
 
@@ -77,7 +77,7 @@ export const RemoteLink = ({ node }) => {
       href={page}
       target="_blank"
       rel="noopener noreferrer"
-      endIcon={<OpenIcon fontSize="small" />}
+      startIcon={onBluesky(node) ? <BlueskyIcon /> : <FediverseIcon />}
     >
       {i18n.t('federation:remote.viewOriginal', { domain: federation.domainOf(node) })}
     </Button>
