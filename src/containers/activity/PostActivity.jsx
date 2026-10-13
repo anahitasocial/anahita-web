@@ -9,10 +9,10 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import LinearProgress from '@mui/material/LinearProgress';
-import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -203,32 +203,31 @@ const PostActivity = ({
                 <ListItem
                   key={row.key}
                   divider
+                  disablePadding
                   secondaryAction={
                     isAuthenticated && viewer.id !== actor.id && !note ?
                       <ControlFollow actor={actor} /> :
                       null
                   }
                 >
-                  <ListItemAvatar>
-                    <ActorAvatar actor={actor} linked />
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary={
-                      <Link href={getURL(actor)} color="inherit">
-                        {getActorName(actor)}
-                      </Link>
-                    }
-                    secondary={note ?
-                      <Link
-                        href={getURL(note)}
-                        color="inherit"
-                        dir="auto"
-                        sx={{ overflowWrap: 'anywhere' }}
-                      >
-                        {row.excerpt || i18n.t('media:activity.open')}
-                      </Link> :
-                      null}
-                  />
+                  {/* The whole row leads somewhere: to the note for a quote
+                      or a reply, to the person for a like or a repost. The
+                      Follow button beside it is its own. */}
+                  <ListItemButton
+                    component="a"
+                    href={note ? getURL(note) : getURL(actor)}
+                  >
+                    <ListItemAvatar>
+                      <ActorAvatar actor={actor} />
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={getActorName(actor)}
+                      secondary={note ? (row.excerpt || i18n.t('media:activity.open')) : null}
+                      slotProps={{
+                        secondary: { dir: 'auto', sx: { overflowWrap: 'anywhere' } },
+                      }}
+                    />
+                  </ListItemButton>
                 </ListItem>
               );
             })}
