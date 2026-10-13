@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/EditOutlined';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import HideIcon from '@mui/icons-material/VisibilityOffOutlined';
 import ShowIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -69,7 +70,9 @@ const ReplyItem = ({
     setMenuAnchor(null);
   };
 
-  const hasMenu = authorized.edit || authorized.delete || authorized.hide || report.canReport;
+  // A reply from another server can be read where it was written.
+  const original = utils.federation.isRemote(reply) && reply.uri ? reply.uri : '';
+  const hasMenu = authorized.edit || authorized.delete || authorized.hide || report.canReport || original;
 
   const under = children.length > 0 && (
     <Box
@@ -231,6 +234,18 @@ const ReplyItem = ({
               open={Boolean(menuAnchor)}
               onClose={closeMenu}
             >
+              {original &&
+                <MenuItem
+                  component="a"
+                  href={original}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMenu}
+                >
+                  <MenuItemLabel icon={<OpenInNewIcon fontSize="small" />}>
+                    {i18n.t('federation:remote.viewOriginal', { domain: utils.federation.domainOf(reply) })}
+                  </MenuItemLabel>
+                </MenuItem>}
               {authorized.edit &&
                 <MenuItem
                   onClick={() => {
