@@ -22,6 +22,7 @@ import GroupsIcon from '@mui/icons-material/GroupsOutlined';
 import HashtagsIcon from '@mui/icons-material/Tag';
 import AboutIcon from '@mui/icons-material/InfoOutlined';
 
+import BlueskyIcon from '../../../components/BlueskyIcon';
 import HeaderMeta from '../../../components/HeaderMeta';
 import i18n from '../../../languages';
 import Hero from './Hero';
@@ -86,8 +87,14 @@ const Home = ({
 
   // A fourth card, on an installation that is part of other networks:
   // which, by the names people know them by, and by what they speak.
+  // The hub stands for the fediverse, and the butterfly for Bluesky: one,
+  // the other, or both side by side.
+  const networkIcons = [
+    networks.includes('activitypub') && NetworksIcon,
+    networks.includes('atproto') && BlueskyIcon,
+  ].filter(Boolean);
   const reasons = partOf ?
-    [...REASONS, { key: `networks.${partOf}`, Icon: NetworksIcon }] :
+    [...REASONS, { key: `networks.${partOf}`, icons: networkIcons }] :
     REASONS;
 
   return (
@@ -98,12 +105,13 @@ const Home = ({
         description={description}
         people={Number((usage.users || {}).total) || 0}
         posts={Number(usage.localPosts) || 0}
-        federated={Boolean(partOf)}
+        federated={networks.includes('activitypub')}
+        onBluesky={networks.includes('atproto')}
         canJoin={Boolean(openRegistrations)}
       />
 
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        {reasons.map(({ key, Icon }) => {
+        {reasons.map(({ key, Icon, icons = [Icon] }) => {
           return (
             <Grid
               key={key}
@@ -111,9 +119,15 @@ const Home = ({
             >
               <Card sx={{ height: '100%' }}>
                 <CardContent>
-                  <Avatar sx={{ bgcolor: 'primary.main', mb: 2 }}>
-                    <Icon />
-                  </Avatar>
+                  <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                    {icons.map((Each) => {
+                      return (
+                        <Avatar key={Each.muiName || Each.name} sx={{ bgcolor: 'primary.main' }}>
+                          <Each />
+                        </Avatar>
+                      );
+                    })}
+                  </Stack>
                   <Typography variant="h6" component="h3" gutterBottom>
                     {i18n.t(`home:guest.reasons.${key}.title`)}
                   </Typography>

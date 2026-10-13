@@ -13,6 +13,7 @@ import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import PostsIcon from '@mui/icons-material/ForumOutlined';
 import FediverseIcon from '@mui/icons-material/Hub';
 
+import BlueskyIcon from '../../../components/BlueskyIcon';
 import api from '../../../api';
 import i18n from '../../../languages';
 import appLogo from '../media/logo';
@@ -30,6 +31,7 @@ const HomeHero = ({
   people = 0,
   posts = 0,
   federated = false,
+  onBluesky = false,
   canJoin = false,
 }) => {
   const { color: logo } = appLogo;
@@ -113,7 +115,7 @@ const HomeHero = ({
           </Button>}
       </Stack>
 
-      {(people > 0 || posts > 0 || federated) &&
+      {(people > 0 || posts > 0 || federated || onBluesky) &&
         <Stack
           direction="row"
           spacing={1}
@@ -138,6 +140,12 @@ const HomeHero = ({
               label={i18n.t('home:guest.federated')}
               variant="outlined"
             />}
+          {onBluesky &&
+            <Chip
+              icon={<BlueskyIcon />}
+              label={i18n.t('home:guest.bluesky')}
+              variant="outlined"
+            />}
         </Stack>}
     </Box>
   );
@@ -150,6 +158,7 @@ HomeHero.propTypes = {
   posts: PropTypes.number,
   // Whether people here can be followed from other servers.
   federated: PropTypes.bool,
+  onBluesky: PropTypes.bool,
   // Whether somebody may make a profile without being invited.
   canJoin: PropTypes.bool,
 };

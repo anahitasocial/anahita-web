@@ -10,6 +10,7 @@ export default {
     posts: '{{ formatted }} publication',
     posts_plural: '{{ formatted }} publications',
     federated: 'Fait partie du fédivers',
+    bluesky: 'Relié à Bluesky',
     reasons: {
       follow: {
         title: 'Personnes, groupes et événements',
