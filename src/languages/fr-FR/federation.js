@@ -21,7 +21,7 @@ export default {
   },
   composer: {
     replyStaysHere: 'Votre réponse sera lue ici et non sur le serveur d’où cela vient : vous n’êtes pas sur le fédivers. Vous pouvez changer cela dans vos paramètres, sous Confidentialité.',
-    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky : ce site lit Bluesky et n’y publie pas.',
+    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky. Pour répondre là-bas aussi, connectez votre compte Bluesky dans vos paramètres, sous Confidentialité.',
     staysHere: 'Cette note ne sera pas partagée avec le fédivers : seule une note ouverte à tout le monde l’est.',
   },
   leaving: {
@@ -34,6 +34,39 @@ export default {
     onAnotherServer: 'Cette personne est sur un autre serveur, {{ domain }}. Ce que vous voyez ici est ce que ce serveur partage avec tout le monde.',
     viewOriginal: 'Voir sur {{ domain }}',
     replyThere: 'Répondre sur {{ domain }}',
+  },
+  bluesky: {
+    title: 'Bluesky',
+    help: 'Tout le monde ici peut suivre des comptes sur Bluesky et les lire. Connectez le compte que vous y avez, et ce que vous faites ici sur une publication venue de Bluesky s’y fait aussi, en votre nom : un j’aime, un partage, une réponse.',
+    as: 'Connecté en tant que',
+    connect: 'Connecter',
+    disconnect: 'Déconnecter',
+    connected: 'Votre compte Bluesky est connecté.',
+    disconnected: 'Votre compte Bluesky est déconnecté.',
+    broken: 'Bluesky n’accepte plus cette connexion, peut-être parce que le mot de passe d’application a été supprimé. Connectez-vous de nouveau avec un autre.',
+    handle: {
+      label: 'Votre identifiant Bluesky',
+      help: 'Par exemple, alice.bsky.social.',
+    },
+    password: {
+      label: 'Mot de passe d’application',
+      help: 'Utilisez un mot de passe d’application, pas le mot de passe de votre compte. Ce site ne le conserve pas.',
+      where: 'En créer un sur Bluesky',
+    },
+    leave: {
+      title: 'Se déconnecter de Bluesky ?',
+      body: 'Ce que vous faites ici n’atteindra plus Bluesky. Les réponses, j’aime et partages déjà faits là-bas en votre nom y restent, et ne pourront alors être retirés que sur Bluesky.',
+    },
+    errors: {
+      bluesky_unreadable: 'Ce n’est pas un identifiant Bluesky et un mot de passe d’application.',
+      bluesky_not_found: 'Aucun compte Bluesky n’a été trouvé sous cet identifiant.',
+      bluesky_denied: 'Bluesky n’a pas accepté ce mot de passe d’application.',
+      bluesky_taken: 'Ce compte Bluesky est connecté par quelqu’un d’autre sur ce site.',
+      bluesky_failed: 'Bluesky est injoignable. Veuillez réessayer.',
+      lookup_refused: 'Ce site ne se connecte pas à ce serveur.',
+      too_many_tries: 'Cela fait beaucoup d’essais. Veuillez patienter quelques minutes.',
+      failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
+    },
   },
   lookup: {
     title: 'Sur un autre serveur',

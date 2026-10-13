@@ -40,6 +40,7 @@ import ActorBlocked from './Blocked';
 import DataExport from './DataExport';
 import ActorSuggestions from './Suggestions';
 import ActorFediverse from './Fediverse';
+import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
 import Progress from '../../../components/Progress';
@@ -244,6 +245,7 @@ const ActorsSettings = ({
       [ITEMS.DATA_EXPORT]: <DataExport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.FEDIVERSE]: <ActorFediverse />,
+      [ITEMS.BLUESKY]: <ActorBluesky />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked
       // at rather than the viewer — the endpoints behind them are the

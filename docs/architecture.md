@@ -1048,10 +1048,17 @@ draws nothing (`utils/federation.js#isAbsent`).
     address a thing has between servers is its page; on Bluesky it is an
     `at://` address, and the page is worked out from it. "View on …"
     leads there, in the menus and on the profile;
-  - **a reply to a post from Bluesky stays here,** whoever writes it,
-    since the site reads Bluesky and does not post to it:
-    `useReplyStaysHere` answers with the words to say so under the reply
-    being written.
+  - **a reply to a post from Bluesky stays here unless its writer
+    connected their Bluesky account:** `useReplyStaysHere` answers with
+    the words to say so under the reply being written, and with nothing
+    for somebody connected (`useOnBluesky`, asked once and kept up to
+    date by the settings card).
+- **A person's own Bluesky account** is connected in their settings,
+  under Privacy (`actors/Settings/Bluesky.jsx`): a handle and an app
+  password, with a link to where Bluesky makes one, then "Connected as"
+  and a button to disconnect, which asks first. When Bluesky no longer
+  takes the connection the card says so and offers the form again.
+  Nothing is drawn where the installation does not write to Bluesky.
 
 ### Menus
 

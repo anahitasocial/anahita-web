@@ -21,7 +21,7 @@ export default {
   },
   composer: {
     replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Privacy.',
-    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky: this site reads Bluesky, and does not post to it.',
+    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Privacy.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
   },
   leaving: {
@@ -34,6 +34,39 @@ export default {
     onAnotherServer: 'This person is on another server, {{ domain }}. What you see here is what that server shares with everybody.',
     viewOriginal: 'View on {{ domain }}',
     replyThere: 'Reply on {{ domain }}',
+  },
+  bluesky: {
+    title: 'Bluesky',
+    help: 'Anybody here can follow accounts on Bluesky and read them. Connect the account you have there, and what you do here to a post from Bluesky is done there too, as you: a like, a repost, a reply.',
+    as: 'Connected as',
+    connect: 'Connect',
+    disconnect: 'Disconnect',
+    connected: 'Your Bluesky account is connected.',
+    disconnected: 'Your Bluesky account is disconnected.',
+    broken: 'Bluesky no longer accepts this connection, perhaps because the app password was removed. Connect again with a new one.',
+    handle: {
+      label: 'Your Bluesky handle',
+      help: 'For example, alice.bsky.social.',
+    },
+    password: {
+      label: 'App password',
+      help: 'Use an app password, not the password of your account. This site does not keep it.',
+      where: 'Make one on Bluesky',
+    },
+    leave: {
+      title: 'Disconnect from Bluesky?',
+      body: 'What you do here will no longer reach Bluesky. Replies, likes and reposts already made there as you stay there, and can then be removed only on Bluesky.',
+    },
+    errors: {
+      bluesky_unreadable: 'That is not a Bluesky handle and an app password.',
+      bluesky_not_found: 'No Bluesky account was found by that handle.',
+      bluesky_denied: 'Bluesky did not accept that app password.',
+      bluesky_taken: 'That Bluesky account is connected by somebody else on this site.',
+      bluesky_failed: 'Bluesky could not be reached. Please try again.',
+      lookup_refused: 'This site does not connect to that server.',
+      too_many_tries: 'That is a lot of tries. Please wait a few minutes.',
+      failed: 'That did not work. Please try again.',
+    },
   },
   lookup: {
     title: 'On another server',

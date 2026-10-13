@@ -32,6 +32,24 @@ const lookup = (query) => {
   return axios.get(`/${service}/lookup`, { params: { q: query } });
 };
 
+// The viewer's own Bluesky account, connected or not: what they do here to
+// things from Bluesky is done there as it. Where the installation does not
+// write to Bluesky, the answer is an error, taken for there being nothing
+// to show.
+const blueskySettings = () => {
+  return axios.get('/atproto/settings');
+};
+
+// `appPassword` is a password made for an app, on Bluesky. The server
+// exchanges it for a token and does not keep it.
+const connectBluesky = ({ handle, appPassword }) => {
+  return axios.put('/atproto/settings', { handle, app_password: appPassword });
+};
+
+const disconnectBluesky = () => {
+  return axios.delete('/atproto/settings');
+};
+
 // The servers this installation refuses: nothing is taken from them or
 // sent to them. For super administrators, in the site's settings.
 //
@@ -58,6 +76,9 @@ export default {
   settings,
   setEnabled,
   lookup,
+  blueskySettings,
+  connectBluesky,
+  disconnectBluesky,
   blocks,
   addBlock,
   removeBlock,

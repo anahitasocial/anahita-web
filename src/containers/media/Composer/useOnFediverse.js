@@ -62,21 +62,78 @@ const useOnFediverse = (viewer) => {
   return onFediverse;
 };
 
+// Whether the viewer has connected their Bluesky account, asked once and
+// remembered in the same way.
+let knownBluesky = { viewerId: 0, asked: null };
+
+const askBluesky = (viewerId) => {
+  if (knownBluesky.viewerId !== viewerId || !knownBluesky.asked) {
+    knownBluesky = {
+      viewerId,
+      asked: api.federation.blueskySettings()
+        .then((result) => {
+          return Boolean(result.data && result.data.connected && !result.data.broken);
+        })
+        .catch(() => {
+          return false;
+        }),
+    };
+  }
+
+  return knownBluesky.asked;
+};
+
+// Told by the settings page when the viewer connects or disconnects.
+export const rememberOnBluesky = (connected) => {
+  if (knownBluesky.viewerId) {
+    knownBluesky = { viewerId: knownBluesky.viewerId, asked: Promise.resolve(Boolean(connected)) };
+  } else {
+    knownBluesky = { viewerId: 0, asked: null };
+  }
+};
+
+export const useOnBluesky = (viewer) => {
+  const viewerId = (viewer && viewer.id) || 0;
+  const [onBluesky, setOnBluesky] = useState(false);
+
+  useEffect(() => {
+    let current = true;
+
+    if (!viewerId) {
+      setOnBluesky(false);
+      return undefined;
+    }
+
+    askBluesky(viewerId).then((connected) => {
+      if (current) {
+        setOnBluesky(connected);
+      }
+    });
+
+    return () => {
+      current = false;
+    };
+  }, [viewerId]);
+
+  return onBluesky;
+};
+
 // What to say under a reply being written to something from another
 // server, when it will be read here and not there: the name of the words
 // to say it with, or '' for nothing.
 //
-// Under something from the fediverse, by somebody who is not on it.
-// Under something from Bluesky, always: this site reads Bluesky and writes
-// nothing to it. Nothing, where the reply will reach whoever it answers,
-// or where what is answered was written here.
+// Under something from the fediverse, by somebody who is not on it. Under
+// something from Bluesky, by somebody who has not connected their account
+// there. Nothing, where the reply will reach whoever it answers, or where
+// what is answered was written here.
 export const useReplyStaysHere = (viewer, answered) => {
   const onFediverse = useOnFediverse(viewer);
+  const onBluesky = useOnBluesky(viewer);
   const type = answered && typeof answered.type === 'string' ? answered.type : '';
   const uri = answered && typeof answered.uri === 'string' ? answered.uri : '';
 
   if (uri.startsWith('at://') || type.includes('.atproto-service.')) {
-    return 'federation:composer.replyStaysHereBluesky';
+    return onBluesky ? '' : 'federation:composer.replyStaysHereBluesky';
   }
   if ((uri || type.includes('.activitypub-service.')) && !onFediverse) {
     return 'federation:composer.replyStaysHere';

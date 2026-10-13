@@ -63,6 +63,7 @@ export const ITEMS = {
   // What the viewer chose about suggestions of who to follow.
   SUGGESTIONS: 'suggestions',
   FEDIVERSE: 'fediverse',
+  BLUESKY: 'bluesky',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   METADATA: 'metadata',
@@ -138,6 +139,8 @@ const ALL_SECTIONS = [
       // Whether people on other servers can find and follow them. Their
       // own choice, and nobody else's to make for them.
       { key: ITEMS.FEDIVERSE, bare: false, viewerOnly: true },
+      // Their own Bluesky account, connected or not. Theirs alone too.
+      { key: ITEMS.BLUESKY, bare: false, viewerOnly: true },
     ],
   },
   {
