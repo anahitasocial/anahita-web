@@ -142,6 +142,12 @@ const ReplyItem = ({
               actor={author}
               linked={Boolean(author.id)}
             />
+            {/* Somebody on another server is called by their whole handle,
+                which is what says where they are. */}
+            {utils.federation.isRemote(author) &&
+              <Typography variant="caption" color="textSecondary" sx={{ overflowWrap: 'anywhere' }}>
+                {utils.federation.handleOf(author)}
+              </Typography>}
             <Typography
               variant="caption"
               color="textSecondary"
