@@ -56,7 +56,7 @@ const People = ({ viewer, inviteSettings }) => {
       <Box sx={{ mb: 2 }}>
         <BrowseHeader
           icon={<PeopleIcon />}
-          title={i18n.t('people:cTitle')}
+          title={i18n.t('people:browse.title')}
           subheader={subheader}
           actionTo={canInvite ? '/invites' : ''}
           actionLabel={i18n.t('invites:form.cTitle')}

@@ -2,6 +2,7 @@ export default {
   cTitle: 'Personnes',
   mTitle: 'Personnes',
   browse: {
+    title: 'Personnes locales',
     local: 'Les personnes qui ont un profil sur {{ site }}.',
     localUnnamed: 'Les personnes qui ont un profil sur ce site.',
     elsewhere: {

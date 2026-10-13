@@ -3,6 +3,7 @@ export default {
   mTitle: 'People',
   // Under the title of the list of people: whose list it is.
   browse: {
+    title: 'Local people',
     local: 'People with a profile on {{ site }}.',
     localUnnamed: 'People with a profile on this site.',
     elsewhere: {
