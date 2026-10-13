@@ -6,10 +6,13 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Typography from '@mui/material/Typography';
 
 import actions from '../../../actions';
+import api from '../../../api';
 import i18n from '../../../languages';
 
 import Progress from '../../../components/Progress';
 import FeedItems from '../components/Items';
+import NewPosts from '../components/NewPosts';
+import useNewPosts from '../useNewPosts';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
@@ -26,6 +29,7 @@ const FeedCustomBrowse = ({
   emptyText = '',
   browseList,
   resetList,
+  prependList,
   items,
   hasMore = true,
   isFetching,
@@ -61,6 +65,18 @@ const FeedCustomBrowse = ({
     };
   }, [key]);
 
+  // What is posted while it is open is put at its top.
+  const { waiting, show } = useNewPosts({
+    peek: () => {
+      return api.customFeeds.peek({ feed, limit: LIMIT }).then((result) => {
+        return result.data.data || [];
+      });
+    },
+    known: items.byId,
+    put: prependList,
+    feedKey: key,
+  });
+
   if (failure) {
     return (
       <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
@@ -80,24 +96,27 @@ const FeedCustomBrowse = ({
   }
 
   return (
-    <InfiniteScroll
-      dataLength={items.allIds.length}
-      next={() => {
-        if (!isFetching) {
-          load(items.allIds.length);
-        }
-      }}
-      hasMore={hasMore}
-      loader={<Progress key="feed-custom-progress" />}
-    >
-      <FeedItems
-        items={items}
-        namespace="feed_custom"
-        columns={columns}
-        isAuthenticated={isAuthenticated}
-        viewer={viewer}
-      />
-    </InfiniteScroll>
+    <>
+      <NewPosts count={waiting} onShow={show} />
+      <InfiniteScroll
+        dataLength={items.allIds.length}
+        next={() => {
+          if (!isFetching) {
+            load(items.allIds.length);
+          }
+        }}
+        hasMore={hasMore}
+        loader={<Progress key="feed-custom-progress" />}
+      >
+        <FeedItems
+          items={items}
+          namespace="feed_custom"
+          columns={columns}
+          isAuthenticated={isAuthenticated}
+          viewer={viewer}
+        />
+      </InfiniteScroll>
+    </>
   );
 };
 
@@ -106,6 +125,7 @@ FeedCustomBrowse.propTypes = {
   emptyText: PropTypes.string,
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
+  prependList: PropTypes.func.isRequired,
   items: NodesType.isRequired,
   hasMore: PropTypes.bool,
   isFetching: PropTypes.bool.isRequired,
@@ -142,6 +162,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetList: () => {
       return dispatch(actions.feed_custom.reset());
+    },
+    prependList: (nodes) => {
+      return dispatch(actions.feed_custom.prepend(nodes));
     },
   };
 };

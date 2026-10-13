@@ -28,6 +28,9 @@ describe('a custom feed\'s definition', () => {
     expect(feeds.complete({ filters: { hashtagsAny: ['garden'] } }).filters.hashtagsAny).toEqual(['garden']);
     expect(feeds.starting().sources.following).toBe(true);
     expect(feeds.ofHashtag('garden').filters.hashtagsAny).toEqual(['garden']);
+    // A place is known by its number, however it reached here.
+    expect(feeds.ofLocation('42').filters.locationsAny).toEqual([42]);
+    expect(feeds.problem(feeds.ofLocation(42))).toBe('');
   });
 
   it('keeps hashtags and keywords as the server does', () => {

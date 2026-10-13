@@ -8,11 +8,11 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 
+import PostActionsRow from '../../../components/PostActionsRow';
 import MediumType from '../../../proptypes/Medium';
 import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';
@@ -179,14 +179,7 @@ const MediumReadDefault = ({
             {quote}
             <SignInPrompt show={Boolean(medium.truncated)} />
           </CardContent>
-          {stats &&
-          <CardActions>
-            {stats}
-          </CardActions>}
-          {actions &&
-          <CardActions>
-            {actions}
-          </CardActions>}
+          <PostActionsRow actions={actions} stats={stats} />
         </>}
       </Card>
       <Tabs

@@ -7,7 +7,6 @@ import MediumType from '../../../proptypes/Medium';
 
 import Article from './Article';
 import Default from './Default';
-import ReplyStats from '../../../components/ReplyStats';
 import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
@@ -99,16 +98,14 @@ const MediaReadView = ({
       isAuthenticated && !isReply && (
         <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />
       ),
+      <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
+      // Share is last, after whatever else there is.
       isAuthenticated && (
         <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />
       ),
-      <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
     ],
     stats: (
-      <>
-        <Likes node={medium} />
-        <ReplyStats node={medium} />
-      </>
+      <Likes node={medium} />
     ),
     // Every kind of post is answered with replies: notes, threaded, each
     // liked and removed like any post. What used to be comments are replies

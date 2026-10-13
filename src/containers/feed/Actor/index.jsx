@@ -9,7 +9,6 @@ import actions from '../../../actions';
 import ControlLike from '../../likes/controls/LikeFeed';
 import ControlRepost from '../../controls/Repost';
 import LikesStats from '../../likes';
-import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
 
 import Masonry from '../../../components/BreakpointMasonry';
@@ -134,10 +133,6 @@ const FeedActorBrowse = ({
               key={`node-like-stat-${node.id}`}
               node={node}
             />,
-            <ReplyStats
-              key={`node-reply-stat-${node.id}`}
-              node={node}
-            />,
           ]}
           actions={isAuthenticated && [
             <Like
@@ -170,10 +165,6 @@ const FeedActorBrowse = ({
           stats={[
             <LikesStats
               key={`node-like-stat-${node.parent.id}`}
-              node={node.parent}
-            />,
-            <ReplyStats
-              key={`node-reply-stat-${node.parent.id}`}
               node={node.parent}
             />,
           ]}
@@ -217,10 +208,6 @@ const FeedActorBrowse = ({
               key={`node-like-stat-${node.parent.id}`}
               node={node.parent}
             />,
-            <ReplyStats
-              key={`node-reply-stat-${node.parent.id}`}
-              node={node.parent}
-            />,
           ]}
           actions={isAuthenticated && [
             <Like
@@ -259,10 +246,6 @@ const FeedActorBrowse = ({
         stats={[
           <LikesStats
             key={`node-like-stat-${node.id}`}
-            node={node}
-          />,
-          <ReplyStats
-            key={`node-reply-stat-${node.id}`}
             node={node}
           />,
         ]}

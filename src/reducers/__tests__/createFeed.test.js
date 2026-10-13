@@ -44,3 +44,40 @@ describe('a feed after a post is removed', () => {
     expect(next.feed_actor.allIds).toEqual([1, 2, 3]);
   });
 });
+
+describe('a feed when its head is read again', () => {
+  const state = stateWith([
+    { id: 5, name: 'five' },
+    { id: 4, name: 'four' },
+    { id: 3, name: 'three' },
+  ]);
+  const prepend = (nodes, from = state) => {
+    return feed(from, { type: 'FEED_ACTOR_BROWSE_PREPEND', nodes });
+  };
+
+  it('puts what is new first, in its own order, and keeps the rest', () => {
+    const next = prepend([{ id: 7 }, { id: 6 }, { id: 5, name: 'five, changed' }, { id: 4, name: 'four' }]);
+    expect(next.feed_actor.allIds).toEqual([7, 6, 5, 4, 3]);
+    expect(next.feed_actor.byId[5].name).toBe('five, changed');
+    expect(next.feed_actor.byId[3].name).toBe('three');
+  });
+
+  it('puts a post that was added among the ones held where the server has it', () => {
+    const next = prepend([{ id: 5 }, { id: 45 }, { id: 4 }]);
+    expect(next.feed_actor.allIds).toEqual([5, 45, 4, 3]);
+  });
+
+  it('begins again when more was posted than a page holds', () => {
+    const next = prepend([{ id: 12 }, { id: 11 }, { id: 10 }], { ...state, hasMore: false });
+    expect(next.feed_actor.allIds).toEqual([12, 11, 10]);
+    expect(next.feed_actor.byId[5]).toBeUndefined();
+    expect(next.hasMore).toBe(true);
+  });
+
+  it('fills a feed that was empty, and is unchanged by nothing', () => {
+    const empty = stateWith([]);
+    expect(prepend([{ id: 1 }], empty).feed_actor.allIds).toEqual([1]);
+    expect(prepend([])).toBe(state);
+    expect(prepend(undefined)).toBe(state);
+  });
+});

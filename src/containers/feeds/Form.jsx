@@ -19,11 +19,8 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-
 import NodesField from '../../components/NodesField';
 import WordsField from '../../components/WordsField';
-import DialogConfirm from '../../components/DialogConfirm';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import CustomFeedIcon, { FEED_ICONS } from '../../components/CustomFeedIcon';
 import actions from '../../actions';
@@ -87,7 +84,6 @@ const CustomFeedForm = ({
   feed = null,
   onClose,
   onSaved,
-  onDeleted = null,
   alertSuccess,
   alertError,
 }) => {
@@ -129,18 +125,6 @@ const CustomFeedForm = ({
   const names = customFeeds.namesOf([...actors, ...locations, ...excluded]);
   // The languages offered, with the feed's own among them whatever it is.
   const languages = postLanguage.optionsWith(definition.filters.language || postLanguage.CODES[0]);
-
-  const handleDelete = () => {
-    setIsSaving(true);
-
-    api.customFeeds.remove(feed).then(() => {
-      alertSuccess(i18n.t('customFeeds:prompts.deleted'));
-      onDeleted();
-    }).catch(() => {
-      alertError(i18n.t('customFeeds:prompts.failed'));
-      setIsSaving(false);
-    });
-  };
 
   const handleSave = (event) => {
     event.preventDefault();
@@ -495,25 +479,6 @@ const CustomFeedForm = ({
               {i18n.t('customFeeds:form.accessHelp')}
             </FormHelperText>
           </FormControl>
-          {/* Changing a feed is also where it is deleted. */}
-          {!isNew && onDeleted &&
-            <div>
-              <DialogConfirm
-                title={i18n.t('customFeeds:delete.title')}
-                message={i18n.t('customFeeds:delete.message')}
-                confirm={i18n.t('customFeeds:delete.confirm')}
-                dismiss={i18n.t('customFeeds:delete.dismiss')}
-              >
-                <Button
-                  color="error"
-                  startIcon={<DeleteIcon />}
-                  disabled={isSaving}
-                  onClick={handleDelete}
-                >
-                  {i18n.t('customFeeds:actions.delete')}
-                </Button>
-              </DialogConfirm>
-            </div>}
           {/* What the feed shows, in a sentence. */}
           <Typography variant="body2" color="textSecondary">
             {customFeeds.summary(definition, i18n.t.bind(i18n), { names })}
@@ -578,8 +543,6 @@ CustomFeedForm.propTypes = {
   // anywhere by itself.
   onClose: PropTypes.func.isRequired,
   onSaved: PropTypes.func.isRequired,
-  // Deleted, from the editor. Without it the editor does not offer to.
-  onDeleted: PropTypes.func,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };

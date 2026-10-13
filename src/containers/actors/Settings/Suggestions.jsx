@@ -17,7 +17,7 @@ import recommendations from '../../../utils/recommendations';
 // Whether the viewer is suggested to other people: the one choice about
 // recommendations that is about who can find them, and so the one that is
 // with their privacy settings. What they are suggested themselves is chosen
-// on the Recommendations page (suggestions/PreferencesDialog).
+// on the Recommendations page (recommendations/PreferencesDialog).
 //
 // Saved as it is switched. Their own, and shown on their own settings only.
 // On an installation with no recommendation service nothing is drawn.

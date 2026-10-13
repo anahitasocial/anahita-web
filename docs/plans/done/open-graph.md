@@ -1,6 +1,6 @@
 # Open Graph for shared Anahita links (web shell)
 
-*Roadmap item 10 (part B), planned 2026-09-28. See the [roadmap](roadmap.md) for order and dependencies.*
+*Roadmap item 10 (part B), planned 2026-09-28. See the [roadmap](../roadmap.md) for order and dependencies.*
 
 ## Context
 1. **Link previews:** when someone pastes a link into a note, show a preview card (title, description, image, site) in the composer and on the published note.
@@ -26,7 +26,7 @@
   - nginx serves `/static/*` and the other build assets directly, and routes page URLs to the shell.
   - That puts the web app on the same host as the API routing, which also settles item 8's phase 0.1: WebFinger, host-meta and ActivityPub content negotiation live on the same front.
 
-Part A (link previews in notes) is in anahita-services' `docs/plans/link-previews.md`.
+Part A (link previews in notes) is in anahita-services' `docs/plans/done/link-previews.md`.
 
 ## Part B — Open Graph through a web shell (new `web-shell`, Go, very small)
 1. **Serving:**

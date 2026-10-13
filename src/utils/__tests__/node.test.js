@@ -126,3 +126,65 @@ describe('authority checks', () => {
     expect(node.isAdmin(null)).toBe(false);
   });
 });
+
+// "Alice (lab)" was drawn as A(: the first character of each of the first
+// two words, whatever it was.
+describe('getActorInitials', () => {
+  const initialsOf = (name) => {
+    return node.getActorInitials({ id: 1, name, alias: 'somebody' });
+  };
+
+  it('takes letters and digits, and nothing else', () => {
+    expect(initialsOf('Alice (lab)')).toBe('AL');
+    expect(initialsOf('"Bob" [admin]')).toBe('BA');
+    expect(initialsOf('Ana & Ben')).toBe('AB');
+    expect(initialsOf('(alice)')).toBe('AL');
+    expect(initialsOf('Route 66')).toBe('R6');
+  });
+
+  it('takes them in any script', () => {
+    expect(initialsOf('Élodie Ñandú')).toBe('ÉÑ');
+    expect(initialsOf('آناهیتا (آزمایش)')).toBe('آآ');
+  });
+
+  it('keeps what it has when a name has no letter in it', () => {
+    expect(initialsOf('***')).toBe('**');
+  });
+
+  it('says so when there is nobody', () => {
+    expect(node.getActorInitials(null)).toBe('??');
+  });
+});
+
+// A profile from another server showed Articles, Photos and Videos, which
+// are never taken in from there: empty lists that said the person had none.
+describe('getActorFeatureTabs', () => {
+  const features = [
+    { service: 'feed-service', enabled: true, ordering: 1 },
+    {
+      service: 'text-service', enabled: true, ordering: 2, nodeTypes: ['note', 'article'],
+    },
+    {
+      service: 'photo-service', enabled: true, ordering: 3, nodeTypes: ['photo'],
+    },
+    {
+      service: 'video-service', enabled: false, ordering: 4, nodeTypes: ['video'],
+    },
+  ];
+
+  it('gives somebody here every list that is on', () => {
+    const tabs = node.getActorFeatureTabs({ type: 'node.actor.person-service.person.v1', features });
+
+    expect(tabs).toEqual(['feed', 'notes', 'articles', 'photos']);
+  });
+
+  it('gives somebody on another server only what is taken in from there', () => {
+    const tabs = node.getActorFeatureTabs({
+      type: 'node.actor.activitypub-service.person.v1',
+      uri: 'https://mastodon.example/users/alice',
+      features,
+    });
+
+    expect(tabs).toEqual(['feed', 'notes', 'photos']);
+  });
+});

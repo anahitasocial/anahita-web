@@ -51,7 +51,7 @@ import CustomFeedAdd from '../containers/feeds/Add';
 import CustomFeedEdit from '../containers/feeds/Edit';
 import CustomFeedRead from '../containers/feeds/Read';
 import ShareDialog from '../containers/share/Dialog';
-import SuggestionsPage from '../containers/suggestions';
+import RecommendationsPage from '../containers/recommendations';
 import SavedPage from '../containers/saved';
 import EventsPage from '../containers/events';
 import EventAdd from '../containers/events/Add';
@@ -68,6 +68,25 @@ const GroupsRead = ActorsRead('groups');
 const GroupsAdd = ActorsAdd('groups');
 const GroupsSettings = ActorsSettings('groups');
 const GroupsNotificationsEdit = ActorsNotificationsEdit('groups');
+
+// A hashtag's page is told to other servers as /tags/<name>, where
+// Mastodon and most of the fediverse have theirs, because some of the apps
+// people read with know a hashtag's link by that shape. Whoever follows
+// one lands here and is shown the page.
+const HashtagMoved = () => {
+  const { alias } = useParams();
+
+  return <Navigate to={`/hashtags/${alias}`} replace />;
+};
+
+// Recommendations were at /suggestions before they were named as the
+// service is. The old address leads to the new, with the tab it asked for
+// (?kind=group), for links already made.
+const SuggestionsMoved = () => {
+  const { search } = useLocation();
+
+  return <Navigate to={`/recommendations${search}`} replace />;
+};
 
 // An event is an actor like a group, so its page and its settings are the
 // same containers told a different namespace.
@@ -327,13 +346,16 @@ const AppRoutes = () => {
             {/* People and groups the viewer might follow. Reached from the
             card on the home page. */}
             <Route
-              path="/suggestions"
+              path="/recommendations"
               element={
                 <AuthenticatedRoute>
-                  <SuggestionsPage />
+                  <RecommendationsPage />
                 </AuthenticatedRoute>
           }
             />
+            {/* What the page was called first. The tab asked for goes
+            with it. */}
+            <Route path="/suggestions" element={<SuggestionsMoved />} />
 
             {/* What the viewer saved. Reached from the left menu. */}
             <Route
@@ -442,6 +464,9 @@ const AppRoutes = () => {
 
             <Route path="/hashtags" element={<Hashtags />} />
             <Route path="/hashtags/:alias" element={<HashtagsRead />} />
+            {/* What other servers are given for a hashtag's page, the address
+            Mastodon has one at. See HashtagMoved. */}
+            <Route path="/tags/:alias" element={<HashtagMoved />} />
 
             <Route path="/locations" element={<Locations />} />
             <Route path="/locations/:id" element={<LocationsRead />} />

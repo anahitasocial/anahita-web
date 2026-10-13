@@ -21,6 +21,7 @@ import email from './email';
 import eventDetails from './events';
 import feed from './feed';
 import customFeeds from './customFeeds';
+import federation from './federation';
 import recommendations from './recommendations';
 import hashtags from './hashtags';
 import is from './is';
@@ -132,6 +133,7 @@ const apis = {
   // A custom feed's posts, in the store as the other feeds are.
   feed_custom: { browse: customFeeds.browse },
   customFeeds,
+  federation,
   recommendations,
   hashtags,
   is,

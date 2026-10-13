@@ -305,7 +305,9 @@ const ActorsRead = (props) => {
             filter="reposts"
             key={`feed-reposts-${actor.id}`}
           />}
-        locations={actor.id &&
+        // Not for somebody on another server: where they are is theirs
+        // to say, and their server says nothing of it.
+        locations={actor.id && !utils.federation.isRemote(actor) &&
           <LocationsGadget
             node={actor}
             viewer={viewer}

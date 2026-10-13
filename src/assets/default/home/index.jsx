@@ -1,68 +1,197 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link as RouterLink } from 'react-router-dom';
+
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Grid from '@mui/material/Grid';
+import Link from '@mui/material/Link';
+import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import IconButton from '@mui/material/IconButton';
+import FollowIcon from '@mui/icons-material/Diversity3Outlined';
+import FeedsIcon from '@mui/icons-material/TuneOutlined';
+import YoursIcon from '@mui/icons-material/LockPersonOutlined';
+import NetworksIcon from '@mui/icons-material/Hub';
+import PeopleIcon from '@mui/icons-material/PeopleOutlined';
+import GroupsIcon from '@mui/icons-material/GroupsOutlined';
+import HashtagsIcon from '@mui/icons-material/Tag';
+import AboutIcon from '@mui/icons-material/InfoOutlined';
 
-import GithubIcon from '@mui/icons-material/GitHub';
-import FacebookIcon from '@mui/icons-material/Facebook';
-import WebsiteIcon from '@mui/icons-material/Web';
-
+import BlueskyIcon from '../../../components/BlueskyIcon';
 import HeaderMeta from '../../../components/HeaderMeta';
+import i18n from '../../../languages';
 import Hero from './Hero';
 
-const Home = () => {
+// What there is to do here, said in three cards. Each is true of any
+// installation, whatever it is for.
+const REASONS = [
+  { key: 'follow', Icon: FollowIcon },
+  { key: 'feeds', Icon: FeedsIcon },
+  { key: 'yours', Icon: YoursIcon },
+];
+
+// The other networks an installation can take part in, as it names them
+// in NodeInfo, and which words say so: one, the other, or both.
+const networksKey = (networks) => {
+  const mastodon = networks.includes('activitypub');
+  const bluesky = networks.includes('atproto');
+
+  if (mastodon && bluesky) {
+    return 'both';
+  }
+  if (mastodon) {
+    return 'activitypub';
+  }
+  return bluesky ? 'atproto' : '';
+};
+
+// What somebody who is not signed in may look at.
+const PLACES = [
+  { key: 'people', to: '/people', Icon: PeopleIcon },
+  { key: 'groups', to: '/groups', Icon: GroupsIcon },
+  { key: 'hashtags', to: '/hashtags', Icon: HashtagsIcon },
+  { key: 'about', to: '/about', Icon: AboutIcon },
+];
+
+// The home page of somebody who is not signed in.
+//
+// It is about this installation and not about Anahita: its name, what its
+// operator says it is, how many are on it, and the ways in. Then what can
+// be done on it, and what may be looked at without a profile. That it runs
+// on Anahita is one line at the foot.
+//
+// A members-only installation never draws this: routes/MembersOnlyGate
+// answers for every page there.
+const Home = ({
+  nodeInfo = null,
+}) => {
+  const {
+    usage = {},
+    metadata = {},
+    protocols = [],
+    openRegistrations = false,
+  } = nodeInfo || {};
+
+  const name = metadata.nodeName || process.env.REACT_APP_NAME || '';
+  const description = metadata.nodeDescription || process.env.REACT_APP_DESCRIPTION || '';
+
+  // What the installation says it is part of. An older server says only
+  // `protocols`.
+  const networks = Array.isArray(metadata.networks) ? metadata.networks : (protocols || []);
+  const partOf = networksKey(networks);
+
+  // A fourth card, on an installation that is part of other networks:
+  // which, by the names people know them by, and by what they speak.
+  // The hub stands for the fediverse, and the butterfly for Bluesky: one,
+  // the other, or both side by side.
+  const networkIcons = [
+    networks.includes('activitypub') && NetworksIcon,
+    networks.includes('atproto') && BlueskyIcon,
+  ].filter(Boolean);
+  const reasons = partOf ?
+    [...REASONS, { key: `networks.${partOf}`, icons: networkIcons }] :
+    REASONS;
+
   return (
-    <>
+    <Box>
       <HeaderMeta />
-      <Hero />
-      <Typography align="center" variant="h6">
-        Follow #Anahita
-      </Typography>
-      <Box align="center">
-        <IconButton
-          href="https://www.anahita.io"
-          target="_blank"
-          aria-label="website"
-          title="Anahita Knowlege Networking Platform & Framework"
-          size="large"
+      <Hero
+        name={name}
+        description={description}
+        people={Number((usage.users || {}).total) || 0}
+        posts={Number(usage.localPosts) || 0}
+        federated={networks.includes('activitypub')}
+        onBluesky={networks.includes('atproto')}
+        canJoin={Boolean(openRegistrations)}
+      />
+
+      <Grid container spacing={2} sx={{ mt: 2 }}>
+        {reasons.map(({ key, Icon, icons = [Icon] }) => {
+          return (
+            <Grid
+              key={key}
+              size={{ xs: 12, sm: reasons.length === 4 ? 6 : 12, md: 12 / reasons.length }}
+            >
+              <Card sx={{ height: '100%' }}>
+                <CardContent>
+                  <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
+                    {icons.map((Each) => {
+                      return (
+                        <Avatar key={Each.muiName || Each.name} sx={{ bgcolor: 'primary.main' }}>
+                          <Each />
+                        </Avatar>
+                      );
+                    })}
+                  </Stack>
+                  <Typography variant="h6" component="h3" gutterBottom>
+                    {i18n.t(`home:guest.reasons.${key}.title`)}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {i18n.t(`home:guest.reasons.${key}.body`)}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
+      </Grid>
+
+      <Box sx={{ mt: 6, textAlign: 'center' }}>
+        <Typography variant="h6" component="h3" gutterBottom>
+          {i18n.t('home:guest.lookAround')}
+        </Typography>
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap
+          sx={{ justifyContent: 'center', flexWrap: 'wrap' }}
         >
-          <WebsiteIcon />
-        </IconButton>
-        <IconButton
-          href="https://github.com/anahitasocial/anahita"
-          target="_blank"
-          aria-label="github-server"
-          title="Anahita Server"
-          size="large"
-        >
-          <GithubIcon />
-        </IconButton>
-        <IconButton
-          href="https://github.com/anahitasocial/anahita-react"
-          target="_blank"
-          aria-label="github-client"
-          title="Anahita Client"
-          size="large"
-        >
-          <GithubIcon />
-        </IconButton>
-        <IconButton
-          href="https://www.facebook.com/anahita_io"
-          target="_blank"
-          aria-label="facebook"
-          size="large"
-        >
-          <FacebookIcon />
-        </IconButton>
+          {PLACES.map(({ key, to, Icon }) => {
+            return (
+              <Button
+                key={key}
+                component={RouterLink}
+                to={to}
+                startIcon={<Icon />}
+              >
+                {i18n.t(`home:guest.places.${key}`)}
+              </Button>
+            );
+          })}
+        </Stack>
       </Box>
-    </>
+
+      <Typography
+        variant="body2"
+        color="textSecondary"
+        align="center"
+        sx={{ mt: 6, mb: 2 }}
+      >
+        {i18n.t('home:guest.runsOn')}
+        {' '}
+        <Link href="https://www.anahita.io" target="_blank" rel="noopener" underline="hover">
+          Anahita
+        </Link>
+        {i18n.t('home:guest.runsOnAfter')}
+      </Typography>
+    </Box>
   );
 };
 
-const mapStateToProps = () => {
-  return {};
+Home.propTypes = {
+  // The installation's own account of itself. Empty until it has answered.
+  nodeInfo: PropTypes.object,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    nodeInfo: state.app.nodeInfo,
+  };
 };
 
 export default connect(

@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/EditOutlined';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import HideIcon from '@mui/icons-material/VisibilityOffOutlined';
 import ShowIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
@@ -26,6 +27,7 @@ import ReplyForm from './ReplyForm';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
+import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import i18n from '../../languages';
@@ -58,6 +60,9 @@ const ReplyItem = ({
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const report = useReport(viewer, reply);
+  // Answering something from another server, and not on the fediverse:
+  // said before it is sent.
+  const staysHere = useReplyStaysHere(viewer, reply);
 
   const authorized = reply.authorized || {};
   const author = reply.deleted ? {} : getAuthor(reply);
@@ -65,7 +70,10 @@ const ReplyItem = ({
     setMenuAnchor(null);
   };
 
-  const hasMenu = authorized.edit || authorized.delete || authorized.hide || report.canReport;
+  // A reply from another server can be read where it was written.
+  const original = utils.federation.isRemote(reply) ? utils.federation.pageOf(reply) : '';
+  const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
+    report.canReport || original;
 
   const under = children.length > 0 && (
     <Box
@@ -138,6 +146,12 @@ const ReplyItem = ({
               actor={author}
               linked={Boolean(author.id)}
             />
+            {/* Somebody on another server is called by their whole handle,
+                which is what says where they are. */}
+            {utils.federation.isRemote(author) &&
+              <Typography variant="caption" color="textSecondary" sx={{ overflowWrap: 'anywhere' }}>
+                {utils.federation.handleOf(author)}
+              </Typography>}
             <Typography
               variant="caption"
               color="textSecondary"
@@ -221,6 +235,18 @@ const ReplyItem = ({
               open={Boolean(menuAnchor)}
               onClose={closeMenu}
             >
+              {original &&
+                <MenuItem
+                  component="a"
+                  href={original}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={closeMenu}
+                >
+                  <MenuItemLabel icon={<OpenInNewIcon fontSize="small" />}>
+                    {i18n.t('federation:remote.viewOriginal', { domain: utils.federation.domainOf(reply) })}
+                  </MenuItemLabel>
+                </MenuItem>}
               {authorized.edit &&
                 <MenuItem
                   onClick={() => {
@@ -273,6 +299,7 @@ const ReplyItem = ({
         <Box sx={{ ml: STEP }}>
           <ReplyForm
             autoFocus
+            hint={staysHere ? i18n.t(staysHere) : ''}
             placeholder={author.name ?
               i18n.t('replies:placeholderTo', { name: author.name }) :
               i18n.t('replies:placeholder')}

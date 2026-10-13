@@ -66,6 +66,11 @@ const ofHashtag = (hashtag) => {
   return complete({ filters: { hashtagsAny: [hashtag] } });
 };
 
+// A feed of one place, over the whole site.
+const ofLocation = (id) => {
+  return complete({ filters: { locationsAny: [Number(id)] } });
+};
+
 // A hashtag as the server keeps it: no "#", lower case.
 const cleanHashtag = (value = '') => {
   return value.trim().replace(/^#+/, '').toLowerCase();
@@ -321,6 +326,7 @@ export default {
   complete,
   starting,
   ofHashtag,
+  ofLocation,
   cleanHashtag,
   cleanKeyword,
   hasSources,

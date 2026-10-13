@@ -10,6 +10,7 @@ import PhotosIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import ActivityIcon from '@mui/icons-material/BarChartOutlined';
 import RepliesIcon from '@mui/icons-material/ForumOutlined';
 import ReportIcon from '@mui/icons-material/FlagOutlined';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 import MenuItemLabel from '../../components/MenuItemLabel';
 
@@ -95,7 +96,19 @@ const MediaMenu = ({
         open={Boolean(menuAnchorEl)}
         onClose={handleClose}
       >
-        {handleEdit &&
+        {utils.federation.isRemote(medium) && utils.federation.pageOf(medium) &&
+          <MenuItem
+            component="a"
+            href={utils.federation.pageOf(medium)}
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={handleClose}
+          >
+            <MenuItemLabel icon={<OpenInNewIcon fontSize="small" />}>
+              {i18n.t('federation:remote.viewOriginal', { domain: utils.federation.domainOf(medium) })}
+            </MenuItemLabel>
+          </MenuItem>}
+        {handleEdit && !utils.federation.isRemote(medium) &&
           <MenuItem
             onClick={() => {
               handleEdit();

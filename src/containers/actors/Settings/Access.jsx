@@ -1,13 +1,19 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import _ from 'lodash';
 
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import List from '@mui/material/List';
@@ -23,6 +29,7 @@ import AccessIcon from '@mui/icons-material/Visibility';
 
 import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
+import api from '../../../api';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import { Access as ACCESS } from '../../../constants';
@@ -71,6 +78,33 @@ const ActorsSettingsAccess = (props) => {
   );
   const [waiting, setWaiting] = useState(false);
 
+  // Whether this person is on the fediverse, where only a profile that is
+  // open to everybody may be. Asked for a person only; where there is no
+  // fediverse service, or it does not say, they are taken not to be.
+  const [isFederated, setIsFederated] = useState(false);
+  const [isConfirmingLeave, setIsConfirmingLeave] = useState(false);
+
+  useEffect(() => {
+    let isCurrent = true;
+    if (utils.node.isPerson(actor) && !utils.federation.isRemote(actor)) {
+      api.federation.settings(actor).then((result) => {
+        if (isCurrent) {
+          setIsFederated(Boolean(result.data && result.data.enabled));
+        }
+      }).catch(() => {
+        // No service, or not theirs to ask: no warning to give.
+      });
+    }
+    return () => {
+      isCurrent = false;
+    };
+  }, [actor.id]);
+
+  // Closing the profile takes them off the fediverse, and that is not
+  // undone by opening it again: other servers are told to remove them and
+  // may not take them back.
+  const wouldLeave = isFederated && access !== ACCESS.ACTORS.PUBLIC;
+
   // No confirmation step.
   //
   // There was one, and it asked a question the page already answers:
@@ -82,10 +116,20 @@ const ActorsSettingsAccess = (props) => {
   //
   // It is also reversible in one click, unlike the Danger zone
   // actions, which is where confirmation earns its place.
+  // THE ONE EXCEPTION to there being no confirmation: somebody on the
+  // fediverse closing their profile. That is not reversible in any number
+  // of clicks, and nothing on this card would otherwise say so. It is said
+  // beside the choice as soon as it is made, and asked once more before it
+  // is saved.
   const handleOnSubmit = (event) => {
     if (event) {
       event.preventDefault();
     }
+    if (wouldLeave && !isConfirmingLeave) {
+      setIsConfirmingLeave(true);
+      return null;
+    }
+    setIsConfirmingLeave(false);
 
     setWaiting(true);
 
@@ -94,6 +138,9 @@ const ActorsSettingsAccess = (props) => {
       access,
       allowFollowRequest,
     }).then(() => {
+      if (wouldLeave) {
+        setIsFederated(false);
+      }
       alertSuccess(i18n.t('actor:access.alerts.success'));
     }).catch(() => {
       alertError(i18n.t('actor:access.alerts.error'));
@@ -168,6 +215,10 @@ const ActorsSettingsAccess = (props) => {
             })}
           </List>
         </RadioGroup>
+        {wouldLeave &&
+          <Alert severity="warning" sx={{ m: 2 }}>
+            {i18n.t('federation:leaving.byClosing')}
+          </Alert>}
 
         <ListItem>
           <FormControlLabel
@@ -201,6 +252,32 @@ const ActorsSettingsAccess = (props) => {
           </Button>
         </CardActions>
       </Card>
+      <Dialog
+        open={isConfirmingLeave}
+        onClose={() => { setIsConfirmingLeave(false); }}
+        fullWidth
+        maxWidth="sm"
+      >
+        <DialogTitle>{i18n.t('federation:settings.leave.title')}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            {i18n.t('federation:leaving.byClosingConfirm')}
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button fullWidth onClick={() => { setIsConfirmingLeave(false); }}>
+            {i18n.t('actions:cancel')}
+          </Button>
+          <Button
+            fullWidth
+            variant="contained"
+            color="error"
+            onClick={() => { handleOnSubmit(); }}
+          >
+            {i18n.t('federation:leaving.confirm')}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </form>
   );
 };

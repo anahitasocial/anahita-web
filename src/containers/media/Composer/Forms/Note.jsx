@@ -7,6 +7,7 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import LinkPreviewCard from '../../../../components/LinkPreviewCard';
 
@@ -32,6 +33,7 @@ const ComposersNote = ({
   actor,
   isFetching,
   postOptions = null,
+  postHint = '',
   linkPreview = null,
   onLinkPreviewRemove = null,
   onBodyPaste = null,
@@ -70,6 +72,10 @@ const ComposersNote = ({
             preview={linkPreview}
             onRemove={isFetching ? null : onLinkPreviewRemove}
           />
+          {postHint &&
+            <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+              {postHint}
+            </Typography>}
         </CardContent>
         <CardActions>
           {postOptions}
@@ -92,6 +98,9 @@ const ComposersNote = ({
 ComposersNote.propTypes = {
   // The audience and language buttons, built by the composer.
   postOptions: PropTypes.node,
+  // Something to know before posting, said above the button: that this
+  // post will not be shared with the fediverse.
+  postHint: PropTypes.string,
   // The card for the first link in the note, and a way to post without it.
   linkPreview: PropTypes.object,
   onLinkPreviewRemove: PropTypes.func,

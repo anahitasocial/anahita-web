@@ -1,6 +1,16 @@
 export default {
   cTitle: 'Personnes',
   mTitle: 'Personnes',
+  browse: {
+    title: 'Personnes locales',
+    local: 'Les personnes qui ont un profil sur {{ site }}.',
+    localUnnamed: 'Les personnes qui ont un profil sur ce site.',
+    elsewhere: {
+      both: 'Pour trouver quelqu’un sur Mastodon ou Bluesky, cherchez son identifiant.',
+      activitypub: 'Pour trouver quelqu’un sur Mastodon ou un autre serveur du fédivers, cherchez son identifiant.',
+      atproto: 'Pour trouver quelqu’un sur Bluesky, cherchez son identifiant.',
+    },
+  },
   add: {
     cTitle: 'Ajouter une personne',
     mTitle: 'Ajouter une personne',
@@ -85,6 +95,7 @@ export default {
       security: 'Sécurité',
       access: 'Confidentialité',
       permissions: 'Autorisations',
+      fediverse: 'Fédivers',
       administration: 'Administration',
       danger: 'Zone de danger',
     },

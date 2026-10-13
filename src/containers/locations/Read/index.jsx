@@ -5,6 +5,7 @@ import { useParams } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
@@ -12,6 +13,7 @@ import Typography from '@mui/material/Typography';
 import LocationIcon from '@mui/icons-material/LocationOn';
 
 import LocationMenu from '../Menu';
+import FollowLocation from '../../feeds/FollowLocation';
 import LocationForm from './EditForm';
 import actions from '../../../actions';
 import form from '../../../utils/form';
@@ -195,6 +197,11 @@ const LocationsRead = ({
             {getAddress(location)}
           </Typography>
         </CardContent>
+        {/* Following a place is keeping a feed of it on the home page. */}
+        {viewer.id > 0 && location.id > 0 && !isEditing &&
+          <CardActions>
+            <FollowLocation location={location} />
+          </CardActions>}
       </Card>
       {location.id > 0 &&
         <Inbounds tag={location} />}

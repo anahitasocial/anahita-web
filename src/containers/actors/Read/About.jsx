@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -16,21 +17,21 @@ import MapIcon from '@mui/icons-material/MapOutlined';
 import OpenIcon from '@mui/icons-material/ExpandMore';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 import WebsiteIcon from '@mui/icons-material/Web';
+import FediverseIcon from '@mui/icons-material/Hub';
 
 import i18n from '../../../languages';
 import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
 import AnahitaMap from '../../../components/Map';
 import MenuItemLabel from '../../../components/MenuItemLabel';
+import BlueskyIcon from '../../../components/BlueskyIcon';
+import federation from '../../../utils/federation';
 import events from '../../../utils/events';
 import ActorType from '../../../proptypes/Actor';
 
 const ActorBodyAbout = (props) => {
   const { actor } = props;
-  const {
-    body,
-    websiteUrl,
-  } = actor;
+  const { body } = actor;
 
   // Where an event is held: the address kept on it, which the server sends
   // to whoever is going, and where that is on a map when whoever made the
@@ -42,6 +43,18 @@ const ActorBodyAbout = (props) => {
   const closeMaps = () => {
     setMapsAnchor(null);
   };
+
+  // Somebody on another network: where they are, and what of them is
+  // here, said in place of a website. The page it leads to is theirs
+  // there, which is what was kept as their website.
+  const remote = federation.isRemote(actor);
+  const onBluesky = remote && (actor.type || '').includes('.atproto-service.');
+  const domain = federation.domainOf(actor);
+  // Their page there is worked out from where they came from; a profile
+  // made here has the website its owner gave it.
+  const websiteUrl = remote ?
+    (federation.pageOf(actor) || actor.websiteUrl) :
+    actor.websiteUrl;
 
   return (
     <Card component="section">
@@ -69,6 +82,8 @@ const ActorBodyAbout = (props) => {
       {/* One list: its website, then where it is held, so the map sits
           right under its address. Pressing where it is offers the maps it
           can be opened in. */}
+      {/* A line between what they say of themselves and the list. */}
+      {body && (address || event.hasAddress || websiteUrl) && <Divider />}
       {(address || event.hasAddress || websiteUrl) &&
         <List>
           {websiteUrl &&
@@ -86,19 +101,27 @@ const ActorBodyAbout = (props) => {
               rel="me nofollow noopener noreferrer"
             >
               <ListItemIcon>
-                <WebsiteIcon />
+                {remote && (onBluesky ? <BlueskyIcon /> : <FediverseIcon />)}
+                {!remote && <WebsiteIcon />}
               </ListItemIcon>
-              <ListItemText
-                primary={i18n.t('actor:website')}
-                secondary={
-                  <Typography
-                    variant="body1"
-                    noWrap
-                  >
-                    {websiteUrl}
-                  </Typography>
-                }
-              />
+              {remote ?
+                <ListItemText
+                  primary={onBluesky ?
+                    i18n.t('federation:remote.onBluesky') :
+                    i18n.t('federation:remote.on', { domain })}
+                  secondary={i18n.t('federation:remote.shared')}
+                /> :
+                <ListItemText
+                  primary={i18n.t('actor:website')}
+                  secondary={
+                    <Typography
+                      variant="body1"
+                      noWrap
+                    >
+                      {websiteUrl}
+                    </Typography>
+                  }
+                />}
             </ListItemButton>}
           {address &&
             <ListItemButton

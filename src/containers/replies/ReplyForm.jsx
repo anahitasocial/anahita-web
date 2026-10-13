@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import useLinkPreview from '../media/Composer/useLinkPreview';
@@ -32,6 +33,7 @@ const ReplyForm = ({
   autoFocus = false,
   flush = false,
   linkPreview = null,
+  hint = '',
 }) => {
   const [body, setBody] = useState(initial);
   const [isSending, setIsSending] = useState(false);
@@ -99,6 +101,10 @@ const ReplyForm = ({
         preview={card.preview}
         onRemove={isSending ? null : card.remove}
       />
+      {hint &&
+        <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+          {hint}
+        </Typography>}
       {/* Buttons the width of the box, as in the composer and the edit
           forms: one for sending, and beside it one for backing out where
           there is something to back out of. */}
@@ -135,6 +141,8 @@ ReplyForm.propTypes = {
   flush: PropTypes.bool,
   // The card a reply being changed already has.
   linkPreview: PropTypes.object,
+  // Something to know before sending, said above the buttons.
+  hint: PropTypes.string,
 };
 
 export default ReplyForm;

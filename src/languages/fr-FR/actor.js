@@ -14,7 +14,7 @@ export default {
     failed: 'Cette action n\'a pas pu être effectuée.',
   },
   featured: {
-    feature: 'Mettre ce profil en avant',
+    feature: 'Mettre en avant',
     unfeature: 'Ne plus mettre en avant',
     errors: {
       generic: 'Impossible de modifier la mise en avant de ce profil. Veuillez réessayer.',

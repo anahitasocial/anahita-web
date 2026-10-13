@@ -50,8 +50,10 @@ const excerptOf = (text = '') => {
 
 // Rows for a list of people: the likers and the reposters, as the server
 // sends them.
-const peopleRows = (actors = []) => {
-  return actors.filter((actor) => {
+// A list with nobody in it is sent as nothing at all (null), not as an
+// empty list. That is nobody, not a failure to read the list.
+const peopleRows = (actors) => {
+  return (actors || []).filter((actor) => {
     return actor && actor.id;
   }).map((actor) => {
     return { key: `actor-${actor.id}`, actor };
@@ -61,8 +63,8 @@ const peopleRows = (actors = []) => {
 // Rows for a list of notes: the quotes and the replies. Each is somebody and
 // what they said, with the note to go to. A reply that was removed, or
 // hidden from the thread, is not somebody's activity to show.
-const noteRows = (notes = []) => {
-  return notes.filter((note) => {
+const noteRows = (notes) => {
+  return (notes || []).filter((note) => {
     return note && note.id && note.author && note.author.id && !note.deleted && !note.hidden;
   }).map((note) => {
     return {

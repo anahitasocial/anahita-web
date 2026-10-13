@@ -30,7 +30,7 @@ Everything is under `src/`:
 | `routes/` | The route table and the two route guards |
 | `permissions/` | What the viewer may do, mostly read from the server's answers |
 | `languages/` | Translations, one directory per language |
-| `assets/` | Themes: logo, home page, left menu, styles and static pages |
+| `assets/` | Themes: logo, home page (what somebody not signed in sees at `/`), left menu, styles and static pages |
 | `statics/` | Files shipped with the app, including the Terms of Service and Privacy Policy |
 | `proptypes/` | PropTypes shapes and matching default objects for the API's entities |
 | `styles/` | Builds the Material UI theme from the active theme's `styles` |
@@ -111,17 +111,17 @@ history. The main paths:
 | --- | --- |
 | `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
-| `/people`, `/people/:id` | People, and a person's profile. `:id` is their username |
+| `/people`, `/people/:id` | People, and a person's profile. `:id` is their username, or for somebody on another server their whole handle, `alice@mastodon.example` |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
-| `/suggestions` | People and groups the viewer might follow. Signed in only; reached from the home page |
+| `/recommendations` | People and groups the viewer might follow. Signed in only; reached from the home page. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
+| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags/:alias`, `/locations/:id` | Hashtags and places |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
@@ -129,6 +129,9 @@ history. The main paths:
 | `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, and Privacy, which shows what the installation lets visitors read and can make everything public members-only |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
+| `/onboarding` | Where somebody signed in with an incomplete profile is sent, once (`routes/OnboardingGate.jsx`): a picture, a name and a few words, then profiles the site features to follow. A step with nothing to show is left out, and every step can be skipped (`containers/onboarding`) |
+| `/pages/:alias` | A page of the installation's own, from `statics/`. `/pages/tos` and `/pages/privacy` redirect to `/legal` |
+| `/404`, and any address not above | The not-found page |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
 
 ### A members-only site
@@ -410,8 +413,8 @@ replies, made directly to the post.
   then taken out of the address). A deleted post leaves every feed on the
   page, with any repost of it (`reducers/createFeed.js`).
 - **In a feed**, the reply button under a post is a link to the post's page,
-  where its thread is (`containers/feed/components/ReplyButton.jsx`), and
-  `components/ReplyStats.jsx` shows how many replies it has.
+  where its thread is (`containers/feed/components/ReplyButton.jsx`). How
+  many replies it has is in its interactions.
 
 - **A reply has a page of its own**, at `/notes/:id` like any note. It is
   drawn as the post, with what it answers above it
@@ -433,7 +436,7 @@ replies, made directly to the post.
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
   is drawn as itself, not inside a card for whoever reposted it.
   The tab is in the address. Reposts are not among the posts unless the
-  profile's owner asks for that, under Settings › Access
+  profile's owner asks for that, under Settings › Privacy
   (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
   it.
 
@@ -453,24 +456,29 @@ a request that fails as it does without the service
 (`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
 
 - **Who to follow** on the home page, under the composer
-  (`containers/suggestions/WhoToFollow.jsx`): three people, each with the
+  (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
   reason, a Follow button and a way to say not interested, and a button on
-  to the rest. Not drawn while it is read or when there is nobody.
-- **The page** at `/suggestions` (`containers/suggestions/index.jsx`):
+  to the rest. Not drawn while it is read or when there is nobody. The ✕ in
+  its header puts the whole card away for seven days, remembered in the
+  browser (`utils/recommendations.js#hide`); Reset on the Recommendations
+  page brings it back.
+- **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
   People, Groups and Events, the open tab in the address (`?kind=group`),
   as cards with the reason inside each, under the name. An event is drawn with the event's
   own card and is not followed from here. It is in the left menu as
-  **Recommendations** (the page keeps the address `/suggestions`, since
-  `/recommendations/` is the service's own path on the same site), where the installation has the service
+  **Recommendations**, where the installation has the service
   (`useHasSuggestions.js` asks once).
 - **What counts** is the viewer's to weigh. The button beside the tabs, and
   one in settings, opens a dialog of sliders
-  (`containers/suggestions/WeightsDialog.jsx`), one a reason, from nothing,
+  (`containers/recommendations/WeightsDialog.jsx`), one a reason, from nothing,
   which leaves the reason out, to the most there is; Reset puts them back
   to the installation's own. Saved, the list is read again. The server
   names a reason in snake case and the keys of what it sends are put in
   camel case on the way in: `utils/recommendations.js#weightKey` is the one
   place that knows.
+  The last slider is not a reason: how lately a person must have been here
+  to be suggested at all, over the steps the server gives, from the last
+  month to any time. A year unless the viewer says.
 - **The reason is always shown.** `utils/recommendations.js#reasonText`
   puts the first reason into words from what the service sent with it
   ("Followed by Ana and 2 others"), and counts where it may name nobody.
@@ -478,7 +486,7 @@ a request that fails as it does without the service
   which does not make it again.
 - **What the viewer is recommended** is chosen on the Recommendations page
   itself, from the cog beside the weights
-  (`containers/suggestions/PreferencesDialog.jsx`): whether people, groups
+  (`containers/recommendations/PreferencesDialog.jsx`): whether people, groups
   and events are suggested, whether what they like and post is used, and
   the suggestions they removed, each to be taken back.
 - **Whether they are suggested to others** is a privacy choice, and is the
@@ -648,6 +656,27 @@ two thirds of the page, centred, on a wide screen, or all of it with `wide`.
 Home, the pages of custom feeds, a post's own page and the event forms use
 it. A profile, with its side column, lays itself out.
 
+### New posts in an open feed
+
+A feed that is open asks again, now and then, for its first page
+(`containers/feed/useNewPosts.js`, for the home feed and every custom
+feed).
+
+- **It asks less and less often, and stops.** After 15 seconds, then 30,
+  60, 120 and 240; when the last of those finds nothing, it asks no more
+  (`utils/heartbeat.js`). Finding something begins it again at 15 seconds.
+  So does the reader coming back to the tab or the window, which is asked
+  at once. Nothing is asked while the tab is hidden.
+- **At the top of the page, what is new is put in at once.** Further
+  down, the page is left alone, since a page that grows above what is
+  being read loses the reader's place: a button, "3 new posts", stays in
+  sight (`containers/feed/components/NewPosts.jsx`) and puts them in and
+  goes to the top when pressed.
+- **In the store** it is `<FEED>_BROWSE_PREPEND` (`reducers/createFeed.js`):
+  the page goes before what is held, in the server's order, and what is
+  held already is brought up to date. When none of the page is held, more
+  was posted than a page holds, and the feed is begun again from it.
+
 ### Custom feeds
 
 A custom feed is one somebody builds: where its posts come from, what they
@@ -708,8 +737,9 @@ are about, what to leave out. The server's side is in the services'
   (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
   draws it: in the menu under Home, on the tabs, in the list and on the
   feed's page.
-- **Deleting a feed** is offered to its owner in three places, each asking
-  first: its card in the list, its own page, and the editor.
+- **Deleting a feed** is offered to its owner in two places, each asking
+  first: its card in the list and its own page. Not in the editor, which is
+  for changing a feed.
 - **Ten feeds** is the most a person owns, the number the home page holds.
 - **The sentence** is `utils/customFeeds.js#summary`, from the definition
   alone. It is on the editor, on a feed's page and in the list, so nothing
@@ -721,9 +751,14 @@ are about, what to leave out. The server's side is in the services'
   by them alone, and opens it in the editor.
 - **Share** is on a shared feed's card, in Discover and on the feed's page.
   See [Sharing](#sharing). Not on a feed kept to its owner.
-- **Following a hashtag** (`containers/feeds/FollowHashtag.jsx`, on a
-  hashtag's page) makes a feed of that one hashtag and puts it on the home
-  page, or puts there the one the viewer already has.
+- **Following a hashtag or a place** (`containers/feeds/FollowHashtag.jsx`
+  and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
+  `FollowFeed.jsx`) makes a feed of that one hashtag or place, the viewer's
+  alone, and puts it on the home page, or puts there the one the viewer
+  already has. The feed is given the hashtag's or the place's own picture.
+  It goes into no other feed. A feed of a place shows only
+  what the viewer could see anyway, and who follows a place is kept
+  nowhere.
 - **Naming in requests.** The definition's keys are snake case on the server
   (`hashtags_any`) and camel case here (`hashtagsAny`), converted both ways
   by the interceptors like every other body.
@@ -755,14 +790,19 @@ handled in `reducers/create.js`).
 
 ### A post's interactions
 
-"Interactions" is a dialog with four lists: who liked a post, reposted it,
-quoted it and replied to it, with an icon and the count of each on its tab
-(`containers/activity/PostActivity.jsx`, `utils/activity.js`). It opens from
-the number of likes under a post, which can be pressed whenever the post has
-any of the four, and from "Interactions" in a post's menu. In the code it is
-still called activity. Each list is read
-when its tab is first opened. People in the likes and reposts lists have a
-Follow button; quotes and replies show what was said and lead to the note.
+"Interactions" is a dialog about a post: who liked it, reposted it, quoted
+it and replied to it (`containers/activity/PostActivity.jsx`,
+`utils/activity.js`). It has a tab for each of the four, with its icon and
+its number; under the tabs is the list of who, each row a link. In the code it is still
+called activity. Each list is read when its tab is first opened.
+
+It opens from **the last button in the row under a post**
+(`containers/likes`, drawn by `components/PostActionsRow.jsx`, which every
+layout of a post uses), there to press when the post has any of the four,
+and from "Interactions" in a post's menu. There is one row under a post:
+like, reply, repost, share and interactions, each the same kind of button
+and as wide as the others, so the row is shared out evenly. None is an
+icon button. The separate row of counts, of likes and of replies, is gone.
 
 There are no views in it, and nothing anywhere counts them.
 
@@ -782,15 +822,25 @@ What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 
 A person who follows the viewer says so: "Follows you" under their name on
-their profile, and beside their name in these lists. The button that follows
-them then reads "Follow back" (`utils/socialgraph.js`, `controls/Follow.jsx`).
+their profile, and beside their name in these lists.
+
+**One word for following.** Every button that follows anything, a profile,
+a hashtag or a place, reads "Follow" with a plus before it
+(`controls/Follow.jsx`, `feeds/FollowFeed.jsx`). It does not read "Follow
+back" for somebody who follows the viewer: "Follows you" beside their name
+says that. Two things keep words of their own because they are not that
+button: "Request to follow", which asks and does not follow, and "Follow
+<name>" in a post's menu, where what is followed is not what the menu
+belongs to.
 
 There is no Social Graph tab. An old address such as
 `/people/ana/socialgraph/leaders` opens the profile with that list showing.
 
-**Blocked** is not in the dialog: who you have blocked is yours alone, and is
-a card under Settings › Access (`actors/Settings/Blocked.jsx`), with Unblock
-on each.
+**Blocked** is not in the dialog: who you have blocked is yours alone. It is
+one row under Settings › Privacy (`actors/Settings/Blocked.jsx`) saying how
+many there are, which opens a dialog: everybody blocked, with their picture,
+read a page at a time as the list is scrolled, a box to search it by name,
+and Unblock on each.
 
 ### Events
 
@@ -895,6 +945,126 @@ follow", then "Requested", which takes the request back when pressed. Whoever
 looks after the profile answers from the follow requests on their own
 profile, and is told by a notification.
 
+### The home page of somebody not signed in
+
+`assets/default/home`, the theme's, drawn at `/` in place of the feeds. It is
+about the installation and not about Anahita: its name and description as
+its operator set them (NodeInfo's `nodeName` and `nodeDescription`, the
+build's until that has answered), how many people and posts are on it,
+whether it is part of the fediverse, and the two ways in, Sign in and, where
+NodeInfo says profiles can be made, Create a profile. Under that, three
+cards on what can be done here, and links to what may be looked at without a
+profile: people, groups, hashtags and About. That it runs on Anahita is one
+line at the foot. A members-only installation never draws it
+(`routes/MembersOnlyGate.jsx`).
+
+### The fediverse
+
+People on other servers (Mastodon and the like), and what they post. The
+server's side is `activitypub-service`, described in the services'
+`docs/federation.md`. It is optional: where there is none, everything here
+draws nothing (`utils/federation.js#isAbsent`).
+
+- **The composer says when a note will stay here.** Somebody on the
+  fediverse, writing a note on their own profile for fewer than everybody,
+  is told above the Post button that it will not be shared with the
+  fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
+  date by the switch in settings). Nothing is said to anybody else, or
+  about any other kind of post: only public notes go out.
+- **Answering something from another server** is offered where the server
+  says the viewer may (`authorized.comment`), as for any post: the reply is
+  the viewer's own note and is sent to whoever it answers when the viewer
+  is on the fediverse. When they are not, the reply form says that it will
+  be read here and not there (`useReplyStaysHere`, in
+  `media/Composer/useOnFediverse.js`). Liking something from elsewhere is
+  still refused.
+- **A hashtag at `/tags/<name>`** leads to `/hashtags/<name>`
+  (`routes/index.js#HashtagMoved`). It is the address other servers are
+  given for a hashtag's page, where Mastodon has its own, because some of
+  the apps people read with know a hashtag's link by that shape.
+- **A profile from another server has three lists,** what was posted,
+  Notes and Photos (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`): a
+  post of theirs that came with pictures is a photo post here. Articles
+  and videos are not taken in from other servers, so those lists would be
+  empty for ever and say the person has none; each comes back when it is
+  taken in. Their replies and reposts are in what was posted, not in lists
+  of their own. Nor is there the box of locations: where
+  somebody is is theirs to say, and their server says nothing of it.
+- **The servers the site refuses** are in Site settings, under Fediverse
+  (`settings/Fediverse.jsx`), for super administrators as every tab there
+  is: the list with why, and a button to stop refusing one. The list is
+  read fifty at a time as it is scrolled and searched on the server, by
+  name or reason, since an installation that takes up somebody else's list
+  has thousands; a server is refused from a dialog, which says that
+  refusing it does not remove what already came from it.
+
+- **The switch** is a card under Settings › Privacy
+  (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
+  follow me". Off until the person turns it on, and theirs alone to turn
+  on. It shows their handle, says that what is sent cannot be called back,
+  asks before it is turned off (other servers are told to remove the
+  person, and may not take them back), says that making a profile private
+  has the same effect,
+  and when they cannot turn it on (their profile is not open to everybody,
+  or the site does not federate) it is disabled with the server's reason
+  beside it.
+- **Closing a profile is the one way to leave by accident,** so the card
+  where a profile's audience is chosen (`actors/Settings/Access.jsx`) asks
+  whether the person is on the fediverse, warns beside the choice as soon
+  as anything but "everybody" is picked, and asks once more before saving.
+  It is the only choice on that card that is confirmed, because it is the
+  only one that cannot be undone. An administrator changing somebody
+  else's profile is warned the same way.
+- **Somebody from another server is a person like any other** to the app:
+  their type ends in `person`, so they are opened at `/people/<handle>`,
+  where the handle is whole, `alice@mastodon.example`, and the same page
+  draws them. What differs is told by `utils/federation.js`:
+  - their handle is drawn whole (`displayHandle`), where a username here
+    is made safe first;
+  - their About card says which network they are on, in a row with the
+    network's mark (the butterfly for Bluesky, the hub for the fediverse),
+    what of them is kept here, and a way to their own page there
+    (`actors/Read/About.jsx`). Nothing is added to the header: it is a
+    fact about the profile, not something to act on;
+  - the server sends nothing they can be edited, run or posted on by, so
+    none of those controls is drawn. Follow is, and works as for anybody.
+- **A post from another server** is an ordinary note with a `uri`. Its menu
+  has "View on <server>" (`media/MediaMenu.jsx`). It cannot be edited,
+  liked or replied to: the server says so in `authorized`, and
+  `permissions/node.js#canEdit` refuses whatever the viewer's role.
+- **Looking somebody up** is on the search page
+  (`search/RemoteLookup.jsx`): when what was searched for is a handle with
+  a server in it or the address of a profile, a card offers to ask that
+  server. It asks only when the button is pressed, since asking tells
+  another server that this site did; then it opens the person.
+- **Bluesky is read through a service of its own,** which may be there
+  when the fediverse's is not, or the other way round. To the app,
+  somebody on Bluesky is somebody from another server like any other.
+  What differs is in `utils/federation.js`:
+  - **which service a lookup asks** is told by how the handle is written
+    (`lookupKind`): `@alice@mastodon.example` has its server after a
+    second `@`; `alice.bsky.social`, a `did:plc:…` or an address under
+    `bsky.app/profile/` is Bluesky. `api/federation.js#lookup` sends it to
+    `/activitypub/lookup` or `/atproto/lookup`, and the card goes for the
+    one network whose service is not there, not for both;
+  - **the page of a post or a person** (`pageOf`): on the fediverse the
+    address a thing has between servers is its page; on Bluesky it is an
+    `at://` address, and the page is worked out from it. "View on …"
+    leads there, in the menus and on the profile;
+  - **a reply to a post from Bluesky stays here unless its writer
+    connected their Bluesky account:** `useReplyStaysHere` answers with
+    the words to say so under the reply being written, and with nothing
+    for somebody connected (`useOnBluesky`, asked once and kept up to
+    date by the settings card).
+- **A person's own Bluesky account** is connected in their settings,
+  under Fediverse (`actors/Settings/Bluesky.jsx`): a handle and an app
+  password, with a link to where Bluesky makes one, then "Connected as"
+  and a button to disconnect, which asks first. When Bluesky no longer
+  takes the connection the card says so and offers the form again.
+  Once connected, a second button follows here the accounts they follow
+  on Bluesky already; the server carries on with it after answering.
+  Nothing is drawn where the installation does not write to Bluesky.
+
 ### Menus
 
 Every item in the menus on posts, feed items, replies and profiles has an
@@ -921,7 +1091,7 @@ ordinary note in every other way: its own audience, likes and replies.
 - **Who can quote** is the third part of a post's interaction settings
   (`components/ReplyAccessDialog.jsx`): anyone, the author's followers, or
   nobody. A post that has never been asked follows its author's own setting,
-  "Who can quote my posts", under Settings › Access
+  "Who can quote my posts", under Settings › Permissions
   (`containers/actors/Settings/QuotePolicy.jsx`).
 
 There is no comment code left: the comment components, actions, reducers,

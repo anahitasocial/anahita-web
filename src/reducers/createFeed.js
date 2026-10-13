@@ -44,6 +44,44 @@ export default (namespace) => {
     }
 
     switch (type) {
+      // The head of the feed read again, with what was posted since it
+      // was opened (containers/feed/useNewPosts.js). It goes before what
+      // is held, in its own order; what is held already is brought up to
+      // date and stays where it was.
+      //
+      // When nothing of it is held, more was posted than one page holds,
+      // and there is no knowing what lies between: the feed is begun
+      // again from this page, to be read on from there.
+      case `${namespace.toUpperCase()}_BROWSE_PREPEND`: {
+        const list = state[namespace];
+        const page = (action.nodes || []).filter((node) => {
+          return node && node.id;
+        });
+        if (page.length === 0) {
+          return state;
+        }
+
+        const ids = page.map((node) => { return node.id; });
+        const joins = list.allIds.length === 0 || ids.some((id) => {
+          return list.byId[id] !== undefined;
+        });
+        const byId = joins ? { ...list.byId } : {};
+        page.forEach((node) => {
+          byId[node.id] = node;
+        });
+
+        return {
+          ...state,
+          [namespace]: {
+            ...list,
+            byId,
+            allIds: joins ?
+              [...ids, ...list.allIds.filter((id) => { return !ids.includes(id); })] :
+              ids,
+          },
+          hasMore: joins ? state.hasMore : true,
+        };
+      }
       case `${namespace.toUpperCase()}_LIKES_ADD_REQUEST`:
       case `${namespace.toUpperCase()}_LIKES_DELETE_REQUEST`:
         return {

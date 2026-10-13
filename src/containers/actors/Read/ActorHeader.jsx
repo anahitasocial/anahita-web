@@ -85,7 +85,7 @@ const ActorHeader = ({
               className={classes.subheader}
               align="center"
             >
-              {actor.alias && `@${slugify(actor.alias.toLowerCase())}`}
+              {utils.federation.displayHandle(actor, slugify)}
             </Typography>
             <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
           </>

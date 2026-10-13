@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import ReplyStats from '../../components/ReplyStats';
 import LikesStats from '../likes';
 import MediumCard from '../../components/MediumCard';
 
@@ -17,10 +16,7 @@ const MediumNode = ({
       medium={medium}
       handleView={handleView}
       stats={
-        <>
-          <LikesStats node={medium} />
-          <ReplyStats node={medium} />
-        </>
+        <LikesStats node={medium} />
       }
     />
   );

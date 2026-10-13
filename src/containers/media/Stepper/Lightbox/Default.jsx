@@ -15,7 +15,6 @@ import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import CircularProgress from '@mui/material/CircularProgress';
 import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
@@ -29,6 +28,7 @@ import NextIcon from '@mui/icons-material/NavigateNext';
 import PrevIcon from '@mui/icons-material/NavigateBefore';
 import ZoomOutIcon from '@mui/icons-material/FullscreenExit';
 
+import PostActionsRow from '../../../../components/PostActionsRow';
 import MediumType from '../../../../proptypes/Medium';
 import ActorTitle from '../../../../components/ActorTitle';
 import ActorAvatar from '../../../../components/ActorAvatar';
@@ -540,14 +540,7 @@ const MediumStepperLightboxDefault = ({
                           })}
                         </EntityBody>}
                     </CardContent>
-                    {stats &&
-                      <CardActions>
-                        {stats}
-                      </CardActions>}
-                    {actions &&
-                      <CardActions>
-                        {actions}
-                      </CardActions>}
+                    <PostActionsRow actions={actions} stats={stats} />
                   </>}
               </Card>
               {!hasPortrait && (hasPrev || hasNext) &&

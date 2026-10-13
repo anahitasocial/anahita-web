@@ -1,6 +1,17 @@
 export default {
   cTitle: 'People',
   mTitle: 'People',
+  // Under the title of the list of people: whose list it is.
+  browse: {
+    title: 'Local people',
+    local: 'People with a profile on {{ site }}.',
+    localUnnamed: 'People with a profile on this site.',
+    elsewhere: {
+      both: 'To find somebody on Mastodon or Bluesky, search for their handle.',
+      activitypub: 'To find somebody on Mastodon or another server of the fediverse, search for their handle.',
+      atproto: 'To find somebody on Bluesky, search for their handle.',
+    },
+  },
   add: {
     cTitle: 'Add person',
     mTitle: 'Add person',
@@ -91,6 +102,7 @@ export default {
       security: 'Security',
       access: 'Privacy',
       permissions: 'Permissions',
+      fediverse: 'Fediverse',
       administration: 'Administration',
       danger: 'Danger zone',
     },

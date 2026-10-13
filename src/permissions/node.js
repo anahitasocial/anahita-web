@@ -7,6 +7,12 @@ const {
 } = utils.node;
 
 const canEdit = (viewer, node) => {
+  // What came from another server is its author's to change, there.
+  // Nobody here changes it, and the server refuses it.
+  if (utils.federation.isRemote(node)) {
+    return false;
+  }
+
   if (node.authorized && node.authorized.edit) {
     return true;
   }

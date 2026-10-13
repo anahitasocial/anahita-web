@@ -22,7 +22,7 @@ import Composers from '../media/Composer';
 import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
 import usePinnedFeeds from './usePinnedFeeds';
-import WhoToFollow from '../suggestions/WhoToFollow';
+import WhoToFollow from '../recommendations/WhoToFollow';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import PageColumn from '../../components/PageColumn';
 import actions from '../../actions';

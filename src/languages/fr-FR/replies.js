@@ -14,9 +14,9 @@ export default {
   retry: 'Réessayer',
   actions: {
     edit: 'Modifier',
-    delete: 'Supprimer la réponse',
-    hide: 'Masquer la réponse',
-    show: 'Afficher la réponse',
+    delete: 'Supprimer',
+    hide: 'Masquer',
+    show: 'Afficher',
     like: 'J\'aime',
     unlike: 'Je n\'aime plus',
     menu: 'Plus à propos de cette réponse',

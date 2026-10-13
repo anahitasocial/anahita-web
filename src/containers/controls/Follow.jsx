@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
+import AddIcon from '@mui/icons-material/Add';
 import FollowIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import UnfollowIcon from '@mui/icons-material/PersonRemoveOutlined';
 
@@ -11,7 +12,6 @@ import MenuItemLabel from '../../components/MenuItemLabel';
 import actions from '../../actions/socialgraph';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
-import socialgraph from '../../utils/socialgraph';
 
 const ControlsFollow = React.forwardRef((props, ref) => {
   const {
@@ -19,9 +19,9 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     unfollowActor,
     actor,
     component = 'button',
-    // "Follow back" for somebody who already follows the viewer: it says
-    // what pressing it would make of the two of them.
-    followLabel = i18n.t(socialgraph.followLabelKey(props.actor)),
+    // One word wherever anything is followed, a profile, a hashtag or a
+    // place, with a plus before it on a button.
+    followLabel = i18n.t('actions:follow'),
     unfollowLabel = i18n.t('actions:unfollow'),
     viewer,
     // The width of what it is in, for a row of buttons of one width.
@@ -77,6 +77,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
       color={color}
       fullWidth={fullWidth}
       variant={variant}
+      startIcon={leader ? null : <AddIcon />}
       ref={ref}
     >
       {title}

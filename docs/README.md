@@ -25,6 +25,7 @@ documented in anahita-services, which will be released later in 2026.
    - [Routes](architecture.md#routes)
    - [What a viewer may do](architecture.md#what-a-viewer-may-do)
    - [Translations](architecture.md#translations)
+   - [Styling](architecture.md#styling)
 4. [Customising](customising.md): making an installation your own
    - [Name and description](customising.md#name-and-description)
    - [Themes](customising.md#themes)

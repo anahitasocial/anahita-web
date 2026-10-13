@@ -8,10 +8,10 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
+import PostActionsRow from './PostActionsRow';
 import MediumType from '../proptypes/Medium';
 import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';
@@ -197,14 +197,7 @@ const MediumCard = ({
         <QuoteEmbed quote={medium.quote} />
         <SignInPrompt show={Boolean(medium.truncated)} />
       </CardContent>
-      {stats &&
-        <CardActions>
-          {stats}
-        </CardActions>}
-      {actions &&
-        <CardActions>
-          {actions}
-        </CardActions>}
+      <PostActionsRow actions={actions} stats={stats} />
     </Card>
   );
 };

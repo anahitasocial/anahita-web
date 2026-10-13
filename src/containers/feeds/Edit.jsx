@@ -15,8 +15,9 @@ import PageColumn from '../../components/PageColumn';
 // which is where it is reached from.
 //
 // Its owner's to do. Anybody else who can see the feed is sent to read it,
-// where they can copy it and change the copy. Cancelled, or with the feed
-// deleted, it goes back to the list. Saved, it opens the feed.
+// where they can copy it and change the copy. Cancelled, it goes back to
+// the list. Saved, it opens the feed. A feed is deleted from the list, not
+// from here.
 const CustomFeedEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -52,9 +53,6 @@ const CustomFeedEdit = () => {
           }}
           onSaved={(saved) => {
             navigate(customFeeds.whereToRead(saved));
-          }}
-          onDeleted={() => {
-            navigate('/feeds', { replace: true });
           }}
         />
       </PageColumn>
