@@ -30,10 +30,7 @@ import ActorType from '../../../proptypes/Actor';
 
 const ActorBodyAbout = (props) => {
   const { actor } = props;
-  const {
-    body,
-    websiteUrl,
-  } = actor;
+  const { body } = actor;
 
   // Where an event is held: the address kept on it, which the server sends
   // to whoever is going, and where that is on a map when whoever made the
@@ -52,6 +49,11 @@ const ActorBodyAbout = (props) => {
   const remote = federation.isRemote(actor);
   const onBluesky = remote && (actor.type || '').includes('.atproto-service.');
   const domain = federation.domainOf(actor);
+  // Their page there is worked out from where they came from; a profile
+  // made here has the website its owner gave it.
+  const websiteUrl = remote ?
+    (federation.pageOf(actor) || actor.websiteUrl) :
+    actor.websiteUrl;
 
   return (
     <Card component="section">
