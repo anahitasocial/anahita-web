@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import ReplyIcon from '@mui/icons-material/Comment';
+import ReplyIcon from '@mui/icons-material/ModeCommentOutlined';
 
 import NodeType from '../../../proptypes/Node';
 import i18n from '../../../languages';
@@ -20,10 +20,12 @@ const FeedReplyButton = ({ post }) => {
       disabled={!replyPerms.canAdd(post)}
       aria-label={i18n.t('replies:reply')}
       title={i18n.t('replies:reply')}
+      // The colour and the size of the others in the row. Left to
+      // itself a button is the theme's own colour, which made this the
+      // one blue icon among white ones.
+      color="inherit"
       fullWidth
-      startIcon={
-        <ReplyIcon fontSize="small" />
-      }
+      startIcon={<ReplyIcon />}
     />
   );
 };
