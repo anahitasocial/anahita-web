@@ -13,8 +13,9 @@ import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Tab from '@mui/material/Tab';
+import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import LikeIcon from '@mui/icons-material/Favorite';
 import RepostIcon from '@mui/icons-material/Repeat';
@@ -69,10 +70,11 @@ const READERS = {
 // A post's interactions ("Interactions" on the page): how many times it was
 // liked, reposted, quoted and replied to, and who did each.
 //
-// At the top, a little chart: a bar for each of the four, as long as its
-// share of the most there is of any, with its number said in words. Under
-// it, one list at a time, read when its bar is first pressed. A list can be
-// shorter than its number: everybody is shown only the people and the notes they may
+// Four lists, one at a time, each read when its tab is first opened. A tab
+// is an icon and a number, the post's own count, with a little bar under
+// them as long as its share of the most there is of any; its name is there
+// for a screen reader and on hover. A list can be shorter than its
+// number: everybody is shown only the people and the notes they may
 // see.
 //
 // There is nothing here about who has looked at the post. That is not
@@ -143,42 +145,46 @@ const PostActivity = ({
       <DialogTitle id={`post-activity-title-${post.id}`}>
         {i18n.t('media:activity.title')}
       </DialogTitle>
-      {/* The four numbers as a little chart: a bar each, as long as its
-          share of the most there is of any. Pressing one shows who. */}
-      <List
-        disablePadding
-        role="tablist"
+      {/* A tab for each of the four: its icon, its number, and under them
+          a little bar as long as its share of the most there is of any, so
+          the four can be told apart at a glance. */}
+      <Tabs
+        value={kind}
+        onChange={(event, value) => {
+          setKind(value);
+        }}
+        variant="fullWidth"
         aria-label={i18n.t('media:activity.title')}
-        sx={{ pb: 1 }}
       >
         {activity.KINDS.map((each) => {
           return (
-            <ListItemButton
+            <Tab
               key={each}
-              role="tab"
-              aria-selected={kind === each}
-              selected={kind === each}
-              onClick={() => {
-                setKind(each);
-              }}
-              sx={{ gap: 2, py: 1 }}
-            >
-              {ICONS[each]}
-              <Box sx={{ flex: 1, minWidth: 0 }}>
-                <Typography variant="body2">
-                  {i18n.t(`media:activity.${each}`, { count: counts[each] })}
-                </Typography>
-                <LinearProgress
-                  variant="determinate"
-                  value={most > 0 ? (counts[each] / most) * 100 : 0}
-                  aria-hidden="true"
-                  sx={{ mt: 1, height: 8, borderRadius: 4 }}
-                />
-              </Box>
-            </ListItemButton>
+              value={each}
+              aria-label={i18n.t(`media:activity.${each}`, { count: counts[each] })}
+              title={i18n.t(`media:activity.${each}`, { count: counts[each] })}
+              sx={{ minHeight: 64, minWidth: 0 }}
+              label={
+                <Box sx={{ width: '100%' }}>
+                  <Box sx={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
+                  }}
+                  >
+                    {ICONS[each]}
+                    {counts[each]}
+                  </Box>
+                  <LinearProgress
+                    variant="determinate"
+                    value={most > 0 ? (counts[each] / most) * 100 : 0}
+                    aria-hidden="true"
+                    sx={{ mt: 1, height: 4, borderRadius: 2 }}
+                  />
+                </Box>
+              }
+            />
           );
         })}
-      </List>
+      </Tabs>
       <DialogContent dividers sx={{ p: 0, minHeight: 240 }}>
         {!list && !failed[kind] && <Progress />}
         {failed[kind] &&
