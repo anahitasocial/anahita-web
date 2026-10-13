@@ -13,54 +13,65 @@ build their own feeds, and run their account. They follow and answer
 people on Mastodon and Bluesky from the same place. Site administrators
 use it to run the installation.
 
-## Part of the fediverse: Mastodon and Bluesky, from one place
+> **anahita-services is not public yet.** The back end will be released later
+> in 2026. Until then this app has no server to run against outside the
+> Anahita team.
 
-An Anahita site is not an island. It speaks to the two open social
-networks, each in its own protocol, and people take part in both without
-leaving the site they are on.
+## Part of the fediverse
 
-**With Mastodon and the rest of the fediverse, over ActivityPub.** Anahita
-is a server of the fediverse in its own right:
+An Anahita site is not an island. It speaks to the two open social networks,
+each in its own protocol, and people take part in both without leaving the
+site they are on.
 
-- Each person chooses whether to be found, and is then
-  `@name@your-site.example` to every Mastodon, GoToSocial or Pixelfed
-  server.
-- Following works both ways, and so do posts with their pictures, replies,
-  likes and reposts, each taken back when it is taken back here.
-- Posts from other servers arrive as ordinary posts: with their hashtags, a
-  card for the link in them, and their pictures copied into the site's own
-  storage, so that reading them tells no other server who looked.
+| | Mastodon and the fediverse | Bluesky |
+| --- | --- | --- |
+| **Protocol** | ActivityPub | AT Protocol |
+| **Follow and read** | Yes | Yes |
+| **Be followed** | Yes | Through your own Bluesky account |
+| **Posts, with pictures and link cards** | Both ways | Both ways |
+| **Replies, likes and reposts** | Both ways | Both ways |
+| **Who you are there** | `@name@your-site.example` | The Bluesky account you connect |
 
-**With Bluesky, over the AT Protocol.**
+### Mastodon and the fediverse
 
-- Anybody can look up a Bluesky account, follow it, and read its posts,
-  replies and reposts in their feed.
-- Somebody who connects the Bluesky account they already have also
-  answers: their public notes and photos are posted there, and a reply, a
-  like, a repost or a follow made here is made there too, as them.
-- What people on Bluesky do in return comes back, and what they post in
-  Bluesky's own app appears here as theirs.
+Anahita is a server of the fediverse in its own right.
 
-**One feed for all of it.** A post from Mastodon, a post from Bluesky and
-a post written here sit in the same feed, newest first, and can be liked,
-answered and reposted the same way. The feeds people build for themselves,
-the hashtags, the recommendations and the blocks apply to all three.
+- **Found by a handle.** Each person chooses whether to be found, and is then
+  `@name@your-site.example` to every Mastodon, GoToSocial or Pixelfed server.
+- **Two-way.** Following, posts with their pictures, replies, likes and
+  reposts cross both ways, and each is taken back when it is taken back here.
+- **Private by design.** Pictures from other servers are copied into the
+  site's own storage, so reading a post tells no other server who looked.
 
-**On the site's terms.** Federation is each person's own choice and is off
-until they make it. An operator can refuse any server, run either network
-without the other, or run neither: both are separate, optional services.
-A site that is for its members only sends nothing out.
+### Bluesky
+
+- **Anybody can read.** Look up a Bluesky account, follow it, and its posts,
+  replies and reposts are in your feed.
+- **Connect your account to answer.** Somebody who connects the Bluesky
+  account they already have posts there too: public notes and photos, and
+  every reply, like, repost and follow made here, as them.
+- **It comes back.** What people on Bluesky do in return arrives here, and
+  what you post in Bluesky's own app appears here as yours.
+
+### One feed for all of it
+
+A post from Mastodon, a post from Bluesky and a post written here sit in the
+same feed, newest first, and are liked, answered and reposted the same way.
+The feeds people build for themselves, the hashtags, the recommendations and
+the blocks apply to all three.
+
+### On the site's terms
+
+- **Each person's own choice.** Federation is off until they turn it on.
+- **Each operator's own choice.** The two networks are separate, optional
+  services: run both, either, or neither, and refuse any server.
+- **Nothing leaks.** A site that is for its members only sends nothing out.
 
 As far as we know, Anahita is the first social platform built in Canada to
 take part in both networks at once. We would be glad to hear of another.
 
-The operator's side of this is in anahita-services
-(`docs/federation.md`). What the web app does with it is in
-[Architecture](docs/architecture.md).
-
-> **anahita-services is not public yet.** The back end will be released later
-> in 2026. Until then this app has no server to run against outside the
-> Anahita team.
+The operator's side of this is in anahita-services (`docs/federation.md`).
+What the web app does with it is in [Architecture](docs/architecture.md).
 
 ## Quick start
 
