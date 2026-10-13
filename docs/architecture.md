@@ -772,8 +772,7 @@ handled in `reducers/create.js`).
 "Interactions" is a dialog about a post: who liked it, reposted it, quoted
 it and replied to it (`containers/activity/PostActivity.jsx`,
 `utils/activity.js`). It has a tab for each of the four, with its icon and
-its number and, under them, a little bar as long as its share of the most
-there is of any; under the tabs is the list of who. In the code it is still
+its number; under the tabs is the list of who, each row a link. In the code it is still
 called activity. Each list is read when its tab is first opened.
 
 It opens from **one icon at the end of the row under a post**

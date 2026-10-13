@@ -2,13 +2,11 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import LinearProgress from '@mui/material/LinearProgress';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -71,10 +69,8 @@ const READERS = {
 // liked, reposted, quoted and replied to, and who did each.
 //
 // Four lists, one at a time, each read when its tab is first opened. A tab
-// is an icon and a number, the post's own count, with a little bar under
-// them as long as its share of the most there is of any; its name is there
-// for a screen reader and on hover. A list can be shorter than its
-// number: everybody is shown only the people and the notes they may
+// is an icon and a number, the post's own count; its name is there for a
+// screen reader and on hover. A list can be shorter than its number: everybody is shown only the people and the notes they may
 // see.
 //
 // There is nothing here about who has looked at the post. That is not
@@ -128,10 +124,6 @@ const PostActivity = ({
   }, [open, kind, rows[kind], failed[kind]]);
 
   const counts = activity.counts(post);
-  // What the longest bar stands for.
-  const most = Math.max(...activity.KINDS.map((each) => {
-    return counts[each];
-  }));
   const list = rows[kind];
 
   return (
@@ -145,9 +137,6 @@ const PostActivity = ({
       <DialogTitle id={`post-activity-title-${post.id}`}>
         {i18n.t('media:activity.title')}
       </DialogTitle>
-      {/* A tab for each of the four: its icon, its number, and under them
-          a little bar as long as its share of the most there is of any, so
-          the four can be told apart at a glance. */}
       <Tabs
         value={kind}
         onChange={(event, value) => {
@@ -161,26 +150,12 @@ const PostActivity = ({
             <Tab
               key={each}
               value={each}
+              icon={ICONS[each]}
+              iconPosition="start"
+              label={counts[each]}
               aria-label={i18n.t(`media:activity.${each}`, { count: counts[each] })}
               title={i18n.t(`media:activity.${each}`, { count: counts[each] })}
-              sx={{ minHeight: 64, minWidth: 0 }}
-              label={
-                <Box sx={{ width: '100%' }}>
-                  <Box sx={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 1,
-                  }}
-                  >
-                    {ICONS[each]}
-                    {counts[each]}
-                  </Box>
-                  <LinearProgress
-                    variant="determinate"
-                    value={most > 0 ? (counts[each] / most) * 100 : 0}
-                    aria-hidden="true"
-                    sx={{ mt: 1, height: 4, borderRadius: 2 }}
-                  />
-                </Box>
-              }
+              sx={{ minHeight: 48, minWidth: 0 }}
             />
           );
         })}
