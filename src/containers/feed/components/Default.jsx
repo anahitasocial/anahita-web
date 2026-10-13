@@ -7,10 +7,10 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
+import PostActionsRow from '../../../components/PostActionsRow';
 import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
@@ -154,14 +154,7 @@ const FeedCardDefault = ({
           <LinkPreviewCard preview={node.linkPreview} />}
         <QuoteEmbed quote={node.quote} />
       </CardContent>
-      {stats &&
-        <CardActions>
-          {stats}
-        </CardActions>}
-      {actions &&
-        <CardActions>
-          {actions}
-        </CardActions>}
+      <PostActionsRow actions={actions} stats={stats} />
     </Card>
   );
 };

@@ -2,18 +2,19 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import LinearProgress from '@mui/material/LinearProgress';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import Tab from '@mui/material/Tab';
-import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import LikeIcon from '@mui/icons-material/Favorite';
 import RepostIcon from '@mui/icons-material/Repeat';
@@ -68,10 +69,10 @@ const READERS = {
 // A post's interactions ("Interactions" on the page): how many times it was
 // liked, reposted, quoted and replied to, and who did each.
 //
-// Four lists, one at a time, each read when its tab is first opened. A tab
-// is an icon and a number, the post's own count; its name is there for a
-// screen reader and on hover. A list can be shorter than
-// its number: everybody is shown only the people and the notes they may
+// At the top, a little chart: a bar for each of the four, as long as its
+// share of the most there is of any, with its number said in words. Under
+// it, one list at a time, read when its bar is first pressed. A list can be
+// shorter than its number: everybody is shown only the people and the notes they may
 // see.
 //
 // There is nothing here about who has looked at the post. That is not
@@ -125,6 +126,10 @@ const PostActivity = ({
   }, [open, kind, rows[kind], failed[kind]]);
 
   const counts = activity.counts(post);
+  // What the longest bar stands for.
+  const most = Math.max(...activity.KINDS.map((each) => {
+    return counts[each];
+  }));
   const list = rows[kind];
 
   return (
@@ -138,29 +143,42 @@ const PostActivity = ({
       <DialogTitle id={`post-activity-title-${post.id}`}>
         {i18n.t('media:activity.title')}
       </DialogTitle>
-      <Tabs
-        value={kind}
-        onChange={(event, value) => {
-          setKind(value);
-        }}
-        variant="fullWidth"
+      {/* The four numbers as a little chart: a bar each, as long as its
+          share of the most there is of any. Pressing one shows who. */}
+      <List
+        disablePadding
+        role="tablist"
         aria-label={i18n.t('media:activity.title')}
+        sx={{ pb: 1 }}
       >
         {activity.KINDS.map((each) => {
           return (
-            <Tab
+            <ListItemButton
               key={each}
-              value={each}
-              icon={ICONS[each]}
-              iconPosition="start"
-              label={counts[each]}
-              aria-label={i18n.t(`media:activity.${each}`, { count: counts[each] })}
-              title={i18n.t(`media:activity.${each}`, { count: counts[each] })}
-              sx={{ minHeight: 48, minWidth: 0 }}
-            />
+              role="tab"
+              aria-selected={kind === each}
+              selected={kind === each}
+              onClick={() => {
+                setKind(each);
+              }}
+              sx={{ gap: 2, py: 1 }}
+            >
+              {ICONS[each]}
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography variant="body2">
+                  {i18n.t(`media:activity.${each}`, { count: counts[each] })}
+                </Typography>
+                <LinearProgress
+                  variant="determinate"
+                  value={most > 0 ? (counts[each] / most) * 100 : 0}
+                  aria-hidden="true"
+                  sx={{ mt: 1, height: 8, borderRadius: 4 }}
+                />
+              </Box>
+            </ListItemButton>
           );
         })}
-      </Tabs>
+      </List>
       <DialogContent dividers sx={{ p: 0, minHeight: 240 }}>
         {!list && !failed[kind] && <Progress />}
         {failed[kind] &&

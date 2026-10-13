@@ -8,7 +8,6 @@ import Typography from '@mui/material/Typography';
 import Masonry from '../../components/BreakpointMasonry';
 import MediumCard from '../../components/MediumCard';
 import Progress from '../../components/Progress';
-import ReplyStats from '../../components/ReplyStats';
 import LikesStats from '../likes';
 import api from '../../api';
 import i18n from '../../languages';
@@ -103,10 +102,7 @@ const SavedBrowse = () => {
               <MediumCard
                 medium={post}
                 stats={
-                  <>
-                    <LikesStats node={post} />
-                    <ReplyStats node={post} />
-                  </>
+                  <LikesStats node={post} />
                 }
                 actions={
                   <Button

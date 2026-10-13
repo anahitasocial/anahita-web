@@ -6,7 +6,6 @@ import ControlRepost from '../../controls/Repost';
 import { ShareAction, ofNode } from '../../controls/Share';
 import { DownloadAction } from '../../controls/medium/Download';
 import LikesStats from '../../likes';
-import ReplyStats from '../../../components/ReplyStats';
 import FeedMenu from '../Menu';
 
 import Masonry from '../../../components/BreakpointMasonry';
@@ -59,10 +58,6 @@ const FeedItems = ({
               key={`node-like-stat-${node.parent.id}`}
               node={node.parent}
             />,
-            <ReplyStats
-              key={`node-reply-stat-${node.parent.id}`}
-              node={node.parent}
-            />,
           ]}
           actions={isAuthenticated && [
             <Like
@@ -104,10 +99,6 @@ const FeedItems = ({
         stats={[
           <LikesStats
             key={`node-like-stat-${node.id}`}
-            node={node}
-          />,
-          <ReplyStats
-            key={`node-reply-stat-${node.id}`}
             node={node}
           />,
         ]}

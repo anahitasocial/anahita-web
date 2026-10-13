@@ -1,7 +1,9 @@
 import axios from 'axios';
 
-const browse = (params) => {
-  const { node } = params;
+// Who reposted a post. The post is named in the address and nothing of it
+// goes in the query: the whole post went there once, and a long one made
+// an address the gateway refused, so the list never loaded.
+const browse = ({ node, ...params }) => {
   return axios.get(`/reposts/${node.id}/`, { params });
 };
 

@@ -6,9 +6,9 @@ import { makeStyles } from 'tss-react/mui';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
-import CardActions from '@mui/material/CardActions';
 import Link from '@mui/material/Link';
 
+import PostActionsRow from '../../../components/PostActionsRow';
 import MediumCard from '../../../components/MediumCard';
 import ActorAvatar from '../../../components/ActorAvatar';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
@@ -84,14 +84,7 @@ const FeedCardRepost = ({
           cardProps={{ variant: 'outlined' }}
         />
       </CardContent>
-      {stats &&
-        <CardActions>
-          {stats}
-        </CardActions>}
-      {actions &&
-        <CardActions>
-          {actions}
-        </CardActions>}
+      <PostActionsRow actions={actions} stats={stats} />
     </Card>
   );
 };

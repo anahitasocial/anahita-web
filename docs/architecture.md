@@ -413,8 +413,8 @@ replies, made directly to the post.
   then taken out of the address). A deleted post leaves every feed on the
   page, with any repost of it (`reducers/createFeed.js`).
 - **In a feed**, the reply button under a post is a link to the post's page,
-  where its thread is (`containers/feed/components/ReplyButton.jsx`), and
-  `components/ReplyStats.jsx` shows how many replies it has.
+  where its thread is (`containers/feed/components/ReplyButton.jsx`). How
+  many replies it has is in its interactions.
 
 - **A reply has a page of its own**, at `/notes/:id` like any note. It is
   drawn as the post, with what it answers above it
@@ -769,13 +769,19 @@ handled in `reducers/create.js`).
 
 ### A post's interactions
 
-"Interactions" is a dialog with four lists: who liked a post, reposted it,
-quoted it and replied to it, with an icon and the count of each on its tab
-(`containers/activity/PostActivity.jsx`, `utils/activity.js`). It opens from
-the number of likes under a post, which can be pressed whenever the post has
-any of the four, and from "Interactions" in a post's menu. In the code it is
-still called activity. Each list is read
-when its tab is first opened. People in the likes and reposts lists have a
+"Interactions" is a dialog about a post: who liked it, reposted it, quoted
+it and replied to it (`containers/activity/PostActivity.jsx`,
+`utils/activity.js`). At its top is a little chart, a bar for each of the
+four as long as its share of the most there is of any, with its number in
+words; pressing a bar shows who. In the code it is still called activity.
+Each list is read when its bar is first pressed.
+
+It opens from **one icon at the end of the row under a post**
+(`containers/likes`, drawn by `components/PostActionsRow.jsx`, which every
+layout of a post uses), there to press when the post has any of the four,
+and from "Interactions" in a post's menu. There is one row under a post, the
+actions spread across it and that icon at the end: the separate row of
+counts, of likes and of replies, is gone. People in the likes and reposts lists have a
 Follow button; quotes and replies show what was said and lead to the note.
 
 There are no views in it, and nothing anywhere counts them.

@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
-import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
 
-import LikeIcon from '@mui/icons-material/Favorite';
+import InteractionsIcon from '@mui/icons-material/BarChartOutlined';
 
 import PostActivity from '../activity/PostActivity';
 import i18n from '../../languages';
 import NodeType from '../../proptypes/Node';
 import activity from '../../utils/activity';
 
-// The number of likes under a post, which opens the post's activity: who
-// liked it, reposted it, quoted it and replied to it.
+// The one icon at the end of the row under a post. It opens the post's
+// interactions: how many times it was liked, reposted, quoted and replied
+// to, and who did each. There to press when there is any of the four.
 //
-// It is there to press whenever the post has any of the four, so that a
-// post with reposts and no likes can still be looked into.
-const Likes = ({ node }) => {
+// There were two counts here, of likes and of replies, in a row of their
+// own, and neither said anything of reposts or quotes. One icon stands for
+// all four and leads to where they are told apart.
+const Interactions = ({ node }) => {
   const [open, setOpen] = useState(false);
 
   const label = i18n.t('media:activity.title');
+  const total = activity.total(node);
 
   return (
     <>
@@ -27,25 +30,22 @@ const Likes = ({ node }) => {
           setOpen(false);
         }}
       />
-      <Button
-        variant="text"
+      <IconButton
         onClick={() => {
           setOpen(true);
         }}
-        disabled={activity.total(node) === 0}
-        startIcon={<LikeIcon />}
+        disabled={total === 0}
         aria-label={label}
         title={label}
-        size="small"
       >
-        {node.likesCount}
-      </Button>
+        <InteractionsIcon />
+      </IconButton>
     </>
   );
 };
 
-Likes.propTypes = {
+Interactions.propTypes = {
   node: NodeType.isRequired,
 };
 
-export default Likes;
+export default Interactions;
