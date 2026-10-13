@@ -62,7 +62,7 @@ const ShareAction = ({ what }) => {
         share.open(what);
       }}
       startIcon={<ShareIcon />}
-      color="default"
+      color="inherit"
       aria-label={label}
       title={label}
       fullWidth

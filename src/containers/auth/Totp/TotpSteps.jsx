@@ -151,7 +151,7 @@ const TotpSteps = ({
               variant="outlined"
               fullWidth
               onClick={handleCopyRecoveryCodes}
-              color={codesCopySuccess ? 'secondary' : 'default'}
+              color={codesCopySuccess ? 'secondary' : 'inherit'}
             >
               {codesCopySuccess ? i18n.t('auth:totp.recoveryCodes.prompts.copySuccess') : i18n.t('auth:totp.recoveryCodes.prompts.copyCodes')}
             </Button>

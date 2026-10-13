@@ -68,7 +68,7 @@ const ControlsFeedRepost = React.forwardRef(({ parent }, ref) => {
           setAnchorEl(event.currentTarget);
         }}
         startIcon={<RepostIcon />}
-        color={reposted ? 'primary' : 'default'}
+        color={reposted ? 'primary' : 'inherit'}
         aria-haspopup="menu"
         aria-expanded={anchorEl ? 'true' : undefined}
         aria-label={label}

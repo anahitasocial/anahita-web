@@ -153,7 +153,9 @@ const PostActivity = ({
               value={each}
               icon={ICONS[each]}
               iconPosition="start"
-              label={counts[each]}
+              // As words, not a number: a tab that is given 0 takes it
+              // for no label at all, and sets the icon hard against it.
+              label={String(counts[each])}
               aria-label={i18n.t(`media:activity.${each}`, { count: counts[each] })}
               title={i18n.t(`media:activity.${each}`, { count: counts[each] })}
               sx={{ minHeight: 48, minWidth: 0 }}

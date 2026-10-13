@@ -44,7 +44,7 @@ const DownloadAction = ({ node }) => {
           }
         }}
         startIcon={<DownloadIcon />}
-        color="default"
+        color="inherit"
         aria-label={label}
         title={label}
         aria-haspopup={parts.length > 1 ? 'menu' : undefined}

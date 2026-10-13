@@ -38,7 +38,7 @@ const Interactions = ({ node }) => {
         }}
         disabled={total === 0}
         startIcon={<InteractionsIcon />}
-        color="default"
+        color="inherit"
         aria-label={label}
         title={label}
         fullWidth
