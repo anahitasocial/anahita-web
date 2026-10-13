@@ -664,9 +664,11 @@ see it (`altText` on each of `medium.files`).
 - **Writing it** is a field under each photo in the composer and in
   "Edit photos" (`components/PhotoFilesEditor.jsx`). The photos are a row
   that is swiped through one at a time, like the slides a reader sees,
-  each with its description, its place in the order and the way to remove
-  it; a photo just picked is the one shown. A line underneath says how
-  many photos have no description. It is never required.
+  each with its place in the order and the way to remove it; a photo just
+  picked is the one shown. Under a photo with no description is a prompt,
+  "Add an alt description", with why in a line beneath it; pressing it
+  opens the field, which is called "Alt description" so that it is not
+  taken for the post's own description just below. It is never required.
 - **Hearing it:** it is the `alt` of the image wherever a photo is drawn
   (`utils/photoFiles.js#altOf`, which falls back to the post's title).
 - **Reading it:** `components/AltBadge.jsx` puts "ALT" in the corner of a

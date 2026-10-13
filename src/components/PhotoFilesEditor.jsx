@@ -12,6 +12,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import AddIcon from '@mui/icons-material/AddPhotoAlternate';
+import AltIcon from '@mui/icons-material/SubtitlesOutlined';
 import EarlierIcon from '@mui/icons-material/ArrowBack';
 import LaterIcon from '@mui/icons-material/ArrowForward';
 import RemoveIcon from '@mui/icons-material/Close';
@@ -135,6 +136,21 @@ const useStyles = makeStyles()((theme) => {
     field: {
       marginTop: theme.spacing(1.5),
     },
+    // The words that ask for a description, as wide as the photo and set
+    // out as a sentence, not as a shouted label.
+    ask: {
+      marginTop: theme.spacing(1.5),
+      justifyContent: 'flex-start',
+      textAlign: 'left',
+      textTransform: 'none',
+      fontWeight: 400,
+      lineHeight: 1.4,
+      padding: theme.spacing(1, 2),
+    },
+    // Clear of the last photo's description.
+    add: {
+      marginTop: theme.spacing(2),
+    },
     dots: {
       justifyContent: 'center',
       background: 'none',
@@ -181,6 +197,8 @@ const PhotoFilesEditor = ({
   // Which photo is on show, read from where the row has been scrolled to.
   const [index, setIndex] = useState(0);
   const scroller = useRef(null);
+  // The photos whose description was asked to be written, by key.
+  const [describing, setDescribing] = useState({});
   // How many photos of the last pick did not fit. The system's own file
   // window cannot be told how many to allow, so somebody can pick more
   // than a post holds; the extra ones are left out and this says so.
@@ -378,40 +396,68 @@ const PhotoFilesEditor = ({
                         {i18n.t('photos:editor.later')}
                       </Button>
                     </div>}
-                  <TextField
-                    className={classes.field}
-                    fullWidth
-                    multiline
-                    minRows={2}
-                    maxRows={6}
-                    size="small"
-                    variant="outlined"
-                    label={i18n.t('photos:editor.altLabel')}
-                    placeholder={i18n.t('photos:editor.altHelp')}
-                    // Said only when it is getting long: most are a
-                    // sentence.
-                    helperText={described > photoFiles.ALT_TEXT_MAX_LENGTH * 0.8 ?
-                      `${described} / ${photoFiles.ALT_TEXT_MAX_LENGTH}` :
-                      undefined}
-                    value={item.altText || ''}
-                    onChange={(event) => {
-                      const altText = event.target.value;
-                      onChange((current) => {
-                        return photoFiles.update(current, item.key, { altText });
-                      });
-                    }}
-                    disabled={disabled}
-                    slotProps={{
-                      inputLabel: { shrink: true },
-                      htmlInput: {
-                        dir: 'auto',
-                        maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
-                        'aria-label': `${i18n.t('photos:editor.altLabel')} (${position})`,
-                        // Only the photo on show takes the keyboard.
-                        tabIndex: at === index ? 0 : -1,
-                      },
-                    }}
-                  />
+                  {/* Its description for people who cannot see it. Asked
+                      for in words that say why, and opened by pressing
+                      them: the post has a description of its own just
+                      below, and two fields called the same were taken
+                      for one thing. Open already when it has one. */}
+                  {!(described > 0 || describing[item.key]) &&
+                    <Button
+                      className={classes.ask}
+                      variant="outlined"
+                      color="inherit"
+                      fullWidth
+                      startIcon={<AltIcon />}
+                      onClick={() => {
+                        setDescribing((open) => {
+                          return { ...open, [item.key]: true };
+                        });
+                      }}
+                      disabled={disabled}
+                    >
+                      <span>
+                        <strong>{i18n.t('photos:editor.askAlt')}</strong>
+                        <br />
+                        {i18n.t('photos:editor.askAltWhy')}
+                      </span>
+                    </Button>}
+                  {(described > 0 || describing[item.key]) &&
+                    <TextField
+                      className={classes.field}
+                      fullWidth
+                      multiline
+                      minRows={2}
+                      maxRows={6}
+                      size="small"
+                      variant="outlined"
+                      // Put to work at once when it was asked for.
+                      autoFocus={Boolean(describing[item.key]) && described === 0}
+                      label={i18n.t('photos:editor.altLabel')}
+                      placeholder={i18n.t('photos:editor.altHelp')}
+                      // Why it is asked for, and how long it is once it
+                      // is getting long.
+                      helperText={described > photoFiles.ALT_TEXT_MAX_LENGTH * 0.8 ?
+                        `${described} / ${photoFiles.ALT_TEXT_MAX_LENGTH}` :
+                        i18n.t('photos:editor.altWhy')}
+                      value={item.altText || ''}
+                      onChange={(event) => {
+                        const altText = event.target.value;
+                        onChange((current) => {
+                          return photoFiles.update(current, item.key, { altText });
+                        });
+                      }}
+                      disabled={disabled}
+                      slotProps={{
+                        inputLabel: { shrink: true },
+                        htmlInput: {
+                          dir: 'auto',
+                          maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
+                          'aria-label': `${i18n.t('photos:editor.altLabel')} (${position})`,
+                          // Only the photo on show takes the keyboard.
+                          tabIndex: at === index ? 0 : -1,
+                        },
+                      }}
+                    />}
                 </div>
               );
             })}
@@ -454,6 +500,7 @@ const PhotoFilesEditor = ({
       {room > 0 &&
         <Button
           {...getRootProps()}
+          className={count > 0 ? classes.add : undefined}
           variant="outlined"
           color="primary"
           startIcon={<AddIcon />}
@@ -470,7 +517,9 @@ const PhotoFilesEditor = ({
       <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
         {i18n.t('photos:editor.limit', { max })}
       </Typography>
-      {undescribed > 0 &&
+      {/* With several photos, most are out of sight: how many still have
+          no description is said here. With one, the prompt says it. */}
+      {undescribed > 0 && count > 1 &&
         <Typography variant="caption" color="textSecondary" component="p">
           {i18n.t('photos:editor.undescribed', { count: undescribed })}
         </Typography>}

@@ -23,10 +23,13 @@ export default {
     describe: 'Describe this photo',
     described: 'Change the description',
     describeTitle: 'Describe this photo',
-    altLabel: 'Description',
-    altHelp: 'Say what the photo shows, for people who cannot see it.',
-    undescribed_one: '1 photo has no description yet. A description tells people who cannot see the photo what it shows.',
-    undescribed_other: '{{count}} photos have no description yet. A description tells people who cannot see a photo what it shows.',
+    altLabel: 'Alt description',
+    askAlt: 'Add an alt description',
+    askAltWhy: 'It is read out to people who cannot see the photo, and shown when a photo does not load.',
+    altWhy: 'Read out to people who cannot see the photo. This is not the caption: say what is in the picture.',
+    altHelp: 'For example: a dwarf banana tree by a window, beside a grey armchair.',
+    undescribed_one: '1 photo has no alt description yet.',
+    undescribed_other: '{{count}} photos have no alt description yet.',
     uploading: 'Uploading',
     failed: 'This photo could not be uploaded. Remove it and try again.',
     unsupported: 'Only JPEG and PNG photos can be uploaded.',
@@ -43,7 +46,7 @@ export default {
   // On a photo that has a description, for somebody who can see it.
   alt: {
     show: 'Read the description of this photo',
-    title: 'Description',
+    title: 'Alt description',
   },
   slides: {
     position: '{{index}} of {{total}}',
