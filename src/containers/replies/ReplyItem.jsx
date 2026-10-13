@@ -71,7 +71,7 @@ const ReplyItem = ({
   };
 
   // A reply from another server can be read where it was written.
-  const original = utils.federation.isRemote(reply) && reply.uri ? reply.uri : '';
+  const original = utils.federation.isRemote(reply) ? utils.federation.pageOf(reply) : '';
   const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
     report.canReport || original;
 
@@ -299,7 +299,7 @@ const ReplyItem = ({
         <Box sx={{ ml: STEP }}>
           <ReplyForm
             autoFocus
-            hint={staysHere ? i18n.t('federation:composer.replyStaysHere') : ''}
+            hint={staysHere ? i18n.t(staysHere) : ''}
             placeholder={author.name ?
               i18n.t('replies:placeholderTo', { name: author.name }) :
               i18n.t('replies:placeholder')}

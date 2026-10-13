@@ -1,9 +1,11 @@
 import axios from 'axios';
+import federation from '../utils/federation';
 
 // Being on the fediverse: found and followed from Mastodon and the other
-// servers that speak ActivityPub.
+// servers that speak ActivityPub. And reading Bluesky, which is a service
+// of its own.
 //
-// The service is optional. Where there is none the gateway answers with an
+// Each service is optional. Where there is none the gateway answers with an
 // error, and whoever asked takes that as there being no fediverse here and
 // draws nothing: see utils/federation.js#isAbsent.
 
@@ -21,10 +23,13 @@ const setEnabled = (enabled) => {
   return axios.put('/activitypub/settings', { enabled: Boolean(enabled) });
 };
 
-// Somebody on another server, by their handle (@alice@mastodon.example) or
-// the address of their profile. The answer is the person, kept here.
+// Somebody on another server, by their handle (@alice@mastodon.example,
+// alice.bsky.social) or the address of their profile. The answer is the
+// person, kept here. Which service is asked is told by how the handle is
+// written: see utils/federation.js#lookupKind.
 const lookup = (query) => {
-  return axios.get('/activitypub/lookup', { params: { q: query } });
+  const service = federation.lookupKind(query) === federation.ATPROTO ? 'atproto' : 'activitypub';
+  return axios.get(`/${service}/lookup`, { params: { q: query } });
 };
 
 // The servers this installation refuses: nothing is taken from them or

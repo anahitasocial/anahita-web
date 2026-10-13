@@ -1013,6 +1013,24 @@ draws nothing (`utils/federation.js#isAbsent`).
   a server in it or the address of a profile, a card offers to ask that
   server. It asks only when the button is pressed, since asking tells
   another server that this site did; then it opens the person.
+- **Bluesky is read through a service of its own,** which may be there
+  when the fediverse's is not, or the other way round. To the app,
+  somebody on Bluesky is somebody from another server like any other.
+  What differs is in `utils/federation.js`:
+  - **which service a lookup asks** is told by how the handle is written
+    (`lookupKind`): `@alice@mastodon.example` has its server after a
+    second `@`; `alice.bsky.social`, a `did:plc:…` or an address under
+    `bsky.app/profile/` is Bluesky. `api/federation.js#lookup` sends it to
+    `/activitypub/lookup` or `/atproto/lookup`, and the card goes for the
+    one network whose service is not there, not for both;
+  - **the page of a post or a person** (`pageOf`): on the fediverse the
+    address a thing has between servers is its page; on Bluesky it is an
+    `at://` address, and the page is worked out from it. "View on …"
+    leads there, in the menus and on the profile;
+  - **a reply to a post from Bluesky stays here,** whoever writes it,
+    since the site reads Bluesky and does not post to it:
+    `useReplyStaysHere` answers with the words to say so under the reply
+    being written.
 
 ### Menus
 

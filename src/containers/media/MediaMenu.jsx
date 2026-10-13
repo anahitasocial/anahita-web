@@ -96,10 +96,10 @@ const MediaMenu = ({
         open={Boolean(menuAnchorEl)}
         onClose={handleClose}
       >
-        {utils.federation.isRemote(medium) && medium.uri &&
+        {utils.federation.isRemote(medium) && utils.federation.pageOf(medium) &&
           <MenuItem
             component="a"
-            href={medium.uri}
+            href={utils.federation.pageOf(medium)}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleClose}

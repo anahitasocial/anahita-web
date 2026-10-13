@@ -8,6 +8,34 @@ describe('people and posts from other servers', () => {
     expect(federation.isRemote({ type: 'node.actor.person-service.person.v1', alias: 'ana' })).toBe(false);
     expect(federation.isRemote({ type: 'node.medium.text-service.note.v1' })).toBe(false);
     expect(federation.isRemote(null)).toBe(false);
+    expect(federation.isRemote({ type: 'node.actor.atproto-service.person.v1', alias: 'alice.bsky.social' })).toBe(true);
+    expect(federation.isRemote({ type: 'node.medium.text-service.note.v1', uri: 'at://did:plc:aaaaaaaaaaaaaaaaaaaaaaaa/app.bsky.feed.post/3l3' })).toBe(true);
+  });
+
+  it('knows the page of something from another server', () => {
+    const did = 'did:plc:aaaaaaaaaaaaaaaaaaaaaaaa';
+    expect(federation.pageOf({ uri: 'https://mastodon.example/@alice/1' })).toBe('https://mastodon.example/@alice/1');
+    expect(federation.pageOf({ uri: `at://${did}/app.bsky.feed.post/3l3qo2vutsw2b` })).toBe(`https://bsky.app/profile/${did}/post/3l3qo2vutsw2b`);
+    expect(federation.pageOf({ uri: `at://${did}` })).toBe(`https://bsky.app/profile/${did}`);
+    // Never a link to somewhere that is not a page.
+    ['at://nobody', `at://${did}/app.bsky.feed.like/3l3`, `at://${did}/app.bsky.feed.post/a/b`, 'mailto:alice@mastodon.example', 'http://plain.example/x', ''].forEach((uri) => {
+      expect(federation.pageOf({ uri })).toBe('');
+    });
+    expect(federation.pageOf(null)).toBe('');
+  });
+
+  it('tells which network a lookup is asked of', () => {
+    const { ACTIVITYPUB, ATPROTO } = federation;
+    expect(federation.lookupKind('@alice@mastodon.example')).toBe(ACTIVITYPUB);
+    expect(federation.lookupKind('https://mastodon.example/@alice')).toBe(ACTIVITYPUB);
+    expect(federation.lookupKind('alice.bsky.social')).toBe(ATPROTO);
+    expect(federation.lookupKind(' @Alice.Bsky.Social ')).toBe(ATPROTO);
+    expect(federation.lookupKind('nytimes.com')).toBe(ATPROTO);
+    expect(federation.lookupKind('did:plc:z72i7hdynmk6r22z27h6tvur')).toBe(ATPROTO);
+    expect(federation.lookupKind('https://bsky.app/profile/alice.bsky.social')).toBe(ATPROTO);
+    ['alice', '@alice', 'gardening tips', 'node.js tips', 'version 1.2', '1.2.3', 'https://bsky.app/profile/', 'did:plc:short', ''].forEach((text) => {
+      expect(federation.lookupKind(text)).toBe('');
+    });
   });
 
   it('says where somebody is from, and what they are called', () => {

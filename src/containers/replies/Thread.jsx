@@ -234,7 +234,7 @@ const RepliesThread = ({
     <Card sx={{ pb: 1 }}>
       {canReply &&
         <ReplyForm
-          hint={staysHere ? i18n.t('federation:composer.replyStaysHere') : ''}
+          hint={staysHere ? i18n.t(staysHere) : ''}
           onSubmit={(body, card) => {
             return handleReply(top, body, card);
           }}

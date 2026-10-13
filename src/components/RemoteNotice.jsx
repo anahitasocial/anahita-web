@@ -16,7 +16,7 @@ import federation from '../utils/federation';
 const RemoteNotice = ({ node }) => {
   const domain = federation.domainOf(node);
   // Their page there: kept as their website when they were looked up.
-  const page = node.websiteUrl || node.uri;
+  const page = node.websiteUrl || federation.pageOf(node);
 
   return (
     <Alert

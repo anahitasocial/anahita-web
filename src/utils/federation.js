@@ -1,4 +1,4 @@
-// People and posts from other servers of the fediverse.
+// People and posts from other servers: of the fediverse, and Bluesky.
 
 // Whether a node came from another server. A person from one has a type of
 // their own; a post from one is an ordinary note with the address it has
@@ -10,7 +10,30 @@ const isRemote = (node) => {
   if (node.uri) {
     return true;
   }
-  return typeof node.type === 'string' && node.type.includes('.activitypub-service.');
+  return typeof node.type === 'string' &&
+    (node.type.includes('.activitypub-service.') || node.type.includes('.atproto-service.'));
+};
+
+// Where something from another server can be read where it was written,
+// or '' when there is no such page. On the fediverse the address a thing
+// has between servers is also its page. On Bluesky it is not: the address
+// names an account and a record, and the page is on the site people read
+// Bluesky on.
+const BLUESKY = 'https://bsky.app';
+const AT_URI = /^at:\/\/(did:[a-z]+:[a-zA-Z0-9._:%-]+)(?:\/app\.bsky\.feed\.post\/([A-Za-z0-9._:~-]+))?$/;
+
+const pageOf = (node) => {
+  const uri = node && typeof node.uri === 'string' ? node.uri : '';
+
+  if (uri.startsWith('https://')) {
+    return uri;
+  }
+
+  const at = AT_URI.exec(uri);
+  if (!at) {
+    return '';
+  }
+  return at[2] ? `${BLUESKY}/profile/${at[1]}/post/${at[2]}` : `${BLUESKY}/profile/${at[1]}`;
 };
 
 // The server a node came from: "mastodon.example". For a person it is in
@@ -49,17 +72,45 @@ const displayHandle = (node, slug) => {
 // Whether what was typed is a handle on another server, or the address of
 // a profile on one: what a lookup can be asked about. A plain word or a
 // name without a server is not, and is left to the ordinary search.
+//
+// Which network it is on is told by how it is written. On the fediverse a
+// handle has its server after a second @ (@alice@mastodon.example). On
+// Bluesky a handle is a name of its own (alice.bsky.social), and an
+// account also has a name that never changes (did:plc:…).
 const HANDLE = /^@?[\w-]+@[a-z0-9](?:[a-z0-9-]*[a-z0-9])?(?:\.[a-z0-9](?:[a-z0-9-]*[a-z0-9])?)+$/i;
+const BLUESKY_HANDLE = /^@?(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z](?:[a-z0-9-]{0,61}[a-z0-9])?$/i;
+const BLUESKY_DID = /^did:(?:plc:[a-z2-7]{24}|web:[a-zA-Z0-9.%-]+)$/;
 
-const isLookup = (text) => {
+const ACTIVITYPUB = 'activitypub';
+const ATPROTO = 'atproto';
+
+// Which network a lookup is asked of, or '' when what was typed is not
+// something to look up.
+const lookupKind = (text) => {
   const query = typeof text === 'string' ? text.trim() : '';
-  if (query.length > 300) {
-    return false;
+  if (query === '' || query.length > 300) {
+    return '';
   }
   if (HANDLE.test(query)) {
-    return true;
+    return ACTIVITYPUB;
   }
-  return /^https:\/\/[^\s/]+\/\S+$/i.test(query);
+  // An address on the site people read Bluesky on is somebody's profile
+  // there, or nothing that can be looked up: that site is not a server of
+  // the fediverse.
+  if (query.startsWith(`${BLUESKY}/`)) {
+    return /^https:\/\/bsky\.app\/profile\/[^\s/]+/.test(query) ? ATPROTO : '';
+  }
+  if (/^https:\/\/[^\s/]+\/\S+$/i.test(query)) {
+    return ACTIVITYPUB;
+  }
+  if (BLUESKY_DID.test(query) || BLUESKY_HANDLE.test(query)) {
+    return ATPROTO;
+  }
+  return '';
+};
+
+const isLookup = (text) => {
+  return lookupKind(text) !== '';
 };
 
 // Whether an error says the installation has no fediverse service at all,
@@ -80,7 +131,11 @@ export default {
   domainOf,
   handleOf,
   displayHandle,
+  pageOf,
+  lookupKind,
   isLookup,
+  ACTIVITYPUB,
+  ATPROTO,
   isAbsent,
   reasonOf,
 };

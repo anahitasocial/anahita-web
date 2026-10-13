@@ -63,15 +63,25 @@ const useOnFediverse = (viewer) => {
 };
 
 // What to say under a reply being written to something from another
-// server by somebody who is not on the fediverse: it will be read here and
-// not there. Nothing, where the reply will reach whoever it answers, or
-// where what is answered was written here.
+// server, when it will be read here and not there: the name of the words
+// to say it with, or '' for nothing.
+//
+// Under something from the fediverse, by somebody who is not on it.
+// Under something from Bluesky, always: this site reads Bluesky and writes
+// nothing to it. Nothing, where the reply will reach whoever it answers,
+// or where what is answered was written here.
 export const useReplyStaysHere = (viewer, answered) => {
   const onFediverse = useOnFediverse(viewer);
-  const fromElsewhere = Boolean(answered && (answered.uri ||
-    (typeof answered.type === 'string' && answered.type.includes('.activitypub-service.'))));
+  const type = answered && typeof answered.type === 'string' ? answered.type : '';
+  const uri = answered && typeof answered.uri === 'string' ? answered.uri : '';
 
-  return fromElsewhere && !onFediverse;
+  if (uri.startsWith('at://') || type.includes('.atproto-service.')) {
+    return 'federation:composer.replyStaysHereBluesky';
+  }
+  if ((uri || type.includes('.activitypub-service.')) && !onFediverse) {
+    return 'federation:composer.replyStaysHere';
+  }
+  return '';
 };
 
 export default useOnFediverse;

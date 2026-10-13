@@ -21,6 +21,7 @@ export default {
   },
   composer: {
     replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Privacy.',
+    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky: this site reads Bluesky, and does not post to it.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
   },
   leaving: {
@@ -37,6 +38,8 @@ export default {
   lookup: {
     title: 'On another server',
     prompt: 'Look up {{ query }} on its own server',
+    promptBluesky: 'Look up {{ query }} on Bluesky',
+    bluesky: 'Bluesky',
     button: 'Look up',
     looking: 'Asking {{ domain }}…',
     errors: {

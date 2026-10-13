@@ -21,6 +21,7 @@ export default {
   },
   composer: {
     replyStaysHere: 'Votre réponse sera lue ici et non sur le serveur d’où cela vient : vous n’êtes pas sur le fédivers. Vous pouvez changer cela dans vos paramètres, sous Confidentialité.',
+    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky : ce site lit Bluesky et n’y publie pas.',
     staysHere: 'Cette note ne sera pas partagée avec le fédivers : seule une note ouverte à tout le monde l’est.',
   },
   leaving: {
@@ -37,6 +38,8 @@ export default {
   lookup: {
     title: 'Sur un autre serveur',
     prompt: 'Chercher {{ query }} sur son propre serveur',
+    promptBluesky: 'Chercher {{ query }} sur Bluesky',
+    bluesky: 'Bluesky',
     button: 'Chercher',
     looking: 'Demande à {{ domain }}…',
     errors: {
