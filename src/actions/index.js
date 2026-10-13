@@ -89,6 +89,10 @@ namespaces.nodes.forEach((namespace) => {
 namespaces.feeds.forEach((namespace) => {
   actions[namespace] = {
     ...createAction(namespace)(apis[namespace]),
+    // What was posted since the feed was opened, put at its head.
+    prepend: (nodes) => {
+      return { type: `${namespace.toUpperCase()}_BROWSE_PREPEND`, nodes };
+    },
     likes: likes(namespace)(apis.likes),
     reposts: createAction('reposts')(apis.reposts),
   };

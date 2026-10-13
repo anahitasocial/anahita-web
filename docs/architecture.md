@@ -656,6 +656,27 @@ two thirds of the page, centred, on a wide screen, or all of it with `wide`.
 Home, the pages of custom feeds, a post's own page and the event forms use
 it. A profile, with its side column, lays itself out.
 
+### New posts in an open feed
+
+A feed that is open asks again, now and then, for its first page
+(`containers/feed/useNewPosts.js`, for the home feed and every custom
+feed).
+
+- **It asks less and less often, and stops.** After 15 seconds, then 30,
+  60, 120 and 240; when the last of those finds nothing, it asks no more
+  (`utils/heartbeat.js`). Finding something begins it again at 15 seconds.
+  So does the reader coming back to the tab or the window, which is asked
+  at once. Nothing is asked while the tab is hidden.
+- **At the top of the page, what is new is put in at once.** Further
+  down, the page is left alone, since a page that grows above what is
+  being read loses the reader's place: a button, "3 new posts", stays in
+  sight (`containers/feed/components/NewPosts.jsx`) and puts them in and
+  goes to the top when pressed.
+- **In the store** it is `<FEED>_BROWSE_PREPEND` (`reducers/createFeed.js`):
+  the page goes before what is held, in the server's order, and what is
+  held already is brought up to date. When none of the page is held, more
+  was posted than a page holds, and the feed is begun again from it.
+
 ### Custom feeds
 
 A custom feed is one somebody builds: where its posts come from, what they

@@ -104,6 +104,12 @@ const browse = ({ feed, start = 0, limit = 20 }) => {
   });
 };
 
+// The head of a feed, asked for again while it is open, to see what was
+// posted since. It leaves alone the place the feed has been read to.
+const peek = ({ feed, limit = 20 }) => {
+  return axios.get(`/feeds/${feed.id}/items`, { params: { limit } });
+};
+
 export default {
   add,
   read,
@@ -115,5 +121,6 @@ export default {
   setPins,
   setPinned,
   browse,
+  peek,
   onChange,
 };

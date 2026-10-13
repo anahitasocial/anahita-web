@@ -4,16 +4,33 @@ import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import actions from '../../../actions';
+import api from '../../../api';
 
 import Progress from '../../../components/Progress';
 import FeedItems from '../components/Items';
+import NewPosts from '../components/NewPosts';
+import useNewPosts from '../useNewPosts';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
 
 const { LIMIT } = APP.BROWSE;
 
+const PARAMS = {
+  include_liked: true,
+  include_reposts: true,
+};
+
+// The head of the feed, asked for again while it is open.
+const peek = () => {
+  return api.feed_leaders.browse({ ...PARAMS, start: 0, limit: LIMIT }).then((result) => {
+    return result.data.data || [];
+  });
+};
+
 // The home feed: posts and reposts by the people and groups the viewer follows.
+//
+// What is posted while it is open is put at its top: see useNewPosts.
 //
 // A feed holds posts and reposts. Replies are not in it: they are read in
 // their thread, on the post's own page, which is where the reply button
@@ -21,6 +38,7 @@ const { LIMIT } = APP.BROWSE;
 const FeedLeadersBrowse = ({
   browseList,
   resetList,
+  prependList,
   alertError,
   items,
   hasMore = true,
@@ -41,8 +59,7 @@ const FeedLeadersBrowse = ({
   useEffect(() => {
     if (!isFetching) {
       browseList({
-        include_liked: true,
-        include_reposts: true,
+        ...PARAMS,
         start,
         limit: LIMIT,
       });
@@ -55,33 +72,46 @@ const FeedLeadersBrowse = ({
     }
   }, [error]);
 
+  // The next page begins after what is held, which is more than whole
+  // pages once new posts have been put at the top.
   const fetchList = () => {
-    return setStart(start + LIMIT);
+    return setStart(Math.max(items.allIds.length, start + 1));
   };
 
+  const { waiting, show } = useNewPosts({
+    peek,
+    known: items.byId,
+    put: prependList,
+    feedKey: 'leaders',
+  });
+
   return (
-    <InfiniteScroll
-      dataLength={items.allIds.length}
-      next={fetchList}
-      hasMore={hasMore}
-      loader={
-        <Progress key="feed-progress" />
-      }
-    >
-      <FeedItems
-        items={items}
-        namespace="feed_leaders"
-        columns={columns}
-        isAuthenticated={isAuthenticated}
-        viewer={viewer}
-      />
-    </InfiniteScroll>
+    <>
+      <NewPosts count={waiting} onShow={show} />
+      <InfiniteScroll
+        dataLength={items.allIds.length}
+        next={fetchList}
+        hasMore={hasMore}
+        loader={
+          <Progress key="feed-progress" />
+        }
+      >
+        <FeedItems
+          items={items}
+          namespace="feed_leaders"
+          columns={columns}
+          isAuthenticated={isAuthenticated}
+          viewer={viewer}
+        />
+      </InfiniteScroll>
+    </>
   );
 };
 
 FeedLeadersBrowse.propTypes = {
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
+  prependList: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
   items: NodesType.isRequired,
   hasMore: PropTypes.bool,
@@ -122,6 +152,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetList: () => {
       return dispatch(actions.feed_leaders.reset());
+    },
+    prependList: (nodes) => {
+      return dispatch(actions.feed_leaders.prepend(nodes));
     },
     alertError: (message) => {
       return dispatch(actions.app.alert.error(message));
