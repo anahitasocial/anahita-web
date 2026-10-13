@@ -6,9 +6,9 @@ export default {
     signIn: 'Se connecter',
     join: 'Créer un profil',
     people: '{{ formatted }} personne',
-    people_plural: '{{ formatted }} personnes',
+    people_other: '{{ formatted }} personnes',
     posts: '{{ formatted }} publication',
-    posts_plural: '{{ formatted }} publications',
+    posts_other: '{{ formatted }} publications',
     federated: 'Fait partie du fédivers',
     bluesky: 'Relié à Bluesky',
     reasons: {

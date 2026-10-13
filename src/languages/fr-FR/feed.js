@@ -1,6 +1,6 @@
 export default {
   newPosts: '{{ count }} nouvelle publication',
-  newPosts_plural: '{{ count }} nouvelles publications',
+  newPosts_other: '{{ count }} nouvelles publications',
   actions: {
     followOwner: 'Suivre {{name}}',
     unfollowOwner: 'Ne plus suivre {{name}}',
