@@ -961,11 +961,13 @@ draws nothing (`utils/federation.js#isAbsent`).
   (`routes/index.js#HashtagMoved`). It is the address other servers are
   given for a hashtag's page, where Mastodon has its own, because some of
   the apps people read with know a hashtag's link by that shape.
-- **A profile from another server has two lists,** what was posted and
-  Notes (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`). Replies,
-  reposts, articles, photos and videos are not taken in from other servers,
-  so those lists would be empty for ever and say the person has none; each
-  comes back when it is taken in. Nor is there the box of locations: where
+- **A profile from another server has three lists,** what was posted,
+  Notes and Photos (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`): a
+  post of theirs that came with pictures is a photo post here. Articles
+  and videos are not taken in from other servers, so those lists would be
+  empty for ever and say the person has none; each comes back when it is
+  taken in. Their replies and reposts are in what was posted, not in lists
+  of their own. Nor is there the box of locations: where
   somebody is is theirs to say, and their server says nothing of it.
 - **The servers the site refuses** are in Site settings, under Fediverse
   (`settings/Fediverse.jsx`), for super administrators as every tab there

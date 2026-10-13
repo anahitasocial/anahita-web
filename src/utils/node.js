@@ -386,11 +386,11 @@ const getEnabledNodeTypes = (actor) => {
 };
 
 // What there can be on the profile of somebody on another server: what
-// was posted, which is their public notes. Their replies, reposts,
-// articles, photos and videos are not taken in from there, so those lists
-// would be empty for ever and say that the person has none. Each comes
-// back here when it is taken in.
-const REMOTE_TABS = ['feed', 'notes'];
+// was posted, their notes, and their photos, which is what a post of
+// theirs with pictures is here. Their articles and videos are not taken in
+// from there, so those lists would be empty for ever and say that the
+// person has none. Each comes back here when it is taken in.
+const REMOTE_TABS = ['feed', 'notes', 'photos'];
 
 const getActorFeatureTabs = (actor) => {
   if (!actor.features) return [];

@@ -185,6 +185,6 @@ describe('getActorFeatureTabs', () => {
       features,
     });
 
-    expect(tabs).toEqual(['feed', 'notes']);
+    expect(tabs).toEqual(['feed', 'notes', 'photos']);
   });
 });
