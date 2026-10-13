@@ -69,6 +69,16 @@ const GroupsAdd = ActorsAdd('groups');
 const GroupsSettings = ActorsSettings('groups');
 const GroupsNotificationsEdit = ActorsNotificationsEdit('groups');
 
+// A hashtag's page is told to other servers as /tags/<name>, where
+// Mastodon and most of the fediverse have theirs, because some of the apps
+// people read with know a hashtag's link by that shape. Whoever follows
+// one lands here and is shown the page.
+const HashtagMoved = () => {
+  const { alias } = useParams();
+
+  return <Navigate to={`/hashtags/${alias}`} replace />;
+};
+
 // Recommendations were at /suggestions before they were named as the
 // service is. The old address leads to the new, with the tab it asked for
 // (?kind=group), for links already made.
@@ -454,6 +464,9 @@ const AppRoutes = () => {
 
             <Route path="/hashtags" element={<Hashtags />} />
             <Route path="/hashtags/:alias" element={<HashtagsRead />} />
+            {/* What other servers are given for a hashtag's page, the address
+            Mastodon has one at. See HashtagMoved. */}
+            <Route path="/tags/:alias" element={<HashtagMoved />} />
 
             <Route path="/locations" element={<Locations />} />
             <Route path="/locations/:id" element={<LocationsRead />} />
