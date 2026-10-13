@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
@@ -81,6 +82,8 @@ const ActorBodyAbout = (props) => {
       {/* One list: its website, then where it is held, so the map sits
           right under its address. Pressing where it is offers the maps it
           can be opened in. */}
+      {/* A line between what they say of themselves and the list. */}
+      {body && (address || event.hasAddress || websiteUrl) && <Divider />}
       {(address || event.hasAddress || websiteUrl) &&
         <List>
           {websiteUrl &&
