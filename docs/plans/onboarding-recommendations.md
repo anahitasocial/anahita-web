@@ -52,6 +52,16 @@ not ask it yet.
 3. **The home page of somebody new** not being empty when they arrive on
    it: what they followed in the steps before is there to read.
 
+## A site that has just been set up
+
+The "Interests" step offers the hashtags most used on the installation,
+and a new installation has none. The user's thought (2026-10-12): when
+the recipes are made (item 40), a recipe can put in the hashtags a site
+of its kind is likely to use, so there is something to pick from on the
+first day. Recorded in the services' `docs/plans/recipes.md`, under what
+recipes will show is missing. Until then the step is skipped when there
+is nothing to offer, as the others are.
+
 ## To decide when it is built
 
 - Whether there is an "Interests" step at all, or only the recommended one.
@@ -65,3 +75,5 @@ not ask it yet.
 
 Recommendations (row 20) and following a hashtag or a place (done). The
 "Interests" step also needs the services' side of picked interests.
+Hashtags a recipe puts in (item 40) would make that step useful on a new
+site; it does not wait for them.
