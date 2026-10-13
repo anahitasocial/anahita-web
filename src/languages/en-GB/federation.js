@@ -19,6 +19,9 @@ export default {
       profile_not_public: 'Only a profile that everybody can see can be on the fediverse. Yours is not open to everybody: you can change that above, under "Access".',
     },
   },
+  composer: {
+    staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
+  },
   leaving: {
     byClosing: 'This profile is on the fediverse, where only a profile open to everybody can be. Saving this takes it off the fediverse: other servers are told to remove it, its notes and its followers there, and may not take it back if it is opened again.',
     byClosingConfirm: 'Closing this profile also takes it off the fediverse. Every server that knows it will be told to remove it, its notes and its followers there. Opening the profile again later will not undo that: servers that removed it may not take it back.',

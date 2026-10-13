@@ -12,6 +12,7 @@ import DownloadOptionButton from '../../../../components/DownloadOptionButton';
 import LanguageButton from '../../../../components/LanguageButton';
 import ReplyAccessButton from '../../../../components/ReplyAccessButton';
 import ComposerAudience from '../Audience';
+import useOnFediverse from '../useOnFediverse';
 import useLinkPreview from '../useLinkPreview';
 
 import AcctorType from '../../../../proptypes/Actor';
@@ -52,6 +53,16 @@ const MediaComposerDefault = ({
   const [access, setAccess] = useState(() => {
     return audience.defaultFor(actor, viewer);
   });
+
+  // A note on the writer's own profile, open to everybody, is sent to
+  // their followers on other servers when they are on the fediverse. One
+  // kept to fewer people is not, and the writer is told so before they
+  // post, not left to wonder why it never arrived.
+  const onFediverse = useOnFediverse(viewer);
+  const staysHere = onFediverse &&
+    namespace === 'notes' &&
+    actor.id === viewer.id &&
+    access !== 'public';
 
   // The same composer is reused when moving from one profile to another,
   // and what could be chosen on the last one may not be choosable here.
@@ -192,6 +203,7 @@ const MediaComposerDefault = ({
       maxFiles={maxFiles}
       namespace={namespace}
       linkPreview={linkPreview.preview}
+      postHint={staysHere ? i18n.t('federation:composer.staysHere') : ''}
       onLinkPreviewRemove={linkPreview.remove}
       onBodyPaste={linkPreview.onPaste}
       // The choices that go with a post: who can see it, what language

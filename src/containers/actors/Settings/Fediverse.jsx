@@ -20,6 +20,7 @@ import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
 import federation from '../../../utils/federation';
+import { rememberOnFediverse } from '../../media/Composer/useOnFediverse';
 
 // Whether people on other servers of the fediverse can find and follow the
 // viewer, and are sent their public notes.
@@ -56,6 +57,8 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
     setIsLeaving(false);
     api.federation.setEnabled(enabled).then((result) => {
       setSettings(result.data);
+      // The composer says whether a note will be shared, from this.
+      rememberOnFediverse(result.data && result.data.enabled);
       alertSuccess(i18n.t('federation:settings.saved'));
     }).catch(() => {
       alertError(i18n.t('federation:settings.notSaved'));

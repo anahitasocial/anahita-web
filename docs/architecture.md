@@ -939,6 +939,12 @@ server's side is `activitypub-service`, described in the services'
 `docs/federation.md`. It is optional: where there is none, everything here
 draws nothing (`utils/federation.js#isAbsent`).
 
+- **The composer says when a note will stay here.** Somebody on the
+  fediverse, writing a note on their own profile for fewer than everybody,
+  is told above the Post button that it will not be shared with the
+  fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
+  date by the switch in settings). Nothing is said to anybody else, or
+  about any other kind of post: only public notes go out.
 - **A profile from another server has two lists,** what was posted and
   Notes (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`). Replies,
   reposts, articles, photos and videos are not taken in from other servers,
