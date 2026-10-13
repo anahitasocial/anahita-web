@@ -98,10 +98,11 @@ const MediaReadView = ({
       isAuthenticated && !isReply && (
         <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />
       ),
+      <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
+      // Share is last, after whatever else there is.
       isAuthenticated && (
         <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />
       ),
-      <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
     ],
     stats: (
       <Likes node={medium} />

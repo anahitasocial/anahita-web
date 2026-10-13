@@ -32,7 +32,7 @@ export default {
     order: 'Ordre',
     newest: 'Les plus récentes d’abord',
     close: 'Fermer',
-    open: 'Ouvrir le fil',
+    open: 'Ouvrir',
   },
   access: {
     label: 'Qui peut le voir',
@@ -44,9 +44,9 @@ export default {
   actions: {
     pin: 'Ajouter à l’accueil',
     unpin: 'Retirer de l’accueil',
-    edit: 'Modifier le fil',
-    copy: 'Copier ce fil',
-    delete: 'Supprimer le fil',
+    edit: 'Modifier',
+    copy: 'Copier',
+    delete: 'Supprimer',
     open: 'Ouvrir',
     moveUp: 'Monter',
     moveDown: 'Descendre',
@@ -64,7 +64,7 @@ export default {
   delete: {
     title: 'Supprimer ce fil ?',
     message: 'Le fil est retiré de votre page d’accueil et de celle de toutes les personnes qui l’avaient ajouté. Aucune publication n’est supprimée.',
-    confirm: 'Supprimer le fil',
+    confirm: 'Supprimer',
     dismiss: 'Le garder',
   },
   read: {
@@ -104,7 +104,7 @@ export default {
     includeReplies: 'Inclure les réponses',
     access: 'Qui peut voir ce fil ?',
     accessHelp: 'Chaque personne qui le voit n’y lit que les publications qu’elle pouvait déjà voir.',
-    create: 'Créer le fil',
+    create: 'Créer',
     save: 'Enregistrer',
     cancel: 'Annuler',
     search: 'Saisissez pour chercher',

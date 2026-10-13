@@ -73,13 +73,15 @@ const FeedItems = ({
               key={`node-repost-${node.id}`}
               parent={node.parent}
             />,
-            <ShareAction
-              key={`node-share-${node.id}`}
-              what={ofNode(node.parent)}
-            />,
             <DownloadAction
               key={`node-download-${node.id}`}
               node={node.parent}
+            />,
+            // Share is last, after whatever else there is: it is the one
+            // that leads away from the post.
+            <ShareAction
+              key={`node-share-${node.id}`}
+              what={ofNode(node.parent)}
             />,
           ]}
           showOwner={node.parent && node.parent.owner && !isPerson(node.parent.owner)}
@@ -116,13 +118,13 @@ const FeedItems = ({
             key={`node-repost-${node.id}`}
             parent={node}
           />,
-          <ShareAction
-            key={`node-share-${node.id}`}
-            what={ofNode(node)}
-          />,
           <DownloadAction
             key={`node-download-${node.id}`}
             node={node}
+          />,
+          <ShareAction
+            key={`node-share-${node.id}`}
+            what={ofNode(node)}
           />,
         ]}
         showOwner={node.owner && !isPerson(node.owner)}

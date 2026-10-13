@@ -30,6 +30,10 @@ export const SECTIONS = {
   // than a second card under Access: Access is who can SEE the profile, this
   // is who can ADD to it, and one tab holding both read as one setting.
   PERMISSIONS: 'permissions',
+  // Other networks: the fediverse, by ActivityPub, and Bluesky. One tab
+  // for both, since to whoever sets them they are one question: where
+  // else am I, and what of mine goes there.
+  FEDIVERSE: 'fediverse',
   // Looking at somebody else's account as an administrator. Never the
   // viewer's own — see the notViewer flag below.
   ADMINISTRATION: 'administration',
@@ -136,11 +140,6 @@ const ALL_SECTIONS = [
       // Who you have blocked is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
       { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },
-      // Whether people on other servers can find and follow them. Their
-      // own choice, and nobody else's to make for them.
-      { key: ITEMS.FEDIVERSE, bare: false, viewerOnly: true },
-      // Their own Bluesky account, connected or not. Theirs alone too.
-      { key: ITEMS.BLUESKY, bare: false, viewerOnly: true },
     ],
   },
   {
@@ -154,6 +153,18 @@ const ALL_SECTIONS = [
       { key: ITEMS.PERMISSIONS, bare: false, viewerOnly: false },
       { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
       { key: ITEMS.DOWNLOADS, bare: false, viewerOnly: false },
+    ],
+  },
+  {
+    key: SECTIONS.FEDIVERSE,
+    // Both are the viewer's own choice, and nobody else's to make for
+    // them, so somebody looking at another person's settings has no such
+    // tab at all.
+    items: [
+      // Whether people on other servers can find and follow them.
+      { key: ITEMS.FEDIVERSE, bare: false, viewerOnly: true },
+      // Their own Bluesky account, connected or not.
+      { key: ITEMS.BLUESKY, bare: false, viewerOnly: true },
     ],
   },
   {

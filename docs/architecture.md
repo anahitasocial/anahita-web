@@ -1054,7 +1054,7 @@ draws nothing (`utils/federation.js#isAbsent`).
     for somebody connected (`useOnBluesky`, asked once and kept up to
     date by the settings card).
 - **A person's own Bluesky account** is connected in their settings,
-  under Privacy (`actors/Settings/Bluesky.jsx`): a handle and an app
+  under Fediverse (`actors/Settings/Bluesky.jsx`): a handle and an app
   password, with a link to where Bluesky makes one, then "Connected as"
   and a button to disconnect, which asks first. When Bluesky no longer
   takes the connection the card says so and offers the form again.

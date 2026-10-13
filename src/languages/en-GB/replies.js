@@ -14,9 +14,9 @@ export default {
   retry: 'Try again',
   actions: {
     edit: 'Edit',
-    delete: 'Delete reply',
-    hide: 'Hide reply',
-    show: 'Show reply',
+    delete: 'Delete',
+    hide: 'Hide',
+    show: 'Show',
     like: 'Like',
     unlike: 'Unlike',
     menu: 'More about this reply',

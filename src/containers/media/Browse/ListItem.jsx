@@ -52,8 +52,8 @@ const MediaListItem = ({
       }
       actions={isAuthenticated && [
         <Like node={medium} key={`medium-like-${medium.id}`} />,
-        <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />,
         <DownloadAction node={medium} key={`medium-download-${medium.id}`} />,
+        <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />,
       ]}
     />
   );

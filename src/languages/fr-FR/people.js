@@ -85,6 +85,7 @@ export default {
       security: 'Sécurité',
       access: 'Confidentialité',
       permissions: 'Autorisations',
+      fediverse: 'Fédivers',
       administration: 'Administration',
       danger: 'Zone de danger',
     },

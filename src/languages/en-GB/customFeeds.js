@@ -32,7 +32,7 @@ export default {
     order: 'Order',
     newest: 'Newest first',
     close: 'Close',
-    open: 'Open feed',
+    open: 'Open',
   },
   access: {
     label: 'Who can see it',
@@ -44,9 +44,9 @@ export default {
   actions: {
     pin: 'Add to home',
     unpin: 'Remove from home',
-    edit: 'Edit feed',
-    copy: 'Copy this feed',
-    delete: 'Delete feed',
+    edit: 'Edit',
+    copy: 'Copy',
+    delete: 'Delete',
     open: 'Open',
     moveUp: 'Move up',
     moveDown: 'Move down',
@@ -64,7 +64,7 @@ export default {
   delete: {
     title: 'Delete this feed?',
     message: 'The feed is removed from your home page and from the home page of anybody who added it. No post is deleted.',
-    confirm: 'Delete feed',
+    confirm: 'Delete',
     dismiss: 'Keep it',
   },
   read: {
@@ -104,7 +104,7 @@ export default {
     includeReplies: 'Include replies',
     access: 'Who can see this feed?',
     accessHelp: 'Whoever sees it reads only the posts they could see anyway.',
-    create: 'Create feed',
+    create: 'Create',
     save: 'Save',
     cancel: 'Cancel',
     search: 'Type to search',

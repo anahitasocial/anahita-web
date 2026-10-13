@@ -142,7 +142,7 @@ export default {
         showMap: 'Show a map',
         showMapHelp: 'The address is sent to a mapping service to find it. The map is shown only to people who are going.',
       },
-      create: 'Create event',
+      create: 'Create',
       save: 'Save',
       edit: 'Edit event',
       errors: {

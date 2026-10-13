@@ -1,6 +1,6 @@
 export default {
   settings: {
-    title: 'Fediverse',
+    title: 'Mastodon and other servers (ActivityPub)',
     enable: 'Let people on other servers find and follow me',
     help: 'People on Mastodon and other servers of the fediverse can then find you by your handle and follow you, and your public notes are sent to them. You can also follow people there.',
     handle: 'Your handle',
@@ -20,8 +20,8 @@ export default {
     },
   },
   composer: {
-    replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Privacy.',
-    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Privacy.',
+    replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Fediverse.',
+    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Fediverse.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
   },
   leaving: {

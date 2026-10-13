@@ -1,6 +1,6 @@
 export default {
   settings: {
-    title: 'Fédivers',
+    title: 'Mastodon et autres serveurs (ActivityPub)',
     enable: 'Permettre aux personnes d’autres serveurs de me trouver et de me suivre',
     help: 'Les personnes sur Mastodon et les autres serveurs du fédivers peuvent alors vous trouver par votre identifiant et vous suivre, et vos notes publiques leur sont envoyées. Vous pouvez aussi suivre des personnes là-bas.',
     handle: 'Votre identifiant',
@@ -20,8 +20,8 @@ export default {
     },
   },
   composer: {
-    replyStaysHere: 'Votre réponse sera lue ici et non sur le serveur d’où cela vient : vous n’êtes pas sur le fédivers. Vous pouvez changer cela dans vos paramètres, sous Confidentialité.',
-    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky. Pour répondre là-bas aussi, connectez votre compte Bluesky dans vos paramètres, sous Confidentialité.',
+    replyStaysHere: 'Votre réponse sera lue ici et non sur le serveur d’où cela vient : vous n’êtes pas sur le fédivers. Vous pouvez changer cela dans vos paramètres, sous Fédivers.',
+    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky. Pour répondre là-bas aussi, connectez votre compte Bluesky dans vos paramètres, sous Fédivers.',
     staysHere: 'Cette note ne sera pas partagée avec le fédivers : seule une note ouverte à tout le monde l’est.',
   },
   leaving: {

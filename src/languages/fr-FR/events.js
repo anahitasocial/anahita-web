@@ -134,7 +134,7 @@ export default {
         showMap: 'Afficher une carte',
         showMapHelp: 'L’adresse est envoyée à un service de cartographie pour la trouver. La carte est montrée uniquement aux personnes qui participent.',
       },
-      create: 'Créer l’événement',
+      create: 'Créer',
       save: 'Enregistrer',
       edit: 'Modifier l’événement',
       errors: {

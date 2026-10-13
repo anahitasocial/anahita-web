@@ -14,7 +14,7 @@ export default {
     failed: 'That could not be done.',
   },
   featured: {
-    feature: 'Feature this profile',
+    feature: 'Feature',
     unfeature: 'Stop featuring',
     errors: {
       generic: 'Could not change whether this profile is featured. Please try again.',
