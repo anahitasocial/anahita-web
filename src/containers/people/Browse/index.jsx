@@ -25,8 +25,31 @@ const Browse = ActorsBrowse('people');
 // this site is issuing invitations at all, and whether the viewer's role
 // clears the level it requires. Both are server settings arriving through
 // NodeInfo, so the viewer alone cannot answer it.
+//
+// The line under the title says whose list this is: the people who have a
+// profile on this site. On a site that is part of other networks, the
+// people it follows there are not in it, and somebody looking for one would
+// wonder; so it also says where they are found, which is by searching for
+// their handle.
 const People = ({ viewer, inviteSettings }) => {
   const canInvite = permissions.invite.canAdd(viewer, inviteSettings);
+
+  const site = inviteSettings.nodeName || process.env.REACT_APP_NAME || '';
+  const networks = Array.isArray(inviteSettings.networks) ? inviteSettings.networks : [];
+  const mastodon = networks.includes('activitypub');
+  const bluesky = networks.includes('atproto');
+  let elsewhere = '';
+  if (mastodon && bluesky) {
+    elsewhere = 'both';
+  } else if (mastodon) {
+    elsewhere = 'activitypub';
+  } else if (bluesky) {
+    elsewhere = 'atproto';
+  }
+  const subheader = [
+    i18n.t(site ? 'people:browse.local' : 'people:browse.localUnnamed', { site }),
+    elsewhere && i18n.t(`people:browse.elsewhere.${elsewhere}`),
+  ].filter(Boolean).join(' ');
 
   return (
     <>
@@ -34,6 +57,7 @@ const People = ({ viewer, inviteSettings }) => {
         <BrowseHeader
           icon={<PeopleIcon />}
           title={i18n.t('people:cTitle')}
+          subheader={subheader}
           actionTo={canInvite ? '/invites' : ''}
           actionLabel={i18n.t('invites:form.cTitle')}
         />
