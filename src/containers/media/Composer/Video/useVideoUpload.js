@@ -40,6 +40,7 @@ const failureOf = (upload) => {
     not_a_video: 'notAVideo',
     too_long: 'tooLong',
     too_large: 'tooLarge',
+    still: 'still',
     encoding: 'encoding',
   }[upload && upload.error] || 'failed';
 };

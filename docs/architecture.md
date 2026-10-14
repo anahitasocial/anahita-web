@@ -532,8 +532,9 @@ own, because a video is too big to be sent with the post (the services'
 - **Whether there is video at all** is the installation's choice. Where it
   is off, the server leaves the video feature off every profile, so there
   is no Video composer and no Videos tab, and nothing here has to hide
-  them. NodeInfo's `videoUploads`, `videoMaxBytes` and `videoMaxSeconds`
-  say what is allowed (`utils/videos.js`).
+  them. NodeInfo's `videoUploads`, `videoMaxBytes`, `videoMaxSeconds`,
+  `animationMaxBytes` and `animationMaxSeconds` say what is allowed
+  (`utils/videos.js`).
 - **Posting** (`containers/media/Composer/Video`): the file is refused at
   once if it is not a video or is too large. `useVideoUpload.js` then
   begins the upload, cuts the file into parts and sends them to storage
@@ -555,6 +556,22 @@ own, because a video is too big to be sent with the post (the services'
   `video.poster`), which ask each time whether the viewer may see the post
   and send the browser on to storage. The player is a plain `<video>`, so
   the browser sends the session cookie itself.
+- **A GIF or an animated PNG** is posted from the Video composer too,
+  which lists them with the video formats and holds them to their own,
+  smaller limits (`utils/videos.js#problem`). The server makes it a
+  silent clip and marks the post `video.loop`. Where video is off there
+  is no Video composer, so none can be posted; the Photo composer takes
+  JPEG and PNG pictures as before, and keeps an animated PNG still. A
+  picture that does not move is refused by the server as `still`, and the
+  composer says to post it as a photo.
+- **A looping post plays in `components/LoopingClip.jsx`**, which
+  `VideoPlayer` hands it to: muted, on a loop, with no controls or sizes.
+  It plays only while at least half of it is in view and stops when
+  scrolled away, so only the few on the screen move, not every one on a
+  long page. Where the reader asked for less motion
+  (`prefers-reduced-motion`) it waits to be pressed. The whole picture is
+  one button that stops and starts it, and a small "GIF" sits in its
+  corner.
 - A video is a kind of post like the others: `/videos/:id`, the `videos`
   namespace in the store, and the kind `video` in custom feeds.
 

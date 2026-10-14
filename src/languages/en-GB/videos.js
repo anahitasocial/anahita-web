@@ -6,9 +6,9 @@ export default {
     namePlaceholder: "Video's title ...",
     body: 'Description',
     bodyPlaceholder: 'Write a description ...',
-    choose: 'Choose a video',
+    choose: 'Choose a video or a GIF',
     change: 'Choose another',
-    limits: 'MP4, MOV or WebM, up to {{size}} and {{minutes}} minutes.',
+    limits: 'MP4, MOV, WebM or GIF, up to {{size}} and {{minutes}} minutes.',
     upload: 'Upload',
   },
   upload: {
@@ -24,9 +24,11 @@ export default {
   },
   problems: {
     none: 'Choose a video first.',
-    notAVideo: 'This file is not a video that can be posted. Use MP4, MOV or WebM.',
+    notAVideo: 'This file is not a video that can be posted. Use MP4, MOV, WebM, a GIF or an animated PNG.',
     tooLarge: 'This video is larger than {{size}}.',
-    tooLong: 'This video is longer than {{minutes}} minutes.',
+    animationTooLarge: 'This GIF is larger than {{animationSize}}.',
+    tooLong: 'This is longer than can be posted: {{minutes}} minutes for a video, {{seconds}} seconds for a GIF.',
+    still: 'This picture does not move. Post it as a photo instead.',
     tooMany: 'You have posted as many videos as you can today.',
     off: 'Videos cannot be posted here.',
     encoding: 'This video could not be prepared.',
@@ -36,5 +38,8 @@ export default {
   player: {
     qualityOf: 'Quality: {{label}}',
     quality: 'Quality',
+    gif: 'GIF',
+    play: 'Play',
+    pause: 'Pause',
   },
 };

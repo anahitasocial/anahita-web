@@ -104,6 +104,8 @@ const ComposerVideo = ({
   const limits = {
     size: videos.megabytes(videos.maxBytes(nodeInfo)),
     minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),
+    animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
+    seconds: videos.animationMaxSeconds(nodeInfo),
   };
   const busy = upload.phase === 'uploading';
 

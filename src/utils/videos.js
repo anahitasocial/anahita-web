@@ -5,10 +5,31 @@ const QUALITY_KEY = 'video.quality';
 
 const DEFAULT_MAX_BYTES = 500 * 1024 * 1024;
 const DEFAULT_MAX_SECONDS = 600;
+const DEFAULT_ANIMATION_MAX_BYTES = 25 * 1024 * 1024;
+const DEFAULT_ANIMATION_MAX_SECONDS = 30;
+
+// GIFs and animated PNGs, posted as a video that plays on a loop. A PNG
+// that does not move is refused by the server as a photo.
+const ANIMATION_TYPES = ['image/gif', 'image/png'];
 
 // What a browser may say it is sending. The server's worker decides what
 // the file really is; this is for the file picker and an early refusal.
-const TYPES = ['video/mp4', 'video/quicktime', 'video/webm'];
+const TYPES = ['video/mp4', 'video/quicktime', 'video/webm', ...ANIMATION_TYPES];
+
+const typeOf = (file) => {
+  return String((file && file.type) || '').toLowerCase();
+};
+
+// Whether a file chosen is a GIF or a PNG rather than a video.
+const isAnimation = (file) => {
+  return ANIMATION_TYPES.includes(typeOf(file));
+};
+
+// Whether a post's video is one made of a GIF or an animated PNG: played
+// silently, on a loop, with no controls.
+const isLoop = (video) => {
+  return Boolean(video && video.loop);
+};
 
 const metadataOf = (nodeInfo) => {
   return (nodeInfo && nodeInfo.metadata) || {};
@@ -27,14 +48,26 @@ const maxSeconds = (nodeInfo) => {
   return Number(metadataOf(nodeInfo).videoMaxSeconds) || DEFAULT_MAX_SECONDS;
 };
 
+const animationMaxBytes = (nodeInfo) => {
+  return Number(metadataOf(nodeInfo).animationMaxBytes) || DEFAULT_ANIMATION_MAX_BYTES;
+};
+
+const animationMaxSeconds = (nodeInfo) => {
+  return Number(metadataOf(nodeInfo).animationMaxSeconds) || DEFAULT_ANIMATION_MAX_SECONDS;
+};
+
 // Why a file cannot be sent, as a key of videos:problems, or '' when it can.
-// Its length is not known here: the server finds that out.
+// Its length is not known here: the server finds that out. A GIF is held to
+// less than a video.
 const problem = (file, nodeInfo) => {
   if (!file) {
     return 'none';
   }
-  if (!TYPES.includes(String(file.type || '').toLowerCase())) {
+  if (!TYPES.includes(typeOf(file))) {
     return 'notAVideo';
+  }
+  if (isAnimation(file)) {
+    return file.size > animationMaxBytes(nodeInfo) ? 'animationTooLarge' : '';
   }
   if (file.size > maxBytes(nodeInfo)) {
     return 'tooLarge';
@@ -168,9 +201,14 @@ const isInHand = (upload) => {
 
 export default {
   TYPES,
+  ANIMATION_TYPES,
+  isAnimation,
+  isLoop,
   isOn,
   maxBytes,
   maxSeconds,
+  animationMaxBytes,
+  animationMaxSeconds,
   problem,
   partsOf,
   percent,

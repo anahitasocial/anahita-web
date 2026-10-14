@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import QualityIcon from '@mui/icons-material/Settings';
 import ChosenIcon from '@mui/icons-material/Check';
 
+import LoopingClip from './LoopingClip';
 import i18n from '../languages';
 import videos from '../utils/videos';
 
@@ -26,9 +27,12 @@ import videos from '../utils/videos';
 //
 // Each size is at an address of the API's that asks, every time, whether
 // this viewer may see the post, and sends the browser on to the file.
-const VideoPlayer = ({
-  video = null,
-  title = '',
+//
+// One made of a GIF or an animated PNG (`loop`) is not played here but as
+// a LoopingClip: silently, on a loop, with no controls.
+const SizedPlayer = ({
+  video,
+  title,
 }) => {
   const files = useMemo(() => {
     return videos.filesOf(video);
@@ -183,6 +187,29 @@ const VideoPlayer = ({
   );
 };
 
+SizedPlayer.propTypes = {
+  video: PropTypes.shape({
+    width: PropTypes.number,
+    height: PropTypes.number,
+    poster: PropTypes.string,
+    files: PropTypes.arrayOf(PropTypes.object),
+  }).isRequired,
+  title: PropTypes.string.isRequired,
+};
+
+const VideoPlayer = ({
+  video = null,
+  title = '',
+}) => {
+  if (!video) {
+    return null;
+  }
+  if (videos.isLoop(video)) {
+    return <LoopingClip video={video} title={title} />;
+  }
+  return <SizedPlayer video={video} title={title} />;
+};
+
 VideoPlayer.propTypes = {
   // What a video post carries as `video`: its sizes and its poster.
   video: PropTypes.shape({
@@ -191,6 +218,7 @@ VideoPlayer.propTypes = {
     height: PropTypes.number,
     poster: PropTypes.string,
     files: PropTypes.arrayOf(PropTypes.object),
+    loop: PropTypes.bool,
   }),
   title: PropTypes.string,
 };
