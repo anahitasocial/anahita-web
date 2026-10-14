@@ -114,7 +114,17 @@ Interest kept by when it happened needs the time of each like, save and reply, w
 
 Services only, apart from the switches. **About 1½–2 sessions,** with time counted by interest; half a session more for the switches. "Most recent" stays as it is.
 
-### Layer 2: a real index of words (before the migration baseline)
+### Layer 2: a real index of words (put off, 2026-10-13)
+
+**Tried on a throwaway MySQL 9.6 before anything was built, and put off: it is not dependable enough to find what search finds now.** With the `ngram` parser on names and bodies, a phrase search (`MATCH … AGAINST ('"coffee"' IN BOOLEAN MODE)`):
+
+- with the stopwords as they come, found "coffee" only in a name and not in two bodies, found nothing for "joomla" or for Japanese, and found the coffee posts for "cafe": two-letter pieces that happen to be English stopwords ("of", "la") are dropped;
+- with stopwords off (`innodb_ft_enable_stopword`, which must also be off when the index is built), an index built over rows already there still missed the bodies, while rows written after it was built were found; Japanese was still not found.
+
+A search that misses posts without saying so is worse than a slow one, and search is not slow: after the fix of quotes (below) the commonest words answer in a third of a second on the development database's 22,000 nodes. So this waits until the database is many times larger, and should then be weighed against a search engine run beside the database (Meilisearch, or OpenSearch), which handles languages, accents and word forms properly, rather than MySQL's index. If it is MySQL's after all, it needs its own tests of what it finds against what `LIKE` finds, in several languages, before it replaces it.
+
+What follows is the plan as first written.
+
 
 Search today matches with `LIKE '%coffee%'`, which reads every row and knows nothing of words or languages. A MySQL `FULLTEXT` index on names and bodies (with the `ngram` parser for languages written without spaces) and `MATCH … AGAINST` give a score for the words themselves and are fast; that score replaces the last two rows of the table above. A migration, so it comes before row 27 folds the migrations into a baseline. **About 1 session.**
 
@@ -171,7 +181,7 @@ Profiles would gain from it first (searching for people, and suggestions), posts
 | **Parts 1 to 3** | **5–7 h, about a session and a half** |
 | 4. As you type | 2–3 h more |
 | 5, layer 1. A scored order, time counted by interest | 1½–2 sessions, half a session more for each person's switches |
-| 5, layer 2. An index of words | about 1 session, before the migration baseline |
+| 5, layer 2. An index of words | put off: not dependable in MySQL as tried; to be weighed against a search engine when the database is much larger |
 | 5, layer 3. Ranking by citation | to be decided in a few months; about 2–3 sessions |
 
 ## How it would be checked
@@ -199,7 +209,7 @@ A phase is finished only when these pages match the code.
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-11 |
-| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 layer 1 built 2026-10-13 (each person's switches not yet); layer 2 planned; layer 3 to be decided; Part 4 not |
+| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 layer 1 built 2026-10-13 (each person's switches not yet); layer 2 tried and put off; layer 3 to be decided; Part 4 not |
 
 ## What was built
 
