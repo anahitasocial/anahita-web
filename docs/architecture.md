@@ -764,7 +764,13 @@ are about, what to leave out. The server's side is in the services'
   `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
   the + in its header, and the pencil on a feed's card. Hashtags and keywords
   are typed as chips (`components/WordsField.jsx`); profiles and places are
-  searched for and picked (`components/NodesField.jsx`). Under the fields is
+  searched for and picked (`components/NodesField.jsx`). People on other
+  servers are found there too, through the site's search, if anybody here
+  has followed or looked them up; the lists of people and groups keep to
+  this site's own. "Posted on" (people, groups, events; people meaning
+  people here and elsewhere) is not offered when profiles named by hand
+  are the feed's only source, since it could only hide some of their
+  posts, and is not sent then. Under the fields is
   what the feed shows, in a sentence. There is no preview: saving opens the
   feed, Home on its tab when it is kept there. Everything done to a feed is
   done from the list page. Home has only the way to it.
