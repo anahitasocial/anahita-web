@@ -29,8 +29,8 @@ export default {
   within: 'Within {{ radius }} km',
   km: '{{ radius }} km',
   choices: {
-    followedFirst: 'People and groups I follow first',
-    followedFirstHelp: 'People and groups you follow, and what is posted on them, before everything else',
+    followedFirst: 'Profiles I follow first',
+    followedFirstHelp: 'The people, groups and events you follow, and what is posted on them, before everything else',
     recentFirst: 'Newer results first',
     recentFirstHelp: 'Among results that match equally well, the newest first',
   },

@@ -29,8 +29,8 @@ export default {
   within: 'À moins de {{ radius }} km',
   km: '{{ radius }} km',
   choices: {
-    followedFirst: 'Personnes et groupes suivis d’abord',
-    followedFirstHelp: 'Les personnes et les groupes que vous suivez, et ce qui y est publié, avant tout le reste',
+    followedFirst: 'Profils suivis d’abord',
+    followedFirstHelp: 'Les personnes, les groupes et les événements que vous suivez, et ce qui y est publié, avant tout le reste',
     recentFirst: 'Résultats récents d’abord',
     recentFirstHelp: 'Parmi les résultats qui correspondent aussi bien, les plus récents d’abord',
   },
