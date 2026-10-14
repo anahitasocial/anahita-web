@@ -119,7 +119,7 @@ const ActorCard = ({
         </CardContent>}
       {actor.body &&
       <CardContent>
-        <ReadMore charLimit={160} contentFilter>
+        <ReadMore lines={4} contentFilter>
           {actor.body}
         </ReadMore>
       </CardContent>}
