@@ -61,8 +61,16 @@ const RemoteLookup = ({ query = '', now = false }) => {
     setIsLooking(true);
     setError('');
 
+    // The lookup answers with who they are and not with their pictures,
+    // so they are then read as their profile is; if that fails, the card
+    // is drawn from what the lookup said.
     api.federation.lookup(asked).then((result) => {
-      setFound(result.data);
+      const person = result.data;
+      return api.people.read(person.alias || person.id).then((full) => {
+        setFound(full.data);
+      }).catch(() => {
+        setFound(person);
+      });
     }).catch((failure) => {
       const reason = federation.reasonOf(failure);
       // No reason given, and no service to give one: this network is

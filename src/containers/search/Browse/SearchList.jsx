@@ -83,13 +83,16 @@ const SearchList = ({
       return;
     }
 
+    // The distance is chosen in kilometres and asked for in metres; the
+    // last mark on the slider is anywhere, and sends none.
+    const near = searchRange <= 100;
     browseList({
       sort,
       start,
       scope,
-      search_range: searchRange <= 100 ? searchRange : '',
-      coord_lng: searchRange <= 100 ? coordLong : '',
-      coord_lat: searchRange <= 100 ? coordLat : '',
+      search_range: near ? searchRange * 1000 : '',
+      coord_lng: near ? coordLong : '',
+      coord_lat: near ? coordLat : '',
       limit: LIMIT,
       term: q,
     });
@@ -134,7 +137,7 @@ const SearchList = ({
         onScope={onScope}
         params={{
           sort,
-          search_range: near ? searchRange : '',
+          search_range: near ? searchRange * 1000 : '',
           coord_lng: near ? coordLong : '',
           coord_lat: near ? coordLat : '',
         }}
@@ -196,6 +199,7 @@ SearchList.propTypes = {
     sort: PropTypes.oneOf([RELEVANT, RECENT]),
     q: PropTypes.string,
     scope: PropTypes.string,
+    // In kilometres; more than 100 is anywhere.
     searchRange: PropTypes.number,
     coordLong: PropTypes.number,
     coordLat: PropTypes.number,

@@ -174,7 +174,7 @@ const Search = ({ viewerId }) => {
           q,
           sort,
           scope,
-          searchRange: searchRange * 1000,
+          searchRange,
           coordLong,
           coordLat,
         }}
