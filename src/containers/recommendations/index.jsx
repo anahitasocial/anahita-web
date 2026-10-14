@@ -17,6 +17,7 @@ import TuneIcon from '@mui/icons-material/TuneOutlined';
 import PreferencesIcon from '@mui/icons-material/SettingsOutlined';
 
 import useSuggestions from './useSuggestions';
+import SharedFeeds from './SharedFeeds';
 import SuggestionWeightsDialog from './WeightsDialog';
 import SuggestionPreferencesDialog from './PreferencesDialog';
 import EventCard from '../events/Card';
@@ -30,6 +31,10 @@ import i18n from '../../languages';
 import recommendations from '../../utils/recommendations';
 
 const LIMIT = 30;
+
+// The tab of shared feeds, after the kinds the recommendation service
+// chooses.
+const FEED = 'feed';
 
 // The cards of one kind of suggestion.
 const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
@@ -118,15 +123,21 @@ SuggestionsList.propTypes = {
 };
 
 // Suggestions: people, groups and events the viewer might follow, each with
-// the reason it is suggested, to follow or to turn down. The open tab is in
-// the address (`?kind=group`).
+// the reason it is suggested, to follow or to turn down; and, last, feeds
+// people have shared, to add to the home page. The open tab is in the
+// address (`?kind=group`, `?kind=feed`).
+//
+// Feeds are not chosen by the recommendation service: they are the shared
+// feeds the viewer may open, newest first, and the weights and the
+// preferences beside the tabs do not change them.
 //
 // The button beside the tabs opens what counts in the choosing, for the
 // viewer to weigh for themselves. Saved, the list is read again.
 const SuggestionsPage = ({ alertSuccess, alertError }) => {
   const [params, setParams] = useSearchParams();
   const asked = params.get('kind');
-  const kind = recommendations.KINDS.includes(asked) ? asked : 'person';
+  const kinds = [...recommendations.KINDS, FEED];
+  const kind = kinds.includes(asked) ? asked : 'person';
   const [isTuning, setIsTuning] = useState(false);
   const [isChoosing, setIsChoosing] = useState(false);
   // Read again when the weights were changed.
@@ -161,7 +172,7 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
           }}
           sx={{ flexGrow: 1, minWidth: 0 }}
         >
-          {recommendations.KINDS.map((each) => {
+          {kinds.map((each) => {
             return (
               <Tab
                 key={each}
@@ -211,12 +222,14 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
             setVersion(version + 1);
           }}
         />}
-      <SuggestionsList
-        key={`${kind}-${version}`}
-        kind={kind}
-        alertSuccess={alertSuccess}
-        alertError={alertError}
-      />
+      {kind === FEED ?
+        <SharedFeeds /> :
+        <SuggestionsList
+          key={`${kind}-${version}`}
+          kind={kind}
+          alertSuccess={alertSuccess}
+          alertError={alertError}
+        />}
     </>
   );
 };

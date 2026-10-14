@@ -468,6 +468,12 @@ a request that fails as it does without the service
   own card and is not followed from here. It is in the left menu as
   **Recommendations**, where the installation has the service
   (`useHasSuggestions.js` asks once).
+- **Feeds,** the last tab (`?kind=feed`, `containers/recommendations/SharedFeeds.jsx`),
+  is not chosen by the recommendation service: it is the feeds people have
+  shared that the viewer may open, newest first (feed-service,
+  `GET /feeds/discover`), without the viewer's own, each with the button
+  that adds it to the home page. The weights and preferences beside the
+  tabs do not change it.
 - **What counts** is the viewer's to weigh. The button beside the tabs, and
   one in settings, opens a dialog of sliders
   (`containers/recommendations/WeightsDialog.jsx`), one a reason, from nothing,

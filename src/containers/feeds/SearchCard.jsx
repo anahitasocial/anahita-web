@@ -16,13 +16,15 @@ import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
 
 // A custom feed among search results, as a card like the profiles and posts
-// around it, with the button that adds it to the home page.
+// around it, with the button that adds it to the home page. Also among
+// suggestions, where it comes as a feed (`feed`) and not as a node.
 //
 // Search sends a feed as a node, with its picture and what it shows in a
 // `feed` block. Whether it is on the viewer's home page is read from the
 // list of the ones that are, which the menu keeps too.
 const CustomFeedSearchCard = ({
-  node,
+  node = null,
+  feed: given = null,
   isAuthenticated,
   alertSuccess,
   alertError,
@@ -30,7 +32,7 @@ const CustomFeedSearchCard = ({
   const pinned = usePinnedFeeds(isAuthenticated);
   const [waiting, setWaiting] = useState(false);
 
-  const feed = customFeeds.fromSearch(node);
+  const feed = given || customFeeds.fromSearch(node);
   const isPinned = pinned.some((each) => {
     return each.id === feed.id;
   });
@@ -70,8 +72,9 @@ const CustomFeedSearchCard = ({
 };
 
 CustomFeedSearchCard.propTypes = {
-  // The feed, as search sends it.
-  node: PropTypes.object.isRequired,
+  // The feed, as search sends it, or as a feed.
+  node: PropTypes.object,
+  feed: PropTypes.object,
   isAuthenticated: PropTypes.bool.isRequired,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
