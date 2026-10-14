@@ -1246,6 +1246,11 @@ hashtags, places, saved, a profile's tabs) and the feed's
   second header as heavy as the author's.
 - **What a reply answers** is quoted in plain words (`utils/plainText.js`),
   so a link in it reads as its words, not as Markdown written out.
+- **Raised the same way** as every other card and the gadgets beside them:
+  MUI's default variant and elevation, set by nobody. Only a post quoted
+  inside a repost is outlined, to stand apart from the card it is in. The
+  composer above a feed is raised too, and the form's own card in it lies
+  flat on it.
 
 ### Long posts
 

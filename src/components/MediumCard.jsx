@@ -40,23 +40,13 @@ const {
   getCoverURL,
 } = utils.node;
 
-const styles = (theme) => {
+const styles = () => {
   return {
     cover: {
       height: 0,
       paddingTop: '30%',
     },
-    title: {
-      fontSize: 24,
-      marginBottom: theme.spacing(2),
-    },
     content: {},
-    authorName: {
-      fontSize: 16,
-    },
-    ownerName: {
-      fontSize: 12,
-    },
   };
 };
 
