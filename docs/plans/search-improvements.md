@@ -118,7 +118,9 @@ Services only, apart from the switches. **About 1½–2 sessions,** with time co
 
 Search today matches with `LIKE '%coffee%'`, which reads every row and knows nothing of words or languages. A MySQL `FULLTEXT` index on names and bodies (with the `ngram` parser for languages written without spaces) and `MATCH … AGAINST` give a score for the words themselves and are fast; that score replaces the last two rows of the table above. A migration, so it comes before row 27 folds the migrations into a baseline. **About 1 session.**
 
-### Layer 3: ranking by citation (written down; not now)
+### Layer 3: ranking by citation (to be decided, a few months from now)
+
+**Set aside by the user on 2026-10-13, to be decided in a few months, when there are more nodes and a denser graph.** Not part of row 33: row 33's Part 5 is done with layers 1 and 2.
 
 Asked about by the user on 2026-10-13, as Google ranks the web: PageRank on Anahita's own graph. A citation between posts is a quote, a repost, a reply or a link from one post to another; between profiles, a follow, a mention or a like of their posts. One counts for more when it comes from something itself well cited. It would run as a job every hour, keep a score for each node, and become one more part of the score in layer 1. Its personalised form, started from the people and groups the searcher follows, ranks by what their part of the network cites.
 
@@ -170,7 +172,7 @@ Profiles would gain from it first (searching for people, and suggestions), posts
 | 4. As you type | 2–3 h more |
 | 5, layer 1. A scored order, time counted by interest | 1½–2 sessions, half a session more for each person's switches |
 | 5, layer 2. An index of words | about 1 session, before the migration baseline |
-| 5, layer 3. Ranking by citation | written down, not now; about 2–3 sessions |
+| 5, layer 3. Ranking by citation | to be decided in a few months; about 2–3 sessions |
 
 ## How it would be checked
 
