@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -16,6 +16,8 @@ import MediaCard from '../../nodes/MediumNode';
 import CustomFeedSearchCard from '../../feeds/SearchCard';
 import customFeeds from '../../../utils/customFeeds';
 import Progress from '../../../components/Progress';
+import NothingFound from './NothingFound';
+import federation from '../../../utils/federation';
 import { App as APP, Search as SEARCH } from '../../../constants';
 
 import utils from '../../../utils/node';
@@ -41,6 +43,8 @@ const SearchList = ({
   alertError,
   items,
   error,
+  isFetching,
+  onScope,
   total = 0,
   queryParams: {
     sort,
@@ -54,6 +58,18 @@ const SearchList = ({
   const { classes } = useStyles();
 
   const [start, setStart] = useState(0);
+
+  // Whether this search has had its answer: the list is drawn anew for
+  // each search, and until the answer comes an empty list says nothing.
+  const [answered, setAnswered] = useState(false);
+  const wasFetching = useRef(false);
+  useEffect(() => {
+    if (isFetching) {
+      wasFetching.current = true;
+    } else if (wasFetching.current) {
+      setAnswered(true);
+    }
+  }, [isFetching]);
 
   useEffect(() => {
     return () => {
@@ -104,6 +120,25 @@ const SearchList = ({
       <Typography variant="body1" color="error" align="center">
         {error}
       </Typography>
+    );
+  }
+
+  // Nothing found. A handle from another server finds nothing here by
+  // its nature, and the card above it says what to do instead.
+  if (q && answered && items.allIds.length === 0 && !federation.isLookup(q)) {
+    const near = searchRange <= 100;
+    return (
+      <NothingFound
+        term={q}
+        scope={scope}
+        onScope={onScope}
+        params={{
+          sort,
+          search_range: near ? searchRange : '',
+          coord_lng: near ? coordLong : '',
+          coord_lat: near ? coordLat : '',
+        }}
+      />
     );
   }
 
@@ -166,6 +201,9 @@ SearchList.propTypes = {
     coordLat: PropTypes.number,
   }).isRequired,
   error: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  // Opens another tab, from the words for a search that found nothing.
+  onScope: PropTypes.func.isRequired,
   total: PropTypes.number,
 };
 

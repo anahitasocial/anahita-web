@@ -38,6 +38,19 @@ describe('people and posts from other servers', () => {
     });
   });
 
+  it('asks another server at once only for what is unmistakably a handle', () => {
+    ['@alice@mastodon.example', 'alice@mastodon.example', ' alice.bsky.social ', '@nytimes.com',
+      'did:plc:z72i7hdynmk6r22z27h6tvur'].forEach((text) => {
+      expect(federation.isClearHandle(text)).toBe(true);
+    });
+    // A word with dots in it, an address, or nothing to look up: the
+    // button, or nothing.
+    ['nytimes.com', 'seeds.org', 'https://mastodon.example/@alice',
+      'https://bsky.app/profile/alice.bsky.social', 'gardening tips', ''].forEach((text) => {
+      expect(federation.isClearHandle(text)).toBe(false);
+    });
+  });
+
   it('says where somebody is from, and what they are called', () => {
     const alice = { alias: 'alice@mastodon.example' };
     expect(federation.domainOf(alice)).toBe('mastodon.example');

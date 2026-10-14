@@ -14,4 +14,12 @@ export default {
     feeds: 'Fils',
   },
   boxPlaceholder: 'Rechercher...',
+  recent: {
+    title: 'Recherches récentes',
+    forget: 'Oublier « {{ term }} »',
+    clear: 'Effacer les recherches récentes',
+  },
+  nothingFound: 'Rien ne correspond à « {{ term }} ».',
+  foundUnder_one: '{{ count }} dans {{ tab }}',
+  foundUnder_other: '{{ count }} dans {{ tab }}',
 };

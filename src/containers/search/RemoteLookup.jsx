@@ -23,14 +23,18 @@ import utils from '../../utils';
 // are not here yet. This offers to ask their own server, or Bluesky, and
 // then opens them as anybody else is opened.
 //
-// It asks only when the button is pressed. Looking somebody up tells
-// another server that this site asked, and that is for the person
-// searching to decide, not for a page to do as it loads.
+// It asks when the button is pressed, or at once when `now` says that
+// the person typed an unmistakable handle into the search box and pressed
+// Enter, which is the same decision made one step earlier. Looking
+// somebody up tells another server that this site asked, and that is for
+// the person searching to decide, not for a page to do as it loads: a
+// link to a search for a handle waits for the button, or a link could
+// make this site call any server just by being opened.
 //
 // Drawn for nothing else, and nothing is drawn on an installation without
 // the service that would be asked: the first press says so and the card
 // goes, for that network and not for the other.
-const RemoteLookup = ({ query = '' }) => {
+const RemoteLookup = ({ query = '', now = false }) => {
   const navigate = useNavigate();
   const [isLooking, setIsLooking] = useState(false);
   const [error, setError] = useState('');
@@ -44,24 +48,21 @@ const RemoteLookup = ({ query = '' }) => {
   }, [query]);
 
   const kind = federation.lookupKind(query);
-
-  if (!kind || absent[kind]) {
-    return null;
-  }
-
-  const asked = query.trim();
+  const asked = (query || '').trim();
   const onBluesky = kind === federation.ATPROTO;
   let domain = asked.startsWith('https://') ? asked.split('/')[2] : asked.slice(asked.lastIndexOf('@') + 1);
   if (onBluesky) {
     domain = i18n.t('federation:lookup.bluesky');
   }
 
-  const handleLookup = () => {
+  // Found at once, the profile takes the search's place in the history,
+  // so that Back does not land on a search that would look them up again.
+  const handleLookup = (replace = false) => {
     setIsLooking(true);
     setError('');
 
     api.federation.lookup(asked).then((result) => {
-      navigate(utils.node.getURL(result.data));
+      navigate(utils.node.getURL(result.data), { replace });
     }).catch((failure) => {
       const reason = federation.reasonOf(failure);
       // No reason given, and no service to give one: this network is
@@ -77,6 +78,16 @@ const RemoteLookup = ({ query = '' }) => {
       setIsLooking(false);
     });
   };
+
+  useEffect(() => {
+    if (now && kind) {
+      handleLookup(true);
+    }
+  }, [now, query]);
+
+  if (!kind || absent[kind]) {
+    return null;
+  }
 
   return (
     <Card sx={{ mb: 2 }}>
@@ -96,7 +107,9 @@ const RemoteLookup = ({ query = '' }) => {
         <Button
           fullWidth
           variant="contained"
-          onClick={handleLookup}
+          onClick={() => {
+            handleLookup();
+          }}
           disabled={isLooking}
         >
           {i18n.t('federation:lookup.button')}
@@ -108,6 +121,8 @@ const RemoteLookup = ({ query = '' }) => {
 
 RemoteLookup.propTypes = {
   query: PropTypes.string,
+  // Look them up at once, without waiting for the button.
+  now: PropTypes.bool,
 };
 
 export default RemoteLookup;

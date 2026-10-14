@@ -14,4 +14,12 @@ export default {
     feeds: 'Feeds',
   },
   boxPlaceholder: 'Search...',
+  recent: {
+    title: 'Recent searches',
+    forget: 'Forget "{{ term }}"',
+    clear: 'Clear recent searches',
+  },
+  nothingFound: 'Nothing matches “{{ term }}”.',
+  foundUnder_one: '{{ count }} under {{ tab }}',
+  foundUnder_other: '{{ count }} under {{ tab }}',
 };

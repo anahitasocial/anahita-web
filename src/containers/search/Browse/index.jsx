@@ -1,6 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { useGeolocated } from 'react-geolocated';
 import { makeStyles } from 'tss-react/mui';
 
@@ -18,9 +19,13 @@ import Toolbar from '@mui/material/Toolbar';
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 import SearchList from './SearchList';
+import RecentSearches from './RecentSearches';
 import RemoteLookup from '../RemoteLookup';
 import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
+import federation from '../../../utils/federation';
+import recentSearches from '../../../utils/recentSearches';
+import searchAddress from '../../../utils/searchAddress';
 
 const { SCOPE, SORTING } = SEARCH;
 
@@ -67,7 +72,7 @@ const marks = [
   },
 ];
 
-const Search = () => {
+const Search = ({ viewerId }) => {
   const { classes } = useStyles();
   const {
     coords,
@@ -81,22 +86,57 @@ const Search = () => {
   });
 
   const location = useLocation();
-  // undefined rather than null when absent, so the request leaves it out.
-  const searchParams = new URLSearchParams(location.search);
-  const q = searchParams.has('q') ? searchParams.get('q') : undefined;
+  const navigate = useNavigate();
+
+  // Everything the page is set to is in its address (utils/searchAddress),
+  // so that reloading, going back and a link sent to somebody all open it
+  // as it was. The page of custom feeds leads here with `?scope=feeds`.
+  // `q` is undefined rather than null when absent, so the request leaves
+  // it out.
+  const {
+    q,
+    scope,
+    sort,
+    km: searchRange,
+  } = searchAddress.read(location.search);
   let coordLong = 0.0;
   let coordLat = 0.0;
 
-  // The tab to open on can be named in the address (`?scope=feeds`), which
-  // is how the page of custom feeds leads to the feeds people have shared.
-  const asked = searchParams.get('scope');
-  const [scope, setScope] = useState(Object.values(SCOPE).includes(asked) ? asked : SCOPE.ALL);
-  const [sort, setSort] = useState(SORTING.RELEVANT);
-  const [searchRange, setSearchRange] = useState(125);
+  // A change of tab, order or distance replaces the address rather than
+  // adding to the history: Back leaves the search, as it did.
+  const change = (what) => {
+    navigate(searchAddress.of({
+      q: q || '',
+      scope,
+      sort,
+      km: searchRange,
+      ...what,
+    }), { replace: true });
+  };
+
+  // The slider moves as it is dragged and is written to the address when
+  // let go, so that a drag is one search and not five.
+  const [range, setRange] = useState(searchRange);
+  useEffect(() => {
+    setRange(searchRange);
+  }, [searchRange]);
 
   const changeScope = (event, value) => {
-    setScope(value);
+    change({ scope: value });
   };
+
+  // Remembered in this browser when it is run, however it was reached:
+  // from the box, from a link, from the list of recent searches.
+  useEffect(() => {
+    if (q) {
+      recentSearches.add(viewerId, q, scope);
+    }
+  }, [viewerId, q, scope]);
+
+  // A handle typed into the search box is looked up on its own server at
+  // once; one a link opened waits for the button (see RemoteLookup).
+  const typed = Boolean(location.state && location.state.typed);
+  const lookUpNow = typed && viewerId > 0 && federation.isClearHandle(q);
 
   if (
     isGeolocationAvailable &&
@@ -134,7 +174,7 @@ const Search = () => {
                 id="search-sort-select"
                 value={sort}
                 onChange={(event) => {
-                  setSort(event.target.value);
+                  change({ sort: event.target.value });
                 }}
                 label={i18n.t('search:sort')}
               >
@@ -151,12 +191,15 @@ const Search = () => {
               className={classes.formControl}
             >
               <Slider
-                value={searchRange}
+                value={range}
                 getAriaValueText={(value) => {
                   return `${value}km`;
                 }}
                 onChange={(event, value) => {
-                  setSearchRange(value);
+                  setRange(value);
+                }}
+                onChangeCommitted={(event, value) => {
+                  change({ km: value });
                 }}
                 aria-labelledby="search-range-slider"
                 min={25}
@@ -192,11 +235,17 @@ const Search = () => {
           />
         </Tabs>
       </AppBar>
-      <RemoteLookup query={q} />
+      <RemoteLookup query={q} now={lookUpNow} />
+      {/* Nothing typed: what this person searched for lately, and
+          nothing else. */}
+      {!q && <RecentSearches viewerId={viewerId} />}
       {useMemo(() => {
         return (
           <SearchList
-            key={`${sort}-${scope}-${searchRange}`}
+            key={`${q}-${sort}-${scope}-${searchRange}`}
+            onScope={(value) => {
+              change({ scope: value });
+            }}
             queryParams={{
               q,
               sort,
@@ -219,8 +268,17 @@ const Search = () => {
   );
 };
 
-const mapStateToProps = () => {
-  return {};
+Search.propTypes = {
+  // 0 for a visitor who is not signed in, who has no recent searches.
+  viewerId: PropTypes.number.isRequired,
+};
+
+const mapStateToProps = (state) => {
+  const { viewer, isAuthenticated } = state.session;
+
+  return {
+    viewerId: isAuthenticated && viewer ? viewer.id : 0,
+  };
 };
 
 export default connect(

@@ -113,6 +113,25 @@ const isLookup = (text) => {
   return lookupKind(text) !== '';
 };
 
+// Whether what was typed is unmistakably somebody on another network, so
+// that searching for it may ask their server at once rather than offer a
+// button: `@alice@mastodon.social`, a Bluesky DID, or a Bluesky handle
+// written with its `@` or on bsky.social. A bare name with dots in it
+// (`seeds.org`) may be a word somebody is searching for, and an address
+// may be anything; those keep the button.
+const isClearHandle = (text) => {
+  const query = typeof text === 'string' ? text.trim() : '';
+  const kind = lookupKind(query);
+  if (kind === ACTIVITYPUB) {
+    return HANDLE.test(query);
+  }
+  if (kind === ATPROTO) {
+    return BLUESKY_DID.test(query) ||
+      (BLUESKY_HANDLE.test(query) && (query.startsWith('@') || /\.bsky\.social$/i.test(query)));
+  }
+  return false;
+};
+
 // Whether an error says the installation has no fediverse service at all,
 // which is not a failure: there is simply nothing to show.
 const isAbsent = (error) => {
@@ -134,6 +153,7 @@ export default {
   pageOf,
   lookupKind,
   isLookup,
+  isClearHandle,
   ACTIVITYPUB,
   ATPROTO,
   isAbsent,

@@ -1071,8 +1071,14 @@ draws nothing (`utils/federation.js#isAbsent`).
 - **Looking somebody up** is on the search page
   (`search/RemoteLookup.jsx`): when what was searched for is a handle with
   a server in it or the address of a profile, a card offers to ask that
-  server. It asks only when the button is pressed, since asking tells
-  another server that this site did; then it opens the person.
+  server. It asks when the button is pressed, since asking tells another
+  server that this site did; then it opens the person. It asks at once,
+  without the button, when somebody signed in typed an unmistakable
+  handle into the search box and pressed Enter (`isClearHandle`:
+  `@alice@mastodon.example`, a Bluesky DID, or a Bluesky handle written
+  with `@` or on `bsky.social`). The box says so in the router's state; a
+  link to the same search does not, so a link cannot make this site call
+  another server just by being opened. See [Search](#search).
 - **Bluesky is read through a service of its own,** which may be there
   when the fediverse's is not, or the other way round. To the app,
   somebody on Bluesky is somebody from another server like any other.
@@ -1103,6 +1109,32 @@ draws nothing (`utils/federation.js#isAbsent`).
   all of them when there are fewer), and says what it does and that it is
   not undone in one step. The server carries on with it after answering.
   Nothing is drawn where the installation does not write to Bluesky.
+
+### Search
+
+- **The box in the top bar** (`components/SearchBox.jsx`) is an MUI
+  `Autocomplete` in free-solo mode. Searching opens the search page
+  through the router, without reloading the app, and marks the search as
+  typed (see Looking somebody up, above).
+- **Recent searches** (`utils/recentSearches.js`): focused while empty,
+  the box lists the last ten searches, newest first, each with the tab it
+  was run under; typing narrows them; each can be forgotten, or all at
+  once. The search page lists them too when nothing has been typed
+  (`search/Browse/RecentSearches.jsx`). They are kept **in this browser
+  only**, under a key with the person's id, and cleared when they sign
+  out. Nothing about what somebody searched for reaches the server, so
+  they do not follow somebody to another device. A search is remembered
+  when it is run, however it was reached.
+- **The page keeps its place in its address** (`utils/searchAddress.js`):
+  `?q=seeds&scope=feeds&sort=recent&km=50`. Reloading, going back and a
+  link sent to somebody open it as it was. What is as it comes is left
+  out. Changing the tab, the order or the distance replaces the address
+  rather than adding to the history.
+- **A search that finds nothing** says so (`search/Browse/NothingFound.jsx`),
+  and offers the other tabs that would find something, with how much:
+  one request for each, asking for a single result and reading the total,
+  made only when the open tab is empty. A handle from another server is
+  left to the lookup card instead.
 
 ### Menus
 
