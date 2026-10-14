@@ -1,7 +1,6 @@
 export default {
   cTitle: 'Recherche',
   mTitle: 'Recherche',
-  filterRadius: '{{ radius }} km',
   sort: 'Trier par',
   sortOptions: {
     relevant: 'Les plus pertinents',
@@ -25,9 +24,14 @@ export default {
   },
   countLabel_one: '{{ count }} trouvé',
   countLabel_other: '{{ count }} trouvés',
+  distanceLabel: 'Distance',
+  anywhere: 'Partout',
+  within: 'À moins de {{ radius }} km',
   choices: {
-    followedFirst: 'Personnes et groupes que je suis en premier',
-    recentFirst: 'Préférer les plus récents',
+    followedFirst: 'Suivis d’abord',
+    followedFirstHelp: 'Les personnes et les groupes que vous suivez, et ce qui y est publié, avant tout le reste',
+    recentFirst: 'Récents d’abord',
+    recentFirstHelp: 'Les plus récents d’abord parmi les résultats qui correspondent aussi bien',
   },
   nothingFound: 'Rien ne correspond à « {{ term }} ».',
   foundUnder_one: '{{ count }} dans {{ tab }}',

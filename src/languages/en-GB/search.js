@@ -1,7 +1,6 @@
 export default {
   cTitle: 'Search',
   mTitle: 'Search',
-  filterRadius: '{{ radius }} km',
   sort: 'Sort by',
   sortOptions: {
     relevant: 'Most relevant',
@@ -25,9 +24,14 @@ export default {
   },
   countLabel_one: '{{ count }} found',
   countLabel_other: '{{ count }} found',
+  distanceLabel: 'Distance',
+  anywhere: 'Anywhere',
+  within: 'Within {{ radius }} km',
   choices: {
-    followedFirst: 'People and groups I follow first',
-    recentFirst: 'Prefer recent',
+    followedFirst: 'Followed first',
+    followedFirstHelp: 'People and groups you follow, and what is posted on them, before everything else',
+    recentFirst: 'Recent first',
+    recentFirstHelp: 'The newest first among results that match as well',
   },
   nothingFound: 'Nothing matches “{{ term }}”.',
   foundUnder_one: '{{ count }} under {{ tab }}',

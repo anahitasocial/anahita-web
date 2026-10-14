@@ -1137,8 +1137,11 @@ draws nothing (`utils/federation.js#isAbsent`).
   out. Nothing about what somebody searched for reaches the server, so
   they do not follow somebody to another device. A search is remembered
   when it is run, however it was reached.
-- **Two choices for "Most relevant"** (`utils/searchChoices.js`), switches
-  under the order for somebody signed in: people and groups they follow
+- **The controls** are one row that wraps on a narrow screen: the order
+  and the distance as two small menus (the distance is Anywhere or within
+  25, 50, 75 or 100 km), and the two choices below as chips.
+- **Two choices for "Most relevant"** (`utils/searchChoices.js`), chips
+  beside the menus for somebody signed in: people and groups they follow
   first, and the newest first among results that match alike. Off as they
   come, kept in this browser per person, and sent with a search only when
   chosen (`followed_first`, `recent_first`).

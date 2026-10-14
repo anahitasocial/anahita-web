@@ -8,19 +8,14 @@ import { makeStyles } from 'tss-react/mui';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
-import FormControl from '@mui/material/FormControl';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import FormGroup from '@mui/material/FormGroup';
-import InputLabel from '@mui/material/InputLabel';
+import Chip from '@mui/material/Chip';
 import MenuItem from '@mui/material/MenuItem';
-import Select from '@mui/material/Select';
-import Slider from '@mui/material/Slider';
-import Switch from '@mui/material/Switch';
+import Stack from '@mui/material/Stack';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import Toolbar from '@mui/material/Toolbar';
+import TextField from '@mui/material/TextField';
 
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import CheckIcon from '@mui/icons-material/Check';
 
 import SearchList from './SearchList';
 import RecentSearches from './RecentSearches';
@@ -37,7 +32,7 @@ import searchAddress from '../../../utils/searchAddress';
 
 const { SCOPE, SORTING } = SEARCH;
 
-const useStyles = makeStyles()((theme) => {
+const useStyles = makeStyles()(() => {
   return {
     root: {
       marginBottom: 8 * 2,
@@ -46,39 +41,8 @@ const useStyles = makeStyles()((theme) => {
       zIndex: 8,
       width: '100%',
     },
-    formControl: {
-      width: '100%',
-      marginTop: theme.spacing(3),
-      // marginLeft: theme.spacing(1),
-    },
-    formControlLabel: {
-      marginTop: theme.spacing(3),
-    },
   };
 });
-
-const marks = [
-  {
-    value: 25,
-    label: i18n.t('search:filterRadius', { radius: 25 }),
-  },
-  {
-    value: 50,
-    label: i18n.t('search:filterRadius', { radius: 50 }),
-  },
-  {
-    value: 75,
-    label: i18n.t('search:filterRadius', { radius: 75 }),
-  },
-  {
-    value: 100,
-    label: i18n.t('search:filterRadius', { radius: 100 }),
-  },
-  {
-    value: 125,
-    label: <AllInclusiveIcon />,
-  },
-];
 
 const Search = ({ viewerId }) => {
   const { classes } = useStyles();
@@ -120,13 +84,6 @@ const Search = ({ viewerId }) => {
       ...what,
     }), { replace: true });
   };
-
-  // The slider moves as it is dragged and is written to the address when
-  // let go, so that a drag is one search and not five.
-  const [range, setRange] = useState(searchRange);
-  useEffect(() => {
-    setRange(searchRange);
-  }, [searchRange]);
 
   const changeScope = (event, value) => {
     change({ scope: value });
@@ -256,91 +213,86 @@ const Search = ({ viewerId }) => {
         className={classes.root}
         elevation={1}
       >
-        <Toolbar>
-          <FormGroup
-            style={{
-              width: '100%',
+        {/* One row of compact controls, which wraps on a narrow screen:
+            the order and the distance as two small menus, and the
+            searcher's own choices for "Most relevant" as chips. */}
+        <Stack
+          direction="row"
+          useFlexGap
+          sx={{
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: 2,
+            px: 2,
+            pt: 2,
+            pb: 1,
+          }}
+        >
+          <TextField
+            select
+            size="small"
+            id="search-sort"
+            label={i18n.t('search:sort')}
+            value={sort}
+            onChange={(event) => {
+              change({ sort: event.target.value });
             }}
+            sx={{ minWidth: 180, flex: { xs: '1 1 140px', sm: '0 0 auto' } }}
           >
-            <FormControl
-              variant="outlined"
-              className={classes.formControl}
-            >
-              <InputLabel id="search-sort-label">
-                {i18n.t('search:sort')}
-              </InputLabel>
-              <Select
-                variant="standard"
-                labelId="search-sort-label"
-                id="search-sort-select"
-                value={sort}
-                onChange={(event) => {
-                  change({ sort: event.target.value });
-                }}
-                label={i18n.t('search:sort')}
-              >
-                <MenuItem value={SORTING.RELEVANT}>
-                  {i18n.t('search:sortOptions.relevant')}
+            <MenuItem value={SORTING.RELEVANT}>
+              {i18n.t('search:sortOptions.relevant')}
+            </MenuItem>
+            <MenuItem value={SORTING.RECENT}>
+              {i18n.t('search:sortOptions.recent')}
+            </MenuItem>
+          </TextField>
+          <TextField
+            select
+            size="small"
+            id="search-distance"
+            label={i18n.t('search:distanceLabel')}
+            value={searchRange}
+            onChange={(event) => {
+              change({ km: Number(event.target.value) });
+            }}
+            sx={{ minWidth: 160, flex: { xs: '1 1 140px', sm: '0 0 auto' } }}
+          >
+            {searchAddress.DISTANCES.map((km) => {
+              return (
+                <MenuItem key={km} value={km}>
+                  {km === searchAddress.ANYWHERE ?
+                    i18n.t('search:anywhere') :
+                    i18n.t('search:within', { radius: km })}
                 </MenuItem>
-                <MenuItem value={SORTING.RECENT}>
-                  {i18n.t('search:sortOptions.recent')}
-                </MenuItem>
-              </Select>
-            </FormControl>
-            {/* The searcher's own choices for "Most relevant", for somebody
-                signed in: a visitor follows nobody, and has nowhere to
-                keep them. */}
-            {sort === SORTING.RELEVANT && viewerId > 0 &&
-              <FormGroup row sx={{ mt: 1, columnGap: 2 }}>
-                <FormControlLabel
-                  control={
-                    <Switch
-                      size="small"
-                      checked={choices.followedFirst}
-                      onChange={(event) => {
-                        choose({ followedFirst: event.target.checked });
-                      }}
-                    />
-                  }
-                  label={i18n.t('search:choices.followedFirst')}
-                />
-                <FormControlLabel
-                  control={
-                    <Switch
-                      size="small"
-                      checked={choices.recentFirst}
-                      onChange={(event) => {
-                        choose({ recentFirst: event.target.checked });
-                      }}
-                    />
-                  }
-                  label={i18n.t('search:choices.recentFirst')}
-                />
-              </FormGroup>}
-            <FormControl
-              variant="outlined"
-              className={classes.formControl}
-            >
-              <Slider
-                value={range}
-                getAriaValueText={(value) => {
-                  return `${value}km`;
-                }}
-                onChange={(event, value) => {
-                  setRange(value);
-                }}
-                onChangeCommitted={(event, value) => {
-                  change({ km: value });
-                }}
-                aria-labelledby="search-range-slider"
-                min={25}
-                max={125}
-                step={25}
-                marks={marks}
-              />
-            </FormControl>
-          </FormGroup>
-        </Toolbar>
+              );
+            })}
+          </TextField>
+          {/* The searcher's own choices for "Most relevant", for somebody
+              signed in: a visitor follows nobody, and has nowhere to keep
+              them. */}
+          {sort === SORTING.RELEVANT && viewerId > 0 &&
+            <Stack direction="row" useFlexGap sx={{ flexWrap: 'wrap', gap: 1 }}>
+              {[
+                ['followedFirst', choices.followedFirst],
+                ['recentFirst', choices.recentFirst],
+              ].map(([which, isOn]) => {
+                return (
+                  <Chip
+                    key={which}
+                    label={i18n.t(`search:choices.${which}`)}
+                    title={i18n.t(`search:choices.${which}Help`)}
+                    icon={isOn ? <CheckIcon /> : undefined}
+                    color={isOn ? 'primary' : 'default'}
+                    variant={isOn ? 'filled' : 'outlined'}
+                    aria-pressed={isOn}
+                    onClick={() => {
+                      choose({ [which]: !isOn });
+                    }}
+                  />
+                );
+              })}
+            </Stack>}
+        </Stack>
         <Tabs
           value={scope}
           onChange={changeScope}
