@@ -48,6 +48,17 @@ export default {
     show: 'Read the description of this photo',
     title: 'Alt description',
   },
+  // In place of the pictures of a post from another server that are no
+  // longer stored here.
+  removed: {
+    kept: 'This post has a picture that is no longer kept here.',
+    kept_other: 'This post has {{count}} pictures that are no longer kept here.',
+    show: 'Show the picture',
+    show_other: 'Show the pictures',
+    gone: 'The picture of this post is no longer available on {{domain}}.',
+    gone_other: 'The {{count}} pictures of this post are no longer available on {{domain}}.',
+    failed: 'They could not be fetched just now. Try again in a moment.',
+  },
   slides: {
     position: '{{index}} of {{total}}',
     next: 'Next photo',

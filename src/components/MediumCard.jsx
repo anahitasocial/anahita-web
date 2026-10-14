@@ -30,6 +30,7 @@ import SignInPrompt from './SignInPrompt';
 import utils from '../utils';
 import photoFiles from '../utils/photoFiles';
 import AltBadge from './AltBadge';
+import RemovedPictures from './RemovedPictures';
 
 const {
   getAuthor,
@@ -142,6 +143,8 @@ const MediumCard = ({
         }
         action={menu}
       />
+      {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
+        <RemovedPictures medium={medium} />}
       {hasSlides &&
         <PhotoSlides
           medium={medium}

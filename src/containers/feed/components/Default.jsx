@@ -26,6 +26,7 @@ import linkPreviews from '../../../utils/linkPreviews';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
+import RemovedPictures from '../../../components/RemovedPictures';
 
 const {
   getURL,
@@ -120,6 +121,8 @@ const FeedCardDefault = ({
             src="picture"
           />
         </Link>}
+      {node.mediaRemoved && photoFiles.countOf(node) === 0 &&
+        <RemovedPictures medium={node} />}
       {photoFiles.hasSeveral(node) &&
         <PhotoSlides
           medium={node}

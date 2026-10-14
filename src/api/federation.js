@@ -64,6 +64,14 @@ const previewBlueskyFollows = () => {
   return axios.get('/atproto/settings/import-follows');
 };
 
+// The pictures of a post from another server, copied here again after
+// they were removed for its age. Asked of whichever service the post came
+// through, which is told by its address.
+const restorePictures = (medium) => {
+  const service = (medium.uri || '').startsWith('at://') ? 'atproto' : 'activitypub';
+  return axios.post(`/${service}/posts/${medium.id}/pictures`);
+};
+
 // The servers this installation refuses: nothing is taken from them or
 // sent to them. For super administrators, in the site's settings.
 //
@@ -90,6 +98,7 @@ export default {
   settings,
   setEnabled,
   lookup,
+  restorePictures,
   blueskySettings,
   connectBluesky,
   disconnectBluesky,

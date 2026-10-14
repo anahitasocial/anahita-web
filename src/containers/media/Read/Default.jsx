@@ -31,6 +31,7 @@ import i18n from '../../../languages';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
+import RemovedPictures from '../../../components/RemovedPictures';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
 
@@ -115,6 +116,8 @@ const MediumReadDefault = ({
           image={cover}
           src="picture"
         />}
+        {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
+        <RemovedPictures medium={medium} auto />}
         {hasSlides &&
         <PhotoSlides
           medium={medium}

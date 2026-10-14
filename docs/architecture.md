@@ -678,6 +678,20 @@ see it (`altText` on each of `medium.files`).
   fall back), and shows it when pressed. It sits over photos that are
   links or open the lightbox, and pressing it does neither.
 
+### Pictures that are no longer kept
+
+The server removes the pictures of a post from another network once the
+post has been left alone for a while, and copies them again when asked. A
+post whose pictures are gone has no `files` and carries
+`mediaRemoved: { count, alts, gone }`.
+
+`components/RemovedPictures.jsx` is drawn where the pictures were: how
+many there were, what each showed, and a button that asks for them
+(`api/federation.js#restorePictures`, which goes to whichever service the
+post came through). When they are back it reads the post again and draws
+them itself. On the post's own page it asks at once. When the answer is
+that they are no longer to be had, it says so in place of the button.
+
 ### New posts in an open feed
 
 A feed that is open asks again, now and then, for its first page

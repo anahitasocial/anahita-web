@@ -47,6 +47,15 @@ export default {
     show: 'Lire la description de cette photo',
     title: 'Description alternative',
   },
+  removed: {
+    kept: 'Cette publication a une image qui n’est plus conservée ici.',
+    kept_other: 'Cette publication a {{count}} images qui ne sont plus conservées ici.',
+    show: 'Afficher l’image',
+    show_other: 'Afficher les images',
+    gone: 'L’image de cette publication n’est plus disponible sur {{domain}}.',
+    gone_other: 'Les {{count}} images de cette publication ne sont plus disponibles sur {{domain}}.',
+    failed: 'Elles n’ont pas pu être récupérées pour l’instant. Réessayez dans un moment.',
+  },
   slides: {
     position: '{{index}} sur {{total}}',
     next: 'Photo suivante',
