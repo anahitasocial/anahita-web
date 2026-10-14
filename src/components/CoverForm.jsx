@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
 import CardMedia from '@mui/material/CardMedia';
 import Fade from '@mui/material/Fade';
+import Typography from '@mui/material/Typography';
 
 import NodeType from '../proptypes/Node';
 import i18n from '../languages';
@@ -16,12 +17,12 @@ const { getActorName } = utils.node;
 
 const styles = (theme) => {
   return {
-    coverPlaceholder: {
-      height: theme.spacing(40),
-    },
+    // A wide band, never a tall box: three times as wide as it is tall,
+    // and no taller than 320px on a wide screen.
     cover: {
       width: '100%',
-      height: theme.spacing(40),
+      aspectRatio: '3 / 1',
+      maxHeight: theme.spacing(40),
     },
     coverIcon: {
       width: theme.spacing(10),
@@ -31,8 +32,13 @@ const styles = (theme) => {
     button: {
       position: 'relative',
       width: '100%',
-      height: theme.spacing(40),
       backgroundColor: theme.palette.background.default,
+    },
+    // No cover, and somebody who may add one: a slim band that says so.
+    addCover: {
+      width: '100%',
+      height: theme.spacing(7),
+      color: theme.palette.text.secondary,
     },
     input: {
       display: 'none',
@@ -55,6 +61,12 @@ const CoverForm = ({
   handleFieldChange,
   handleDelete,
 }) => {
+  // No cover: nothing at all for whoever may not add one, rather than an
+  // empty grey box.
+  if (!cover && !isFetching && !canEdit) {
+    return null;
+  }
+
   return (
     <>
       <ButtonBase
@@ -71,7 +83,10 @@ const CoverForm = ({
               src="picture"
             />
           </Fade>}
-        {!cover && <div className={classes.coverPlaceholder} />}
+        {!cover && !isFetching &&
+          <Typography variant="body2" className={classes.addCover} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            {i18n.t('actions:addCover')}
+          </Typography>}
         {isFetching && <CircularProgress className={classes.progress} />}
       </ButtonBase>
       <Menu

@@ -878,9 +878,34 @@ icon button. The separate row of counts, of likes and of replies, is gone.
 
 There are no views in it, and nothing anywhere counts them.
 
+### The top of a profile
+
+`actors/Read/ActorHeader.jsx` lays it out the same way on a phone and a
+desktop, left aligned:
+
+- **The cover,** when there is one, as a wide band three times as wide as
+  it is tall and no taller than 320px (`components/CoverForm.jsx`). With
+  none it is not drawn at all, apart from a slim "Add a cover photo" band
+  for whoever may add one. Cards of profiles use the same band.
+- **The picture** over the cover's lower edge, or at the top of the card
+  with no cover, smaller on a phone; **beside it, the buttons**: Follow
+  (filled while not following, outlined once following), the others the
+  viewer may use, and the ⋮ menu. They were a row of their own under
+  everything, which left a band of white.
+- **The name, with the pronouns after it** in a lighter grey, "Sarah Noble
+  (they/them)".
+- **The handle,** and "· Follows you" after it for somebody who follows
+  the viewer.
+- **One line of counts,** "22 followers · 16 following"
+  (`actors/Read/SocialgraphMeta.jsx`), each opening the dialog below on
+  that list. Following is counted only for this site's people: whom
+  somebody on another server follows is not known here.
+
+What the profile says of itself is in its About card, not here.
+
 ### Followers, following and what is in common
 
-Under a profile's name is the number of its followers. Pressing it opens a
+Under a profile's name are its counts. Pressing one opens a
 dialog (`actors/Read/SocialgraphDialog.jsx`, `utils/socialgraph.js`) with up
 to three lists:
 
@@ -891,21 +916,23 @@ to three lists:
   profile. Only for somebody signed in, on a profile that is not their own.
  Each is
 read when first opened and more of it as its end is scrolled to, whoever
-followed most lately first. A Latest / Oldest switch above the list turns the
-order round (`?dir=asc`). A group's administrators can remove a follower
+followed most lately first. The order is a small menu at the right of the
+dialog's title, Latest or Oldest (`?dir=asc`); it was a row of its own under
+the tabs. Each tab's count is in grey after its name, as on the search
+page. A group's administrators can remove a follower
 there.
 
 What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 
-A person who follows the viewer says so: "Follows you" under their name on
+A person who follows the viewer says so: "Follows you" after their handle on
 their profile, and beside their name in these lists.
 
 **One word for following.** Every button that follows anything, a profile,
 a hashtag or a place, reads "Follow" with a plus before it
-(`controls/Follow.jsx`, `feeds/FollowFeed.jsx`). It does not read "Follow
-back" for somebody who follows the viewer: "Follows you" beside their name
-says that. Two things keep words of their own because they are not that
+(`controls/Follow.jsx`, `feeds/FollowFeed.jsx`), except for somebody who
+follows the viewer already, where it reads "Follow back" (asked for by the
+user on 2026-10-14). Two things keep words of their own because they are not that
 button: "Request to follow", which asks and does not follow, and "Follow
 <name>" in a post's menu, where what is followed is not what the menu
 belongs to.

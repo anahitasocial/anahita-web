@@ -16,9 +16,11 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+
+import SortIcon from '@mui/icons-material/SwapVert';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import Progress from '../../../components/Progress';
@@ -26,6 +28,7 @@ import SignInPrompt from '../../../components/SignInPrompt';
 import ControlFollow from '../../controls/Follow';
 import ControlRemoveFollower from '../../controls/RemoveFollower';
 import api from '../../../api';
+import shortCount from '../../../utils/shortCount';
 import i18n from '../../../languages';
 import permissions from '../../../permissions/actor';
 import ActorType from '../../../proptypes/Actor';
@@ -60,6 +63,7 @@ const SocialgraphDialog = ({
   const [lists, setLists] = useState({});
   const [failed, setFailed] = useState({});
   const [order, setOrder] = useState(socialgraph.LATEST);
+  const [orderMenu, setOrderMenu] = useState(null);
 
   const load = (which, start) => {
     api.socialgraph.browse({
@@ -115,8 +119,61 @@ const SocialgraphDialog = ({
       maxWidth="sm"
       aria-labelledby={`socialgraph-title-${actor.id}`}
     >
-      <DialogTitle id={`socialgraph-title-${actor.id}`}>
-        {getActorName(actor)}
+      {/* The order is a small menu in the title's row, which had room for
+          it, rather than a row of its own under the tabs: the tabs are what
+          is chosen first, the order seldom. */}
+      <DialogTitle
+        id={`socialgraph-title-${actor.id}`}
+        sx={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1,
+        }}
+      >
+        <Box component="span" sx={{ overflowWrap: 'anywhere' }}>
+          {getActorName(actor)}
+        </Box>
+        {!heldBack &&
+          <>
+            <Button
+              size="small"
+              color="inherit"
+              startIcon={<SortIcon />}
+              aria-label={i18n.t('socialgraph:order.label')}
+              aria-haspopup="menu"
+              onClick={(event) => {
+                setOrderMenu(event.currentTarget);
+              }}
+              sx={{ color: 'text.secondary', flexShrink: 0 }}
+            >
+              {i18n.t(`socialgraph:order.${order}`)}
+            </Button>
+            <Menu
+              anchorEl={orderMenu}
+              open={Boolean(orderMenu)}
+              onClose={() => {
+                setOrderMenu(null);
+              }}
+            >
+              {socialgraph.ORDERS.map((each) => {
+                return (
+                  <MenuItem
+                    key={each}
+                    selected={each === order}
+                    onClick={() => {
+                      setOrderMenu(null);
+                      if (each !== order) {
+                        setOrder(each);
+                        // Every list is read again in the new order.
+                        setLists({});
+                        setFailed({});
+                      }
+                    }}
+                  >
+                    {i18n.t(`socialgraph:order.${each}`)}
+                  </MenuItem>
+                );
+              })}
+            </Menu>
+          </>}
       </DialogTitle>
       <Tabs
         value={kind}
@@ -133,42 +190,17 @@ const SocialgraphDialog = ({
               key={each}
               value={each}
               label={typeof count === 'number' ?
-                `${i18n.t(`socialgraph:${each}`)} ${count}` :
+                <span>
+                  {i18n.t(`socialgraph:${each}`)}
+                  <Box component="span" sx={{ ml: 1, color: 'text.secondary', fontVariantNumeric: 'tabular-nums' }}>
+                    {shortCount(count, i18n.language)}
+                  </Box>
+                </span> :
                 i18n.t(`socialgraph:${each}`)}
             />
           );
         })}
       </Tabs>
-      {!heldBack &&
-        <Box sx={{
-          px: 2, py: 1, display: 'flex', justifyContent: 'flex-end',
-        }}
-        >
-          <ToggleButtonGroup
-            size="small"
-            color="primary"
-            exclusive
-            value={order}
-            aria-label={i18n.t('socialgraph:order.label')}
-            onChange={(event, value) => {
-              // Pressing the one that is on leaves it on.
-              if (value && value !== order) {
-                setOrder(value);
-                // Every list is read again in the new order.
-                setLists({});
-                setFailed({});
-              }
-            }}
-          >
-            {socialgraph.ORDERS.map((each) => {
-              return (
-                <ToggleButton key={each} value={each} sx={{ px: 2, py: 0 }}>
-                  {i18n.t(`socialgraph:order.${each}`)}
-                </ToggleButton>
-              );
-            })}
-          </ToggleButtonGroup>
-        </Box>}
       {/* The list scrolls inside the dialog, so that is what is watched
           for its end. */}
       <DialogContent

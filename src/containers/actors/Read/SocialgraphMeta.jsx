@@ -2,22 +2,19 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography';
+import Link from '@mui/material/Link';
 
 import SocialgraphDialog from './SocialgraphDialog';
 import ActorType from '../../../proptypes/Actor';
 import i18n from '../../../languages';
 import socialgraph from '../../../utils/socialgraph';
+import shortCount from '../../../utils/shortCount';
+import utils from '../../../utils';
 
-// The number of followers under a profile's name. Pressing it opens who
-// they are, who the profile follows, and who the viewer has in common with
-// it.
-//
-// It used to show the number of leaders beside it too, each a link to a tab
-// of the profile. One number is enough to say how followed a profile is, and
-// the rest is one press away.
+// One line of counts under a profile's name: "22 followers · 16 following".
+// Each opens the dialog of who they are, on that list. Following is for
+// people only, since only people follow; a group or an event has its
+// followers alone, as somebody on another server has.
 const SocialgraphMeta = ({ actor, openOn = '' }) => {
   const [startOn, setStartOn] = useState(openOn || '');
 
@@ -27,36 +24,43 @@ const SocialgraphMeta = ({ actor, openOn = '' }) => {
     setStartOn(openOn || '');
   }, [openOn, actor.id]);
 
+  const counts = [
+    { list: socialgraph.FOLLOWERS, count: actor.followerCount || 0, label: 'socialgraph:counts.followers' },
+  ];
+  // Whom somebody on another server follows is not known here, so their
+  // following is not counted. The API leaves a count of nought out.
+  if (utils.node.isPerson(actor) && !utils.federation.isRemote(actor)) {
+    counts.push({ list: socialgraph.LEADERS, count: actor.leaderCount || 0, label: 'socialgraph:counts.following' });
+  }
+
   return (
     <>
-      <Typography
-        variant="h4"
-        align="center"
-        sx={{ m: 2, fontSize: 16 }}
+      <Box sx={{
+        mt: 1, display: 'flex', flexWrap: 'wrap', columnGap: 2, rowGap: 0.5,
+      }}
       >
-        <b>{`${i18n.t('socialgraph:followers')}: `}</b>
-        <Button
-          onClick={() => {
-            setStartOn(socialgraph.FOLLOWERS);
-          }}
-          aria-label={i18n.t('socialgraph:open', { count: actor.followerCount || 0 })}
-          sx={{
-            minWidth: 0,
-            px: 1,
-            py: 0,
-            fontSize: 'inherit',
-            verticalAlign: 'baseline',
-          }}
-        >
-          {actor.followerCount || 0}
-        </Button>
-      </Typography>
-      {/* Said here, where it is looked for: under the name of somebody
-          whose profile you are on. */}
-      {actor.isFollowingViewer &&
-        <Box sx={{ textAlign: 'center', mb: 2 }}>
-          <Chip size="small" label={i18n.t('socialgraph:followsYou')} />
-        </Box>}
+        {counts.map((each) => {
+          return (
+            // eslint-disable-next-line jsx-a11y/anchor-is-valid
+            <Link
+              key={each.list}
+              component="button"
+              type="button"
+              variant="body2"
+              color="textSecondary"
+              underline="hover"
+              onClick={() => {
+                setStartOn(each.list);
+              }}
+            >
+              <Box component="span" sx={{ color: 'text.primary', fontWeight: 600, mr: 0.5 }}>
+                {shortCount(each.count, i18n.language)}
+              </Box>
+              {i18n.t(each.label, { count: each.count })}
+            </Link>
+          );
+        })}
+      </Box>
       <SocialgraphDialog
         actor={actor}
         open={Boolean(startOn)}

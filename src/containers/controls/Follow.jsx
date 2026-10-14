@@ -21,7 +21,9 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     component = 'button',
     // One word wherever anything is followed, a profile, a hashtag or a
     // place, with a plus before it on a button.
-    followLabel = i18n.t('actions:follow'),
+    // Left out, "Follow", or "Follow back" for somebody who follows the
+    // viewer already.
+    followLabel = '',
     unfollowLabel = i18n.t('actions:unfollow'),
     viewer,
     // The width of what it is in, for a row of buttons of one width.
@@ -29,6 +31,9 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     // How the button is drawn, where the place it is in wants more than
     // the plain one: 'outlined' beside another outlined button.
     variant = 'text',
+    // The one thing to do on a profile's header: filled while not
+    // following, outlined once following. Overrides `variant`.
+    prominent = false,
   } = props;
 
   const [leader, setLeader] = useState(actor.isLeadingViewer);
@@ -52,9 +57,15 @@ const ControlsFollow = React.forwardRef((props, ref) => {
       });
   };
 
-  const title = leader ? unfollowLabel : followLabel;
+  const askLabel = followLabel ||
+    i18n.t(actor.isFollowingViewer ? 'actions:followBack' : 'actions:follow');
+  const title = leader ? unfollowLabel : askLabel;
   const onClick = leader ? handleUnfollow : handleFollow;
   const color = leader ? 'inherit' : 'primary';
+  let drawn = variant;
+  if (prominent) {
+    drawn = leader ? 'outlined' : 'contained';
+  }
 
   if (component === 'menuitem') {
     return (
@@ -76,7 +87,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
       disabled={waiting}
       color={color}
       fullWidth={fullWidth}
-      variant={variant}
+      variant={drawn}
       startIcon={leader ? null : <AddIcon />}
       ref={ref}
     >
@@ -94,6 +105,7 @@ ControlsFollow.propTypes = {
   unfollowLabel: PropTypes.string,
   fullWidth: PropTypes.bool,
   variant: PropTypes.oneOf(['text', 'outlined', 'contained']),
+  prominent: PropTypes.bool,
   viewer: PersonType.isRequired,
 };
 

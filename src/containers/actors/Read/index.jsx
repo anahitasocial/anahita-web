@@ -233,6 +233,7 @@ const ActorsRead = (props) => {
             canEdit={canEdit}
           />}
         actor={actor}
+        hasCover={Boolean(utils.node.getCoverURL(actor))}
         // /people/ana/socialgraph/leaders was a tab of the profile. It now
         // opens the profile with that list showing.
         socialgraphOpenOn={tab === 'socialgraph' ? (subtab || 'followers') : ''}
@@ -252,7 +253,7 @@ const ActorsRead = (props) => {
                   }}
                 />
               </Box>}
-            {showFollow && !showInviteAnswer && <ControlFollow actor={actor} />}
+            {showFollow && !showInviteAnswer && <ControlFollow actor={actor} prominent />}
           </>
         }
         headerActions={showCommands &&

@@ -1,4 +1,9 @@
 export default {
+  counts: {
+    followers_one: 'follower',
+    followers_other: 'followers',
+    following: 'following',
+  },
   cTitle: 'Social Graph',
   mTitle: 'Social Graph',
   followers: 'Followers',
