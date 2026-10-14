@@ -9,7 +9,7 @@ export default {
   filterNodeTypes: {
     all: 'All',
     media: 'Media',
-    actors: 'Actors',
+    actors: 'Profiles',
     feeds: 'Feeds',
   },
   boxPlaceholder: 'Search...',
