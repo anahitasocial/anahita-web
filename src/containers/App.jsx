@@ -15,6 +15,7 @@ import Toolbar from '@mui/material/Toolbar';
 
 import IconButton from '@mui/material/IconButton';
 import SearchBox from '../components/SearchBox';
+import recentSearches from '../utils/recentSearches';
 
 import Viewer from '../components/AuthViewer';
 import ViewerType from '../proptypes/Viewer';
@@ -137,6 +138,9 @@ const App = ({
   };
 
   const handleLogout = () => {
+    // What this person searched for is not left for whoever uses this
+    // browser next.
+    recentSearches.clear(viewer.id);
     logout()
       .then(() => {
         navigate('/');

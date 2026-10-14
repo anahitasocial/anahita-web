@@ -38,6 +38,13 @@ const v4Look = (prefersDarkMode) => {
             lineHeight: 1.43,
             letterSpacing: '0.01071em',
           },
+          // A placeholder takes its direction from its own words. In a box
+          // set right to left for a post in Persian or Arabic, an English
+          // placeholder then still reads "What's new?" and not "?What's
+          // new", with no translation needed.
+          'input::placeholder, textarea::placeholder': {
+            unicodeBidi: 'plaintext',
+          },
         },
       },
       MuiLink: {

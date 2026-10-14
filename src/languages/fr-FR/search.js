@@ -1,7 +1,6 @@
 export default {
   cTitle: 'Recherche',
   mTitle: 'Recherche',
-  filterRadius: '{{ radius }} km',
   sort: 'Trier par',
   sortOptions: {
     relevant: 'Les plus pertinents',
@@ -14,4 +13,28 @@ export default {
     feeds: 'Fils',
   },
   boxPlaceholder: 'Rechercher...',
+  recent: {
+    title: 'Recherches récentes',
+    forget: 'Oublier « {{ term }} »',
+    clear: 'Effacer les recherches récentes',
+  },
+  distance: {
+    unavailable: 'Ce navigateur ne peut pas indiquer où vous êtes : cette recherche n’est donc pas limitée par la distance.',
+    refused: 'Votre navigateur n’a pas indiqué où vous êtes : cette recherche n’est donc pas limitée par la distance. Autorisez ce site à connaître votre position pour chercher à proximité.',
+  },
+  countLabel_one: '{{ count }} trouvé',
+  countLabel_other: '{{ count }} trouvés',
+  distanceLabel: 'Distance',
+  anywhere: 'Partout',
+  within: 'À moins de {{ radius }} km',
+  km: '{{ radius }} km',
+  choices: {
+    followedFirst: 'Profils suivis d’abord',
+    followedFirstHelp: 'Les personnes, les groupes et les événements que vous suivez, et ce qui y est publié, avant tout le reste',
+    recentFirst: 'Résultats récents d’abord',
+    recentFirstHelp: 'Parmi les résultats qui correspondent aussi bien, les plus récents d’abord',
+  },
+  nothingFound: 'Rien ne correspond à « {{ term }} ».',
+  foundUnder_one: '{{ count }} dans {{ tab }}',
+  foundUnder_other: '{{ count }} dans {{ tab }}',
 };

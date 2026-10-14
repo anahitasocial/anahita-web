@@ -1,7 +1,6 @@
 export default {
   cTitle: 'Search',
   mTitle: 'Search',
-  filterRadius: '{{ radius }} km',
   sort: 'Sort by',
   sortOptions: {
     relevant: 'Most relevant',
@@ -10,8 +9,32 @@ export default {
   filterNodeTypes: {
     all: 'All',
     media: 'Media',
-    actors: 'Actors',
+    actors: 'Profiles',
     feeds: 'Feeds',
   },
   boxPlaceholder: 'Search...',
+  recent: {
+    title: 'Recent searches',
+    forget: 'Forget "{{ term }}"',
+    clear: 'Clear recent searches',
+  },
+  distance: {
+    unavailable: 'This browser cannot say where you are, so this search is not limited by distance.',
+    refused: 'Your browser did not share where you are, so this search is not limited by distance. Allow this site to know your location to search nearby.',
+  },
+  countLabel_one: '{{ count }} found',
+  countLabel_other: '{{ count }} found',
+  distanceLabel: 'Distance',
+  anywhere: 'Anywhere',
+  within: 'Within {{ radius }} km',
+  km: '{{ radius }} km',
+  choices: {
+    followedFirst: 'Profiles I follow first',
+    followedFirstHelp: 'The people, groups and events you follow, and what is posted on them, before everything else',
+    recentFirst: 'Newer results first',
+    recentFirstHelp: 'Among results that match equally well, the newest first',
+  },
+  nothingFound: 'Nothing matches “{{ term }}”.',
+  foundUnder_one: '{{ count }} under {{ tab }}',
+  foundUnder_other: '{{ count }} under {{ tab }}',
 };

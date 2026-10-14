@@ -33,6 +33,9 @@ const ComposersNote = ({
   actor,
   isFetching,
   postOptions = null,
+  // Right to left for a post in Persian, Arabic or Hebrew; otherwise from
+  // the first letter typed.
+  direction = 'auto',
   postHint = '',
   linkPreview = null,
   onLinkPreviewRemove = null,
@@ -63,7 +66,7 @@ const ComposersNote = ({
             required
             slotProps={{
               htmlInput: {
-                dir: 'auto',
+                dir: direction,
                 maxLength: BODY.MAX_LENGTH,
               },
             }}
@@ -96,6 +99,7 @@ const ComposersNote = ({
 };
 
 ComposersNote.propTypes = {
+  direction: PropTypes.oneOf(['auto', 'rtl']),
   // The audience and language buttons, built by the composer.
   postOptions: PropTypes.node,
   // Something to know before posting, said above the button: that this

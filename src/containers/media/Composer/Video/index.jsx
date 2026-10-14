@@ -160,7 +160,6 @@ const ComposerVideo = ({
       if (!handedOver) {
         return;
       }
-      postLanguage.remember(viewer, language);
       audience.remember(actor, viewer, access);
       setName('');
       setBody('');
@@ -222,7 +221,7 @@ const ComposerVideo = ({
             disabled={busy}
             required
             slotProps={{
-              htmlInput: { dir: 'auto', maxLength: NAME.MAX_LENGTH },
+              htmlInput: { dir: postLanguage.directionOf(language), maxLength: NAME.MAX_LENGTH },
               inputLabel: { shrink: true },
             }}
           />
@@ -240,7 +239,7 @@ const ComposerVideo = ({
             margin="normal"
             disabled={busy}
             slotProps={{
-              htmlInput: { dir: 'auto', maxLength: BODY.MAX_LENGTH },
+              htmlInput: { dir: postLanguage.directionOf(language), maxLength: BODY.MAX_LENGTH },
               inputLabel: { shrink: true },
             }}
           />

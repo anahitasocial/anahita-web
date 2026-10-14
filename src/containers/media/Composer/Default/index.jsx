@@ -166,7 +166,6 @@ const MediaComposerDefault = ({
         ...(linkPreview.url ? { link_preview_url: linkPreview.url } : {}),
         composed: 1,
       }, actor).then(() => {
-        postLanguage.remember(viewer, language);
         // Remembered once it has been used, not when it is picked: a
         // choice somebody backed out of is not a habit.
         audience.remember(actor, viewer, access);
@@ -203,6 +202,7 @@ const MediaComposerDefault = ({
       maxFiles={maxFiles}
       namespace={namespace}
       linkPreview={linkPreview.preview}
+      direction={postLanguage.directionOf(language)}
       postHint={staysHere ? i18n.t('federation:composer.staysHere') : ''}
       onLinkPreviewRemove={linkPreview.remove}
       onBodyPaste={linkPreview.onPaste}

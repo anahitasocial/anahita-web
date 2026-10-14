@@ -111,6 +111,15 @@ const CustomFeedForm = ({
   const { definition } = values;
   const problem = customFeeds.problem(definition);
 
+  // Profiles named by hand, and nothing else to draw from: whose posts
+  // these are is already said, and "Posted on" could only hide some of
+  // them. It is not offered then, and not sent.
+  const onlyPicked = !definition.sources.following &&
+    (definition.sources.actors || []).length > 0;
+  const sent = onlyPicked ?
+    { ...definition, filters: { ...definition.filters, actorTypes: [] } } :
+    definition;
+
   const setDefinition = (part, changes) => {
     setError('');
     setValues({
@@ -148,7 +157,7 @@ const CustomFeedForm = ({
       body: values.body.trim(),
       access: values.access,
       icon: values.icon,
-      definition,
+      definition: sent,
     };
     const call = isNew ?
       api.customFeeds.add(fields) :
@@ -264,7 +273,7 @@ const CustomFeedForm = ({
           <NodesField
             label={i18n.t('customFeeds:form.actors')}
             helperText={i18n.t('customFeeds:form.actorsHelp')}
-            namespaces={['people', 'groups']}
+            namespaces={['people', 'groups', 'remote']}
             value={actors}
             max={LIMITS.actors}
             disabled={isSaving}
@@ -315,6 +324,7 @@ const CustomFeedForm = ({
               {i18n.t('customFeeds:form.mediaTypesHelp')}
             </FormHelperText>
           </FormControl>
+          {!onlyPicked &&
           <FormControl component="fieldset" disabled={isSaving}>
             <FormLabel component="legend">
               {i18n.t('customFeeds:form.actorTypes')}
@@ -343,7 +353,7 @@ const CustomFeedForm = ({
             <FormHelperText sx={{ ml: 0 }}>
               {i18n.t('customFeeds:form.actorTypesHelp')}
             </FormHelperText>
-          </FormControl>
+          </FormControl>}
           <WordsField
             label={i18n.t('customFeeds:form.hashtags')}
             helperText={i18n.t('customFeeds:form.hashtagsHelp')}
@@ -441,7 +451,7 @@ const CustomFeedForm = ({
           />
           <NodesField
             label={i18n.t('customFeeds:form.excludeActors')}
-            namespaces={['people', 'groups']}
+            namespaces={['people', 'groups', 'remote']}
             value={excluded}
             max={LIMITS.actors}
             disabled={isSaving}
@@ -481,7 +491,7 @@ const CustomFeedForm = ({
           </FormControl>
           {/* What the feed shows, in a sentence. */}
           <Typography variant="body2" color="textSecondary">
-            {customFeeds.summary(definition, i18n.t.bind(i18n), { names })}
+            {customFeeds.summary(sent, i18n.t.bind(i18n), { names })}
           </Typography>
         </Stack>
       </form>

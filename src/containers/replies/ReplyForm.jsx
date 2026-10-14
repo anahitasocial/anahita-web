@@ -34,6 +34,7 @@ const ReplyForm = ({
   flush = false,
   linkPreview = null,
   hint = '',
+  direction = 'auto',
 }) => {
   const [body, setBody] = useState(initial);
   const [isSending, setIsSending] = useState(false);
@@ -92,7 +93,7 @@ const ReplyForm = ({
         fullWidth
         slotProps={{
           htmlInput: {
-            dir: 'auto',
+            dir: direction,
             maxLength: BODY.MAX_LENGTH,
           },
         }}
@@ -143,6 +144,8 @@ ReplyForm.propTypes = {
   linkPreview: PropTypes.object,
   // Something to know before sending, said above the buttons.
   hint: PropTypes.string,
+  // Right to left for somebody who writes Persian, Arabic or Hebrew.
+  direction: PropTypes.oneOf(['auto', 'rtl']),
 };
 
 export default ReplyForm;

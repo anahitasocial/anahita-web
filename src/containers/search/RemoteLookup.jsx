@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
 import Button from '@mui/material/Button';
@@ -13,7 +12,6 @@ import Typography from '@mui/material/Typography';
 import api from '../../api';
 import i18n from '../../languages';
 import federation from '../../utils/federation';
-import utils from '../../utils';
 
 // Somebody on another server, found from the search page.
 //
@@ -21,18 +19,23 @@ import utils from '../../utils';
 // (@alice@mastodon.example), a handle on Bluesky (alice.bsky.social) or
 // the address of a profile, the ordinary search has nothing to find: they
 // are not here yet. This offers to ask their own server, or Bluesky, and
-// then opens them as anybody else is opened.
+// then hands who was found to the search page (`onFound`), which draws
+// them first among the results, as anybody found by a search is.
 //
-// It asks only when the button is pressed. Looking somebody up tells
-// another server that this site asked, and that is for the person
-// searching to decide, not for a page to do as it loads.
+// It asks when the button is pressed, or at once when `now` says that
+// the person typed an unmistakable handle into the search box and pressed
+// Enter, which is the same decision made one step earlier. Looking
+// somebody up tells another server that this site asked, and that is for
+// the person searching to decide, not for a page to do as it loads: a
+// link to a search for a handle waits for the button, or a link could
+// make this site call any server just by being opened.
 //
 // Drawn for nothing else, and nothing is drawn on an installation without
 // the service that would be asked: the first press says so and the card
 // goes, for that network and not for the other.
-const RemoteLookup = ({ query = '' }) => {
-  const navigate = useNavigate();
+const RemoteLookup = ({ query = '', now = false, onFound }) => {
   const [isLooking, setIsLooking] = useState(false);
+  const [found, setFound] = useState(null);
   const [error, setError] = useState('');
   // The networks this installation turned out to have no service for.
   const [absent, setAbsent] = useState({});
@@ -41,15 +44,11 @@ const RemoteLookup = ({ query = '' }) => {
   useEffect(() => {
     setError('');
     setIsLooking(false);
+    setFound(null);
   }, [query]);
 
   const kind = federation.lookupKind(query);
-
-  if (!kind || absent[kind]) {
-    return null;
-  }
-
-  const asked = query.trim();
+  const asked = (query || '').trim();
   const onBluesky = kind === federation.ATPROTO;
   let domain = asked.startsWith('https://') ? asked.split('/')[2] : asked.slice(asked.lastIndexOf('@') + 1);
   if (onBluesky) {
@@ -60,8 +59,18 @@ const RemoteLookup = ({ query = '' }) => {
     setIsLooking(true);
     setError('');
 
+    // The lookup answers with who they are and not with their pictures,
+    // so they are then read as their profile is; if that fails, the card
+    // is drawn from what the lookup said.
     api.federation.lookup(asked).then((result) => {
-      navigate(utils.node.getURL(result.data));
+      const person = result.data;
+      return api.people.read(person.alias || person.id).then((full) => {
+        setFound(full.data);
+        onFound(full.data);
+      }).catch(() => {
+        setFound(person);
+        onFound(person);
+      });
     }).catch((failure) => {
       const reason = federation.reasonOf(failure);
       // No reason given, and no service to give one: this network is
@@ -77,6 +86,21 @@ const RemoteLookup = ({ query = '' }) => {
       setIsLooking(false);
     });
   };
+
+  useEffect(() => {
+    if (now && kind) {
+      handleLookup();
+    }
+  }, [now, query]);
+
+  if (!kind || absent[kind]) {
+    return null;
+  }
+
+  // Drawn by the search page, among the results.
+  if (found) {
+    return null;
+  }
 
   return (
     <Card sx={{ mb: 2 }}>
@@ -96,7 +120,9 @@ const RemoteLookup = ({ query = '' }) => {
         <Button
           fullWidth
           variant="contained"
-          onClick={handleLookup}
+          onClick={() => {
+            handleLookup();
+          }}
           disabled={isLooking}
         >
           {i18n.t('federation:lookup.button')}
@@ -108,6 +134,10 @@ const RemoteLookup = ({ query = '' }) => {
 
 RemoteLookup.propTypes = {
   query: PropTypes.string,
+  // Look them up at once, without waiting for the button.
+  now: PropTypes.bool,
+  // Given who was found.
+  onFound: PropTypes.func.isRequired,
 };
 
 export default RemoteLookup;

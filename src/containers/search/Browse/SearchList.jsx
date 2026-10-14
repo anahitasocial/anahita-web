@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -16,6 +16,9 @@ import MediaCard from '../../nodes/MediumNode';
 import CustomFeedSearchCard from '../../feeds/SearchCard';
 import customFeeds from '../../../utils/customFeeds';
 import Progress from '../../../components/Progress';
+import NothingFound from './NothingFound';
+import federation from '../../../utils/federation';
+import searchChoices from '../../../utils/searchChoices';
 import { App as APP, Search as SEARCH } from '../../../constants';
 
 import utils from '../../../utils/node';
@@ -41,6 +44,10 @@ const SearchList = ({
   alertError,
   items,
   error,
+  isFetching,
+  onScope,
+  lead = null,
+  counts = {},
   total = 0,
   queryParams: {
     sort,
@@ -49,11 +56,24 @@ const SearchList = ({
     coordLong,
     coordLat,
     searchRange,
+    choices = searchChoices.NONE,
   },
 }) => {
   const { classes } = useStyles();
 
   const [start, setStart] = useState(0);
+
+  // Whether this search has had its answer: the list is drawn anew for
+  // each search, and until the answer comes an empty list says nothing.
+  const [answered, setAnswered] = useState(false);
+  const wasFetching = useRef(false);
+  useEffect(() => {
+    if (isFetching) {
+      wasFetching.current = true;
+    } else if (wasFetching.current) {
+      setAnswered(true);
+    }
+  }, [isFetching]);
 
   useEffect(() => {
     return () => {
@@ -67,13 +87,17 @@ const SearchList = ({
       return;
     }
 
+    // The distance is chosen in kilometres and asked for in metres; the
+    // last mark on the slider is anywhere, and sends none.
+    const near = searchRange <= 100;
     browseList({
+      ...(sort === RELEVANT ? searchChoices.paramsOf(choices) : {}),
       sort,
       start,
       scope,
-      search_range: searchRange <= 100 ? searchRange : '',
-      coord_lng: searchRange <= 100 ? coordLong : '',
-      coord_lat: searchRange <= 100 ? coordLat : '',
+      search_range: near ? searchRange * 1000 : '',
+      coord_lng: near ? coordLong : '',
+      coord_lat: near ? coordLat : '',
       limit: LIMIT,
       term: q,
     });
@@ -107,6 +131,19 @@ const SearchList = ({
     );
   }
 
+  // Nothing found. A handle from another server finds nothing here by
+  // its nature, and the card above it says what to do instead.
+  if (q && answered && items.allIds.length === 0 && !federation.isLookup(q)) {
+    return (
+      <NothingFound
+        term={q}
+        scope={scope}
+        onScope={onScope}
+        counts={counts}
+      />
+    );
+  }
+
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
@@ -117,7 +154,13 @@ const SearchList = ({
       }
     >
       <Masonry>
-        {items.allIds.map((itemId) => {
+        {lead &&
+          <div key={`search_lead_${lead.id}`} className={classes.card}>
+            <ActorsCard actor={lead} />
+          </div>}
+        {items.allIds.filter((itemId) => {
+          return !lead || items.byId[itemId].id !== lead.id;
+        }).map((itemId) => {
           const node = items.byId[itemId];
           const key = `search_node_${node.id}`;
           return (
@@ -161,11 +204,24 @@ SearchList.propTypes = {
     sort: PropTypes.oneOf([RELEVANT, RECENT]),
     q: PropTypes.string,
     scope: PropTypes.string,
+    // In kilometres; more than 100 is anywhere.
     searchRange: PropTypes.number,
     coordLong: PropTypes.number,
     coordLat: PropTypes.number,
+    // How the searcher likes "Most relevant" ordered (utils/searchChoices).
+    choices: PropTypes.shape({
+      followedFirst: PropTypes.bool,
+      recentFirst: PropTypes.bool,
+    }),
   }).isRequired,
   error: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  // Opens another tab, from the words for a search that found nothing.
+  onScope: PropTypes.func.isRequired,
+  // Somebody looked up on another server, drawn first.
+  lead: PropTypes.objectOf(PropTypes.any),
+  // How many each tab finds.
+  counts: PropTypes.objectOf(PropTypes.number),
   total: PropTypes.number,
 };
 

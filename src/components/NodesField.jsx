@@ -14,6 +14,10 @@ import ActorAvatar from './ActorAvatar';
 import utils from '../utils';
 
 const { getActorName, isActor } = utils.node;
+const { isRemote, displayHandle } = utils.federation;
+
+// Where people on other servers are looked for.
+const REMOTE = 'remote';
 
 const WAIT = 300;
 const EACH = 6;
@@ -22,10 +26,15 @@ const EACH = 6;
 // kept as chips.
 //
 // `namespaces` is where to look: 'people' and 'groups' for profiles,
-// 'locations' for places. Each is asked for names like what was typed, a
-// moment after the typing stops, and the answers are offered together. What
-// is offered is what the viewer may see, since it is the lists they could
-// open themselves.
+// 'locations' for places, and 'remote' for people on other servers. Each
+// is asked for names like what was typed, a moment after the typing stops,
+// and the answers are offered together. What is offered is what the
+// viewer may see, since it is the lists they could open themselves.
+//
+// The lists of people and groups keep to this site's own. People from
+// Mastodon or Bluesky are found through the site's search, which has
+// everybody kept here: whoever somebody here followed or looked up. One
+// never looked up is not offered until they are.
 const NodesField = ({
   label,
   helperText = '',
@@ -62,9 +71,19 @@ const NodesField = ({
       setIsFetching(true);
 
       Promise.all(namespaces.map((namespace) => {
-        return axios.get(`/${namespace}/`, { params: { q: q.trim(), limit: EACH } })
+        const request = namespace === REMOTE ?
+          axios.get('/search/', { params: { term: q.trim(), scope: 'actors', limit: EACH * 3 } }) :
+          axios.get(`/${namespace}/`, { params: { q: q.trim(), limit: EACH } });
+
+        return request
           .then((result) => {
-            return result.data.data || [];
+            const found = result.data.data || [];
+            if (namespace !== REMOTE) {
+              return found;
+            }
+            // The search has this site's own too, which the other lists
+            // give; only those from elsewhere are taken from it.
+            return found.filter(isRemote).slice(0, EACH);
           })
           .catch(() => {
             return [];
@@ -122,7 +141,12 @@ const NodesField = ({
                 <ActorAvatar actor={node} size="small" linked={false} /> :
                 <PlaceIcon color="action" />}
             </ListItemAvatar>
-            <ListItemText primary={nameOf(node)} />
+            <ListItemText
+              primary={nameOf(node)}
+              // Somebody elsewhere by their handle, so that two of the same
+              // name on different servers can be told apart.
+              secondary={isRemote(node) ? displayHandle(node) : null}
+            />
           </li>
         );
       }}

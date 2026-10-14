@@ -30,6 +30,17 @@ const primaryOf = (tag) => {
   return `${tag || ''}`.split(/[-_]/)[0].toLowerCase();
 };
 
+// The languages written from right to left.
+const RIGHT_TO_LEFT = ['ar', 'ckb', 'dv', 'fa', 'he', 'ps', 'sd', 'ug', 'ur', 'yi'];
+
+// The direction to type a post in, from the language chosen for it: right
+// to left for Persian, Arabic, Hebrew and the others, so that an empty box
+// starts at the right. Otherwise `auto`, which takes the direction from the
+// first letter typed, as before.
+const directionOf = (code) => {
+  return RIGHT_TO_LEFT.includes(primaryOf(code)) ? 'rtl' : 'auto';
+};
+
 const isOffered = (code) => {
   return CODES.includes(code);
 };
@@ -63,42 +74,30 @@ const browserLanguage = () => {
   return found || '';
 };
 
-const read = () => {
+// The composer used to remember the language somebody last posted in, in
+// this browser, and start there. One post sent in the wrong language then
+// made every post after it start in that language, each confirming it. It
+// is no longer kept; what an older version stored is cleared.
+const clearOld = () => {
   try {
-    return JSON.parse(window.localStorage.getItem(STORAGE_KEY)) || {};
+    window.localStorage.removeItem(STORAGE_KEY);
   } catch (e) {
-    return {};
-  }
-};
-
-// The language this person last posted in, in this browser. Per person:
-// a shared browser must not hand one person's language to the next.
-const remembered = (viewer) => {
-  return read()[viewer.id] || '';
-};
-
-const remember = (viewer, code) => {
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      ...read(),
-      [viewer.id]: code,
-    }));
-  } catch (e) {
-    // Not remembered. The next post starts from the profile again.
+    // Nothing to clear, or nowhere to clear it from.
   }
 };
 
 // Where the composer starts, in order:
 //
-//   1. the language this person last posted in, here: somebody who
-//      switched to French for a post is probably still writing French;
-//   2. the posting language on their profile, which follows them to
-//      every device;
-//   3. what the browser says they read;
-//   4. English, so there is always an answer.
+//   1. the posting language on their profile, which follows them to every
+//      device;
+//   2. what their browser, and so their computer, says they read;
+//   3. English, so there is always an answer.
+//
+// A different language for one post is chosen on that post, and the next
+// starts here again.
 const defaultFor = (viewer) => {
-  return remembered(viewer) ||
-    primaryOf(viewer.language) ||
+  clearOld();
+  return primaryOf(viewer && viewer.language) ||
     browserLanguage() ||
     'en';
 };
@@ -117,10 +116,9 @@ export default {
   UNDETERMINED,
   CODES,
   primaryOf,
+  directionOf,
   nameOf,
   browserLanguage,
-  remembered,
-  remember,
   defaultFor,
   optionsWith,
 };

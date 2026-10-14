@@ -59,6 +59,11 @@ const mine = () => {
 };
 
 // The feeds the viewer keeps on their home page, in order.
+// Feeds people have shared, newest first, each as the viewer may see it.
+const discover = ({ start = 0, limit = 20 } = {}) => {
+  return axios.get('/feeds/discover', { params: { start, limit } });
+};
+
 const pinned = () => {
   return axios.get('/feeds/pinned');
 };
@@ -117,6 +122,7 @@ export default {
   remove,
   copy,
   mine,
+  discover,
   pinned,
   setPins,
   setPinned,

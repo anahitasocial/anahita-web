@@ -35,6 +35,9 @@ const ComposersPhoto = ({
   isFetching,
   namespace,
   postOptions = null,
+  // Right to left for a post in Persian, Arabic or Hebrew; otherwise from
+  // the first letter typed.
+  direction = 'auto',
 }) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
@@ -64,7 +67,7 @@ const ComposersPhoto = ({
               required
               slotProps={{
                 htmlInput: {
-                  dir: 'auto',
+                  dir: direction,
                   maxLength: NAME.MAX_LENGTH,
                   minLength: NAME.MIN_LENGTH,
                 },
@@ -90,7 +93,7 @@ const ComposersPhoto = ({
               required
               slotProps={{
                 htmlInput: {
-                  dir: 'auto',
+                  dir: direction,
                   maxLength: BODY.MAX_LENGTH,
                 },
 
@@ -121,6 +124,7 @@ const ComposersPhoto = ({
 };
 
 ComposersPhoto.propTypes = {
+  direction: PropTypes.oneOf(['auto', 'rtl']),
   // The audience and language buttons, built by the composer.
   postOptions: PropTypes.node,
   actor: ActorType.isRequired,

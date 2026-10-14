@@ -62,8 +62,8 @@ Whether the **Create account** button appears depends on the server's
 `yarn start` runs the development server with hot reload.
 
 In development the Redux store also runs `redux-logger`, which logs every
-action to the browser console, and the Redux DevTools dock
-(`src/containers/DevTools.jsx`). Neither is in a production build.
+action to the browser console, and connects to the Redux DevTools browser
+extension when it is installed. Neither is in a production build.
 
 `REACT_APP_*` values are read when the server starts. After changing `.env`,
 restart `yarn start`.

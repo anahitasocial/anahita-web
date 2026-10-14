@@ -6,7 +6,6 @@ import { Link as RouterLink } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -18,7 +17,6 @@ import Typography from '@mui/material/Typography';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import DownIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/EditOutlined';
-import FindIcon from '@mui/icons-material/SearchOutlined';
 import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/Home';
@@ -41,8 +39,8 @@ const { getActorName } = utils.node;
 
 // Custom feeds: the ones the viewer made, and the ones of other people's
 // they keep on their home page. What other people have shared is found in
-// the site's search, under its Feeds tab, which this page links to: that
-// is the list that grows, and it is kept out of this one.
+// the site's search and in the Feeds tab of Recommendations: that is the
+// list that grows, and it is kept out of this one.
 //
 // A feed on the home page has a filled house; pressing it takes it off, and
 // the arrows move it among the tabs there. Making, changing and deleting a
@@ -336,14 +334,6 @@ const CustomFeedsManage = ({
             {i18n.t('customFeeds:list.emptyKept')}
           </Typography>}
           {kept.map(row)}
-          <Button
-            component={RouterLink}
-            to="/search?scope=feeds"
-            startIcon={<FindIcon />}
-            sx={{ mx: 1, mb: 2 }}
-          >
-            {i18n.t('customFeeds:list.find')}
-          </Button>
         </>}
       </PageColumn>
       {detailsOf > 0 &&

@@ -19,7 +19,6 @@ export default {
     kept: 'Fils d’autres personnes',
     empty: 'Vous n’avez pas encore de fil personnalisé.',
     emptyKept: 'Un fil créé par quelqu’un d’autre apparaît ici quand vous l’ajoutez à votre page d’accueil.',
-    find: 'Trouver des fils partagés',
     by: 'par {{ name }}',
     loadFailed: 'Vos fils n’ont pas pu être chargés. Veuillez réessayer.',
   },
