@@ -14,7 +14,7 @@ import customFeeds from '../../../utils/customFeeds';
 // What somebody who has just joined is interested in: the hashtags on the
 // most public posts lately, as chips to pick.
 //
-// What is picked becomes one feed, "For You": every post on the site with
+// What is picked becomes one feed, "My interests": every post on the site with
 // any of those hashtags, on their home page, theirs alone. A feed takes ten
 // hashtags at most, so ten can be picked. That feed is also what the next
 // step recommends by: the recommendation service reads the hashtags of the

@@ -19,10 +19,10 @@ export default {
   },
   interests: {
     title: 'What are you interested in?',
-    description: 'Hashtags people here use a lot. Pick up to ten: posts with any of them make up a "For You" feed on your home page, and help us suggest people and groups to you.',
+    description: 'Hashtags people here use a lot. Pick up to ten: posts with any of them make up a "My interests" feed on your home page, and help us suggest people and groups to you.',
     follow_one: 'Follow {{ count }} hashtag',
     follow_other: 'Follow {{ count }} hashtags',
-    feedName: 'For You',
+    feedName: 'My interests',
   },
   recommended: {
     title: 'Recommended for you',

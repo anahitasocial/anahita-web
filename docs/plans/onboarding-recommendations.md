@@ -136,6 +136,9 @@ Changed from what they saw:
   `prominent`).
 - **The language they post in starts on the browser's,** and so the
   computer's, rather than on nothing chosen.
-- **What is picked makes one feed, "For You",** of all the hashtags picked,
-  not a feed for each: up to ten, as many as a feed takes. The last step is
-  called "Recommended", so that the two are not both "For you".
+- **What is picked makes one feed, "My interests",** of all the hashtags
+  picked, not a feed for each: up to ten, as many as a feed takes. First
+  called "For You", and renamed at the user's word: on other platforms
+  "For You" is a feed an algorithm chooses, and this one is the posts with
+  the hashtags they chose, newest first. The last step is called
+  "Recommended".
