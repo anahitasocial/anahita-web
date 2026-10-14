@@ -38,22 +38,15 @@ describe('post language', () => {
     });
   });
 
-  // Somebody who switched to French for a post is probably still writing
-  // French, whatever their profile says.
-  it('prefers the language last posted in to both', () => {
-    postLanguage.remember(viewer, 'de');
+  // One post in another language does not make the next start in it: a
+  // post sent once as Farsi made every post after it Farsi.
+  it('does not follow the language of the last post, and clears what an older version kept', () => {
+    window.localStorage.setItem('composer.language', JSON.stringify({ 7: 'fa' }));
 
     withBrowser(['en-US'], () => {
-      expect(postLanguage.defaultFor({ ...viewer, language: 'fa' })).toBe('de');
+      expect(postLanguage.defaultFor(viewer)).toBe('en');
     });
-  });
-
-  it('keeps one person\'s language from the next person on the same browser', () => {
-    postLanguage.remember(viewer, 'de');
-
-    withBrowser(['en-US'], () => {
-      expect(postLanguage.defaultFor({ id: 8 })).toBe('en');
-    });
+    expect(window.localStorage.getItem('composer.language')).toBeNull();
   });
 
   it('always has an answer', () => {
@@ -93,8 +86,5 @@ describe('post language', () => {
     withBrowser(['en'], () => {
       expect(postLanguage.defaultFor(viewer)).toBe('en');
     });
-    expect(() => {
-      postLanguage.remember(viewer, 'fr');
-    }).not.toThrow();
   });
 });

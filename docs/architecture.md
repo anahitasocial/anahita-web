@@ -297,9 +297,12 @@ reads that and adds what the server has no opinion on:
 Beside the audience button the composer has a language button
 (`components/LanguageButton.jsx`), showing a code such as `EN`. The choice is
 sent with the post as `language`. `src/utils/postLanguage.js` decides where it
-starts: the language this person last posted in, in this browser; then the
-posting language on their profile, which the session's viewer carries; then
-the browser's language; then English. Language names come from the browser
+starts: the posting language on their profile, which the session's viewer
+carries; then the browser's language, which is the computer's; then
+English. A different language chosen for one post applies to that post only.
+It once remembered the language somebody last posted in, which made one post
+sent in the wrong language the start of every post after it; it no longer
+does, and clears what it kept. Language names come from the browser
 (`Intl.DisplayNames`), in the language the app is being read in.
 
 Where a post's text is drawn, `components/NodeBody.jsx` puts the post's

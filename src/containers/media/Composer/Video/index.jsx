@@ -160,7 +160,6 @@ const ComposerVideo = ({
       if (!handedOver) {
         return;
       }
-      postLanguage.remember(viewer, language);
       audience.remember(actor, viewer, access);
       setName('');
       setBody('');
