@@ -6,9 +6,9 @@ export default {
     namePlaceholder: 'Titre de la vidéo ...',
     body: 'Description',
     bodyPlaceholder: 'Écrivez une description ...',
-    choose: 'Choisir une vidéo',
+    choose: 'Choisir une vidéo ou un GIF',
     change: 'En choisir une autre',
-    limits: 'MP4, MOV ou WebM, jusqu’à {{size}} et {{minutes}} minutes.',
+    limits: 'MP4, MOV ou WebM, jusqu’à {{size}} et {{minutes}} minutes. Un GIF ou un PNG animé, jusqu’à {{animationSize}} et {{seconds}} secondes, joue en boucle.',
     upload: 'Téléverser',
   },
   upload: {
@@ -24,9 +24,11 @@ export default {
   },
   problems: {
     none: 'Choisissez d’abord une vidéo.',
-    notAVideo: 'Ce fichier n’est pas une vidéo publiable. Utilisez MP4, MOV ou WebM.',
+    notAVideo: 'Ce fichier n’est pas une vidéo publiable. Utilisez MP4, MOV, WebM, un GIF ou un PNG animé.',
     tooLarge: 'Cette vidéo dépasse {{size}}.',
-    tooLong: 'Cette vidéo dépasse {{minutes}} minutes.',
+    animationTooLarge: 'Ce GIF dépasse {{animationSize}}.',
+    tooLong: 'C’est plus long que ce qui peut être publié : {{minutes}} minutes pour une vidéo, {{seconds}} secondes pour un GIF.',
+    still: 'Cette image ne bouge pas. Publiez-la plutôt comme photo.',
     tooMany: 'Vous avez publié autant de vidéos que possible aujourd’hui.',
     off: 'Les vidéos ne peuvent pas être publiées ici.',
     encoding: 'Cette vidéo n’a pas pu être préparée.',
@@ -36,5 +38,8 @@ export default {
   player: {
     qualityOf: 'Qualité : {{label}}',
     quality: 'Qualité',
+    gif: 'GIF',
+    play: 'Lire',
+    pause: 'Pause',
   },
 };

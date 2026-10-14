@@ -17,7 +17,8 @@ describe('a video being sent', () => {
     const info = { metadata: { videoUploads: true, videoMaxBytes: 1000 } };
 
     expect(videos.problem(undefined, info)).toBe('none');
-    expect(videos.problem({ type: 'image/png', size: 10 }, info)).toBe('notAVideo');
+    expect(videos.problem({ type: 'image/jpeg', size: 10 }, info)).toBe('notAVideo');
+    expect(videos.problem({ type: 'image/webp', size: 10 }, info)).toBe('notAVideo');
     expect(videos.problem({ type: 'video/mp4', size: 1001 }, info)).toBe('tooLarge');
     expect(videos.problem({ type: 'video/mp4', size: 1000 }, info)).toBe('');
     expect(videos.problem({ type: 'VIDEO/QuickTime', size: 5 }, info)).toBe('');
@@ -26,6 +27,26 @@ describe('a video being sent', () => {
     expect(videos.isOn(undefined)).toBe(false);
     expect(videos.maxBytes(undefined)).toBe(500 * 1024 * 1024);
     expect(videos.maxSeconds({ metadata: { videoMaxSeconds: 1200 } })).toBe(1200);
+  });
+
+  it('may be a GIF or an animated PNG, held to less than a video', () => {
+    const info = {
+      metadata: {
+        videoUploads: true, videoMaxBytes: 1000, animationMaxBytes: 100, animationMaxSeconds: 20,
+      },
+    };
+
+    expect(videos.isAnimation({ type: 'image/gif' })).toBe(true);
+    expect(videos.isAnimation({ type: 'IMAGE/PNG' })).toBe(true);
+    expect(videos.isAnimation({ type: 'video/mp4' })).toBe(false);
+    expect(videos.problem({ type: 'image/gif', size: 100 }, info)).toBe('');
+    expect(videos.problem({ type: 'image/gif', size: 101 }, info)).toBe('animationTooLarge');
+    expect(videos.problem({ type: 'image/png', size: 50 }, info)).toBe('');
+    // A video of the same size is taken.
+    expect(videos.problem({ type: 'video/mp4', size: 101 }, info)).toBe('');
+    expect(videos.animationMaxSeconds(info)).toBe(20);
+    expect(videos.animationMaxBytes(undefined)).toBe(25 * 1024 * 1024);
+    expect(videos.animationMaxSeconds(undefined)).toBe(30);
   });
 
   it('is cut into parts that cover it once', () => {
