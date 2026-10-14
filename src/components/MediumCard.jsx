@@ -70,8 +70,6 @@ const MediumCard = ({
   menu = null,
   handleView = null,
   cardProps = {
-    variant: 'elevation',
-    elevation: 0,
     component: 'section',
   },
 }) => {
