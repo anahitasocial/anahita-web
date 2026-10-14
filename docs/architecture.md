@@ -1227,6 +1227,21 @@ draws nothing (`utils/federation.js#isAbsent`).
   distance, rather than search everywhere and look as though it had not.
   While the browser is still asking, it waits.
 
+### Cards in lists
+
+The cards that show posts in lists, `components/MediumCard.jsx` (search,
+hashtags, places, saved, a profile's tabs) and the feed's
+(`feed/components/Default.jsx`), are drawn alike:
+
+- **A title** (an article's, a topic's, a photo's) through
+  `components/PostTitle.jsx`: one size, a little larger and bolder than the
+  text, in the text's colour, underlined when pointed at.
+- **Where it was posted,** a group or somebody else's profile, as a quiet
+  line above the author (`components/MediumOwnerCardHeader.jsx`), not a
+  second header as heavy as the author's.
+- **What a reply answers** is quoted in plain words (`utils/plainText.js`),
+  so a link in it reads as its words, not as Markdown written out.
+
 ### Long posts
 
 A long post on a card shows its first lines and **Read more**

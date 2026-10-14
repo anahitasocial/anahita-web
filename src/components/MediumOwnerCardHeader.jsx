@@ -19,7 +19,11 @@ const MediumOwner = ({ owner, actions }) => {
 
   return (
     <>
+      {/* Where a post was made: a group, or somebody else's profile. A
+          quiet line above the card's own header, not a second header as
+          heavy as the author's. */}
       <CardHeader
+        sx={{ py: 1 }}
         avatar={
           <ActorAvatar
             actor={owner}
@@ -28,11 +32,11 @@ const MediumOwner = ({ owner, actions }) => {
           />
         }
         title={
-          <Link href={url}>
+          <Link href={url} variant="body2" color="textSecondary" underline="hover">
             {owner.name}
           </Link>
         }
-        actions={actions}
+        action={actions}
       />
       <Divider />
     </>

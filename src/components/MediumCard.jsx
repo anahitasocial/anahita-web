@@ -9,10 +9,10 @@ import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 import PostActionsRow from './PostActionsRow';
+import PostTitle from './PostTitle';
 import MediumType from '../proptypes/Medium';
 import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';
@@ -186,16 +186,9 @@ const MediumCard = ({
       {medium.body && <Player text={medium.body} />}
       <CardContent component="article" className={classes.content}>
         {medium.name &&
-          <Typography
-            variant="h2"
-            dir="auto"
-            lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
-            className={classes.title}
-          >
-            <Link href={url}>
-              {medium.name}
-            </Link>
-          </Typography>}
+          <PostTitle href={url} lang={medium.language}>
+            {medium.name}
+          </PostTitle>}
         {medium.body &&
           <ReadMore contentFilter lang={medium.language}>
             {medium.body}

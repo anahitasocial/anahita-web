@@ -79,7 +79,7 @@ const HashtagsRead = (props) => {
         />
         {/* Following a hashtag is keeping a feed of it on the home page. */}
         {isAuthenticated && hashtag.id > 0 &&
-          <CardActions>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             <FollowHashtag tag={customFeeds.cleanHashtag(hashtag.alias || hashtag.name)} />
           </CardActions>}
       </Card>

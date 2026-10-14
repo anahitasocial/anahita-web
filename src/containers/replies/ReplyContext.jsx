@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography';
 import CardOwner from '../../components/MediumOwnerCardHeader';
 import i18n from '../../languages';
 import utils from '../../utils';
+import plainText from '../../utils/plainText';
 
 const { getURL } = utils.node;
 
@@ -15,8 +16,10 @@ const { getURL } = utils.node;
 // about; the rest is a click away.
 const EXCERPT = 140;
 
+// In plain words: the Markdown of what was answered is not drawn here, and
+// written out it showed links as "[@julian](https://…)".
 const excerptOf = (text = '') => {
-  const plain = String(text).replace(/\s+/g, ' ').trim();
+  const plain = plainText(text);
   return plain.length > EXCERPT ? `${plain.slice(0, EXCERPT).trim()}…` : plain;
 };
 

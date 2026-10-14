@@ -9,13 +9,13 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
 
 import PostActionsRow from '../../../components/PostActionsRow';
 import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
+import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
@@ -146,14 +146,9 @@ const FeedCardDefault = ({
       {body && <Player text={body} />}
       <CardContent>
         {title &&
-          <Typography
-            variant="h6"
-            className={classes.title}
-          >
-            <Link href={url}>
-              {title}
-            </Link>
-          </Typography>}
+          <PostTitle href={url} lang={node.language}>
+            {title}
+          </PostTitle>}
         {body &&
           <ReadMore contentFilter>
             {body}
