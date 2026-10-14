@@ -29,6 +29,7 @@ import ReadMore from './ReadMore';
 import SignInPrompt from './SignInPrompt';
 import utils from '../utils';
 import photoFiles from '../utils/photoFiles';
+import openOnClick from '../utils/openOnClick';
 import AltBadge from './AltBadge';
 import RemovedPictures from './RemovedPictures';
 
@@ -184,7 +185,13 @@ const MediumCard = ({
         </CardContent>}
       {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
       {medium.body && <Player text={medium.body} />}
-      <CardContent component="article" className={classes.content}>
+      {/* The title and the text open the post when clicked, unless text
+          is being selected or a link in it was clicked. */}
+      <CardContent
+        component="article"
+        className={classes.content}
+        {...openOnClick.handlersFor(url, navigate)}
+      >
         {medium.name &&
           <PostTitle href={url} lang={medium.language}>
             {medium.name}

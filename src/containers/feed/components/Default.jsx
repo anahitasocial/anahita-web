@@ -15,6 +15,7 @@ import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
+import openOnClick from '../../../utils/openOnClick';
 import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
@@ -144,7 +145,9 @@ const FeedCardDefault = ({
         </Box>}
       {node.video && <VideoPlayer video={node.video} title={title} />}
       {body && <Player text={body} />}
-      <CardContent>
+      {/* The title and the text open the post when clicked, unless text
+          is being selected or a link in it was clicked. */}
+      <CardContent {...openOnClick.handlersFor(url, navigate)}>
         {title &&
           <PostTitle href={url} lang={node.language}>
             {title}

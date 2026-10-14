@@ -5,7 +5,8 @@ import Typography from '@mui/material/Typography';
 
 // The title of an article, a topic or a photo on a card in a list: one size
 // everywhere, a little larger and bolder than the text under it, in the
-// text's own colour, and a link to the post underlined when pointed at.
+// text's own colour, and a link to the post, not underlined: the card's
+// title and text open the post when clicked (utils/openOnClick.js).
 // It is a heading for screen readers, but drawn to sit with the card, not
 // above it.
 const PostTitle = ({ children, href = '', lang = '' }) => {
@@ -23,7 +24,7 @@ const PostTitle = ({ children, href = '', lang = '' }) => {
       }}
     >
       {href ?
-        <Link href={href} color="inherit" underline="hover">
+        <Link href={href} color="inherit" underline="none">
           {children}
         </Link> :
         children}

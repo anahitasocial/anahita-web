@@ -1235,7 +1235,12 @@ hashtags, places, saved, a profile's tabs) and the feed's
 
 - **A title** (an article's, a topic's, a photo's) through
   `components/PostTitle.jsx`: one size, a little larger and bolder than the
-  text, in the text's colour, underlined when pointed at.
+  text, in the text's colour, a link with no underline.
+- **The title and the text open the post** when clicked
+  (`utils/openOnClick.js`), unless text is being selected, so it can still
+  be copied, or the click was on a link or a button in it: a hashtag, a
+  mention, an address. Ctrl-, ⌘- or a middle click opens it in a new tab.
+  The title stays a real link for the keyboard and screen readers.
 - **Where it was posted,** a group or somebody else's profile, as a quiet
   line above the author (`components/MediumOwnerCardHeader.jsx`), not a
   second header as heavy as the author's.
