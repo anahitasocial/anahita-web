@@ -95,8 +95,7 @@ const Search = ({ viewerId }) => {
 
   // Everything the page is set to is in its address (utils/searchAddress),
   // so that reloading, going back and a link sent to somebody all open it
-  // as it was. The page of custom feeds leads here with `?scope=feeds`.
-  // `q` is undefined rather than null when absent, so the request leaves
+  // as it was. `q` is undefined rather than null when absent, so the request leaves
   // it out.
   const {
     q,

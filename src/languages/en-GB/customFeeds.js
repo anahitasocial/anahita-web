@@ -19,7 +19,6 @@ export default {
     kept: 'Feeds by other people',
     empty: 'You have no custom feeds yet.',
     emptyKept: 'A feed somebody else made appears here when you add it to your home page.',
-    find: 'Find feeds people have shared',
     by: 'by {{ name }}',
     loadFailed: 'Your feeds could not be loaded. Please try again.',
   },

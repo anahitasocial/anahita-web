@@ -758,7 +758,6 @@ are about, what to leave out. The server's side is in the services'
   with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
   (`components/CustomFeedCard.jsx`) in the same columns, with the button
   that adds it to the home page. Feeds kept to their owners are never found.
-  The list page links to the tab (`/search?scope=feeds`).
 - **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
   new feed at `/feeds/new` (`Add.jsx`) and for changing one at
   `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
