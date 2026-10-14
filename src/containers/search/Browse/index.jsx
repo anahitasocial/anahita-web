@@ -10,11 +10,14 @@ import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import Chip from '@mui/material/Chip';
 import MenuItem from '@mui/material/MenuItem';
+import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
+import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import CheckIcon from '@mui/icons-material/Check';
 
 import SearchList from './SearchList';
@@ -43,6 +46,10 @@ const useStyles = makeStyles()(() => {
     },
   };
 });
+
+const marks = [25, 50, 75, 100].map((radius) => {
+  return { value: radius, label: i18n.t('search:km', { radius }) };
+}).concat([{ value: 125, label: <AllInclusiveIcon fontSize="small" /> }]);
 
 const Search = ({ viewerId }) => {
   const { classes } = useStyles();
@@ -84,6 +91,13 @@ const Search = ({ viewerId }) => {
       ...what,
     }), { replace: true });
   };
+
+  // The slider moves as it is dragged and is written to the address when
+  // let go, so that a drag is one search and not five.
+  const [range, setRange] = useState(searchRange);
+  useEffect(() => {
+    setRange(searchRange);
+  }, [searchRange]);
 
   const changeScope = (event, value) => {
     change({ scope: value });
@@ -213,9 +227,9 @@ const Search = ({ viewerId }) => {
         className={classes.root}
         elevation={1}
       >
-        {/* One row of compact controls, which wraps on a narrow screen:
-            the order and the distance as two small menus, and the
-            searcher's own choices for "Most relevant" as chips. */}
+        {/* A row of compact controls, which wraps on a narrow screen: the
+            order as a small menu, and the searcher's own choices for "Most
+            relevant" as chips. */}
         <Stack
           direction="row"
           useFlexGap
@@ -246,27 +260,6 @@ const Search = ({ viewerId }) => {
               {i18n.t('search:sortOptions.recent')}
             </MenuItem>
           </TextField>
-          <TextField
-            select
-            size="small"
-            id="search-distance"
-            label={i18n.t('search:distanceLabel')}
-            value={searchRange}
-            onChange={(event) => {
-              change({ km: Number(event.target.value) });
-            }}
-            sx={{ minWidth: 160, flex: { xs: '1 1 140px', sm: '0 0 auto' } }}
-          >
-            {searchAddress.DISTANCES.map((km) => {
-              return (
-                <MenuItem key={km} value={km}>
-                  {km === searchAddress.ANYWHERE ?
-                    i18n.t('search:anywhere') :
-                    i18n.t('search:within', { radius: km })}
-                </MenuItem>
-              );
-            })}
-          </TextField>
           {/* The searcher's own choices for "Most relevant", for somebody
               signed in: a visitor follows nobody, and has nowhere to keep
               them. */}
@@ -293,6 +286,39 @@ const Search = ({ viewerId }) => {
               })}
             </Stack>}
         </Stack>
+        {/* The distance, on a line of its own so that the slider has room,
+            and padded so that the marks at its ends are not cut off. */}
+        <Box sx={{ px: 4, pb: 1 }}>
+          <Typography
+            id="search-range-label"
+            variant="caption"
+            color="textSecondary"
+            component="div"
+            sx={{ ml: -2 }}
+          >
+            {i18n.t('search:distanceLabel')}
+          </Typography>
+          <Slider
+            value={range}
+            getAriaValueText={(value) => {
+              return value === searchAddress.ANYWHERE ?
+                i18n.t('search:anywhere') :
+                i18n.t('search:within', { radius: value });
+            }}
+            onChange={(event, value) => {
+              setRange(value);
+            }}
+            onChangeCommitted={(event, value) => {
+              change({ km: value });
+            }}
+            aria-labelledby="search-range-label"
+            min={25}
+            max={searchAddress.ANYWHERE}
+            step={25}
+            marks={marks}
+            size="small"
+          />
+        </Box>
         <Tabs
           value={scope}
           onChange={changeScope}

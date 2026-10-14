@@ -27,6 +27,7 @@ export default {
   distanceLabel: 'Distance',
   anywhere: 'Partout',
   within: 'À moins de {{ radius }} km',
+  km: '{{ radius }} km',
   choices: {
     followedFirst: 'Suivis d’abord',
     followedFirstHelp: 'Les personnes et les groupes que vous suivez, et ce qui y est publié, avant tout le reste',

@@ -27,6 +27,7 @@ export default {
   distanceLabel: 'Distance',
   anywhere: 'Anywhere',
   within: 'Within {{ radius }} km',
+  km: '{{ radius }} km',
   choices: {
     followedFirst: 'Followed first',
     followedFirstHelp: 'People and groups you follow, and what is posted on them, before everything else',
