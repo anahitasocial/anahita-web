@@ -27,7 +27,7 @@ Everything is under `src/`:
 | `store/` | The Redux store, with a development and a production version |
 | `containers/` | Pages and components connected to the store, grouped by feature (`actors`, `media`, `replies`, `settings`, `auth`…) |
 | `components/` | Presentational components with no store access |
-| `routes/` | The route table and the two route guards |
+| `routes/` | The route table and the four route guards |
 | `permissions/` | What the viewer may do, mostly read from the server's answers |
 | `languages/` | Translations, one directory per language |
 | `assets/` | Themes: logo, home page (what somebody not signed in sees at `/`), left menu, styles and static pages |
@@ -72,7 +72,7 @@ with PKCE, as the first-party client `anahita-web` (`src/api/session.js`):
 Signing up, accepting an invitation and confirming an email address are pages
 on auth-service too. The app only links to them.
 
-Two components guard routes (`src/routes/`):
+Four components guard routes (`src/routes/`):
 
 - **`AuthenticatedRoute`** sends signed-out visitors to `/auth`. It waits for
   the session check to finish first, so a signed-in person is not bounced on
@@ -81,6 +81,15 @@ Two components guard routes (`src/routes/`):
   to `/agreements` when the Terms of Service or Privacy Policy has a newer
   version than the one they accepted. See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
+- **`OnboardingGate`**, inside it, sends a signed-in person with an
+  incomplete profile to `/onboarding`, once, and waits while the agreements
+  are outstanding so the two never send somebody back and forth.
+- **`MembersOnlyGate`**, on a members-only site, shows somebody who is not
+  signed in a way in instead of the page they asked for. See
+  [A members-only site](#a-members-only-site).
+
+All four are gates on the interface. What may be read is decided by the
+server.
 
 ## State
 
@@ -99,8 +108,8 @@ factories instead of being written out each time:
 up. Anything that does not fit the pattern, such as the session or the
 socialgraph, has its own module.
 
-In development the store also logs every action and mounts the Redux DevTools
-dock.
+In development the store also logs every action, and connects to the Redux
+DevTools browser extension when it is installed.
 
 ## Routes
 
@@ -114,23 +123,26 @@ history. The main paths:
 | `/people`, `/people/:id` | People, and a person's profile. `:id` is their username, or for somebody on another server their whole handle, `alice@mastodon.example` |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
-| `/recommendations` | People and groups the viewer might follow. Signed in only; reached from the home page. `/suggestions`, its first address, leads to it |
+| `/recommendations` | People, groups and events the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
-| `/events`, `/events/add`, `/events/:id`, `/events/:id/edit` | The viewer's own events, making one, an event's page, changing it. See *Events* |
+| `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
+| `/people/add`, `/groups/add` | Making a person (administrators) or a group |
+| `/people/:id/notifications`, and the same for groups and events | What notifications the viewer gets from that profile |
+| `/people/:id/settings/password` | The old address of the password form, linked from older emails. Sends to Security |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
-| `/hashtags/:alias`, `/locations/:id` | Hashtags and places |
+| `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
-| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, and Privacy, which shows what the installation lets visitors read and can make everything public members-only |
+| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, Privacy, which shows what the installation lets visitors read and can make everything public members-only, and Fediverse, the servers the site refuses |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/onboarding` | Where somebody signed in with an incomplete profile is sent, once (`routes/OnboardingGate.jsx`): a picture, a name and a few words, then profiles the site features to follow. A step with nothing to show is left out, and every step can be skipped (`containers/onboarding`) |
-| `/pages/:alias` | A page of the installation's own, from `statics/`. `/pages/tos` and `/pages/privacy` redirect to `/legal` |
+| `/pages/:alias` | A page of the installation's own, from the theme's `pages/` folder (`src/assets/<theme>/pages`). `/pages/tos` and `/pages/privacy` redirect to `/legal` |
 | `/404`, and any address not above | The not-found page |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
 
@@ -544,8 +556,8 @@ A photo or a video has a Download button in the row under it on its own
 page, where the server said this viewer may download it
 (`authorized.download`; `utils/downloads.js`). Whoever posted it decides,
 and it is off until they say otherwise. It is not on a post's card in a
-feed or a list: a card is narrow, and one more button did not fit on a
-phone (user, 2026-10-13).
+feed or a list: a card is narrow, and one more button does not fit on a
+phone.
 
 - **When posting**, the photo and video composers have a download button
   among the post's options (`components/DownloadOptionButton.jsx`), which
@@ -553,8 +565,8 @@ phone (user, 2026-10-13).
 - **Afterwards**, "Allow download" and "Do not allow download" are in the
   post's menu on its own page, for whoever may edit it
   (`containers/controls/medium/Download.jsx`).
-- **The default** is a switch in settings: Access for a person, and under
-  who can see the group for a group
+- **The default** is a switch under Settings › Permissions, for a person
+  and for a group, not for an event
   (`containers/actors/Settings/DownloadDefault.jsx`).
 - **The download** sends the browser to the API's address for the file,
   which answers with something to save, so the page stays where it is. A
@@ -748,7 +760,7 @@ are about, what to leave out. The server's side is in the services'
   terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
 - **Under Home in the left menu** are the feeds on the viewer's home page, in
   their order, each opening Home on that feed. The list page is an entry of
-  its own below them, **Feeds**, like Saved. A feed is made from the + there. A feed is put on its maker's home page when it is made, so it
+  its own below them, **Feeds**, like Saved. A feed is made from the + on the Feeds page. A feed is put on its maker's home page when it is made, so it
   appears there at once. The menu and the tabs read the same list
   (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
@@ -761,7 +773,8 @@ are about, what to leave out. The server's side is in the services'
   what it shows when it does not say. Pressing the name opens the feed in
   full in a dialog (`containers/feeds/DetailsDialog.jsx`): its description
   and every setting it has, one line each, with a button on to the feed.
-- **Finding shared feeds** is the site's search. A feed that matches is a
+- **Finding shared feeds:** the site's search, and the Feeds tab of
+  Recommendations (see *Suggestions*). In search a feed that matches is a
   result like any other, among the profiles and posts under **All**, and by
   itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node
   with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
@@ -799,7 +812,8 @@ are about, what to leave out. The server's side is in the services'
 - **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
   its owner edit and delete. Copying makes a feed of the viewer's own, seen
   by them alone, and opens it in the editor.
-- **Share** is on a shared feed's card, in Discover and on the feed's page.
+- **Share** is on a shared feed's card (in search and in Recommendations ›
+  Feeds), in the list of feeds and on the feed's page.
   See [Sharing](#sharing). Not on a feed kept to its owner.
 - **Following a hashtag or a place** (`containers/feeds/FollowHashtag.jsx`
   and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
@@ -831,8 +845,8 @@ stops saying so. The new order shows when the list is next read.
 the left menu under Home, at `/saved` (`containers/saved/index.jsx`, the list
 in `Browse.jsx`), in the same masonry as the other lists. It was a tab on the
 viewer's own profile for a day and was moved on 2026-10-06: a profile is what
-other people look at. There are no folders. Collections (roadmap item 34) are a
-separate feature, filled from this list, and leave it as it is.
+other people look at. There are no folders. Collections, planned for later, would be a separate feature filled from
+this list, and would leave it as it is.
 
 It is private end to end: the server never says who saved a post. The page
 says so in one line under its title. The mark is told to every list on the page (`POST_SAVED_CHANGED`,
@@ -860,9 +874,14 @@ There are no views in it, and nothing anywhere counts them.
 
 Under a profile's name is the number of its followers. Pressing it opens a
 dialog (`actors/Read/SocialgraphDialog.jsx`, `utils/socialgraph.js`) with up
-to three lists: **Followers**, **Following** (who the profile follows; people
-only; `leaders` in the code and the API, which is Anahita's own word for it), and **In common** (the people the viewer follows who follow this
-profile; for somebody signed in, on a profile that is not their own). Each is
+to three lists:
+
+- **Followers:** who follows the profile.
+- **Following:** who the profile follows. Only people follow, so only a
+  person's profile has it. The code and the API call these `leaders`.
+- **In common:** the people the viewer follows who also follow this
+  profile. Only for somebody signed in, on a profile that is not their own.
+ Each is
 read when first opened and more of it as its end is scrolled to, whoever
 followed most lately first. A Latest / Oldest switch above the list turns the
 order round (`?dir=asc`). A group's administrators can remove a follower
@@ -902,8 +921,8 @@ administrators, its access. What only an event has is in `containers/events`.
 | --- | --- |
 | **Events** in the left menu, `/events` | The viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`). There is no list of every event. Its + follows the installation's `eventsFrom` (`permissions/actor.js`), a setting apart from the one for groups |
 | `/events/add`, `/events/add?host=<group id>` | The form (`events/Form.jsx`). With a host it is the group's event |
-| `/events/:id` | The actor page with `events/Panel.jsx` above the tabs: when it is, who hosts it, how many are going, Going and Maybe, Add to calendar, and for its administrators Edit and Cancel |
-| `/events/:id/edit`, and Info under its settings | The same form, to change it |
+| `/events/:id` | The actor page with `events/Panel.jsx` above the tabs: when it is, who hosts it, how many are going, Going and Maybe, Add to calendar. Its administrators change it from its settings |
+| Info under its settings | The same form, to change it. The old address `/events/:id/edit` sends there; calling an event off is in the Danger zone |
 | A group's **Events** tab | What the group hosts, upcoming or past, with Add event for its administrators (`events/Hosted.jsx`) |
 
 **Times** are kept as instants with the name of the zone they were chosen in.
@@ -1026,8 +1045,9 @@ draws nothing (`utils/federation.js#isAbsent`).
   the viewer's own note and is sent to whoever it answers when the viewer
   is on the fediverse. When they are not, the reply form says that it will
   be read here and not there (`useReplyStaysHere`, in
-  `media/Composer/useOnFediverse.js`). Liking something from elsewhere is
-  still refused.
+  `media/Composer/useOnFediverse.js`). Liking and reposting something from
+  elsewhere work the same way, where the server allows them
+  (`authorized.like`), and reach its author's server.
 - **A hashtag at `/tags/<name>`** leads to `/hashtags/<name>`
   (`routes/index.js#HashtagMoved`). It is the address other servers are
   given for a hashtag's page, where Mastodon has its own, because some of
@@ -1048,8 +1068,8 @@ draws nothing (`utils/federation.js#isAbsent`).
   has thousands; a server is refused from a dialog, which says that
   refusing it does not remove what already came from it.
 
-- **The switch** is a card under Settings › Privacy
-  (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
+- **The switch** is a card under Settings › Fediverse, beside the Bluesky
+  card, on the viewer's own profile only (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
   follow me". Off until the person turns it on, and theirs alone to turn
   on. It shows their handle, says that what is sent cannot be called back,
   asks before it is turned off (other servers are told to remove the
@@ -1079,9 +1099,10 @@ draws nothing (`utils/federation.js#isAbsent`).
   - the server sends nothing they can be edited, run or posted on by, so
     none of those controls is drawn. Follow is, and works as for anybody.
 - **A post from another server** is an ordinary note with a `uri`. Its menu
-  has "View on <server>" (`media/MediaMenu.jsx`). It cannot be edited,
-  liked or replied to: the server says so in `authorized`, and
-  `permissions/node.js#canEdit` refuses whatever the viewer's role.
+  has "View on <server>" (`media/MediaMenu.jsx`). It cannot be edited
+  here, whatever the viewer's role (`permissions/node.js#canEdit`): it is
+  its author's to change, on their own server. It can be liked, replied to
+  and reposted wherever the server allows (`authorized`).
 - **Looking somebody up** is on the search page
   (`search/RemoteLookup.jsx`): when what was searched for is a handle with
   a server in it or the address of a profile, a card offers to ask that
@@ -1140,13 +1161,15 @@ draws nothing (`utils/federation.js#isAbsent`).
   out. Nothing about what somebody searched for reaches the server, so
   they do not follow somebody to another device. A search is remembered
   when it is run, however it was reached.
-- **The controls** are a row that wraps on a narrow screen, the order as a
-  small menu and the two choices below as chips, with the distance under
-  it as a slider of its own (25 to 100 km, or anywhere), written to the
-  address when it is let go.
+- **The controls:** the order as a small menu with, beside it, the two
+  choices below as chips; the row wraps on a narrow screen. The distance
+  is a slider on a line of its own under them (25 to 100 km, or anywhere),
+  written to the address when it is let go.
 - **Two choices for "Most relevant"** (`utils/searchChoices.js`), chips
-  beside the menus for somebody signed in: people and groups they follow
-  first, and the newest first among results that match alike. Off as they
+  shown only with that order and only to somebody signed in: **Profiles I
+  follow first** (people, groups and events they follow, and what is
+  posted on them, before everything else) and **Newer results first** (the
+  newest first among results that match equally well). Off as they
   come, kept in this browser per person, and sent with a search only when
   chosen (`followed_first`, `recent_first`).
 - **The page keeps its place in its address** (`utils/searchAddress.js`):
@@ -1168,6 +1191,16 @@ draws nothing (`utils/federation.js#isAbsent`).
   was not allowed to, the page says that the search is not limited by
   distance, rather than search everywhere and look as though it had not.
   While the browser is still asking, it waits.
+
+### Long posts
+
+A long post on a card shows its first lines and **Read more**
+(`components/ReadMore.jsx`): six lines on a post, four on a profile card.
+The whole text is always drawn and only its height is kept short, with the
+last line fading out, so nothing is cut through: a link or bold text near
+the cut stays whole, and a screen reader has all of it. Read more is shown
+only when the text is taller than that, measured as it is drawn and again
+when a picture in it loads.
 
 ### Menus
 

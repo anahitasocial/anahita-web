@@ -39,8 +39,8 @@ const { getActorName } = utils.node;
 
 // Custom feeds: the ones the viewer made, and the ones of other people's
 // they keep on their home page. What other people have shared is found in
-// the site's search, under its Feeds tab, which this page links to: that
-// is the list that grows, and it is kept out of this one.
+// the site's search and in the Feeds tab of Recommendations: that is the
+// list that grows, and it is kept out of this one.
 //
 // A feed on the home page has a filled house; pressing it takes it off, and
 // the arrows move it among the tabs there. Making, changing and deleting a

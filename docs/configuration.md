@@ -63,8 +63,8 @@ is read:
 | `REACT_APP_MAP_TILE_URL` | Where map tiles come from, in Leaflet's `{s}/{z}/{x}/{y}` form. Unset uses OpenStreetMap's public tile server |
 | `REACT_APP_MAP_TILE_ATTRIBUTION` | The credit shown on the map, as the tile server's licence requires. Unset credits OpenStreetMap |
 | `REACT_APP_LOCATION_FIXED_COUNTRY` | Pins every new location to one country, as a two-letter code such as `CA`, and hides the country field |
-| `REACT_APP_LOCATION_FIXED_STATE_PROVINCE` | Pins new locations to one state or province, as a short code such as `BC` |
-| `REACT_APP_LOCATION_FIXED_CITY` | Pins new locations to one city, as free text |
+| `REACT_APP_LOCATION_FIXED_STATE_PROVINCE` | Pins new locations to one state or province, as a short code such as `BC`, and hides that field |
+| `REACT_APP_LOCATION_FIXED_CITY` | Pins new locations to one city, as free text, and hides that field |
 
 Leave the location variables unset to let people choose freely. That is the
 usual case.
