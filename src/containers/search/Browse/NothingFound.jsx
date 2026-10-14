@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
@@ -7,7 +7,6 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 
-import api from '../../../api';
 import i18n from '../../../languages';
 import { Search as SEARCH } from '../../../constants';
 
@@ -17,51 +16,17 @@ const { SCOPE } = SEARCH;
 const NARROW = [SCOPE.MEDIA, SCOPE.ACTORS, SCOPE.FEEDS];
 
 // A search that found nothing under its tab says so, and offers the other
-// tabs that would have something, with how much. One request for each,
-// asking for a single result and reading the total; asked only when the
-// open tab is empty. Under All there is nothing to offer: All is the
-// others together.
+// tabs that would have something, with how much: the counts the tabs show
+// (useScopeCounts). Under All there is nothing to offer: All is the others
+// together.
 const NothingFound = ({
-  term, scope, params = {}, onScope,
+  term,
+  scope,
+  counts = {},
+  onScope,
 }) => {
-  const [counts, setCounts] = useState({});
-
-  useEffect(() => {
-    let current = true;
-    setCounts({});
-
-    if (scope === SCOPE.ALL) {
-      return undefined;
-    }
-
-    NARROW.filter((other) => {
-      return other !== scope;
-    }).forEach((other) => {
-      api.search.browse({
-        ...params,
-        term,
-        scope: other,
-        start: 0,
-        limit: 1,
-      }).then(({ data }) => {
-        const total = (data && data.pagination && data.pagination.total) || 0;
-        if (current && total > 0) {
-          setCounts((known) => {
-            return { ...known, [other]: total };
-          });
-        }
-      }).catch(() => {
-        // Not offered. The words above still say what happened.
-      });
-    });
-
-    return () => {
-      current = false;
-    };
-  }, [term, scope]);
-
-  const offers = NARROW.filter((other) => {
-    return counts[other] > 0;
+  const offers = scope === SCOPE.ALL ? [] : NARROW.filter((other) => {
+    return other !== scope && counts[other] > 0;
   });
 
   return (
@@ -98,9 +63,8 @@ const NothingFound = ({
 NothingFound.propTypes = {
   term: PropTypes.string.isRequired,
   scope: PropTypes.string.isRequired,
-  // The distance and place the search was made with, so the counts are
-  // of the same search.
-  params: PropTypes.objectOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
+  // How many each tab finds.
+  counts: PropTypes.objectOf(PropTypes.number),
   onScope: PropTypes.func.isRequired,
 };
 

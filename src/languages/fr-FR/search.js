@@ -23,6 +23,8 @@ export default {
     unavailable: 'Ce navigateur ne peut pas indiquer où vous êtes : cette recherche n’est donc pas limitée par la distance.',
     refused: 'Votre navigateur n’a pas indiqué où vous êtes : cette recherche n’est donc pas limitée par la distance. Autorisez ce site à connaître votre position pour chercher à proximité.',
   },
+  countLabel_one: '{{ count }} trouvé',
+  countLabel_other: '{{ count }} trouvés',
   nothingFound: 'Rien ne correspond à « {{ term }} ».',
   foundUnder_one: '{{ count }} dans {{ tab }}',
   foundUnder_other: '{{ count }} dans {{ tab }}',

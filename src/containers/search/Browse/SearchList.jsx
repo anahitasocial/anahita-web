@@ -46,6 +46,7 @@ const SearchList = ({
   isFetching,
   onScope,
   lead = null,
+  counts = {},
   total = 0,
   queryParams: {
     sort,
@@ -130,18 +131,12 @@ const SearchList = ({
   // Nothing found. A handle from another server finds nothing here by
   // its nature, and the card above it says what to do instead.
   if (q && answered && items.allIds.length === 0 && !federation.isLookup(q)) {
-    const near = searchRange <= 100;
     return (
       <NothingFound
         term={q}
         scope={scope}
         onScope={onScope}
-        params={{
-          sort,
-          search_range: near ? searchRange * 1000 : '',
-          coord_lng: near ? coordLong : '',
-          coord_lat: near ? coordLat : '',
-        }}
+        counts={counts}
       />
     );
   }
@@ -217,6 +212,8 @@ SearchList.propTypes = {
   onScope: PropTypes.func.isRequired,
   // Somebody looked up on another server, drawn first.
   lead: PropTypes.objectOf(PropTypes.any),
+  // How many each tab finds.
+  counts: PropTypes.objectOf(PropTypes.number),
   total: PropTypes.number,
 };
 

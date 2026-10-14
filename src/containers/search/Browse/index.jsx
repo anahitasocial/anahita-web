@@ -6,6 +6,7 @@ import { useGeolocated } from 'react-geolocated';
 import { makeStyles } from 'tss-react/mui';
 
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -21,6 +22,8 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 
 import SearchList from './SearchList';
 import RecentSearches from './RecentSearches';
+import useScopeCounts from './useScopeCounts';
+import shortCount from '../../../utils/shortCount';
 import RemoteLookup from '../RemoteLookup';
 import Progress from '../../../components/Progress';
 import { Search as SEARCH } from '../../../constants';
@@ -169,11 +172,43 @@ const Search = ({ viewerId }) => {
   }
   const waitingForPlace = near && !located && !noPlace;
 
+  // How many each tab finds, beside its name, short however large.
+  const geo = near && located ?
+    { search_range: searchRange * 1000, coord_lng: coordLong, coord_lat: coordLat } :
+    {};
+  const counts = useScopeCounts(waitingForPlace ? '' : q, geo);
+  // A tab that finds nothing is not drawn, once its count says so. All is
+  // always drawn, and so is the open tab even when it finds nothing (it
+  // may have come from a link), so that the tabs never point at one that
+  // is not there.
+  const shown = (kind) => {
+    return kind === SCOPE.ALL || kind === scope || counts[kind] !== 0;
+  };
+  const tabLabel = (kind) => {
+    const name = i18n.t(`search:filterNodeTypes.${kind}`);
+    if (counts[kind] === undefined) {
+      return name;
+    }
+    return (
+      <span>
+        {name}
+        <Box
+          component="span"
+          sx={{ ml: 1, color: 'text.secondary', fontVariantNumeric: 'tabular-nums' }}
+          aria-label={i18n.t('search:countLabel', { count: counts[kind] })}
+        >
+          {shortCount(counts[kind], i18n.language)}
+        </Box>
+      </span>
+    );
+  };
+
   const list = useMemo(() => {
     return (
       <SearchList
         key={`${q}-${sort}-${scope}-${searchRange}`}
         lead={found}
+        counts={counts}
         onScope={(value) => {
           change({ scope: value });
         }}
@@ -196,6 +231,7 @@ const Search = ({ viewerId }) => {
     coordLong,
     coordLat,
     found,
+    counts,
   ]);
 
   return (
@@ -269,21 +305,24 @@ const Search = ({ viewerId }) => {
           textColor="primary"
         >
           <Tab
-            label={i18n.t('search:filterNodeTypes.all')}
+            label={tabLabel(SCOPE.ALL)}
             value={SCOPE.ALL}
           />
-          <Tab
-            label={i18n.t('search:filterNodeTypes.media')}
-            value={SCOPE.MEDIA}
-          />
-          <Tab
-            label={i18n.t('search:filterNodeTypes.actors')}
-            value={SCOPE.ACTORS}
-          />
-          <Tab
-            label={i18n.t('search:filterNodeTypes.feeds')}
-            value={SCOPE.FEEDS}
-          />
+          {shown(SCOPE.MEDIA) &&
+            <Tab
+              label={tabLabel(SCOPE.MEDIA)}
+              value={SCOPE.MEDIA}
+            />}
+          {shown(SCOPE.ACTORS) &&
+            <Tab
+              label={tabLabel(SCOPE.ACTORS)}
+              value={SCOPE.ACTORS}
+            />}
+          {shown(SCOPE.FEEDS) &&
+            <Tab
+              label={tabLabel(SCOPE.FEEDS)}
+              value={SCOPE.FEEDS}
+            />}
         </Tabs>
       </AppBar>
       {noPlace &&

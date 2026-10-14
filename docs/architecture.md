@@ -1137,11 +1137,15 @@ draws nothing (`utils/federation.js#isAbsent`).
   link sent to somebody open it as it was. What is as it comes is left
   out. Changing the tab, the order or the distance replaces the address
   rather than adding to the history.
+- **Each tab says how many it finds,** in grey after its name and short
+  however large (`utils/shortCount.js`: 515, 1.2K, 48K, 3.1M, as the
+  reader's language writes them). One request for each tab, asking for a
+  single result and reading the total (`search/Browse/useScopeCounts.js`),
+  again when the words or the distance change but not the order. **A tab
+  that finds nothing is not drawn,** except All and the open one.
 - **A search that finds nothing** says so (`search/Browse/NothingFound.jsx`),
-  and offers the other tabs that would find something, with how much:
-  one request for each, asking for a single result and reading the total,
-  made only when the open tab is empty. A handle from another server is
-  left to the lookup card instead.
+  and offers the other tabs that would find something, from the same
+  counts. A handle from another server is left to the lookup card instead.
 - **A distance needs a place.** The server leaves the distance out when
   it is not told where the searcher is, so when the browser cannot say or
   was not allowed to, the page says that the search is not limited by

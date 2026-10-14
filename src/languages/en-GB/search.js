@@ -23,6 +23,8 @@ export default {
     unavailable: 'This browser cannot say where you are, so this search is not limited by distance.',
     refused: 'Your browser did not share where you are, so this search is not limited by distance. Allow this site to know your location to search nearby.',
   },
+  countLabel_one: '{{ count }} found',
+  countLabel_other: '{{ count }} found',
   nothingFound: 'Nothing matches “{{ term }}”.',
   foundUnder_one: '{{ count }} under {{ tab }}',
   foundUnder_other: '{{ count }} under {{ tab }}',
