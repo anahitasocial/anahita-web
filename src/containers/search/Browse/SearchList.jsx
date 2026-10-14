@@ -45,6 +45,7 @@ const SearchList = ({
   error,
   isFetching,
   onScope,
+  lead = null,
   total = 0,
   queryParams: {
     sort,
@@ -155,7 +156,13 @@ const SearchList = ({
       }
     >
       <Masonry>
-        {items.allIds.map((itemId) => {
+        {lead &&
+          <div key={`search_lead_${lead.id}`} className={classes.card}>
+            <ActorsCard actor={lead} />
+          </div>}
+        {items.allIds.filter((itemId) => {
+          return !lead || items.byId[itemId].id !== lead.id;
+        }).map((itemId) => {
           const node = items.byId[itemId];
           const key = `search_node_${node.id}`;
           return (
@@ -208,6 +215,8 @@ SearchList.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   // Opens another tab, from the words for a search that found nothing.
   onScope: PropTypes.func.isRequired,
+  // Somebody looked up on another server, drawn first.
+  lead: PropTypes.objectOf(PropTypes.any),
   total: PropTypes.number,
 };
 

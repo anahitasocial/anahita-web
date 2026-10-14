@@ -1072,8 +1072,8 @@ draws nothing (`utils/federation.js#isAbsent`).
   (`search/RemoteLookup.jsx`): when what was searched for is a handle with
   a server in it or the address of a profile, a card offers to ask that
   server. It asks when the button is pressed, since asking tells another
-  server that this site did; then it shows the person found on the search
-  page, with their card and its Follow button. It asks at once,
+  server that this site did; then the person found is drawn first among the
+  search page's results, with their card and its Follow button. It asks at once,
   without the button, when somebody signed in typed an unmistakable
   handle into the search box and pressed Enter (`isClearHandle`:
   `@alice@mastodon.example`, a Bluesky DID, or a Bluesky handle written

@@ -140,6 +140,12 @@ const Search = ({ viewerId }) => {
   const typed = Boolean(location.state && location.state.typed);
   const lookUpNow = typed && viewerId > 0 && federation.isClearHandle(q);
 
+  // Somebody found on another server, drawn first among the results.
+  const [found, setFound] = useState(null);
+  useEffect(() => {
+    setFound(null);
+  }, [q]);
+
   if (
     isGeolocationAvailable &&
     isGeolocationEnabled &&
@@ -167,6 +173,7 @@ const Search = ({ viewerId }) => {
     return (
       <SearchList
         key={`${q}-${sort}-${scope}-${searchRange}`}
+        lead={found}
         onScope={(value) => {
           change({ scope: value });
         }}
@@ -177,6 +184,7 @@ const Search = ({ viewerId }) => {
           searchRange,
           coordLong,
           coordLat,
+          found,
         }}
       />
     );
@@ -187,6 +195,7 @@ const Search = ({ viewerId }) => {
     searchRange,
     coordLong,
     coordLat,
+    found,
   ]);
 
   return (
@@ -281,7 +290,7 @@ const Search = ({ viewerId }) => {
         <Alert severity="info" sx={{ mb: 2 }}>
           {i18n.t(`search:distance.${noPlace}`)}
         </Alert>}
-      <RemoteLookup query={q} now={lookUpNow} />
+      <RemoteLookup query={q} now={lookUpNow} onFound={setFound} />
       {/* Nothing typed: what this person searched for lately, and
           nothing else. */}
       {!q && <RecentSearches viewerId={viewerId} />}

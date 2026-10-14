@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Alert from '@mui/material/Alert';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -10,7 +9,6 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
-import ActorsCard from '../actors/Browse/Card';
 import api from '../../api';
 import i18n from '../../languages';
 import federation from '../../utils/federation';
@@ -21,8 +19,8 @@ import federation from '../../utils/federation';
 // (@alice@mastodon.example), a handle on Bluesky (alice.bsky.social) or
 // the address of a profile, the ordinary search has nothing to find: they
 // are not here yet. This offers to ask their own server, or Bluesky, and
-// then shows who was found here, on the search page, as anybody found by
-// a search is: with their card and its Follow button.
+// then hands who was found to the search page (`onFound`), which draws
+// them first among the results, as anybody found by a search is.
 //
 // It asks when the button is pressed, or at once when `now` says that
 // the person typed an unmistakable handle into the search box and pressed
@@ -35,7 +33,7 @@ import federation from '../../utils/federation';
 // Drawn for nothing else, and nothing is drawn on an installation without
 // the service that would be asked: the first press says so and the card
 // goes, for that network and not for the other.
-const RemoteLookup = ({ query = '', now = false }) => {
+const RemoteLookup = ({ query = '', now = false, onFound }) => {
   const [isLooking, setIsLooking] = useState(false);
   const [found, setFound] = useState(null);
   const [error, setError] = useState('');
@@ -68,8 +66,10 @@ const RemoteLookup = ({ query = '', now = false }) => {
       const person = result.data;
       return api.people.read(person.alias || person.id).then((full) => {
         setFound(full.data);
+        onFound(full.data);
       }).catch(() => {
         setFound(person);
+        onFound(person);
       });
     }).catch((failure) => {
       const reason = federation.reasonOf(failure);
@@ -97,12 +97,9 @@ const RemoteLookup = ({ query = '', now = false }) => {
     return null;
   }
 
+  // Drawn by the search page, among the results.
   if (found) {
-    return (
-      <Box sx={{ mb: 2, maxWidth: 360 }}>
-        <ActorsCard actor={found} />
-      </Box>
-    );
+    return null;
   }
 
   return (
@@ -139,6 +136,8 @@ RemoteLookup.propTypes = {
   query: PropTypes.string,
   // Look them up at once, without waiting for the button.
   now: PropTypes.bool,
+  // Given who was found.
+  onFound: PropTypes.func.isRequired,
 };
 
 export default RemoteLookup;
