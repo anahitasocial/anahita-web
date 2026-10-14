@@ -209,7 +209,7 @@ A phase is finished only when these pages match the code.
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-11 |
-| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 layer 1 built 2026-10-13 (each person's switches not yet); layer 2 tried and put off; layer 3 to be decided; Part 4 not |
+| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 layer 1 built 2026-10-13, each person's choices 2026-10-14; layer 2 tried and put off; layer 3 to be decided; Part 4 not |
 
 ## What was built
 
@@ -239,3 +239,12 @@ Built in graph-grpc-service, as planned, with these differences:
 
 Checked against MySQL with searches as people make them (`search_ranking_integration_test.go`), and on the development database: "coffee" opens on the group *Coffee Love*, then photos whose titles begin with the word; "bmann" on Boris, then a handle with it inside (`webmanna`), then posts that mention him.
 - **Too slow at first, for common words** (found by the user: "joomla" answered 500). A word in thousands of posts took 11 to 36 seconds and the query was cut off at three. Not the character sets, which were checked and are the same throughout (`utf8mb4_0900_ai_ci`), but one lookup: quotes were counted by when they were made, and with nearly no post quoting another, the database judged the index on `quote_id` not worth using and read every node for every result. The index is now named in the query. With it, and the page's ids ranked before its rows are read whole, the commonest words answer in a third of a second.
+
+### Each person's choices: 2026-10-14
+
+Two switches under the order on the search page, for somebody signed in, off as they come:
+
+- **People and groups I follow first:** what they follow, or what is on a profile they follow, before everything else, however it matches.
+- **Prefer recent:** among results that match alike, the newest first, then by standing. First built as interest fading within a month, which still put an old post liked this week above this morning's; changed before it was shown, since that is not what "prefer recent" means to anybody choosing it.
+
+Kept in the browser, per person, like recent searches, rather than with the person's settings on the server: nothing about how somebody searches is stored there. Sent as `followed_first` and `recent_first` through search-service to the graph (`SearchBrowseRequest` fields 13 and 14). Checked against MySQL (`TestMostRelevantAsTheSearcherChooses`).

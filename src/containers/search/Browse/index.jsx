@@ -9,11 +9,13 @@ import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
 import FormControl from '@mui/material/FormControl';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import FormGroup from '@mui/material/FormGroup';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select from '@mui/material/Select';
 import Slider from '@mui/material/Slider';
+import Switch from '@mui/material/Switch';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Toolbar from '@mui/material/Toolbar';
@@ -30,6 +32,7 @@ import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
 import federation from '../../../utils/federation';
 import recentSearches from '../../../utils/recentSearches';
+import searchChoices from '../../../utils/searchChoices';
 import searchAddress from '../../../utils/searchAddress';
 
 const { SCOPE, SORTING } = SEARCH;
@@ -142,6 +145,17 @@ const Search = ({ viewerId }) => {
   const typed = Boolean(location.state && location.state.typed);
   const lookUpNow = typed && viewerId > 0 && federation.isClearHandle(q);
 
+  // How this person likes "Most relevant" ordered, kept in their browser.
+  const [choices, setChoices] = useState(() => {
+    return searchChoices.read(viewerId);
+  });
+  useEffect(() => {
+    setChoices(searchChoices.read(viewerId));
+  }, [viewerId]);
+  const choose = (what) => {
+    setChoices(searchChoices.write(viewerId, { ...choices, ...what }));
+  };
+
   // Somebody found on another server, drawn first among the results.
   const [found, setFound] = useState(null);
   useEffect(() => {
@@ -205,7 +219,7 @@ const Search = ({ viewerId }) => {
   const list = useMemo(() => {
     return (
       <SearchList
-        key={`${q}-${sort}-${scope}-${searchRange}`}
+        key={`${q}-${sort}-${scope}-${searchRange}-${choices.followedFirst}-${choices.recentFirst}`}
         lead={found}
         counts={counts}
         onScope={(value) => {
@@ -218,7 +232,7 @@ const Search = ({ viewerId }) => {
           searchRange,
           coordLong,
           coordLat,
-          found,
+          choices,
         }}
       />
     );
@@ -231,6 +245,7 @@ const Search = ({ viewerId }) => {
     coordLat,
     found,
     counts,
+    choices,
   ]);
 
   return (
@@ -272,6 +287,36 @@ const Search = ({ viewerId }) => {
                 </MenuItem>
               </Select>
             </FormControl>
+            {/* The searcher's own choices for "Most relevant", for somebody
+                signed in: a visitor follows nobody, and has nowhere to
+                keep them. */}
+            {sort === SORTING.RELEVANT && viewerId > 0 &&
+              <FormGroup row sx={{ mt: 1, columnGap: 2 }}>
+                <FormControlLabel
+                  control={
+                    <Switch
+                      size="small"
+                      checked={choices.followedFirst}
+                      onChange={(event) => {
+                        choose({ followedFirst: event.target.checked });
+                      }}
+                    />
+                  }
+                  label={i18n.t('search:choices.followedFirst')}
+                />
+                <FormControlLabel
+                  control={
+                    <Switch
+                      size="small"
+                      checked={choices.recentFirst}
+                      onChange={(event) => {
+                        choose({ recentFirst: event.target.checked });
+                      }}
+                    />
+                  }
+                  label={i18n.t('search:choices.recentFirst')}
+                />
+              </FormGroup>}
             <FormControl
               variant="outlined"
               className={classes.formControl}

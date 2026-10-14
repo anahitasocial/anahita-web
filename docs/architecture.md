@@ -1137,6 +1137,11 @@ draws nothing (`utils/federation.js#isAbsent`).
   out. Nothing about what somebody searched for reaches the server, so
   they do not follow somebody to another device. A search is remembered
   when it is run, however it was reached.
+- **Two choices for "Most relevant"** (`utils/searchChoices.js`), switches
+  under the order for somebody signed in: people and groups they follow
+  first, and the newest first among results that match alike. Off as they
+  come, kept in this browser per person, and sent with a search only when
+  chosen (`followed_first`, `recent_first`).
 - **The page keeps its place in its address** (`utils/searchAddress.js`):
   `?q=seeds&scope=feeds&sort=recent&km=50`. Reloading, going back and a
   link sent to somebody open it as it was. What is as it comes is left

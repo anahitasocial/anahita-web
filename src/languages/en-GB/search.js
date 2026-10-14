@@ -25,6 +25,10 @@ export default {
   },
   countLabel_one: '{{ count }} found',
   countLabel_other: '{{ count }} found',
+  choices: {
+    followedFirst: 'People and groups I follow first',
+    recentFirst: 'Prefer recent',
+  },
   nothingFound: 'Nothing matches “{{ term }}”.',
   foundUnder_one: '{{ count }} under {{ tab }}',
   foundUnder_other: '{{ count }} under {{ tab }}',

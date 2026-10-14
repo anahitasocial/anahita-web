@@ -18,6 +18,7 @@ import customFeeds from '../../../utils/customFeeds';
 import Progress from '../../../components/Progress';
 import NothingFound from './NothingFound';
 import federation from '../../../utils/federation';
+import searchChoices from '../../../utils/searchChoices';
 import { App as APP, Search as SEARCH } from '../../../constants';
 
 import utils from '../../../utils/node';
@@ -55,6 +56,7 @@ const SearchList = ({
     coordLong,
     coordLat,
     searchRange,
+    choices = searchChoices.NONE,
   },
 }) => {
   const { classes } = useStyles();
@@ -89,6 +91,7 @@ const SearchList = ({
     // last mark on the slider is anywhere, and sends none.
     const near = searchRange <= 100;
     browseList({
+      ...(sort === RELEVANT ? searchChoices.paramsOf(choices) : {}),
       sort,
       start,
       scope,
@@ -205,6 +208,11 @@ SearchList.propTypes = {
     searchRange: PropTypes.number,
     coordLong: PropTypes.number,
     coordLat: PropTypes.number,
+    // How the searcher likes "Most relevant" ordered (utils/searchChoices).
+    choices: PropTypes.shape({
+      followedFirst: PropTypes.bool,
+      recentFirst: PropTypes.bool,
+    }),
   }).isRequired,
   error: PropTypes.string.isRequired,
   isFetching: PropTypes.bool.isRequired,
