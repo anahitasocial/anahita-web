@@ -109,7 +109,7 @@ const EventPanel = ({
   };
 
   return (
-    <Card sx={{ mb: 2 }}>
+    <Card sx={{ my: 2 }}>
       <CardContent>
         <Stack spacing={2}>
           {(event.state === 'cancelled' || event.state === 'past') &&
