@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
+import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
@@ -24,6 +25,8 @@ import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
+import AltBadge from '../../../components/AltBadge';
+import RemovedPictures from '../../../components/RemovedPictures';
 
 const {
   getURL,
@@ -118,6 +121,8 @@ const FeedCardDefault = ({
             src="picture"
           />
         </Link>}
+      {node.mediaRemoved && photoFiles.countOf(node) === 0 &&
+        <RemovedPictures medium={node} />}
       {photoFiles.hasSeveral(node) &&
         <PhotoSlides
           medium={node}
@@ -126,14 +131,17 @@ const FeedCardDefault = ({
           }}
         />}
       {!photoFiles.hasSeveral(node) && portrait &&
-        <Link href={url}>
-          <CardMedia
-            component="img"
-            title={title}
-            alt={photoFiles.altOf(node)}
-            image={portrait}
-          />
-        </Link>}
+        <Box sx={{ position: 'relative' }}>
+          <Link href={url}>
+            <CardMedia
+              component="img"
+              title={title}
+              alt={photoFiles.altOf(node)}
+              image={portrait}
+            />
+          </Link>
+          <AltBadge text={photoFiles.descriptionOf(node)} />
+        </Box>}
       {node.video && <VideoPlayer video={node.video} title={title} />}
       {body && <Player text={body} />}
       <CardContent>

@@ -14,12 +14,10 @@ export default {
   update: 'Update',
   submitting: 'Updating…',
   success: 'Your password has been updated. A confirmation email has been sent.',
-  // Plural keys are `key` + `key_plural`, not `_one`/`_other`. The
-  // `_one`/`_other` suffixes arrived with i18next v21's JSON v4; this
-  // app runs i18next 17, which resolves count === 1 to the bare key and
-  // everything else to `_plural`. Under v17 an `_other` key is never
-  // looked up, so the toast rendered the literal string
-  // 'successSessions' instead of a sentence.
+  // Plural keys are the bare key for one and `key_other` for more, which
+  // is what i18next 26 looks up. `key_plural`, which older versions read,
+  // is never looked up: a phrase written that way shows its singular for
+  // every count.
   successSessions: 'Your password has been updated and {{count}} other session was signed out. A confirmation email has been sent.',
   successSessions_other: 'Your password has been updated and {{count}} other sessions were signed out. A confirmation email has been sent.',
   errors: {

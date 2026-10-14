@@ -531,10 +531,12 @@ own, because a video is too big to be sent with the post (the services'
 
 ### Downloading
 
-A photo or a video has a Download button in the row under it, where the
-server said this viewer may download it (`authorized.download`;
-`utils/downloads.js`). Whoever posted it decides, and it is off until they
-say otherwise.
+A photo or a video has a Download button in the row under it on its own
+page, where the server said this viewer may download it
+(`authorized.download`; `utils/downloads.js`). Whoever posted it decides,
+and it is off until they say otherwise. It is not on a post's card in a
+feed or a list: a card is narrow, and one more button did not fit on a
+phone (user, 2026-10-13).
 
 - **When posting**, the photo and video composers have a download button
   among the post's options (`components/DownloadOptionButton.jsx`), which
@@ -655,6 +657,40 @@ be and its gutters. Inside it a page chooses its own width.
 two thirds of the page, centred, on a wide screen, or all of it with `wide`.
 Home, the pages of custom feeds, a post's own page and the event forms use
 it. A profile, with its side column, lays itself out.
+
+### Describing photos
+
+Each image of a photo post has its own description, for people who cannot
+see it (`altText` on each of `medium.files`).
+
+- **Writing it** is a field under each photo in the composer and in
+  "Edit photos" (`components/PhotoFilesEditor.jsx`). The photos are a row
+  that is swiped through one at a time, like the slides a reader sees,
+  each with its place in the order and the way to remove it; a photo just
+  picked is the one shown. Under a photo with no description is a prompt,
+  "Add an alt description", with why in a line beneath it; pressing it
+  opens the field, which is called "Alt description" so that it is not
+  taken for the post's own description just below. It is never required.
+- **Hearing it:** it is the `alt` of the image wherever a photo is drawn
+  (`utils/photoFiles.js#altOf`, which falls back to the post's title).
+- **Reading it:** `components/AltBadge.jsx` puts "ALT" in the corner of a
+  photo that has a description of its own (`descriptionOf`, which does not
+  fall back), and shows it when pressed. It sits over photos that are
+  links or open the lightbox, and pressing it does neither.
+
+### Pictures that are no longer kept
+
+The server removes the pictures of a post from another network once the
+post has been left alone for a while, and copies them again when asked. A
+post whose pictures are gone has no `files` and carries
+`mediaRemoved: { count, alts, gone }`.
+
+`components/RemovedPictures.jsx` is drawn where the pictures were: how
+many there were, what each showed, and a button that asks for them
+(`api/federation.js#restorePictures`, which goes to whichever service the
+post came through). When they are back it reads the post again and draws
+them itself. On the post's own page it asks at once. When the answer is
+that they are no longer to be had, it says so in place of the button.
 
 ### New posts in an open feed
 
@@ -1062,7 +1098,10 @@ draws nothing (`utils/federation.js#isAbsent`).
   and a button to disconnect, which asks first. When Bluesky no longer
   takes the connection the card says so and offers the form again.
   Once connected, a second button follows here the accounts they follow
-  on Bluesky already; the server carries on with it after answering.
+  on Bluesky already. It asks first: a dialog says how many they follow
+  there, offers a number (the 25, 100 or 500 followed most recently, or
+  all of them when there are fewer), and says what it does and that it is
+  not undone in one step. The server carries on with it after answering.
   Nothing is drawn where the installation does not write to Bluesky.
 
 ### Menus

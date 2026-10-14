@@ -27,7 +27,7 @@ export default {
     none: 'Aucun serveur n’est refusé.',
     noneFound: 'Aucun serveur refusé ne correspond.',
     count: '{{ count }} serveur refusé',
-    count_plural: '{{ count }} serveurs refusés',
+    count_other: '{{ count }} serveurs refusés',
     search: 'Rechercher par nom ou par raison',
     cancel: 'Annuler',
     open: 'Refuser un serveur',

@@ -27,7 +27,7 @@ export default {
     none: 'No server is refused.',
     noneFound: 'No server refused matches that.',
     count: '{{ count }} server refused',
-    count_plural: '{{ count }} servers refused',
+    count_other: '{{ count }} servers refused',
     search: 'Search by name or reason',
     cancel: 'Cancel',
     open: 'Refuse a server',

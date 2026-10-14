@@ -45,6 +45,10 @@ const STEP = 3;
 // Everything it can do is handed to it: it draws, and asks. What a viewer
 // may do with a reply comes from the server, in `authorized`, so a control
 // is here only when it will work.
+// How tall the line with somebody's name on it is, which their picture
+// is centred on.
+const HEAD = 32;
+
 const ReplyItem = ({
   node,
   viewer,
@@ -125,11 +129,16 @@ const ReplyItem = ({
         display: 'flex', alignItems: 'flex-start', gap: 2, px: 2, pt: 2, pb: 1,
       }}
       >
-        <ActorAvatar
-          actor={author}
-          linked={Boolean(author.id)}
-          size="small"
-        />
+        {/* As tall as the line their name is on, with the picture in the
+            middle of it: a small picture set at the top of a taller line
+            sat above the name it belongs to. */}
+        <Box sx={{ display: 'flex', alignItems: 'center', minHeight: HEAD }}>
+          <ActorAvatar
+            actor={author}
+            linked={Boolean(author.id)}
+            size="small"
+          />
+        </Box>
         <Box
           sx={{
             flex: 1,
@@ -139,7 +148,7 @@ const ReplyItem = ({
           }}
         >
           <Box sx={{
-            display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap',
+            display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', minHeight: HEAD,
           }}
           >
             <ActorTitle

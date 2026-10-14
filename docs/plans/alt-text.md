@@ -55,3 +55,29 @@ About one session, in the web app alone: nothing changes in the services.
 ## Depends on
 
 Nothing. Item 17 (several images in a post) built what this stands on.
+
+## What was built (2026-10-13)
+
+No change to how it is kept: each image already has its own description
+(`photo_files.alt_text`), which is where it belongs, since a post holds up
+to four images and each shows something different. A field on the post
+itself could hold one description for all of them.
+
+- **Writing it.** In the composer and in "Edit photos", the photos are a
+  carousel, one at a time and swiped through, each with a field labelled
+  "Description" under it with the hint in it, there to be written in
+  (`components/PhotoFilesEditor.jsx`). The small "ALT" mark and the dialog
+  behind it are gone. (First built as a stack of rows; made a carousel the
+  same day at the user's word, for phones.)
+- **Photos without one.** Under the list: "2 photos have no description
+  yet", with why one matters. Said, and never in the way of posting.
+- **Reading it.** An "ALT" badge in the corner of a photo that has a
+  description, in the feed, on the post's page, in profile lists and on
+  each slide of a post with several (`components/AltBadge.jsx`). Pressing
+  it shows the description.
+
+**Not built:** the reminder as a setting. With the field in plain sight
+and the line under the list, a second prompt at the moment of posting
+seemed one too many; it is easy to add if people still post without.
+**Not done:** the badge in the lightbox.
+

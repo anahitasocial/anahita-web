@@ -52,8 +52,24 @@ const disconnectBluesky = () => {
 
 // Follows here the accounts the viewer's Bluesky account follows already.
 // It is begun and not waited for: a long list takes minutes.
-const importBlueskyFollows = () => {
-  return axios.post('/atproto/settings/import-follows');
+//
+// `limit` is how many, beginning with the ones followed most lately.
+const importBlueskyFollows = (limit) => {
+  return axios.post('/atproto/settings/import-follows', { limit });
+};
+
+// What that would do, before it is done: how many accounts the viewer
+// follows on Bluesky, and the most that are followed here in one go.
+const previewBlueskyFollows = () => {
+  return axios.get('/atproto/settings/import-follows');
+};
+
+// The pictures of a post from another server, copied here again after
+// they were removed for its age. Asked of whichever service the post came
+// through, which is told by its address.
+const restorePictures = (medium) => {
+  const service = (medium.uri || '').startsWith('at://') ? 'atproto' : 'activitypub';
+  return axios.post(`/${service}/posts/${medium.id}/pictures`);
 };
 
 // The servers this installation refuses: nothing is taken from them or
@@ -82,10 +98,12 @@ export default {
   settings,
   setEnabled,
   lookup,
+  restorePictures,
   blueskySettings,
   connectBluesky,
   disconnectBluesky,
   importBlueskyFollows,
+  previewBlueskyFollows,
   blocks,
   addBlock,
   removeBlock,

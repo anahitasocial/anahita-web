@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import ControlLike from '../../likes/controls/LikeFeed';
 import ControlRepost from '../../controls/Repost';
 import { ShareAction, ofNode } from '../../controls/Share';
-import { DownloadAction } from '../../controls/medium/Download';
 import LikesStats from '../../likes';
 import FeedMenu from '../Menu';
 
@@ -73,12 +72,10 @@ const FeedItems = ({
               key={`node-repost-${node.id}`}
               parent={node.parent}
             />,
-            <DownloadAction
-              key={`node-download-${node.id}`}
-              node={node.parent}
-            />,
             // Share is last, after whatever else there is: it is the one
-            // that leads away from the post.
+            // that leads away from the post. Downloading is on the post's
+            // own page and not here: a card in a list is narrow, and one
+            // more button did not fit on a phone.
             <ShareAction
               key={`node-share-${node.id}`}
               what={ofNode(node.parent)}
@@ -117,10 +114,6 @@ const FeedItems = ({
           <ControlRepost
             key={`node-repost-${node.id}`}
             parent={node}
-          />,
-          <DownloadAction
-            key={`node-download-${node.id}`}
-            node={node}
           />,
           <ShareAction
             key={`node-share-${node.id}`}

@@ -23,8 +23,13 @@ export default {
     describe: 'Describe this photo',
     described: 'Change the description',
     describeTitle: 'Describe this photo',
-    altLabel: 'Description',
-    altHelp: 'Say what the photo shows, for people who cannot see it.',
+    altLabel: 'Alt description',
+    askAlt: 'Add an alt description',
+    askAltWhy: 'It is read out to people who cannot see the photo, and shown when a photo does not load.',
+    altWhy: 'Read out to people who cannot see the photo. This is not the caption: say what is in the picture.',
+    altHelp: 'For example: a dwarf banana tree by a window, beside a grey armchair.',
+    undescribed_one: '1 photo has no alt description yet.',
+    undescribed_other: '{{count}} photos have no alt description yet.',
     uploading: 'Uploading',
     failed: 'This photo could not be uploaded. Remove it and try again.',
     unsupported: 'Only JPEG and PNG photos can be uploaded.',
@@ -37,6 +42,22 @@ export default {
     altTooLong: 'One of the descriptions is too long.',
     saved: 'The photos were updated.',
     notSaved: 'The photos could not be updated.',
+  },
+  // On a photo that has a description, for somebody who can see it.
+  alt: {
+    show: 'Read the description of this photo',
+    title: 'Alt description',
+  },
+  // In place of the pictures of a post from another server that are no
+  // longer stored here.
+  removed: {
+    kept: 'This post has a picture that is no longer kept here.',
+    kept_other: 'This post has {{count}} pictures that are no longer kept here.',
+    show: 'Show the picture',
+    show_other: 'Show the pictures',
+    gone: 'The picture of this post is no longer available on {{domain}}.',
+    gone_other: 'The {{count}} pictures of this post are no longer available on {{domain}}.',
+    failed: 'They could not be fetched just now. Try again in a moment.',
   },
   slides: {
     position: '{{index}} of {{total}}',
