@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useGeolocated } from 'react-geolocated';
 import { makeStyles } from 'tss-react/mui';
 
+import Alert from '@mui/material/Alert';
 import AppBar from '@mui/material/AppBar';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
@@ -21,6 +22,7 @@ import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import SearchList from './SearchList';
 import RecentSearches from './RecentSearches';
 import RemoteLookup from '../RemoteLookup';
+import Progress from '../../../components/Progress';
 import { Search as SEARCH } from '../../../constants';
 import i18n from '../../../languages';
 import federation from '../../../utils/federation';
@@ -147,6 +149,46 @@ const Search = ({ viewerId }) => {
     coordLat = coords.latitude;
   }
 
+  // A distance means nothing without knowing where the searcher is, and
+  // the server leaves it out when it is not told. Rather than search
+  // everywhere and look as though it had not, the page says so; and while
+  // the browser is still asking, it waits.
+  const near = searchRange <= 100;
+  const located = coordLat !== 0.0 || coordLong !== 0.0;
+  let noPlace = '';
+  if (near && !isGeolocationAvailable) {
+    noPlace = 'unavailable';
+  } else if (near && !isGeolocationEnabled) {
+    noPlace = 'refused';
+  }
+  const waitingForPlace = near && !located && !noPlace;
+
+  const list = useMemo(() => {
+    return (
+      <SearchList
+        key={`${q}-${sort}-${scope}-${searchRange}`}
+        onScope={(value) => {
+          change({ scope: value });
+        }}
+        queryParams={{
+          q,
+          sort,
+          scope,
+          searchRange: searchRange * 1000,
+          coordLong,
+          coordLat,
+        }}
+      />
+    );
+  }, [
+    q,
+    sort,
+    scope,
+    searchRange,
+    coordLong,
+    coordLat,
+  ]);
+
   return (
     <>
       <AppBar
@@ -235,35 +277,16 @@ const Search = ({ viewerId }) => {
           />
         </Tabs>
       </AppBar>
+      {noPlace &&
+        <Alert severity="info" sx={{ mb: 2 }}>
+          {i18n.t(`search:distance.${noPlace}`)}
+        </Alert>}
       <RemoteLookup query={q} now={lookUpNow} />
       {/* Nothing typed: what this person searched for lately, and
           nothing else. */}
       {!q && <RecentSearches viewerId={viewerId} />}
-      {useMemo(() => {
-        return (
-          <SearchList
-            key={`${q}-${sort}-${scope}-${searchRange}`}
-            onScope={(value) => {
-              change({ scope: value });
-            }}
-            queryParams={{
-              q,
-              sort,
-              scope,
-              searchRange: searchRange * 1000,
-              coordLong,
-              coordLat,
-            }}
-          />
-        );
-      }, [
-        q,
-        sort,
-        scope,
-        searchRange,
-        coordLong,
-        coordLat,
-      ])}
+      {waitingForPlace && q && <Progress />}
+      {!waitingForPlace && list}
     </>
   );
 };

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate } from 'react-router-dom';
 
 import Alert from '@mui/material/Alert';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -10,10 +10,10 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Typography from '@mui/material/Typography';
 
+import ActorsCard from '../actors/Browse/Card';
 import api from '../../api';
 import i18n from '../../languages';
 import federation from '../../utils/federation';
-import utils from '../../utils';
 
 // Somebody on another server, found from the search page.
 //
@@ -21,7 +21,8 @@ import utils from '../../utils';
 // (@alice@mastodon.example), a handle on Bluesky (alice.bsky.social) or
 // the address of a profile, the ordinary search has nothing to find: they
 // are not here yet. This offers to ask their own server, or Bluesky, and
-// then opens them as anybody else is opened.
+// then shows who was found here, on the search page, as anybody found by
+// a search is: with their card and its Follow button.
 //
 // It asks when the button is pressed, or at once when `now` says that
 // the person typed an unmistakable handle into the search box and pressed
@@ -35,8 +36,8 @@ import utils from '../../utils';
 // the service that would be asked: the first press says so and the card
 // goes, for that network and not for the other.
 const RemoteLookup = ({ query = '', now = false }) => {
-  const navigate = useNavigate();
   const [isLooking, setIsLooking] = useState(false);
+  const [found, setFound] = useState(null);
   const [error, setError] = useState('');
   // The networks this installation turned out to have no service for.
   const [absent, setAbsent] = useState({});
@@ -45,6 +46,7 @@ const RemoteLookup = ({ query = '', now = false }) => {
   useEffect(() => {
     setError('');
     setIsLooking(false);
+    setFound(null);
   }, [query]);
 
   const kind = federation.lookupKind(query);
@@ -55,14 +57,12 @@ const RemoteLookup = ({ query = '', now = false }) => {
     domain = i18n.t('federation:lookup.bluesky');
   }
 
-  // Found at once, the profile takes the search's place in the history,
-  // so that Back does not land on a search that would look them up again.
-  const handleLookup = (replace = false) => {
+  const handleLookup = () => {
     setIsLooking(true);
     setError('');
 
     api.federation.lookup(asked).then((result) => {
-      navigate(utils.node.getURL(result.data), { replace });
+      setFound(result.data);
     }).catch((failure) => {
       const reason = federation.reasonOf(failure);
       // No reason given, and no service to give one: this network is
@@ -81,12 +81,20 @@ const RemoteLookup = ({ query = '', now = false }) => {
 
   useEffect(() => {
     if (now && kind) {
-      handleLookup(true);
+      handleLookup();
     }
   }, [now, query]);
 
   if (!kind || absent[kind]) {
     return null;
+  }
+
+  if (found) {
+    return (
+      <Box sx={{ mb: 2, maxWidth: 360 }}>
+        <ActorsCard actor={found} />
+      </Box>
+    );
   }
 
   return (

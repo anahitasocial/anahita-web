@@ -1072,7 +1072,8 @@ draws nothing (`utils/federation.js#isAbsent`).
   (`search/RemoteLookup.jsx`): when what was searched for is a handle with
   a server in it or the address of a profile, a card offers to ask that
   server. It asks when the button is pressed, since asking tells another
-  server that this site did; then it opens the person. It asks at once,
+  server that this site did; then it shows the person found on the search
+  page, with their card and its Follow button. It asks at once,
   without the button, when somebody signed in typed an unmistakable
   handle into the search box and pressed Enter (`isClearHandle`:
   `@alice@mastodon.example`, a Bluesky DID, or a Bluesky handle written
@@ -1135,6 +1136,11 @@ draws nothing (`utils/federation.js#isAbsent`).
   one request for each, asking for a single result and reading the total,
   made only when the open tab is empty. A handle from another server is
   left to the lookup card instead.
+- **A distance needs a place.** The server leaves the distance out when
+  it is not told where the searcher is, so when the browser cannot say or
+  was not allowed to, the page says that the search is not limited by
+  distance, rather than search everywhere and look as though it had not.
+  While the browser is still asking, it waits.
 
 ### Menus
 
