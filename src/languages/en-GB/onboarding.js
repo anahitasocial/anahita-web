@@ -6,7 +6,7 @@ export default {
     profile: 'About you',
     interests: 'Interests',
     featured: 'Who to follow',
-    recommended: 'For you',
+    recommended: 'Recommended',
   },
   avatar: {
     title: 'Add a profile photo',
@@ -19,9 +19,10 @@ export default {
   },
   interests: {
     title: 'What are you interested in?',
-    description: 'Hashtags people here use a lot. Each one you pick is added to your home page as a feed, and helps us suggest people and groups to you.',
+    description: 'Hashtags people here use a lot. Pick up to ten: posts with any of them make up a "For You" feed on your home page, and help us suggest people and groups to you.',
     follow_one: 'Follow {{ count }} hashtag',
     follow_other: 'Follow {{ count }} hashtags',
+    feedName: 'For You',
   },
   recommended: {
     title: 'Recommended for you',

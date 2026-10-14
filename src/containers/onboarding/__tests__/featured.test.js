@@ -45,21 +45,21 @@ describe('mergeFeatured', () => {
 });
 
 describe('the steps somebody who has just joined gets', () => {
-  it('always has a photo and a profile', () => {
-    expect(featured.stepsFor({})).toEqual(['avatar', 'profile']);
+  it('always has a profile, then a photo', () => {
+    expect(featured.stepsFor({})).toEqual(['profile', 'avatar']);
   });
 
   it('adds interests when there are enough to pick from', () => {
-    expect(featured.stepsFor({ interests: 2 })).toEqual(['avatar', 'profile']);
-    expect(featured.stepsFor({ interests: 3 })).toEqual(['avatar', 'profile', 'interests']);
+    expect(featured.stepsFor({ interests: 2 })).toEqual(['profile', 'avatar']);
+    expect(featured.stepsFor({ interests: 3 })).toEqual(['profile', 'avatar', 'interests']);
   });
 
   it('puts them in order, recommendations last', () => {
     expect(featured.stepsFor({ interests: 10, featured: 2, hasRecommendations: true }))
-      .toEqual(['avatar', 'profile', 'interests', 'featured', 'recommended']);
+      .toEqual(['profile', 'avatar', 'interests', 'featured', 'recommended']);
   });
 
   it('has no recommendations without the service', () => {
-    expect(featured.stepsFor({ featured: 2 })).toEqual(['avatar', 'profile', 'featured']);
+    expect(featured.stepsFor({ featured: 2 })).toEqual(['profile', 'avatar', 'featured']);
   });
 });

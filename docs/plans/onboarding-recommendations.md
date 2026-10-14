@@ -123,3 +123,19 @@ for you**, then the home page.
 - Tested: which steps somebody gets (`onboarding/__tests__`), and against
   MySQL that a followed hashtag is recommended by and what is offered
   (`signals_integration_test.go`).
+
+### After the user tried it: 2026-10-14
+
+The user made an account (Captain Picard), went through, and deleted it.
+Changed from what they saw:
+
+- **The profile comes before the photo,** so the circle can show the
+  initials of the name just given. The circle was white on a white card;
+  in signing up it now has a border in the theme's colour, dashed until
+  there is a picture, with the initials in that colour (the avatar form's
+  `prominent`).
+- **The language they post in starts on the browser's,** and so the
+  computer's, rather than on nothing chosen.
+- **What is picked makes one feed, "For You",** of all the hashtags picked,
+  not a feed for each: up to ten, as many as a feed takes. The last step is
+  called "Recommended", so that the two are not both "For you".

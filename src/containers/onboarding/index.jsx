@@ -27,7 +27,7 @@ import { Onboarding as ONBOARDING } from '../../constants';
 const { STEPS } = ONBOARDING;
 
 // Where somebody with an incomplete profile is sent after the agreements:
-// avatar, then name, bio and pronouns, then hashtags they are interested in,
+// name, bio and pronouns, then a photo, then hashtags they are interested in,
 // then the accounts the installation features, then people and groups
 // recommended to them, then the dashboard.
 //
@@ -40,7 +40,7 @@ const { STEPS } = ONBOARDING;
 // front, and a step whose list comes back empty — or fails to come back — is
 // left out, so the stepper shows only steps that will happen. Avatar and
 // profile depend on nothing, so there is always at least one step: a fresh
-// installation with nothing to offer goes avatar, profile, dashboard.
+// installation with nothing to offer goes profile, avatar, dashboard.
 //
 // Every step can be skipped. Skipping moves to the next; skipping the last one
 // finishes, and finishing — however it is reached — is what stops the gate

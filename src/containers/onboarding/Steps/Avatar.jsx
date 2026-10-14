@@ -43,6 +43,7 @@ const OnboardingAvatar = ({
           <ActorsAvatar
             node={viewer}
             canEdit
+            prominent
             onChange={refreshSession}
             onError={() => { alertError(i18n.t('onboarding:avatar.error')); }}
           />

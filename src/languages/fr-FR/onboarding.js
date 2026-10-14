@@ -6,7 +6,7 @@ export default {
     profile: 'À propos de vous',
     interests: 'Centres d’intérêt',
     featured: 'Qui suivre',
-    recommended: 'Pour vous',
+    recommended: 'Recommandés',
   },
   avatar: {
     title: 'Ajoutez une photo de profil',
@@ -19,9 +19,10 @@ export default {
   },
   interests: {
     title: 'Qu’est-ce qui vous intéresse ?',
-    description: 'Des hashtags très utilisés ici. Chacun que vous choisissez est ajouté à votre page d’accueil comme un fil, et nous aide à vous suggérer des personnes et des groupes.',
+    description: 'Des hashtags très utilisés ici. Choisissez-en jusqu’à dix : les publications qui en portent un forment un fil « Pour vous » sur votre page d’accueil, et nous aident à vous suggérer des personnes et des groupes.',
     follow_one: 'Suivre {{ count }} hashtag',
     follow_other: 'Suivre {{ count }} hashtags',
+    feedName: 'Pour vous',
   },
   recommended: {
     title: 'Recommandé pour vous',

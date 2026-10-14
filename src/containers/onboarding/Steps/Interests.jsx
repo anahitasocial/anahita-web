@@ -14,10 +14,11 @@ import customFeeds from '../../../utils/customFeeds';
 // What somebody who has just joined is interested in: the hashtags on the
 // most public posts lately, as chips to pick.
 //
-// Each one picked is followed, as following a hashtag is anywhere: a feed
-// of that hashtag on their home page, theirs alone. That is also what the
-// next step recommends by: the recommendation service reads the hashtags
-// of the feeds somebody follows. Nothing is picked for them.
+// What is picked becomes one feed, "For You": every post on the site with
+// any of those hashtags, on their home page, theirs alone. A feed takes ten
+// hashtags at most, so ten can be picked. That feed is also what the next
+// step recommends by: the recommendation service reads the hashtags of the
+// feeds somebody owns. Nothing is picked for them.
 const OnboardingInterests = ({
   interests,
   primaryLabel,
@@ -32,14 +33,13 @@ const OnboardingInterests = ({
     const next = new Set(picked);
     if (next.has(alias)) {
       next.delete(alias);
-    } else {
+    } else if (next.size < customFeeds.LIMITS.hashtags) {
       next.add(alias);
     }
     setPicked(next);
   };
+  const isFull = picked.size >= customFeeds.LIMITS.hashtags;
 
-  // One after another, since each puts a tab on the home page in turn. One
-  // that fails does not stop the rest, nor the flow.
   const followPicked = () => {
     if (picked.size === 0) {
       onNext();
@@ -50,22 +50,14 @@ const OnboardingInterests = ({
     const tags = Array.from(picked).map((alias) => {
       return alias.toLowerCase();
     });
-    let failed = false;
-    tags.reduce((before, tag) => {
-      return before.then(() => {
-        return api.customFeeds.follow({
-          name: tag,
-          icon: 'hashtag',
-          definition: customFeeds.ofHashtag(tag),
-        }, customFeeds.fingerprint).catch(() => {
-          failed = true;
-        });
-      });
-    }, Promise.resolve()).then(() => {
+    api.customFeeds.follow({
+      name: i18n.t('onboarding:interests.feedName'),
+      icon: 'star',
+      definition: customFeeds.ofHashtags(tags),
+    }, customFeeds.fingerprint).catch(() => {
+      alertError(i18n.t('onboarding:prompts.followError'));
+    }).finally(() => {
       setPending(false);
-      if (failed) {
-        alertError(i18n.t('onboarding:prompts.followError'));
-      }
       onNext();
     });
   };
@@ -89,7 +81,7 @@ const OnboardingInterests = ({
                 color={isOn ? 'primary' : 'default'}
                 variant={isOn ? 'filled' : 'outlined'}
                 aria-pressed={isOn}
-                disabled={pending}
+                disabled={pending || (isFull && !isOn)}
                 onClick={() => {
                   toggle(interest.alias);
                 }}

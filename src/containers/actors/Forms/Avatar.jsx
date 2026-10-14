@@ -60,8 +60,22 @@ const ActorAvatarForm = ({
   handleFieldChange,
   handleDelete,
   size = 'default',
+  prominent = false,
 }) => {
   const initials = getActorInitials(node);
+
+  // On a profile the circle stands over the cover, and its white edge is
+  // what sets it off. On a plain card, as in signing up, that is white on
+  // white: there it has a border in the theme's colour, dashed until there
+  // is a picture, and the initials in that colour, so it is plainly the
+  // thing to press.
+  const prominentLook = prominent ? {
+    backgroundColor: 'action.hover',
+    color: 'primary.main',
+    borderColor: 'primary.main',
+    borderStyle: avatar ? 'solid' : 'dashed',
+    borderWidth: 3,
+  } : undefined;
 
   return (
     <>
@@ -76,6 +90,7 @@ const ActorAvatarForm = ({
         <Avatar
           aria-label={getActorName(node)}
           className={clsx(classes[`${size}Avatar`], classes.avatar)}
+          sx={prominentLook}
           alt={getActorName(node)}
           src={isFetching ? '' : avatar}
         >
@@ -123,6 +138,8 @@ ActorAvatarForm.propTypes = {
   handleFieldChange: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
   size: PropTypes.oneOf(['small', 'large', 'default']),
+  // Drawn to stand out on a plain card, as in signing up.
+  prominent: PropTypes.bool,
 };
 
 export default withStyles(ActorAvatarForm, styles);

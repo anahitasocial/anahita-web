@@ -79,13 +79,14 @@ const loadFeatured = (viewer) => {
 const FEWEST_INTERESTS = 3;
 
 // The steps somebody gets, in order, from how much each list step has to
-// show. Photo and profile always; Interests when there are enough hashtags
+// show. Profile and photo always, the profile first so that the photo's
+// circle shows the initials of the name just given; Interests when there are enough hashtags
 // to pick from; the featured accounts when there are any; Recommended when
 // the installation has the recommendation service (it is asked for its
 // list when the step is reached, and moves on by itself when that is
 // empty).
 const stepsFor = ({ interests = 0, featured = 0, hasRecommendations = false }) => {
-  const steps = [STEPS.AVATAR, STEPS.PROFILE];
+  const steps = [STEPS.PROFILE, STEPS.AVATAR];
   if (interests >= FEWEST_INTERESTS) {
     steps.push(STEPS.INTERESTS);
   }

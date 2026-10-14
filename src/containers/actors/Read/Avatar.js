@@ -10,6 +10,7 @@ const ActorsAvatar = (props) => {
     canEdit,
     onChange = () => {},
     onError = () => {},
+    prominent = false,
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -97,6 +98,7 @@ const ActorsAvatar = (props) => {
       handleClose={handleClose}
       handleFieldChange={handleFieldChange}
       handleDelete={handleDelete}
+      prominent={prominent}
       size="large"
     />
   );
@@ -111,6 +113,7 @@ ActorsAvatar.propTypes = {
   onChange: PropTypes.func,
   // Called when an upload or a delete fails.
   onError: PropTypes.func,
+  prominent: PropTypes.bool,
 };
 
 export default ActorsAvatar;
