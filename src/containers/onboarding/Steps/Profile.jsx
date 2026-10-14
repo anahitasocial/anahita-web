@@ -11,6 +11,7 @@ import ViewerType from '../../../proptypes/Viewer';
 import api from '../../../api';
 import form from '../../../utils/form';
 import i18n from '../../../languages';
+import postLanguage from '../../../utils/postLanguage';
 
 const formFields = form.createFormFields([
   'name',
@@ -42,10 +43,17 @@ const OnboardingProfile = ({
   useEffect(() => {
     let cancelled = false;
 
+    // The language they post in starts on what their browser, and so their
+    // computer, says they read, rather than on nothing chosen: one less
+    // thing to set, and plainly theirs to change.
+    const withLanguage = (data) => {
+      return data.language ? data : { ...data, language: postLanguage.browserLanguage() || 'en' };
+    };
+
     api.people.read(viewer.alias)
-      .then(({ data }) => { if (!cancelled) setPerson(data); })
+      .then(({ data }) => { if (!cancelled) setPerson(withLanguage(data)); })
       // Nothing to pre-fill is not a reason to stop somebody filling it in.
-      .catch(() => { if (!cancelled) setPerson({ id: viewer.id }); });
+      .catch(() => { if (!cancelled) setPerson(withLanguage({ id: viewer.id })); });
 
     return () => { cancelled = true; };
   }, [viewer.alias, viewer.id]);

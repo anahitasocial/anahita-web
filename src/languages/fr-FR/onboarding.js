@@ -1,10 +1,12 @@
 export default {
   cTitle: 'Bienvenue, {{name}}',
-  intro: 'Quelques étapes rapides pour que l’on vous reconnaisse, et pour que votre tableau de bord ne soit pas vide.',
+  intro: 'Quelques étapes rapides pour bien commencer.',
   steps: {
     avatar: 'Photo',
     profile: 'À propos de vous',
+    interests: 'Centres d’intérêt',
     featured: 'Qui suivre',
+    recommended: 'Recommandés',
   },
   avatar: {
     title: 'Ajoutez une photo de profil',
@@ -14,6 +16,17 @@ export default {
   profile: {
     title: 'Présentez-vous',
     description: 'Votre nom et une ligne ou deux sur vous apparaissent à côté de tout ce que vous publiez.',
+  },
+  interests: {
+    title: 'Qu’est-ce qui vous intéresse ?',
+    description: 'Des hashtags très utilisés ici. Choisissez-en jusqu’à dix : les publications qui en portent un forment un fil « Mes centres d’intérêt » sur votre page d’accueil, et nous aident à vous suggérer des personnes et des groupes.',
+    follow_one: 'Suivre {{ count }} hashtag',
+    follow_other: 'Suivre {{ count }} hashtags',
+    feedName: 'Mes centres d’intérêt',
+  },
+  recommended: {
+    title: 'Recommandé pour vous',
+    description: 'Des personnes et des groupes qui pourraient vous plaire, chacun avec la raison. Rien n’est suivi tant que vous ne l’avez pas choisi.',
   },
   featured: {
     title: 'Comptes à suivre',

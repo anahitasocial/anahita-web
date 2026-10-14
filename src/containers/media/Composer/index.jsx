@@ -28,6 +28,16 @@ const useStyles = makeStyles()({
     position: 'sticky',
     top: 8 * 7,
     zIndex: 8,
+    // Raised as a whole, like the cards under it, so the form's own card
+    // inside lies flat on it.
+    '& .MuiCard-root': {
+      boxShadow: 'none',
+    },
+    // The card's padding is room enough above the first field; its margin
+    // on top of that left twice as much.
+    '& .MuiCardContent-root > .MuiFormControl-marginNormal:first-child': {
+      marginTop: 0,
+    },
   },
   tab: {
     fontSize: 12,
@@ -102,8 +112,7 @@ const Composers = ({
       position="sticky"
       color="inherit"
       className={classes.root}
-      variant="outlined"
-      elevation={0}
+      elevation={1}
     >
       {config && (
         <config.Composer

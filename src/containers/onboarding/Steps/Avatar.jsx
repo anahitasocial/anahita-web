@@ -37,12 +37,17 @@ const OnboardingAvatar = ({
           sx={{
             display: 'flex',
             justifyContent: 'center',
+            // The circle is larger than the button it sits in, and spills
+            // over by some 24px above and below: room for it, so that it
+            // does not cover what comes after.
             mt: 2,
+            py: 4,
           }}
         >
           <ActorsAvatar
             node={viewer}
             canEdit
+            prominent
             onChange={refreshSession}
             onError={() => { alertError(i18n.t('onboarding:avatar.error')); }}
           />

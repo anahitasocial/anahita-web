@@ -78,6 +78,8 @@ const ActorCard = ({
             title={getActorName(actor)}
             alias={actor.name}
             image={cover}
+            // A wide band, as on the profile, whatever shape the picture.
+            sx={{ aspectRatio: '3 / 1', objectFit: 'cover' }}
           />
         </Link>}
       <CardHeader

@@ -66,6 +66,11 @@ const ofHashtag = (hashtag) => {
   return complete({ filters: { hashtagsAny: [hashtag] } });
 };
 
+// A feed of any of several hashtags, over the whole site.
+const ofHashtags = (hashtags) => {
+  return complete({ filters: { hashtagsAny: hashtags } });
+};
+
 // A feed of one place, over the whole site.
 const ofLocation = (id) => {
   return complete({ filters: { locationsAny: [Number(id)] } });
@@ -326,6 +331,7 @@ export default {
   complete,
   starting,
   ofHashtag,
+  ofHashtags,
   ofLocation,
   cleanHashtag,
   cleanKeyword,

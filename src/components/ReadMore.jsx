@@ -86,6 +86,7 @@ const ReadMore = ({
           }}
           variant="body2"
           aria-expanded={false}
+          sx={{ mt: 1 }}
         >
           {readMoreText}
         </Link>}

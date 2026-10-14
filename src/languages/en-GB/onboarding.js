@@ -1,10 +1,12 @@
 export default {
   cTitle: 'Welcome, {{name}}',
-  intro: 'A few quick steps so people recognise you, and so your dashboard has something in it.',
+  intro: 'A few quick steps to get you ready.',
   steps: {
     avatar: 'Photo',
     profile: 'About you',
+    interests: 'Interests',
     featured: 'Who to follow',
+    recommended: 'Recommended',
   },
   avatar: {
     title: 'Add a profile photo',
@@ -14,6 +16,17 @@ export default {
   profile: {
     title: 'Tell people about yourself',
     description: 'Your name and a line or two about you appear beside everything you post.',
+  },
+  interests: {
+    title: 'What are you interested in?',
+    description: 'Hashtags people here use a lot. Pick up to ten: posts with any of them make up a "My interests" feed on your home page, and help us suggest people and groups to you.',
+    follow_one: 'Follow {{ count }} hashtag',
+    follow_other: 'Follow {{ count }} hashtags',
+    feedName: 'My interests',
+  },
+  recommended: {
+    title: 'Recommended for you',
+    description: 'People and groups you might like, each with the reason. Nothing is followed until you choose to.',
   },
   featured: {
     title: 'Accounts to follow',

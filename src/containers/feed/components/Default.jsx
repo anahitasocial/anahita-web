@@ -9,13 +9,14 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
-import Typography from '@mui/material/Typography';
 
 import PostActionsRow from '../../../components/PostActionsRow';
 import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
+import openOnClick from '../../../utils/openOnClick';
+import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
@@ -144,16 +145,13 @@ const FeedCardDefault = ({
         </Box>}
       {node.video && <VideoPlayer video={node.video} title={title} />}
       {body && <Player text={body} />}
-      <CardContent>
+      {/* The title and the text open the post when clicked, unless text
+          is being selected or a link in it was clicked. */}
+      <CardContent {...openOnClick.handlersFor(url, navigate)}>
         {title &&
-          <Typography
-            variant="h6"
-            className={classes.title}
-          >
-            <Link href={url}>
-              {title}
-            </Link>
-          </Typography>}
+          <PostTitle href={url} lang={node.language}>
+            {title}
+          </PostTitle>}
         {body &&
           <ReadMore contentFilter>
             {body}

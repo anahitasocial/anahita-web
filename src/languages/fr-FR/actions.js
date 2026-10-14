@@ -1,4 +1,6 @@
 export default {
+  addCover: 'Ajouter une photo de couverture',
+  followBack: 'Suivre en retour',
   follow: 'Suivre',
   unfollow: 'Ne plus suivre',
   block: 'Bloquer',

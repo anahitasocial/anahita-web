@@ -13,6 +13,8 @@ import Stepper from '@mui/material/Stepper';
 
 import AvatarStep from './Steps/Avatar';
 import FeaturedStep from './Steps/Featured';
+import InterestsStep from './Steps/Interests';
+import RecommendedStep from './Steps/Recommended';
 import ProfileStep from './Steps/Profile';
 import featured from './featured';
 import Progress from '../../components/Progress';
@@ -25,14 +27,20 @@ import { Onboarding as ONBOARDING } from '../../constants';
 const { STEPS } = ONBOARDING;
 
 // Where somebody with an incomplete profile is sent after the agreements:
-// avatar, then name, bio and pronouns, then the accounts the installation
-// features, then the dashboard.
+// name, bio and pronouns, then a photo, then hashtags they are interested in,
+// then the accounts the installation features, then people and groups
+// recommended to them, then the dashboard.
+//
+// The interests and the recommendations come from the recommendation
+// service, which is optional: without it neither step is there. Interests
+// are offered only when the site has a few to offer (featured.stepsFor); a
+// new site with no hashtags yet skips the step.
 //
 // AN EMPTY LIST SKIPS ITS STEP. Whatever the steps need is fetched once, up
 // front, and a step whose list comes back empty — or fails to come back — is
 // left out, so the stepper shows only steps that will happen. Avatar and
 // profile depend on nothing, so there is always at least one step: a fresh
-// installation with nothing to offer goes avatar, profile, dashboard.
+// installation with nothing to offer goes profile, avatar, dashboard.
 //
 // Every step can be skipped. Skipping moves to the next; skipping the last one
 // finishes, and finishing — however it is reached — is what stops the gate
@@ -40,15 +48,25 @@ const { STEPS } = ONBOARDING;
 
 // loadSteps decides which steps this person gets, and fetches what the list
 // steps show. It never rejects: each list fails on its own, as empty.
+const loadInterests = () => {
+  return api.recommendations.interests({ limit: 20 }).then((result) => {
+    return { hasService: true, interests: result.data.data || [] };
+  }).catch(() => {
+    return { hasService: false, interests: [] };
+  });
+};
+
 const loadSteps = (viewer) => {
-  return featured.loadFeatured(viewer).then((featuredList) => {
-    const steps = [STEPS.AVATAR, STEPS.PROFILE];
+  const both = [featured.loadFeatured(viewer), loadInterests()];
 
-    if (featuredList.actors.length > 0) {
-      steps.push(STEPS.FEATURED);
-    }
+  return Promise.all(both).then(([featuredList, offered]) => {
+    const steps = featured.stepsFor({
+      interests: offered.interests.length,
+      featured: featuredList.actors.length,
+      hasRecommendations: offered.hasService,
+    });
 
-    return { steps, featured: featuredList };
+    return { steps, featured: featuredList, interests: offered.interests };
   });
 };
 
@@ -61,6 +79,7 @@ const Onboarding = ({
   const navigate = useNavigate();
   const [steps, setSteps] = useState(null);
   const [featuredList, setFeaturedList] = useState({ actors: [], inviterId: null });
+  const [interests, setInterests] = useState([]);
   const [active, setActive] = useState(0);
   const [finishing, setFinishing] = useState(false);
 
@@ -70,6 +89,7 @@ const Onboarding = ({
     loadSteps(viewer).then((result) => {
       if (!cancelled) {
         setFeaturedList(result.featured);
+        setInterests(result.interests);
         setSteps(result.steps);
       }
     });
@@ -127,6 +147,7 @@ const Onboarding = ({
         <CardHeader
           title={i18n.t('onboarding:cTitle', { name: viewer.name || viewer.alias })}
           subheader={i18n.t('onboarding:intro')}
+          slotProps={{ title: { sx: { mb: 1 } } }}
         />
         {steps.length > 1 &&
           <Box sx={{ px: 1 }}>
@@ -142,6 +163,8 @@ const Onboarding = ({
           </Box>}
         {steps[active] === STEPS.AVATAR && <AvatarStep {...stepProps} />}
         {steps[active] === STEPS.PROFILE && <ProfileStep {...stepProps} />}
+        {steps[active] === STEPS.INTERESTS &&
+          <InterestsStep {...stepProps} interests={interests} />}
         {steps[active] === STEPS.FEATURED &&
           <FeaturedStep
             {...stepProps}
@@ -149,6 +172,8 @@ const Onboarding = ({
             inviterId={featuredList.inviterId}
             followActor={followActor}
           />}
+        {steps[active] === STEPS.RECOMMENDED &&
+          <RecommendedStep {...stepProps} followActor={followActor} />}
       </Card>
     </Container>
   );

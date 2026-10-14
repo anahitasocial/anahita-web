@@ -199,7 +199,7 @@ const LocationsRead = ({
         </CardContent>
         {/* Following a place is keeping a feed of it on the home page. */}
         {viewer.id > 0 && location.id > 0 && !isEditing &&
-          <CardActions>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             <FollowLocation location={location} />
           </CardActions>}
       </Card>

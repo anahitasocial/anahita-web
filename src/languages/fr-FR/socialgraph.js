@@ -1,4 +1,9 @@
 export default {
+  counts: {
+    followers_one: 'abonné·e',
+    followers_other: 'abonné·es',
+    following: 'abonnements',
+  },
   cTitle: 'Graphe social',
   mTitle: 'Graphe social',
   followers: 'Abonnés',

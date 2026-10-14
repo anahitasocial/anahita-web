@@ -30,6 +30,16 @@ const useStyles = makeStyles()((theme) => {
         unicodeBidi: 'plaintext',
         textAlign: 'start',
       },
+      // A paragraph keeps a line's space from the next, but none above the
+      // first or below the last: the card around the text has its own
+      // padding, and a browser's margin on top of it left a wide gap
+      // between a post's or a profile's header and what it says.
+      '& > :first-child': {
+        marginTop: 0,
+      },
+      '& > :last-child': {
+        marginBottom: 0,
+      },
     },
     body1,
     body2,
