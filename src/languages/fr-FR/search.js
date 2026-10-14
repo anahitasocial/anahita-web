@@ -29,10 +29,10 @@ export default {
   within: 'À moins de {{ radius }} km',
   km: '{{ radius }} km',
   choices: {
-    followedFirst: 'Suivis d’abord',
+    followedFirst: 'Personnes et groupes suivis d’abord',
     followedFirstHelp: 'Les personnes et les groupes que vous suivez, et ce qui y est publié, avant tout le reste',
-    recentFirst: 'Récents d’abord',
-    recentFirstHelp: 'Les plus récents d’abord parmi les résultats qui correspondent aussi bien',
+    recentFirst: 'Résultats récents d’abord',
+    recentFirstHelp: 'Parmi les résultats qui correspondent aussi bien, les plus récents d’abord',
   },
   nothingFound: 'Rien ne correspond à « {{ term }} ».',
   foundUnder_one: '{{ count }} dans {{ tab }}',

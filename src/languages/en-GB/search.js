@@ -29,10 +29,10 @@ export default {
   within: 'Within {{ radius }} km',
   km: '{{ radius }} km',
   choices: {
-    followedFirst: 'Followed first',
+    followedFirst: 'People and groups I follow first',
     followedFirstHelp: 'People and groups you follow, and what is posted on them, before everything else',
-    recentFirst: 'Recent first',
-    recentFirstHelp: 'The newest first among results that match as well',
+    recentFirst: 'Newer results first',
+    recentFirstHelp: 'Among results that match equally well, the newest first',
   },
   nothingFound: 'Nothing matches “{{ term }}”.',
   foundUnder_one: '{{ count }} under {{ tab }}',
