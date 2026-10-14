@@ -28,6 +28,18 @@ const v4Look = (prefersDarkMode) => {
       MuiAppBar: {
         defaultProps: { enableColorOnDark: true },
       },
+      // Content straight after a card's header drops its top padding: the
+      // header's own padding below it is the gap, and the two together were
+      // twice that. A picture or anything else between them keeps both.
+      MuiCardContent: {
+        styleOverrides: {
+          root: {
+            '.MuiCardHeader-root + &': {
+              paddingTop: 0,
+            },
+          },
+        },
+      },
       MuiCheckbox: {
         defaultProps: { color: 'secondary' },
       },
