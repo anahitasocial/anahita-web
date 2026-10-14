@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import PlayIcon from '@mui/icons-material/PlayArrow';
 
 import i18n from '../languages';
@@ -11,21 +10,20 @@ import videos from '../utils/videos';
 // A video post made of a GIF or an animated PNG: played as the picture it
 // was, silently, on a loop, with none of a player's controls.
 //
-// It plays while it is in view and stops when it is scrolled away. Where
-// the reader has asked for less motion, it waits to be pressed. Pressing
-// it stops and starts it, and the whole picture is that one button, so a
-// keyboard reaches it too. A small "GIF" in its corner says what it is.
+// It waits to be pressed, showing its first picture: a page of them all
+// moving at once is heavy for a browser, and for whoever is reading. Pressed,
+// it plays on a loop until it is pressed again or scrolled away, and plays
+// again when it comes back into view. The whole picture is that one button,
+// so a keyboard reaches it too. A small "GIF" in its corner says what it is.
 //
 // It has one size, made at the picture's own; there is nothing to choose.
 const LoopingClip = ({
   video,
   title = '',
 }) => {
-  const reduced = useMediaQuery('(prefers-reduced-motion: reduce)', { noSsr: true });
   const element = useRef(null);
-  // Whether it is to play while it is in view: from the start unless less
-  // motion was asked for, and after that as it was last pressed.
-  const wanted = useRef(!reduced);
+  // Whether it is to play while it is in view: as it was last pressed.
+  const wanted = useRef(false);
   const [playing, setPlaying] = useState(false);
   const [file] = videos.filesOf(video);
   const url = file ? file.url : '';
@@ -37,22 +35,11 @@ const LoopingClip = ({
   };
 
   useEffect(() => {
-    wanted.current = !reduced;
-    const node = element.current;
-    if (reduced && node && !node.paused) {
-      node.pause();
-    }
-  }, [reduced]);
-
-  useEffect(() => {
     const node = element.current;
     if (!node) {
       return undefined;
     }
     if (!window.IntersectionObserver) {
-      if (wanted.current) {
-        play(node);
-      }
       return undefined;
     }
     const observer = new window.IntersectionObserver(([entry]) => {
