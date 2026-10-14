@@ -4,7 +4,9 @@ export default {
   STEPS: {
     AVATAR: 'avatar',
     PROFILE: 'profile',
+    INTERESTS: 'interests',
     FEATURED: 'featured',
+    RECOMMENDED: 'recommended',
   },
   // Where the dashboard remembers that the "Complete your profile" card was
   // dismissed. Per browser: a convenience, not a record.

@@ -43,3 +43,23 @@ describe('mergeFeatured', () => {
     expect(mergeFeatured({ viewer })).toEqual([]);
   });
 });
+
+describe('the steps somebody who has just joined gets', () => {
+  it('always has a photo and a profile', () => {
+    expect(featured.stepsFor({})).toEqual(['avatar', 'profile']);
+  });
+
+  it('adds interests when there are enough to pick from', () => {
+    expect(featured.stepsFor({ interests: 2 })).toEqual(['avatar', 'profile']);
+    expect(featured.stepsFor({ interests: 3 })).toEqual(['avatar', 'profile', 'interests']);
+  });
+
+  it('puts them in order, recommendations last', () => {
+    expect(featured.stepsFor({ interests: 10, featured: 2, hasRecommendations: true }))
+      .toEqual(['avatar', 'profile', 'interests', 'featured', 'recommended']);
+  });
+
+  it('has no recommendations without the service', () => {
+    expect(featured.stepsFor({ featured: 2 })).toEqual(['avatar', 'profile', 'featured']);
+  });
+});

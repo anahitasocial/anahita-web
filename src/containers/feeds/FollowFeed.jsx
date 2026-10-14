@@ -29,31 +29,10 @@ const FollowFeed = ({
   const [waiting, setWaiting] = useState(false);
 
   const handleFollow = () => {
-    const wanted = customFeeds.fingerprint(definition);
-
     setWaiting(true);
 
-    api.customFeeds.mine().then((result) => {
-      const have = (result.data.data || []).find((feed) => {
-        return customFeeds.fingerprint(feed.definition) === wanted;
-      });
-
-      if (have) {
-        return have;
-      }
-
-      return api.customFeeds.add({
-        name,
-        // The feed's picture is what it is a feed of: a hashtag, a place.
-        icon,
-        access: 'myself',
-        definition,
-      }).then((added) => {
-        return added.data;
-      });
-    }).then((feed) => {
-      return api.customFeeds.setPinned(feed, true);
-    }).then(() => {
+    // The feed's picture is what it is a feed of: a hashtag, a place.
+    api.customFeeds.follow({ name, icon, definition }, customFeeds.fingerprint).then(() => {
       alertSuccess(done);
     })
       .catch((response) => {

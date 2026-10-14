@@ -1,4 +1,7 @@
 import api from '../../api';
+import { Onboarding as ONBOARDING } from '../../constants';
+
+const { STEPS } = ONBOARDING;
 
 // The featured accounts step's list: the inviter first, then the people and
 // groups the installation features.
@@ -71,7 +74,33 @@ const loadFeatured = (viewer) => {
   });
 };
 
+// Fewer hashtags than this to offer, and the Interests step is left out:
+// three is too few to choose among.
+const FEWEST_INTERESTS = 3;
+
+// The steps somebody gets, in order, from how much each list step has to
+// show. Photo and profile always; Interests when there are enough hashtags
+// to pick from; the featured accounts when there are any; Recommended when
+// the installation has the recommendation service (it is asked for its
+// list when the step is reached, and moves on by itself when that is
+// empty).
+const stepsFor = ({ interests = 0, featured = 0, hasRecommendations = false }) => {
+  const steps = [STEPS.AVATAR, STEPS.PROFILE];
+  if (interests >= FEWEST_INTERESTS) {
+    steps.push(STEPS.INTERESTS);
+  }
+  if (featured > 0) {
+    steps.push(STEPS.FEATURED);
+  }
+  if (hasRecommendations) {
+    steps.push(STEPS.RECOMMENDED);
+  }
+  return steps;
+};
+
 export default {
   loadFeatured,
   mergeFeatured,
+  stepsFor,
+  FEWEST_INTERESTS,
 };

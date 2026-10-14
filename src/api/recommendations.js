@@ -12,6 +12,12 @@ const actors = ({ kind = 'person', limit = 10, context = 'home' } = {}) => {
   return axios.get('/recommendations/actors', { params: { kind, limit, context } });
 };
 
+// The hashtags on the most public posts lately, offered to somebody who
+// has just joined to pick from.
+const interests = ({ limit = 20 } = {}) => {
+  return axios.get('/recommendations/interests', { params: { limit } });
+};
+
 const preferences = () => {
   return axios.get('/recommendations/preferences');
 };
@@ -35,6 +41,7 @@ const setDismissed = (actor, isDismissed) => {
 
 export default {
   actors,
+  interests,
   preferences,
   setPreferences,
   dismissals,

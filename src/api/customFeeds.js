@@ -78,6 +78,35 @@ const setPinned = (feed, isPinned) => {
   return (isPinned ? axios.put(path) : axios.delete(path)).then(changed);
 };
 
+// Follows something that is not a profile, a hashtag or a place: a feed of
+// that one thing, the viewer's own and seen by them alone, put on their
+// home page. A feed of exactly this they already have is put there as it
+// is, and no second one is made. Answers with the feed.
+const follow = ({ name, icon, definition }, fingerprint) => {
+  const wanted = fingerprint(definition);
+
+  return mine().then((result) => {
+    const have = (result.data.data || []).find((feed) => {
+      return fingerprint(feed.definition) === wanted;
+    });
+    if (have) {
+      return have;
+    }
+    return add({
+      name,
+      icon,
+      access: 'myself',
+      definition,
+    }).then((added) => {
+      return added.data;
+    });
+  }).then((feed) => {
+    return setPinned(feed, true).then(() => {
+      return feed;
+    });
+  });
+};
+
 const cursors = {};
 
 // A page of a feed. `start` is how many the list holds already: 0 begins
@@ -123,6 +152,7 @@ export default {
   copy,
   mine,
   discover,
+  follow,
   pinned,
   setPins,
   setPinned,
