@@ -8,7 +8,7 @@ export default {
     bodyPlaceholder: 'Écrivez une description ...',
     choose: 'Choisir une vidéo ou un GIF',
     change: 'En choisir une autre',
-    limits: 'MP4, MOV ou WebM, jusqu’à {{size}} et {{minutes}} minutes. Un GIF ou un PNG animé, jusqu’à {{animationSize}} et {{seconds}} secondes, joue en boucle.',
+    limits: 'MP4, MOV, WebM ou GIF, jusqu’à {{size}} et {{minutes}} minutes.',
     upload: 'Téléverser',
   },
   upload: {
