@@ -30,6 +30,17 @@ const primaryOf = (tag) => {
   return `${tag || ''}`.split(/[-_]/)[0].toLowerCase();
 };
 
+// The languages written from right to left.
+const RIGHT_TO_LEFT = ['ar', 'ckb', 'dv', 'fa', 'he', 'ps', 'sd', 'ug', 'ur', 'yi'];
+
+// The direction to type a post in, from the language chosen for it: right
+// to left for Persian, Arabic, Hebrew and the others, so that an empty box
+// starts at the right. Otherwise `auto`, which takes the direction from the
+// first letter typed, as before.
+const directionOf = (code) => {
+  return RIGHT_TO_LEFT.includes(primaryOf(code)) ? 'rtl' : 'auto';
+};
+
 const isOffered = (code) => {
   return CODES.includes(code);
 };
@@ -105,6 +116,7 @@ export default {
   UNDETERMINED,
   CODES,
   primaryOf,
+  directionOf,
   nameOf,
   browserLanguage,
   defaultFor,

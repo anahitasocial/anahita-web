@@ -326,7 +326,13 @@ right-to-left layout. What people write is another matter: a post's title and
 text, and the fields they are typed into, carry `dir="auto"`, so Persian,
 Arabic or Hebrew runs right to left and aligns to the right. The direction
 comes from the text, not from the language tag, so it holds for untagged and
-older posts, and each paragraph of a post is judged on its own. Mirroring the
+older posts, and each paragraph of a post is judged on its own. **While a
+post is written** the box follows the language chosen for it
+(`postLanguage.directionOf`): right to left for Persian, Arabic, Hebrew,
+Urdu and the others, so an empty box starts at the right, and changing the
+language changes the direction at once; otherwise from the first letter
+typed. Replies and quotes have no language button and follow the
+writer's own language. Mirroring the
 whole interface (MUI's `direction: 'rtl'` theme with the stylis RTL plugin)
 would come with a Persian or Arabic translation of it, and there is none yet.
 

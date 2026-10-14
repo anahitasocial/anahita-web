@@ -202,6 +202,7 @@ const MediaComposerDefault = ({
       maxFiles={maxFiles}
       namespace={namespace}
       linkPreview={linkPreview.preview}
+      direction={postLanguage.directionOf(language)}
       postHint={staysHere ? i18n.t('federation:composer.staysHere') : ''}
       onLinkPreviewRemove={linkPreview.remove}
       onBodyPaste={linkPreview.onPaste}

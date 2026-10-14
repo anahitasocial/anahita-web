@@ -59,6 +59,15 @@ describe('post language', () => {
     });
   });
 
+  it('types right to left for the languages written that way', () => {
+    expect(postLanguage.directionOf('fa')).toBe('rtl');
+    expect(postLanguage.directionOf('ar-EG')).toBe('rtl');
+    expect(postLanguage.directionOf('he')).toBe('rtl');
+    expect(postLanguage.directionOf('en')).toBe('auto');
+    expect(postLanguage.directionOf('')).toBe('auto');
+    expect(postLanguage.directionOf(undefined)).toBe('auto');
+  });
+
   it('offers languages, not regions', () => {
     expect(postLanguage.primaryOf('pt-BR')).toBe('pt');
     expect(postLanguage.primaryOf('FR_ca')).toBe('fr');

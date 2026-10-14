@@ -105,7 +105,7 @@ const QuoteDialog = ({
               htmlInput: {
                 maxLength: MAX,
                 'aria-label': i18n.t('replies:quote.placeholder'),
-                dir: 'auto',
+                dir: postLanguage.directionOf(postLanguage.defaultFor(viewer)),
               },
             }}
           />

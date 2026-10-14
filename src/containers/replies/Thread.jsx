@@ -235,6 +235,7 @@ const RepliesThread = ({
       {canReply &&
         <ReplyForm
           hint={staysHere ? i18n.t(staysHere) : ''}
+          direction={postLanguage.directionOf(postLanguage.defaultFor(viewer))}
           onSubmit={(body, card) => {
             return handleReply(top, body, card);
           }}
