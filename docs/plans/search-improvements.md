@@ -199,7 +199,7 @@ A phase is finished only when these pages match the code.
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-11 |
-| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 planned in three layers; Part 4 not |
+| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 layer 1 built 2026-10-13 (each person's switches not yet); layer 2 planned; layer 3 to be decided; Part 4 not |
 
 ## What was built
 
@@ -215,3 +215,16 @@ As planned, with these differences:
 - **The distance filter listed what was a thousand times too far** (anahita-services, `graph-grpc-service/data/repositories/search.go`): the count compared in metres and the list multiplied by 1000 again, so "within 25 km" of Paris listed posts in Vancouver. Fixed; the list compares in metres as the count does.
 
 Files: `components/SearchBox.jsx`, `utils/recentSearches.js` and `utils/searchAddress.js` with their tests, `search/Browse/{index,SearchList,RecentSearches,NothingFound}.jsx`, `search/RemoteLookup.jsx`, `utils/federation.js#isClearHandle`, `App.jsx` (cleared on signing out), strings in en-GB and fr-FR. Nothing on the server stores a search.
+
+### Part 5, layer 1: 2026-10-13
+
+Built in graph-grpc-service, as planned, with these differences:
+
+- **The order is in three steps, not one score.** Where the words are first; then, among results that match alike, their standing (how useful people have found them, and whether the searcher follows them); then the id. So a profile called *Coffee* always comes before a post that mentions coffee, however liked, which a single sum could not promise.
+- **A profile is weighed by its followers counted by when they followed,** the same way posts are weighed by their likes, rather than by when the profile was last active: it is the same rule of "still found useful" for both.
+- **Inside the handle** (`decafcoffeeclub`) counts as inside the name, and a handle typed with its `@` is matched without it, so `@bmann.ca` finds bmann.ca (it was found before only by posts that mention him).
+- **Interest fades by half every 365 days as it comes.** `half_life_days` in the file; 0 for never.
+- **The weights are in `graph-grpc-defaults/search_ranking.json`,** read again when it changes; anahita-services `docs/search.md` says how to tune it.
+- **Not built: each person's switches.** Which ones is still to be settled with the user.
+
+Checked against MySQL with searches as people make them (`search_ranking_integration_test.go`), and on the development database: "coffee" opens on the group *Coffee Love*, then photos whose titles begin with the word; "bmann" on Boris, then a handle with it inside (`webmanna`), then posts that mention him.
