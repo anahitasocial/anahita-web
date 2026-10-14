@@ -66,15 +66,15 @@ const ActorAvatarForm = ({
 
   // On a profile the circle stands over the cover, and its white edge is
   // what sets it off. On a plain card, as in signing up, that is white on
-  // white: there it has a border in the theme's colour, dashed until there
-  // is a picture, and the initials in that colour, so it is plainly the
-  // thing to press.
+  // white: there it is solid grey with the initials in white, so it is
+  // plainly the thing to press. `&&` so that it wins over the white of the
+  // class above.
   const prominentLook = prominent ? {
-    backgroundColor: 'action.hover',
-    color: 'primary.main',
-    borderColor: 'primary.main',
-    borderStyle: avatar ? 'solid' : 'dashed',
-    borderWidth: 3,
+    '&&': {
+      backgroundColor: 'grey.500',
+      color: 'common.white',
+      borderColor: 'grey.500',
+    },
   } : undefined;
 
   return (

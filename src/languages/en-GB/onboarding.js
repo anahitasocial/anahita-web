@@ -1,6 +1,6 @@
 export default {
   cTitle: 'Welcome, {{name}}',
-  intro: 'A few quick steps so people recognise you, and so your dashboard has something in it.',
+  intro: 'A few quick steps to get you ready.',
   steps: {
     avatar: 'Photo',
     profile: 'About you',

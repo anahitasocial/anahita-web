@@ -147,6 +147,7 @@ const Onboarding = ({
         <CardHeader
           title={i18n.t('onboarding:cTitle', { name: viewer.name || viewer.alias })}
           subheader={i18n.t('onboarding:intro')}
+          slotProps={{ title: { sx: { mb: 1 } } }}
         />
         {steps.length > 1 &&
           <Box sx={{ px: 1 }}>

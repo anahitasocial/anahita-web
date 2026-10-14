@@ -1,6 +1,6 @@
 export default {
   cTitle: 'Bienvenue, {{name}}',
-  intro: 'Quelques étapes rapides pour que l’on vous reconnaisse, et pour que votre tableau de bord ne soit pas vide.',
+  intro: 'Quelques étapes rapides pour bien commencer.',
   steps: {
     avatar: 'Photo',
     profile: 'À propos de vous',
