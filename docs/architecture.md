@@ -566,11 +566,12 @@ own, because a video is too big to be sent with the post (the services'
   composer says to post it as a photo.
 - **A looping post plays in `components/LoopingClip.jsx`**, which
   `VideoPlayer` hands it to: muted, on a loop, with no controls or sizes.
-  It waits to be pressed, showing its first picture, since a page of them
-  all moving at once is heavy for a browser (the user's choice,
-  2026-10-14). Pressed, it plays until pressed again or scrolled away, and
-  again when back in view. The whole picture is one button, and a small
-  "GIF" sits in its corner.
+  It plays only while at least half of it is in view and stops when
+  scrolled away, so only the few on the screen move, not every one on a
+  long page. Where the reader asked for less motion
+  (`prefers-reduced-motion`) it waits to be pressed. The whole picture is
+  one button that stops and starts it, and a small "GIF" sits in its
+  corner.
 - A video is a kind of post like the others: `/videos/:id`, the `videos`
   namespace in the store, and the kind `video` in custom feeds.
 
