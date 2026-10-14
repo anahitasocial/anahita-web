@@ -332,7 +332,9 @@ post is written** the box follows the language chosen for it
 Urdu and the others, so an empty box starts at the right, and changing the
 language changes the direction at once; otherwise from the first letter
 typed. Replies and quotes have no language button and follow the
-writer's own language. Mirroring the
+writer's own language. A placeholder takes its direction from its own words
+(`unicode-bidi: plaintext`, in `styles/index.js`), so an English one reads
+rightly in a box set right to left. Mirroring the
 whole interface (MUI's `direction: 'rtl'` theme with the stylis RTL plugin)
 would come with a Persian or Arabic translation of it, and there is none yet.
 
