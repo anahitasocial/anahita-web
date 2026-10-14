@@ -70,29 +70,88 @@ Left out unless asked for. If it is, it should wait 300 ms after the last key, a
 
 **What it is today** (`graph-grpc-service/data/repositories/search.go`, `GetRelevantSortQuery`): popularity alone, replies + likes + subscribers + followers, highest first. The words searched for decide what is found, not the order. So a post that mentions "seeds" once comes before a group called *Seeds* when the post has more likes; nothing new can rise above what is old and liked; and with no tiebreak, results with equal counts may come back in another order on the next page, so scrolling can show some twice and skip others.
 
-**What it would be**, in order of weight:
+**A principle, from the user (2026-10-13): old and useful counts as much as new.** Anahita is meant for building knowledge as well as for news: a school's notes, a library's guides, a research group's findings stay useful for years. So the order must never push something down only for being old. What it may weigh is whether something is **still being found useful**, which is a different thing from when it was written.
 
-1. **How well it matches.** The handle or name exactly, then the name beginning with the words, then the name containing them, then the words only in the body.
-2. **The searcher's own connections:** people and groups they follow, and what those posted.
-3. **Popularity, softened by age,** so that something new and liked can come before something old and liked a little more.
-4. **A fixed tiebreak** by id, so that pages do not overlap.
+It is built in three layers, each useful alone.
+
+### Layer 1: a scored order (to build first)
+
+Each result is given a score from four parts, then a fixed tiebreak by id so that pages never overlap.
+
+**1. How well it matches.** This part outweighs the others, so that a profile called *Seeds* always comes before a post that mentions seeds once.
+
+| Where the words are | Points |
+| --- | --- |
+| The handle exactly (`bmann.ca`, `rastin`) | 100 |
+| The name exactly | 90 |
+| The name begins with them | 70 |
+| A word in the name begins with them ("Jericho **Bea**ch") | 60 |
+| Somewhere in the name | 50 |
+| A hashtag on the post | 40 |
+| A whole word in the body | 20 |
+| Only inside a word in the body ("**coffee**house") | 10 |
+
+With several words, all of them beats some of them, and the exact phrase beats both.
+
+**2. The searcher's connections.** About +15 when they follow the profile, or the post is on a profile they follow: enough to put what they know above strangers at the same level of match, never enough to put a mention in a body above a name.
+
+**3. Usefulness, on a logarithmic scale.** For a post, `log(1 + likes + saves + 2 × replies + 2 × reposts and quotes)`; for a profile, `log(1 + followers)`. The logarithm keeps one post liked a thousand times from burying everything: it comes first, not a hundred times first.
+
+**4. Time, counted by when it was found useful, not by when it was written.** This is where the principle above is kept:
+
+- What counts toward usefulness is weighted by **when each like, save, reply or repost happened**: a guide from 2019 liked and saved this month counts as fully as a post from this week. A post written last year that nobody has touched since weighs only its old interest.
+- **How much the past fades is the operator's choice,** `half_life_days` in the weights file: a newsroom may halve the weight of interest every 30 days; a library, a school or a research group may set a year, or `0` for never, so that what was useful once stays as useful.
+- A profile is weighed by when it was last active, under the same setting.
+
+Interest kept by when it happened needs the time of each like, save and reply, which the edges and nodes already have (`created_at`). Counting by it means reading the edges rather than the counters on the node, which is affordable at this size and can be kept in a small table refreshed every hour if it is not.
 
 **Who tunes it:**
 
-- **The operator,** through weights in a file, as the recommendation service has: a newsroom may favour what is new, a community what is popular. With the recipes (item 40), each kind of site starts from its own.
-- **Each person,** with a few switches rather than weights, kept with their settings: for instance, "put people and groups I follow first". Which switches is to be decided with the user.
+- **The operator,** with every number above in a weights file, as the recommendation service has. The recipes (item 40) give each kind of site its own: `newsroom` short, `library`, `research`, `school` and `university` long or never.
+- **Each person,** with a switch or two rather than weights, kept with their settings: "put people and groups I follow first", and perhaps "prefer what is recent". Which switches is to be settled with the user.
 
-Services only, apart from the switches. About **1–1½ sessions** for the ordering and the operator's weights; half a session more for the switches.
+**To check it:** a handful of searches the user really makes, with the result they expect first ("coffee", "bmann"), made into tests, so that the weights are held to what people expect and not to guesses.
 
-## Part 6: Ranking by citation (an idea, not planned)
+Services only, apart from the switches. **About 1½–2 sessions,** with time counted by interest; half a session more for the switches. "Most recent" stays as it is.
 
-Asked about by the user on 2026-10-13, as Google ranks the web: PageRank on Anahita's own graph. Written down so it is not lost; not to be built until Part 5 is and the user asks.
+### Layer 2: a real index of words (before the migration baseline)
 
-- **A citation** between posts is a quote, a repost, a reply, a link from one post to another; between people and groups, a follow, a mention, a like of their posts. One counts for more when it comes from something itself well cited.
-- **It would run** as a job every hour that reads the edges, computes a score for each node and keeps it; at this size, well under a second. The score becomes one more weight in Part 5.
-- **Personalised PageRank,** started from the people and groups the searcher follows, ranks by what their part of the network cites: the per-person form of it.
-- **To be careful of:** only public edges may count, or a private follow or a followers-only repost could show through the order of results; rings of accounts citing each other (PageRank resists them better than counters, but not entirely); the old always being favoured, hence age in Part 5; and posts from other servers, whose citations on their own network are not seen here, so their score is this site's interest in them.
-- **Size:** about 2–3 sessions, and one more for the personalised form.
+Search today matches with `LIKE '%coffee%'`, which reads every row and knows nothing of words or languages. A MySQL `FULLTEXT` index on names and bodies (with the `ngram` parser for languages written without spaces) and `MATCH … AGAINST` give a score for the words themselves and are fast; that score replaces the last two rows of the table above. A migration, so it comes before row 27 folds the migrations into a baseline. **About 1 session.**
+
+### Layer 3: ranking by citation (written down; not now)
+
+Asked about by the user on 2026-10-13, as Google ranks the web: PageRank on Anahita's own graph. A citation between posts is a quote, a repost, a reply or a link from one post to another; between profiles, a follow, a mention or a like of their posts. One counts for more when it comes from something itself well cited. It would run as a job every hour, keep a score for each node, and become one more part of the score in layer 1. Its personalised form, started from the people and groups the searcher follows, ranks by what their part of the network cites.
+
+**It suits knowledge systems especially,** which is why it is kept: it is how scholarly citation works, and it values what is old and still cited, which is the principle above.
+
+**Why not now: the numbers on the development database (2026-10-13).**
+
+| | Count |
+| --- | --- |
+| Posts | 7,597 |
+| Replies | 11,126 |
+| Profiles | 872 |
+| Follows | 3,119 |
+| Likes | 6,537 |
+| Mentions | 296 |
+| Reposts | 3 |
+| Quotes | 0 |
+
+- **Between posts there is almost no graph.** Citation analysis needs chains: B cites A, C cites B, and A gains from being cited by something cited. Nearly every citation here is a reply under a post; 2,254 posts have at least one and 447 have five or more, but not one post cites a post that is itself cited. Without chains, PageRank comes out as the number of replies, lightly weighted, which layer 1 already counts.
+- **Between profiles there is a little more:** three or four follows each. PageRank could say "followed by people who are themselves well followed", but at this size follower counts and "followed by people you follow" (the recommendation service already has it) say nearly as much.
+
+**When to look at it again**, whichever comes first:
+
+- quotes and reposts in the thousands, so that posts cite posts in chains (both are new, and federation brings more);
+- profiles in the tens of thousands with denser follows, when counts grow noisy and easy to inflate;
+- signs of gaming, such as accounts liking each other in rings, which counters cannot tell from real interest;
+- an installation used as a knowledge system (a `library`, `research` or `university` site) whose posts link to one another, which is where it pays soonest.
+
+Profiles would gain from it first (searching for people, and suggestions), posts after.
+
+**To be careful of, when it is built:** only public edges may count, or a private follow or a followers-only repost could show through the order of results; rings of accounts citing each other, which PageRank resists better than counters but not entirely; and posts from other servers, whose citations on their own network are not seen here, so their score is this site's interest in them.
+
+**Size:** about 2–3 sessions, one more for the personalised form.
 
 ## Decided against
 
@@ -109,8 +168,9 @@ Asked about by the user on 2026-10-13, as Google ranks the web: PageRank on Anah
 | 3. Words for an empty search, with counts for the other tabs | 1–2 h |
 | **Parts 1 to 3** | **5–7 h, about a session and a half** |
 | 4. As you type | 2–3 h more |
-| 5. "Most relevant" made better | 1–1½ sessions, half a session more for each person's switches |
-| 6. Ranking by citation | an idea; about 2–3 sessions |
+| 5, layer 1. A scored order, time counted by interest | 1½–2 sessions, half a session more for each person's switches |
+| 5, layer 2. An index of words | about 1 session, before the migration baseline |
+| 5, layer 3. Ranking by citation | written down, not now; about 2–3 sessions |
 
 ## How it would be checked
 
@@ -137,7 +197,7 @@ A phase is finished only when these pages match the code.
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-11 |
-| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 planned; parts 4 and 6 not |
+| Implementation | parts 1 to 3 built 2026-10-13, with looking a handle up at once; Part 5 planned in three layers; Part 4 not |
 
 ## What was built
 
