@@ -18,7 +18,6 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
-import CheckIcon from '@mui/icons-material/Check';
 
 import SearchList from './SearchList';
 import RecentSearches from './RecentSearches';
@@ -274,7 +273,6 @@ const Search = ({ viewerId }) => {
                     key={which}
                     label={i18n.t(`search:choices.${which}`)}
                     title={i18n.t(`search:choices.${which}Help`)}
-                    icon={isOn ? <CheckIcon /> : undefined}
                     color={isOn ? 'primary' : 'default'}
                     variant={isOn ? 'filled' : 'outlined'}
                     aria-pressed={isOn}
