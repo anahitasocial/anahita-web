@@ -42,6 +42,7 @@ import reauth from './reauth';
 import repost from './feed/repost';
 import session from './session';
 import socialgraph from './socialgraph';
+import handles from './handles';
 import inbounds from './inbounds';
 import tagGraph from './tag_graph';
 import totp from './totp';
@@ -135,6 +136,7 @@ const apis = {
   customFeeds,
   federation,
   recommendations,
+  handles,
   hashtags,
   is,
   likes,

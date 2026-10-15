@@ -188,3 +188,24 @@ describe('getActorFeatureTabs', () => {
     expect(tabs).toEqual(['feed', 'notes', 'photos']);
   });
 });
+
+describe('where something is read', () => {
+  it('is a profile of any kind at its alias, and anything else at its kind', () => {
+    const person = { id: 5, type: 'node.actor.person-service.person.v1', alias: 'rastin' };
+    const group = { id: 10273, type: 'node.actor.group-service.group.v1', alias: 'anahita-atrium' };
+    const remote = { id: 9, type: 'node.actor.activitypub-service.person.v1', alias: 'ana@mastodon.social' };
+    const photo = { id: 13, type: 'node.medium.photo-service.photo.v1', alias: 'sunset' };
+
+    expect(node.getURL(person)).toBe('/@rastin/');
+    expect(node.getURL(group)).toBe('/@anahita-atrium/');
+    expect(node.getURL(remote)).toBe('/@ana@mastodon.social/');
+    expect(node.getURL(photo)).toBe('/photos/13-sunset/');
+
+    // Settings and the like stay under the kind's address.
+    expect(node.getKindURL(person)).toBe('/people/rastin/');
+    expect(node.getKindURL(group)).toBe('/groups/10273-anahita-atrium/');
+
+    // A group with no alias has only its kind's address.
+    expect(node.getURL({ id: 4, type: 'node.actor.group-service.group.v1' })).toBe('/groups/4/');
+  });
+});

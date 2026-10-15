@@ -17,7 +17,7 @@ describe('describing what was reported', () => {
     };
 
     expect(target.title(item)).toBe('Grace');
-    expect(target.url(item)).toBe('/people/grace/');
+    expect(target.url(item)).toBe('/@grace/');
     // A profile's bio is not what was reported.
     expect(target.body(item)).toBe('');
   });
