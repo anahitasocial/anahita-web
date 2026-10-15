@@ -17,6 +17,7 @@ import HomePage from '../containers/home';
 
 import Actors from '../containers/actors';
 import ActorsRead from '../containers/actors/Read';
+import ActorByHandle from '../containers/actors/ByHandle';
 import ActorsAdd from '../containers/actors/Add';
 import ActorsSettings from '../containers/actors/Settings';
 import ActorsNotificationsEdit from '../containers/actors/Notifications/Edit';
@@ -102,7 +103,12 @@ const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
 const EventsNotificationsEdit = ActorsNotificationsEdit('events');
 
-const PeopleRead = ActorsRead('people');
+// An old address of a person's page, /people/ana/photos, sent to /@ana/photos.
+const PeopleToHandle = () => {
+  const { id, tab, subtab } = useParams();
+  const rest = [tab, subtab].filter(Boolean).join('/');
+  return <Navigate to={`/@${id}${rest ? `/${rest}` : ''}`} replace />;
+};
 const PeopleSettings = ActorsSettings('people');
 const PeopleNotificationsEdit = ActorsNotificationsEdit('people');
 
@@ -238,9 +244,11 @@ const AppRoutes = () => {
                 </AuthenticatedRoute>
           }
             />
-            <Route path="/people/:id/:tab/:subtab" element={<PeopleRead />} />
-            <Route path="/people/:id/:tab" element={<PeopleRead />} />
-            <Route path="/people/:id" element={<PeopleRead />} />
+            {/* A person's page is at their alias, /@ana: an old address
+                is sent there, with its tab. */}
+            <Route path="/people/:id/:tab/:subtab" element={<PeopleToHandle />} />
+            <Route path="/people/:id/:tab" element={<PeopleToHandle />} />
+            <Route path="/people/:id" element={<PeopleToHandle />} />
 
             {/* Groups — static paths before parameterized */}
             <Route path="/groups" element={<GroupsBrowse />} />
@@ -502,6 +510,9 @@ const AppRoutes = () => {
             <Route path="/pages/privacy" element={<Navigate to="/legal/privacy" replace />} />
             <Route path="/pages/:alias" element={<StaticPage />} />
 
+            {/* A profile of any kind at its alias: /@ana, /@ana/photos.
+                Anything else of one word is not found there. */}
+            <Route path="/:handle/*" element={<ActorByHandle />} />
             <Route path="/404" element={<NotFoundPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>

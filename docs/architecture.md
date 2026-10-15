@@ -120,8 +120,9 @@ history. The main paths:
 | --- | --- |
 | `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
-| `/people`, `/people/:id` | People, and a person's profile. `:id` is their username, or for somebody on another server their whole handle, `alice@mastodon.example` |
-| `/people/:id/:tab`, `/groups/:id/:tab` | A profile opened on one of its tabs: one of its kinds of post, or for a person `replies` or `reposts` |
+| `/@:alias`, `/@:alias/:tab` | A profile of any kind at its alias, as it is known on the fediverse: a person (`/@rastin`), somebody on another server by their whole handle (`/@alice@mastodon.example`, `/@alice.bsky.social`), a group (`/@anahita-atrium`) or an event. `containers/actors/ByHandle.jsx` asks the API which profile the alias is (`api.handles`, `GET /actors/:alias`) and draws its page, its tabs under `/@:alias`. `utils/node.getURL` gives every profile this address; `getKindURL` gives the one by kind, under which settings are |
+| `/people`, `/people/:id` | People. A person's old address, `/people/:id` and its tabs, sends to `/@:id` |
+| `/people/:id/:tab`, `/groups/:id/:tab` | A group's page opened on one of its tabs at its address by kind, which still works; for a person, sent to `/@:id/:tab` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
 | `/recommendations` | People, groups and events the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |

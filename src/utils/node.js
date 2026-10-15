@@ -299,7 +299,9 @@ const readIdentifier = (node, namespace) => {
   return namespace === 'people' ? node.alias : node.id;
 };
 
-const getURL = (node) => {
+// Where a profile's page is, by its kind: /people/ana/, /groups/12-garden/.
+// Its settings and the like are under this.
+const getKindURL = (node) => {
   if (node && node.id && node.type) {
     const service = pluralize(node.type.split('.')[3]);
     let slug = '';
@@ -316,6 +318,17 @@ const getURL = (node) => {
   }
 
   return '/';
+};
+
+// Where something is read. A profile of any kind is at its alias, /@ana/,
+// as it is known on the fediverse (@ana@example.org); somebody on another
+// server at theirs, /@ana@mastodon.social/. Anything else at its kind's
+// address.
+const getURL = (node) => {
+  if (node && node.id && node.type && node.type.includes('.actor.') && node.alias) {
+    return `/@${node.alias}/`;
+  }
+  return getKindURL(node);
 };
 
 const getServiceName = (node) => {
@@ -464,6 +477,7 @@ export default {
   getURL,
   readIdentifier,
   getNamespace,
+  getKindURL,
   getComposers,
   getEnabledNodeTypes,
   getActorFeatureTabs,

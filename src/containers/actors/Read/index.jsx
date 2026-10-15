@@ -100,11 +100,23 @@ const ActorsRead = (props) => {
     isAuthenticated,
     isFetching,
     error,
+    // From /@alias (ByHandle), which has found the profile already: its
+    // id (a person's alias), its tab, and the address its tabs are under.
+    routeId = '',
+    routeTab = undefined,
+    routeSubtab = undefined,
+    basePath = '',
   } = props;
 
-  const { id: slug, tab, subtab } = useParams();
+  const params = useParams();
   const navigate = useNavigate();
-  const [id] = slug.split('-');
+  const slug = routeId || params.id;
+  const tab = routeId ? routeTab : params.tab;
+  const subtab = routeId ? routeSubtab : params.subtab;
+  // A person is read by alias, whole: an alias may have a hyphen in it. A
+  // group or an event by the id at the front of its address, 12-garden.
+  const id = namespace === 'people' ? slug : slug.split('-')[0];
+  const base = basePath || `/${namespace}/${slug}`;
 
   useEffect(() => {
     readItem(id);
@@ -302,7 +314,7 @@ const ActorsRead = (props) => {
         composers={isAuthenticated && actor.id && viewer.id &&
         <Composers actor={actor} />}
         onTabChange={(newTab) => {
-          navigate(newTab ? `/${namespace}/${slug}/${newTab}` : `/${namespace}/${slug}`);
+          navigate(newTab ? `${base}/${newTab}` : base);
         }}
         feed={actor.id &&
         <FeedActorBrowse
@@ -336,6 +348,10 @@ const ActorsRead = (props) => {
 
 ActorsRead.propTypes = {
   readItem: PropTypes.func.isRequired,
+  routeId: PropTypes.string,
+  routeTab: PropTypes.string,
+  routeSubtab: PropTypes.string,
+  basePath: PropTypes.string,
   items: ActorsType.isRequired,
   viewer: PersonType.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,

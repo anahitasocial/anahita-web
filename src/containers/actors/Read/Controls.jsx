@@ -95,7 +95,7 @@ const ActorsReadControls = ({
           <MenuItem
             key={`actor-edit-${actor.id}`}
             component="a"
-            href={`${node.getURL(actor)}settings`}
+            href={`${node.getKindURL(actor)}settings`}
           >
             <MenuItemLabel icon={<SettingsIcon fontSize="small" />}>
               {i18n.t('commons:settings')}
