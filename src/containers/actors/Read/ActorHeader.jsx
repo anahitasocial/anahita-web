@@ -36,14 +36,21 @@ const ActorHeader = ({
   followAction = null,
   headerActions = null,
   socialgraphOpenOn = '',
+  muted = false,
 }) => {
+  // A profile the viewer has blocked: its cover and picture blurred, so
+  // that who they are is not looked at, while the page still says whose
+  // it is. The blur is kept inside each picture's edges.
+  const blurred = (amount) => {
+    return muted ? { filter: `blur(${amount}px)`, overflow: 'hidden' } : {};
+  };
   const pronouns = (actor.personPronouns || '').trim();
 
   return (
     <Card
       sx={!actor.enabled ? { border: 1, borderColor: 'warning.light' } : undefined}
     >
-      {cover}
+      <Box sx={{ overflow: 'hidden', '& > *': blurred(16) }}>{cover}</Box>
       <Box sx={{ px: { xs: 2, sm: 3 }, pb: 2 }}>
         <Box
           sx={{
@@ -65,6 +72,7 @@ const ActorHeader = ({
               // the circle is the size, smaller on a phone.
               '& .MuiIconButton-root': { width: 'auto', height: 'auto', p: 0 },
               '& .MuiAvatar-root': {
+                ...blurred(6),
                 width: { xs: 96, sm: 128 },
                 height: { xs: 96, sm: 128 },
                 fontSize: { xs: 36, sm: 44 },
@@ -126,6 +134,8 @@ ActorHeader.propTypes = {
   headerActions: PropTypes.node,
   // A list of followers to open on arriving. See SocialgraphMeta.
   socialgraphOpenOn: PropTypes.string,
+  // Drawn as a profile the viewer has blocked.
+  muted: PropTypes.bool,
 };
 
 export default ActorHeader;
