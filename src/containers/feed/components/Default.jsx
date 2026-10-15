@@ -153,7 +153,7 @@ const FeedCardDefault = ({
             {title}
           </PostTitle>}
         {body &&
-          <ReadMore contentFilter>
+          <ReadMore contentFilter to={url}>
             {body}
           </ReadMore>}
         {linkPreviews.isShown(node.linkPreview, body) &&
