@@ -121,7 +121,7 @@ const ActorCard = ({
         </CardContent>}
       {actor.body &&
       <CardContent>
-        <ReadMore lines={4} contentFilter>
+        <ReadMore lines={4} contentFilter to={url}>
           {actor.body}
         </ReadMore>
       </CardContent>}

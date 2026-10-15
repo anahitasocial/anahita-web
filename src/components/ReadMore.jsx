@@ -4,6 +4,7 @@
 
 import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import EntityBody from './NodeBody';
@@ -24,12 +25,17 @@ const LINE = 1.5;
 // "Read more" is offered only when the text is taller than the lines it is
 // kept to, measured as drawn and again when its size changes, as when a
 // picture in it loads.
+//
+// On a card in a list it leads to the page the whole text is on (`to`):
+// opened where it was, a long text made its card many times taller than
+// those beside it, and the columns jumped. With no `to`, it opens in place.
 const ReadMore = ({
   lines = 6,
   readMoreText = i18n.t('commons:readMore'),
   children,
   contentFilter = false,
   lang = '',
+  to = '',
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isLong, setIsLong] = useState(false);
@@ -78,7 +84,16 @@ const ReadMore = ({
           {children}
         </EntityBody>
       </Box>
-      {isClipped &&
+      {isClipped && to &&
+        <Link
+          component={RouterLink}
+          to={to}
+          variant="body2"
+          sx={{ mt: 1, display: 'inline-block' }}
+        >
+          {readMoreText}
+        </Link>}
+      {isClipped && !to &&
         <Link
           component="button"
           onClick={() => {
@@ -102,6 +117,8 @@ ReadMore.propTypes = {
   readMoreText: PropTypes.string,
   children: PropTypes.string.isRequired,
   contentFilter: PropTypes.bool,
+  // The page the whole text is on, for a card in a list.
+  to: PropTypes.string,
 };
 
 export default ReadMore;

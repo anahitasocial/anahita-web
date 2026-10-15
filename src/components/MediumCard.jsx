@@ -184,7 +184,7 @@ const MediumCard = ({
             {medium.name}
           </PostTitle>}
         {medium.body &&
-          <ReadMore contentFilter lang={medium.language}>
+          <ReadMore contentFilter lang={medium.language} to={url}>
             {medium.body}
           </ReadMore>}
         {linkPreviews.isShown(medium.linkPreview, medium.body) &&
