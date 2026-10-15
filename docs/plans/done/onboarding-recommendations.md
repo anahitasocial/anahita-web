@@ -8,7 +8,7 @@ that we have recommendations". Built 2026-10-14; see What was built.
 Somebody who has just joined is taken through three steps
 (`containers/onboarding/Steps`): their picture, their profile, and the
 accounts the installation features. The plan for onboarding
-([done/onboarding.md](done/onboarding.md)) had a third phase, put off until
+([done/onboarding.md](onboarding.md)) had a third phase, put off until
 there was something to recommend with:
 
 > Suggestions from interests: deferred to the recommendation engine. When
