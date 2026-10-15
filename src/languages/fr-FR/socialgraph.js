@@ -11,6 +11,10 @@ export default {
   mutuals: 'En commun',
   blocks: 'Bloqués',
   followsYou: 'Vous suit',
+  blockedNotice: {
+    title: 'Vous avez bloqué {{name}}',
+    help: 'Cette personne ne peut ni vous suivre, ni voir vos publications ici, ni vous répondre, ni aimer ce que vous publiez, et vous ne voyez pas les siennes. Si vous avez connecté votre compte Bluesky, elle y est bloquée aussi.',
+  },
   order: {
     label: 'Ordre',
     latest: 'Récents',

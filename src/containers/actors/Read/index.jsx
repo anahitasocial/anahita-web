@@ -8,6 +8,7 @@ import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
 import ActorHeader from './ActorHeader';
+import BlockedNotice from './BlockedNotice';
 import ActorBody from './Body';
 import ActorsFollowRequests from './FollowRequests';
 import ActorsBrowseFeature from '../Browse/Gadget';
@@ -163,7 +164,10 @@ const ActorsRead = (props) => {
   // An event is answered, Going or Maybe, from its own panel. That is
   // following it, so there is no Follow button beside.
   const isEvent = namespace === 'events';
-  const showFollow = isAuthenticated && canFollow && !isEvent;
+  // Somebody the viewer has blocked: their profile says so, with the way
+  // back, in place of what they post; nothing to follow.
+  const isBlocked = isAuthenticated && Boolean(actor.isBlockedByViewer);
+  const showFollow = isAuthenticated && canFollow && !isEvent && !isBlocked;
   // Inviting follows the group's "who can invite" setting, which the
   // server answers as authorized.invite.
   const showInvite = isAuthenticated && Boolean(actor.authorized && actor.authorized.invite);
@@ -237,6 +241,7 @@ const ActorsRead = (props) => {
         // /people/ana/socialgraph/leaders was a tab of the profile. It now
         // opens the profile with that list showing.
         socialgraphOpenOn={tab === 'socialgraph' ? (subtab || 'followers') : ''}
+        muted={isBlocked}
         followAction={
           <>
             {showEditNotifications && <NotificationsDialog actor={actor} />}
@@ -261,6 +266,9 @@ const ActorsRead = (props) => {
             actor={actor}
             viewer={viewer}
             isAuthenticated={isAuthenticated}
+            onChanged={() => {
+              readItem(id);
+            }}
           />}
       />
       {isEvent &&
@@ -270,50 +278,58 @@ const ActorsRead = (props) => {
             readItem(id);
           }}
         />}
+      {isBlocked &&
+        <BlockedNotice
+          actor={actor}
+          onChanged={() => {
+            readItem(id);
+          }}
+        />}
+      {!isBlocked &&
       <ActorBody
         actor={actor}
         events={namespace === 'groups' && actor.id &&
-          <EventsHosted
-            group={actor}
-            canAdd={isAuthenticated && canAdminister}
-            key={`hosted-events-${actor.id}`}
-          />}
+        <EventsHosted
+          group={actor}
+          canAdd={isAuthenticated && canAdminister}
+          key={`hosted-events-${actor.id}`}
+        />}
         viewer={viewer}
         selectedTab={tab}
         tabPanels={tabPanels}
         admins={actor.administrators &&
-          <Admins actor={actor} />}
+        <Admins actor={actor} />}
         composers={isAuthenticated && actor.id && viewer.id &&
-          <Composers actor={actor} />}
+        <Composers actor={actor} />}
         onTabChange={(newTab) => {
           navigate(newTab ? `/${namespace}/${slug}/${newTab}` : `/${namespace}/${slug}`);
         }}
         feed={actor.id &&
-          <FeedActorBrowse
-            actor={actor}
-            filter="posts"
-            key={`feed-posts-${actor.id}`}
-          />}
+        <FeedActorBrowse
+          actor={actor}
+          filter="posts"
+          key={`feed-posts-${actor.id}`}
+        />}
         replies={actor.id &&
-          <FeedActorBrowse
-            actor={actor}
-            filter="replies"
-            key={`feed-replies-${actor.id}`}
-          />}
+        <FeedActorBrowse
+          actor={actor}
+          filter="replies"
+          key={`feed-replies-${actor.id}`}
+        />}
         reposts={actor.id &&
-          <FeedActorBrowse
-            actor={actor}
-            filter="reposts"
-            key={`feed-reposts-${actor.id}`}
-          />}
-        // Not for somebody on another server: where they are is theirs
-        // to say, and their server says nothing of it.
+        <FeedActorBrowse
+          actor={actor}
+          filter="reposts"
+          key={`feed-reposts-${actor.id}`}
+        />}
+          // Not for somebody on another server: where they are is theirs
+          // to say, and their server says nothing of it.
         locations={actor.id && !utils.federation.isRemote(actor) &&
-          <LocationsGadget
-            node={actor}
-            viewer={viewer}
-          />}
-      />
+        <LocationsGadget
+          node={actor}
+          viewer={viewer}
+        />}
+      />}
     </>
   );
 };

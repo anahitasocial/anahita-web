@@ -26,6 +26,7 @@ const ActorsReadControls = ({
   actor,
   isAuthenticated = false,
   viewer,
+  onChanged = null,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -78,6 +79,12 @@ const ActorsReadControls = ({
             actor={actor}
             key="actor-socialgraph-block"
             component="menuitem"
+            onChange={() => {
+              handleClose();
+              if (onChanged) {
+                onChanged();
+              }
+            }}
           />}
         {showFeature &&
           <ControlFeature
@@ -117,6 +124,8 @@ const ActorsReadControls = ({
 };
 
 ActorsReadControls.propTypes = {
+  // Told when the profile has changed, as by blocking, to read it again.
+  onChanged: PropTypes.func,
   actor: ActorType,
   isAuthenticated: PropTypes.bool,
   viewer: PersonType.isRequired,

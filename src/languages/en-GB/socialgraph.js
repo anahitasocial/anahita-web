@@ -11,6 +11,10 @@ export default {
   mutuals: 'In common',
   blocks: 'Blocked',
   followsYou: 'Follows you',
+  blockedNotice: {
+    title: 'You blocked {{name}}',
+    help: 'They cannot follow you, see your posts here, reply to you or like what you post, and you do not see theirs. If you have connected your Bluesky account, they are blocked there too.',
+  },
   order: {
     label: 'Order',
     latest: 'Latest',
