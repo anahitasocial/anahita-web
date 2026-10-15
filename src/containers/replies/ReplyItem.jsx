@@ -29,7 +29,7 @@ import PhotoSlides from '../../components/PhotoSlides';
 import VideoPlayer from '../../components/VideoPlayer';
 import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
-import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
+import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import i18n from '../../languages';
@@ -69,6 +69,8 @@ const ReplyItem = ({
   // Answering something from another server, and not on the fediverse:
   // said before it is sent.
   const staysHere = useReplyStaysHere(viewer, reply);
+  // Whether the viewer's posts go to Bluesky, where a change does not follow.
+  const onBluesky = useOnBluesky(viewer);
 
   const authorized = reply.authorized || {};
   const author = reply.deleted ? {} : getAuthor(reply);
@@ -207,6 +209,7 @@ const ReplyItem = ({
                 setIsEditing(false);
               }}
               linkPreview={reply.linkPreview}
+              hint={onBluesky ? i18n.t('federation:composer.editStaysHereBluesky') : ''}
               onSubmit={(body, card) => {
                 return onEdit(reply, body, card).then(() => {
                   setIsEditing(false);
