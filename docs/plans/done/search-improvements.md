@@ -1,6 +1,6 @@
 # Search: recent searches, and a search that keeps its place
 
-*Roadmap item 36, raised by the user on 2026-10-11 ("jazz up our search so it caches recent searches"). Row 33 of M10. See the [roadmap](roadmap.md).*
+*Roadmap item 36, raised by the user on 2026-10-11 ("jazz up our search so it caches recent searches"). Row 33 of M10. See the [roadmap](../roadmap.md).*
 
 ## Context
 
