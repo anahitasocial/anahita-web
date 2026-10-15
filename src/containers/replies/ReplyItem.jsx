@@ -179,13 +179,14 @@ const ReplyItem = ({
             </EntityBody>}
           {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.body) &&
             <LinkPreviewCard preview={reply.linkPreview} />}
-          {/* A reply with pictures or a video shows them under its words. */}
+          {/* A reply with pictures or a video shows them under its words,
+              with room above and below: 32 pixels each way. */}
           {Array.isArray(reply.files) && reply.files.length > 0 &&
-            <Box sx={{ mt: 1, borderRadius: 1, overflow: 'hidden' }}>
+            <Box sx={{ my: 4, borderRadius: 1, overflow: 'hidden' }}>
               <PhotoSlides medium={reply} size="medium" />
             </Box>}
           {reply.video &&
-            <Box sx={{ mt: 1, borderRadius: 1, overflow: 'hidden' }}>
+            <Box sx={{ my: 4, borderRadius: 1, overflow: 'hidden' }}>
               <VideoPlayer video={reply.video} title={reply.name || ''} />
             </Box>}
           {isEditing &&
