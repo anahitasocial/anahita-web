@@ -174,13 +174,21 @@ const ReplyItem = ({
               <Chip size="small" label={i18n.t('replies:hidden.badge')} />}
           </Box>
           {/* A reply with pictures or a video shows them first, its words
-              under them, with room above and below: 16 pixels each way. */}
+              under them. 16 pixels show above and below: 8 above, since
+              the line with the name is as tall as the picture beside it
+              and already leaves some 8 under the name. */}
           {Array.isArray(reply.files) && reply.files.length > 0 &&
-            <Box sx={{ my: 2, borderRadius: 1, overflow: 'hidden' }}>
+            <Box sx={{
+              mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
+            }}
+            >
               <PhotoSlides medium={reply} size="medium" />
             </Box>}
           {reply.video &&
-            <Box sx={{ my: 2, borderRadius: 1, overflow: 'hidden' }}>
+            <Box sx={{
+              mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
+            }}
+            >
               <VideoPlayer video={reply.video} title={reply.name || ''} />
             </Box>}
           {!isEditing &&
