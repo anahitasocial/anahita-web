@@ -63,7 +63,10 @@ const useStyles = makeStyles()((theme) => {
       '&::-webkit-scrollbar': {
         display: 'none',
       },
-      backgroundColor: theme.palette.action.hover,
+      // Nothing behind a photo of another shape than the frame: the card
+      // shows beside it, in its own colour. A grey band there looked like
+      // something missing.
+      backgroundColor: 'transparent',
     },
     slide: {
       flex: '0 0 100%',
