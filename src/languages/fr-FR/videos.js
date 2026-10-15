@@ -29,6 +29,7 @@ export default {
     animationTooLarge: 'Ce GIF dépasse {{animationSize}}.',
     tooLong: 'C’est plus long que ce qui peut être publié : {{minutes}} minutes pour une vidéo, {{seconds}} secondes pour un GIF.',
     still: 'Cette image ne bouge pas. Publiez-la plutôt comme photo.',
+    closed: 'Cette discussion n’accepte plus vos réponses ; la vidéo n’a pas été publiée.',
     tooMany: 'Vous avez publié autant de vidéos que possible aujourd’hui.',
     off: 'Les vidéos ne peuvent pas être publiées ici.',
     encoding: 'Cette vidéo n’a pas pu être préparée.',

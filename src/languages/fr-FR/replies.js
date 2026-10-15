@@ -5,6 +5,13 @@ export default {
   placeholder: 'Écrivez une réponse ...',
   placeholderTo: 'Répondre à {{name}} ...',
   send: 'Répondre',
+  attachments: {
+    addPhotos: 'Ajouter des images',
+    addVideo: 'Ajouter un GIF ou une vidéo',
+    removeVideo: 'Retirer la vidéo',
+    noPhotos: 'Pas d’images',
+    preparing: 'Préparation de votre réponse. Elle apparaîtra dans la discussion une fois prête ; vous pouvez quitter cette page.',
+  },
   count_one: '{{count}} réponse',
   count_other: '{{count}} réponses',
   removed: 'Cette réponse a été retirée.',

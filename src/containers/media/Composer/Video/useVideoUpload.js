@@ -28,6 +28,10 @@ const refusalOf = (error) => {
   if (response.status === 429) {
     return 'tooMany';
   }
+  // A reply to a thread the viewer may not answer.
+  if (response.status === 403 && !code) {
+    return 'closed';
+  }
   if (code === 'uploads_off') {
     return 'off';
   }
@@ -41,6 +45,7 @@ const failureOf = (upload) => {
     too_long: 'tooLong',
     too_large: 'tooLarge',
     still: 'still',
+    closed: 'closed',
     encoding: 'encoding',
   }[upload && upload.error] || 'failed';
 };

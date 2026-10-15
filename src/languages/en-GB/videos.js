@@ -29,6 +29,7 @@ export default {
     animationTooLarge: 'This GIF is larger than {{animationSize}}.',
     tooLong: 'This is longer than can be posted: {{minutes}} minutes for a video, {{seconds}} seconds for a GIF.',
     still: 'This picture does not move. Post it as a photo instead.',
+    closed: 'This thread no longer takes your replies, so the video was not posted.',
     tooMany: 'You have posted as many videos as you can today.',
     off: 'Videos cannot be posted here.',
     encoding: 'This video could not be prepared.',

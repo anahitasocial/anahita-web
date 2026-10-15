@@ -25,6 +25,8 @@ import ActorTitle from '../../components/ActorTitle';
 import EntityBody from '../../components/NodeBody';
 import ReplyForm from './ReplyForm';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
+import PhotoSlides from '../../components/PhotoSlides';
+import VideoPlayer from '../../components/VideoPlayer';
 import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
 import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
@@ -177,6 +179,15 @@ const ReplyItem = ({
             </EntityBody>}
           {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.body) &&
             <LinkPreviewCard preview={reply.linkPreview} />}
+          {/* A reply with pictures or a video shows them under its words. */}
+          {Array.isArray(reply.files) && reply.files.length > 0 &&
+            <Box sx={{ mt: 1, borderRadius: 1, overflow: 'hidden' }}>
+              <PhotoSlides medium={reply} size="medium" />
+            </Box>}
+          {reply.video &&
+            <Box sx={{ mt: 1, borderRadius: 1, overflow: 'hidden' }}>
+              <VideoPlayer video={reply.video} title={reply.name || ''} />
+            </Box>}
           {isEditing &&
             <ReplyForm
               initial={reply.body || ''}
@@ -315,8 +326,9 @@ const ReplyItem = ({
             onCancel={() => {
               setIsReplying(false);
             }}
-            onSubmit={(body, card) => {
-              return onReply(reply, body, card).then(() => {
+            attachments
+            onSubmit={(body, card, attached) => {
+              return onReply(reply, body, card, attached).then(() => {
                 setIsReplying(false);
               });
             }}

@@ -5,6 +5,13 @@ export default {
   placeholder: 'Write a reply ...',
   placeholderTo: 'Reply to {{name}} ...',
   send: 'Reply',
+  attachments: {
+    addPhotos: 'Add pictures',
+    addVideo: 'Add a GIF or a video',
+    removeVideo: 'Remove the video',
+    noPhotos: 'No pictures',
+    preparing: 'Preparing your reply. It will be in the thread when it is ready, and you can leave this page.',
+  },
   count_one: '{{count}} reply',
   count_other: '{{count}} replies',
   removed: 'This reply was removed.',
