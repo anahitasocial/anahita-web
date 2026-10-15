@@ -173,14 +173,8 @@ const ReplyItem = ({
             {reply.hidden &&
               <Chip size="small" label={i18n.t('replies:hidden.badge')} />}
           </Box>
-          {!isEditing &&
-            <EntityBody contentFilter size="body2" lang={reply.language}>
-              {reply.body || ''}
-            </EntityBody>}
-          {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.body) &&
-            <LinkPreviewCard preview={reply.linkPreview} />}
-          {/* A reply with pictures or a video shows them under its words,
-              with room above and below: 16 pixels each way. */}
+          {/* A reply with pictures or a video shows them first, its words
+              under them, with room above and below: 16 pixels each way. */}
           {Array.isArray(reply.files) && reply.files.length > 0 &&
             <Box sx={{ my: 2, borderRadius: 1, overflow: 'hidden' }}>
               <PhotoSlides medium={reply} size="medium" />
@@ -189,6 +183,12 @@ const ReplyItem = ({
             <Box sx={{ my: 2, borderRadius: 1, overflow: 'hidden' }}>
               <VideoPlayer video={reply.video} title={reply.name || ''} />
             </Box>}
+          {!isEditing &&
+            <EntityBody contentFilter size="body2" lang={reply.language}>
+              {reply.body || ''}
+            </EntityBody>}
+          {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.body) &&
+            <LinkPreviewCard preview={reply.linkPreview} />}
           {isEditing &&
             <ReplyForm
               initial={reply.body || ''}
