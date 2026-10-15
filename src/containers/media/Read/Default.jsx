@@ -7,7 +7,6 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
-import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -126,18 +125,9 @@ const MediumReadDefault = ({
             handleView();
           } : null}
         />}
-        {!hasSlides && portrait && isLoaded && handleView &&
-        <Box sx={{ position: 'relative' }}>
-          <ButtonBase
-            className={classes.portraitButton}
-            onClick={handleView}
-            aria-label={i18n.t('media:stepper.open')}
-          >
-            {portraitMedia}
-          </ButtonBase>
-          <AltBadge text={photoFiles.descriptionOf(medium)} />
-        </Box>}
-        {!hasSlides && portrait && isLoaded && !handleView &&
+        {/* One photo is shown as it is: there is nothing to step
+            through, so it opens in nothing larger. */}
+        {!hasSlides && portrait && isLoaded &&
         <Box sx={{ position: 'relative' }}>
           {portraitMedia}
           <AltBadge text={photoFiles.descriptionOf(medium)} />

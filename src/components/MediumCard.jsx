@@ -151,10 +151,9 @@ const MediumCard = ({
               width: '100%',
               display: 'inline',
             }}
+            // One photo opens its post, as its title does. Only a post
+            // with several is stepped through (PhotoSlides, above).
             onClick={() => {
-              if (handleView) {
-                return handleView(medium.id);
-              }
               return navigate(url);
             }}
           >
