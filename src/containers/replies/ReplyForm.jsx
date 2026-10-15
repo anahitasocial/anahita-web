@@ -9,8 +9,9 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import PhotoIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
-import VideoIcon from '@mui/icons-material/VideoFileOutlined';
+import PhotoIcon from '@mui/icons-material/Photo';
+import GifIcon from '@mui/icons-material/GifBoxOutlined';
+import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import RemoveIcon from '@mui/icons-material/Close';
 
 import LinkPreviewCard from '../../components/LinkPreviewCard';
@@ -209,7 +210,7 @@ const ReplyForm = ({
                   picker.current.click();
                 }}
               >
-                <VideoIcon fontSize="small" />
+                <GifIcon fontSize="small" />
               </IconButton>
             </Tooltip>}
           {isAddingPhotos && !hasPhotos &&
