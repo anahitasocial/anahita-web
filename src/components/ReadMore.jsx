@@ -16,7 +16,7 @@ const LINE = 1.5;
 
 // Longer than this, as read, and a card leads to the whole text's page
 // rather than opening it in place.
-const IN_PLACE_MAX = 500;
+const IN_PLACE_MAX = 1000;
 
 // A long text, shown by its first lines until the reader asks for the
 // rest.

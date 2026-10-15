@@ -1291,7 +1291,7 @@ The whole text is always drawn and only its height is kept short, with the
 last line fading out, so nothing is cut through: a link or bold text near
 the cut stays whole, and a screen reader has all of it. Read more is shown
 only when the text is taller than that, measured as it is drawn and again
-when a picture in it loads. On a card, a text of more than 500
+when a picture in it loads. On a card, a text of more than 1000
 letters as read leads to the post's or the profile's own page, where the
 whole text is: opened in place, a long text made its card many times taller
 than the ones beside it and the columns jumped. A shorter one opens in
