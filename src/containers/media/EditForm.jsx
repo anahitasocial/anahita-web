@@ -1,12 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
+import Typography from '@mui/material/Typography';
 
 import LinkPreviewCard from '../../components/LinkPreviewCard';
+import { useOnBluesky } from './Composer/useOnFediverse';
+import utils from '../../utils';
 import MediumType from '../../proptypes/Medium';
 import { Medium as MEDIUM } from '../../constants';
 
@@ -30,6 +34,11 @@ const MediumFormEdit = (props) => {
     onBodyPaste = null,
     bodyOptional = false,
   } = props;
+
+  const viewer = useSelector((state) => { return state.session.viewer; });
+  const onBluesky = useOnBluesky(viewer);
+  const editStaysHere = onBluesky && Boolean(viewer) && medium.createdBy === viewer.id &&
+    !utils.federation.isRemote(medium);
 
   return (
     <form onSubmit={handleOnSubmit} noValidate>
@@ -82,6 +91,12 @@ const MediumFormEdit = (props) => {
           preview={linkPreview}
           onRemove={isFetching ? null : onLinkPreviewRemove}
         />
+        {/* Bluesky only adds and deletes posts. For somebody whose posts
+            go there, said before they change one. */}
+        {editStaysHere &&
+          <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+            {i18n.t('federation:composer.editStaysHereBluesky')}
+          </Typography>}
       </CardContent>
       <CardActions>
         <Button

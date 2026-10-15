@@ -17,6 +17,7 @@ import Progress from '../../components/Progress';
 import SignInPrompt from '../../components/SignInPrompt';
 import ReplyForm from './ReplyForm';
 import ReplyItem from './ReplyItem';
+import VideoReplyOnTheWay from './VideoReplyOnTheWay';
 
 import actions from '../../actions';
 import api from '../../api';
@@ -59,6 +60,8 @@ const RepliesThread = ({
   const [showHidden, setShowHidden] = useState(false);
   // What is waiting on a yes: a message and what to do.
   const [asking, setAsking] = useState(null);
+  // Replies with a GIF or a video on their way: sent, then prepared.
+  const [onTheWay, setOnTheWay] = useState([]);
 
   const load = useCallback(() => {
     setIsLoading(true);
@@ -92,13 +95,27 @@ const RepliesThread = ({
     load();
   }, [load, heldBack]);
 
-  const handleReply = (parent, body, card = {}) => {
-    return api.replies.add(parent, {
-      body,
-      card,
-      // The language this person writes in, as for any post.
-      language: postLanguage.defaultFor(viewer),
-    }).then((result) => {
+  // A reply with words alone is a note; with pictures, a photo post; with a
+  // GIF or a video, a video post, which is in the thread once it has been
+  // sent and prepared.
+  const handleReply = (parent, body, card = {}, attached = {}) => {
+    // The language this person writes in, as for any post.
+    const language = postLanguage.defaultFor(viewer);
+
+    if (attached.video) {
+      setOnTheWay((current) => {
+        return [...current, {
+          key: `${Date.now()}-${current.length}`, parent, body, language, file: attached.video,
+        }];
+      });
+      return Promise.resolve();
+    }
+
+    const sent = attached.uploads ?
+      api.replies.addWithPictures(parent, { body, language, uploads: attached.uploads }) :
+      api.replies.add(parent, { body, card, language });
+
+    return sent.then((result) => {
       setReplies((current) => {
         return thread.add(current, result.data);
       });
@@ -236,10 +253,31 @@ const RepliesThread = ({
         <ReplyForm
           hint={staysHere ? i18n.t(staysHere) : ''}
           direction={postLanguage.directionOf(postLanguage.defaultFor(viewer))}
-          onSubmit={(body, card) => {
-            return handleReply(top, body, card);
+          attachments
+          onSubmit={(body, card, attached) => {
+            return handleReply(top, body, card, attached);
           }}
         />}
+      {onTheWay.map((each) => {
+        return (
+          <VideoReplyOnTheWay
+            key={`on-the-way-${each.key}`}
+            viewer={viewer}
+            parent={each.parent}
+            body={each.body}
+            language={each.language}
+            file={each.file}
+            onReady={load}
+            onGone={() => {
+              setOnTheWay((current) => {
+                return current.filter((other) => {
+                  return other.key !== each.key;
+                });
+              });
+            }}
+          />
+        );
+      })}
       {/* Said to everybody, the people who can still reply included, so
           a thread with few voices in it explains itself. */}
       {!isLoading && !hasFailed && replyAccess.isLimited(limitedTo) &&
@@ -317,6 +355,7 @@ const RepliesThread = ({
         </DialogContent>
         <DialogActions>
           <Button
+            fullWidth
             onClick={() => {
               setAsking(null);
             }}
@@ -324,6 +363,7 @@ const RepliesThread = ({
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="primary"
             onClick={() => {

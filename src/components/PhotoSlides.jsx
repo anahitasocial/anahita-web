@@ -63,7 +63,10 @@ const useStyles = makeStyles()((theme) => {
       '&::-webkit-scrollbar': {
         display: 'none',
       },
-      backgroundColor: theme.palette.action.hover,
+      // Nothing behind a photo of another shape than the frame: the card
+      // shows beside it, in its own colour. A grey band there looked like
+      // something missing.
+      backgroundColor: 'transparent',
     },
     slide: {
       flex: '0 0 100%',
@@ -187,6 +190,8 @@ const PhotoSlides = ({
 
   const files = photoFiles.filesOf(medium);
   const count = files.length;
+  // One photo is a photo, not slides: no dots, no "1/1".
+  const several = count > 1;
 
   // The same card is reused as a list is paged through.
   useEffect(() => {
@@ -242,7 +247,7 @@ const PhotoSlides = ({
     <div
       className={classes.root}
       role="group"
-      aria-roledescription="carousel"
+      aria-roledescription={several ? 'carousel' : undefined}
       aria-label={medium.name || i18n.t('photos:mTitle')}
       tabIndex={0}
       onKeyDown={handleKeyDown}
@@ -302,9 +307,10 @@ const PhotoSlides = ({
             );
           })}
         </div>
-        <span className={classes.count} aria-live="polite">
-          {position}
-        </span>
+        {several &&
+          <span className={classes.count} aria-live="polite">
+            {position}
+          </span>}
         <AltBadge text={photoFiles.descriptionOf(medium, index)} />
         {index > 0 &&
           <IconButton
@@ -329,17 +335,18 @@ const PhotoSlides = ({
             <NextIcon />
           </IconButton>}
       </div>
-      <MobileStepper
-        className={classes.dots}
-        variant="dots"
-        position="static"
-        steps={count}
-        activeStep={index}
-        backButton={null}
-        nextButton={null}
-        elevation={0}
-        aria-hidden
-      />
+      {several &&
+        <MobileStepper
+          className={classes.dots}
+          variant="dots"
+          position="static"
+          steps={count}
+          activeStep={index}
+          backButton={null}
+          nextButton={null}
+          elevation={0}
+          aria-hidden
+        />}
     </div>
   );
 };

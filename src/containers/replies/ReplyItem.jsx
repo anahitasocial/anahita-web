@@ -25,9 +25,11 @@ import ActorTitle from '../../components/ActorTitle';
 import EntityBody from '../../components/NodeBody';
 import ReplyForm from './ReplyForm';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
+import PhotoSlides from '../../components/PhotoSlides';
+import VideoPlayer from '../../components/VideoPlayer';
 import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
-import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
+import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import i18n from '../../languages';
@@ -67,6 +69,8 @@ const ReplyItem = ({
   // Answering something from another server, and not on the fediverse:
   // said before it is sent.
   const staysHere = useReplyStaysHere(viewer, reply);
+  // Whether the viewer's posts go to Bluesky, where a change does not follow.
+  const onBluesky = useOnBluesky(viewer);
 
   const authorized = reply.authorized || {};
   const author = reply.deleted ? {} : getAuthor(reply);
@@ -171,6 +175,24 @@ const ReplyItem = ({
             {reply.hidden &&
               <Chip size="small" label={i18n.t('replies:hidden.badge')} />}
           </Box>
+          {/* A reply with pictures or a video shows them first, its words
+              under them. 16 pixels show above and below: 8 above, since
+              the line with the name is as tall as the picture beside it
+              and already leaves some 8 under the name. */}
+          {Array.isArray(reply.files) && reply.files.length > 0 &&
+            <Box sx={{
+              mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
+            }}
+            >
+              <PhotoSlides medium={reply} size="medium" />
+            </Box>}
+          {reply.video &&
+            <Box sx={{
+              mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
+            }}
+            >
+              <VideoPlayer video={reply.video} title={reply.name || ''} />
+            </Box>}
           {!isEditing &&
             <EntityBody contentFilter size="body2" lang={reply.language}>
               {reply.body || ''}
@@ -187,6 +209,7 @@ const ReplyItem = ({
                 setIsEditing(false);
               }}
               linkPreview={reply.linkPreview}
+              hint={onBluesky ? i18n.t('federation:composer.editStaysHereBluesky') : ''}
               onSubmit={(body, card) => {
                 return onEdit(reply, body, card).then(() => {
                   setIsEditing(false);
@@ -195,7 +218,7 @@ const ReplyItem = ({
             />}
           {!isEditing &&
             <Box sx={{
-              display: 'flex', alignItems: 'center', gap: 1, ml: -1,
+              display: 'flex', alignItems: 'center', gap: 1, ml: -1, mt: 2,
             }}
             >
               {authorized.comment &&
@@ -315,8 +338,9 @@ const ReplyItem = ({
             onCancel={() => {
               setIsReplying(false);
             }}
-            onSubmit={(body, card) => {
-              return onReply(reply, body, card).then(() => {
+            attachments
+            onSubmit={(body, card, attached) => {
+              return onReply(reply, body, card, attached).then(() => {
                 setIsReplying(false);
               });
             }}

@@ -41,6 +41,7 @@ const useStyles = makeStyles()({
   },
   tab: {
     fontSize: 12,
+    minHeight: 48,
   },
 });
 
@@ -139,7 +140,11 @@ const Composers = ({
               key={`composer-tab-${composer}`}
               label={i18n.t(`apps:${composer}`)}
               value={composer}
-              icon={appIcons[_.upperFirst(composer)]}
+              // The icons are named for the kind of post in the plural
+              // ("Notes"), and a composer is named in the singular
+              // ("note"): looked up as it was, no tab had one.
+              icon={appIcons[_.upperFirst(pluralize(composer))]}
+              iconPosition="start"
               className={classes.tab}
             />
           );

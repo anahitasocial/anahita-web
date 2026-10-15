@@ -1,10 +1,12 @@
 import axios from 'axios';
 import utils from '../utils';
 
-// Replies. A reply is a note that answers a post or another reply, so it is
-// read, changed and removed at /notes/:id like any note. The post answered
-// can be of any kind, a photo included: the addresses are under /notes/
-// because of what a reply is, not what it answers.
+// Replies. A reply answers a post or another reply, and can itself be any
+// kind of post: a note, a photo post (a reply with pictures), or a video
+// post (a reply with a GIF or a video, sent as a video is: see
+// media/Composer/Video/useVideoUpload, with a `parentId`). Its words are
+// changed at /notes/:id whatever its kind, and its thread is read there; it
+// is removed under its own kind's address, which takes its files with it.
 
 // Everything said under a post, oldest first, with whether the viewer may
 // add to it.
@@ -21,12 +23,20 @@ const add = (parent, { body, language, card = {} }) => {
   return axios.post(`/notes/${parent.id}/replies`, { body, language, ...card });
 };
 
+// Answers a post or a reply with pictures, uploaded first for the person
+// replying (api/photos#upload with their own profile): `uploads` as
+// utils/photoFiles#toRequest makes them.
+const addWithPictures = (parent, { body, language, uploads }) => {
+  return axios.post(`/photos/${parent.id}/replies`, { body, language, uploads });
+};
+
 const edit = (reply, { body, card = {} }) => {
   return axios.patch(`/notes/${reply.id}`, { body, ...card });
 };
 
 const remove = (reply) => {
-  return axios.delete(`/notes/${reply.id}`);
+  const namespace = utils.node.getNamespace(reply) || 'notes';
+  return axios.delete(`/${namespace}/${reply.id}`);
 };
 
 // Hides a reply from its thread for everybody, or shows it again.
@@ -43,6 +53,7 @@ const setAccess = (medium, replyAccess) => {
 
 export default {
   add,
+  addWithPictures,
   edit,
   remove,
   setAccess,

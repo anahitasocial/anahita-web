@@ -21,6 +21,7 @@ export default {
   },
   composer: {
     replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Fediverse.',
+    editStaysHereBluesky: 'Bluesky only adds and deletes posts, so this change will not reach the copy there.',
     replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Fediverse.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
   },

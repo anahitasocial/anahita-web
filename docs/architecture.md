@@ -396,8 +396,9 @@ What the server stores and accepts is in the services' `docs/photos.md`.
 
 ### Replies
 
-A post of any kind is answered with replies: notes, each of which can be
-answered in turn. `containers/replies/Thread.jsx` shows them, as the Replies
+A post of any kind is answered with replies, each of which can be answered
+in turn. A reply is a post of any kind too: words alone make a note, pictures
+a photo post, a GIF or a video a video post. `containers/replies/Thread.jsx` shows them, as the Replies
 tab on a post's page and in the lightbox. What used to be comments are
 replies, made directly to the post.
 
@@ -419,6 +420,19 @@ replies, made directly to the post.
   `hidden`. They are drawn apart, under the thread, closed until opened.
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
+- **The reply box** (`ReplyForm`, with `attachments` for a new reply) has a
+  button for pictures and, where videos may be posted, one for a GIF or a
+  video: one or the other, with words or without. Pictures use the photo
+  composer's editor (`PhotoFilesEditor`, uploaded for the person replying)
+  and go to `api.replies.addWithPictures`. A GIF or a video is sent as a
+  video is, with a `parentId` (`VideoReplyOnTheWay`, through
+  `useVideoUpload`), shown as being sent and then prepared under the box,
+  and the thread is read again once the reply is made. Nothing about who
+  sees a reply, who may answer it or its language is asked: the thread's.
+- **A reply shows its pictures** (`PhotoSlides`) **or its video**
+  (`VideoPlayer`, the looping clip for a GIF) under its words. Its words are
+  changed at `/notes/:id` whatever its kind; it is removed under its own
+  kind's address (`api.replies.remove`), which takes its files with it.
 
 - **Who can reply** is the post's own setting, chosen by its author:
   anyone, nobody, or any of the people who follow them, the people they
