@@ -207,7 +207,7 @@ const ReplyItem = ({
             />}
           {!isEditing &&
             <Box sx={{
-              display: 'flex', alignItems: 'center', gap: 1, ml: -1,
+              display: 'flex', alignItems: 'center', gap: 1, ml: -1, mt: 2,
             }}
             >
               {authorized.comment &&
