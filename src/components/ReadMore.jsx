@@ -8,10 +8,15 @@ import { Link as RouterLink } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
 import EntityBody from './NodeBody';
+import plainText from '../utils/plainText';
 import i18n from '../languages';
 
 // The height of a line of a body, in ems, as the theme sets it.
 const LINE = 1.5;
+
+// Longer than this, as read, and a card leads to the whole text's page
+// rather than opening it in place.
+const IN_PLACE_MAX = 500;
 
 // A long text, shown by its first lines until the reader asks for the
 // rest.
@@ -26,9 +31,10 @@ const LINE = 1.5;
 // kept to, measured as drawn and again when its size changes, as when a
 // picture in it loads.
 //
-// On a card in a list it leads to the page the whole text is on (`to`):
-// opened where it was, a long text made its card many times taller than
-// those beside it, and the columns jumped. With no `to`, it opens in place.
+// On a card in a list, a text longer than IN_PLACE_MAX letters as read
+// leads to the page the whole text is on (`to`): opened where it was, a
+// long text made its card many times taller than those beside it, and the
+// columns jumped. A shorter one opens in place, as it does with no `to`.
 const ReadMore = ({
   lines = 6,
   readMoreText = i18n.t('commons:readMore'),
@@ -68,6 +74,7 @@ const ReadMore = ({
   }, [children, isOpen, lines]);
 
   const isClipped = !isOpen && isLong;
+  const leadsAway = Boolean(to) && plainText(children).length > IN_PLACE_MAX;
   const fade = 'linear-gradient(to bottom, black 70%, transparent 100%)';
 
   return (
@@ -84,7 +91,7 @@ const ReadMore = ({
           {children}
         </EntityBody>
       </Box>
-      {isClipped && to &&
+      {isClipped && leadsAway &&
         <Link
           component={RouterLink}
           to={to}
@@ -93,7 +100,7 @@ const ReadMore = ({
         >
           {readMoreText}
         </Link>}
-      {isClipped && !to &&
+      {isClipped && !leadsAway &&
         <Link
           component="button"
           onClick={() => {
