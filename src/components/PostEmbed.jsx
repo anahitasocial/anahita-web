@@ -52,19 +52,57 @@ PlainLink.propTypes = {
   url: PropTypes.string.isRequired,
 };
 
-// Who wrote an embedded post, and where it is: under its pictures or its
-// video, small, a link to the post itself.
-//
-// The name black, with a tiny avatar before it, and the post's title, when
-// it has one, grey after it, and their handle in grey too (the user,
-// 2026-10-16). `&&&` because the text around it colours every link as one,
-// in the editor by a rule of two classes and a tag.
-const Byline = ({ post }) => {
+// The lines a text is cut to, with an ellipsis.
+const clamp = (lines) => {
+  return {
+    display: '-webkit-box',
+    WebkitLineClamp: lines,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+  };
+};
+
+// What goes under an embedded photo or video, as a caption: its title, a
+// link to the post; what it says of itself, in grey, three lines of it at
+// most, the rest on the post; and who it is by: a tiny avatar, their name
+// black and their handle grey (the user, 2026-10-16). `&&&` because the
+// text around it colours every link as one, in the editor by a rule of two
+// classes and a tag.
+const Caption = ({ post }) => {
   const author = getAuthor(post);
+  const said = plainText(post.body || '').replace(/\s+/g, ' ').trim();
+  return (
+    <Box sx={{ mt: 1 }}>
+      {post.name &&
+        <Typography variant="body2" component="div" dir="auto" sx={{ fontWeight: 500 }}>
+          <Link
+            component={RouterLink}
+            to={getURL(post)}
+            underline="hover"
+            sx={{ '&&&': { color: 'text.primary' } }}
+          >
+            {post.name}
+          </Link>
+        </Typography>}
+      {said &&
+        <Typography variant="body2" color="textSecondary" dir="auto" sx={clamp(3)}>
+          {said}
+        </Typography>}
+      <Byline author={author} />
+    </Box>
+  );
+};
+
+Caption.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+// Who it is by: a tiny avatar, their name black and their handle grey.
+const Byline = ({ author }) => {
   return (
     <Box
       sx={{
-        display: 'flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap', mt: 1,
+        display: 'flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap', mt: 0.5,
       }}
     >
       <Box
@@ -88,30 +126,19 @@ const Byline = ({ post }) => {
         </Link>
       </Typography>
       <ActorHandle actor={author} />
-      {post.name &&
-        <Typography variant="body2" component="span" dir="auto" sx={{ minWidth: 0, overflowWrap: 'anywhere' }}>
-          <Link
-            component={RouterLink}
-            to={getURL(post)}
-            underline="hover"
-            sx={{ '&&&': { color: 'text.secondary' } }}
-          >
-            {post.name}
-          </Link>
-        </Typography>}
     </Box>
   );
 };
 
 Byline.propTypes = {
-  post: PropTypes.object.isRequired,
+  author: PropTypes.object.isRequired,
 };
 
 // An embedded post that is words: as a quotation is set, a rule down its
 // side and no frame, with an article's cover above its title.
 const Words = ({ post }) => {
   const cover = getCoverURL(post, 'medium');
-  const text = excerptOf(post.excerpt || post.body);
+  const text = excerptOf(post.body);
   return (
     <Link
       component={RouterLink}
@@ -199,7 +226,7 @@ const Post = ({ url, at }) => {
     return (
       <Box sx={SPACE}>
         <PhotoSlides medium={post} size="large" natural />
-        <Byline post={post} />
+        <Caption post={post} />
       </Box>
     );
   }
@@ -208,7 +235,7 @@ const Post = ({ url, at }) => {
     return (
       <Box sx={SPACE}>
         <VideoPlayer video={post.video} title={post.name} />
-        <Byline post={post} />
+        <Caption post={post} />
       </Box>
     );
   }
