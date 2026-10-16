@@ -2,6 +2,7 @@ export default {
   embed: {
     in: 'dans',
     citations: 'Citations',
+    readMore: 'Lire la suite',
   },
   stepper: {
     position: '{{index}} sur {{total}}',

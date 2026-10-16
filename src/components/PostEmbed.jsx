@@ -181,11 +181,11 @@ Who.propTypes = {
   size: PropTypes.number,
 };
 
-// An embedded post that is words, a note, an article or a topic: as a
-// quotation is set, a rule down its side and no frame, and above it who
-// wrote it and, where it was posted on another profile, a group, which
-// (the user, 2026-10-16). Then an article's cover, its title, and its
-// opening, in the text's own ink.
+// An embedded post that is words, a note, an article or a topic: framed
+// as a page's card is, a light border and slightly rounded corners (the
+// user, 2026-10-16). Who wrote it, and the group it was posted in; an
+// article's cover; its title, a link; its opening; and Read more, which
+// opens it in a tab of its own so the article being read stays open.
 const Words = ({ post }) => {
   const cover = getCoverURL(post, 'medium');
   const text = excerptOf(post.body);
@@ -197,55 +197,58 @@ const Words = ({ post }) => {
     <Box
       sx={{
         ...SPACE,
-        borderInlineStart: 3,
+        border: 1,
         borderColor: 'divider',
-        pl: 2,
-        '&:hover': { borderColor: 'primary.main' },
+        borderRadius: 1,
+        overflow: 'hidden',
       }}
     >
-      <Box
-        sx={{
-          display: 'flex', alignItems: 'center', columnGap: 1, rowGap: 0.5, flexWrap: 'wrap', mb: 1,
-        }}
-      >
-        <Who actor={author} />
-        {elsewhere &&
-          <>
-            <Typography variant="body2" color="textSecondary" component="span">
-              {i18n.t('media:embed.in')}
-            </Typography>
-            <Who actor={owner} size={20} />
-          </>}
-      </Box>
-      <Link
-        component={RouterLink}
-        to={url}
-        underline="none"
-        sx={{ display: 'block', '&&&': { color: 'text.primary' } }}
-      >
-        {cover &&
-          <Box
-            component="img"
-            src={cover}
-            alt=""
-            loading="lazy"
-            sx={{
-              width: '100%',
-              aspectRatio: '3 / 1',
-              objectFit: 'cover',
-              display: 'block',
-              mb: 1,
-            }}
-          />}
+      {cover &&
+        <Box
+          component="img"
+          src={cover}
+          alt=""
+          loading="lazy"
+          sx={{
+            width: '100%',
+            aspectRatio: '3 / 1',
+            objectFit: 'cover',
+            display: 'block',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        />}
+      <Box sx={{ p: 2 }}>
+        <Box
+          sx={{
+            display: 'flex', alignItems: 'center', columnGap: 1, rowGap: 0.5, flexWrap: 'wrap', mb: 1,
+          }}
+        >
+          <Who actor={author} />
+          {elsewhere &&
+            <>
+              <Typography variant="body2" color="textSecondary" component="span">
+                {i18n.t('media:embed.in')}
+              </Typography>
+              <Who actor={owner} size={20} />
+            </>}
+        </Box>
         {post.name &&
           <Typography variant="subtitle1" component="div" dir="auto" sx={{ fontWeight: 600 }}>
-            {post.name}
+            <Link component={RouterLink} to={url} underline="hover">
+              {post.name}
+            </Link>
           </Typography>}
         {text &&
-          <Typography variant="body1" component="div" dir="auto">
+          <Typography variant="body2" component="div" dir="auto" sx={{ mt: 0.5 }}>
             {text}
           </Typography>}
-      </Link>
+        <Typography variant="body2" component="div" sx={{ mt: 1 }}>
+          <Link href={url} target="_blank" rel="noopener" underline="hover">
+            {i18n.t('media:embed.readMore')}
+          </Link>
+        </Typography>
+      </Box>
     </Box>
   );
 };

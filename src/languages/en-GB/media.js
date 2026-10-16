@@ -3,6 +3,7 @@ export default {
   embed: {
     in: 'in',
     citations: 'Citations',
+    readMore: 'Read more',
   },
   stepper: {
     position: '{{index}} of {{total}}',
