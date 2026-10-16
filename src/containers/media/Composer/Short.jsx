@@ -18,7 +18,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
-import ExpandIcon from '@mui/icons-material/OpenInFull';
+import ExpandIcon from '@mui/icons-material/EditNoteOutlined';
 import GifIcon from '@mui/icons-material/GifBoxOutlined';
 import PhotoIcon from '@mui/icons-material/Photo';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
