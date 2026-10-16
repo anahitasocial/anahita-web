@@ -25,6 +25,9 @@ const ComposersArticle = ({
   medium,
   isFetching,
   postOptions = null,
+  // How many lines the text starts with: as many as the dialog has room
+  // for (Long.jsx).
+  bodyRows = 12,
   // Right to left for a post in Persian, Arabic or Hebrew; otherwise from
   // the first letter typed.
   direction = 'auto',
@@ -73,8 +76,7 @@ const ComposersArticle = ({
               multiline
               margin="normal"
               disabled={isFetching}
-              minRows={5}
-              maxRows={10}
+              minRows={bodyRows}
               required
               slotProps={{
                 htmlInput: {
@@ -132,6 +134,7 @@ const ComposersArticle = ({
 };
 
 ComposersArticle.propTypes = {
+  bodyRows: PropTypes.number,
   direction: PropTypes.oneOf(['auto', 'rtl']),
   // The audience and language buttons, built by the composer.
   postOptions: PropTypes.node,

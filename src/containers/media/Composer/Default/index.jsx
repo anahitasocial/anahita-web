@@ -36,6 +36,7 @@ const MediaComposerDefault = ({
   maxFiles = photoFiles.DEFAULT_MAX,
   initialBody = '',
   onPosted = null,
+  bodyRows = 12,
 }) => {
   const [fields, setFields] = useState(formFields);
   const [medium, setMedium] = useState({ ...MediumDefault, body: initialBody });
@@ -204,6 +205,7 @@ const MediaComposerDefault = ({
       photoItems={photoItems}
       onPhotoItemsChange={setPhotoItems}
       maxFiles={maxFiles}
+      bodyRows={bodyRows}
       namespace={namespace}
       linkPreview={linkPreview.preview}
       direction={postLanguage.directionOf(language)}
@@ -269,6 +271,8 @@ MediaComposerDefault.propTypes = {
   initialBody: PropTypes.string,
   // Told once the post is made: the extended composer closes.
   onPosted: PropTypes.func,
+  // How many lines the text starts with.
+  bodyRows: PropTypes.number,
 };
 
 const mapStateToProps = (namespace) => {

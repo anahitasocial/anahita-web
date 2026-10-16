@@ -59,6 +59,18 @@ const LongComposer = ({
     }
   }, [kinds]);
 
+  // The text gets the height left over once the title, the excerpt and
+  // the buttons have theirs: a line is about 23 pixels, and the rest of
+  // the dialog about 460 on a desktop, 380 full screen on a phone.
+  const rowsFor = () => {
+    const room = window.innerHeight - (phone ? 380 : 460);
+    return Math.max(12, Math.floor(room / 23));
+  };
+  const [bodyRows, setBodyRows] = useState(rowsFor);
+  useEffect(() => {
+    setBodyRows(rowsFor());
+  }, [open, phone]);
+
   const config = LONG[kind];
   if (!config) {
     return null;
@@ -71,6 +83,11 @@ const LongComposer = ({
       fullScreen={phone}
       fullWidth
       maxWidth="md"
+      // As tall as the screen allows on a desktop, less the dialog's
+      // margins: room to write at length. What is in it scrolls.
+      slotProps={{
+        paper: { sx: phone ? {} : { height: 'calc(100% - 64px)' } },
+      }}
     >
       <Toolbar sx={{ gap: 1, px: 1 }}>
         <IconButton edge="start" aria-label={i18n.t('composer:close')} onClick={onClose}>
@@ -105,6 +122,7 @@ const LongComposer = ({
           which this app does not do. */}
       <Box
         sx={{
+          flexGrow: 1,
           overflowY: 'auto',
           '& .MuiCard-root': { boxShadow: 'none' },
           '& .MuiCardContent-root > .MuiFormControl-marginNormal:first-child/* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason */': {
@@ -119,6 +137,7 @@ const LongComposer = ({
             formFields={config.formFields}
             formComponent={config.formComponent}
             initialBody={body}
+            bodyRows={bodyRows}
             onPosted={onClose}
           />}
       </Box>
