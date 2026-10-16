@@ -80,6 +80,14 @@ const download = (namespace) => {
   };
 };
 
+// A draft, an article or a topic, published: a post from now, seen by
+// `access` when it is given.
+const publish = (namespace) => {
+  return (node, access = '') => {
+    return axios.post(`/${namespace}/${node.id}/publish`, access ? { access } : {});
+  };
+};
+
 export { browseOwned };
 
 export default (namespace) => {
@@ -92,5 +100,6 @@ export default (namespace) => {
     deleteItem: deleteItem(namespace),
     restore: restore(namespace),
     download: download(namespace),
+    publish: publish(namespace),
   };
 };

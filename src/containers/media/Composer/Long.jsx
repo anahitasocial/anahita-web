@@ -13,14 +13,18 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
+import SaveIcon from '@mui/icons-material/SaveOutlined';
 
 import actions from '../../../actions';
+import api from '../../../api';
 import coverApi from '../../../api/cover';
 import linkPreviewsApi from '../../../api/linkPreviews';
 import CoverPicker from './CoverPicker';
+import DraftsMenu from './DraftsMenu';
 import LongEditor from './LazyLongEditor';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
@@ -84,6 +88,18 @@ const LongComposer = ({
 
   const [title, setTitle, clearTitle] = useDraft(actor.id, 'long-title');
   const [body, setBody, clearBody] = useDraft(actor.id, 'long-body');
+  // The draft kept on the server that this is, as `<kind>:<id>`, when it
+  // is one: saved with Save draft, or taken up again from Drafts.
+  const [draftRef, setDraftRef, clearDraftRef] = useDraft(actor.id, 'long-draft');
+  const [draftKind, draftNumber] = draftRef.split(':');
+  const draftId = Number(draftNumber) || 0;
+  const [isSaving, setIsSaving] = useState(false);
+  // A draft is of the kind it was begun as.
+  useEffect(() => {
+    if (draftKind && kinds.includes(draftKind) && tab !== draftKind) {
+      setTab(draftKind);
+    }
+  }, [draftKind]);
   const [cover, setCover] = useState(null);
   const [isSending, setIsSending] = useState(false);
   const [tried, setTried] = useState(false);
@@ -118,7 +134,7 @@ const LongComposer = ({
   // its corner is dragged (LongEditor).
   const bodyRows = 8;
 
-  const busy = isSending;
+  const busy = isSending || isSaving;
   const kind = tab;
   const words = WORDS[kind] || WORDS.article;
 
@@ -171,10 +187,69 @@ const LongComposer = ({
   const reset = () => {
     clearTitle();
     clearBody();
+    clearDraftRef();
     setCover(null);
     setTried(false);
     choices.posted();
     onClose();
+  };
+
+  // An article's cover goes once the article exists. Should it not be
+  // taken, the article is posted all the same, and the cover can be added
+  // on its page. A draft's goes when it is published.
+  const withCover = (node) => {
+    if (kind !== 'article' || !cover || !node || !node.id) {
+      return Promise.resolve(true);
+    }
+    return coverApi.add(node, cover).then(() => {
+      return true;
+    }).catch((failure) => {
+      alertError(`${i18n.t(uploads.refusalKey(failure))} ${i18n.t('composer:coverRefused')}`);
+      return false;
+    });
+  };
+
+  const { namespace } = words;
+
+  // What a draft says now, saved over what it said.
+  const saveOver = () => {
+    return api[namespace].edit({
+      id: draftId, name, body: text, language: choices.language,
+    });
+  };
+
+  // Kept on the server as a draft, seen by nobody else, to be taken up
+  // again here or on another device (the user, 2026-10-16).
+  const saveDraft = () => {
+    setTried(true);
+    if (!ready || busy) {
+      return;
+    }
+    setIsSaving(true);
+    const saving = draftId ?
+      saveOver() :
+      api[namespace].add({
+        name, body: text, ...choices.request(), draft: true,
+      }, actor).then((result) => {
+        setDraftRef(`${kind}:${result.data.id}`);
+      });
+    saving.then(() => {
+      setTried(false);
+      alertSuccess(i18n.t('composer:drafts.saved'));
+    }).catch(() => {
+      alertError(i18n.t('composer:drafts.notSaved'));
+    }).finally(() => {
+      setIsSaving(false);
+    });
+  };
+
+  const posted = (node) => {
+    return withCover(node).then((ok) => {
+      if (ok) {
+        alertSuccess(i18n.t('prompts:posted.success'));
+      }
+      reset();
+    });
   };
 
   const handleSubmit = (event) => {
@@ -184,32 +259,18 @@ const LongComposer = ({
       return;
     }
 
-    const post = { name, body: text, ...choices.request() };
-
-    // An article's cover goes once the article exists. Should it not be
-    // taken, the article is posted all the same, and the cover can be added
-    // on its page.
-    const withCover = (node) => {
-      if (kind !== 'article' || !cover || !node || !node.id) {
-        return Promise.resolve(true);
-      }
-      return coverApi.add(node, cover).then(() => {
-        return true;
-      }).catch((failure) => {
-        alertError(`${i18n.t(uploads.refusalKey(failure))} ${i18n.t('composer:coverRefused')}`);
-        return false;
-      });
-    };
-
     setIsSending(true);
-    dispatch(actions[words.namespace].add(post, actor)).then((node) => {
-      return withCover(node).then((ok) => {
-        if (ok) {
-          alertSuccess(i18n.t('prompts:posted.success'));
-        }
-        reset();
-      });
-    }).catch(() => {
+    // A draft taken up again: what it says now, then published, a post
+    // from now and announced as one.
+    const posting = draftId ?
+      saveOver().then(() => {
+        return api[namespace].publish({ id: draftId }, choices.access);
+      }).then((result) => {
+        return posted(result.data);
+      }) :
+      dispatch(actions[namespace].add({ name, body: text, ...choices.request() }, actor))
+        .then(posted);
+    posting.catch(() => {
       // What was written stays, to post again.
       alertError(i18n.t('prompts:posted.error'));
     }).finally(() => {
@@ -255,9 +316,52 @@ const LongComposer = ({
           >
             <CloseIcon />
           </IconButton>
-          <Typography variant="h6" sx={{ flexGrow: 1 }}>
+          <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
             {i18n.t('composer:longContent')}
           </Typography>
+          <DraftsMenu
+            actor={actor}
+            kinds={kinds}
+            phone={phone}
+            currentId={draftId}
+            disabled={busy}
+            onOpen={(draft) => {
+              setTab(draft.kind);
+              setTitle(draft.name || '');
+              setBody(draft.body || '');
+              setDraftRef(`${draft.kind}:${draft.id}`);
+              setTried(false);
+            }}
+            onNew={() => {
+              clearTitle();
+              clearBody();
+              clearDraftRef();
+              setCover(null);
+              setTried(false);
+            }}
+          />
+          {/* Its words where there is room; on a phone, the icon. */}
+          {phone ?
+            <Tooltip title={i18n.t('composer:drafts.save')}>
+              <span>
+                <IconButton
+                  aria-label={i18n.t('composer:drafts.save')}
+                  onClick={saveDraft}
+                  disabled={busy}
+                >
+                  {isSaving ? <CircularProgress size={20} /> : <SaveIcon />}
+                </IconButton>
+              </span>
+            </Tooltip> :
+            <Button
+              variant="outlined"
+              onClick={saveDraft}
+              disabled={busy}
+              sx={{ minWidth: 88, flexShrink: 0 }}
+            >
+              {!isSaving && i18n.t('composer:drafts.save')}
+              {isSaving && <CircularProgress size={20} />}
+            </Button>}
           <Button
             type="submit"
             variant="contained"
@@ -284,7 +388,8 @@ const LongComposer = ({
                   key={`long-${each}`}
                   value={each}
                   label={i18n.t(`composer:kinds.${each}`)}
-                  disabled={busy}
+                  // A draft is of the kind it was begun as.
+                  disabled={busy || (draftId > 0 && each !== tab)}
                 />
               );
             })}

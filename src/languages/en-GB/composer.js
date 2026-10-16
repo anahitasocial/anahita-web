@@ -75,6 +75,17 @@ export default {
     content: 'Content',
     description: 'Description',
   },
+  // Drafts: articles and topics still being written, kept on the server.
+  drafts: {
+    title: 'Drafts',
+    save: 'Save draft',
+    saved: 'Draft saved. Only you can see it.',
+    notSaved: 'The draft could not be saved.',
+    none: 'No drafts here yet.',
+    new: 'Start a new one',
+    remove: 'Delete draft',
+    untitled: 'Untitled',
+  },
   kinds: {
     article: 'Article',
     topic: 'Topic',

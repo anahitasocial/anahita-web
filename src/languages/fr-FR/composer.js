@@ -55,6 +55,16 @@ export default {
     content: 'Contenu',
     description: 'Description',
   },
+  drafts: {
+    title: 'Brouillons',
+    save: 'Enregistrer',
+    saved: 'Brouillon enregistré. Vous seul pouvez le voir.',
+    notSaved: 'Le brouillon n’a pas pu être enregistré.',
+    none: 'Pas encore de brouillons ici.',
+    new: 'En commencer un nouveau',
+    remove: 'Supprimer le brouillon',
+    untitled: 'Sans titre',
+  },
   kinds: {
     article: 'Article',
     topic: 'Sujet',
