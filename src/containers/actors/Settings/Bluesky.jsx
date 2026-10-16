@@ -30,6 +30,7 @@ import api from '../../../api';
 import i18n from '../../../languages';
 import federation from '../../../utils/federation';
 import { rememberOnBluesky } from '../../media/Composer/useOnFediverse';
+import PasswordField from '../../../components/PasswordField';
 
 // How many accounts may be followed here in one go: a few, to see what it
 // is like, before many.
@@ -208,9 +209,8 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
               required
               fullWidth
             />
-            <TextField
+            <PasswordField
               name="app_password"
-              type="password"
               label={i18n.t('federation:bluesky.password.label')}
               helperText={
                 <>

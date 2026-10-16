@@ -13,6 +13,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FingerprintIcon from '@mui/icons-material/Fingerprint';
 
 import i18n from '../../../languages';
+import PasswordField from '../../../components/PasswordField';
 
 // Step-up prompt.
 //
@@ -104,8 +105,7 @@ const StepUpDialog = ({
           {showForm &&
             <>
               {canUsePassword &&
-              <TextField
-                type="password"
+              <PasswordField
                 name="currentPassword"
                 label={i18n.t('auth:reauth.fields.currentPassword')}
                 value={fields.currentPassword.value}
