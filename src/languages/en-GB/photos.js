@@ -11,6 +11,8 @@ export default {
     title: 'Photos in this post',
     edit: 'Edit photos',
     add: 'Select or drop photos here',
+    // Where a post may hold a video instead.
+    addOrVideo: 'Select or drop photos or a video here',
     addMore: 'Add another',
     limit: 'Up to {{max}} photos in a post. The first is shown first.',
     first: 'First',

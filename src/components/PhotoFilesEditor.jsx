@@ -192,6 +192,8 @@ const PhotoFilesEditor = ({
   max = photoFiles.DEFAULT_MAX,
   supportedMimetypes = ['image/jpeg', 'image/png'],
   disabled = false,
+  videoMimetypes = [],
+  onVideo = null,
 }) => {
   const { classes, cx } = useStyles();
   // Which photo is on show, read from where the row has been scrolled to.
@@ -217,7 +219,23 @@ const PhotoFilesEditor = ({
 
   const room = photoFiles.room(items, max);
 
-  const handleDrop = (files) => {
+  // Before any photo is in, a video may be picked or dropped here too where
+  // the post can take one: it is the composer's to take (`onVideo`), as a
+  // post holds photos or a video, not both. A photo among what was dropped
+  // decides it.
+  const takesVideo = Boolean(onVideo) && videoMimetypes.length > 0 && items.length === 0;
+
+  const handleDrop = (dropped) => {
+    const files = dropped.filter((file) => {
+      return supportedMimetypes.includes(file.type);
+    });
+    if (files.length === 0) {
+      if (takesVideo && dropped.length > 0) {
+        onVideo(dropped[0]);
+      }
+      return;
+    }
+
     // No more than there is room for; the rest are left out, not queued.
     setLeftOut(Math.max(files.length - room, 0));
 
@@ -252,7 +270,10 @@ const PhotoFilesEditor = ({
 
   const { getRootProps, getInputProps } = useDropzone({
     // react-dropzone takes a map of MIME type to file extensions.
-    accept: Object.fromEntries(supportedMimetypes.map((type) => {
+    accept: Object.fromEntries([
+      ...supportedMimetypes,
+      ...(takesVideo ? videoMimetypes : []),
+    ].map((type) => {
       return [type, []];
     })),
     multiple: true,
@@ -508,7 +529,8 @@ const PhotoFilesEditor = ({
           fullWidth
         >
           <input {...getInputProps()} />
-          {i18n.t(count ? 'photos:editor.addMore' : 'photos:editor.add')}
+          {count > 0 && i18n.t('photos:editor.addMore')}
+          {count === 0 && i18n.t(takesVideo ? 'photos:editor.addOrVideo' : 'photos:editor.add')}
         </Button>}
       {leftOut > 0 &&
         <Typography variant="caption" color="error" component="p" role="alert" sx={{ mt: 1 }}>
@@ -537,6 +559,10 @@ PhotoFilesEditor.propTypes = {
   max: PropTypes.number,
   supportedMimetypes: PropTypes.arrayOf(PropTypes.string),
   disabled: PropTypes.bool,
+  // What else may be picked or dropped before any photo is in, and who takes
+  // it: a video, in the composer.
+  videoMimetypes: PropTypes.arrayOf(PropTypes.string),
+  onVideo: PropTypes.func,
 };
 
 export default PhotoFilesEditor;

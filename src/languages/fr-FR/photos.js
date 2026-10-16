@@ -11,6 +11,7 @@ export default {
     title: 'Photos de cette publication',
     edit: 'Modifier les photos',
     add: 'Sélectionnez ou déposez des photos ici',
+    addOrVideo: 'Sélectionnez ou déposez des photos ou une vidéo ici',
     addMore: 'Ajouter une autre',
     limit: 'Jusqu\'à {{max}} photos par publication. La première est affichée en premier.',
     first: 'Première',

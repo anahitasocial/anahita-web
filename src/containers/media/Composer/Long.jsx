@@ -257,14 +257,9 @@ const LongComposer = ({
     });
   };
 
-  const chooseVideo = (event) => {
-    const chosen = event.target.files && event.target.files[0];
-    // The same file can be chosen again after it is taken off.
-    // eslint-disable-next-line no-param-reassign
-    event.target.value = '';
-    if (!chosen) {
-      return;
-    }
+  // A video picked with its own button, or picked or dropped where the
+  // photos are.
+  const takeVideo = (chosen) => {
     const problem = videos.problem(chosen, nodeInfo);
     if (problem) {
       setVideoProblem(i18n.t(`videos:problems.${problem}`, limits));
@@ -272,8 +267,19 @@ const LongComposer = ({
     }
     setVideoProblem('');
     setVideo(chosen);
+    setIsAddingPhotos(false);
     if (upload.phase !== 'idle') {
       upload.reset();
+    }
+  };
+
+  const chooseVideo = (event) => {
+    const chosen = event.target.files && event.target.files[0];
+    // The same file can be chosen again after it is taken off.
+    // eslint-disable-next-line no-param-reassign
+    event.target.value = '';
+    if (chosen) {
+      takeVideo(chosen);
     }
   };
 
@@ -413,6 +419,8 @@ const LongComposer = ({
                 onChange={setPhotoItems}
                 max={photoFiles.maxFiles(nodeInfo)}
                 disabled={busy}
+                videoMimetypes={canVideo ? videos.TYPES : []}
+                onVideo={takeVideo}
               />
               {!hasPhotos &&
                 <Button
