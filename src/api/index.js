@@ -9,6 +9,7 @@ import pins from './pins';
 import quotes from './quotes';
 import replies from './replies';
 import saved from './saved';
+import searchPreferences from './searchPreferences';
 import reposts from './reposts';
 
 import agreements from './agreements';
@@ -158,6 +159,7 @@ const apis = {
   replies,
   repost,
   saved,
+  searchPreferences,
   reposts,
   session,
   socialgraph,
