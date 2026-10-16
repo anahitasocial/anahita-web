@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -19,14 +19,13 @@ import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/EditNoteOutlined';
-import GifIcon from '@mui/icons-material/GifBoxOutlined';
-import PhotoIcon from '@mui/icons-material/Photo';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
 import ActorAvatar from '../../../components/ActorAvatar';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
+import AttachButtons from './AttachButtons';
 import VideoUploads from './VideoUploads';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
@@ -92,7 +91,6 @@ const ShortComposer = ({
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
   const [handedOver, setHandedOver] = useState(0);
-  const picker = useRef(null);
   const upload = useVideoUpload();
 
   const canWords = kinds.includes('note');
@@ -227,53 +225,27 @@ const ShortComposer = ({
     }
   };
 
-  const chooseVideo = (event) => {
-    const chosen = event.target.files && event.target.files[0];
-    // The same file can be chosen again after it is taken off.
-    // eslint-disable-next-line no-param-reassign
-    event.target.value = '';
-    if (chosen) {
-      takeVideo(chosen);
-    }
-  };
-
-  const open = (then) => {
+  const open = () => {
     setIsOpen(true);
-    if (then === 'photos') {
-      setIsAddingPhotos(true);
-    }
   };
 
   const placeholder = isPerson(actor) && actor.id !== viewer.id ?
     i18n.t('notes:composer.bodyPlaceholderPerson', { name: actor.name }) :
     i18n.t('notes:composer.bodyPlaceholder');
 
-  // Pictures, or a GIF or a video: one or the other, as in a reply.
+  // Photos, or a GIF or a video: one or the other, as in a reply. Hidden
+  // while posting rather than disabled: a tooltip on a disabled button is
+  // never seen.
   const attachButtons = (
-    <>
-      {canPhotos && !busy && !video && !isAddingPhotos &&
-        <Tooltip title={i18n.t('replies:attachments.addPhotos')}>
-          <IconButton
-            aria-label={i18n.t('replies:attachments.addPhotos')}
-            onClick={() => {
-              setIsAddingPhotos(true);
-            }}
-          >
-            <PhotoIcon />
-          </IconButton>
-        </Tooltip>}
-      {canVideo && !busy && !hasPhotos && !isAddingPhotos && !video &&
-        <Tooltip title={i18n.t('replies:attachments.addVideo')}>
-          <IconButton
-            aria-label={i18n.t('replies:attachments.addVideo')}
-            onClick={() => {
-              picker.current.click();
-            }}
-          >
-            <GifIcon />
-          </IconButton>
-        </Tooltip>}
-    </>
+    <AttachButtons
+      phone={phone}
+      photos={canPhotos && !busy && !video && !isAddingPhotos}
+      video={canVideo && !busy && !hasPhotos && !isAddingPhotos && !video}
+      onPhotos={() => {
+        setIsAddingPhotos(true);
+      }}
+      onVideo={takeVideo}
+    />
   );
 
   const options = choices.render({ busy, withDownload: hasPhotos || Boolean(video) });
@@ -287,24 +259,35 @@ const ShortComposer = ({
   };
 
   // Hidden rather than disabled while posting: a tooltip on a disabled
-  // button is never seen. With its words beside it where there is room,
-  // and the icon alone on a phone, where the box needs the width.
-  const expandButton = onExpand && !busy && (phone ?
-    <Tooltip title={i18n.t('composer:longContent')}>
-      <IconButton
-        aria-label={i18n.t('composer:longContent')}
+  // button is never seen. Its words beside it on the closed line where
+  // there is room; the icon alone on a phone, and in the open box, where
+  // the row is full.
+  const expandButton = (withWords) => {
+    if (!onExpand || busy) {
+      return null;
+    }
+    if (!withWords) {
+      return (
+        <Tooltip title={i18n.t('composer:longContent')}>
+          <IconButton
+            aria-label={i18n.t('composer:longContent')}
+            onClick={expand}
+          >
+            <ExpandIcon />
+          </IconButton>
+        </Tooltip>
+      );
+    }
+    return (
+      <Button
+        startIcon={<ExpandIcon />}
+        sx={{ color: 'text.secondary', flexShrink: 0 }}
         onClick={expand}
       >
-        <ExpandIcon />
-      </IconButton>
-    </Tooltip> :
-    <Button
-      startIcon={<ExpandIcon />}
-      sx={{ color: 'text.secondary', flexShrink: 0 }}
-      onClick={expand}
-    >
-      {i18n.t('composer:longContent')}
-    </Button>);
+        {i18n.t('composer:longContent')}
+      </Button>
+    );
+  };
 
   const postButton = (fullWidth) => {
     return (
@@ -420,16 +403,6 @@ const ShortComposer = ({
     </>
   );
 
-  const videoInput = (
-    <input
-      ref={picker}
-      type="file"
-      accept={videos.TYPES.join(',')}
-      hidden
-      onChange={chooseVideo}
-    />
-  );
-
   // A video being prepared, said when the box is closed again.
   const preparing = upload.phase === 'processing' &&
     <Stack spacing={1} sx={{ px: 2, pb: 2 }}>
@@ -447,8 +420,8 @@ const ShortComposer = ({
       refreshKey={handedOver}
     />;
 
-  // Closed: one line, as the reply box starts, with a way straight to the
-  // pictures, a video, or longer writing.
+  // Closed: one line, as the reply box starts, and the way to longer
+  // writing.
   const closed = (
     <Stack direction="row" spacing={1} sx={{ alignItems: 'center', p: 2 }}>
       <ActorAvatar actor={viewer} />
@@ -481,28 +454,7 @@ const ShortComposer = ({
           {body || placeholder}
         </Typography>
       </ButtonBase>
-      {canPhotos && phone &&
-        <Tooltip title={i18n.t('replies:attachments.addPhotos')}>
-          <IconButton
-            aria-label={i18n.t('replies:attachments.addPhotos')}
-            onClick={() => {
-              open('photos');
-            }}
-          >
-            <PhotoIcon />
-          </IconButton>
-        </Tooltip>}
-      {canPhotos && !phone &&
-        <Button
-          startIcon={<PhotoIcon />}
-          sx={{ color: 'text.secondary', flexShrink: 0 }}
-          onClick={() => {
-            open('photos');
-          }}
-        >
-          {i18n.t('composer:photos')}
-        </Button>}
-      {expandButton}
+      {expandButton(!phone)}
     </Stack>
   );
 
@@ -512,7 +464,6 @@ const ShortComposer = ({
         {closed}
         {preparing}
         {uploadsList}
-        {videoInput}
         <Dialog
           fullScreen
           open={isOpen}
@@ -531,8 +482,8 @@ const ShortComposer = ({
             noValidate
             sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
           >
-            {/* Close and Post at the top, where a thumb finds them above
-                the keyboard. */}
+            {/* Close, Long content and Post at the top, where a thumb
+                finds them above the keyboard. */}
             <Toolbar sx={{ gap: 1, px: 1 }}>
               <IconButton
                 edge="start"
@@ -547,6 +498,7 @@ const ShortComposer = ({
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 {i18n.t('composer:newPost')}
               </Typography>
+              {expandButton(false)}
               {postButton(false)}
             </Toolbar>
             <Divider />
@@ -570,7 +522,6 @@ const ShortComposer = ({
             >
               {attachButtons}
               {options}
-              {expandButton}
             </Stack>
           </Box>
         </Dialog>
@@ -580,7 +531,6 @@ const ShortComposer = ({
 
   return (
     <Card>
-      {videoInput}
       {!isOpen && closed}
       {isOpen &&
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ p: 2 }}>
@@ -598,7 +548,7 @@ const ShortComposer = ({
                 {attachButtons}
                 {options}
                 <Box sx={{ flexGrow: 1 }} />
-                {expandButton}
+                {expandButton(false)}
               </Stack>
               {/* Buttons the width of the box, side by side, as in the
                   reply form. Closing keeps what was written. */}

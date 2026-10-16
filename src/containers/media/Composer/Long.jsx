@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -14,16 +14,14 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
-import GifIcon from '@mui/icons-material/GifBoxOutlined';
-import PhotoIcon from '@mui/icons-material/Photo';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
+import AttachButtons from './AttachButtons';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
 import useVideoUpload from './Video/useVideoUpload';
@@ -90,7 +88,6 @@ const LongComposer = ({
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
   const upload = useVideoUpload();
-  const picker = useRef(null);
 
   const [tab, setTab] = useState(kinds[0]);
   useEffect(() => {
@@ -271,39 +268,6 @@ const LongComposer = ({
     if (upload.phase !== 'idle') {
       upload.reset();
     }
-  };
-
-  const chooseVideo = (event) => {
-    const chosen = event.target.files && event.target.files[0];
-    // The same file can be chosen again after it is taken off.
-    // eslint-disable-next-line no-param-reassign
-    event.target.value = '';
-    if (chosen) {
-      takeVideo(chosen);
-    }
-  };
-
-  // With its words beside it where there is room, the icon alone on a
-  // phone, as in the short box.
-  const attachButton = (label, tip, icon, onClick) => {
-    if (phone) {
-      return (
-        <Tooltip title={tip}>
-          <IconButton aria-label={tip} onClick={onClick}>
-            {icon}
-          </IconButton>
-        </Tooltip>
-      );
-    }
-    return (
-      <Button
-        startIcon={icon}
-        sx={{ color: 'text.secondary', flexShrink: 0 }}
-        onClick={onClick}
-      >
-        {label}
-      </Button>
-    );
   };
 
   // Hidden while posting rather than disabled: a tooltip on a disabled
@@ -515,33 +479,17 @@ const LongComposer = ({
             alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
           }}
         >
-          {showPhotos &&
-            attachButton(
-              i18n.t('composer:photos'),
-              i18n.t('replies:attachments.addPhotos'),
-              <PhotoIcon />,
-              () => {
-                setIsAddingPhotos(true);
-              },
-            )}
-          {showVideo &&
-            attachButton(
-              i18n.t('composer:video'),
-              i18n.t('replies:attachments.addVideo'),
-              <GifIcon />,
-              () => {
-                picker.current.click();
-              },
-            )}
+          <AttachButtons
+            phone={phone}
+            photos={showPhotos}
+            video={showVideo}
+            onPhotos={() => {
+              setIsAddingPhotos(true);
+            }}
+            onVideo={takeVideo}
+          />
           {choices.render({ busy, withDownload: kind === 'photo' || kind === 'video' })}
         </Stack>
-        <input
-          ref={picker}
-          type="file"
-          accept={videos.TYPES.join(',')}
-          hidden
-          onChange={chooseVideo}
-        />
       </Box>
     </Dialog>
   );
