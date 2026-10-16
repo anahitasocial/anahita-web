@@ -39,7 +39,12 @@ What stands in the way today:
    (order, alt text, cropping) than the short box.
 4. **No Todo or File composer.** Neither exists, and their leftover forms are
    removed. Sharing documents is a service of its own, kept for later (row 75).
-5. **For 1.0, and it has to be excellent on a phone as well as on a desktop.**
+5. **Pictures and videos in the extended composer too** (the user, later the
+   same day): "Media decides". Pictures added there make a photo post, with a
+   title and a long description; a video makes a video post with a title;
+   with nothing attached it is an article or a topic, by the tabs, which go
+   once something is attached. No change to the services.
+6. **For 1.0, and it has to be excellent on a phone as well as on a desktop.**
    The user: "IMPORTANT: it has to look good and deliver excellent ui/ux for
    mobile users as well as desktop users."
 
@@ -74,7 +79,8 @@ for the composer.
 - **A dialog:** wide on a desktop, full screen on a phone, with Post and Close
   in a bar that stays at the top while the text scrolls.
 - **Tabs: Article, Topic,** where the profile takes both; only the one it takes
-  otherwise, and no tabs at all.
+  otherwise, and no tabs at all. The tabs go once pictures or a video are
+  attached, which make a photo or a video post instead (decision 5).
 - **Fields:** title, then the text, in a larger editor. An article adds an
   excerpt and a cover. Pictures and videos within an article's text are part of
   this row, as is whether the editor stays Markdown or becomes one that shows
@@ -145,7 +151,8 @@ words, as a reply with pictures does.
 | Todo and File composer forms | removed 2026-10-16 |
 | Order | the composer before Pulse (row 38), at the user's word on 2026-10-16 |
 | Phase 1 | done 2026-10-16 on branch `unified-composer`; to try in a browser |
-| Phases 2 and 3 | to do |
+| Phase 2 | begun 2026-10-16: one form of its own, with pictures and videos; the cover, pictures within an article's text, and the editor are still to do |
+| Phase 3 | to do |
 
 ### What phase 1 did
 
@@ -169,6 +176,23 @@ words, as a reply with pictures does.
   desktop's width and a phone's: a note, a photo post with words, and a
   two-second video, each posted from the short box without a title, shown,
   and deleted after.
+
+### What phase 2 has done so far
+
+- **One form of its own** (`Long.jsx`) in place of the old Article and Topic
+  forms, which are removed with the composer they ran in (`Default`): the
+  title, the text growing as it is written, an article's excerpt, and the
+  same bottom row as the short box, with Photos and Video beside the post's
+  choices (`usePostChoices.jsx`, shared by both). An article or a topic
+  needs a title of 10 characters and some text, said under each field in
+  the line kept for it.
+- **Pictures and a video** (decision 5), shown under the title where they
+  are seen; the text is shorter then.
+- **Its own draft** of the title and the text (`useDraft` with a slot).
+  What was written in the short box moves to it when expanded.
+- **Tried on the dev stack** as the test account at a desktop's width and a
+  phone's: a photo post with a title and two lines of text, an article, and
+  a two-second video with a title, each posted, read back, and deleted.
 
 ### Found on the way, not part of this row
 

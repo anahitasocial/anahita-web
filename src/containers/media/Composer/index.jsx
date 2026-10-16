@@ -91,6 +91,7 @@ const Composers = ({
         <LongComposer
           actor={actor}
           kinds={long}
+          media={short.filter((kind) => { return kind !== 'note'; })}
           open={isLongOpen}
           body={carried}
           onClose={() => {

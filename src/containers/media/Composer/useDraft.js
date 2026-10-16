@@ -7,8 +7,8 @@ import { useEffect, useState } from 'react';
 // The words only: pictures and videos are uploaded as they are added, and
 // are not kept. A browser that keeps nothing (a private window, storage
 // turned off) simply starts empty each time.
-const keyFor = (id) => {
-  return `composer-draft:${id}`;
+const keyFor = (id, slot) => {
+  return slot ? `composer-draft:${slot}:${id}` : `composer-draft:${id}`;
 };
 
 const read = (key) => {
@@ -31,8 +31,10 @@ const write = (key, value) => {
   }
 };
 
-const useDraft = (id) => {
-  const key = keyFor(id);
+// `slot` keeps another draft for the same profile: the extended composer's
+// title and text beside the short box's.
+const useDraft = (id, slot = '') => {
+  const key = keyFor(id, slot);
   const [text, setText] = useState(() => {
     return read(key);
   });

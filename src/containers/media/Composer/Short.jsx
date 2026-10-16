@@ -25,23 +25,17 @@ import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
 import ActorAvatar from '../../../components/ActorAvatar';
-import DownloadOptionButton from '../../../components/DownloadOptionButton';
-import LanguageButton from '../../../components/LanguageButton';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
-import ReplyAccessButton from '../../../components/ReplyAccessButton';
-import ComposerAudience from './Audience';
 import VideoUploads from './VideoUploads';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
 import useOnFediverse from './useOnFediverse';
 import useVideoUpload from './Video/useVideoUpload';
+import usePostChoices from './usePostChoices';
 
-import audience from '../../../utils/audience';
 import composer from '../../../utils/composer';
 import photoFiles from '../../../utils/photoFiles';
-import postLanguage from '../../../utils/postLanguage';
-import replyAccess from '../../../utils/replyAccess';
 import utils from '../../../utils';
 import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
@@ -105,26 +99,7 @@ const ShortComposer = ({
   const canPhotos = kinds.includes('photo');
   const canVideo = kinds.includes('video') && videos.isOn(nodeInfo);
 
-  const [access, setAccess] = useState(() => {
-    return audience.defaultFor(actor, viewer);
-  });
-  useEffect(() => {
-    setAccess(audience.defaultFor(actor, viewer));
-  }, [actor.id, actor.access, viewer.id]);
-
-  const [language, setLanguage] = useState(() => {
-    return postLanguage.defaultFor(viewer);
-  });
-  useEffect(() => {
-    setLanguage(postLanguage.defaultFor(viewer));
-  }, [viewer.id, viewer.language]);
-
-  const [whoReplies, setWhoReplies] = useState(replyAccess.ANYONE);
-  const [whoQuotes, setWhoQuotes] = useState('');
-  const [allowDownload, setAllowDownload] = useState(Boolean(actor.allowDownload));
-  useEffect(() => {
-    setAllowDownload(Boolean(actor.allowDownload));
-  }, [actor.id, actor.allowDownload]);
+  const choices = usePostChoices(actor, viewer);
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
@@ -144,7 +119,7 @@ const ShortComposer = ({
   // A post open to everybody on the writer's own profile goes to their
   // followers on other servers. Said before posting when it will not.
   const onFediverse = useOnFediverse(viewer);
-  const staysHere = onFediverse && actor.id === viewer.id && access !== 'public';
+  const staysHere = onFediverse && actor.id === viewer.id && choices.access !== 'public';
 
   const limits = {
     size: videos.megabytes(videos.maxBytes(nodeInfo)),
@@ -177,26 +152,16 @@ const ShortComposer = ({
     setIsAddingPhotos(false);
     setVideo(null);
     setVideoProblem('');
-    setWhoReplies(replyAccess.ANYONE);
-    setWhoQuotes('');
+    choices.posted();
     linkPreview.reset();
     setIsOpen(false);
   };
 
   const shared = () => {
-    return {
-      body: text,
-      access,
-      language,
-      ...replyAccess.toRequest(whoReplies),
-      ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
-    };
+    return { body: text, ...choices.request() };
   };
 
   const posted = () => {
-    // Remembered once used, not when picked: a choice somebody backed out
-    // of is not a habit.
-    audience.remember(actor, viewer, access);
     alertSuccess(i18n.t('prompts:posted.success'));
     reset();
   };
@@ -213,14 +178,10 @@ const ShortComposer = ({
       upload.start(actor, {
         name: '',
         body: text,
-        access,
-        language,
-        ...replyAccess.toRequest(whoReplies),
-        ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
-        allowDownload,
+        ...choices.request(),
+        allowDownload: choices.allowDownload,
       }, video).then((ok) => {
         if (ok) {
-          audience.remember(actor, viewer, access);
           setHandedOver(handedOver + 1);
           reset();
         }
@@ -233,7 +194,7 @@ const ShortComposer = ({
       ...shared(),
       name: '',
       uploads: photoFiles.toRequest(photoItems),
-      allow_download: allowDownload,
+      allow_download: choices.allowDownload,
     } : {
       ...shared(),
       // Which link the card is for. What the card says is the server's.
@@ -309,37 +270,16 @@ const ShortComposer = ({
     </>
   );
 
-  // Who can see it, its language, who may reply, and for pictures and a
-  // video whether they may be downloaded.
-  const options = (
-    <>
-      <ComposerAudience
-        actor={actor}
-        viewer={viewer}
-        value={access}
-        onChange={setAccess}
-        disabled={busy}
-      />
-      <LanguageButton value={language} onChange={setLanguage} disabled={busy} />
-      <ReplyAccessButton
-        value={whoReplies}
-        onChange={setWhoReplies}
-        quotePolicy={whoQuotes}
-        defaultQuotePolicy={viewer.quotePolicy}
-        onQuotePolicyChange={setWhoQuotes}
-        disabled={busy}
-      />
-      {(hasPhotos || video) &&
-        <DownloadOptionButton
-          value={allowDownload}
-          onChange={setAllowDownload}
-          disabled={busy}
-        />}
-    </>
-  );
+  const options = choices.render({ busy, withDownload: hasPhotos || Boolean(video) });
 
-  // Hidden rather than disabled while posting: a tooltip on a disabled
-  // button is never seen.
+  // What is written goes along to the extended composer, and is its draft
+  // from then on.
+  const expand = () => {
+    setIsOpen(false);
+    onExpand(body);
+    clearDraft();
+  };
+
   // Hidden rather than disabled while posting: a tooltip on a disabled
   // button is never seen. With its words beside it where there is room,
   // and the icon alone on a phone, where the box needs the width.
@@ -347,10 +287,7 @@ const ShortComposer = ({
     <Tooltip title={i18n.t('composer:longContent')}>
       <IconButton
         aria-label={i18n.t('composer:longContent')}
-        onClick={() => {
-          setIsOpen(false);
-          onExpand(body);
-        }}
+        onClick={expand}
       >
         <ExpandIcon />
       </IconButton>
@@ -358,10 +295,7 @@ const ShortComposer = ({
     <Button
       startIcon={<ExpandIcon />}
       sx={{ color: 'text.secondary', flexShrink: 0 }}
-      onClick={() => {
-        setIsOpen(false);
-        onExpand(body);
-      }}
+      onClick={expand}
     >
       {i18n.t('composer:longContent')}
     </Button>);
@@ -403,7 +337,7 @@ const ShortComposer = ({
         slotProps={{
           input: phone ? { disableUnderline: true } : {},
           htmlInput: {
-            dir: postLanguage.directionOf(language),
+            dir: choices.direction,
             maxLength: BODY.MAX_LENGTH,
           },
         }}
