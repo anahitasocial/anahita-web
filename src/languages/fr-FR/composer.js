@@ -22,6 +22,7 @@ export default {
     bullets: 'Liste à puces',
     numbers: 'Liste numérotée',
     quote: 'Citation',
+    code: 'Code',
     link: 'Lien',
     linkAddress: 'Adresse',
     unlink: 'Retirer le lien',

@@ -38,6 +38,7 @@ export default {
     bullets: 'Bulleted list',
     numbers: 'Numbered list',
     quote: 'Quote',
+    code: 'Code',
     link: 'Link',
     linkAddress: 'Address',
     unlink: 'Remove link',

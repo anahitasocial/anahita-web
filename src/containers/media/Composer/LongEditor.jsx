@@ -21,6 +21,7 @@ import HeadingIcon from '@mui/icons-material/Title';
 import BulletsIcon from '@mui/icons-material/FormatListBulleted';
 import NumbersIcon from '@mui/icons-material/FormatListNumbered';
 import QuoteIcon from '@mui/icons-material/FormatQuote';
+import CodeIcon from '@mui/icons-material/Code';
 import LinkIcon from '@mui/icons-material/Link';
 import MediaIcon from '@mui/icons-material/PermMediaOutlined';
 
@@ -174,6 +175,7 @@ const LongEditor = ({
         bullets: current.isActive('bulletList'),
         numbers: current.isActive('orderedList'),
         quote: current.isActive('blockquote'),
+        code: current.isActive('codeBlock'),
         link: current.isActive('link'),
       };
     },
@@ -299,6 +301,12 @@ const LongEditor = ({
           {button('quote', <QuoteIcon />, i18n.t('composer:editor.quote'), () => {
             chain().toggleBlockquote().run();
           })}
+          {/* Code kept as it was written: pasted into a code block, its
+              lines and indentation stay. No colours: they would add to
+              what the page loads (the user, 2026-10-16). */}
+          {button('code', <CodeIcon />, i18n.t('composer:editor.code'), () => {
+            chain().toggleCodeBlock().run();
+          })}
           {button('link', <LinkIcon />, i18n.t('composer:editor.link'), openLink)}
           {withMedia &&
             button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
@@ -336,9 +344,13 @@ const LongEditor = ({
               },
               '& .ProseMirror a': { color: 'primary.main' },
               '& .ProseMirror pre': {
-                p: 1,
+                p: 1.5,
                 bgcolor: 'background.default',
                 overflowX: 'auto',
+                fontFamily: 'monospace',
+                fontSize: '0.875rem',
+                whiteSpace: 'pre',
+                tabSize: 4,
               },
               // What it says while it is empty. Emotion warns of
               // :first-child because of server rendering, which this app

@@ -81,13 +81,21 @@ const useStyles = makeStyles()((theme) => {
         textDecoration: 'none',
         wordWrap: 'break-word',
       },
+      // Code as it was written: its lines and indentation kept, in a box
+      // that scrolls sideways when a line is long rather than wrapping it,
+      // and left to right whatever the post's language. No colours.
       '& pre': {
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(1),
-        overflowX: 'scroll',
+        padding: theme.spacing(1.5),
+        overflowX: 'auto',
+        direction: 'ltr',
+        textAlign: 'left',
+        fontSize: '0.875rem',
+        tabSize: 4,
       },
-      '& code': {
-        overflowX: 'scroll',
+      '& pre code': {
+        fontFamily: 'monospace',
+        whiteSpace: 'pre',
       },
       // Each paragraph runs in the direction of what is written in it, so
       // a Persian paragraph and an English one in the same post both read
