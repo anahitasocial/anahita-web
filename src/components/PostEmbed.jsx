@@ -198,7 +198,7 @@ const Post = ({ url, at }) => {
   if (at.kind === 'photo') {
     return (
       <Box sx={SPACE}>
-        <PhotoSlides medium={post} size="large" />
+        <PhotoSlides medium={post} size="large" natural />
         <Byline post={post} />
       </Box>
     );

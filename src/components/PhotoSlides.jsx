@@ -37,6 +37,14 @@ const frameRatio = (medium) => {
   return Math.min(Math.max(first.width / first.height, TALLEST), WIDEST);
 };
 
+// The first photo's own shape, kept nowhere within anything: in an article,
+// where a picture fills the column and is as tall as it is (the user,
+// 2026-10-16). 0 when the server does not know it.
+const ownRatio = (medium) => {
+  const [first] = photoFiles.filesOf(medium);
+  return first && first.width && first.height ? first.width / first.height : 0;
+};
+
 const useStyles = makeStyles()((theme) => {
   return {
     root: {
@@ -136,6 +144,7 @@ const Slide = ({
   size,
   className,
   imageClassName,
+  onMeasure = null,
 }) => {
   // How many of this photo's sizes have failed to load. A size the server
   // lists is not always one it stored, so the next smaller is tried.
@@ -153,6 +162,12 @@ const Slide = ({
       // come into view, so a post of four loads one until somebody swipes.
       loading={index === 0 ? 'eager' : 'lazy'}
       draggable={false}
+      onLoad={(event) => {
+        const { naturalWidth, naturalHeight } = event.currentTarget;
+        if (onMeasure && naturalWidth && naturalHeight) {
+          onMeasure(naturalWidth / naturalHeight);
+        }
+      }}
       onError={() => {
         if (failed < candidates.length - 1) {
           setFailed(failed + 1);
@@ -168,6 +183,8 @@ Slide.propTypes = {
   size: PropTypes.string.isRequired,
   className: PropTypes.string,
   imageClassName: PropTypes.string,
+  // Told the photo's own shape once it has loaded.
+  onMeasure: PropTypes.func,
 };
 
 // Material UI has no carousel, so this is one made for this one job from
@@ -183,8 +200,11 @@ const PhotoSlides = ({
   medium,
   size = 'medium',
   onOpen = null,
+  natural = false,
 }) => {
   const { classes } = useStyles();
+  // The first photo's shape as it loads, where the server does not know it.
+  const [measured, setMeasured] = useState(0);
   const [index, setIndex] = useState(0);
   const scroller = useRef(null);
 
@@ -196,6 +216,7 @@ const PhotoSlides = ({
   // The same card is reused as a list is paged through.
   useEffect(() => {
     setIndex(0);
+    setMeasured(0);
     if (scroller.current) {
       scroller.current.scrollLeft = 0;
     }
@@ -256,7 +277,11 @@ const PhotoSlides = ({
         <div
           ref={scroller}
           className={classes.scroller}
-          style={{ aspectRatio: frameRatio(medium) }}
+          style={{
+            aspectRatio: natural ?
+              (ownRatio(medium) || measured || 4 / 3) :
+              frameRatio(medium),
+          }}
           // Left to right whatever the page, so "the next photo" is always
           // the same way and the arithmetic above holds.
           dir="ltr"
@@ -293,6 +318,7 @@ const PhotoSlides = ({
                       medium={medium}
                       index={at}
                       size={size}
+                      onMeasure={natural && at === 0 && !ownRatio(medium) ? setMeasured : null}
                       imageClassName={classes.image}
                     />
                   </ButtonBase>}
@@ -301,6 +327,7 @@ const PhotoSlides = ({
                     medium={medium}
                     index={at}
                     size={size}
+                    onMeasure={natural && at === 0 && !ownRatio(medium) ? setMeasured : null}
                     imageClassName={classes.image}
                   />}
               </div>
@@ -358,6 +385,10 @@ PhotoSlides.propTypes = {
   // Called with the image on show when it is clicked; left out, the image
   // is not a button.
   onOpen: PropTypes.func,
+  // The frame the first photo's own shape, whatever it is, rather than kept
+  // between 4 by 5 and 2 by 1 as in a column of posts: a picture shown
+  // within an article, filling its width.
+  natural: PropTypes.bool,
 };
 
 // One photo of a post at a wanted size, stepping down to a smaller one if
