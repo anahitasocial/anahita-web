@@ -164,7 +164,6 @@ const MediaComposerDefault = ({
         ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
         // Which link the card is for. What the card says is the server's.
         ...(linkPreview.url ? { link_preview_url: linkPreview.url } : {}),
-        composed: 1,
       }, actor).then(() => {
         // Remembered once it has been used, not when it is picked: a
         // choice somebody backed out of is not a habit.
