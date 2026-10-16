@@ -233,16 +233,18 @@ const ShortComposer = ({
     i18n.t('notes:composer.bodyPlaceholderPerson', { name: actor.name }) :
     i18n.t('notes:composer.bodyPlaceholder');
 
-  // Photos, or a GIF or a video: one or the other, as in a reply. Hidden
+  // Photos, or a GIF or a video: one or the other, as in a reply. Photo
+  // opens the place to drop them and, while it is empty, closes it again. Hidden
   // while posting rather than disabled: a tooltip on a disabled button is
   // never seen.
   const attachButtons = (
     <AttachButtons
       phone={phone}
-      photos={canPhotos && !busy && !video && !isAddingPhotos}
-      video={canVideo && !busy && !hasPhotos && !isAddingPhotos && !video}
+      photos={canPhotos && !busy && !video && !hasPhotos}
+      video={canVideo && !busy && !hasPhotos && !video}
+      photosOpen={isAddingPhotos}
       onPhotos={() => {
-        setIsAddingPhotos(true);
+        setIsAddingPhotos(!isAddingPhotos);
       }}
       onVideo={takeVideo}
     />

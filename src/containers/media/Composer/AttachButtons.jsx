@@ -26,17 +26,27 @@ const AttachButtons = ({
   phone,
   photos = false,
   video = false,
+  photosOpen = false,
   onPhotos,
   onVideo,
 }) => {
   const gifPicker = useRef(null);
   const videoPicker = useRef(null);
 
-  const button = (label, tip, icon, onClick) => {
+  const button = (label, tip, icon, onClick, pressed) => {
+    // Coloured while what it opened is open, so it is clear that pressing
+    // it again closes it.
+    const color = pressed ? 'primary.main' : 'text.secondary';
+    const ariaPressed = pressed === undefined ? undefined : pressed;
     if (phone) {
       return (
         <Tooltip title={tip}>
-          <IconButton aria-label={tip} onClick={onClick}>
+          <IconButton
+            aria-label={tip}
+            aria-pressed={ariaPressed}
+            onClick={onClick}
+            sx={{ color }}
+          >
             {icon}
           </IconButton>
         </Tooltip>
@@ -45,7 +55,8 @@ const AttachButtons = ({
     return (
       <Button
         startIcon={icon}
-        sx={{ color: 'text.secondary', flexShrink: 0 }}
+        aria-pressed={ariaPressed}
+        sx={{ color, flexShrink: 0 }}
         onClick={onClick}
       >
         {label}
@@ -71,6 +82,7 @@ const AttachButtons = ({
           i18n.t('replies:attachments.addPhotos'),
           <PhotoIcon />,
           onPhotos,
+          photosOpen,
         )}
       {video &&
         button(
@@ -100,6 +112,8 @@ AttachButtons.propTypes = {
   phone: PropTypes.bool.isRequired,
   photos: PropTypes.bool,
   video: PropTypes.bool,
+  // Whether the place to drop photos is open, which Photo then closes.
+  photosOpen: PropTypes.bool,
   onPhotos: PropTypes.func.isRequired,
   // Called with the file picked, a GIF or a video.
   onVideo: PropTypes.func.isRequired,

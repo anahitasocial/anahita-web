@@ -151,8 +151,10 @@ const LongComposer = ({
   const isUploading = upload.phase === 'uploading';
   const busy = isSending || isUploading;
 
+  // Pictures decide it once one is in: opening the place to drop them
+  // changes nothing else, so it can be closed again with nothing lost.
   let kind = tab;
-  if (hasPhotos || isAddingPhotos) {
+  if (hasPhotos) {
     kind = 'photo';
   } else if (video) {
     kind = 'video';
@@ -271,9 +273,10 @@ const LongComposer = ({
   };
 
   // Hidden while posting rather than disabled: a tooltip on a disabled
-  // button is never seen. Pictures, or a GIF or a video, not both.
-  const showPhotos = canPhotos && !busy && !video && !isAddingPhotos;
-  const showVideo = canVideo && !busy && !hasPhotos && !isAddingPhotos && !video;
+  // button is never seen. Pictures, or a GIF or a video, not both. Photo
+  // opens the place to drop them and, while it is empty, closes it again.
+  const showPhotos = canPhotos && !busy && !video && !hasPhotos;
+  const showVideo = canVideo && !busy && !hasPhotos && !video;
 
   // As tall as the screen allows on a desktop, less the dialog's margins;
   // on a phone, what the keyboard leaves.
@@ -483,8 +486,9 @@ const LongComposer = ({
             phone={phone}
             photos={showPhotos}
             video={showVideo}
+            photosOpen={isAddingPhotos}
             onPhotos={() => {
-              setIsAddingPhotos(true);
+              setIsAddingPhotos(!isAddingPhotos);
             }}
             onVideo={takeVideo}
           />
