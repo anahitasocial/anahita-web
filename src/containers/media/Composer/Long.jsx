@@ -1,10 +1,4 @@
-import React, {
-  Suspense,
-  lazy,
-  useEffect,
-  useRef,
-  useState,
-} from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -15,7 +9,6 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
-import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -32,6 +25,7 @@ import linkPreviewsApi from '../../../api/linkPreviews';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
 import CoverPicker from './CoverPicker';
+import LongEditor from './LazyLongEditor';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
 import useVideoUpload from './Video/useVideoUpload';
@@ -43,13 +37,6 @@ import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
-
-// The editor, with what it is made of, is fetched when long writing is
-// first opened: most people reading never write at length, and it would
-// add a sixth to what every page loads.
-const LongEditor = lazy(() => {
-  return import('./LongEditor');
-});
 
 const { NAME, BODY, EXCERPT } = MEDIUM.FIELDS;
 
@@ -508,28 +495,18 @@ const LongComposer = ({
             <Typography variant="caption" color="error" component="p" role="alert" sx={{ pb: 2 }}>
               {videoProblem}
             </Typography>}
-          <Suspense
-            fallback={
-              <Skeleton
-                variant="rounded"
-                height={(isWriting ? bodyRows : 6) * 23 + 64}
-                sx={{ mb: 3.5 }}
-              />
-            }
-          >
-            <LongEditor
-              value={body}
-              onChange={setBody}
-              label={i18n.t('articles:composer.body')}
-              placeholder={i18n.t(words.bodyPlaceholder)}
-              error={bodyError !== ''}
-              helperText={bodyError || ' '}
-              required={isWriting}
-              disabled={busy}
-              dir={choices.direction}
-              minHeight={(isWriting ? bodyRows : 6) * 23}
-            />
-          </Suspense>
+          <LongEditor
+            value={body}
+            onChange={setBody}
+            label={i18n.t('articles:composer.body')}
+            placeholder={i18n.t(words.bodyPlaceholder)}
+            error={bodyError !== ''}
+            helperText={bodyError || ' '}
+            required={isWriting}
+            disabled={busy}
+            dir={choices.direction}
+            minHeight={(isWriting ? bodyRows : 6) * 23}
+          />
           {kind === 'article' &&
             <TextField
               value={excerpt}

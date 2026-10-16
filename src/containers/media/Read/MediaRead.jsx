@@ -85,6 +85,8 @@ const MediaReadView = ({
         // A photo or video post needs neither a title nor words.
         bodyOptional={namespace === 'videos' || namespace === 'photos'}
         nameOptional={namespace === 'videos' || namespace === 'photos'}
+        // Long writing in the editor it was written in.
+        richText={namespace === 'articles' || namespace === 'topics'}
       />
     ),
     menu: isAuthenticated && (
