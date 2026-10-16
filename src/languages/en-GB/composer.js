@@ -43,6 +43,7 @@ export default {
     unlink: 'Remove link',
     apply: 'Apply',
     resize: 'Drag to change the height',
+    removeEmbed: 'Remove',
   },
   kinds: {
     article: 'Article',

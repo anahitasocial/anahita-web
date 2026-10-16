@@ -23,6 +23,7 @@ import NumbersIcon from '@mui/icons-material/FormatListNumbered';
 import QuoteIcon from '@mui/icons-material/FormatQuote';
 import LinkIcon from '@mui/icons-material/Link';
 
+import EmbedNode from './EmbedNode';
 import embeds from '../../../utils/embeds';
 import i18n from '../../../languages';
 
@@ -50,6 +51,7 @@ const LongEditor = ({
   disabled = false,
   dir = 'auto',
   minHeight = 280,
+  stickyTop = 0,
 }) => {
   // What this editor last said the text was, so that a value coming back
   // the same is not put in again, which would move the caret.
@@ -75,6 +77,7 @@ const LongEditor = ({
         },
       }),
       Placeholder.configure({ placeholder }),
+      EmbedNode,
       Markdown,
     ],
     content: value,
@@ -238,8 +241,9 @@ const LongEditor = ({
           spacing={0.5}
           sx={{
             position: 'sticky',
-            top: 0,
-            zIndex: 1,
+            top: stickyTop,
+            // Over what scrolls under it, an embed's own buttons too.
+            zIndex: 3,
             px: 1,
             pt: 1.5,
             pb: 0.5,
@@ -433,6 +437,10 @@ LongEditor.propTypes = {
   dir: PropTypes.string,
   // How tall it starts, in pixels.
   minHeight: PropTypes.number,
+  // Where the buttons stay as the text scrolls under them: the top of what
+  // scrolls, less its padding, or under the page's bar. A number or, as sx
+  // takes it, one for each breakpoint.
+  stickyTop: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
 };
 
 export default LongEditor;

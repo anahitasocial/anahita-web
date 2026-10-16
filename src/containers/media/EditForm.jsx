@@ -95,6 +95,8 @@ const MediumFormEdit = (props) => {
             helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: BODY.MAX_LENGTH }) : ' '}
             disabled={isFetching}
             minHeight={280}
+            // Under the page's bar, which is 56 pixels tall on a phone.
+            stickyTop={{ xs: 56, sm: 64 }}
           />}
         {fields.body && !richText &&
           <TextField

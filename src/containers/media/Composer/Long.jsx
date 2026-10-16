@@ -498,6 +498,9 @@ const LongComposer = ({
             disabled={busy}
             dir={choices.direction}
             minHeight={(isWriting ? bodyRows : 6) * 23}
+            // Flush with the top of the dialog's scrolling part, over its
+            // padding.
+            stickyTop={-24}
           />
           {kind === 'article' &&
             <TextField

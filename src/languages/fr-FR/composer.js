@@ -27,6 +27,7 @@ export default {
     unlink: 'Retirer le lien',
     apply: 'Appliquer',
     resize: 'Faire glisser pour changer la hauteur',
+    removeEmbed: 'Retirer',
   },
   kinds: {
     article: 'Article',
