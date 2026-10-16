@@ -82,7 +82,7 @@ const PasswordEdit = ({
               value={fields.newPassword.value}
               onChange={onChange}
               error={Boolean(errors.newPassword)}
-              helperText={errors.newPassword || ''}
+              helperText={errors.newPassword || ' '}
               fullWidth
               margin="normal"
               variant="outlined"

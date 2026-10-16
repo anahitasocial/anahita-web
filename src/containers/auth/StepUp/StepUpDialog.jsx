@@ -111,7 +111,7 @@ const StepUpDialog = ({
                 value={fields.currentPassword.value}
                 onChange={onChange}
                 error={Boolean(errors.currentPassword)}
-                helperText={errors.currentPassword || ''}
+                helperText={errors.currentPassword || ' '}
                 fullWidth
                 margin="normal"
                 variant="outlined"

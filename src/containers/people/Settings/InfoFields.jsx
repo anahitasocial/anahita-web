@@ -44,7 +44,7 @@ const PersonInfoFields = ({
         onChange={handleOnChange}
         label={i18n.t('people:person.displayName')}
         error={name.error !== ''}
-        helperText={name.error}
+        helperText={name.error || ' '}
         autoFocus={autoFocus}
         fullWidth
         margin="normal"
@@ -63,7 +63,7 @@ const PersonInfoFields = ({
         onChange={handleOnChange}
         label={i18n.t('people:person.body')}
         error={body.error !== ''}
-        helperText={body.error}
+        helperText={body.error || ' '}
         margin="normal"
         fullWidth
         multiline

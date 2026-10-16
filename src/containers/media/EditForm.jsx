@@ -51,7 +51,7 @@ const MediumFormEdit = (props) => {
             onChange={handleOnChange}
             label={i18n.t('media:medium.title')}
             error={fields.name.error !== ''}
-            helperText={fields.name.error}
+            helperText={fields.name.error || ' '}
             autoFocus
             fullWidth
             margin="normal"
@@ -74,7 +74,7 @@ const MediumFormEdit = (props) => {
             onPaste={onBodyPaste}
             label={i18n.t('media:medium.description')}
             error={fields.body.error !== ''}
-            helperText={fields.body.error}
+            helperText={fields.body.error || ' '}
             multiline
             fullWidth
             margin="normal"

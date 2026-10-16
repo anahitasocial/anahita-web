@@ -30,7 +30,7 @@ const TOTPFormPassword = ({
         required
         disabled={success || isFetching}
         error={password.error !== ''}
-        helperText={password.error}
+        helperText={password.error || ' '}
         autoComplete="off"
         slotProps={{
           htmlInput: {

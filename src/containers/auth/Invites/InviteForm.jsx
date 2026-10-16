@@ -93,7 +93,7 @@ const InviteForm = ({
             value={email.value}
             onChange={handleChange}
             error={Boolean(email.error)}
-            helperText={email.error}
+            helperText={email.error || ' '}
             fullWidth
             required
             autoFocus

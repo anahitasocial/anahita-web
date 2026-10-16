@@ -241,7 +241,7 @@ const ActorDeleteForm = (props) => {
             alias: actor.alias,
           })}
           error={alias.error !== ''}
-          helperText={alias.error}
+          helperText={alias.error || ' '}
           margin="normal"
           fullWidth
           autoComplete="off"

@@ -108,7 +108,7 @@ const EmailEdit = ({
                 value={code}
                 onChange={onCodeChange}
                 error={Boolean(codeError)}
-                helperText={codeError || ''}
+                helperText={codeError || ' '}
                 fullWidth
                 margin="normal"
                 variant="outlined"
@@ -165,7 +165,7 @@ const EmailEdit = ({
                 value={fields.email.value}
                 onChange={onChange}
                 error={Boolean(errors.email)}
-                helperText={errors.email || ''}
+                helperText={errors.email || ' '}
                 fullWidth
                 margin="normal"
                 variant="outlined"
