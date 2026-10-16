@@ -28,6 +28,20 @@ export default {
     apply: 'Appliquer',
     resize: 'Faire glisser pour changer la hauteur',
     removeEmbed: 'Retirer',
+    media: 'Photos et vidéos',
+  },
+  library: {
+    title: 'Vos médias',
+    photos: 'Photos',
+    videos: 'Vidéos',
+    none: {
+      photos: 'Pas encore de photos.',
+      videos: 'Pas encore de vidéos.',
+    },
+    untitled: {
+      photos: 'Photo',
+      videos: 'Vidéo',
+    },
   },
   kinds: {
     article: 'Article',

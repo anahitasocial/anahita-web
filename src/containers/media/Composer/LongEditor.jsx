@@ -22,8 +22,10 @@ import BulletsIcon from '@mui/icons-material/FormatListBulleted';
 import NumbersIcon from '@mui/icons-material/FormatListNumbered';
 import QuoteIcon from '@mui/icons-material/FormatQuote';
 import LinkIcon from '@mui/icons-material/Link';
+import MediaIcon from '@mui/icons-material/PermMediaOutlined';
 
 import EmbedNode from './EmbedNode';
+import MediaLibrary from './MediaLibrary';
 import embeds from '../../../utils/embeds';
 import i18n from '../../../languages';
 
@@ -64,6 +66,7 @@ const LongEditor = ({
   }, [minHeight]);
   const drag = useRef(null);
   const [linkAnchor, setLinkAnchor] = useState(null);
+  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   const [linkAddress, setLinkAddress] = useState('');
 
   const editor = useEditor({
@@ -272,6 +275,9 @@ const LongEditor = ({
             chain().toggleBlockquote().run();
           })}
           {button('link', <LinkIcon />, i18n.t('composer:editor.link'), openLink)}
+          {button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
+            setIsLibraryOpen(true);
+          })}
         </Stack>
         <Divider />
         <Box
@@ -373,6 +379,18 @@ const LongEditor = ({
       <FormHelperText error={error} sx={{ mx: '14px' }}>
         {helperText}
       </FormHelperText>
+      {/* A photo or a video of one's own, put in where the caret is, as an
+          embed: what pasting its address on a line of its own does. */}
+      <MediaLibrary
+        open={isLibraryOpen}
+        onClose={() => {
+          setIsLibraryOpen(false);
+        }}
+        onPick={(url) => {
+          setIsLibraryOpen(false);
+          chain().insertContent({ type: 'embed', attrs: { url } }).run();
+        }}
+      />
       <Popover
         open={Boolean(linkAnchor)}
         anchorEl={linkAnchor}

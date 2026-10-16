@@ -117,6 +117,26 @@ recommendations.
   that was embedded (to ask the user); sending embeds as anything but
   links to other servers.
 
+### The media library in the editor
+
+The user's idea, 2026-10-16, after WordPress's media manager: put photos and
+videos of one's own into an article, picked from a library or uploaded
+there and then.
+
+- **A Media button** in the editor's row opens the library, in a dialog,
+  full screen on a phone. **Your media:** one's own photo and video posts,
+  newest first, a grid that loads more as it is scrolled. **Upload:**
+  pictures, a GIF or a video, picked or dropped.
+- **Putting one in** is an embed: its address goes in where the caret is,
+  as a block of its own, shown as itself, and a citation is written when
+  the article is saved. Nothing new in how an article is kept or read.
+- **What an upload becomes** (the user's choice): a photo or video post
+  that is **in the library only**. It has its own page and is seen by whoever
+  may see it, but it is not announced: not in a feed, a profile's lists,
+  search, a hashtag's or a place's list, recommendations, and not sent to
+  other servers by itself. Its author finds it in the library. A flag on
+  the post that every listing and both federation services respect.
+
 ### Phones and desktops
 
 - Touch targets of at least 48px, controls in the bottom row within a thumb's

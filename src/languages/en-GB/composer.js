@@ -44,6 +44,21 @@ export default {
     apply: 'Apply',
     resize: 'Drag to change the height',
     removeEmbed: 'Remove',
+    media: 'Photos and videos',
+  },
+  // The library of one's own photos and videos, in the editor.
+  library: {
+    title: 'Your media',
+    photos: 'Photos',
+    videos: 'Videos',
+    none: {
+      photos: 'No photos yet.',
+      videos: 'No videos yet.',
+    },
+    untitled: {
+      photos: 'Photo',
+      videos: 'Video',
+    },
   },
   kinds: {
     article: 'Article',
