@@ -19,6 +19,7 @@ import i18n from '../../languages';
 const {
   NAME,
   BODY,
+  EXCERPT,
 } = MEDIUM.FIELDS;
 
 const MediumFormEdit = (props) => {
@@ -85,6 +86,27 @@ const MediumFormEdit = (props) => {
               htmlInput: {
                 dir: 'auto',
                 maxLength: BODY.MAX_LENGTH,
+              },
+            }}
+          />}
+        {/* An article's, said where it is listed. */}
+        {fields.excerpt &&
+          <TextField
+            variant="standard"
+            name="excerpt"
+            value={medium.excerpt || ''}
+            onChange={handleOnChange}
+            label={i18n.t('articles:composer.excerpt')}
+            error={fields.excerpt.error !== ''}
+            helperText={fields.excerpt.error || ' '}
+            multiline
+            fullWidth
+            margin="normal"
+            disabled={isFetching}
+            slotProps={{
+              htmlInput: {
+                dir: 'auto',
+                maxLength: EXCERPT.MAX_LENGTH,
               },
             }}
           />}

@@ -59,6 +59,9 @@ const MediumReadDefault = ({
   form = null,
   stats = null,
   handleView = null,
+  // An article's cover as its author may change it (containers/cover), in
+  // place of the picture alone.
+  cover = null,
 }) => {
   const [tab, setTab] = useState(TABS.REPLIES);
 
@@ -67,7 +70,7 @@ const MediumReadDefault = ({
   };
 
   const portrait = getPortraitURL(medium, 'original');
-  const cover = getCoverURL(medium, 'large');
+  const coverUrl = getCoverURL(medium, 'large');
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
 
@@ -108,11 +111,12 @@ const MediumReadDefault = ({
               it was said in its context, below. */}
         {!context && medium.owner && medium.owner.id !== author.id &&
         <CardHeaderOwner owner={medium.owner} />}
-        {cover &&
+        {cover}
+        {!cover && coverUrl &&
         <CardMedia
           className={classes.cover}
           title={medium.name}
-          image={cover}
+          image={coverUrl}
           src="picture"
         />}
         {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
@@ -218,6 +222,7 @@ MediumReadDefault.propTypes = {
   stats: PropTypes.node,
   editing: PropTypes.bool,
   handleView: PropTypes.func,
+  cover: PropTypes.node,
 };
 
 export default withStyles(MediumReadDefault, styles);

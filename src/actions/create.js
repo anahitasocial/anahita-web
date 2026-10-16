@@ -250,7 +250,9 @@ const add = (namespace, api) => {
         api.add(node, owner)
           .then((result) => {
             dispatch(addSuccess(result, namespace));
-            return resolve();
+            // The post as the server made it, for what is done with it
+            // next: an article's cover is added once it exists.
+            return resolve(result.data);
           }, (response) => {
             dispatch(addFailure(response, namespace));
             return reject(response);

@@ -12,6 +12,8 @@ export default {
   addVideo: 'Ajouter une vidéo',
   titleNeeded: 'Un titre d’au moins {{count}} caractères.',
   bodyNeeded: 'Écrivez quelque chose d’abord.',
+  removeCover: 'Retirer la couverture',
+  coverRefused: 'L’article est publié sans elle ; vous pouvez ajouter une couverture sur l’article.',
   kinds: {
     article: 'Article',
     topic: 'Sujet',

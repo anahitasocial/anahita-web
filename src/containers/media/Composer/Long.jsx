@@ -20,13 +20,16 @@ import CloseIcon from '@mui/icons-material/Close';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
+import coverApi from '../../../api/cover';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
+import CoverPicker from './CoverPicker';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
 import useVideoUpload from './Video/useVideoUpload';
 
 import photoFiles from '../../../utils/photoFiles';
+import uploads from '../../../utils/upload';
 import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
@@ -99,6 +102,7 @@ const LongComposer = ({
   const [title, setTitle, clearTitle] = useDraft(actor.id, 'long-title');
   const [body, setBody, clearBody] = useDraft(actor.id, 'long-body');
   const [excerpt, setExcerpt] = useState('');
+  const [cover, setCover] = useState(null);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
   const [video, setVideo] = useState(null);
@@ -200,6 +204,7 @@ const LongComposer = ({
     clearTitle();
     clearBody();
     setExcerpt('');
+    setCover(null);
     setPhotoItems([]);
     setIsAddingPhotos(false);
     setVideo(null);
@@ -244,10 +249,29 @@ const LongComposer = ({
       post = { ...post, excerpt: excerpt.trim() };
     }
 
+    // An article's cover goes once the article exists. Should it not be
+    // taken, the article is posted all the same, and the cover can be added
+    // on its page.
+    const withCover = (node) => {
+      if (kind !== 'article' || !cover || !node || !node.id) {
+        return Promise.resolve(true);
+      }
+      return coverApi.add(node, cover).then(() => {
+        return true;
+      }).catch((failure) => {
+        alertError(`${i18n.t(uploads.refusalKey(failure))} ${i18n.t('composer:coverRefused')}`);
+        return false;
+      });
+    };
+
     setIsSending(true);
-    dispatch(actions[words.namespace].add(post, actor)).then(() => {
-      alertSuccess(i18n.t('prompts:posted.success'));
-      reset();
+    dispatch(actions[words.namespace].add(post, actor)).then((node) => {
+      return withCover(node).then((ok) => {
+        if (ok) {
+          alertSuccess(i18n.t('prompts:posted.success'));
+        }
+        reset();
+      });
     }).catch(() => {
       // What was written stays, to post again.
       alertError(i18n.t('prompts:posted.error'));
@@ -356,6 +380,8 @@ const LongComposer = ({
             flexGrow: 1, overflowY: 'auto', px: 2, pt: 3,
           }}
         >
+          {kind === 'article' &&
+            <CoverPicker file={cover} onChange={setCover} disabled={busy} />}
           {/* Each field keeps a line under it for what is wrong, so
               nothing moves when it is said. */}
           <TextField

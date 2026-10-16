@@ -24,6 +24,10 @@ export default {
   // without them.
   titleNeeded: 'A title of at least {{count}} characters.',
   bodyNeeded: 'Write something first.',
+  // An article's cover, chosen in the extended composer.
+  removeCover: 'Remove the cover',
+  // After why the server would not take it.
+  coverRefused: 'The article is posted without it; you can add a cover on the article.',
   // The extended composer's tabs.
   kinds: {
     article: 'Article',

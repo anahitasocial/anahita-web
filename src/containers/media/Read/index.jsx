@@ -37,9 +37,14 @@ const MediaRead = ({
   const { id } = useParams();
 
   const formFields = useMemo(() => {
-    return utils.form.createFormFields(
-      namespace === 'notes' ? ['body'] : ['name', 'body'],
-    );
+    let names = ['name', 'body'];
+    if (namespace === 'notes') {
+      names = ['body'];
+    }
+    if (namespace === 'articles') {
+      names = ['name', 'body', 'excerpt'];
+    }
+    return utils.form.createFormFields(names);
   }, [namespace]);
 
   const [isEditing, setIsEditing] = useState(false);
