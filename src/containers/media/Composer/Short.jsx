@@ -506,9 +506,9 @@ const ShortComposer = ({
           justifyContent: 'flex-start',
           minHeight: 48,
           px: 2,
-          // As an outlined text field: the theme's radius, and its border,
-          // darker on hover.
-          borderRadius: 1,
+          // Its ends as round as the avatar beside it; the border an
+          // outlined text field's, darker on hover.
+          borderRadius: '999px',
           border: 1,
           borderColor: (theme) => {
             return theme.palette.mode === 'dark' ?
