@@ -278,8 +278,12 @@ const PhotoSlides = ({
           ref={scroller}
           className={classes.scroller}
           style={{
+            // In an article, a photo whose shape is not known yet is
+            // given none: it lays itself out as it loads, at the full
+            // width, rather than starting in a frame of a guessed shape and
+            // jumping to its own (the user, 2026-10-16).
             aspectRatio: natural ?
-              (ownRatio(medium) || measured || 4 / 3) :
+              (ownRatio(medium) || measured || undefined) :
               frameRatio(medium),
           }}
           // Left to right whatever the page, so "the next photo" is always
