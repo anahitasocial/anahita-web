@@ -9,6 +9,13 @@ describe('embeds', () => {
     expect(embeds.alone('<https://a.example/x>')).toBe('https://a.example/x');
     expect(embeds.alone('see https://a.example/x')).toBe('');
     expect(embeds.alone('ftp://a.example/x')).toBe('');
+    expect(embeds.alone('[https://a.example/x](https://a.example/x)')).toBe('https://a.example/x');
+    expect(embeds.alone('[words](https://a.example/x)')).toBe('');
+  });
+
+  it('writes a link that reads as its own address as the bare address', () => {
+    const md = '[https://a.example/x](https://a.example/x)\n\nA [link](https://b.example) and [https://c.example/a\\_b](https://c.example/a_b).';
+    expect(embeds.bareLinks(md)).toBe('https://a.example/x\n\nA [link](https://b.example) and https://c.example/a_b.');
   });
 
   it('reads which post an address here is to', () => {

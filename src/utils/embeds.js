@@ -45,10 +45,28 @@ const postAt = (address) => {
   return { namespace: match[1], kind: KINDS[match[1]], id };
 };
 
+// A link whose words are its own address, as some editors write one:
+// [https://a.example/](https://a.example/).
+const SELF_LINK = /^\[([^\]]+)\]\((\S+)\)$/;
+const SELF_LINKS = /\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)/g;
+
+// Markdown's escapes taken out of a link's words: \_ is _.
+const unescape = (text) => {
+  return text.replace(/\\([\\`*_{}[\]()#+\-.!|~<>])/g, '$1');
+};
+
 // Whether a line is an address and nothing else, as Markdown writes one:
-// bare, or in angle brackets. The address, or ''.
+// bare, in angle brackets, or as a link whose words are the address. The
+// address, or ''.
 const alone = (line = '') => {
   let text = line.trim();
+  const self = SELF_LINK.exec(text);
+  if (self) {
+    if (unescape(self[1]) !== self[2]) {
+      return '';
+    }
+    [, , text] = self;
+  }
   if (text.startsWith('<') && text.endsWith('>')) {
     text = text.slice(1, -1).trim();
   }
@@ -87,8 +105,19 @@ const samePage = (a = '', b = '') => {
   return tidy(a) === tidy(b);
 };
 
+// Markdown with every link whose words are its own address written as the
+// bare address: what the editor writes as [https://a.example/](https://a.example/)
+// reads, and is kept, as https://a.example/. One on a line of its own is
+// then an embed whatever reads it, and the text elsewhere is plainer.
+const bareLinks = (markdown = '') => {
+  return String(markdown).replace(SELF_LINKS, (whole, words, address) => {
+    return unescape(words) === address ? address : whole;
+  });
+};
+
 export default {
   alone,
+  bareLinks,
   isOurs,
   pagesIn,
   postAt,

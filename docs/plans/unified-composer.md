@@ -109,8 +109,8 @@ recommendations.
   the post is saved, text-service copies the kept previews into its meta
   (`link_previews`, beside a note's single `link_preview`), so a card reads
   the same later and nobody's reading fetches anything. No card, a link.
-- **The edge:** `edge.medium.embed.v1`, from the post to each post here it
-  embeds, written by text-service when the post is added or edited, and
+- **The edge, a citation** (the user's name for it): `edge.medium.citation.v1`,
+  from the post to each post here it embeds, written by text-service when the post is added or edited, and
   taken away with the line. Search and recommendations reading it come
   later, as their own work.
 - **Not now:** embedding in short posts; notifying the author of a post
@@ -238,7 +238,15 @@ words, as a reply with pictures does.
   `components/PostEmbed.jsx`, drawn by `NodeBody` for articles and topics;
   the composer asks for page previews as it is written. Tried on dev: a
   photo, a note and Wikipedia embedded in an article, at a desktop's
-  width and a phone's; both edges and the card were there; deleted after.
+  width and a phone's; both citations and the card were there; deleted after.
+- **The editor** (Tiptap 3.31.4, the user's choice, 2026-10-16):
+  `LongEditor.jsx`, what is written shown as it reads, with Bold,
+  Italic, Heading, the two lists, Quote and Link above it. It keeps
+  Markdown, so nothing stored changes; a link reading as its own address
+  is kept bare (`embeds.bareLinks`). Fetched only when long writing is
+  first opened, as its own 148 KB part, so the page everyone loads did not
+  grow. Tried on dev: a bold phrase, a heading, a list and a page on its
+  own line, posted and read back as written.
 - **Not done:** a cover can't be cleared from the edit form, only from the
   page; an excerpt can't be emptied once set (the graph skips an empty
   one); articles are still not sent to other servers.

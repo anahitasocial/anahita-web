@@ -29,6 +29,20 @@ export default {
   // After why the server would not take it.
   coverRefused: 'The article is posted without it; you can add a cover on the article.',
   // The extended composer's tabs.
+  // The extended composer's text, and the buttons above it.
+  tooLong: 'At most {{count}} characters.',
+  editor: {
+    bold: 'Bold',
+    italic: 'Italic',
+    heading: 'Heading',
+    bullets: 'Bulleted list',
+    numbers: 'Numbered list',
+    quote: 'Quote',
+    link: 'Link',
+    linkAddress: 'Address',
+    unlink: 'Remove link',
+    apply: 'Apply',
+  },
   kinds: {
     article: 'Article',
     topic: 'Topic',

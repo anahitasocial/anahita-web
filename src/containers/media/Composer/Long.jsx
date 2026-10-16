@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, {
+  Suspense,
+  lazy,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,6 +15,7 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
+import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -36,6 +43,13 @@ import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
+
+// The editor, with what it is made of, is fetched when long writing is
+// first opened: most people reading never write at length, and it would
+// add a sixth to what every page loads.
+const LongEditor = lazy(() => {
+  return import('./LongEditor');
+});
 
 const { NAME, BODY, EXCERPT } = MEDIUM.FIELDS;
 
@@ -194,9 +208,19 @@ const LongComposer = ({
   const text = body.trim();
   const titleShort = isWriting && name.length < NAME.MIN_LENGTH;
   const bodyMissing = isWriting && !text;
+  // The editor has no limit of its own, as a text box had: said as soon as
+  // it is passed, since the server would refuse it.
+  const bodyTooLong = text.length > BODY.MAX_LENGTH;
   let ready = !titleShort && !bodyMissing;
   if (kind === 'photo') {
     ready = photosReady;
+  }
+  ready = ready && !bodyTooLong;
+  let bodyError = '';
+  if (bodyTooLong) {
+    bodyError = i18n.t('composer:tooLong', { count: BODY.MAX_LENGTH });
+  } else if (tried && bodyMissing) {
+    bodyError = i18n.t('composer:bodyNeeded');
   }
 
   const limits = {
@@ -484,25 +508,28 @@ const LongComposer = ({
             <Typography variant="caption" color="error" component="p" role="alert" sx={{ pb: 2 }}>
               {videoProblem}
             </Typography>}
-          <TextField
-            value={body}
-            onChange={(event) => {
-              setBody(event.target.value);
-            }}
-            label={i18n.t('articles:composer.body')}
-            placeholder={i18n.t(words.bodyPlaceholder)}
-            error={tried && bodyMissing}
-            helperText={tried && bodyMissing ? i18n.t('composer:bodyNeeded') : ' '}
-            required={isWriting}
-            disabled={busy}
-            multiline
-            minRows={isWriting ? bodyRows : 6}
-            fullWidth
-            slotProps={{
-              htmlInput: { dir: choices.direction, maxLength: BODY.MAX_LENGTH },
-              inputLabel: { shrink: true },
-            }}
-          />
+          <Suspense
+            fallback={
+              <Skeleton
+                variant="rounded"
+                height={(isWriting ? bodyRows : 6) * 23 + 64}
+                sx={{ mb: 3.5 }}
+              />
+            }
+          >
+            <LongEditor
+              value={body}
+              onChange={setBody}
+              label={i18n.t('articles:composer.body')}
+              placeholder={i18n.t(words.bodyPlaceholder)}
+              error={bodyError !== ''}
+              helperText={bodyError || ' '}
+              required={isWriting}
+              disabled={busy}
+              dir={choices.direction}
+              minHeight={(isWriting ? bodyRows : 6) * 23}
+            />
+          </Suspense>
           {kind === 'article' &&
             <TextField
               value={excerpt}
