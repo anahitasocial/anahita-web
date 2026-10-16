@@ -35,8 +35,10 @@ const errorMessage = (err, fallbackKey) => {
     return i18n.t('invites:errors.rateLimited');
   }
 
-  if (typeof data === 'string' && data) {
-    return data;
+  // At the cap of outstanding invitations: the server says how many,
+  // and how a slot frees.
+  if (status === 409 && data && data.error === 'too_many_invitations') {
+    return data.description;
   }
 
   if (status === 409) {
@@ -47,7 +49,7 @@ const errorMessage = (err, fallbackKey) => {
     return i18n.t('invites:errors.forbidden');
   }
 
-  return (data && (data.message || data.description)) || i18n.t(fallbackKey);
+  return (data && data.description) || i18n.t(fallbackKey);
 };
 
 // The viewer's own invites.

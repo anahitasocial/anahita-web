@@ -125,7 +125,7 @@ const SettingsPrivacy = ({
           return;
         }
 
-        alertError(body.message || i18n.t('settings:privacy.convert.errors.generic'));
+        alertError(body.description || i18n.t('settings:privacy.convert.errors.generic'));
       },
     ).finally(() => {
       setSubmitting(false);

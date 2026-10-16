@@ -29,7 +29,7 @@ const errorMessage = (err) => {
     return i18n.t('settings:oauthSigningKeys.errors.forbidden');
   }
 
-  return data.description || data.message || i18n.t('settings:oauthSigningKeys.errors.edit');
+  return data.description || i18n.t('settings:oauthSigningKeys.errors.edit');
 };
 
 // The keys that sign every token this site issues.

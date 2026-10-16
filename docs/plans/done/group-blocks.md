@@ -1,14 +1,14 @@
 # Blocking by a group (item 55)
 
-**Done 2026-10-16**, untried in a browser. One change from the plan below:
+**Done 2026-10-15**, untried in a browser. One change from the plan below:
 the web app could not tell from a post whether the viewer runs the group it
 is in, so the services now answer it with each post and reply
 (`authorized.block_from_owner`, `permissions.CanBlockFromOwner`), for the
 group's administrators, and for site administrators on the post's own page
-only (the user, 2026-10-16: they may change any post, but not from feeds and
+only (the user, 2026-10-15: they may change any post, but not from feeds and
 lists). Events have it as groups do.
 
-Decided by the user on 2026-10-16, while finishing item 44
+Decided by the user on 2026-10-15, while finishing item 44
 ([hiding-replies-across-servers.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/hiding-replies-across-servers.md)):
 a person's block does not reach the groups they administer, because that
 "will really complicate things". A group blocks somebody in its own right,
@@ -49,7 +49,7 @@ viewer's own (`containers/actors/Settings/Blocked.jsx`, `viewerOnly`).
 ## Not part of it
 
 - **Telling other servers.** Groups are not on ActivityPub for now (the
-  user, 2026-10-16), so a group's block stays here.
+  user, 2026-10-15), so a group's block stays here.
 - A person's block reaching their groups: decided against.
 
 ## Documentation

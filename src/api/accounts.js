@@ -48,7 +48,7 @@ const browse = (filters = {}) => {
       content_max: onlyWithoutContent ? 0 : undefined,
       has_admin: onlyWithoutAdmin ? 'false' : undefined,
       limit,
-      offset,
+      start: offset,
     },
   });
 };
