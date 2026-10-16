@@ -49,6 +49,10 @@ All requests go through axios, configured in `src/api/index.js`:
   Code in the app never sees a `snake_case` key.
 - **Redirects** are not followed (`maxRedirects: 0`).
 
+What each route takes and sends is in the services' API reference
+(anahita-services `docs/api.md` and `docs/api/`, made from the code). It
+describes the wire, in `snake_case`, not the `camelCase` the app sees.
+
 A few documents come from elsewhere and skip the interceptors. For example, the
 OpenID configuration goes through `api/publicClient.js`, which repeats the key
 conversion itself.
