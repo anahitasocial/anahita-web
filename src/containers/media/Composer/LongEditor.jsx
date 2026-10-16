@@ -34,7 +34,11 @@ import i18n from '../../../languages';
 //
 // It looks as the outlined fields around it do: their border and corners,
 // their label sitting on the border, a line under it for what is wrong. It
-// starts `minHeight` tall and grows as somebody writes.
+// starts `minHeight` tall and grows as somebody writes, and its corner can
+// be dragged to make it taller or shorter, with a finger as with a mouse.
+// The least the text can be dragged down to: a few lines.
+const MIN_HEIGHT = 96;
+
 const LongEditor = ({
   value,
   onChange,
@@ -50,6 +54,13 @@ const LongEditor = ({
   // What this editor last said the text was, so that a value coming back
   // the same is not put in again, which would move the caret.
   const said = useRef(value);
+  // How tall the text is at least: where it started, or where its corner
+  // was dragged to. It grows past it as somebody writes.
+  const [height, setHeight] = useState(minHeight);
+  useEffect(() => {
+    setHeight(minHeight);
+  }, [minHeight]);
+  const drag = useRef(null);
   const [linkAnchor, setLinkAnchor] = useState(null);
   const [linkAddress, setLinkAddress] = useState('');
 
@@ -268,7 +279,7 @@ const LongEditor = ({
               cursor: 'text',
               '& .ProseMirror': {
                 outline: 'none',
-                minHeight,
+                minHeight: height,
                 wordWrap: 'break-word',
               },
               // A line's space under each paragraph, heading, list or
@@ -311,6 +322,48 @@ const LongEditor = ({
           }}
         >
           <EditorContent editor={editor} />
+        </Box>
+        {/* The corner to drag. A finger's width, and it takes the drag
+            for itself, so on a phone moving it does not scroll the page
+            instead. Pointer events are a mouse's and a finger's alike. */}
+        <Box sx={{ position: 'relative', height: 0 }}>
+          <Box
+            role="separator"
+            aria-orientation="horizontal"
+            aria-label={i18n.t('composer:editor.resize')}
+            onPointerDown={(event) => {
+              event.preventDefault();
+              event.currentTarget.setPointerCapture(event.pointerId);
+              drag.current = { from: event.clientY, height };
+            }}
+            onPointerMove={(event) => {
+              if (!drag.current) {
+                return;
+              }
+              const moved = event.clientY - drag.current.from;
+              setHeight(Math.max(MIN_HEIGHT, Math.round(drag.current.height + moved)));
+            }}
+            onPointerUp={() => {
+              drag.current = null;
+            }}
+            onPointerCancel={() => {
+              drag.current = null;
+            }}
+            sx={{
+              position: 'absolute',
+              right: 0,
+              bottom: 0,
+              width: 32,
+              height: 32,
+              cursor: 'ns-resize',
+              touchAction: 'none',
+              // Two short slanted lines in the corner, as a text box has.
+              background: (theme) => {
+                const line = theme.palette.text.disabled;
+                return `linear-gradient(135deg, transparent 0 62%, ${line} 62% 66%, transparent 66% 76%, ${line} 76% 80%, transparent 80%)`;
+              },
+            }}
+          />
         </Box>
       </Box>
       <FormHelperText error={error} sx={{ mx: '14px' }}>

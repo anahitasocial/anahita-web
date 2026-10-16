@@ -139,17 +139,9 @@ const LongComposer = ({
     };
   }, [phone, open]);
 
-  // The text starts with the height left once the title, the excerpt and
-  // the buttons have theirs, a line being about 23 pixels, and grows as
-  // somebody types.
-  const rowsFor = () => {
-    const room = window.innerHeight - (phone ? 340 : 420);
-    return Math.max(8, Math.floor(room / 23));
-  };
-  const [bodyRows, setBodyRows] = useState(rowsFor);
-  useEffect(() => {
-    setBodyRows(rowsFor());
-  }, [open, phone]);
+  // The text starts a few lines tall, and grows as somebody writes or as
+  // its corner is dragged (LongEditor).
+  const bodyRows = 8;
 
   const canPhotos = media.includes('photo');
   const canVideo = media.includes('video') && videos.isOn(nodeInfo);

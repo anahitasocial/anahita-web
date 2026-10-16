@@ -26,6 +26,7 @@ export default {
     linkAddress: 'Adresse',
     unlink: 'Retirer le lien',
     apply: 'Appliquer',
+    resize: 'Faire glisser pour changer la hauteur',
   },
   kinds: {
     article: 'Article',
