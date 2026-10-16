@@ -23,6 +23,13 @@ export default {
   dismissed: 'Removed. You will not be recommended that again.',
   failed: 'That did not work. Please try again.',
   reasons: {
+    citedByOne: 'Cited by {{ name }}',
+    citedByMore_one: 'Cited by {{ name }} and {{ count }} other',
+    citedByMore_other: 'Cited by {{ name }} and {{ count }} others',
+    citedByCount_one: 'Cited by {{ count }} person you follow',
+    citedByCount_other: 'Cited by {{ count }} people you follow',
+    cited_one: 'Cited by {{ count }} person',
+    cited_other: 'Cited by {{ count }} people',
     goingOne: '{{ name }} is going',
     goingTwo: '{{ first }} and {{ second }} are going',
     goingMore_one: '{{ name }} and {{ count }} other are going',
@@ -64,6 +71,8 @@ export default {
     sharedInterest: 'They post about what you post about',
     featured: 'Featured on this site',
     popular: 'Many people followed them lately',
+    citedByLeaders: 'People you follow cite them or their posts',
+    cited: 'Others cite them or their posts',
     activeWithin: {
       label: 'People who were last here',
       help: 'Somebody who has not been here, or posted, for longer than this is not suggested to you. Groups and events are not left out by it.',

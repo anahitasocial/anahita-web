@@ -23,6 +23,13 @@ export default {
   dismissed: 'Retiré. Cela ne vous sera plus recommandé.',
   failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
   reasons: {
+    citedByOne: 'Cité par {{ name }}',
+    citedByMore_one: 'Cité par {{ name }} et {{ count }} autre',
+    citedByMore_other: 'Cité par {{ name }} et {{ count }} autres',
+    citedByCount_one: 'Cité par {{ count }} personne que vous suivez',
+    citedByCount_other: 'Cité par {{ count }} personnes que vous suivez',
+    cited_one: 'Cité par {{ count }} personne',
+    cited_other: 'Cité par {{ count }} personnes',
     goingOne: '{{ name }} y va',
     goingTwo: '{{ first }} et {{ second }} y vont',
     goingMore_one: '{{ name }} et {{ count }} autre y vont',
@@ -64,6 +71,8 @@ export default {
     sharedInterest: 'Ils publient sur vos sujets',
     featured: 'Mis en avant sur ce site',
     popular: 'Beaucoup de personnes les ont suivis récemment',
+    citedByLeaders: 'Des personnes que vous suivez les citent, eux ou leurs publications',
+    cited: 'D’autres les citent, eux ou leurs publications',
     activeWithin: {
       label: 'Personnes venues ici pour la dernière fois',
       help: 'Une personne qui n’est pas venue ici, ni n’a rien publié, depuis plus longtemps ne vous est pas suggérée. Les groupes et les événements ne sont pas concernés.',
