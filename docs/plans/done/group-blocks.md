@@ -1,5 +1,12 @@
 # Blocking by a group (item 55)
 
+**Done 2026-10-16**, untried in a browser. One change from the plan below:
+the web app could not tell from a post whether the viewer runs the group it
+is in, so the services now answer it with each post and reply
+(`authorized.block_from_owner`, `permissions.CanBlockFromOwner`), for the
+group's administrators only. Site administrators are not offered it. Events
+have it as groups do.
+
 Decided by the user on 2026-10-16, while finishing item 44
 ([hiding-replies-across-servers.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/hiding-replies-across-servers.md)):
 a person's block does not reach the groups they administer, because that

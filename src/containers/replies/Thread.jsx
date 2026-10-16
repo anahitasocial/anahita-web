@@ -204,6 +204,32 @@ const RepliesThread = ({
     });
   };
 
+  // The group or the event the thread is in blocking whoever wrote a reply,
+  // for whoever runs it. The thread is read again afterwards: what the
+  // blocked person wrote in it is out of sight now, for everybody.
+  const group = root.owner || {};
+  const groupName = utils.node.getActorName(group);
+
+  const handleBlockFromOwner = (reply) => {
+    const author = utils.node.getAuthor(reply);
+
+    setAsking({
+      message: i18n.t('socialgraph:blockFromOwner.confirm', {
+        person: utils.node.getActorName(author),
+        name: groupName,
+      }),
+      confirm: i18n.t('actions:block'),
+      run: () => {
+        return api.socialgraph.block({ actor: author, viewer: group }).then(() => {
+          alertSuccess(i18n.t('socialgraph:blockFromOwner.done', { name: groupName }));
+          load();
+        }).catch(() => {
+          alertError(i18n.t('socialgraph:blockFromOwner.failed'));
+        });
+      },
+    });
+  };
+
   const handleLike = (reply) => {
     const call = reply.isLikedByViewer ? api.likes.deleteItem : api.likes.add;
 
@@ -253,6 +279,8 @@ const RepliesThread = ({
         onDelete={handleDelete}
         onHide={handleHide}
         onLike={handleLike}
+        onBlockFromOwner={handleBlockFromOwner}
+        blockFromOwnerLabel={i18n.t('socialgraph:blockFromOwner.action', { name: groupName })}
       />
     );
   };
@@ -395,6 +423,8 @@ RepliesThread.propTypes = {
   root: PropTypes.shape({
     id: PropTypes.number.isRequired,
     replyAccess: PropTypes.string,
+    // The profile it is on: a group, for blocking somebody from it.
+    owner: PropTypes.object,
   }).isRequired,
   // A reply in the thread, to show only what is under it.
   under: MediumType,

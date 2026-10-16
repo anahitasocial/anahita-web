@@ -78,4 +78,19 @@ export default {
     none: 'You have not blocked anybody.',
     failed: 'That could not be done.',
   },
+  // Who a group or an event has blocked, in its settings.
+  groupBlocked: {
+    title: 'People blocked from {{name}}',
+    search: 'Find somebody blocked',
+    noMatch: 'Nobody blocked has that name.',
+    none: 'Nobody is blocked.',
+  },
+  // A group or an event blocking whoever wrote something in it.
+  blockFromOwner: {
+    action: 'Block from {{name}}',
+    title: 'Block from {{name}}?',
+    confirm: '{{person}} will no longer see or take part in {{name}}, and what they posted, replied and liked there is hidden from everybody. Nothing is deleted: unblocking them in the settings of {{name}} brings it back.',
+    done: 'Blocked from {{name}}.',
+    failed: 'That could not be done.',
+  },
 };

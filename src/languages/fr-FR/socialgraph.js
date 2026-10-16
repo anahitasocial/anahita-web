@@ -78,4 +78,17 @@ export default {
     none: 'Vous n\'avez bloqué personne.',
     failed: 'Cette action n\'a pas pu être effectuée.',
   },
+  groupBlocked: {
+    title: 'Personnes bloquées de {{name}}',
+    search: 'Trouver une personne bloquée',
+    noMatch: 'Aucune personne bloquée ne porte ce nom.',
+    none: 'Personne n\'est bloqué.',
+  },
+  blockFromOwner: {
+    action: 'Bloquer de {{name}}',
+    title: 'Bloquer de {{name}} ?',
+    confirm: '{{person}} ne pourra plus voir {{name}} ni y participer, et ce que cette personne y a publié, répondu et aimé est masqué pour tout le monde. Rien n\'est supprimé : la débloquer dans les paramètres de {{name}} le fait revenir.',
+    done: 'Bloqué de {{name}}.',
+    failed: 'Cette action n\'a pas pu être effectuée.',
+  },
 };

@@ -983,6 +983,15 @@ many there are, which opens a dialog: everybody blocked, with their picture,
 read a page at a time as the list is scrolled, a box to search it by name,
 and Unblock on each.
 
+A group or an event has the same row under its own Privacy tab, below Access,
+listing who it has blocked; Unblock there lifts the group's block, not the
+viewer's. A group blocks somebody from the menu on what they wrote in it:
+"Block from <group>", on a post (`controls/BlockFromOwner.jsx`) and on a
+reply (`replies/Thread.jsx`, which reads the thread again afterwards). It is
+offered where the server says `authorized.blockFromOwner`: to the group's
+administrators, on what somebody else wrote. A person's own block does not
+reach the groups they run.
+
 ### Events
 
 An event is an actor like a group, so most of it is the containers a group
