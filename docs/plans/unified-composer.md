@@ -288,6 +288,30 @@ video post with a title is made in the short box. Photo opens the
 library's Upload tab; GIF and Video pick a file that is put up into the
 library and goes in once it is prepared.
 
+### The last touches of 2026-10-16
+
+- **Feeds and lists** show an article or a topic by its summary: its cover,
+  or the first photo it shows; its title; its opening as plain words,
+  without the addresses on lines of their own or code; what is in it
+  ("2 photos · 5 citations"); and Read more (`components/LongSummary.jsx`,
+  `utils/summary.js`). For the user to judge against real content; written
+  excerpts can come back before deploying, should they serve better.
+- **No players of other sites:** a YouTube, Vimeo or SoundCloud link is its
+  card, which leads to the source; react-player is gone. Videos put up here
+  play in place.
+- **Show as a link** on an embed in the editor: a link that stays one.
+- **Code blocks** keep what is pasted into them, without colours.
+- **Links** within Anahita go there in the same tab; to another site, a new
+  tab, marked with an icon (`components/SmartLink.jsx`).
+- **Photos** kept by their longest side, 2048 at most and 1080 for a feed,
+  JPEG at quality 85, an opaque PNG as a JPEG (services `docs/photos.md`).
+- **Line breaks** stored as `\n` whatever sent them.
+- **Drafts:** Save draft and Drafts in the long content form; a draft is its
+  author's alone, listed nowhere, announced to nobody, citing nothing;
+  published, it is a post from then (services `nodes.draft`,
+  `POST /articles|topics/:id/publish`). No revisions, at the user's word.
+- **Bluesky** takes back a post made private, as the fediverse does.
+
 ### Found on the way, not part of this row
 
 - A photo post just made shows in the home feed without its picture until
