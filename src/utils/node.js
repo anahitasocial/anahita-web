@@ -342,12 +342,6 @@ const getNamespace = (node) => {
 
 const getSupportedMimetypes = (namespace) => {
   switch (namespace) {
-    case 'documents':
-      return [
-        'application/pdf',
-        'application/msword',
-        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      ];
     case 'photos':
       return [
         'image/jpeg',
