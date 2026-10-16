@@ -115,9 +115,15 @@ const NodeBody = ({
   const { classes, cx } = useStyles();
   let body = `${children}`;
 
+  // Empty paragraphs at the end of long writing, which its editor wrote
+  // as &nbsp; before it learnt not to, left a gap under the text.
+  if (embeds) {
+    body = body.replace(/(\s*&nbsp;\s*)+$/, '');
+  }
+
   if (contentFilter) {
     body = utils.contentfilter({
-      text: children,
+      text: body,
       filters,
     });
   }

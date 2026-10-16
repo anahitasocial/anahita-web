@@ -115,9 +115,19 @@ const bareLinks = (markdown = '') => {
   });
 };
 
+// What the editor writes, as it is kept: a link that reads as its own
+// address bare, and no empty paragraphs at the end, which it writes as
+// &nbsp; and which left a gap under the text.
+const tidy = (markdown = '') => {
+  return bareLinks(markdown)
+    .replace(/(\s*&nbsp;\s*)+$/, '')
+    .replace(/\s+$/, '');
+};
+
 export default {
   alone,
   bareLinks,
+  tidy,
   isOurs,
   pagesIn,
   postAt,

@@ -25,6 +25,7 @@ import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
+import { Citations } from '../../../components/PostEmbed';
 import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
@@ -188,6 +189,8 @@ const MediumReadDefault = ({
             >
               {medium.body}
             </EntityBody>}
+            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.body &&
+              <Citations text={medium.body} cards={medium.linkPreviews || []} />}
             {linkPreviews.isShown(medium.linkPreview, medium.body) &&
               <LinkPreviewCard preview={medium.linkPreview} />}
             {quote}

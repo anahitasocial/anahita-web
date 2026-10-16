@@ -1,4 +1,9 @@
 export default {
+  // What an article shows within itself, and lists at its end.
+  embed: {
+    in: 'in',
+    citations: 'Citations',
+  },
   stepper: {
     position: '{{index}} of {{total}}',
     next: 'Next post',

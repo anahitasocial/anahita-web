@@ -35,6 +35,11 @@ describe('embeds', () => {
     expect(embeds.pagesIn(text, ORIGIN)).toEqual(['https://elsewhere.com/a']);
   });
 
+  it('leaves no empty paragraphs at the end', () => {
+    expect(embeds.tidy('Words.\n\n&nbsp;\n\n&nbsp;\n')).toBe('Words.');
+    expect(embeds.tidy('A\n\n&nbsp;\n\nB')).toBe('A\n\n&nbsp;\n\nB');
+  });
+
   it('knows a page by its tidied address', () => {
     expect(embeds.samePage('https://Elsewhere.com/a#part', 'https://elsewhere.com/a')).toBe(true);
     expect(embeds.samePage('https://elsewhere.com/a', 'https://elsewhere.com/b')).toBe(false);

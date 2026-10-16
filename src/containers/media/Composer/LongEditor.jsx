@@ -121,7 +121,7 @@ const LongEditor = ({
     onUpdate: ({ editor: current }) => {
       // A link that reads as its own address is kept as the bare address:
       // on a line of its own, an embed (utils/embeds).
-      const markdown = embeds.bareLinks(current.getMarkdown());
+      const markdown = embeds.tidy(current.getMarkdown());
       said.current = markdown;
       onChange(markdown);
     },

@@ -1,4 +1,8 @@
 export default {
+  embed: {
+    in: 'dans',
+    citations: 'Citations',
+  },
   stepper: {
     position: '{{index}} sur {{total}}',
     next: 'Publication suivante',
