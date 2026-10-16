@@ -82,7 +82,9 @@ const MediaReadView = ({
         linkPreview={linkPreview ? linkPreview.preview : null}
         onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
         onBodyPaste={linkPreview ? linkPreview.onPaste : null}
-        bodyOptional={namespace === 'videos'}
+        // A photo or video post needs neither a title nor words.
+        bodyOptional={namespace === 'videos' || namespace === 'photos'}
+        nameOptional={namespace === 'videos' || namespace === 'photos'}
       />
     ),
     menu: isAuthenticated && (

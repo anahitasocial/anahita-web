@@ -33,6 +33,7 @@ const MediumFormEdit = (props) => {
     onLinkPreviewRemove = null,
     onBodyPaste = null,
     bodyOptional = false,
+    nameOptional = false,
   } = props;
 
   const viewer = useSelector((state) => { return state.session.viewer; });
@@ -56,7 +57,7 @@ const MediumFormEdit = (props) => {
             fullWidth
             margin="normal"
             disabled={isFetching}
-            required
+            required={!nameOptional}
             slotProps={{
               htmlInput: {
                 dir: 'auto',
@@ -121,6 +122,9 @@ const MediumFormEdit = (props) => {
 };
 
 MediumFormEdit.propTypes = {
+  // A photo or video post may have no title: the pictures or the video
+  // are the post.
+  nameOptional: PropTypes.bool,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   handleCancel: PropTypes.func.isRequired,
