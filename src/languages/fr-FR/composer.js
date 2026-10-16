@@ -29,6 +29,7 @@ export default {
     apply: 'Appliquer',
     resize: 'Faire glisser pour changer la hauteur',
     removeEmbed: 'Retirer',
+    showAsLink: 'Afficher comme lien',
     media: 'Photos et vidéos',
   },
   library: {

@@ -45,6 +45,7 @@ export default {
     apply: 'Apply',
     resize: 'Drag to change the height',
     removeEmbed: 'Remove',
+    showAsLink: 'Show as a link',
     media: 'Photos and videos',
   },
   // The library of one's own photos and videos, in the editor.

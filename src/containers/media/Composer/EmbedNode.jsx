@@ -9,7 +9,10 @@ import { Node, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
 
 import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
+import Tooltip from '@mui/material/Tooltip';
 import RemoveIcon from '@mui/icons-material/Close';
+import LinkIcon from '@mui/icons-material/Link';
 
 import PostEmbed from '../../../components/PostEmbed';
 import linkPreviewsApi from '../../../api/linkPreviews';
@@ -84,7 +87,22 @@ const toEmbeds = (state, type) => {
   return tr;
 };
 
-const View = ({ node, deleteNode, selected }) => {
+// How an address reads as a link that stays one: without its scheme and a
+// last slash. An address that reads as itself, alone on its line, is an
+// embed; one that reads otherwise is a link, here, on the page and on the
+// server alike (utils/embeds, anahita-libs/embeds).
+const asLinkWords = (url) => {
+  const words = url.replace(/^https?:\/\//i, '').replace(/\/$/, '');
+  return words && words !== url ? words : url;
+};
+
+const View = ({
+  node,
+  deleteNode,
+  selected,
+  editor,
+  getPos,
+}) => {
   const { url } = node.attrs;
   const [cards, setCards] = useState([]);
 
@@ -125,22 +143,51 @@ const View = ({ node, deleteNode, selected }) => {
         <Box sx={{ pointerEvents: 'none' }}>
           <PostEmbed url={url} cards={cards} />
         </Box>
-        <IconButton
-          size="small"
-          aria-label={i18n.t('composer:editor.removeEmbed')}
-          onClick={deleteNode}
+        {/* Show it as a link instead, a line of addresses being written
+            for what they say and not for what they show (the user,
+            2026-10-16); or take it out. */}
+        <Stack
+          direction="row"
+          spacing={1}
           sx={{
-            position: 'absolute',
-            top: 8,
-            right: 8,
-            zIndex: 1,
-            bgcolor: 'background.paper',
-            boxShadow: 1,
-            '&:hover': { bgcolor: 'background.paper' },
+            position: 'absolute', top: 8, right: 8, zIndex: 1,
           }}
         >
-          <RemoveIcon fontSize="small" />
-        </IconButton>
+          {[
+            ['showAsLink', <LinkIcon fontSize="small" />, () => {
+              const from = getPos();
+              editor.chain().focus().insertContentAt(
+                { from, to: from + node.nodeSize },
+                {
+                  type: 'paragraph',
+                  content: [{
+                    type: 'text',
+                    text: asLinkWords(url),
+                    marks: [{ type: 'link', attrs: { href: url } }],
+                  }],
+                },
+              ).run();
+            }],
+            ['removeEmbed', <RemoveIcon fontSize="small" />, deleteNode],
+          ].map(([key, icon, act]) => {
+            return (
+              <Tooltip title={i18n.t(`composer:editor.${key}`)} key={key}>
+                <IconButton
+                  size="small"
+                  aria-label={i18n.t(`composer:editor.${key}`)}
+                  onClick={act}
+                  sx={{
+                    bgcolor: 'background.paper',
+                    boxShadow: 1,
+                    '&:hover': { bgcolor: 'background.paper' },
+                  }}
+                >
+                  {icon}
+                </IconButton>
+              </Tooltip>
+            );
+          })}
+        </Stack>
       </Box>
     </NodeViewWrapper>
   );
@@ -149,6 +196,8 @@ const View = ({ node, deleteNode, selected }) => {
 View.propTypes = {
   node: PropTypes.object.isRequired,
   deleteNode: PropTypes.func.isRequired,
+  editor: PropTypes.object.isRequired,
+  getPos: PropTypes.func.isRequired,
   selected: PropTypes.bool.isRequired,
 };
 
