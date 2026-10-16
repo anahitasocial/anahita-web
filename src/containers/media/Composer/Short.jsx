@@ -506,9 +506,18 @@ const ShortComposer = ({
           justifyContent: 'flex-start',
           minHeight: 48,
           px: 2,
-          borderRadius: 3,
+          // As an outlined text field: the theme's radius, and its border,
+          // darker on hover.
+          borderRadius: 1,
           border: 1,
-          borderColor: 'divider',
+          borderColor: (theme) => {
+            return theme.palette.mode === 'dark' ?
+              'rgba(255, 255, 255, 0.23)' :
+              'rgba(0, 0, 0, 0.23)';
+          },
+          '&:hover': {
+            borderColor: 'text.primary',
+          },
           color: 'text.secondary',
           textAlign: 'start',
         }}
