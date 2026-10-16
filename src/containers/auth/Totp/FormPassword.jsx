@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
+import PasswordField from '../../../components/PasswordField';
 import { Totp as TOTP } from '../../../constants';
 import i18n from '../../../languages';
 
@@ -19,9 +19,8 @@ const TOTPFormPassword = ({
       <Typography variant="h5" color="primary">
         {i18n.t('auth:totp.password.title')}
       </Typography>
-      <TextField
+      <PasswordField
         variant="standard"
-        type="password"
         name="password"
         value={password.value}
         onChange={handleOnChange}
@@ -31,7 +30,7 @@ const TOTPFormPassword = ({
         required
         disabled={success || isFetching}
         error={password.error !== ''}
-        helperText={password.error}
+        helperText={password.error || ' '}
         autoComplete="off"
         slotProps={{
           htmlInput: {

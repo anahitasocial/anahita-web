@@ -55,7 +55,7 @@ const PersonAddForm = (props) => {
             onChange={handleOnChange}
             label={i18n.t('people:person.displayName')}
             error={name.error !== ''}
-            helperText={name.error}
+            helperText={name.error || ' '}
             autoFocus
             fullWidth
             margin="normal"
@@ -75,7 +75,7 @@ const PersonAddForm = (props) => {
             onBlur={handleOnBlur}
             label={i18n.t('people:person.username')}
             error={username.error !== ''}
-            helperText={username.error}
+            helperText={username.error || ' '}
             fullWidth
             margin="normal"
             required
@@ -95,7 +95,7 @@ const PersonAddForm = (props) => {
             onBlur={handleOnBlur}
             label={i18n.t('people:person.email')}
             error={email.error !== ''}
-            helperText={email.error}
+            helperText={email.error || ' '}
             fullWidth
             margin="normal"
             required
@@ -113,7 +113,7 @@ const PersonAddForm = (props) => {
             onChange={handleOnChange}
             label={i18n.t('people:person.body')}
             error={body.error !== ''}
-            helperText={body.error}
+            helperText={body.error || ' '}
             margin="normal"
             fullWidth
             multiline

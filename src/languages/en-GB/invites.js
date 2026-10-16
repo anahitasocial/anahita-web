@@ -2,6 +2,11 @@ export default {
   cTitle: 'Invites',
   mTitle: 'Invites',
   empty: 'No invites sent.',
+  // How many more may wait at once; the count goes down as they send.
+  remaining_one: 'You can send {{count}} more invite.',
+  remaining_other: 'You can send {{count}} more invites.',
+  atLimit_one: 'You have {{count}} invite waiting, the most you can. One frees up when an invite is accepted, expires, or you revoke it.',
+  atLimit_other: 'You have {{count}} invites waiting, the most you can. One frees up when an invite is accepted, expires, or you revoke it.',
   restricted: {
     cTitle: 'Invites are restricted',
     cDescription: 'Administrators only.',

@@ -18,6 +18,7 @@ import cover from './cover';
 import abuseReports from './abuseReports';
 import accounts from './accounts';
 import email from './email';
+import username from './username';
 import eventDetails from './events';
 import feed from './feed';
 import customFeeds from './customFeeds';
@@ -168,6 +169,7 @@ const apis = {
   abuseReports,
   accounts,
   email,
+  username,
 };
 
 namespaces.actors.forEach((ns) => {

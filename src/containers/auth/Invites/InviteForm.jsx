@@ -46,8 +46,12 @@ const InviteForm = ({
 
   const handleChange = (event) => {
     const { target } = event;
+    // Checked now, while the field holds what was just typed: an updater
+    // runs later, and read then, the message can be a keystroke behind
+    // the value. Only the result is merged in.
+    const checked = form.validateField(target, { [target.name]: fields[target.name] }, ['email']);
     setFields((previous) => {
-      return form.validateField(target, previous, ['email']);
+      return { ...previous, ...checked };
     });
   };
 
@@ -80,9 +84,11 @@ const InviteForm = ({
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
       <form onSubmit={handleSubmit} noValidate>
-        <DialogTitle>{i18n.t('invites:form.cTitle')}</DialogTitle>
+        {/* 8px between the title and what it says, and 8px from that to
+            the field: MUI's own is 16px under a title. */}
+        <DialogTitle sx={{ pb: 1 }}>{i18n.t('invites:form.cTitle')}</DialogTitle>
         <DialogContent>
-          <DialogContentText variant="body2">
+          <DialogContentText variant="body2" sx={{ mb: 1 }}>
             {i18n.t('invites:form.cDescription')}
           </DialogContentText>
           <TextField
@@ -93,7 +99,7 @@ const InviteForm = ({
             value={email.value}
             onChange={handleChange}
             error={Boolean(email.error)}
-            helperText={email.error}
+            helperText={email.error || ' '}
             fullWidth
             required
             autoFocus

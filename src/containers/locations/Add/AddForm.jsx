@@ -50,7 +50,7 @@ const LocationAddForm = ({
           name="name"
           value={location.name}
           error={fields.name.error !== ''}
-          helperText={fields.name.error}
+          helperText={fields.name.error || ' '}
           disabled={isFetching}
           fullWidth
           autoFocus
@@ -70,7 +70,7 @@ const LocationAddForm = ({
           name="address"
           value={location.address}
           error={fields.address.error !== ''}
-          helperText={fields.address.error}
+          helperText={fields.address.error || ' '}
           disabled={isFetching}
           fullWidth
           required={requiredFields.includes('address')}
@@ -90,7 +90,7 @@ const LocationAddForm = ({
             name="city"
             value={location.city}
             error={fields.city.error !== ''}
-            helperText={fields.city.error}
+            helperText={fields.city.error || ' '}
             disabled={isFetching}
             fullWidth
             required={requiredFields.includes('city')}

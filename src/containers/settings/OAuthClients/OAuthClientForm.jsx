@@ -192,8 +192,12 @@ const OAuthClientForm = ({
 
   const handleChange = (event) => {
     const { target } = event;
+    // Checked now, while the field holds what was just typed: an updater
+    // runs later, and read then, the message can be a keystroke behind
+    // the value. Only the result is merged in.
+    const checked = form.validateField(target, { [target.name]: fields[target.name] }, ['clientId', 'name']);
     setFields((previous) => {
-      return form.validateField(target, previous, ['clientId', 'name']);
+      return { ...previous, ...checked };
     });
   };
 

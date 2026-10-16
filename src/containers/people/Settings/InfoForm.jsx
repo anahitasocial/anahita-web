@@ -62,7 +62,7 @@ const PersonInfo = ({
           value={person.websiteUrl || ''}
           onChange={handleOnChange}
           error={fields.websiteUrl.error !== ''}
-          helperText={fields.websiteUrl.error}
+          helperText={fields.websiteUrl.error || ' '}
           label={i18n.t('actor:website')}
           placeholder="example.com"
           margin="normal"

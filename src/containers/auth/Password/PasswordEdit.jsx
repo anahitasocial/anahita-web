@@ -8,18 +8,14 @@ import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import CircularProgress from '@mui/material/CircularProgress';
-import InputAdornment from '@mui/material/InputAdornment';
-import IconButton from '@mui/material/IconButton';
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import PasswordIcon from '@mui/icons-material/Lock';
 
 import i18n from '../../../languages';
 import { Password as PASSWORD } from '../../../constants';
+import PasswordField from '../../../components/PasswordField';
 
 const { PASSWORD_MIN_LENGTH, PASSWORD_MAX_LENGTH } = PASSWORD;
 
@@ -78,14 +74,15 @@ const PasswordEdit = ({
               {i18n.t('password:description', { count: PASSWORD_MIN_LENGTH })}
             </Typography>
 
-            <TextField
-              type={showNewPassword ? 'text' : 'password'}
+            <PasswordField
+              shown={showNewPassword}
+              onToggle={onToggleVisibility}
               name="newPassword"
               label={i18n.t('password:fields.new')}
               value={fields.newPassword.value}
               onChange={onChange}
               error={Boolean(errors.newPassword)}
-              helperText={errors.newPassword || ''}
+              helperText={errors.newPassword || ' '}
               fullWidth
               margin="normal"
               variant="outlined"
@@ -93,28 +90,6 @@ const PasswordEdit = ({
               disabled={submitting}
               required
               slotProps={{
-                input: {
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label={
-                            showNewPassword
-                              ? i18n.t('password:toggle.hide')
-                              : i18n.t('password:toggle.show')
-                          }
-                        aria-pressed={showNewPassword}
-                        onClick={onToggleVisibility}
-                        edge="end"
-                        disabled={submitting}
-                        tabIndex={-1}
-                        size="large"
-                      >
-                        {showNewPassword ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                },
-
                 htmlInput: {
                   minLength: PASSWORD_MIN_LENGTH,
                   maxLength: PASSWORD_MAX_LENGTH,

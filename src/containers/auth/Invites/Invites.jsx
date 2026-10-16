@@ -80,6 +80,8 @@ const Invites = ({
   items,
   isFetching = false,
   canAdd = false,
+  remaining = null,
+  maxPending = null,
   canDelete = false,
   onAdd,
   onDelete,
@@ -184,6 +186,18 @@ const Invites = ({
           })}
         </List>}
 
+      {/* How many more may be sent, said before the form is opened,
+          and why not at the limit. Not while the list is loading: the
+          count would be the one from before it. */}
+      {canAdd && remaining !== null && !isFetching &&
+        <CardContent>
+          <Typography variant="body2" color="textSecondary">
+            {remaining > 0
+              ? i18n.t('invites:remaining', { count: remaining })
+              : i18n.t('invites:atLimit', { count: maxPending })}
+          </Typography>
+        </CardContent>}
+
       {canAdd &&
         <CardActions>
           <Button
@@ -191,6 +205,7 @@ const Invites = ({
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={onAdd}
+            disabled={remaining === 0}
             fullWidth
           >
             {i18n.t('invites:actions.add')}
@@ -255,6 +270,8 @@ Invites.propTypes = {
   items: InvitesType.isRequired,
   isFetching: PropTypes.bool,
   canAdd: PropTypes.bool,
+  remaining: PropTypes.number,
+  maxPending: PropTypes.number,
   canDelete: PropTypes.bool,
   onAdd: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,

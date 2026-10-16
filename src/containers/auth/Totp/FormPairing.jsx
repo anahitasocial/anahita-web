@@ -72,7 +72,7 @@ const TOTPFormPairing = ({
         required
         disabled={success || isFetching}
         error={passcode.error !== ''}
-        helperText={passcode.error}
+        helperText={passcode.error || ' '}
         slotProps={{
           htmlInput: {
             maxLength: TOTP.FIELDS.PASSCODE.MAX_LENGTH,

@@ -33,7 +33,7 @@ const ActorFormsInfo = ({
           onChange={handleOnChange}
           label={i18n.t('actor:name')}
           error={fields.name.error !== ''}
-          helperText={fields.name.error}
+          helperText={fields.name.error || ' '}
           margin="normal"
           fullWidth
           required
@@ -51,7 +51,7 @@ const ActorFormsInfo = ({
           value={actor.body || ''}
           onChange={handleOnChange}
           error={fields.body.error !== ''}
-          helperText={fields.body.error}
+          helperText={fields.body.error || ' '}
           label={i18n.t('actor:body')}
           margin="normal"
           fullWidth
@@ -71,7 +71,7 @@ const ActorFormsInfo = ({
           value={actor.websiteUrl || ''}
           onChange={handleOnChange}
           error={fields.websiteUrl.error !== ''}
-          helperText={fields.websiteUrl.error}
+          helperText={fields.websiteUrl.error || ' '}
           label={i18n.t('actor:website')}
           placeholder="example.com"
           margin="normal"

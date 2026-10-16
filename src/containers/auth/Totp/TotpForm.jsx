@@ -55,7 +55,7 @@ const TotpForm = (props) => {
             fullWidth
             margin="normal"
             error={passcode.error !== ''}
-            helperText={passcode.error}
+            helperText={passcode.error || ' '}
             required
             slotProps={{
               htmlInput: {
