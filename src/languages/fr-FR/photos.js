@@ -2,9 +2,7 @@ export default {
   cTitle: 'Photos',
   mTitle: 'Photos',
   composer: {
-    name: 'Titre',
     namePlaceholder: 'Titre de la photo ...',
-    body: 'Description',
     bodyPlaceholder: 'Rédigez une description ...',
   },
   editor: {

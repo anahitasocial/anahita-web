@@ -20,7 +20,6 @@ import i18n from '../../languages';
 const {
   NAME,
   BODY,
-  EXCERPT,
 } = MEDIUM.FIELDS;
 
 const MediumFormEdit = (props) => {
@@ -52,6 +51,7 @@ const MediumFormEdit = (props) => {
       },
     });
   };
+  // A photo or a video is described; anything else has content.
   const bodyMissing = richText && !bodyOptional && !(medium.body || '').trim();
   const bodyTooLong = (medium.body || '').trim().length > BODY.MAX_LENGTH;
 
@@ -69,7 +69,7 @@ const MediumFormEdit = (props) => {
             name="name"
             value={medium.name || ''}
             onChange={handleOnChange}
-            label={i18n.t('media:medium.title')}
+            label={i18n.t('composer:fields.title')}
             error={fields.name.error !== ''}
             helperText={fields.name.error || ' '}
             autoFocus
@@ -89,7 +89,7 @@ const MediumFormEdit = (props) => {
           <LongEditor
             value={medium.body || ''}
             onChange={changeBody}
-            label={i18n.t('media:medium.description')}
+            label={i18n.t(bodyOptional ? 'composer:fields.description' : 'composer:fields.content')}
             required={!bodyOptional}
             error={bodyTooLong}
             helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: BODY.MAX_LENGTH }) : ' '}
@@ -106,7 +106,7 @@ const MediumFormEdit = (props) => {
             value={medium.body || ''}
             onChange={handleOnChange}
             onPaste={onBodyPaste}
-            label={i18n.t('media:medium.description')}
+            label={i18n.t(bodyOptional ? 'composer:fields.description' : 'composer:fields.content')}
             error={fields.body.error !== ''}
             helperText={fields.body.error || ' '}
             multiline
@@ -118,27 +118,6 @@ const MediumFormEdit = (props) => {
               htmlInput: {
                 dir: 'auto',
                 maxLength: BODY.MAX_LENGTH,
-              },
-            }}
-          />}
-        {/* An article's, said where it is listed. */}
-        {fields.excerpt &&
-          <TextField
-            variant="standard"
-            name="excerpt"
-            value={medium.excerpt || ''}
-            onChange={handleOnChange}
-            label={i18n.t('articles:composer.excerpt')}
-            error={fields.excerpt.error !== ''}
-            helperText={fields.excerpt.error || ' '}
-            multiline
-            fullWidth
-            margin="normal"
-            disabled={isFetching}
-            slotProps={{
-              htmlInput: {
-                dir: 'auto',
-                maxLength: EXCERPT.MAX_LENGTH,
               },
             }}
           />}

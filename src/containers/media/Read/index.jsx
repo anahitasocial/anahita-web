@@ -41,9 +41,6 @@ const MediaRead = ({
     if (namespace === 'notes') {
       names = ['body'];
     }
-    if (namespace === 'articles') {
-      names = ['name', 'body', 'excerpt'];
-    }
     return utils.form.createFormFields(names);
   }, [namespace]);
 

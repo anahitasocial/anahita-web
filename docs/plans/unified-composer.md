@@ -268,8 +268,15 @@ words, as a reply with pictures does.
   grow. Tried on dev: a bold phrase, a heading, a list and a page on its
   own line, posted and read back as written.
 - **Not done:** a cover can't be cleared from the edit form, only from the
-  page; an excerpt can't be emptied once set (the graph skips an empty
-  one); articles are still not sent to other servers.
+  page; articles are still not sent to other servers.
+- **The excerpt is gone** (the user, 2026-10-16): from the forms, the API,
+  the graph and the `nodes` table, with what was in it, the old site's 702
+  included, at the user's word. Where a short form of a post is wanted it
+  is made from the opening of its text, as WordPress makes one.
+- **What the fields are called**, as WordPress calls them: Title for every
+  post; Content for the text of an article, a topic or a note; Description
+  for a photo's or a video's. One set of words, `composer:fields`, used by
+  the composer and the edit form alike.
 
 ### Found on the way, not part of this row
 

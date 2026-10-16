@@ -1,8 +1,4 @@
 export default {
-  medium: {
-    description: 'Description',
-    title: 'Title',
-  },
   stepper: {
     position: '{{index}} of {{total}}',
     next: 'Next post',

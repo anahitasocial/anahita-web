@@ -1,8 +1,4 @@
 export default {
-  medium: {
-    description: 'Description',
-    title: 'Titre',
-  },
   stepper: {
     position: '{{index}} sur {{total}}',
     next: 'Publication suivante',

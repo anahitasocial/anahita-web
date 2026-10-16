@@ -2,9 +2,7 @@ export default {
   cTitle: 'Sujets',
   mTitle: 'Sujets',
   composer: {
-    title: 'Titre',
     titlePlaceholder: "De quel sujet parlons-nous aujourd'hui ?",
-    body: 'Description',
     bodyPlaceholder: 'Lancez votre conversation ...',
   },
   settings: {

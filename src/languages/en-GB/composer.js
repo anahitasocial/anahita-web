@@ -65,6 +65,14 @@ export default {
       videos: 'Video',
     },
   },
+  // What a post's fields are called, the same in every form: a title; the
+  // content of writing; the description of a photo or a video, as
+  // WordPress says.
+  fields: {
+    title: 'Title',
+    content: 'Content',
+    description: 'Description',
+  },
   kinds: {
     article: 'Article',
     topic: 'Topic',

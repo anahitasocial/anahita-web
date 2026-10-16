@@ -48,6 +48,11 @@ export default {
       videos: 'Vidéo',
     },
   },
+  fields: {
+    title: 'Titre',
+    content: 'Contenu',
+    description: 'Description',
+  },
   kinds: {
     article: 'Article',
     topic: 'Sujet',

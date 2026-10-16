@@ -7,8 +7,5 @@ export default {
     BODY: {
       MAX_LENGTH: 8000,
     },
-    EXCERPT: {
-      MAX_LENGTH: 500,
-    },
   },
 };

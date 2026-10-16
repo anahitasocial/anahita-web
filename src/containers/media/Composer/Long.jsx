@@ -38,31 +38,33 @@ import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
 
-const { NAME, BODY, EXCERPT } = MEDIUM.FIELDS;
+const { NAME, BODY } = MEDIUM.FIELDS;
 
-// The words of the title and the text, as each kind of post has them.
+// The words of the title and the text, as each kind of post has them: the
+// text of writing is its content, and of a photo or a video what describes
+// it, as WordPress says (the user, 2026-10-16).
 const WORDS = {
   article: {
     namespace: 'articles',
-    title: 'articles:composer.title',
+    body: 'composer:fields.content',
     titlePlaceholder: 'articles:composer.titlePlaceholder',
     bodyPlaceholder: 'articles:composer.bodyPlaceholder',
   },
   topic: {
     namespace: 'topics',
-    title: 'topics:composer.title',
+    body: 'composer:fields.content',
     titlePlaceholder: 'topics:composer.titlePlaceholder',
     bodyPlaceholder: 'topics:composer.bodyPlaceholder',
   },
   photo: {
     namespace: 'photos',
-    title: 'photos:composer.name',
+    body: 'composer:fields.description',
     titlePlaceholder: 'photos:composer.namePlaceholder',
     bodyPlaceholder: 'photos:composer.bodyPlaceholder',
   },
   video: {
     namespace: 'videos',
-    title: 'videos:composer.name',
+    body: 'composer:fields.description',
     titlePlaceholder: 'videos:composer.namePlaceholder',
     bodyPlaceholder: 'videos:composer.bodyPlaceholder',
   },
@@ -104,7 +106,6 @@ const LongComposer = ({
 
   const [title, setTitle, clearTitle] = useDraft(actor.id, 'long-title');
   const [body, setBody, clearBody] = useDraft(actor.id, 'long-body');
-  const [excerpt, setExcerpt] = useState('');
   const [cover, setCover] = useState(null);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
@@ -230,7 +231,6 @@ const LongComposer = ({
   const reset = () => {
     clearTitle();
     clearBody();
-    setExcerpt('');
     setCover(null);
     setPhotoItems([]);
     setIsAddingPhotos(false);
@@ -271,9 +271,6 @@ const LongComposer = ({
         uploads: photoFiles.toRequest(photoItems),
         allow_download: choices.allowDownload,
       };
-    }
-    if (kind === 'article' && excerpt.trim()) {
-      post = { ...post, excerpt: excerpt.trim() };
     }
 
     // An article's cover goes once the article exists. Should it not be
@@ -416,7 +413,7 @@ const LongComposer = ({
             onChange={(event) => {
               setTitle(event.target.value);
             }}
-            label={i18n.t(words.title)}
+            label={i18n.t('composer:fields.title')}
             placeholder={i18n.t(words.titlePlaceholder)}
             error={tried && titleShort}
             helperText={tried && titleShort ?
@@ -490,7 +487,7 @@ const LongComposer = ({
           <LongEditor
             value={body}
             onChange={setBody}
-            label={i18n.t('articles:composer.body')}
+            label={i18n.t(words.body)}
             placeholder={i18n.t(words.bodyPlaceholder)}
             error={bodyError !== ''}
             helperText={bodyError || ' '}
@@ -503,24 +500,6 @@ const LongComposer = ({
             stickyTop={-24}
             uploadAccess={choices.access}
           />
-          {kind === 'article' &&
-            <TextField
-              value={excerpt}
-              onChange={(event) => {
-                setExcerpt(event.target.value);
-              }}
-              label={i18n.t('articles:composer.excerpt')}
-              placeholder={i18n.t('articles:composer.excerptPlaceholder')}
-              helperText=" "
-              disabled={busy}
-              multiline
-              minRows={2}
-              fullWidth
-              slotProps={{
-                htmlInput: { dir: choices.direction, maxLength: EXCERPT.MAX_LENGTH },
-                inputLabel: { shrink: true },
-              }}
-            />}
         </Box>
         <Divider />
         {/* Attachments and choices in one row at the bottom; it scrolls
