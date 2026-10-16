@@ -36,6 +36,7 @@ const MediumFormEdit = (props) => {
     bodyOptional = false,
     nameOptional = false,
     richText = false,
+    withMedia = false,
   } = props;
 
   // Long writing is changed in the editor it was written in. It is not a
@@ -98,6 +99,7 @@ const MediumFormEdit = (props) => {
             // Under the page's bar, which is 56 pixels tall on a phone.
             stickyTop={{ xs: 56, sm: 64 }}
             uploadAccess={medium.access || 'public'}
+            withMedia={withMedia}
           />}
         {fields.body && !richText &&
           <TextField
@@ -173,6 +175,8 @@ MediumFormEdit.propTypes = {
   bodyOptional: PropTypes.bool,
   // An article or a topic: its text in the editor it was written in.
   richText: PropTypes.bool,
+  // Its media library too: an article, not a topic.
+  withMedia: PropTypes.bool,
 };
 
 export default MediumFormEdit;

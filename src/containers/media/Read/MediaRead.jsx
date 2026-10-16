@@ -87,6 +87,7 @@ const MediaReadView = ({
         nameOptional={namespace === 'videos' || namespace === 'photos'}
         // Long writing in the editor it was written in.
         richText={namespace === 'articles' || namespace === 'topics'}
+        withMedia={namespace === 'articles'}
       />
     ),
     menu: isAuthenticated && (

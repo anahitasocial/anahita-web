@@ -55,10 +55,12 @@ const WORDS = {
 // tall as the screen allows and full screen on a phone.
 //
 // It is an article or a topic, chosen by the tabs where the profile takes
-// both, and either needs its title. Pictures, a GIF or a video go into the
-// content as blocks where the caret is, from the editor's library or the
-// buttons at the bottom alike (the user, 2026-10-16); a photo or video post
-// of its own, with a title, is the short box's.
+// both, and either needs its title. In an article, pictures, a GIF or a
+// video go into the content as blocks where the caret is, from the
+// editor's library or the buttons at the bottom alike, and it may have a
+// cover; a topic is talked about, with links pasted in, a post here or a
+// page elsewhere, and has neither (the user, 2026-10-16). A photo or video
+// post of its own, with a title, is the short box's.
 //
 // `kinds` is what this profile takes of article and topic. `body` is what
 // was written in the short box before it was expanded. The title and the
@@ -338,6 +340,7 @@ const LongComposer = ({
             stickyTop={-24}
             uploadAccess={choices.access}
             controlsRef={editor}
+            withMedia={kind === 'article'}
           />
         </Box>
         <Divider />
@@ -355,8 +358,8 @@ const LongComposer = ({
               up there. */}
           <AttachButtons
             phone={phone}
-            photos={!busy}
-            video={!busy && canVideo}
+            photos={!busy && kind === 'article'}
+            video={!busy && canVideo && kind === 'article'}
             onPhotos={() => {
               if (editor.current) {
                 editor.current.openLibrary({ tab: 'upload' });

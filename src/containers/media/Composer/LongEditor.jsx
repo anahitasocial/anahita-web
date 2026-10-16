@@ -56,6 +56,7 @@ const LongEditor = ({
   stickyTop = 0,
   uploadAccess = 'public',
   controlsRef = null,
+  withMedia = true,
 }) => {
   // What this editor last said the text was, so that a value coming back
   // the same is not put in again, which would move the caret.
@@ -299,10 +300,11 @@ const LongEditor = ({
             chain().toggleBlockquote().run();
           })}
           {button('link', <LinkIcon />, i18n.t('composer:editor.link'), openLink)}
-          {button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
-            setLibraryStart({});
-            setIsLibraryOpen(true);
-          })}
+          {withMedia &&
+            button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
+              setLibraryStart({});
+              setIsLibraryOpen(true);
+            })}
         </Stack>
         <Divider />
         <Box
@@ -496,6 +498,10 @@ LongEditor.propTypes = {
   uploadAccess: PropTypes.string,
   // Given an object, it is given openLibrary({ tab, file }).
   controlsRef: PropTypes.shape({ current: PropTypes.any }),
+  // The media library and its button: an article's. A topic is talked
+  // about, with links pasted in, and no pictures of its own (the user,
+  // 2026-10-16).
+  withMedia: PropTypes.bool,
 };
 
 export default LongEditor;
