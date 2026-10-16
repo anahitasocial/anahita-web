@@ -28,7 +28,6 @@ import permissions from '../../permissions';
 
 const { withRef } = utils.component;
 const {
-  getOwnerName,
   isSubscribable,
   getURL,
 } = utils.node;
@@ -53,7 +52,6 @@ const FeedItemMenu = ({
     setAnchorEl(null);
   };
 
-  const ownerName = getOwnerName(node);
   const { id } = node;
   const canSubscribe = node.id && isSubscribable(node);
   const canFollow = permissions.actor.canFollow(node.owner, viewer);
@@ -86,12 +84,6 @@ const FeedItemMenu = ({
             actor={node.owner}
             component="menuitem"
             key={`feed-follow-${id}`}
-            followLabel={i18n.t('feed:actions.followOwner', {
-              name: ownerName,
-            })}
-            unfollowLabel={i18n.t('feed:actions.unfollowOwner', {
-              name: ownerName,
-            })}
           />}
         {canSubscribe &&
           <NotificationSubActionWithRef
