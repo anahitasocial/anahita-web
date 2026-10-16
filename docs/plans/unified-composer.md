@@ -81,8 +81,8 @@ for the composer.
 - **Tabs: Article, Topic,** where the profile takes both; only the one it takes
   otherwise, and no tabs at all. The tabs go once pictures or a video are
   attached, which make a photo or a video post instead (decision 5).
-- **Fields:** title, then the text, in a larger editor. An article adds an
-  excerpt and a cover. Pictures and videos within an article's text are part of
+- **Fields:** title, then the content, in a larger editor. An article adds a
+  cover (an excerpt was planned, and dropped). Pictures and videos within an article's text are part of
   this row, as is whether the editor stays Markdown or becomes one that shows
   what it writes; settled in phase 1.
 - **Pictures:** the fuller uploader: order by dragging, alt text for each,
