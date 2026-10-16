@@ -20,7 +20,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import actions from '../../../actions';
 import coverApi from '../../../api/cover';
 import linkPreviewsApi from '../../../api/linkPreviews';
-import AttachButtons from './AttachButtons';
 import CoverPicker from './CoverPicker';
 import LongEditor from './LazyLongEditor';
 import useDraft from './useDraft';
@@ -28,7 +27,6 @@ import usePostChoices from './usePostChoices';
 
 import embeds from '../../../utils/embeds';
 import uploads from '../../../utils/upload';
-import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
@@ -74,11 +72,8 @@ const LongComposer = ({
 }) => {
   const dispatch = useDispatch();
   const viewer = useSelector((state) => { return state.session.viewer; });
-  const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
-  // The editor's library, opened by the buttons at the bottom.
-  const editor = useRef(null);
 
   const [tab, setTab] = useState(kinds[0]);
   useEffect(() => {
@@ -123,7 +118,6 @@ const LongComposer = ({
   // its corner is dragged (LongEditor).
   const bodyRows = 8;
 
-  const canVideo = videos.isOn(nodeInfo);
   const busy = isSending;
   const kind = tab;
   const words = WORDS[kind] || WORDS.article;
@@ -339,13 +333,13 @@ const LongComposer = ({
             // padding.
             stickyTop={-24}
             uploadAccess={choices.access}
-            controlsRef={editor}
             withMedia={kind === 'article'}
           />
         </Box>
         <Divider />
-        {/* Attachments and choices in one row at the bottom; it scrolls
-            sideways on a phone rather than wrapping. */}
+        {/* The post's choices in one row at the bottom; it scrolls
+            sideways on a phone rather than wrapping. Pictures and videos
+            are the editor's own buttons. */}
         <Stack
           direction="row"
           spacing={0.5}
@@ -353,24 +347,6 @@ const LongComposer = ({
             alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
           }}
         >
-          {/* Into the content where the caret is, as blocks: pictures
-              by the library's Upload, a GIF or a video picked here and put
-              up there. */}
-          <AttachButtons
-            phone={phone}
-            photos={!busy && kind === 'article'}
-            video={!busy && canVideo && kind === 'article'}
-            onPhotos={() => {
-              if (editor.current) {
-                editor.current.openLibrary({ tab: 'upload' });
-              }
-            }}
-            onVideo={(file) => {
-              if (editor.current) {
-                editor.current.openLibrary({ tab: 'upload', file });
-              }
-            }}
-          />
           {choices.render({ busy })}
         </Stack>
       </Box>

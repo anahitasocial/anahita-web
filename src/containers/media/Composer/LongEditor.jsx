@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
@@ -24,10 +25,14 @@ import QuoteIcon from '@mui/icons-material/FormatQuote';
 import CodeIcon from '@mui/icons-material/Code';
 import LinkIcon from '@mui/icons-material/Link';
 import MediaIcon from '@mui/icons-material/PermMediaOutlined';
+import PhotoIcon from '@mui/icons-material/Photo';
+import GifIcon from '@mui/icons-material/GifBoxOutlined';
+import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import EmbedNode from './EmbedNode';
 import MediaLibrary from './MediaLibrary';
 import embeds from '../../../utils/embeds';
+import videos from '../../../utils/videos';
 import i18n from '../../../languages';
 
 // The text of long writing, written as it will read: bold, headings, lists,
@@ -43,6 +48,12 @@ import i18n from '../../../languages';
 // The least the text can be dragged down to: a few lines.
 const MIN_HEIGHT = 96;
 
+// What the GIF and Video buttons open the file window on.
+const ANIMATIONS = videos.ANIMATION_TYPES.join(',');
+const MOVIES = videos.TYPES.filter((type) => {
+  return !videos.ANIMATION_TYPES.includes(type);
+}).join(',');
+
 const LongEditor = ({
   value,
   onChange,
@@ -56,7 +67,6 @@ const LongEditor = ({
   minHeight = 280,
   stickyTop = 0,
   uploadAccess = 'public',
-  controlsRef = null,
   withMedia = true,
 }) => {
   // What this editor last said the text was, so that a value coming back
@@ -69,30 +79,16 @@ const LongEditor = ({
     setHeight(minHeight);
   }, [minHeight]);
   const drag = useRef(null);
+  const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
+  const canVideo = videos.isOn(nodeInfo);
+  const gifPicker = useRef(null);
+  const videoPicker = useRef(null);
   const [linkAnchor, setLinkAnchor] = useState(null);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
   // How the library opens: on which tab, and with a GIF or a video picked
   // outside it to put up at once.
   const [libraryStart, setLibraryStart] = useState({});
 
-  // What the form around may ask of the editor: to open its library, from
-  // the buttons at the bottom of the long content form.
-  useEffect(() => {
-    if (!controlsRef) {
-      return undefined;
-    }
-    // eslint-disable-next-line no-param-reassign
-    controlsRef.current = {
-      openLibrary: (start = {}) => {
-        setLibraryStart(start);
-        setIsLibraryOpen(true);
-      },
-    };
-    return () => {
-      // eslint-disable-next-line no-param-reassign
-      controlsRef.current = null;
-    };
-  }, [controlsRef]);
   const [linkAddress, setLinkAddress] = useState('');
 
   const editor = useEditor({
@@ -308,10 +304,50 @@ const LongEditor = ({
             chain().toggleCodeBlock().run();
           })}
           {button('link', <LinkIcon />, i18n.t('composer:editor.link'), openLink)}
+          {/* Photo, GIF and Video put one in where the caret is, as the
+              library's Upload does, the same in writing and in editing
+              (the user, 2026-10-16); the library, what is there already. */}
+          {withMedia &&
+            button('photo', <PhotoIcon />, i18n.t('composer:photo'), () => {
+              setLibraryStart({ tab: 'upload' });
+              setIsLibraryOpen(true);
+            })}
+          {withMedia && canVideo &&
+            button('gif', <GifIcon />, i18n.t('composer:gif'), () => {
+              gifPicker.current.click();
+            })}
+          {withMedia && canVideo &&
+            button('video', <VideoIcon />, i18n.t('composer:video'), () => {
+              videoPicker.current.click();
+            })}
           {withMedia &&
             button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
               setLibraryStart({});
               setIsLibraryOpen(true);
+            })}
+          {withMedia && canVideo &&
+            [
+              [gifPicker, ANIMATIONS],
+              [videoPicker, MOVIES],
+            ].map(([picker, accept]) => {
+              return (
+                <input
+                  key={accept}
+                  ref={picker}
+                  type="file"
+                  accept={accept}
+                  hidden
+                  onChange={(event) => {
+                    const file = event.target.files && event.target.files[0];
+                    // eslint-disable-next-line no-param-reassign
+                    event.target.value = '';
+                    if (file) {
+                      setLibraryStart({ tab: 'upload', file });
+                      setIsLibraryOpen(true);
+                    }
+                  }}
+                />
+              );
             })}
         </Stack>
         <Divider />
@@ -508,8 +544,6 @@ LongEditor.propTypes = {
   // Who may see a picture or a video put up from the library: the
   // writing's own audience.
   uploadAccess: PropTypes.string,
-  // Given an object, it is given openLibrary({ tab, file }).
-  controlsRef: PropTypes.shape({ current: PropTypes.any }),
   // The media library and its button: an article's. A topic is talked
   // about, with links pasted in, and no pictures of its own (the user,
   // 2026-10-16).
