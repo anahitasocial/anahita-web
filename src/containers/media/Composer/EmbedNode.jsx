@@ -111,9 +111,13 @@ const View = ({ node, deleteNode, selected }) => {
         contentEditable={false}
         sx={{
           position: 'relative',
-          borderRadius: 1,
-          outline: selected ? 2 : 0,
-          outlineColor: 'primary.main',
+          // Dotted, light and square: a block set into the text, soon to
+          // be part of it, not a frame (the user, 2026-10-16). Darker and
+          // heavier while it is selected. An outline, not a border, so
+          // nothing in it moves when it is selected.
+          outlineStyle: 'dotted',
+          outlineWidth: selected ? 2 : 1,
+          outlineColor: selected ? 'text.secondary' : 'divider',
           outlineOffset: 4,
         }}
       >

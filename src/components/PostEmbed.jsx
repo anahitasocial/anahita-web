@@ -7,6 +7,8 @@ import Link from '@mui/material/Link';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
+import ActorAvatar from './ActorAvatar';
+import ActorHandle from './ActorHandle';
 import LinkPreviewCard from './LinkPreviewCard';
 import PhotoSlides from './PhotoSlides';
 import VideoPlayer from './VideoPlayer';
@@ -52,14 +54,52 @@ PlainLink.propTypes = {
 
 // Who wrote an embedded post, and where it is: under its pictures or its
 // video, small, a link to the post itself.
+//
+// The name black, with a tiny avatar before it, and the post's title, when
+// it has one, grey after it, and their handle in grey too (the user,
+// 2026-10-16). `&&&` because the text around it colours every link as one,
+// in the editor by a rule of two classes and a tag.
 const Byline = ({ post }) => {
-  const name = getActorName(getAuthor(post));
+  const author = getAuthor(post);
   return (
-    <Typography variant="caption" color="textSecondary" component="div" sx={{ mt: 1 }} dir="auto">
-      <Link component={RouterLink} to={getURL(post)} color="inherit" underline="hover">
-        {[post.name, name].filter(Boolean).join(' · ')}
-      </Link>
-    </Typography>
+    <Box
+      sx={{
+        display: 'flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap', mt: 1,
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          '& .MuiAvatar-root': {
+            width: 20, height: 20, fontSize: 10,
+          },
+        }}
+      >
+        <ActorAvatar actor={author} linked={Boolean(author.id)} size="small" />
+      </Box>
+      <Typography variant="body2" component="span" dir="auto">
+        <Link
+          component={RouterLink}
+          to={getURL(author)}
+          underline="hover"
+          sx={{ '&&&': { color: 'text.primary' } }}
+        >
+          {getActorName(author)}
+        </Link>
+      </Typography>
+      <ActorHandle actor={author} />
+      {post.name &&
+        <Typography variant="body2" component="span" dir="auto" sx={{ minWidth: 0, overflowWrap: 'anywhere' }}>
+          <Link
+            component={RouterLink}
+            to={getURL(post)}
+            underline="hover"
+            sx={{ '&&&': { color: 'text.secondary' } }}
+          >
+            {post.name}
+          </Link>
+        </Typography>}
+    </Box>
   );
 };
 
