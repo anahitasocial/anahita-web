@@ -34,9 +34,11 @@ const MediaComposerDefault = ({
   supportedMimetypes = [],
   namespace,
   maxFiles = photoFiles.DEFAULT_MAX,
+  initialBody = '',
+  onPosted = null,
 }) => {
   const [fields, setFields] = useState(formFields);
-  const [medium, setMedium] = useState({ ...MediumDefault });
+  const [medium, setMedium] = useState({ ...MediumDefault, body: initialBody });
   const [file, setFile] = useState(null);
 
   // The images of a photo post: picked, uploaded one by one as they are
@@ -179,6 +181,9 @@ const MediaComposerDefault = ({
         setPhotoItems([]);
         linkPreview.reset();
         setFields({ ...formFields });
+        if (onPosted) {
+          onPosted();
+        }
       });
     }
   };
@@ -260,6 +265,10 @@ MediaComposerDefault.propTypes = {
   namespace: PropTypes.string.isRequired,
   // How many images a photo post can hold, as the server says.
   maxFiles: PropTypes.number,
+  // What was written in the short box before it was expanded to this.
+  initialBody: PropTypes.string,
+  // Told once the post is made: the extended composer closes.
+  onPosted: PropTypes.func,
 };
 
 const mapStateToProps = (namespace) => {

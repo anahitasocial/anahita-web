@@ -95,19 +95,29 @@ for the composer.
 - Checked at 360px wide, a tablet, and a desktop, in light and dark, before each
   phase is called done.
 
+### The one change to the services
+
+A photo post and a video post need a title today, and a photo post words as
+well (`MediumAddRequest`, photo-service; the video upload refuses a post
+without a name). A reply with pictures or a video needs neither. A short post
+has no title, so for photo and video posts, as for replies: the title is
+optional, and the words are optional when there are pictures or a video. The
+same for changing one. Where a post is shown, one without a title shows its
+words, as a reply with pictures does.
+
 ### What is not part of it
 
-- The server. Notes, photos, videos, articles and topics are posted as they are
-  today; the composer picks the route from what the post holds, as the reply
-  form does. Merging topics and articles (above) would change that, and is not
-  this row.
+- Merging topics and articles (above), which would change stored types.
+  Otherwise notes, photos, videos, articles and topics are posted by the
+  routes they have today; the composer picks the route from what the post
+  holds, as the reply form does.
 - Sharing documents (row 75), todos.
 
 ## Phases and estimate
 
 | Phase | Work | Time |
 | --- | --- | --- |
-| 1 | The short box: one form for notes, photos and videos, on the reply form's parts; the sheet on a phone; drafts | 1½–2 sessions |
+| 1 | The short box: one form for notes, photos and videos, on the reply form's parts; full screen on a phone; drafts; photo and video posts without a title | 1½–2 sessions |
 | 2 | The extended composer: the dialog, Article and Topic, title, excerpt, cover, the fuller picture editor; "Expand" | 1½–2 sessions |
 | 3 | The old tabs and forms removed; every place a composer appears checked on a phone and a desktop | ½–1 session |
 | | **Total** | **3½–5 sessions** |
@@ -125,7 +135,7 @@ for the composer.
 ## Documentation
 
 - web `docs/architecture.md`: the composer, in place of the tabs.
-- services: none, unless topics and articles are merged.
+- services: the API reference, where photo and video posts take no title.
 
 ## Status
 
@@ -133,4 +143,39 @@ for the composer.
 | --- | --- |
 | Plan | written 2026-10-16, with the user's decisions |
 | Todo and File composer forms | removed 2026-10-16 |
-| Phases 1–3 | after row 38 (Pulse), for 1.0 |
+| Order | the composer before Pulse (row 38), at the user's word on 2026-10-16 |
+| Phase 1 | done 2026-10-16 on branch `unified-composer`; to try in a browser |
+| Phases 2 and 3 | to do |
+
+### What phase 1 did
+
+- **The short box** (`containers/media/Composer/Short.jsx`): closed, one line
+  with the viewer's avatar, a button for pictures and one to expand; open, in
+  place on a desktop and full screen on a phone, Close and Post at the top
+  and the attachments and choices in one row at the bottom. The full-screen
+  composer is the height of what can be seen, so a phone's keyboard does
+  not cover its bottom row (iOS shrinks only that). What a post becomes is
+  `utils/composer.js`, with its tests. The draft is `useDraft.js`.
+- **The extended composer, for now** (`Long.jsx`): a dialog, full screen on a
+  phone, with Article and Topic tabs holding the forms there were. Phase 2
+  gives it its own editor.
+- **The tabs are gone,** and with them the Note and Photo forms and the video
+  composer; the list of videos being prepared is `VideoUploads.jsx`.
+- **The services:** photo and video posts take no title, and a photo post no
+  words (services branch `unified-composer`). On the way, a reply of
+  pictures or a video with nothing said failed with a 500: the graph asked
+  for a title or words where a file is enough. Fixed there.
+- **Tried on the dev stack** as the test account, in a headless browser at a
+  desktop's width and a phone's: a note, a photo post with words, and a
+  two-second video, each posted from the short box without a title, shown,
+  and deleted after.
+
+### Found on the way, not part of this row
+
+- A photo post just made shows in the home feed without its picture until
+  the page is reloaded: the feed's check for new posts takes it before its
+  pictures are attached. It was so with the old composer too.
+- The post's choices are labelled in three styles side by side: "Public",
+  "EN", "ANYONE" (the reply button's capitals are MUI's default).
+- The welcome page logs React's warning about a list without keys
+  (`Home`).

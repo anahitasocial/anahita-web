@@ -13,6 +13,7 @@ import linkPreviews from './linkPreviews';
 import federation from './federation';
 import recommendations from './recommendations';
 import replies from './replies';
+import composer from './composer';
 import auth from './auth';
 import actor from './actor';
 import blogs from './blogs';
@@ -60,6 +61,7 @@ export default {
   federation,
   recommendations,
   replies,
+  composer,
   auth,
   actor,
   blogs,
