@@ -88,6 +88,35 @@ for the composer.
 - **Pictures:** the fuller uploader: order by dragging, alt text for each,
   cropping. The same parts as "Edit photos" (`PhotoFilesEditor`).
 
+### Embedding posts and pages in long writing
+
+The user's design, 2026-10-16: paste an address; a page elsewhere shows as
+its preview, a post here as itself, in the text, seamless, with a
+paragraph's margins. And an edge between the two posts, for search and
+recommendations.
+
+- **What embeds:** an address on a line of its own in an article or a
+  topic. One inside a sentence stays a link, so a post can be mentioned
+  without being shown. The text stays plain Markdown: elsewhere on the
+  fediverse the line is the link it is.
+- **A post here** (`/articles/`, `/topics/`, `/notes/`, `/photos/`,
+  `/videos/` with its id): the reader's browser asks for it as for any
+  post, so somebody who may not see it gets the link and nothing else.
+  Shown as part of the text: pictures as slides, a video playing, words
+  as a quiet block with who wrote them. No card around it.
+- **A page elsewhere:** its card, made as a note's is. The composer asks
+  link-preview-service for each such address while it is written; when
+  the post is saved, text-service copies the kept previews into its meta
+  (`link_previews`, beside a note's single `link_preview`), so a card reads
+  the same later and nobody's reading fetches anything. No card, a link.
+- **The edge:** `edge.medium.embed.v1`, from the post to each post here it
+  embeds, written by text-service when the post is added or edited, and
+  taken away with the line. Search and recommendations reading it come
+  later, as their own work.
+- **Not now:** embedding in short posts; notifying the author of a post
+  that was embedded (to ask the user); sending embeds as anything but
+  links to other servers.
+
 ### Phones and desktops
 
 - Touch targets of at least 48px, controls in the bottom row within a thumb's
@@ -193,6 +222,26 @@ words, as a reply with pictures does.
 - **Tried on the dev stack** as the test account at a desktop's width and a
   phone's: a photo post with a title and two lines of text, an article, and
   a two-second video with a title, each posted, read back, and deleted.
+
+### Cover and embeds (2026-10-16)
+
+- **Cover:** chosen in the long content form for an article and sent once
+  it exists (`CoverPicker.jsx`, the `/covers/` endpoint profiles use);
+  changed or removed on the article's page by its author. The article
+  layout no article used (`Read/Article.jsx`) is gone. Fixed on the way:
+  the cover widget read its cover once; an edited excerpt was dropped by
+  text-service, and no post's excerpt was in what the server answers. The
+  edit form has the excerpt.
+- **Embeds:** as designed above. Server: `anahita-libs/embeds`,
+  `link_previews` in a post's meta and response, the edges in
+  text-service (`handlers/embeds.go`). Web: `utils/embeds.js`,
+  `components/PostEmbed.jsx`, drawn by `NodeBody` for articles and topics;
+  the composer asks for page previews as it is written. Tried on dev: a
+  photo, a note and Wikipedia embedded in an article, at a desktop's
+  width and a phone's; both edges and the card were there; deleted after.
+- **Not done:** a cover can't be cleared from the edit form, only from the
+  page; an excerpt can't be emptied once set (the graph skips an empty
+  one); articles are still not sent to other servers.
 
 ### Found on the way, not part of this row
 

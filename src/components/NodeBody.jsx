@@ -1,10 +1,59 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 import remarkGfm from 'remark-gfm';
 import { makeStyles } from 'tss-react/mui';
 
+import PostEmbed from './PostEmbed';
 import utils from '../utils';
+import embedsOf from '../utils/embeds';
+
+// The words of a link, as it reads.
+const textOf = (node) => {
+  if (!node) {
+    return '';
+  }
+  if (node.type === 'text') {
+    return node.value;
+  }
+  return (node.children || []).map(textOf).join('');
+};
+
+// The address a paragraph is and nothing else: one link, reading as its own
+// address, as Markdown makes of an address on a line of its own. ''
+// otherwise; a link with words of its own stays a link.
+const addressAlone = (paragraph) => {
+  const children = (paragraph.children || []).filter((child) => {
+    return !(child.type === 'text' && !child.value.trim());
+  });
+  if (children.length !== 1 || children[0].tagName !== 'a') {
+    return '';
+  }
+  const link = children[0];
+  const href = (link.properties && link.properties.href) || '';
+  if (textOf(link).trim() !== href || !embedsOf.alone(href)) {
+    return '';
+  }
+  return href;
+};
+
+// The cards kept with the post being drawn, for its paragraphs to find.
+const Cards = createContext([]);
+
+// A paragraph, or what the address it is and nothing else is to. Made once,
+// here: one made as the text is drawn would be a new kind of thing each
+// time, and an embedded video would start again with every change.
+// eslint-disable-next-line react/prop-types
+const Paragraph = ({ node, children, ...rest }) => {
+  const cards = useContext(Cards);
+  const address = addressAlone(node);
+  if (address) {
+    return <PostEmbed url={address} cards={cards} />;
+  }
+  return <p {...rest}>{children}</p>;
+};
+
+const WITH_EMBEDS = { p: Paragraph };
 
 const useStyles = makeStyles()((theme) => {
   const { body1, body2 } = theme.typography;
@@ -60,6 +109,8 @@ const NodeBody = ({
     'mention',
   ],
   lang = '',
+  embeds = false,
+  cards = [],
 }) => {
   const { classes, cx } = useStyles();
   let body = `${children}`;
@@ -83,9 +134,14 @@ const NodeBody = ({
       className={cx(classes.root, classes[size])}
       lang={lang && lang !== 'und' ? lang : undefined}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {body}
-      </ReactMarkdown>
+      <Cards.Provider value={cards}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={embeds ? WITH_EMBEDS : undefined}
+        >
+          {body}
+        </ReactMarkdown>
+      </Cards.Provider>
     </div>
   );
 };
@@ -97,6 +153,11 @@ NodeBody.propTypes = {
   filters: PropTypes.arrayOf(PropTypes.string),
   // A language tag, "fr" or "fr-CA".
   lang: PropTypes.string,
+  // An address on a line of its own drawn as what it is to (PostEmbed): in
+  // an article or a topic.
+  embeds: PropTypes.bool,
+  // The cards of the pages elsewhere it embeds, as kept with the post.
+  cards: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default NodeBody;

@@ -177,7 +177,14 @@ const MediumReadDefault = ({
               {medium.name}
             </Typography>}
             {medium.body &&
-            <EntityBody contentFilter lang={medium.language}>
+            <EntityBody
+              contentFilter
+              lang={medium.language}
+              // Long writing shows what an address on a line of its own
+              // is to: a post here as itself, a page by its card.
+              embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
+              cards={medium.linkPreviews || []}
+            >
               {medium.body}
             </EntityBody>}
             {linkPreviews.isShown(medium.linkPreview, medium.body) &&

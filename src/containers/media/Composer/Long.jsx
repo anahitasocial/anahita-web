@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -21,6 +21,7 @@ import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
 import coverApi from '../../../api/cover';
+import linkPreviewsApi from '../../../api/linkPreviews';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
 import CoverPicker from './CoverPicker';
@@ -28,6 +29,7 @@ import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
 import useVideoUpload from './Video/useVideoUpload';
 
+import embeds from '../../../utils/embeds';
 import photoFiles from '../../../utils/photoFiles';
 import uploads from '../../../utils/upload';
 import videos from '../../../utils/videos';
@@ -165,6 +167,28 @@ const LongComposer = ({
   }
   const words = WORDS[kind];
   const isWriting = kind === 'article' || kind === 'topic';
+
+  // A page elsewhere on a line of its own is shown by its card. Its preview
+  // is asked for while the text is written, once each, so that it is there
+  // to keep when the post is saved: the server keeps only what
+  // link-preview-service has read. Nothing is shown here for it.
+  const asked = useRef(new Set());
+  useEffect(() => {
+    if (!open || (kind !== 'article' && kind !== 'topic')) {
+      return undefined;
+    }
+    const timer = setTimeout(() => {
+      embeds.pagesIn(body).forEach((page) => {
+        if (!asked.current.has(page)) {
+          asked.current.add(page);
+          linkPreviewsApi.read(page).catch(() => {});
+        }
+      });
+    }, 800);
+    return () => {
+      clearTimeout(timer);
+    };
+  }, [body, open, kind]);
 
   const name = title.trim();
   const text = body.trim();
