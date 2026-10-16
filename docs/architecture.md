@@ -419,6 +419,11 @@ replies, made directly to the post.
   under it.
 - **Hidden replies** are sent only to whoever may show them again, marked
   `hidden`. They are drawn apart, under the thread, closed until opened.
+  The server also leaves out, for every reader, the replies of somebody the
+  post's owner or writer has blocked. A reply from Bluesky is hidden there
+  too, when the post went there; one from the fediverse is hidden here
+  only, and asking to hide it says so, naming its server
+  (`utils/federation.js#fromFediverse`).
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
 - **The reply box** (`ReplyForm`, with `attachments` for a new reply) has a

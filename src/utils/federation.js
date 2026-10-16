@@ -14,6 +14,19 @@ const isRemote = (node) => {
     (node.type.includes('.activitypub-service.') || node.type.includes('.atproto-service.'));
 };
 
+// Whether a node came from a server of the fediverse, as against Bluesky.
+// Hiding a reply from there hides it here only: the fediverse has no
+// agreed way of asking other servers to hide one.
+const fromFediverse = (node) => {
+  if (!node) {
+    return false;
+  }
+  if (typeof node.uri === 'string' && node.uri.startsWith('https://')) {
+    return true;
+  }
+  return typeof node.type === 'string' && node.type.includes('.activitypub-service.');
+};
+
 // Where something from another server can be read where it was written,
 // or '' when there is no such page. On the fediverse the address a thing
 // has between servers is also its page. On Bluesky it is not: the address
@@ -147,6 +160,7 @@ const reasonOf = (error) => {
 
 export default {
   isRemote,
+  fromFediverse,
   domainOf,
   handleOf,
   displayHandle,

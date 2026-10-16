@@ -29,6 +29,9 @@ import postLanguage from '../../utils/postLanguage';
 import replyAccess from '../../utils/replyAccess';
 import thread from '../../utils/thread';
 import visitor from '../../utils/visitor';
+import utils from '../../utils';
+
+const { federation } = utils;
 
 // Everything said under a post: the replies to it, the replies to those, and
 // a place to add one.
@@ -185,8 +188,15 @@ const RepliesThread = ({
       return;
     }
 
+    // A reply from the fediverse is hidden here only, which is said.
+    const author = utils.node.getAuthor(reply);
+    const fediverse = federation.fromFediverse(reply) || federation.fromFediverse(author);
+    const domain = federation.domainOf(reply) || federation.domainOf(author);
+
     setAsking({
-      message: i18n.t('replies:confirm.hide'),
+      message: fediverse && domain ?
+        i18n.t('replies:confirm.hideFediverse', { domain }) :
+        i18n.t('replies:confirm.hide'),
       confirm: i18n.t('replies:actions.hide'),
       run: () => {
         return setHidden(reply, true);
