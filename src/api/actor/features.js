@@ -7,7 +7,6 @@ import axios from 'axios';
 const edit = (namespace) => {
   return (node) => {
     return axios.patch(`/${namespace}/${node.id}/features`, {
-      id: node.id,
       features: node.features,
     });
   };
