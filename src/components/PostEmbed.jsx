@@ -481,5 +481,5 @@ Citations.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
 };
 
-export { Citations };
+export { Citations, usePost };
 export default PostEmbed;

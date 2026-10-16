@@ -1,4 +1,13 @@
 export default {
+  // What an article or a topic holds, under its opening in a list.
+  summary: {
+    photos_one: '{{count}} photo',
+    photos_other: '{{count}} photos',
+    videos_one: '{{count}} video',
+    videos_other: '{{count}} videos',
+    citations_one: '{{count}} citation',
+    citations_other: '{{count}} citations',
+  },
   // What an article shows within itself, and lists at its end.
   embed: {
     in: 'in',

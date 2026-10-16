@@ -15,6 +15,7 @@ import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import ActorHandle from '../../../components/ActorHandle';
+import LongSummary, { isLong, SummaryPicture } from '../../../components/LongSummary';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import openOnClick from '../../../utils/openOnClick';
 import PostTitle from '../../../components/PostTitle';
@@ -81,6 +82,7 @@ const FeedCardDefault = ({
   const { body } = node;
   const title = node.name || '';
   const url = getURL(node);
+  const long = isLong(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
   const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
 
@@ -135,6 +137,7 @@ const FeedCardDefault = ({
             src="picture"
           />
         </Link>}
+      {!cover && long && <SummaryPicture node={node} url={url} />}
       {node.mediaRemoved && photoFiles.countOf(node) === 0 &&
         <RemovedPictures medium={node} />}
       {photoFiles.hasSeveral(node) &&
@@ -157,7 +160,7 @@ const FeedCardDefault = ({
           <AltBadge text={photoFiles.descriptionOf(node)} />
         </Box>}
       {node.video && <VideoPlayer video={node.video} title={title} />}
-      {body && <Player text={body} />}
+      {body && !long && <Player text={body} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent {...openOnClick.handlersFor(url, navigate)}>
@@ -165,7 +168,10 @@ const FeedCardDefault = ({
           <PostTitle href={url} lang={node.language}>
             {title}
           </PostTitle>}
-        {body &&
+        {/* An article or a topic by its summary: what it shows within
+            itself is on its page. */}
+        {body && long && <LongSummary node={node} url={url} />}
+        {body && !long &&
           <ReadMore contentFilter to={url}>
             {body}
           </ReadMore>}

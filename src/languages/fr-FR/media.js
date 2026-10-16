@@ -1,4 +1,12 @@
 export default {
+  summary: {
+    photos_one: '{{count}} photo',
+    photos_other: '{{count}} photos',
+    videos_one: '{{count}} vidéo',
+    videos_other: '{{count}} vidéos',
+    citations_one: '{{count}} citation',
+    citations_other: '{{count}} citations',
+  },
   embed: {
     in: 'dans',
     citations: 'Citations',
