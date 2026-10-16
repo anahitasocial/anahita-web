@@ -18,7 +18,6 @@ Each milestone ends in a shippable state.
 
 | # | State | Item | Plan file | Repo | Est. sessions | Needs |
 | --- | --- | --- | --- | --- | --- | --- |
-| **Now** | ⬜ | Rotate the AWS key found in `k8s/00-secret.yml` | — | services | ops, minutes | — |
 | **M1. Safety and cleanup** | ✅ | | | | **about 4–5** | |
 | 1 | ✅ | 0 · Feed access leak | [feed-access-leak.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/feed-access-leak.md) | services | ½–1 | — |
 | 1b | ✅ | 0b · auth-service hardening: IP lookup, `X-Forwarded-For`, refresh re-checks `Enabled`, TOTP freshness | [auth-service-hardening.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/auth-service-hardening.md) | services | 2 | — |
