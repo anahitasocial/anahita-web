@@ -17,7 +17,6 @@ import auth from './auth';
 import actor from './actor';
 import blogs from './blogs';
 import home from './home';
-import documents from './documents';
 import about from './about';
 import abuseReports from './abuseReports';
 import accounts from './accounts';
@@ -68,7 +67,6 @@ export default {
   actor,
   blogs,
   home,
-  documents,
   about,
   abuseReports,
   accounts,

@@ -110,7 +110,6 @@ const namespaces = {
   ],
   media: [
     'articles',
-    'documents',
     'notes',
     'photos',
     'topics',

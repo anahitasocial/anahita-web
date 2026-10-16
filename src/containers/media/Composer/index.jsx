@@ -8,7 +8,6 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
 import ArticleForm from './Forms/Article';
-import FileForm from './Forms/File';
 import NoteForm from './Forms/Note';
 import PhotoForm from './Forms/Photo';
 import TopicForm from './Forms/Topic';
@@ -51,16 +50,6 @@ const COMPOSER_CONFIGS = {
     Composer: ComposerDefault('articles'),
     formFields: form.createFormFields(['name', 'body', 'excerpt']),
     formComponent: ArticleForm,
-  },
-  documents: {
-    Composer: ComposerDefault('documents'),
-    formFields: form.createFormFields(['name', 'body']),
-    formComponent: FileForm,
-    supportedMimetypes: [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-    ],
   },
   photos: {
     Composer: ComposerDefault('photos'),
