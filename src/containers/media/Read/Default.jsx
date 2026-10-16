@@ -19,7 +19,6 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
-import Player from '../../../components/Player';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
@@ -167,7 +166,6 @@ const MediumReadDefault = ({
         {!editing &&
         <>
           {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
-          {medium.body && <Player text={medium.body} />}
           <CardContent component="article">
             {medium.name &&
             <Typography

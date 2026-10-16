@@ -61,7 +61,6 @@
     "react-leaflet": "^5",
     "react-markdown": "^10.1.0",
     "react-masonry-css": "^1.0.14",
-    "react-player": "^2.16.1",
     "react-redux": "^9",
     "react-router-dom": "^7.18.4",
     "react-truncate": "^2.4.0",

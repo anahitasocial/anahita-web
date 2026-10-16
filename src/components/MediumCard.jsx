@@ -20,7 +20,6 @@ import CardHeaderOwner from './MediumOwnerCardHeader';
 import PhotoSlides from './PhotoSlides';
 import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
-import Player from './Player';
 import LinkPreviewCard from './LinkPreviewCard';
 import VideoPlayer from './VideoPlayer';
 import linkPreviews from '../utils/linkPreviews';
@@ -174,7 +173,6 @@ const MediumCard = ({
           <Progress />
         </CardContent>}
       {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
-      {medium.body && <Player text={medium.body} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent

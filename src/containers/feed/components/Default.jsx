@@ -22,7 +22,6 @@ import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
-import Player from '../../../components/Player';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
@@ -160,7 +159,6 @@ const FeedCardDefault = ({
           <AltBadge text={photoFiles.descriptionOf(node)} />
         </Box>}
       {node.video && <VideoPlayer video={node.video} title={title} />}
-      {body && !long && <Player text={body} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent {...openOnClick.handlersFor(url, navigate)}>

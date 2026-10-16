@@ -20,7 +20,6 @@ import WebsiteIcon from '@mui/icons-material/Web';
 import FediverseIcon from '@mui/icons-material/Hub';
 
 import i18n from '../../../languages';
-import Player from '../../../components/Player';
 import EntityBody from '../../../components/NodeBody';
 import AnahitaMap from '../../../components/Map';
 import MenuItemLabel from '../../../components/MenuItemLabel';
@@ -71,14 +70,11 @@ const ActorBodyAbout = (props) => {
         }
       />
       {body &&
-        <>
-          <Player text={body} />
-          <CardContent>
-            <EntityBody contentFilter>
-              {body}
-            </EntityBody>
-          </CardContent>
-        </>}
+        <CardContent>
+          <EntityBody contentFilter>
+            {body}
+          </EntityBody>
+        </CardContent>}
       {/* One list: its website, then where it is held, so the map sits
           right under its address. Pressing where it is offers the maps it
           can be opened in. */}
