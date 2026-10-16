@@ -3,8 +3,10 @@
 export default {
   newPost: 'New post',
   close: 'Close',
-  // Opens the extended composer from the short box.
-  expand: 'Write an article or a topic',
+  // Opens the extended composer from the short box: an article or a topic.
+  longContent: 'Long content',
+  // Opens the short box with pictures being added.
+  photos: 'Photos',
   // The extended composer's heading, and the button where a profile takes
   // only long writing.
   writeLong: 'Write at length',

@@ -340,10 +340,13 @@ const ShortComposer = ({
 
   // Hidden rather than disabled while posting: a tooltip on a disabled
   // button is never seen.
-  const expandButton = onExpand && !busy &&
-    <Tooltip title={i18n.t('composer:expand')}>
+  // Hidden rather than disabled while posting: a tooltip on a disabled
+  // button is never seen. With its words beside it where there is room,
+  // and the icon alone on a phone, where the box needs the width.
+  const expandButton = onExpand && !busy && (phone ?
+    <Tooltip title={i18n.t('composer:longContent')}>
       <IconButton
-        aria-label={i18n.t('composer:expand')}
+        aria-label={i18n.t('composer:longContent')}
         onClick={() => {
           setIsOpen(false);
           onExpand(body);
@@ -351,7 +354,17 @@ const ShortComposer = ({
       >
         <ExpandIcon />
       </IconButton>
-    </Tooltip>;
+    </Tooltip> :
+    <Button
+      startIcon={<ExpandIcon />}
+      sx={{ color: 'text.secondary', flexShrink: 0 }}
+      onClick={() => {
+        setIsOpen(false);
+        onExpand(body);
+      }}
+    >
+      {i18n.t('composer:longContent')}
+    </Button>);
 
   const postButton = (fullWidth) => {
     return (
@@ -526,7 +539,7 @@ const ShortComposer = ({
           {body || placeholder}
         </Typography>
       </ButtonBase>
-      {canPhotos &&
+      {canPhotos && phone &&
         <Tooltip title={i18n.t('replies:attachments.addPhotos')}>
           <IconButton
             aria-label={i18n.t('replies:attachments.addPhotos')}
@@ -537,6 +550,16 @@ const ShortComposer = ({
             <PhotoIcon />
           </IconButton>
         </Tooltip>}
+      {canPhotos && !phone &&
+        <Button
+          startIcon={<PhotoIcon />}
+          sx={{ color: 'text.secondary', flexShrink: 0 }}
+          onClick={() => {
+            open('photos');
+          }}
+        >
+          {i18n.t('composer:photos')}
+        </Button>}
       {expandButton}
     </Stack>
   );

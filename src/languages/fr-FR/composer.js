@@ -1,7 +1,8 @@
 export default {
   newPost: 'Nouvelle publication',
   close: 'Fermer',
-  expand: 'Écrire un article ou un sujet',
+  longContent: 'Contenu long',
+  photos: 'Photos',
   writeLong: 'Écrire plus long',
   needsPicture: 'Ajoutez une image ou une vidéo pour publier ici.',
   kinds: {
