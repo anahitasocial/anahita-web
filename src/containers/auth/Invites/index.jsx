@@ -75,6 +75,17 @@ const InvitesPage = ({
   const [items, setItems] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
   const [formOpen, setFormOpen] = useState(false);
+  // How many of the viewer's invitations are waiting, as the server
+  // counts them, kept up to date here as they send and revoke.
+  const [pending, setPending] = useState(0);
+
+  // How many may wait at once is the viewer's entitlement, which comes
+  // with the viewer (userinfo). Unknown for a session from before it was
+  // sent: then nothing is counted and the server alone says when.
+  const maxPending = viewer.entitlements && viewer.entitlements.invites
+    ? viewer.entitlements.invites.maxPending
+    : null;
+  const remaining = maxPending === null ? null : Math.max(0, maxPending - pending);
 
   // Reading your own list is self-service; issuing depends on the
   // server's INVITES_FROM, which arrives through NodeInfo.
@@ -98,6 +109,7 @@ const InvitesPage = ({
     return api.invites.browse()
       .then(({ data }) => {
         setItems(data.data || []);
+        setPending(data.pending || 0);
       })
       .catch((err) => {
         alertError(errorMessage(err, 'invites:errors.browse'));
@@ -117,10 +129,19 @@ const InvitesPage = ({
         setItems((previous) => {
           return [data, ...previous];
         });
+        setPending((previous) => {
+          return previous + 1;
+        });
         setFormOpen(false);
         alertSuccess(i18n.t('invites:alerts.sent', { email }));
       })
       .catch((err) => {
+        // At the limit after all: another tab sent one. Count it so.
+        const data = err && err.response && err.response.data;
+        if (data && data.error === 'too_many_invitations' && maxPending !== null) {
+          setPending(maxPending);
+          setFormOpen(false);
+        }
         alertError(errorMessage(err, 'invites:errors.add'));
         // Rethrown so the form stays open with the address still in it.
         // Every refusal here is worth a second attempt — a cap frees, a
@@ -138,6 +159,12 @@ const InvitesPage = ({
             return item.id !== invite.id;
           });
         });
+        // Only a waiting invitation counts against the limit.
+        if (invite.status === 'pending') {
+          setPending((previous) => {
+            return Math.max(0, previous - 1);
+          });
+        }
         alertSuccess(i18n.t('invites:alerts.revoked', {
           email: invite.recipientEmail,
         }));
@@ -169,6 +196,8 @@ const InvitesPage = ({
         items={items}
         isFetching={isFetching}
         canAdd={canAdd}
+        remaining={remaining}
+        maxPending={maxPending}
         canDelete={canDelete}
         onAdd={() => {
           setFormOpen(true);

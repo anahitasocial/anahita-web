@@ -2,6 +2,10 @@ export default {
   cTitle: 'Invitations',
   mTitle: 'Invitations',
   empty: 'Aucune invitation envoyée.',
+  remaining_one: 'Vous pouvez encore envoyer {{count}} invitation.',
+  remaining_other: 'Vous pouvez encore envoyer {{count}} invitations.',
+  atLimit_one: 'Vous avez {{count}} invitation en attente, le maximum. Une place se libère quand une invitation est acceptée, expire, ou que vous la révoquez.',
+  atLimit_other: 'Vous avez {{count}} invitations en attente, le maximum. Une place se libère quand une invitation est acceptée, expire, ou que vous la révoquez.',
   restricted: {
     cTitle: 'Les invitations sont réservées',
     cDescription: 'Administrateurs uniquement.',
