@@ -39,6 +39,7 @@ export default {
   confirm: {
     delete: 'Delete this reply? This cannot be undone.',
     hide: 'Hide this reply from everybody who reads this post? Replies to it are hidden with it. You can show it again.',
+    hideFediverse: 'Hide this reply from everybody who reads this post here? Replies to it are hidden with it. You can show it again. It came from {{domain}}, and servers like it cannot be asked to hide it, so people there may still see it.',
   },
   // Who can reply to a post, as its author sets it.
   access: {

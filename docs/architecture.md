@@ -49,6 +49,10 @@ All requests go through axios, configured in `src/api/index.js`:
   Code in the app never sees a `snake_case` key.
 - **Redirects** are not followed (`maxRedirects: 0`).
 
+What each route takes and sends is in the services' API reference
+(anahita-services `docs/api.md` and `docs/api/`, made from the code). It
+describes the wire, in `snake_case`, not the `camelCase` the app sees.
+
 A few documents come from elsewhere and skip the interceptors. For example, the
 OpenID configuration goes through `api/publicClient.js`, which repeats the key
 conversion itself.
@@ -419,6 +423,11 @@ replies, made directly to the post.
   under it.
 - **Hidden replies** are sent only to whoever may show them again, marked
   `hidden`. They are drawn apart, under the thread, closed until opened.
+  The server also leaves out, for every reader, the replies of somebody the
+  post's owner or writer has blocked. A reply from Bluesky is hidden there
+  too, when the post went there; one from the fediverse is hidden here
+  only, and asking to hide it says so, naming its server
+  (`utils/federation.js#fromFediverse`).
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
 - **The reply box** (`ReplyForm`, with `attachments` for a new reply) has a
@@ -977,6 +986,17 @@ one row under Settings › Privacy (`actors/Settings/Blocked.jsx`) saying how
 many there are, which opens a dialog: everybody blocked, with their picture,
 read a page at a time as the list is scrolled, a box to search it by name,
 and Unblock on each.
+
+A group or an event has the same row under its own Privacy tab, below Access,
+listing who it has blocked; Unblock there lifts the group's block, not the
+viewer's. A group blocks somebody from the menu on what they wrote in it:
+"Block from group" ("Block from event" in an event), on a post (`controls/BlockFromOwner.jsx`, in the feed's
+menu and the post page's) and on a reply (`replies/Thread.jsx`, which reads
+the thread again afterwards). It is offered where the server says
+`authorized.blockFromOwner`: to the group's administrators, on what somebody
+else wrote, and on the post's own page to site administrators too. Pin is
+offered the same way. A person's own block does not reach the groups they
+run.
 
 ### Events
 

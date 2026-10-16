@@ -12,6 +12,15 @@ describe('people and posts from other servers', () => {
     expect(federation.isRemote({ type: 'node.medium.text-service.note.v1', uri: 'at://did:plc:aaaaaaaaaaaaaaaaaaaaaaaa/app.bsky.feed.post/3l3' })).toBe(true);
   });
 
+  it('tells the fediverse from Bluesky and from here', () => {
+    expect(federation.fromFediverse({ type: 'node.medium.text-service.note.v1', uri: 'https://mastodon.example/n/1' })).toBe(true);
+    expect(federation.fromFediverse({ type: 'node.actor.activitypub-service.person.v1', alias: 'alice@mastodon.example' })).toBe(true);
+    expect(federation.fromFediverse({ type: 'node.medium.text-service.note.v1', uri: 'at://did:plc:aaaaaaaaaaaaaaaaaaaaaaaa/app.bsky.feed.post/3l3' })).toBe(false);
+    expect(federation.fromFediverse({ type: 'node.actor.atproto-service.person.v1', alias: 'alice.bsky.social' })).toBe(false);
+    expect(federation.fromFediverse({ type: 'node.medium.text-service.note.v1' })).toBe(false);
+    expect(federation.fromFediverse(null)).toBe(false);
+  });
+
   it('knows the page of something from another server', () => {
     const did = 'did:plc:aaaaaaaaaaaaaaaaaaaaaaaa';
     expect(federation.pageOf({ uri: 'https://mastodon.example/@alice/1' })).toBe('https://mastodon.example/@alice/1');

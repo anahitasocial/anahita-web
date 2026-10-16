@@ -36,8 +36,9 @@ const { getActorName, getURL } = utils.node;
 const PAGE = 20;
 const PAUSE = 300;
 
-// The people the viewer has blocked, each with a way to unblock them, in
-// a dialog of their own.
+// The people a profile has blocked, each with a way to unblock them, in a
+// dialog of their own: the viewer's own blocks, or a group's or an event's,
+// for whoever runs it.
 //
 // The list can be long. It is read a page at a time, most lately blocked
 // first, with more read as the dialog is scrolled, and it can be searched
@@ -46,6 +47,11 @@ const PAUSE = 300;
 //
 // `onCount` is told how many there are, whenever that is learned or
 // changes, for whoever shows the number.
+// The words for the viewer's own blocks, or for a group's.
+const textsFor = (actor, viewer) => {
+  return actor.id === viewer.id ? 'socialgraph:blocked' : 'socialgraph:groupBlocked';
+};
+
 const BlockedDialog = ({
   actor,
   viewer,
@@ -140,7 +146,8 @@ const BlockedDialog = ({
 
   const handleUnblock = (person) => {
     setWaiting(person.id);
-    api.socialgraph.unblock({ actor: person, viewer }).then(() => {
+    // Lifted by whoever made it: the profile these are the blocks of.
+    api.socialgraph.unblock({ actor: person, viewer: actor }).then(() => {
       setRows((before) => {
         return before.filter((each) => {
           return each.id !== person.id;
@@ -166,6 +173,8 @@ const BlockedDialog = ({
   const canSearch = everybody > PAGE || typed !== '';
 
   const scrollId = `blocked-scroll-${actor.id}`;
+  const texts = textsFor(actor, viewer);
+  const name = getActorName(actor);
 
   return (
     <Dialog
@@ -176,7 +185,7 @@ const BlockedDialog = ({
       aria-labelledby={`blocked-title-${actor.id}`}
     >
       <DialogTitle id={`blocked-title-${actor.id}`}>
-        {i18n.t('socialgraph:blocked.title')}
+        {i18n.t(`${texts}.title`, { name })}
       </DialogTitle>
       <DialogContent dividers id={scrollId} sx={{ minHeight: 240 }}>
         {canSearch &&
@@ -185,8 +194,8 @@ const BlockedDialog = ({
             onChange={(event) => {
               setTyped(event.target.value);
             }}
-            placeholder={i18n.t('socialgraph:blocked.search')}
-            aria-label={i18n.t('socialgraph:blocked.search')}
+            placeholder={i18n.t(`${texts}.search`)}
+            aria-label={i18n.t(`${texts}.search`)}
             size="small"
             fullWidth
             sx={{ mb: 2 }}
@@ -208,7 +217,7 @@ const BlockedDialog = ({
           </Typography>}
         {rows && rows.length === 0 && !hasFailed &&
           <Typography variant="body2" color="textSecondary">
-            {i18n.t(query ? 'socialgraph:blocked.noMatch' : 'socialgraph:blocked.none')}
+            {i18n.t(query ? `${texts}.noMatch` : `${texts}.none`)}
           </Typography>}
         {rows && rows.length > 0 &&
           <InfiniteScroll
@@ -276,10 +285,10 @@ BlockedDialog.propTypes = {
   onCount: PropTypes.func.isRequired,
 };
 
-// Who the viewer has blocked, in their settings: how many, and the way to
-// the list.
+// Who the viewer has blocked, in their settings, or who a group or an event
+// has, in its settings: how many, and the way to the list.
 //
-// Theirs alone, so it is in their settings. One line, however many there
+// A person's blocks are theirs alone, so they are in their settings. One line, however many there
 // are: the list itself opens in a dialog, so that a long one does not push
 // the rest of the page out of reach.
 const ActorsSettingsBlocked = ({
@@ -310,7 +319,7 @@ const ActorsSettingsBlocked = ({
         title={i18n.t('socialgraph:blocks')}
         subheader={count === null ? null : i18n.t(count > 0 ?
           'socialgraph:blocked.count' :
-          'socialgraph:blocked.none', { count })}
+          `${textsFor(actor, viewer)}.none`, { count })}
         action={
           <Button
             onClick={() => {

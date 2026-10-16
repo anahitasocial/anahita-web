@@ -21,6 +21,7 @@ import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
+import ControlBlockFromOwner from '../controls/BlockFromOwner';
 import ControlSave from '../controls/medium/Save';
 import { DownloadSwitchMenuItem } from '../controls/medium/Download';
 import PostActivity from '../activity/PostActivity';
@@ -69,6 +70,9 @@ const MediaMenu = ({
   const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
   // Pinning is the profile's: the server says whether this viewer may.
   const canPin = Boolean(medium.authorized && medium.authorized.pin);
+  // Whoever runs the group it is in, or a site administrator, may block
+  // its writer from there.
+  const canBlockFromOwner = Boolean(medium.authorized && medium.authorized.blockFromOwner);
   const report = useReport(viewer, medium);
   // A photo post's images are changed in a dialog of their own: their
   // order, their descriptions, and which there are.
@@ -182,6 +186,12 @@ const MediaMenu = ({
           component="menuitem"
           confirmMessage={i18n.t('media:confirm.delete')}
         />
+        {canBlockFromOwner &&
+          <ControlBlockFromOwner
+            node={medium}
+            onDone={handleClose}
+            key={`medium-block-from-owner-${medium.id}`}
+          />}
         {report.canReport &&
           <MenuItem
             onClick={() => {

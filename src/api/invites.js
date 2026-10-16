@@ -9,17 +9,11 @@ import axios from 'axios';
 // filter this module applies and not one it can be talked out of —
 // an invite row carries the address it was sent to, and reading
 // somebody else's is not part of being allowed to send your own.
-//
-// Invite ids are STRINGS. auth-service formats the token id with
-// strconv.FormatInt on the way out while every other entity sends a
-// number. Left as it is on purpose — the accept flow's callers already
-// read it that way — so the proptype says string and nothing here
-// coerces it.
 
 const browse = (params = {}) => {
   const { limit = 20, offset = 0 } = params;
   return axios.get('/invites', {
-    params: { limit, offset },
+    params: { limit, start: offset },
   });
 };
 

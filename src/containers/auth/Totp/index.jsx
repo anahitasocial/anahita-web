@@ -95,11 +95,9 @@ const Totp = ({ viewer, alertSuccess, alertError }) => {
         const status = err && err.response && err.response.status;
         const body = err && err.response && err.response.data;
 
-        // A bare 403 means no recent step-up; one carrying `error` means the
-        // caller may not act on this account at all. The server splits them
-        // by body rather than by status because 403 is already the step-up
-        // contract across /password, /email and /username.
-        if (status === 403 && !(body && body.error)) {
+        // `step_up_required` means no recent step-up; `forbidden` means the
+        // caller may not act on this account at all.
+        if (status === 403 && body && body.error === 'step_up_required') {
           setStepUpOpen(true);
           return;
         }
@@ -158,14 +156,14 @@ const Totp = ({ viewer, alertSuccess, alertError }) => {
           setQrImage(response.data);
           setActiveStep(PAIR_DEVICE);
         }).catch((err) => {
-          // 406 is specifically "password did not match"; anything else
+          // 401 is specifically "password did not match"; anything else
           // is a validation or server problem the user cannot act on as
           // precisely, so keep that message generic.
           const status = err.response && err.response.status;
           setFieldError(
             setPasswordFields,
             'password',
-            status === 406
+            status === 401
               ? i18n.t('auth:totp.errors.wrongPassword')
               : i18n.t('auth:totp.errors.passwordInvalid'),
           );

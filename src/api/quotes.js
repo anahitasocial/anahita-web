@@ -16,7 +16,6 @@ const add = (viewer, {
     quoteId,
     access,
     language,
-    composed: true,
   });
 };
 

@@ -29,6 +29,10 @@ import postLanguage from '../../utils/postLanguage';
 import replyAccess from '../../utils/replyAccess';
 import thread from '../../utils/thread';
 import visitor from '../../utils/visitor';
+import utils from '../../utils';
+import events from '../../utils/events';
+
+const { federation } = utils;
 
 // Everything said under a post: the replies to it, the replies to those, and
 // a place to add one.
@@ -185,11 +189,44 @@ const RepliesThread = ({
       return;
     }
 
+    // A reply from the fediverse is hidden here only, which is said.
+    const author = utils.node.getAuthor(reply);
+    const fediverse = federation.fromFediverse(reply) || federation.fromFediverse(author);
+    const domain = federation.domainOf(reply) || federation.domainOf(author);
+
     setAsking({
-      message: i18n.t('replies:confirm.hide'),
+      message: fediverse && domain ?
+        i18n.t('replies:confirm.hideFediverse', { domain }) :
+        i18n.t('replies:confirm.hide'),
       confirm: i18n.t('replies:actions.hide'),
       run: () => {
         return setHidden(reply, true);
+      },
+    });
+  };
+
+  // The group or the event the thread is in blocking whoever wrote a reply,
+  // for whoever runs it. The thread is read again afterwards: what the
+  // blocked person wrote in it is out of sight now, for everybody.
+  const group = root.owner || {};
+  const groupName = utils.node.getActorName(group);
+
+  const handleBlockFromOwner = (reply) => {
+    const author = utils.node.getAuthor(reply);
+
+    setAsking({
+      message: i18n.t('socialgraph:blockFromOwner.confirm', {
+        person: utils.node.getActorName(author),
+        name: groupName,
+      }),
+      confirm: i18n.t('actions:block'),
+      run: () => {
+        return api.socialgraph.block({ actor: author, viewer: group }).then(() => {
+          alertSuccess(i18n.t('socialgraph:blockFromOwner.done', { name: groupName }));
+          load();
+        }).catch(() => {
+          alertError(i18n.t('socialgraph:blockFromOwner.failed'));
+        });
       },
     });
   };
@@ -243,6 +280,10 @@ const RepliesThread = ({
         onDelete={handleDelete}
         onHide={handleHide}
         onLike={handleLike}
+        onBlockFromOwner={handleBlockFromOwner}
+        blockFromOwnerLabel={i18n.t(events.isEvent(group) ?
+          'socialgraph:blockFromOwner.actionEvent' :
+          'socialgraph:blockFromOwner.action')}
       />
     );
   };
@@ -385,6 +426,8 @@ RepliesThread.propTypes = {
   root: PropTypes.shape({
     id: PropTypes.number.isRequired,
     replyAccess: PropTypes.string,
+    // The profile it is on: a group, for blocking somebody from it.
+    owner: PropTypes.object,
   }).isRequired,
   // A reply in the thread, to show only what is under it.
   under: MediumType,

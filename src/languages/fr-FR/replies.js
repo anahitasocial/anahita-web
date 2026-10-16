@@ -39,6 +39,7 @@ export default {
   confirm: {
     delete: 'Supprimer cette réponse ? Cette action est irréversible.',
     hide: 'Masquer cette réponse pour toutes les personnes qui lisent cette publication ? Les réponses qui lui sont faites sont masquées avec elle. Vous pourrez l\'afficher à nouveau.',
+    hideFediverse: 'Masquer cette réponse pour toutes les personnes qui lisent cette publication ici ? Les réponses qui lui sont faites sont masquées avec elle. Vous pourrez l\'afficher à nouveau. Elle vient de {{domain}}, et on ne peut pas demander à ce genre de serveur de la masquer : les personnes qui y sont pourront peut-être encore la voir.',
   },
   // Qui peut répondre à une publication, selon son auteur.
   access: {

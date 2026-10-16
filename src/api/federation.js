@@ -80,7 +80,7 @@ const restorePictures = (medium) => {
 // reasons it is found in.
 const blocks = ({ q = '', limit = 50, offset = 0 } = {}) => {
   return axios.get('/activitypub/blocks', {
-    params: { q, limit, offset },
+    params: { q, limit, start: offset },
   });
 };
 

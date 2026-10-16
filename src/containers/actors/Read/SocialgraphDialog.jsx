@@ -241,8 +241,8 @@ const SocialgraphDialog = ({
                     divider
                     secondaryAction={
                       <>
-                        {showRemove && <ControlRemoveFollower actor={actor} follower={row} />}
                         {showFollow && <ControlFollow actor={row} />}
+                        {showRemove && <ControlRemoveFollower actor={actor} follower={row} />}
                       </>
                     }
                   >

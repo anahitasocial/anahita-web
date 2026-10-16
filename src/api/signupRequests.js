@@ -13,7 +13,7 @@ import axios from 'axios';
 const browse = (params = {}) => {
   const { limit = 20, offset = 0 } = params;
   return axios.get('/signup-requests', {
-    params: { limit, offset },
+    params: { limit, start: offset },
   });
 };
 

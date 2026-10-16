@@ -22,7 +22,7 @@ import OAuthClientSecret from './OAuthClientSecret';
 //
 // auth-service answers most other refusals with a bare status and no
 // body, so there is often nothing to quote; the few that do carry one
-// use OAuthErrorResponse's { error, description }.
+// say { error, description }.
 const errorMessage = (err, fallbackKey) => {
   const response = err && err.response;
   const data = (response && response.data) || {};
@@ -35,7 +35,7 @@ const errorMessage = (err, fallbackKey) => {
     return i18n.t('settings:oauthClients.errors.forbidden');
   }
 
-  return data.description || data.message || i18n.t(fallbackKey);
+  return data.description || i18n.t(fallbackKey);
 };
 
 // The OAuth client registry.

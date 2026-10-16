@@ -39,7 +39,7 @@ const errorMessage = (err, fallbackKey) => {
     case 'not_verified':
       return i18n.t('signupRequests:errors.notVerified');
     default:
-      return data.message || i18n.t(fallbackKey);
+      return data.description || i18n.t(fallbackKey);
   }
 };
 

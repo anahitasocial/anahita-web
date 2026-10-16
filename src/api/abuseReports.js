@@ -37,7 +37,7 @@ const browseCases = (params = {}) => {
       // Left out altogether when there is no filter.
       reason: reason || undefined,
       limit,
-      offset,
+      start: offset,
       lang,
     },
   });

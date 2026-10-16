@@ -14,6 +14,7 @@ import HideIcon from '@mui/icons-material/VisibilityOffOutlined';
 import ShowIcon from '@mui/icons-material/VisibilityOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import ReportIcon from '@mui/icons-material/FlagOutlined';
+import BlockIcon from '@mui/icons-material/BlockOutlined';
 import Typography from '@mui/material/Typography';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
@@ -60,6 +61,8 @@ const ReplyItem = ({
   onDelete,
   onHide,
   onLike,
+  onBlockFromOwner = null,
+  blockFromOwnerLabel = '',
 }) => {
   const { reply, children } = node;
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -80,8 +83,10 @@ const ReplyItem = ({
 
   // A reply from another server can be read where it was written.
   const original = utils.federation.isRemote(reply) ? utils.federation.pageOf(reply) : '';
+  // Whoever runs the group the thread is in may block its writer from there.
+  const canBlockFromOwner = Boolean(authorized.blockFromOwner && onBlockFromOwner);
   const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
-    report.canReport || original;
+    canBlockFromOwner || report.canReport || original;
 
   const under = children.length > 0 && (
     <Box
@@ -105,6 +110,8 @@ const ReplyItem = ({
             onDelete={onDelete}
             onHide={onHide}
             onLike={onLike}
+            onBlockFromOwner={onBlockFromOwner}
+            blockFromOwnerLabel={blockFromOwnerLabel}
           />
         );
       })}
@@ -312,6 +319,17 @@ const ReplyItem = ({
                     {i18n.t('replies:actions.delete')}
                   </MenuItemLabel>
                 </MenuItem>}
+              {canBlockFromOwner &&
+                <MenuItem
+                  onClick={() => {
+                    closeMenu();
+                    onBlockFromOwner(reply);
+                  }}
+                >
+                  <MenuItemLabel icon={<BlockIcon fontSize="small" />}>
+                    {blockFromOwnerLabel}
+                  </MenuItemLabel>
+                </MenuItem>}
               {report.canReport &&
                 <MenuItem
                   onClick={() => {
@@ -365,6 +383,11 @@ ReplyItem.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   onLike: PropTypes.func.isRequired,
+  // Blocking the writer from the group the thread is in, for whoever runs
+  // it. Given only on a group's thread.
+  onBlockFromOwner: PropTypes.func,
+  // What that item says: "Block from group".
+  blockFromOwnerLabel: PropTypes.string,
 };
 
 export default ReplyItem;

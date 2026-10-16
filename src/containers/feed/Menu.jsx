@@ -20,6 +20,7 @@ import ControlPin from '../controls/medium/Pin';
 import ControlSave from '../controls/medium/Save';
 import PostActivity from '../activity/PostActivity';
 import ControlFollow from '../controls/Follow';
+import ControlBlockFromOwner from '../controls/BlockFromOwner';
 import useReport from '../reports/useReport';
 
 import PersonType from '../../proptypes/Person';
@@ -28,7 +29,6 @@ import permissions from '../../permissions';
 
 const { withRef } = utils.component;
 const {
-  getOwnerName,
   isSubscribable,
   getURL,
 } = utils.node;
@@ -53,7 +53,6 @@ const FeedItemMenu = ({
     setAnchorEl(null);
   };
 
-  const ownerName = getOwnerName(node);
   const { id } = node;
   const canSubscribe = node.id && isSubscribable(node);
   const canFollow = permissions.actor.canFollow(node.owner, viewer);
@@ -62,6 +61,8 @@ const FeedItemMenu = ({
   const canEdit = permissions.medium.canEdit(viewer, node);
   const canDelete = permissions.medium.canDelete(viewer, node);
   const canPin = Boolean(node.authorized && node.authorized.pin);
+  // Whoever runs the group it is in may block its writer from there.
+  const canBlockFromOwner = Boolean(node.authorized && node.authorized.blockFromOwner);
   const report = useReport(viewer, node);
 
   return (
@@ -86,12 +87,6 @@ const FeedItemMenu = ({
             actor={node.owner}
             component="menuitem"
             key={`feed-follow-${id}`}
-            followLabel={i18n.t('feed:actions.followOwner', {
-              name: ownerName,
-            })}
-            unfollowLabel={i18n.t('feed:actions.unfollowOwner', {
-              name: ownerName,
-            })}
           />}
         {canSubscribe &&
           <NotificationSubActionWithRef
@@ -139,6 +134,12 @@ const FeedItemMenu = ({
             key={`feed-delete-${id}`}
             component="menuitem"
             confirmMessage={i18n.t('media:confirm.delete')}
+          />}
+        {canBlockFromOwner &&
+          <ControlBlockFromOwner
+            node={node}
+            onDone={handleClose}
+            key={`feed-block-from-owner-${id}`}
           />}
         {report.canReport &&
           <MenuItem

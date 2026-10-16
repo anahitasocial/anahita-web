@@ -346,7 +346,14 @@ const ActorsSettings = ({
     // its Info is the event's own form and not the one a group has.
     [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
-    [ITEMS.ACCESS]: <ActorAccess />,
+    // Who can see it, and who it has blocked: one of its administrators
+    // blocks somebody from the menu on what they wrote in it.
+    [ITEMS.ACCESS]: (
+      <Stack spacing={2}>
+        <ActorAccess />
+        <ActorBlocked actor={actor} />
+      </Stack>
+    ),
     // Who can do what in the group, and with what is posted in it: whether
     // its new photos and videos start out downloadable. Not an event's.
     [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (

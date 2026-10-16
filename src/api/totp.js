@@ -39,11 +39,8 @@ function add(password) {
   }), { responseType: 'blob' });
 }
 
-// skipAuthRedirect: a wrong passcode here is a failed check, not a dead
-// session. Without the flag the global 401/refresh interceptor would
-// treat any auth-shaped failure as session expiry and bounce the user
-// out of the enrolment wizard. The server returns 403 for this now, so
-// the flag is belt-and-braces.
+// A wrong passcode is 403, as it is at /totp/verify and /reauth.
+// skipAuthRedirect is belt-and-braces: nothing reads it now.
 function addRecoveryCodes(passcode) {
   return axios.post('totp/recovery-codes', constructFormData({
     passcode,
