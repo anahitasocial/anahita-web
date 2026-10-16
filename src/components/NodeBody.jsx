@@ -34,7 +34,12 @@ const useStyles = makeStyles()((theme) => {
       // first or below the last: the card around the text has its own
       // padding, and a browser's margin on top of it left a wide gap
       // between a post's or a profile's header and what it says.
-      '& > :first-child': {
+      //
+      // :first-child, not :first-of-type, which would also take the margin
+      // off the first list or quote in the middle of a text. Emotion warns
+      // of :first-child because of server rendering, which this app does
+      // not do, so the warning is switched off for it.
+      '& > :first-child/* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason */': {
         marginTop: 0,
       },
       '& > :last-child': {

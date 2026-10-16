@@ -34,8 +34,9 @@ const useStyles = makeStyles()({
       boxShadow: 'none',
     },
     // The card's padding is room enough above the first field; its margin
-    // on top of that left twice as much.
-    '& .MuiCardContent-root > .MuiFormControl-marginNormal:first-child': {
+    // on top of that left twice as much. Emotion warns of :first-child
+    // because of server rendering, which this app does not do.
+    '& .MuiCardContent-root > .MuiFormControl-marginNormal:first-child/* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason */': {
       marginTop: 0,
     },
   },
