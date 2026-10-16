@@ -34,6 +34,11 @@ export default {
     title: 'Vos médias',
     photos: 'Photos',
     videos: 'Vidéos',
+    upload: 'Téléverser',
+    uploadNote: 'Mis ici, il est dans votre bibliothèque et dans ce texte seulement : ni dans votre fil ni sur votre profil.',
+    insert: 'Insérer',
+    chooseVideo: 'Choisir un GIF ou une vidéo',
+    preparing: 'Préparation de votre vidéo. Elle est insérée dès qu’elle est prête.',
     none: {
       photos: 'Pas encore de photos.',
       videos: 'Pas encore de vidéos.',

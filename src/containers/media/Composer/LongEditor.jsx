@@ -54,6 +54,7 @@ const LongEditor = ({
   dir = 'auto',
   minHeight = 280,
   stickyTop = 0,
+  uploadAccess = 'public',
 }) => {
   // What this editor last said the text was, so that a value coming back
   // the same is not put in again, which would move the caret.
@@ -383,12 +384,17 @@ const LongEditor = ({
           embed: what pasting its address on a line of its own does. */}
       <MediaLibrary
         open={isLibraryOpen}
+        access={uploadAccess}
         onClose={() => {
           setIsLibraryOpen(false);
         }}
         onPick={(url) => {
           setIsLibraryOpen(false);
-          chain().insertContent({ type: 'embed', attrs: { url } }).run();
+          // After what is selected, never in its place: an embed just put
+          // in is selected, and the next would take its place.
+          chain()
+            .insertContentAt(editor.state.selection.to, { type: 'embed', attrs: { url } })
+            .run();
         }}
       />
       <Popover
@@ -459,6 +465,9 @@ LongEditor.propTypes = {
   // scrolls, less its padding, or under the page's bar. A number or, as sx
   // takes it, one for each breakpoint.
   stickyTop: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
+  // Who may see a picture or a video put up from the library: the
+  // writing's own audience.
+  uploadAccess: PropTypes.string,
 };
 
 export default LongEditor;

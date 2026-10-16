@@ -51,6 +51,11 @@ export default {
     title: 'Your media',
     photos: 'Photos',
     videos: 'Videos',
+    upload: 'Upload',
+    uploadNote: 'Put up here, it is in your library and in this writing only: not in your feed or on your profile.',
+    insert: 'Insert',
+    chooseVideo: 'Choose a GIF or a video',
+    preparing: 'Preparing your video. It goes in as soon as it is ready.',
     none: {
       photos: 'No photos yet.',
       videos: 'No videos yet.',

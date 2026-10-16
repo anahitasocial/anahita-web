@@ -501,6 +501,7 @@ const LongComposer = ({
             // Flush with the top of the dialog's scrolling part, over its
             // padding.
             stickyTop={-24}
+            uploadAccess={choices.access}
           />
           {kind === 'article' &&
             <TextField

@@ -97,6 +97,7 @@ const MediumFormEdit = (props) => {
             minHeight={280}
             // Under the page's bar, which is 56 pixels tall on a phone.
             stickyTop={{ xs: 56, sm: 64 }}
+            uploadAccess={medium.access || 'public'}
           />}
         {fields.body && !richText &&
           <TextField
