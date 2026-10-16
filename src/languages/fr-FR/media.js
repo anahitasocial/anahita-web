@@ -2,6 +2,7 @@ export default {
   embed: {
     in: 'dans',
     citations: 'Citations',
+    opensNewTab: 'S’ouvre dans un nouvel onglet',
     readMore: 'Lire la suite',
   },
   stepper: {

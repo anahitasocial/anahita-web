@@ -7,6 +7,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import RemoveIcon from '@mui/icons-material/Close';
 
+import { OutboundMark } from './SmartLink';
 import i18n from '../languages';
 import linkPreviews from '../utils/linkPreviews';
 
@@ -74,10 +75,11 @@ const LinkPreviewCard = ({
             }}
           />}
         <Box sx={{ p: 2, pr: onRemove && !image ? 6 : 2 }}>
-          {site &&
-            <Typography variant="caption" color="textSecondary" noWrap component="div">
-              {site}
-            </Typography>}
+          {/* The site it is on, marked as a page that opens in a new tab. */}
+          <Typography variant="caption" color="textSecondary" noWrap component="div">
+            {site}
+            <OutboundMark />
+          </Typography>
           <Typography variant="subtitle2" dir="auto" sx={clamp(2)}>
             {preview.title}
           </Typography>

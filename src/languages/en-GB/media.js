@@ -3,6 +3,7 @@ export default {
   embed: {
     in: 'in',
     citations: 'Citations',
+    opensNewTab: 'Opens in a new tab',
     readMore: 'Read more',
   },
   stepper: {

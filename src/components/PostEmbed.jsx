@@ -11,6 +11,7 @@ import ActorAvatar from './ActorAvatar';
 import ActorHandle from './ActorHandle';
 import LinkPreviewCard from './LinkPreviewCard';
 import PhotoSlides from './PhotoSlides';
+import SmartLink from './SmartLink';
 import VideoPlayer from './VideoPlayer';
 import api from '../api';
 import embeds from '../utils/embeds';
@@ -48,9 +49,9 @@ const SPACE = { my: 2 };
 const PlainLink = ({ url }) => {
   return (
     <Box component="p" sx={SPACE}>
-      <Link href={url} rel="noopener noreferrer nofollow" target="_blank" sx={{ wordWrap: 'break-word' }}>
+      <SmartLink href={url} sx={{ wordWrap: 'break-word' }}>
         {url}
-      </Link>
+      </SmartLink>
     </Box>
   );
 };
@@ -244,7 +245,8 @@ const Words = ({ post }) => {
             {text}
           </Typography>}
         <Typography variant="body2" component="div" sx={{ mt: 1 }}>
-          <Link href={url} target="_blank" rel="noopener" underline="hover">
+          {/* Within Anahita: in the same tab (the user, 2026-10-16). */}
+          <Link component={RouterLink} to={url} underline="hover">
             {i18n.t('media:embed.readMore')}
           </Link>
         </Typography>
@@ -416,15 +418,9 @@ const Citation = ({ url, cards }) => {
         <Typography variant="body2" color="textSecondary" component="span" sx={{ mr: 1 }}>
           {card.siteName}
         </Typography>}
-      <Link
-        href={url}
-        target={at ? undefined : '_blank'}
-        rel={at ? undefined : 'noopener noreferrer nofollow'}
-        dir="auto"
-        sx={{ overflowWrap: 'anywhere' }}
-      >
+      <SmartLink href={url} dir="auto" sx={{ overflowWrap: 'anywhere' }}>
         {(card && card.title) || url}
-      </Link>
+      </SmartLink>
     </span>
   );
 };

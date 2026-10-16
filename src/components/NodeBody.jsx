@@ -5,6 +5,7 @@ import remarkGfm from 'remark-gfm';
 import { makeStyles } from 'tss-react/mui';
 
 import PostEmbed from './PostEmbed';
+import SmartLink from './SmartLink';
 import utils from '../utils';
 import embedsOf from '../utils/embeds';
 
@@ -53,7 +54,23 @@ const Paragraph = ({ node, children, ...rest }) => {
   return <p {...rest}>{children}</p>;
 };
 
-const WITH_EMBEDS = { p: Paragraph };
+// A link in what was written: within Anahita in the same tab, to another
+// site in a new one, marked (SmartLink).
+// `node` is the Markdown's own, and not passed on.
+const Anchor = ({
+  node, href = '', children = null, ...rest
+}) => {
+  return <SmartLink href={href} {...rest}>{children}</SmartLink>;
+};
+
+Anchor.propTypes = {
+  node: PropTypes.object,
+  href: PropTypes.string,
+  children: PropTypes.node,
+};
+
+const LINKS = { a: Anchor };
+const WITH_EMBEDS = { p: Paragraph, a: Anchor };
 
 const useStyles = makeStyles()((theme) => {
   const { body1, body2 } = theme.typography;
@@ -143,7 +160,7 @@ const NodeBody = ({
       <Cards.Provider value={cards}>
         <ReactMarkdown
           remarkPlugins={[remarkGfm]}
-          components={embeds ? WITH_EMBEDS : undefined}
+          components={embeds ? WITH_EMBEDS : LINKS}
         >
           {body}
         </ReactMarkdown>
