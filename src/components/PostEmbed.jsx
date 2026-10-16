@@ -278,6 +278,112 @@ const readPost = (at) => {
   return reads.get(key);
 };
 
+// Each profile read once, by its alias: which kind it is, then itself.
+const profiles = new Map();
+const readProfile = (alias) => {
+  if (!profiles.has(alias)) {
+    const reading = api.handles.read(alias).then((result) => {
+      const { kind, id } = result.data;
+      return api[kind].read(id);
+    }).then((result) => {
+      return result.data;
+    }).catch((error) => {
+      profiles.delete(alias);
+      throw error;
+    });
+    profiles.set(alias, reading);
+  }
+  return profiles.get(alias);
+};
+
+const useProfile = (alias) => {
+  const [actor, setActor] = useState(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    if (!alias) {
+      return undefined;
+    }
+    let current = true;
+    setActor(null);
+    setFailed(false);
+    readProfile(alias).then((read) => {
+      if (current) {
+        setActor(read);
+      }
+    }).catch(() => {
+      if (current) {
+        setFailed(true);
+      }
+    });
+    return () => {
+      current = false;
+    };
+  }, [alias]);
+  return { actor, failed };
+};
+
+// A profile here, a person, a group or an event, framed as a page's card
+// is: its cover, who it is, a few lines of what it says of itself, and a
+// way to it (the user, 2026-10-16).
+const Profile = ({ url, alias }) => {
+  const { actor, failed } = useProfile(alias);
+
+  if (failed) {
+    return <PlainLink url={url} />;
+  }
+  if (!actor) {
+    return <Skeleton variant="rounded" height={120} sx={SPACE} />;
+  }
+
+  const cover = getCoverURL(actor, 'medium');
+  const about = excerptOf(actor.body || '', 200);
+  const to = getURL(actor);
+  return (
+    <Box
+      sx={{
+        ...SPACE,
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1,
+        overflow: 'hidden',
+      }}
+    >
+      {cover &&
+        <Box
+          component="img"
+          src={cover}
+          alt=""
+          loading="lazy"
+          sx={{
+            width: '100%',
+            aspectRatio: '3 / 1',
+            objectFit: 'cover',
+            display: 'block',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        />}
+      <Box sx={{ p: 2 }}>
+        <Who actor={actor} size={40} />
+        {about &&
+          <Typography variant="body2" component="div" dir="auto" sx={{ mt: 1, ...clamp(3) }}>
+            {about}
+          </Typography>}
+        <Typography variant="body2" component="div" sx={{ mt: 1 }}>
+          <Link component={RouterLink} to={to} underline="hover">
+            {i18n.t('media:embed.viewProfile')}
+          </Link>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+Profile.propTypes = {
+  url: PropTypes.string.isRequired,
+  alias: PropTypes.string.isRequired,
+};
+
 const usePost = (at) => {
   const [post, setPost] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -363,6 +469,10 @@ const PostEmbed = ({
     if (at) {
       return <Post url={url} at={at} />;
     }
+    const profile = embeds.profileAt(url);
+    if (profile) {
+      return <Profile url={url} alias={profile.alias} />;
+    }
     return <PlainLink url={url} />;
   }
 
@@ -390,7 +500,17 @@ PostEmbed.propTypes = {
 // called or opens with; a page elsewhere, by its site and its title.
 const Citation = ({ url, cards }) => {
   const at = embeds.isOurs(url) ? embeds.postAt(url) : null;
+  const profileAt = embeds.isOurs(url) && !at ? embeds.profileAt(url) : null;
   const { post } = usePost(at);
+  const { actor } = useProfile(profileAt ? profileAt.alias : '');
+
+  if (profileAt && actor) {
+    return (
+      <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center', columnGap: 1 }}>
+        <Who actor={actor} size={20} />
+      </Box>
+    );
+  }
 
   if (at && post) {
     const what = post.name || excerptOf(post.body, 120);

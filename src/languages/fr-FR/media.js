@@ -12,6 +12,7 @@ export default {
     citations: 'Citations',
     opensNewTab: 'S’ouvre dans un nouvel onglet',
     readMore: 'Lire la suite',
+    viewProfile: 'Voir le profil',
   },
   stepper: {
     position: '{{index}} sur {{total}}',

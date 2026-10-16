@@ -14,6 +14,7 @@ export default {
     citations: 'Citations',
     opensNewTab: 'Opens in a new tab',
     readMore: 'Read more',
+    viewProfile: 'View profile',
   },
   stepper: {
     position: '{{index}} of {{total}}',

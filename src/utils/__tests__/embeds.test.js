@@ -25,6 +25,13 @@ describe('embeds', () => {
     expect(embeds.postAt('https://example.org/photos/')).toBe(null);
   });
 
+  it('reads which profile an address here is to', () => {
+    expect(embeds.profileAt('https://example.org/@anahita-project')).toEqual({ alias: 'anahita-project' });
+    expect(embeds.profileAt('https://example.org/@ana/photos')).toEqual({ alias: 'ana' });
+    expect(embeds.profileAt('https://example.org/@alice@mastodon.example')).toEqual({ alias: 'alice@mastodon.example' });
+    expect(embeds.profileAt('https://example.org/photos/12')).toBe(null);
+  });
+
   it('tells this installation from elsewhere', () => {
     expect(embeds.isOurs('https://example.org/photos/1', ORIGIN)).toBe(true);
     expect(embeds.isOurs('https://elsewhere.com/', ORIGIN)).toBe(false);
