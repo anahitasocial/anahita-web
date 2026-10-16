@@ -180,7 +180,12 @@ Grid.propTypes = {
 // library only, listed nowhere and announced to nobody, to be shown in what
 // is being written (the user's choice). It is seen by whoever may see the
 // writing it is put up for (`access`).
-const Upload = ({ viewer, access, onPick }) => {
+const Upload = ({
+  viewer,
+  access,
+  onPick,
+  file = null,
+}) => {
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const [items, setItems] = useState([]);
   const [isSending, setIsSending] = useState(false);
@@ -225,13 +230,7 @@ const Upload = ({ viewer, access, onPick }) => {
     });
   };
 
-  const chooseVideo = (event) => {
-    const chosen = event.target.files && event.target.files[0];
-    // eslint-disable-next-line no-param-reassign
-    event.target.value = '';
-    if (!chosen) {
-      return;
-    }
+  const takeVideo = (chosen) => {
     const why = videos.problem(chosen, nodeInfo);
     if (why) {
       setProblem(i18n.t(`videos:problems.${why}`, limits));
@@ -245,6 +244,23 @@ const Upload = ({ viewer, access, onPick }) => {
       libraryOnly: true,
     }, chosen);
   };
+
+  const chooseVideo = (event) => {
+    const chosen = event.target.files && event.target.files[0];
+    // eslint-disable-next-line no-param-reassign
+    event.target.value = '';
+    if (chosen) {
+      takeVideo(chosen);
+    }
+  };
+
+  // A GIF or a video picked outside, by the button at the bottom of the
+  // long content form: put up at once.
+  useEffect(() => {
+    if (file) {
+      takeVideo(file);
+    }
+  }, [file]);
 
   const videoBusy = upload.phase === 'uploading' || upload.phase === 'processing';
 
@@ -316,6 +332,8 @@ Upload.propTypes = {
   viewer: PropTypes.object.isRequired,
   access: PropTypes.string.isRequired,
   onPick: PropTypes.func.isRequired,
+  // A GIF or a video to put up at once.
+  file: PropTypes.object,
 };
 
 // One's own photos and videos, to put into what is being written, as
@@ -326,10 +344,18 @@ const MediaLibrary = ({
   onClose,
   onPick,
   access = 'public',
+  initialTab = 'photos',
+  file = null,
 }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const [tab, setTab] = useState('photos');
+  const [tab, setTab] = useState(initialTab || 'photos');
+  // On the tab it is asked to open on, each time it opens.
+  useEffect(() => {
+    if (open) {
+      setTab(initialTab || 'photos');
+    }
+  }, [open, initialTab]);
 
   return (
     <Dialog
@@ -362,7 +388,7 @@ const MediaLibrary = ({
       <Divider />
       <Box sx={{ flexGrow: 1, overflowY: 'auto' }}>
         {open && viewer && viewer.id && tab === 'upload' &&
-          <Upload viewer={viewer} access={access} onPick={onPick} />}
+          <Upload viewer={viewer} access={access} onPick={onPick} file={file} />}
         {open && viewer && viewer.id && tab !== 'upload' &&
           <Grid
             key={tab}
@@ -384,6 +410,10 @@ MediaLibrary.propTypes = {
   onPick: PropTypes.func.isRequired,
   // Who may see what is put up from here: the writing's own audience.
   access: PropTypes.string,
+  // Which tab it opens on: photos, videos or upload.
+  initialTab: PropTypes.string,
+  // A GIF or a video to put up at once, on the upload tab.
+  file: PropTypes.object,
 };
 
 export default MediaLibrary;

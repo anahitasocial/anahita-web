@@ -8,7 +8,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
@@ -17,21 +16,17 @@ import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
-import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
 import coverApi from '../../../api/cover';
 import linkPreviewsApi from '../../../api/linkPreviews';
-import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
 import CoverPicker from './CoverPicker';
 import LongEditor from './LazyLongEditor';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
-import useVideoUpload from './Video/useVideoUpload';
 
 import embeds from '../../../utils/embeds';
-import photoFiles from '../../../utils/photoFiles';
 import uploads from '../../../utils/upload';
 import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
@@ -40,9 +35,7 @@ import i18n from '../../../languages';
 
 const { NAME, BODY } = MEDIUM.FIELDS;
 
-// The words of the title and the text, as each kind of post has them: the
-// text of writing is its content, and of a photo or a video what describes
-// it, as WordPress says (the user, 2026-10-16).
+// The words of the title and the content, as each kind of writing has them.
 const WORDS = {
   article: {
     namespace: 'articles',
@@ -56,36 +49,23 @@ const WORDS = {
     titlePlaceholder: 'topics:composer.titlePlaceholder',
     bodyPlaceholder: 'topics:composer.bodyPlaceholder',
   },
-  photo: {
-    namespace: 'photos',
-    body: 'composer:fields.description',
-    titlePlaceholder: 'photos:composer.namePlaceholder',
-    bodyPlaceholder: 'photos:composer.bodyPlaceholder',
-  },
-  video: {
-    namespace: 'videos',
-    body: 'composer:fields.description',
-    titlePlaceholder: 'videos:composer.namePlaceholder',
-    bodyPlaceholder: 'videos:composer.bodyPlaceholder',
-  },
 };
 
 // The extended composer: writing at length, with a title, in a dialog as
 // tall as the screen allows and full screen on a phone.
 //
-// What it posts follows from what is in it, as in the short box: pictures
-// make a photo post and a video a video post, each with its title and its
-// text; with nothing attached it is an article or a topic, chosen by the
-// tabs where the profile takes both. An article and a topic need their title;
-// a photo or video post may do without.
+// It is an article or a topic, chosen by the tabs where the profile takes
+// both, and either needs its title. Pictures, a GIF or a video go into the
+// content as blocks where the caret is, from the editor's library or the
+// buttons at the bottom alike (the user, 2026-10-16); a photo or video post
+// of its own, with a title, is the short box's.
 //
-// `kinds` is what this profile takes of article and topic, `media` of photo
-// and video. `body` is what was written in the short box before it was
-// expanded. The title and the text are kept as a draft of their own.
+// `kinds` is what this profile takes of article and topic. `body` is what
+// was written in the short box before it was expanded. The title and the
+// content are kept as a draft of their own.
 const LongComposer = ({
   actor,
   kinds,
-  media = [],
   open,
   onClose,
   body: carried = '',
@@ -95,7 +75,8 @@ const LongComposer = ({
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
-  const upload = useVideoUpload();
+  // The editor's library, opened by the buttons at the bottom.
+  const editor = useRef(null);
 
   const [tab, setTab] = useState(kinds[0]);
   useEffect(() => {
@@ -107,10 +88,6 @@ const LongComposer = ({
   const [title, setTitle, clearTitle] = useDraft(actor.id, 'long-title');
   const [body, setBody, clearBody] = useDraft(actor.id, 'long-body');
   const [cover, setCover] = useState(null);
-  const [isAddingPhotos, setIsAddingPhotos] = useState(false);
-  const [photoItems, setPhotoItems] = useState([]);
-  const [video, setVideo] = useState(null);
-  const [videoProblem, setVideoProblem] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [tried, setTried] = useState(false);
 
@@ -144,23 +121,10 @@ const LongComposer = ({
   // its corner is dragged (LongEditor).
   const bodyRows = 8;
 
-  const canPhotos = media.includes('photo');
-  const canVideo = media.includes('video') && videos.isOn(nodeInfo);
-  const hasPhotos = photoItems.length > 0;
-  const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
-  const isUploading = upload.phase === 'uploading';
-  const busy = isSending || isUploading;
-
-  // Pictures decide it once one is in: opening the place to drop them
-  // changes nothing else, so it can be closed again with nothing lost.
-  let kind = tab;
-  if (hasPhotos) {
-    kind = 'photo';
-  } else if (video) {
-    kind = 'video';
-  }
-  const words = WORDS[kind];
-  const isWriting = kind === 'article' || kind === 'topic';
+  const canVideo = videos.isOn(nodeInfo);
+  const busy = isSending;
+  const kind = tab;
+  const words = WORDS[kind] || WORDS.article;
 
   // A page elsewhere on a line of its own is shown by its card. Its preview
   // is asked for while the text is written, once each, so that it is there
@@ -168,7 +132,7 @@ const LongComposer = ({
   // link-preview-service has read. Nothing is shown here for it.
   const asked = useRef(new Set());
   useEffect(() => {
-    if (!open || (kind !== 'article' && kind !== 'topic')) {
+    if (!open) {
       return undefined;
     }
     const timer = setTimeout(() => {
@@ -182,33 +146,22 @@ const LongComposer = ({
     return () => {
       clearTimeout(timer);
     };
-  }, [body, open, kind]);
+  }, [body, open]);
 
   const name = title.trim();
   const text = body.trim();
-  const titleShort = isWriting && name.length < NAME.MIN_LENGTH;
-  const bodyMissing = isWriting && !text;
+  const titleShort = name.length < NAME.MIN_LENGTH;
+  const bodyMissing = !text;
   // The editor has no limit of its own, as a text box had: said as soon as
   // it is passed, since the server would refuse it.
   const bodyTooLong = text.length > BODY.MAX_LENGTH;
-  let ready = !titleShort && !bodyMissing;
-  if (kind === 'photo') {
-    ready = photosReady;
-  }
-  ready = ready && !bodyTooLong;
+  const ready = !titleShort && !bodyMissing && !bodyTooLong;
   let bodyError = '';
   if (bodyTooLong) {
     bodyError = i18n.t('composer:tooLong', { count: BODY.MAX_LENGTH });
   } else if (tried && bodyMissing) {
     bodyError = i18n.t('composer:bodyNeeded');
   }
-
-  const limits = {
-    size: videos.megabytes(videos.maxBytes(nodeInfo)),
-    minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),
-    animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
-    seconds: videos.animationMaxSeconds(nodeInfo),
-  };
 
   const alertSuccess = (message) => {
     dispatch(actions.app.alert.success(message));
@@ -217,25 +170,12 @@ const LongComposer = ({
     dispatch(actions.app.alert.error(message));
   };
 
-  useEffect(() => {
-    if (upload.phase === 'ready') {
-      alertSuccess(i18n.t('videos:upload.ready'));
-    }
-    if (upload.phase === 'failed') {
-      alertError(i18n.t(`videos:problems.${upload.problem || 'failed'}`, limits));
-    }
-  }, [upload.phase]);
-
   // Everything back to empty, closed. The choices of audience and language
   // stay, as in the short box.
   const reset = () => {
     clearTitle();
     clearBody();
     setCover(null);
-    setPhotoItems([]);
-    setIsAddingPhotos(false);
-    setVideo(null);
-    setVideoProblem('');
     setTried(false);
     choices.posted();
     onClose();
@@ -248,30 +188,7 @@ const LongComposer = ({
       return;
     }
 
-    if (kind === 'video') {
-      upload.start(actor, {
-        name,
-        body: text,
-        ...choices.request(),
-        allowDownload: choices.allowDownload,
-      }, video).then((ok) => {
-        if (ok) {
-          // Posted by the server once it is ready, which is said then.
-          alertSuccess(i18n.t('videos:upload.processing'));
-          reset();
-        }
-      });
-      return;
-    }
-
-    let post = { name, body: text, ...choices.request() };
-    if (kind === 'photo') {
-      post = {
-        ...post,
-        uploads: photoFiles.toRequest(photoItems),
-        allow_download: choices.allowDownload,
-      };
-    }
+    const post = { name, body: text, ...choices.request() };
 
     // An article's cover goes once the article exists. Should it not be
     // taken, the article is posted all the same, and the cover can be added
@@ -303,28 +220,6 @@ const LongComposer = ({
       setIsSending(false);
     });
   };
-
-  // A video picked with its own button, or picked or dropped where the
-  // photos are.
-  const takeVideo = (chosen) => {
-    const problem = videos.problem(chosen, nodeInfo);
-    if (problem) {
-      setVideoProblem(i18n.t(`videos:problems.${problem}`, limits));
-      return;
-    }
-    setVideoProblem('');
-    setVideo(chosen);
-    setIsAddingPhotos(false);
-    if (upload.phase !== 'idle') {
-      upload.reset();
-    }
-  };
-
-  // Hidden while posting rather than disabled: a tooltip on a disabled
-  // button is never seen. Pictures, or a GIF or a video, not both. Photo
-  // opens the place to drop them and, while it is empty, closes it again.
-  const showPhotos = canPhotos && !busy && !video && !hasPhotos;
-  const showVideo = canVideo && !busy && !hasPhotos && !video;
 
   // As tall as the screen allows on a desktop, less the dialog's margins;
   // on a phone, what the keyboard leaves.
@@ -371,15 +266,15 @@ const LongComposer = ({
             type="submit"
             variant="contained"
             color="primary"
-            disabled={busy || (hasPhotos && !photosReady)}
+            disabled={busy}
             sx={{ minWidth: 88 }}
           >
             {!isSending && i18n.t('actions:post')}
             {isSending && <CircularProgress size={20} />}
           </Button>
         </Toolbar>
-        {/* Article or Topic, until a picture or a video decides it. */}
-        {kinds.length > 1 && isWriting &&
+        {/* Article or Topic, where the profile takes both. */}
+        {kinds.length > 1 &&
           <Tabs
             value={tab}
             onChange={(event, value) => {
@@ -418,7 +313,7 @@ const LongComposer = ({
             error={tried && titleShort}
             helperText={tried && titleShort ?
               i18n.t('composer:titleNeeded', { count: NAME.MIN_LENGTH }) : ' '}
-            required={isWriting}
+            required
             disabled={busy}
             fullWidth
             autoFocus={!phone}
@@ -427,63 +322,6 @@ const LongComposer = ({
               inputLabel: { shrink: true },
             }}
           />
-          {/* What is attached, under the title, where it is seen. */}
-          {isAddingPhotos &&
-            <Box sx={{ pb: 2 }}>
-              <PhotoFilesEditor
-                owner={actor}
-                items={photoItems}
-                onChange={setPhotoItems}
-                max={photoFiles.maxFiles(nodeInfo)}
-                disabled={busy}
-                videoMimetypes={canVideo ? videos.TYPES : []}
-                onVideo={takeVideo}
-              />
-              {!hasPhotos &&
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setIsAddingPhotos(false);
-                  }}
-                >
-                  {i18n.t('replies:attachments.noPhotos')}
-                </Button>}
-            </Box>}
-          {video &&
-            <Stack direction="row" spacing={1} sx={{ alignItems: 'center', pb: 2 }}>
-              <VideoIcon fontSize="small" color="action" />
-              <Typography variant="body2" sx={{ flexGrow: 1, overflowWrap: 'anywhere' }}>
-                {`${video.name} · ${videos.megabytes(video.size)}`}
-              </Typography>
-              {!busy &&
-                <IconButton
-                  size="small"
-                  aria-label={i18n.t('replies:attachments.removeVideo')}
-                  onClick={() => {
-                    setVideo(null);
-                  }}
-                >
-                  <CloseIcon fontSize="small" />
-                </IconButton>}
-            </Stack>}
-          {isUploading &&
-            <Stack spacing={1} sx={{ pb: 2 }}>
-              <LinearProgress
-                variant="determinate"
-                value={upload.percent}
-                aria-label={i18n.t('videos:upload.uploading', { percent: upload.percent })}
-              />
-              <Typography variant="body2" color="textSecondary">
-                {i18n.t('videos:upload.keepOpen')}
-              </Typography>
-              <Button onClick={upload.cancel} size="small" sx={{ alignSelf: 'flex-start' }}>
-                {i18n.t('videos:upload.cancel')}
-              </Button>
-            </Stack>}
-          {videoProblem &&
-            <Typography variant="caption" color="error" component="p" role="alert" sx={{ pb: 2 }}>
-              {videoProblem}
-            </Typography>}
           <LongEditor
             value={body}
             onChange={setBody}
@@ -491,14 +329,15 @@ const LongComposer = ({
             placeholder={i18n.t(words.bodyPlaceholder)}
             error={bodyError !== ''}
             helperText={bodyError || ' '}
-            required={isWriting}
+            required
             disabled={busy}
             dir={choices.direction}
-            minHeight={(isWriting ? bodyRows : 6) * 23}
+            minHeight={bodyRows * 23}
             // Flush with the top of the dialog's scrolling part, over its
             // padding.
             stickyTop={-24}
             uploadAccess={choices.access}
+            controlsRef={editor}
           />
         </Box>
         <Divider />
@@ -511,17 +350,25 @@ const LongComposer = ({
             alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
           }}
         >
+          {/* Into the content where the caret is, as blocks: pictures
+              by the library's Upload, a GIF or a video picked here and put
+              up there. */}
           <AttachButtons
             phone={phone}
-            photos={showPhotos}
-            video={showVideo}
-            photosOpen={isAddingPhotos}
+            photos={!busy}
+            video={!busy && canVideo}
             onPhotos={() => {
-              setIsAddingPhotos(!isAddingPhotos);
+              if (editor.current) {
+                editor.current.openLibrary({ tab: 'upload' });
+              }
             }}
-            onVideo={takeVideo}
+            onVideo={(file) => {
+              if (editor.current) {
+                editor.current.openLibrary({ tab: 'upload', file });
+              }
+            }}
           />
-          {choices.render({ busy, withDownload: kind === 'photo' || kind === 'video' })}
+          {choices.render({ busy })}
         </Stack>
       </Box>
     </Dialog>
@@ -532,8 +379,6 @@ LongComposer.propTypes = {
   actor: ActorType.isRequired,
   // What this profile takes, of `article` and `topic`.
   kinds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  // And of `photo` and `video`, which may be added here too.
-  media: PropTypes.arrayOf(PropTypes.string),
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   body: PropTypes.string,

@@ -55,6 +55,7 @@ const LongEditor = ({
   minHeight = 280,
   stickyTop = 0,
   uploadAccess = 'public',
+  controlsRef = null,
 }) => {
   // What this editor last said the text was, so that a value coming back
   // the same is not put in again, which would move the caret.
@@ -68,6 +69,28 @@ const LongEditor = ({
   const drag = useRef(null);
   const [linkAnchor, setLinkAnchor] = useState(null);
   const [isLibraryOpen, setIsLibraryOpen] = useState(false);
+  // How the library opens: on which tab, and with a GIF or a video picked
+  // outside it to put up at once.
+  const [libraryStart, setLibraryStart] = useState({});
+
+  // What the form around may ask of the editor: to open its library, from
+  // the buttons at the bottom of the long content form.
+  useEffect(() => {
+    if (!controlsRef) {
+      return undefined;
+    }
+    // eslint-disable-next-line no-param-reassign
+    controlsRef.current = {
+      openLibrary: (start = {}) => {
+        setLibraryStart(start);
+        setIsLibraryOpen(true);
+      },
+    };
+    return () => {
+      // eslint-disable-next-line no-param-reassign
+      controlsRef.current = null;
+    };
+  }, [controlsRef]);
   const [linkAddress, setLinkAddress] = useState('');
 
   const editor = useEditor({
@@ -277,6 +300,7 @@ const LongEditor = ({
           })}
           {button('link', <LinkIcon />, i18n.t('composer:editor.link'), openLink)}
           {button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
+            setLibraryStart({});
             setIsLibraryOpen(true);
           })}
         </Stack>
@@ -385,6 +409,8 @@ const LongEditor = ({
       <MediaLibrary
         open={isLibraryOpen}
         access={uploadAccess}
+        initialTab={libraryStart.tab}
+        file={libraryStart.file}
         onClose={() => {
           setIsLibraryOpen(false);
         }}
@@ -468,6 +494,8 @@ LongEditor.propTypes = {
   // Who may see a picture or a video put up from the library: the
   // writing's own audience.
   uploadAccess: PropTypes.string,
+  // Given an object, it is given openLibrary({ tab, file }).
+  controlsRef: PropTypes.shape({ current: PropTypes.any }),
 };
 
 export default LongEditor;

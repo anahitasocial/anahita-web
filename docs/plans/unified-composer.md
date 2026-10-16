@@ -278,6 +278,16 @@ words, as a reply with pictures does.
   for a photo's or a video's. One set of words, `composer:fields`, used by
   the composer and the edit form alike.
 
+### Media are blocks in long writing (2026-10-16)
+
+The user, once the editor took photos and videos as blocks: the long
+content form's Photo, GIF and Video buttons put them into the content as
+blocks too, as the editor's library does, and long writing is always an
+article or a topic. "Media decides" (decision 5) is withdrawn: a photo or
+video post with a title is made in the short box. Photo opens the
+library's Upload tab; GIF and Video pick a file that is put up into the
+library and goes in once it is prepared.
+
 ### Found on the way, not part of this row
 
 - A photo post just made shows in the home feed without its picture until
