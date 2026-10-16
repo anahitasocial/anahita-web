@@ -1,0 +1,485 @@
+import React, { useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
+
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
+
+import ActorAvatar from './ActorAvatar';
+import ActorHandle from './ActorHandle';
+import LinkPreviewCard from './LinkPreviewCard';
+import PhotoSlides from './PhotoSlides';
+import SmartLink from './SmartLink';
+import VideoPlayer from './VideoPlayer';
+import api from '../api';
+import embeds from '../utils/embeds';
+import plainText from '../utils/plainText';
+import utils from '../utils';
+import i18n from '../languages';
+
+const {
+  getAuthor,
+  getActorName,
+  getURL,
+  getCoverURL,
+} = utils.node;
+
+// How much of an embedded post's words are shown. The rest is a click away.
+const EXCERPT = 280;
+
+// Cut at a word, with an ellipsis, where it is longer.
+const excerptOf = (text = '', most = EXCERPT) => {
+  const plain = plainText(text).replace(/\s+/g, ' ').trim();
+  if (plain.length <= most) {
+    return plain;
+  }
+  const cut = plain.slice(0, most);
+  const space = cut.lastIndexOf(' ');
+  return `${(space > most / 2 ? cut.slice(0, space) : cut).trim()}…`;
+};
+
+// The space an embed takes in the text: a paragraph's, so it reads as part
+// of what is written around it rather than as something set beside it.
+const SPACE = { my: 2 };
+
+// The address as a link, for whatever cannot be shown: a page with no card,
+// a post the reader may not see or that is gone.
+const PlainLink = ({ url }) => {
+  return (
+    <Box component="p" sx={SPACE}>
+      <SmartLink href={url} sx={{ wordWrap: 'break-word' }}>
+        {url}
+      </SmartLink>
+    </Box>
+  );
+};
+
+PlainLink.propTypes = {
+  url: PropTypes.string.isRequired,
+};
+
+// The lines a text is cut to, with an ellipsis.
+const clamp = (lines) => {
+  return {
+    display: '-webkit-box',
+    WebkitLineClamp: lines,
+    WebkitBoxOrient: 'vertical',
+    overflow: 'hidden',
+  };
+};
+
+// What goes under an embedded photo or video, as a caption: its title, a
+// link to the post; what it says of itself, in grey, three lines of it at
+// most, the rest on the post; and who it is by: a tiny avatar, their name
+// black and their handle grey (the user, 2026-10-16). `&&&` because the
+// text around it colours every link as one, in the editor by a rule of two
+// classes and a tag.
+const Caption = ({ post }) => {
+  const author = getAuthor(post);
+  const said = plainText(post.body || '').replace(/\s+/g, ' ').trim();
+  return (
+    <Box sx={{ mt: 1 }}>
+      {post.name &&
+        <Typography variant="body2" component="div" dir="auto" sx={{ fontWeight: 500 }}>
+          <Link
+            component={RouterLink}
+            to={getURL(post)}
+            underline="hover"
+            sx={{ '&&&': { color: 'text.primary' } }}
+          >
+            {post.name}
+          </Link>
+        </Typography>}
+      {said &&
+        <Typography variant="body2" color="textSecondary" dir="auto" sx={clamp(3)}>
+          {said}
+        </Typography>}
+      <Byline author={author} />
+    </Box>
+  );
+};
+
+Caption.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+// Who it is by: a tiny avatar, their name black and their handle grey.
+const Byline = ({ author }) => {
+  return (
+    <Box
+      sx={{
+        display: 'flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap', mt: 0.5,
+      }}
+    >
+      <Box
+        sx={{
+          display: 'flex',
+          '& .MuiAvatar-root': {
+            width: 20, height: 20, fontSize: 10,
+          },
+        }}
+      >
+        <ActorAvatar actor={author} linked={Boolean(author.id)} size="small" />
+      </Box>
+      <Typography variant="body2" component="span" dir="auto">
+        <Link
+          component={RouterLink}
+          to={getURL(author)}
+          underline="hover"
+          sx={{ '&&&': { color: 'text.primary' } }}
+        >
+          {getActorName(author)}
+        </Link>
+      </Typography>
+      <ActorHandle actor={author} />
+    </Box>
+  );
+};
+
+Byline.propTypes = {
+  author: PropTypes.object.isRequired,
+};
+
+// Who someone is, small: a tiny avatar, their name black, their handle grey.
+const Who = ({ actor, size = 24 }) => {
+  return (
+    <Box
+      component="span"
+      sx={{
+        display: 'inline-flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap', minWidth: 0,
+      }}
+    >
+      <Box
+        component="span"
+        sx={{
+          display: 'flex',
+          '& .MuiAvatar-root': {
+            width: size, height: size, fontSize: size / 2,
+          },
+        }}
+      >
+        <ActorAvatar actor={actor} linked={Boolean(actor.id)} size="small" />
+      </Box>
+      <Typography variant="body2" component="span" dir="auto" sx={{ fontWeight: 500 }}>
+        <Link
+          component={RouterLink}
+          to={getURL(actor)}
+          underline="hover"
+          sx={{ '&&&': { color: 'text.primary' } }}
+        >
+          {getActorName(actor)}
+        </Link>
+      </Typography>
+      <ActorHandle actor={actor} />
+    </Box>
+  );
+};
+
+Who.propTypes = {
+  actor: PropTypes.object.isRequired,
+  size: PropTypes.number,
+};
+
+// An embedded post that is words, a note, an article or a topic: framed
+// as a page's card is, a light border and slightly rounded corners (the
+// user, 2026-10-16). Who wrote it, and the group it was posted in; an
+// article's cover; its title, a link; its opening; and Read more, which
+// opens it in a tab of its own so the article being read stays open.
+const Words = ({ post }) => {
+  const cover = getCoverURL(post, 'medium');
+  const text = excerptOf(post.body);
+  const author = getAuthor(post);
+  const { owner } = post;
+  const elsewhere = owner && owner.id && owner.id !== author.id;
+  const url = getURL(post);
+  return (
+    <Box
+      sx={{
+        ...SPACE,
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1,
+        overflow: 'hidden',
+      }}
+    >
+      {cover &&
+        <Box
+          component="img"
+          src={cover}
+          alt=""
+          loading="lazy"
+          sx={{
+            width: '100%',
+            aspectRatio: '3 / 1',
+            objectFit: 'cover',
+            display: 'block',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        />}
+      <Box sx={{ p: 2 }}>
+        <Box
+          sx={{
+            display: 'flex', alignItems: 'center', columnGap: 1, rowGap: 0.5, flexWrap: 'wrap', mb: 1,
+          }}
+        >
+          <Who actor={author} />
+          {elsewhere &&
+            <>
+              <Typography variant="body2" color="textSecondary" component="span">
+                {i18n.t('media:embed.in')}
+              </Typography>
+              <Who actor={owner} size={20} />
+            </>}
+        </Box>
+        {post.name &&
+          <Typography variant="subtitle1" component="div" dir="auto" sx={{ fontWeight: 600 }}>
+            <Link component={RouterLink} to={url} underline="hover">
+              {post.name}
+            </Link>
+          </Typography>}
+        {text &&
+          <Typography variant="body2" component="div" dir="auto" sx={{ mt: 0.5 }}>
+            {text}
+          </Typography>}
+        <Typography variant="body2" component="div" sx={{ mt: 1 }}>
+          {/* Within Anahita: in the same tab (the user, 2026-10-16). */}
+          <Link component={RouterLink} to={url} underline="hover">
+            {i18n.t('media:embed.readMore')}
+          </Link>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+Words.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+// A post of this installation, read as the reader: one they may not see,
+// or that is gone, is the link and nothing else.
+// Each post read once, for its block and its line in the citations alike.
+// A post that could not be read is asked again the next time.
+const reads = new Map();
+const readPost = (at) => {
+  const key = `${at.namespace}/${at.id}`;
+  if (!reads.has(key)) {
+    const reading = api[at.namespace].read(at.id).then((result) => {
+      return result.data;
+    }).catch((error) => {
+      reads.delete(key);
+      throw error;
+    });
+    reads.set(key, reading);
+  }
+  return reads.get(key);
+};
+
+const usePost = (at) => {
+  const [post, setPost] = useState(null);
+  const [failed, setFailed] = useState(false);
+  const namespace = at ? at.namespace : '';
+  const id = at ? at.id : 0;
+
+  useEffect(() => {
+    if (!namespace || !id) {
+      return undefined;
+    }
+    let current = true;
+    setPost(null);
+    setFailed(false);
+    readPost({ namespace, id }).then((read) => {
+      if (current) {
+        setPost(read);
+      }
+    }).catch(() => {
+      if (current) {
+        setFailed(true);
+      }
+    });
+    return () => {
+      current = false;
+    };
+  }, [namespace, id]);
+
+  return { post, failed };
+};
+
+const Post = ({ url, at }) => {
+  const { post, failed } = usePost(at);
+
+  if (failed) {
+    return <PlainLink url={url} />;
+  }
+
+  // Room kept while it is read, so the text under it moves as little as it
+  // can when it comes.
+  if (!post) {
+    return <Skeleton variant="rounded" height={120} sx={SPACE} />;
+  }
+
+  if (at.kind === 'photo') {
+    return (
+      <Box sx={SPACE}>
+        <PhotoSlides medium={post} size="large" natural />
+        <Caption post={post} />
+      </Box>
+    );
+  }
+
+  if (at.kind === 'video' && post.video) {
+    return (
+      <Box sx={SPACE}>
+        <VideoPlayer video={post.video} title={post.name} />
+        <Caption post={post} />
+      </Box>
+    );
+  }
+
+  return <Words post={post} />;
+};
+
+Post.propTypes = {
+  url: PropTypes.string.isRequired,
+  at: PropTypes.shape({
+    namespace: PropTypes.string,
+    kind: PropTypes.string,
+    id: PropTypes.number,
+  }).isRequired,
+};
+
+// What an address on a line of its own in an article or a topic shows: a
+// post of this installation as itself, a page elsewhere by the card kept
+// with the post when it was saved (`cards`). See utils/embeds.
+const PostEmbed = ({
+  url,
+  cards = [],
+}) => {
+  if (embeds.isOurs(url)) {
+    const at = embeds.postAt(url);
+    if (at) {
+      return <Post url={url} at={at} />;
+    }
+    return <PlainLink url={url} />;
+  }
+
+  const card = (cards || []).find((each) => {
+    return embeds.samePage(each.url, url);
+  });
+  if (!card) {
+    return <PlainLink url={url} />;
+  }
+
+  // The card's own top margin, and one below to match.
+  return (
+    <Box sx={{ mb: 2 }}>
+      <LinkPreviewCard preview={card} />
+    </Box>
+  );
+};
+
+PostEmbed.propTypes = {
+  url: PropTypes.string.isRequired,
+  cards: PropTypes.arrayOf(PropTypes.object),
+};
+
+// One line of the citations: a post here, by who wrote it and what it is
+// called or opens with; a page elsewhere, by its site and its title.
+const Citation = ({ url, cards }) => {
+  const at = embeds.isOurs(url) ? embeds.postAt(url) : null;
+  const { post } = usePost(at);
+
+  if (at && post) {
+    const what = post.name || excerptOf(post.body, 120);
+    return (
+      <Box
+        component="span"
+        sx={{
+          display: 'inline-flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap',
+        }}
+      >
+        <Who actor={getAuthor(post)} size={20} />
+        <Link component={RouterLink} to={getURL(post)} dir="auto" sx={{ overflowWrap: 'anywhere' }}>
+          {what || url}
+        </Link>
+      </Box>
+    );
+  }
+
+  const card = !at && (cards || []).find((each) => {
+    return embeds.samePage(each.url, url);
+  });
+  return (
+    <span>
+      {card && card.siteName &&
+        <Typography variant="body2" color="textSecondary" component="span" sx={{ mr: 1 }}>
+          {card.siteName}
+        </Typography>}
+      <SmartLink href={url} dir="auto" sx={{ overflowWrap: 'anywhere' }}>
+        {(card && card.title) || url}
+      </SmartLink>
+    </span>
+  );
+};
+
+Citation.propTypes = {
+  url: PropTypes.string.isRequired,
+  cards: PropTypes.arrayOf(PropTypes.object),
+};
+
+// What an article or a topic cites, at its end, in the order it comes:
+// every address on a line of its own, a post here or a page elsewhere (the
+// user, 2026-10-16). The posts here are its citations in the graph too.
+const Citations = ({ text = '', cards = [] }) => {
+  const addresses = [];
+  String(text).split('\n').forEach((line) => {
+    const address = embeds.alone(line);
+    if (address && !addresses.includes(address)) {
+      addresses.push(address);
+    }
+  });
+
+  if (addresses.length === 0) {
+    return null;
+  }
+
+  return (
+    <Box component="section" sx={{ mt: 4 }}>
+      {/* A heading of its own, with a line under it, as the end of an
+          article sets its references apart (the user, 2026-10-16). */}
+      <Typography
+        variant="h6"
+        component="h2"
+        sx={{
+          fontWeight: 600,
+          pb: 1,
+          mb: 2,
+          borderBottom: 1,
+          borderColor: 'divider',
+        }}
+      >
+        {i18n.t('media:embed.citations')}
+      </Typography>
+      <Box component="ol" sx={{ m: 0, pl: 3 }}>
+        {addresses.map((address) => {
+          return (
+            <Box component="li" key={address} sx={{ mb: 1 }}>
+              <Citation url={address} cards={cards} />
+            </Box>
+          );
+        })}
+      </Box>
+    </Box>
+  );
+};
+
+Citations.propTypes = {
+  text: PropTypes.string,
+  cards: PropTypes.arrayOf(PropTypes.object),
+};
+
+export { Citations, usePost };
+export default PostEmbed;

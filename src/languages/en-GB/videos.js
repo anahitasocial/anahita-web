@@ -2,9 +2,7 @@ export default {
   cTitle: 'Videos',
   mTitle: 'Videos',
   composer: {
-    name: 'Title',
     namePlaceholder: "Video's title ...",
-    body: 'Description',
     bodyPlaceholder: 'Write a description ...',
     choose: 'Choose a video or a GIF',
     change: 'Choose another',

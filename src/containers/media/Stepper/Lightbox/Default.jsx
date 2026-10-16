@@ -34,7 +34,6 @@ import ActorTitle from '../../../../components/ActorTitle';
 import ActorAvatar from '../../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../../components/MediumOwnerCardHeader';
 import { PhotoSlideImage } from '../../../../components/PhotoSlides';
-import Player from '../../../../components/Player';
 import EntityBody from '../../../../components/NodeBody';
 import i18n from '../../../../languages';
 import utils from '../../../../utils';
@@ -504,6 +503,7 @@ const MediumStepperLightboxDefault = ({
                     <ActorTitle
                       actor={author}
                       linked={Boolean(author.id)}
+                      withHandle
                     />
                   }
                   subheader={
@@ -519,7 +519,6 @@ const MediumStepperLightboxDefault = ({
                 {editing && form}
                 {!editing &&
                   <>
-                    {medium.body && <Player text={medium.body} />}
                     <CardContent component="article">
                       {medium.name &&
                         <Typography

@@ -1,7 +1,17 @@
 export default {
-  medium: {
-    description: 'Description',
-    title: 'Titre',
+  summary: {
+    photos_one: '{{count}} photo',
+    photos_other: '{{count}} photos',
+    videos_one: '{{count}} vidéo',
+    videos_other: '{{count}} vidéos',
+    citations_one: '{{count}} citation',
+    citations_other: '{{count}} citations',
+  },
+  embed: {
+    in: 'dans',
+    citations: 'Citations',
+    opensNewTab: 'S’ouvre dans un nouvel onglet',
+    readMore: 'Lire la suite',
   },
   stepper: {
     position: '{{index}} sur {{total}}',

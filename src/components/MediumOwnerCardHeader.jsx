@@ -1,10 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Box from '@mui/material/Box';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import Link from '@mui/material/Link';
 
 import ActorAvatar from './ActorAvatar';
+import ActorHandle from './ActorHandle';
 import NodeType from '../proptypes/Node';
 import utils from '../utils';
 
@@ -32,9 +34,17 @@ const MediumOwner = ({ owner, actions }) => {
           />
         }
         title={
-          <Link href={url} variant="body2" color="textSecondary" underline="hover">
-            {owner.name}
-          </Link>
+          <Box
+            component="span"
+            sx={{
+              display: 'flex', alignItems: 'baseline', columnGap: 1, flexWrap: 'wrap', minWidth: 0,
+            }}
+          >
+            <Link href={url} variant="body2" color="textSecondary" underline="hover">
+              {owner.name}
+            </Link>
+            <ActorHandle actor={owner} variant="caption" />
+          </Box>
         }
         action={actions}
       />

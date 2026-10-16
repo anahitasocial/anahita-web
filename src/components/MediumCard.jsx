@@ -20,11 +20,11 @@ import CardHeaderOwner from './MediumOwnerCardHeader';
 import PhotoSlides from './PhotoSlides';
 import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
-import Player from './Player';
 import LinkPreviewCard from './LinkPreviewCard';
 import VideoPlayer from './VideoPlayer';
 import linkPreviews from '../utils/linkPreviews';
 import Progress from './Progress';
+import LongSummary, { isLong, SummaryPicture } from './LongSummary';
 import ReadMore from './ReadMore';
 import SignInPrompt from './SignInPrompt';
 import utils from '../utils';
@@ -106,6 +106,7 @@ const MediumCard = ({
             src="picture"
           />
         </Link>}
+      {!cover && isLong(medium) && <SummaryPicture node={medium} url={url} />}
       <CardHeader
         avatar={
           <ActorAvatar
@@ -117,6 +118,7 @@ const MediumCard = ({
           <ActorTitle
             actor={author}
             linked={Boolean(author.id)}
+            withHandle
           />
         }
         subheader={
@@ -171,7 +173,6 @@ const MediumCard = ({
           <Progress />
         </CardContent>}
       {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
-      {medium.body && <Player text={medium.body} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent
@@ -183,7 +184,8 @@ const MediumCard = ({
           <PostTitle href={url} lang={medium.language}>
             {medium.name}
           </PostTitle>}
-        {medium.body &&
+        {medium.body && isLong(medium) && <LongSummary node={medium} url={url} />}
+        {medium.body && !isLong(medium) &&
           <ReadMore contentFilter lang={medium.language} to={url}>
             {medium.body}
           </ReadMore>}

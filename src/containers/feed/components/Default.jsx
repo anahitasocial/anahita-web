@@ -14,13 +14,14 @@ import PostActionsRow from '../../../components/PostActionsRow';
 import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
+import ActorHandle from '../../../components/ActorHandle';
+import LongSummary, { isLong, SummaryPicture } from '../../../components/LongSummary';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import openOnClick from '../../../utils/openOnClick';
 import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
-import Player from '../../../components/Player';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
@@ -80,6 +81,7 @@ const FeedCardDefault = ({
   const { body } = node;
   const title = node.name || '';
   const url = getURL(node);
+  const long = isLong(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
   const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
 
@@ -98,11 +100,23 @@ const FeedCardDefault = ({
             linked={node.author.id > 0}
           />
         }
-        title={node.author.id > 0 ? (
-          <Link href={getURL(node.author)}>
-            {authorName}
-          </Link>
-        ) : authorName}
+        title={
+          // The handle after the name, in grey, or under it where the line is
+          // too narrow for both.
+          <Box
+            component="span"
+            sx={{
+              display: 'flex', alignItems: 'baseline', columnGap: 1, flexWrap: 'wrap', minWidth: 0,
+            }}
+          >
+            {node.author.id > 0 ? (
+              <Link href={getURL(node.author)}>
+                {authorName}
+              </Link>
+            ) : authorName}
+            <ActorHandle actor={node.author} />
+          </Box>
+        }
         subheader={
           <Link
             href={url}
@@ -122,6 +136,7 @@ const FeedCardDefault = ({
             src="picture"
           />
         </Link>}
+      {!cover && long && <SummaryPicture node={node} url={url} />}
       {node.mediaRemoved && photoFiles.countOf(node) === 0 &&
         <RemovedPictures medium={node} />}
       {photoFiles.hasSeveral(node) &&
@@ -144,7 +159,6 @@ const FeedCardDefault = ({
           <AltBadge text={photoFiles.descriptionOf(node)} />
         </Box>}
       {node.video && <VideoPlayer video={node.video} title={title} />}
-      {body && <Player text={body} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent {...openOnClick.handlersFor(url, navigate)}>
@@ -152,7 +166,10 @@ const FeedCardDefault = ({
           <PostTitle href={url} lang={node.language}>
             {title}
           </PostTitle>}
-        {body &&
+        {/* An article or a topic by its summary: what it shows within
+            itself is on its page. */}
+        {body && long && <LongSummary node={node} url={url} />}
+        {body && !long &&
           <ReadMore contentFilter to={url}>
             {body}
           </ReadMore>}

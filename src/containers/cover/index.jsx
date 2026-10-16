@@ -20,15 +20,14 @@ const Cover = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [waiting, setWaiting] = useState(false);
 
+  // The cover the node has, again whenever another node or another cover
+  // comes in: it used to be read only once, so a page moved to another
+  // post, or the post read again, went on showing the first.
+  const given = node.coverUrls && node.coverUrls.large && node.coverUrls.large.url;
   useEffect(() => {
-    const src = node.coverUrls && node.coverUrls.large && node.coverUrls.large.url;
-    if (src) {
-      setCover(src);
-      setIsLoading(false);
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
+    setCover(given || null);
+    setIsLoading(false);
+  }, [node.id, given]);
 
   useEffect(() => {
     if (cover) {

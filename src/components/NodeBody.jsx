@@ -1,10 +1,76 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import ReactMarkdown from 'react-markdown';
 import PropTypes from 'prop-types';
 import remarkGfm from 'remark-gfm';
 import { makeStyles } from 'tss-react/mui';
 
+import PostEmbed from './PostEmbed';
+import SmartLink from './SmartLink';
 import utils from '../utils';
+import embedsOf from '../utils/embeds';
+
+// The words of a link, as it reads.
+const textOf = (node) => {
+  if (!node) {
+    return '';
+  }
+  if (node.type === 'text') {
+    return node.value;
+  }
+  return (node.children || []).map(textOf).join('');
+};
+
+// The address a paragraph is and nothing else: one link, reading as its own
+// address, as Markdown makes of an address on a line of its own. ''
+// otherwise; a link with words of its own stays a link.
+const addressAlone = (paragraph) => {
+  const children = (paragraph.children || []).filter((child) => {
+    return !(child.type === 'text' && !child.value.trim());
+  });
+  if (children.length !== 1 || children[0].tagName !== 'a') {
+    return '';
+  }
+  const link = children[0];
+  const href = (link.properties && link.properties.href) || '';
+  if (textOf(link).trim() !== href || !embedsOf.alone(href)) {
+    return '';
+  }
+  return href;
+};
+
+// The cards kept with the post being drawn, for its paragraphs to find.
+const Cards = createContext([]);
+
+// A paragraph, or what the address it is and nothing else is to. Made once,
+// here: one made as the text is drawn would be a new kind of thing each
+// time, and an embedded video would start again with every change.
+// eslint-disable-next-line react/prop-types
+const Paragraph = ({ node, children, ...rest }) => {
+  const cards = useContext(Cards);
+  const address = addressAlone(node);
+  if (address) {
+    return <PostEmbed url={address} cards={cards} />;
+  }
+  return <p {...rest}>{children}</p>;
+};
+
+// A link in what was written: within Anahita in the same tab, to another
+// site in a new one, marked (SmartLink).
+// `node` is the Markdown's own, and not passed on.
+const Anchor = ({
+  node, href = '', children = null, ...rest
+}) => {
+  return <SmartLink href={href} {...rest}>{children}</SmartLink>;
+};
+
+Anchor.propTypes = {
+  node: PropTypes.object,
+  href: PropTypes.string,
+  children: PropTypes.node,
+};
+
+const LINKS = { a: Anchor };
+const WITH_EMBEDS = { p: Paragraph, a: Anchor };
 
 const useStyles = makeStyles()((theme) => {
   const { body1, body2 } = theme.typography;
@@ -15,13 +81,21 @@ const useStyles = makeStyles()((theme) => {
         textDecoration: 'none',
         wordWrap: 'break-word',
       },
+      // Code as it was written: its lines and indentation kept, in a box
+      // that scrolls sideways when a line is long rather than wrapping it,
+      // and left to right whatever the post's language. No colours.
       '& pre': {
         backgroundColor: theme.palette.background.default,
-        padding: theme.spacing(1),
-        overflowX: 'scroll',
+        padding: theme.spacing(1.5),
+        overflowX: 'auto',
+        direction: 'ltr',
+        textAlign: 'left',
+        fontSize: '0.875rem',
+        tabSize: 4,
       },
-      '& code': {
-        overflowX: 'scroll',
+      '& pre code': {
+        fontFamily: 'monospace',
+        whiteSpace: 'pre',
       },
       // Each paragraph runs in the direction of what is written in it, so
       // a Persian paragraph and an English one in the same post both read
@@ -60,13 +134,21 @@ const NodeBody = ({
     'mention',
   ],
   lang = '',
+  embeds = false,
+  cards = [],
 }) => {
   const { classes, cx } = useStyles();
   let body = `${children}`;
 
+  // Empty paragraphs at the end of long writing, which its editor wrote
+  // as &nbsp; before it learnt not to, left a gap under the text.
+  if (embeds) {
+    body = body.replace(/(\s*&nbsp;\s*)+$/, '');
+  }
+
   if (contentFilter) {
     body = utils.contentfilter({
-      text: children,
+      text: body,
       filters,
     });
   }
@@ -83,9 +165,14 @@ const NodeBody = ({
       className={cx(classes.root, classes[size])}
       lang={lang && lang !== 'und' ? lang : undefined}
     >
-      <ReactMarkdown remarkPlugins={[remarkGfm]}>
-        {body}
-      </ReactMarkdown>
+      <Cards.Provider value={cards}>
+        <ReactMarkdown
+          remarkPlugins={[remarkGfm]}
+          components={embeds ? WITH_EMBEDS : LINKS}
+        >
+          {body}
+        </ReactMarkdown>
+      </Cards.Provider>
     </div>
   );
 };
@@ -97,6 +184,11 @@ NodeBody.propTypes = {
   filters: PropTypes.arrayOf(PropTypes.string),
   // A language tag, "fr" or "fr-CA".
   lang: PropTypes.string,
+  // An address on a line of its own drawn as what it is to (PostEmbed): in
+  // an article or a topic.
+  embeds: PropTypes.bool,
+  // The cards of the pages elsewhere it embeds, as kept with the post.
+  cards: PropTypes.arrayOf(PropTypes.object),
 };
 
 export default NodeBody;

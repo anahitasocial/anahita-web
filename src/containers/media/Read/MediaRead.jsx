@@ -5,7 +5,6 @@ import Link from '@mui/material/Link';
 import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
 
-import Article from './Article';
 import Default from './Default';
 import HeaderMeta from '../../../components/HeaderMeta';
 import Likes from '../../likes';
@@ -65,12 +64,13 @@ const MediaReadView = ({
     handleView: portrait ? handleView : null,
     access: canEdit && medium.access && <Access medium={medium} />,
     editing: isEditing,
-    cover: (
+    // Only an article has a cover its author chooses.
+    cover: namespace === 'articles' ? (
       <Cover
         node={medium}
         canEdit={canEdit}
       />
-    ),
+    ) : null,
     form: (
       <MediumForm
         medium={current}
@@ -82,7 +82,12 @@ const MediaReadView = ({
         linkPreview={linkPreview ? linkPreview.preview : null}
         onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
         onBodyPaste={linkPreview ? linkPreview.onPaste : null}
-        bodyOptional={namespace === 'videos'}
+        // A photo or video post needs neither a title nor words.
+        bodyOptional={namespace === 'videos' || namespace === 'photos'}
+        nameOptional={namespace === 'videos' || namespace === 'photos'}
+        // Long writing in the editor it was written in.
+        richText={namespace === 'articles' || namespace === 'topics'}
+        withMedia={namespace === 'articles'}
       />
     ),
     menu: isAuthenticated && (
@@ -145,9 +150,7 @@ const MediaReadView = ({
         description={medium.body}
         image={portrait || cover}
       />
-      {medium.type === 'node.medium.article-service.article.v1'
-        ? <Article {...mediumProps} />
-        : <Default {...mediumProps} />}
+      <Default {...mediumProps} />
     </>
   );
 };

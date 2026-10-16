@@ -19,12 +19,12 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
 import PinnedLabel from '../../../components/PinnedLabel';
-import Player from '../../../components/Player';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
+import { Citations } from '../../../components/PostEmbed';
 import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
@@ -59,6 +59,9 @@ const MediumReadDefault = ({
   form = null,
   stats = null,
   handleView = null,
+  // An article's cover as its author may change it (containers/cover), in
+  // place of the picture alone.
+  cover = null,
 }) => {
   const [tab, setTab] = useState(TABS.REPLIES);
 
@@ -67,7 +70,7 @@ const MediumReadDefault = ({
   };
 
   const portrait = getPortraitURL(medium, 'original');
-  const cover = getCoverURL(medium, 'large');
+  const coverUrl = getCoverURL(medium, 'large');
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
 
@@ -108,11 +111,12 @@ const MediumReadDefault = ({
               it was said in its context, below. */}
         {!context && medium.owner && medium.owner.id !== author.id &&
         <CardHeaderOwner owner={medium.owner} />}
-        {cover &&
+        {cover}
+        {!cover && coverUrl &&
         <CardMedia
           className={classes.cover}
           title={medium.name}
-          image={cover}
+          image={coverUrl}
           src="picture"
         />}
         {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
@@ -147,6 +151,7 @@ const MediumReadDefault = ({
             <ActorTitle
               actor={author}
               linked={Boolean(author.id)}
+              withHandle
             />
             }
           subheader={
@@ -161,7 +166,6 @@ const MediumReadDefault = ({
         {!editing &&
         <>
           {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
-          {medium.body && <Player text={medium.body} />}
           <CardContent component="article">
             {medium.name &&
             <Typography
@@ -173,9 +177,18 @@ const MediumReadDefault = ({
               {medium.name}
             </Typography>}
             {medium.body &&
-            <EntityBody contentFilter lang={medium.language}>
+            <EntityBody
+              contentFilter
+              lang={medium.language}
+              // Long writing shows what an address on a line of its own
+              // is to: a post here as itself, a page by its card.
+              embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
+              cards={medium.linkPreviews || []}
+            >
               {medium.body}
             </EntityBody>}
+            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.body &&
+              <Citations text={medium.body} cards={medium.linkPreviews || []} />}
             {linkPreviews.isShown(medium.linkPreview, medium.body) &&
               <LinkPreviewCard preview={medium.linkPreview} />}
             {quote}
@@ -218,6 +231,7 @@ MediumReadDefault.propTypes = {
   stats: PropTypes.node,
   editing: PropTypes.bool,
   handleView: PropTypes.func,
+  cover: PropTypes.node,
 };
 
 export default withStyles(MediumReadDefault, styles);

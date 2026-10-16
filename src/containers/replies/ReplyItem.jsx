@@ -22,6 +22,7 @@ import LikedIcon from '@mui/icons-material/Favorite';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import ActorAvatar from '../../components/ActorAvatar';
+import ActorHandle from '../../components/ActorHandle';
 import ActorTitle from '../../components/ActorTitle';
 import EntityBody from '../../components/NodeBody';
 import ReplyForm from './ReplyForm';
@@ -166,12 +167,9 @@ const ReplyItem = ({
               actor={author}
               linked={Boolean(author.id)}
             />
-            {/* Somebody on another server is called by their whole handle,
-                which is what says where they are. */}
-            {utils.federation.isRemote(author) &&
-              <Typography variant="caption" color="textSecondary" sx={{ overflowWrap: 'anywhere' }}>
-                {utils.federation.handleOf(author)}
-              </Typography>}
+            {/* Their handle in grey: @ana here, and the whole handle for
+                somebody on another server, which says where they are. */}
+            <ActorHandle actor={author} />
             <Typography
               variant="caption"
               color="textSecondary"

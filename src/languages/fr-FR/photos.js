@@ -2,15 +2,14 @@ export default {
   cTitle: 'Photos',
   mTitle: 'Photos',
   composer: {
-    name: 'Titre',
     namePlaceholder: 'Titre de la photo ...',
-    body: 'Description',
     bodyPlaceholder: 'Rédigez une description ...',
   },
   editor: {
     title: 'Photos de cette publication',
     edit: 'Modifier les photos',
     add: 'Sélectionnez ou déposez des photos ici',
+    addOrVideo: 'Sélectionnez ou déposez des photos ou une vidéo ici',
     addMore: 'Ajouter une autre',
     limit: 'Jusqu\'à {{max}} photos par publication. La première est affichée en premier.',
     first: 'Première',

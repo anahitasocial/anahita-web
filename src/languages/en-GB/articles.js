@@ -2,12 +2,8 @@ export default {
   cTitle: 'Articles',
   mTitle: 'Articles',
   composer: {
-    title: 'Title',
     titlePlaceholder: "Article's title ...",
-    body: 'Description',
     bodyPlaceholder: 'Start writing ...',
-    excerpt: 'Excerpt',
-    excerptPlaceholder: 'Write an excerpt ...',
   },
   settings: {
     article: {
