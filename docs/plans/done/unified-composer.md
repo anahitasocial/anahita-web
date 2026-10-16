@@ -199,9 +199,10 @@ words, as a reply with pictures does.
 | Plan | written 2026-10-16, with the user's decisions |
 | Todo and File composer forms | removed 2026-10-16 |
 | Order | the composer before Pulse (row 38), at the user's word on 2026-10-16 |
-| Phase 1 | done 2026-10-16 on branch `unified-composer`; to try in a browser |
-| Phase 2 | begun 2026-10-16: one form of its own, with pictures and videos; the cover, pictures within an article's text, and the editor are still to do |
-| Phase 3 | to do |
+| Phase 1 | done 2026-10-16 on branch `unified-composer` |
+| Phase 2 | done 2026-10-16: the long content form, the editor (Tiptap), the cover, embeds and citations, the media library, drafts |
+| Phase 3 | done 2026-10-16: the old forms removed; tried at a desktop's width and a phone's, as each piece was built. The user is using it, and will report what they find |
+| Done | 2026-10-16, merged by the user |
 
 ### What phase 1 did
 

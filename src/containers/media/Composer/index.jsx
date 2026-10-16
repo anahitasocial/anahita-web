@@ -35,7 +35,7 @@ const useStyles = makeStyles()({
 
 // The composer at the top of a profile and of the home page: one box for
 // short posts, and from it the extended composer for writing at length
-// (docs/plans/unified-composer.md). What either offers is what this profile
+// (docs/plans/done/unified-composer.md). What either offers is what this profile
 // takes and the viewer may post (`authorized.composers`).
 const Composers = ({
   actor,
