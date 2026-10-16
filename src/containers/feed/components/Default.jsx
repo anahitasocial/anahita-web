@@ -14,6 +14,7 @@ import PostActionsRow from '../../../components/PostActionsRow';
 import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
+import ActorHandle from '../../../components/ActorHandle';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import openOnClick from '../../../utils/openOnClick';
 import PostTitle from '../../../components/PostTitle';
@@ -98,11 +99,23 @@ const FeedCardDefault = ({
             linked={node.author.id > 0}
           />
         }
-        title={node.author.id > 0 ? (
-          <Link href={getURL(node.author)}>
-            {authorName}
-          </Link>
-        ) : authorName}
+        title={
+          // The handle after the name, in grey, or under it where the line is
+          // too narrow for both.
+          <Box
+            component="span"
+            sx={{
+              display: 'flex', alignItems: 'baseline', columnGap: 1, flexWrap: 'wrap', minWidth: 0,
+            }}
+          >
+            {node.author.id > 0 ? (
+              <Link href={getURL(node.author)}>
+                {authorName}
+              </Link>
+            ) : authorName}
+            <ActorHandle actor={node.author} />
+          </Box>
+        }
         subheader={
           <Link
             href={url}

@@ -151,6 +151,7 @@ const MediumReadDefault = ({
             <ActorTitle
               actor={author}
               linked={Boolean(author.id)}
+              withHandle
             />
             }
           subheader={

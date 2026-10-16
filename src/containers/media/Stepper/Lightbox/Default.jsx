@@ -504,6 +504,7 @@ const MediumStepperLightboxDefault = ({
                     <ActorTitle
                       actor={author}
                       linked={Boolean(author.id)}
+                      withHandle
                     />
                   }
                   subheader={
