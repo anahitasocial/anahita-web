@@ -4,8 +4,9 @@
 the web app could not tell from a post whether the viewer runs the group it
 is in, so the services now answer it with each post and reply
 (`authorized.block_from_owner`, `permissions.CanBlockFromOwner`), for the
-group's administrators only. Site administrators are not offered it. Events
-have it as groups do.
+group's administrators, and for site administrators on the post's own page
+only (the user, 2026-10-16: they may change any post, but not from feeds and
+lists). Events have it as groups do.
 
 Decided by the user on 2026-10-16, while finishing item 44
 ([hiding-replies-across-servers.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/hiding-replies-across-servers.md)):

@@ -986,11 +986,13 @@ and Unblock on each.
 A group or an event has the same row under its own Privacy tab, below Access,
 listing who it has blocked; Unblock there lifts the group's block, not the
 viewer's. A group blocks somebody from the menu on what they wrote in it:
-"Block from <group>", on a post (`controls/BlockFromOwner.jsx`) and on a
-reply (`replies/Thread.jsx`, which reads the thread again afterwards). It is
-offered where the server says `authorized.blockFromOwner`: to the group's
-administrators, on what somebody else wrote. A person's own block does not
-reach the groups they run.
+"Block from <group>", on a post (`controls/BlockFromOwner.jsx`, in the feed's
+menu and the post page's) and on a reply (`replies/Thread.jsx`, which reads
+the thread again afterwards). It is offered where the server says
+`authorized.blockFromOwner`: to the group's administrators, on what somebody
+else wrote, and on the post's own page to site administrators too. Pin is
+offered the same way. A person's own block does not reach the groups they
+run.
 
 ### Events
 
