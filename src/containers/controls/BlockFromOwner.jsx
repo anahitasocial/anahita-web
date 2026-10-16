@@ -11,10 +11,11 @@ import api from '../../api';
 import i18n from '../../languages';
 import NodeType from '../../proptypes/Node';
 import utils from '../../utils';
+import events from '../../utils/events';
 
 const { getAuthor, getActorName } = utils.node;
 
-// "Block from <group>", in the menu of a post in a group or an event, for
+// "Block from group", in the menu of a post in a group or an event, for
 // whoever runs it: the group blocks whoever wrote the post, not the viewer.
 // Shown only where the server says it may be done
 // (`authorized.blockFromOwner`).
@@ -57,7 +58,9 @@ const ControlsBlockFromOwner = React.forwardRef(({
     >
       <MenuItem onClick={handleBlock} disabled={waiting} ref={ref}>
         <MenuItemLabel icon={<BlockIcon fontSize="small" />}>
-          {i18n.t('socialgraph:blockFromOwner.action', { name })}
+          {i18n.t(events.isEvent(owner) ?
+            'socialgraph:blockFromOwner.actionEvent' :
+            'socialgraph:blockFromOwner.action')}
         </MenuItemLabel>
       </MenuItem>
     </DialogConfirm>

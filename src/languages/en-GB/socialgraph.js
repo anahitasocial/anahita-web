@@ -87,7 +87,8 @@ export default {
   },
   // A group or an event blocking whoever wrote something in it.
   blockFromOwner: {
-    action: 'Block from {{name}}',
+    action: 'Block from group',
+    actionEvent: 'Block from event',
     title: 'Block from {{name}}?',
     confirm: '{{person}} will no longer see or take part in {{name}}, and what they posted, replied and liked there is hidden from everybody. Nothing is deleted: unblocking them in the settings of {{name}} brings it back.',
     done: 'Blocked from {{name}}.',

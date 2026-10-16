@@ -85,7 +85,8 @@ export default {
     none: 'Personne n\'est bloqué.',
   },
   blockFromOwner: {
-    action: 'Bloquer de {{name}}',
+    action: 'Bloquer du groupe',
+    actionEvent: 'Bloquer de l\'événement',
     title: 'Bloquer de {{name}} ?',
     confirm: '{{person}} ne pourra plus voir {{name}} ni y participer, et ce que cette personne y a publié, répondu et aimé est masqué pour tout le monde. Rien n\'est supprimé : la débloquer dans les paramètres de {{name}} le fait revenir.',
     done: 'Bloqué de {{name}}.',

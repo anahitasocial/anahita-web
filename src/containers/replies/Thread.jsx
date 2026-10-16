@@ -30,6 +30,7 @@ import replyAccess from '../../utils/replyAccess';
 import thread from '../../utils/thread';
 import visitor from '../../utils/visitor';
 import utils from '../../utils';
+import events from '../../utils/events';
 
 const { federation } = utils;
 
@@ -280,7 +281,9 @@ const RepliesThread = ({
         onHide={handleHide}
         onLike={handleLike}
         onBlockFromOwner={handleBlockFromOwner}
-        blockFromOwnerLabel={i18n.t('socialgraph:blockFromOwner.action', { name: groupName })}
+        blockFromOwnerLabel={i18n.t(events.isEvent(group) ?
+          'socialgraph:blockFromOwner.actionEvent' :
+          'socialgraph:blockFromOwner.action')}
       />
     );
   };

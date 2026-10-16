@@ -386,7 +386,7 @@ ReplyItem.propTypes = {
   // Blocking the writer from the group the thread is in, for whoever runs
   // it. Given only on a group's thread.
   onBlockFromOwner: PropTypes.func,
-  // What that item says: "Block from <group>".
+  // What that item says: "Block from group".
   blockFromOwnerLabel: PropTypes.string,
 };
 
