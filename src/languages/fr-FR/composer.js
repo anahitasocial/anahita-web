@@ -2,6 +2,7 @@ export default {
   newPost: 'Nouvelle publication',
   close: 'Fermer',
   longContent: 'Contenu long',
+  expand: 'Agrandir',
   photo: 'Photo',
   gif: 'GIF',
   addGif: 'Ajouter un GIF',

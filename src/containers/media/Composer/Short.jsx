@@ -261,9 +261,9 @@ const ShortComposer = ({
   };
 
   // Hidden rather than disabled while posting: a tooltip on a disabled
-  // button is never seen. Its words beside it on the closed line where
-  // there is room; the icon alone on a phone, and in the open box, where
-  // the row is full.
+  // button is never seen. The icon alone beside the closed box and on a
+  // phone, named Long content; "Expand" beside it in the open box on a
+  // desktop, where there is room for a short word.
   const expandButton = (withWords) => {
     if (!onExpand || busy) {
       return null;
@@ -286,7 +286,7 @@ const ShortComposer = ({
         sx={{ color: 'text.secondary', flexShrink: 0 }}
         onClick={expand}
       >
-        {i18n.t('composer:longContent')}
+        {i18n.t('composer:expand')}
       </Button>
     );
   };
@@ -456,7 +456,7 @@ const ShortComposer = ({
           {body || placeholder}
         </Typography>
       </ButtonBase>
-      {expandButton(!phone)}
+      {expandButton(false)}
     </Stack>
   );
 
@@ -550,7 +550,7 @@ const ShortComposer = ({
                 {attachButtons}
                 {options}
                 <Box sx={{ flexGrow: 1 }} />
-                {expandButton(false)}
+                {expandButton(true)}
               </Stack>
               {/* Buttons the width of the box, side by side, as in the
                   reply form. Closing keeps what was written. */}

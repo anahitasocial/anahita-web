@@ -5,6 +5,8 @@ export default {
   close: 'Close',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Long content',
+  // The same button's word in the open box, where the row is full.
+  expand: 'Expand',
   // What can be added to a post: the words beside each icon where there is
   // room, and the icon's name where it stands alone, on a phone.
   photo: 'Photo',
