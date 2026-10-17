@@ -4,6 +4,10 @@ Documentation for Anahita Web, the web app for Anahita. The server side,
 including every setting an operator changes without rebuilding this app, is
 documented in anahita-services, which will be released later in 2026.
 
+To set up a whole site, make it your own, keep it running or build on it,
+begin with the four ways in that the services' docs give:
+[Where to begin](https://github.com/purplerat/anahita-services/blob/main/docs/README.md#where-to-begin).
+
 ## Contents
 
 1. [Getting started](getting-started.md): running the app locally
