@@ -62,7 +62,7 @@ const clientRepository = (() => {
 // zero into a dash, which reads as "not reported" — a site with no
 // posts yet would look broken rather than new.
 const count = (value) => {
-  return typeof value === 'number' ? value.toLocaleString() : '—';
+  return typeof value === 'number' ? value.toLocaleString(i18n.language) : '—';
 };
 
 const text = (value) => {

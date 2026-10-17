@@ -29,7 +29,7 @@ const EventDateTile = ({ actor, size = 'default' }) => {
   const tile = events.dateTile(
     actor.event && actor.event.startsAt,
     events.browserZone(),
-    i18n.language || 'en-GB',
+    i18n.language || 'en-CA',
   );
 
   return (

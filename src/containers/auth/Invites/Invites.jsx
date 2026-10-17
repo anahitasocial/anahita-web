@@ -58,7 +58,7 @@ const formatDate = (value) => {
 
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString();
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString(i18n.language);
 };
 
 // The status is the row's most useful fact, so it leads with an icon

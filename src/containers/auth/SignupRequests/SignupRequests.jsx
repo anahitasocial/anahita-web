@@ -75,7 +75,7 @@ const formatDate = (value) => {
 
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString();
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString(i18n.language);
 };
 
 const SignupRequests = ({

@@ -304,7 +304,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
               <DialogContentText>
                 {i18n.t('federation:bluesky.import.following', {
                   count: preview.following || 0,
-                  formatted: (preview.following || 0).toLocaleString(),
+                  formatted: (preview.following || 0).toLocaleString(i18n.language),
                 })}
               </DialogContentText>
               {preview.following > 0 &&

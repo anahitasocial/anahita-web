@@ -55,7 +55,8 @@ const isZone = (zone) => {
   }
 };
 
-// The wall-clock parts of an instant in a zone.
+// The wall-clock parts of an instant in a zone. Read as numbers, never
+// shown, so the locale is fixed and is not the language of the page.
 const partsIn = (date, zone) => {
   const formatter = new Intl.DateTimeFormat('en-GB', {
     timeZone: zone,
@@ -213,7 +214,7 @@ const timesError = (startsWall, endsWall, zone) => {
 //
 // Returns the pieces, for the wording to put together:
 //   { sameDay, date, start, end }
-const when = (startsAt, endsAt, zone, locale = 'en-GB') => {
+const when = (startsAt, endsAt, zone, locale = 'en-CA') => {
   const starts = new Date(startsAt);
   const ends = new Date(endsAt);
   if (Number.isNaN(starts.getTime()) || Number.isNaN(ends.getTime()) || !isZone(zone)) {
@@ -261,7 +262,7 @@ const when = (startsAt, endsAt, zone, locale = 'en-GB') => {
 // The month and the day an event starts on, for the small square that
 // stands where an avatar would: { month: 'Oct', day: '14' }. Null when
 // there is no time to read.
-const dateTile = (startsAt, zone, locale = 'en-GB') => {
+const dateTile = (startsAt, zone, locale = 'en-CA') => {
   const starts = new Date(startsAt);
   if (!startsAt || Number.isNaN(starts.getTime()) || !isZone(zone)) {
     return null;

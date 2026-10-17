@@ -101,8 +101,9 @@ describe('when an event is, for somebody reading', () => {
     // Read in Tokyo it is 9 to 11 am on the 6th. A two-day event is not.
     const long = events.when('2026-11-06T00:00:00Z', '2026-11-07T22:00:00Z', 'Europe/Paris');
     expect(long.sameDay).toBe(false);
-    expect(long.start).toContain('6 Nov 2026');
-    expect(long.end).toContain('7 Nov 2026');
+    // Written in Canadian English, the default.
+    expect(long.start).toContain('Nov 6, 2026');
+    expect(long.end).toContain('Nov 7, 2026');
   });
 
   it('is nothing for times that cannot be read', () => {

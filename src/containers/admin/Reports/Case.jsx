@@ -33,7 +33,7 @@ const { getURL } = utils.node;
 
 const formatDateTime = (value) => {
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleString();
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleString(i18n.language);
 };
 
 const resolveError = (err, fallbackKey) => {

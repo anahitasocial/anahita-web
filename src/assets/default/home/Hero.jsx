@@ -125,13 +125,13 @@ const HomeHero = ({
           {people > 0 &&
             <Chip
               icon={<PeopleIcon />}
-              label={i18n.t('home:guest.people', { count: people, formatted: people.toLocaleString() })}
+              label={i18n.t('home:guest.people', { count: people, formatted: people.toLocaleString(i18n.language) })}
               variant="outlined"
             />}
           {posts > 0 &&
             <Chip
               icon={<PostsIcon />}
-              label={i18n.t('home:guest.posts', { count: posts, formatted: posts.toLocaleString() })}
+              label={i18n.t('home:guest.posts', { count: posts, formatted: posts.toLocaleString(i18n.language) })}
               variant="outlined"
             />}
           {federated &&

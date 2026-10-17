@@ -38,7 +38,7 @@ const formatDate = (value) => {
 
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime()) ? null : date.toLocaleDateString();
+  return Number.isNaN(date.getTime()) ? null : date.toLocaleDateString(i18n.language);
 };
 
 // What one person has accepted, and when.
