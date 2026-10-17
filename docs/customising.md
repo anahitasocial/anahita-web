@@ -73,6 +73,12 @@ Each file in a directory is a namespace of strings, and `index.js` gathers
 them. A string a language does not have is read from the one it falls back
 to.
 
+**Who translated them.** The translations, from the Canadian English the app
+is written in, are made by Claude, an AI model made by Anthropic, at the
+project's request. Nobody who speaks French, or any language to come, as
+their first language has read them yet. If something reads wrong to you,
+please say so: a correction to a string in `src/languages/` is welcome.
+
 **Which language a visitor sees** is chosen from their browser's languages,
 in their order, by `src/languages/choose.js`:
 
@@ -102,8 +108,9 @@ To add a language:
    in `match` which of the browser's languages it is shown for.
 
 To add a layer, such as `fr-BE`, make a directory with only the strings that
-differ, and give it its base in `FALLBACK`. The tests check that a layer has
-no key its base does not.
+differ, and give it its base in `FALLBACK`. The tests check that every base
+has every string the Canadian English has and no other (add a new base to
+`BASES` in `choose.js`), and that a layer has no key its base does not.
 
 When you add a string to the app, add it to both bases. Add it to a layer
 only when it differs there. The Canadian English files are the reference.

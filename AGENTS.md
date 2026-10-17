@@ -58,7 +58,8 @@ UI:
 - No Delete inside an edit form when the list or page has one already.
 - A person's settings have a Fediverse tab for network settings.
 - Every string is in both bases, `src/languages/en-CA` and `fr-FR`; in a
-  layer (`en-US`, `fr-CA`) only when it differs there.
+  layer (`en-US`, `fr-CA`) only when it differs there. `yarn test` fails on
+  a base missing one. The translations are Claude's; the docs say so.
 
 ## Checking a change
 
