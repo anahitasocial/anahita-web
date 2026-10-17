@@ -9,6 +9,7 @@ import IconButton from '@mui/material/IconButton';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import PhotoIcon from '@mui/icons-material/Photo';
 import GifIcon from '@mui/icons-material/GifBoxOutlined';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
@@ -17,6 +18,8 @@ import RemoveIcon from '@mui/icons-material/Close';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../components/PhotoFilesEditor';
 import useLinkPreview from '../media/Composer/useLinkPreview';
+import useTextareaHashtags from '../media/Composer/useHashtagSuggestions';
+import HashtagSuggestions from '../../components/HashtagSuggestions';
 import linkPreviews from '../../utils/linkPreviews';
 import photoFiles from '../../utils/photoFiles';
 import videos from '../../utils/videos';
@@ -79,6 +82,9 @@ const ReplyForm = ({
       null;
   }, [linkPreview, initial]);
   const card = useLinkPreview(body, true, known);
+  // Hashtags in use offered as one is typed (roadmap row 78).
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, phone });
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -133,13 +139,16 @@ const ReplyForm = ({
         size="small"
         multiline
         fullWidth
+        inputRef={hashtags.inputRef}
         slotProps={{
           htmlInput: {
             dir: direction,
             maxLength: BODY.MAX_LENGTH,
+            ...hashtags.handlers,
           },
         }}
       />
+      <HashtagSuggestions {...hashtags.overlay} />
       {/* A card for a link only where there is nothing else to show. */}
       {!hasPhotos && !video &&
         <LinkPreviewCard

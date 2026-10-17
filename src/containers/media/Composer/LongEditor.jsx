@@ -16,6 +16,7 @@ import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import ToggleButton from '@mui/material/ToggleButton';
 import Tooltip from '@mui/material/Tooltip';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import BoldIcon from '@mui/icons-material/FormatBold';
 import ItalicIcon from '@mui/icons-material/FormatItalic';
 import HeadingIcon from '@mui/icons-material/Title';
@@ -31,7 +32,11 @@ import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import EmbedNode from './EmbedNode';
 import MediaLibrary from './MediaLibrary';
+import { useOffer, samePlace } from './useHashtagSuggestions';
+import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import embeds from '../../../utils/embeds';
+import { hashtagsIn } from '../../../utils/contentfilter/hashtag';
+import { typedHashtag, isFullAmong } from '../../../utils/hashtagTyping';
 import videos from '../../../utils/videos';
 import i18n from '../../../languages';
 
@@ -47,6 +52,9 @@ import i18n from '../../../languages';
 // be dragged to make it taller or shorter, with a finger as with a mouse.
 // The least the text can be dragged down to: a few lines.
 const MIN_HEIGHT = 96;
+
+// Not typing a hashtag.
+const NOT_TYPING = { typed: null, full: false, rect: null };
 
 // What the GIF and Video buttons open the file window on.
 const ANIMATIONS = videos.ANIMATION_TYPES.join(',');
@@ -91,6 +99,20 @@ const LongEditor = ({
 
   const [linkAddress, setLinkAddress] = useState('');
 
+  // A hashtag being typed where the caret is, and hashtags in use offered
+  // for it (roadmap row 78), as in the short box. The keys the list takes
+  // are passed to it before the editor's own.
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const [typing, setTyping] = useState(NOT_TYPING);
+  const listKeys = useRef(() => { return false; });
+  const handleKeyDown = (view, event) => {
+    if (listKeys.current(event)) {
+      event.preventDefault();
+      return true;
+    }
+    return false;
+  };
+
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -115,6 +137,7 @@ const LongEditor = ({
         'aria-multiline': 'true',
         role: 'textbox',
       },
+      handleKeyDown,
     },
     onUpdate: ({ editor: current }) => {
       // A link that reads as its own address is kept as the bare address:
@@ -152,10 +175,75 @@ const LongEditor = ({
             'aria-multiline': 'true',
             role: 'textbox',
           },
+          handleKeyDown,
         },
       });
     }
   }, [editor, dir, label]);
+
+  // Whether a hashtag is being typed, and where, as the caret moves, the
+  // text changes and what is around it scrolls.
+  useEffect(() => {
+    if (!editor) {
+      return undefined;
+    }
+    const look = () => {
+      const { selection } = editor.state;
+      if (!editor.isFocused || !selection.empty) {
+        setTyping(NOT_TYPING);
+        return;
+      }
+      const { $from } = selection;
+      const typed = typedHashtag($from.parent.textBetween(0, $from.parentOffset, null, '\ufffc'));
+      if (typed === null) {
+        setTyping(NOT_TYPING);
+        return;
+      }
+      const others = hashtagsIn(editor.getText()).filter((alias) => {
+        return alias !== typed.toLowerCase();
+      });
+      const at = editor.view.coordsAtPos(selection.from);
+      setTyping((was) => {
+        const rect = samePlace(was.rect, { top: at.top, bottom: at.bottom, left: at.left });
+        const full = isFullAmong(others, typed);
+        if (was.typed === typed && was.full === full && was.rect === rect) {
+          return was;
+        }
+        return { typed, full, rect };
+      });
+    };
+    editor.on('selectionUpdate', look);
+    editor.on('update', look);
+    editor.on('focus', look);
+    editor.on('blur', look);
+    window.addEventListener('scroll', look, true);
+    return () => {
+      editor.off('selectionUpdate', look);
+      editor.off('update', look);
+      editor.off('focus', look);
+      editor.off('blur', look);
+      window.removeEventListener('scroll', look, true);
+    };
+  }, [editor]);
+
+  // The hashtag picked in place of what was typed after the #, and a space.
+  const pickHashtag = (item) => {
+    const { from } = editor.state.selection;
+    editor.chain()
+      .focus()
+      .insertContentAt(
+        { from: from - typing.typed.length - 1, to: from },
+        { type: 'text', text: `#${item.name} ` },
+      )
+      .run();
+  };
+  const offer = useOffer({
+    typed: typing.typed,
+    full: typing.full,
+    phone,
+    onPick: pickHashtag,
+  });
+  listKeys.current = offer.onKey;
 
   // Which buttons are on where the caret is.
   const on = useEditorState({
@@ -408,6 +496,14 @@ const LongEditor = ({
         >
           <EditorContent editor={editor} />
         </Box>
+        <HashtagSuggestions
+          rect={typing.rect}
+          items={offer.items}
+          notice={offer.notice}
+          active={offer.active}
+          phone={phone}
+          onPick={pickHashtag}
+        />
         {/* The corner to drag. A finger's width, and it takes the drag
             for itself, so on a phone moving it does not scroll the page
             instead. Pointer events are a mouse's and a finger's alike. */}

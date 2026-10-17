@@ -11,6 +11,7 @@ export default {
   add: {
     cTitle: 'Ajouter des lieux',
     mTitle: 'Ajouter des lieux',
+    full: 'Une publication peut avoir jusqu’à {{ count }} lieux.',
   },
   confirm: {
     delete: 'Voulez-vous supprimer ce lieu ?',

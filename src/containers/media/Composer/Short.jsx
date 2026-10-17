@@ -29,6 +29,8 @@ import AttachButtons from './AttachButtons';
 import VideoUploads from './VideoUploads';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
+import useTextareaHashtags from './useHashtagSuggestions';
+import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import useOnFediverse from './useOnFediverse';
 import useVideoUpload from './Video/useVideoUpload';
 import usePostChoices from './usePostChoices';
@@ -113,6 +115,8 @@ const ShortComposer = ({
   const isHeldBack = (hasPhotos && !photosReady) || busy;
 
   const linkPreview = useLinkPreview(body, canWords && !hasPhotos && !video);
+  // Hashtags in use offered as one is typed (roadmap row 78).
+  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, phone });
 
   // A post open to everybody on the writer's own profile goes to their
   // followers on other servers. Said before posting when it will not.
@@ -325,14 +329,17 @@ const ShortComposer = ({
         multiline
         minRows={phone ? 6 : 3}
         fullWidth
+        inputRef={hashtags.inputRef}
         slotProps={{
           input: phone ? { disableUnderline: true } : {},
           htmlInput: {
             dir: choices.direction,
             maxLength: BODY.MAX_LENGTH,
+            ...hashtags.handlers,
           },
         }}
       />
+      <HashtagSuggestions {...hashtags.overlay} />
       {!hasPhotos && !video &&
         <LinkPreviewCard
           preview={linkPreview.preview}

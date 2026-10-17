@@ -26,10 +26,12 @@ import linkPreviewsApi from '../../../api/linkPreviews';
 import CoverPicker from './CoverPicker';
 import DraftsMenu from './DraftsMenu';
 import LongEditor from './LazyLongEditor';
+import SuggestedHashtags from './SuggestedHashtags';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
 
 import embeds from '../../../utils/embeds';
+import { appendHashtag } from '../../../utils/hashtagTyping';
 import uploads from '../../../utils/upload';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
@@ -439,6 +441,14 @@ const LongComposer = ({
             stickyTop={-24}
             uploadAccess={choices.access}
             withMedia={kind === 'article'}
+          />
+          <SuggestedHashtags
+            title={title}
+            body={body}
+            disabled={busy}
+            onAdd={(hashtag) => {
+              setBody(appendHashtag(body, hashtag));
+            }}
           />
         </Box>
         <Divider />
