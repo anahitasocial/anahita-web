@@ -7,6 +7,13 @@ import enUS from '../en-US';
 import frFR from '../fr-FR';
 import frCA from '../fr-CA';
 
+const RESOURCES = {
+  'en-CA': enCA,
+  'en-US': enUS,
+  'fr-FR': frFR,
+  'fr-CA': frCA,
+};
+
 const { NARROW_NO_BREAK } = frenchSpacing;
 
 // Every key path in a set of namespaces: "events:event.state.cancelled".
@@ -87,6 +94,27 @@ describe('the space before ?, ! and ; in French', () => {
     expect(text).toContain(`${NARROW_NO_BREAK}?`);
     expect(i18n.t('events:event.cancel.title', { lng: 'fr-CA' })).not.toMatch(/\s\?/);
   });
+});
+
+describe('every language', () => {
+  it('is given its strings', () => {
+    expect(Object.keys(RESOURCES).sort()).toEqual([...choose.LANGUAGES].sort());
+  });
+
+  // A base falls behind when a string is added to the app and not to it:
+  // its readers are then shown English. Or ahead, when a key is renamed in
+  // one and not the other.
+  it.each(choose.BASES.filter((base) => { return base !== choose.BASE; }))(
+    '%s has every string the base has, and no other',
+    (base) => {
+      const theBase = new Set(keysOf(RESOURCES[choose.BASE]));
+      const theirs = new Set(keysOf(RESOURCES[base]));
+      expect({
+        missing: [...theBase].filter((key) => { return !theirs.has(key); }),
+        extra: [...theirs].filter((key) => { return !theBase.has(key); }),
+      }).toEqual({ missing: [], extra: [] });
+    },
+  );
 });
 
 describe('the layers', () => {

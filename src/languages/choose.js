@@ -11,6 +11,9 @@ const BASE = 'en-CA';
 
 const LANGUAGES = ['en-CA', 'en-US', 'fr-FR', 'fr-CA'];
 
+// The languages with every string. The rest are layers over one of them.
+const BASES = ['en-CA', 'fr-FR'];
+
 // What each language falls back to, for a string it does not have.
 const FALLBACK = {
   'en-US': ['en-CA'],
@@ -47,6 +50,7 @@ const choose = (browserLanguages, setting) => {
 export default {
   BASE,
   LANGUAGES,
+  BASES,
   FALLBACK,
   match,
   siteDefault,
