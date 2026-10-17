@@ -362,7 +362,14 @@ const ActorsSettings = ({
       </Stack>
     ),
     [ITEMS.WEBSITE]: <WebsiteFollowSnippet actor={actor} />,
-    [ITEMS.FEDIVERSE]: <ActorBluesky profile={actor} />,
+    // Its handle on the fediverse, where it always is, and its own Bluesky
+    // account, as a person's tab holds both.
+    [ITEMS.FEDIVERSE]: (
+      <Stack spacing={2}>
+        <ActorFediverse profile={actor} />
+        <ActorBluesky profile={actor} />
+      </Stack>
+    ),
     // Who can do what in the group, and with what is posted in it: whether
     // its new photos and videos start out downloadable. Not an event's.
     [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (

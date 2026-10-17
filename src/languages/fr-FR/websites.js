@@ -70,6 +70,13 @@ export default {
     access: 'Bloqués',
     website: 'Sur votre site',
     fediverse: 'Fédivers',
+    fediverseHelp: 'Un site est toujours sur le fédivers : les gens sur Mastodon et d’autres serveurs le trouvent par son identifiant et le suivent, et ses notes leur sont envoyées.',
+    handle: 'Son identifiant',
+    fediverseOff: {
+      site_private: 'Ce site réserve ce qu’il contient à ses membres : aucun site web n’y est sur le fédivers.',
+      site_unreachable: 'Ce site n’a pas d’adresse que d’autres serveurs puissent joindre : aucun site web n’y est sur le fédivers.',
+      profile_not_public: 'Tant que le site est désactivé ou supprimé, il n’est pas sur le fédivers.',
+    },
     blueskyHelp: 'Connectez le compte Bluesky du site lui-même, avec votre domaine comme identifiant si vous voulez (@exemple.fr) : ses notes y sont publiées aussi, et les gens sur Bluesky le suivent là-bas. Utilisez un mot de passe d’application, pas celui du compte.',
     websiteIntro: 'Collez ceci dans votre site pour mener vos lecteurs jusqu’ici.',
     snippetLabel: 'Suivez notre site sur le fédivers',

@@ -38,19 +38,22 @@ import { rememberOnFediverse } from '../../media/Composer/useOnFediverse';
 // told to remove the person, and in the lab the one tried did not take them
 // back when they turned it on again. On an installation with no fediverse service
 // nothing is drawn.
-const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
+//
+// A website (`profile`) is always on the fediverse, with nobody to choose it:
+// its card has no switch, and says its handle.
+const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) => {
   const [settings, setSettings] = useState(null);
   const [isAbsent, setIsAbsent] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
-    api.federation.settings().then((result) => {
+    api.federation.settings(profile).then((result) => {
       setSettings(result.data);
     }).catch((error) => {
       setIsAbsent(federation.isAbsent(error));
     });
-  }, []);
+  }, [profile && profile.id]);
 
   if (isAbsent || !settings) {
     return null;
@@ -85,6 +88,31 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
   // Turning it off is always allowed. Turning it on, only when they could
   // be on the fediverse.
   const canSwitch = settings.enabled || settings.available;
+
+  if (profile) {
+    return (
+      <Card>
+        <CardHeader
+          avatar={<Avatar><FediverseIcon /></Avatar>}
+          title={i18n.t('federation:settings.title')}
+        />
+        <Divider />
+        <CardContent>
+          <Typography variant="body2" color="textSecondary">
+            {i18n.t(settings.reason
+              ? `websites:settings.fediverseOff.${settings.reason}`
+              : 'websites:settings.fediverseHelp')}
+          </Typography>
+          {settings.handle && !settings.reason &&
+            <Typography variant="body2" sx={{ mt: 2 }}>
+              {i18n.t('websites:settings.handle')}
+              {': '}
+              <strong>{`@${settings.handle}`}</strong>
+            </Typography>}
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <Card>
@@ -157,6 +185,8 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
 };
 
 ActorsSettingsFediverse.propTypes = {
+  // A website, whose card this is; the viewer's own when left out.
+  profile: PropTypes.shape({ id: PropTypes.number }),
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };
