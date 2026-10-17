@@ -15,6 +15,8 @@ const HeaderMeta = ({
   image = `${window.location.origin}/statics/media/ogimage.jpg`,
   url = window.location.href,
   type = 'website',
+  author = '',
+  publishedTime = '',
 }) => {
   const metaTitle = title ? `${title} - ${process.env.REACT_APP_NAME}` : process.env.REACT_APP_NAME;
   const metaDesc = striptags(description).substring(0, 160);
@@ -38,6 +40,12 @@ const HeaderMeta = ({
       {type && [
         <meta property="og:type" content={type} key="og-type" />,
       ]}
+      {author && [
+        <meta name="author" content={author} key="meta-author" />,
+      ]}
+      {publishedTime && [
+        <meta property="article:published_time" content={publishedTime} key="article-published" />,
+      ]}
     </Helmet>
   );
 };
@@ -48,6 +56,9 @@ HeaderMeta.propTypes = {
   image: PropTypes.string,
   url: PropTypes.string,
   type: PropTypes.string,
+  // For long writing: who wrote it, and when, as ISO 8601.
+  author: PropTypes.string,
+  publishedTime: PropTypes.string,
 };
 
 export default HeaderMeta;

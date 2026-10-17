@@ -154,11 +154,12 @@ const MediumReadDefault = ({
               actor={author}
               linked={Boolean(author.id)}
               withHandle
+              isAuthor
             />
             }
           subheader={
             <>
-              {createdAt}
+              <time dateTime={moment.utc(medium.createdAt).toISOString()}>{createdAt}</time>
               {access}
             </>
             }
@@ -168,10 +169,15 @@ const MediumReadDefault = ({
         {!editing &&
         <>
           {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
-          <CardContent component="article">
+          {/* The card is the <article>; this is its text. One article,
+              with an h1 and a byline, is what reading views (Safari's
+              Reader, Firefox's) look for: an article within an article
+              read as none. */}
+          <CardContent>
             {medium.name &&
             <Typography
               variant="h2"
+              component="h1"
               dir="auto"
               lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
               className={classes.title}

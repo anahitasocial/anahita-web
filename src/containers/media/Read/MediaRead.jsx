@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import moment from 'moment';
 import Link from '@mui/material/Link';
 
 import PersonType from '../../../proptypes/Person';
@@ -143,12 +144,20 @@ const MediaReadView = ({
     ),
   };
 
+  // Long writing is an article to whatever reads the page's head.
+  const isLong = /\.(article|topic)\.v1$/.test(medium.type || '');
+
   return (
     <>
       <HeaderMeta
         title={medium.name || medium.body}
         description={medium.body}
         image={portrait || cover}
+        {...(isLong ? {
+          type: 'article',
+          author: utils.node.getActorName(utils.node.getAuthor(medium)),
+          publishedTime: moment.utc(medium.createdAt).toISOString(),
+        } : {})}
       />
       <Default {...mediumProps} />
     </>
