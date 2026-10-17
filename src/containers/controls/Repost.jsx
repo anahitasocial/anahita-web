@@ -115,7 +115,7 @@ const ControlsFeedRepost = React.forwardRef(({ parent }, ref) => {
             <QuoteIcon fontSize="small" />
           </ListItemIcon>
           <ListItemText
-            secondary={!quotes.canQuote(parent) ? i18n.t('replies:quote.notOffered') : null}
+            secondary={!quotes.canQuote(parent) ? i18n.t(quotes.whyNot(parent)) : null}
           >
             {i18n.t('replies:quote.action')}
           </ListItemText>

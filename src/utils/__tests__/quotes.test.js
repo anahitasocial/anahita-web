@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import quotes from '../quotes';
 
 describe('quotes', () => {
@@ -42,5 +43,12 @@ describe('quotes', () => {
     expect(quotes.refusalKey(refused('something new'))).toBe('replies:quote.refused.other');
     expect(quotes.refusalKey({ response: { data: { error: 'other' } } })).toBe('replies:quote.refused.other');
     expect(quotes.refusalKey(undefined)).toBe('replies:quote.refused.other');
+  });
+
+  it('says why Quote is not offered: a post that is not public, or the author', () => {
+    expect(quotes.whyNot({ access: 'registered' })).toBe('replies:quote.refused.not_public');
+    expect(quotes.whyNot({ access: 'followers' })).toBe('replies:quote.refused.not_public');
+    expect(quotes.whyNot({ access: 'public' })).toBe('replies:quote.notOffered');
+    expect(quotes.whyNot(undefined)).toBe('replies:quote.notOffered');
   });
 });
