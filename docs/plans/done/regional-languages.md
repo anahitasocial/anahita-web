@@ -1,6 +1,6 @@
 # Regional English and French
 
-*Roadmap row 85, planned 2026-10-17. See the [roadmap](roadmap.md) for order
+*Roadmap row 85, planned 2026-10-17. See the [roadmap](../roadmap.md) for order
 and dependencies.*
 
 ## Context
@@ -82,12 +82,12 @@ and for the browser's own spelling and hyphenation.
 
 | Thing | Today | Proposed for `fr-FR` |
 | --- | --- | --- |
-| Email | *e-mail* (15), *email* (15), *courriel* (6) | *e-mail* |
+| Email | *e-mail* (15), *email* (15), *courriel* (6) | *email*, settled |
 | Hashtag | *hashtag* (12), *mot-dièse* (7), *mot-clic* (1) | *hashtag* |
 | A post, in three notifications | *post* | *publication*, as everywhere else |
 
 **Then `fr-CA`**, a layer with the Office québécois de la langue française's
-words where France's differ: *courriel* for *e-mail*, *mot-clic* for
+words where France's differ: *courriel* for *email*, *mot-clic* for
 *hashtag*, and the strings that use them. About 40 strings; the list is
 made when the strings are, and read by somebody who speaks Quebec French
 before an operator relies on it.
@@ -155,13 +155,8 @@ development.
    says *mot-clic*.
 2. **The `fr-CA` strings go out as drafted,** and are corrected when
    operators in Quebec report something.
-
-## Open questions
-
-1. **The one word for email in `fr-FR`:** *e-mail*, as proposed, or
-   *courriel*, which France's official terminology prefers and Quebec uses?
-   Until it is settled, `fr-FR` keeps its three words and `fr-CA` has no
-   email strings of its own.
+3. **Email in `fr-FR` is *email*,** for French developers, engineers and
+   everyday users of technology, who say it; `fr-CA` says *courriel*.
 
 ## Estimate
 
@@ -179,4 +174,4 @@ development.
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-17 |
-| Implementation | begun 2026-10-17. Built: the four languages and the matching (`src/languages/choose.js`), `<html lang>` and moment following the language, `en-CA` and `en-US`, *hashtag* in `fr-FR` and *mot-clic* in `fr-CA`, *publication* for *post* in three notifications, the spacing rule (`src/languages/frenchSpacing.js`), dates and numbers in the language shown, `REACT_APP_LANGUAGE`, the docs. Checked in headless Chrome signed out in six browser languages, at desktop and phone. Left: one word for email |
+| Implementation | Built: the four languages and the matching (`src/languages/choose.js`), `<html lang>` and moment following the language, `en-CA` and `en-US`, *hashtag* in `fr-FR` and *mot-clic* in `fr-CA`, *publication* for *post* in three notifications, the spacing rule (`src/languages/frenchSpacing.js`), dates and numbers in the language shown, `REACT_APP_LANGUAGE`, the docs. Checked in headless Chrome signed out in six browser languages, at desktop and phone. *Email* in `fr-FR` and *courriel* in `fr-CA`. **Done 2026-10-17** |

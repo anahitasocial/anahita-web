@@ -67,7 +67,7 @@ layers, with only the strings that differ from their base:
 | English (Canada), `en-CA` | `src/languages/en-CA/` | Every string | — |
 | English (United States), `en-US` | `src/languages/en-US/` | The strings that differ: *canceled*, *license*, *gray* | `en-CA` |
 | French (France), `fr-FR` | `src/languages/fr-FR/` | Every string | `en-CA` |
-| French (Quebec), `fr-CA` | `src/languages/fr-CA/` | The strings that differ: *mot-clic* for *hashtag* | `fr-FR`, then `en-CA` |
+| French (Quebec), `fr-CA` | `src/languages/fr-CA/` | The strings that differ: *courriel* for *email*, *mot-clic* for *hashtag* | `fr-FR`, then `en-CA` |
 
 Each file in a directory is a namespace of strings, and `index.js` gathers
 them. A string a language does not have is read from the one it falls back
