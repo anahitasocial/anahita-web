@@ -8,7 +8,7 @@ export default {
   settings: {
     topic: {
       add: 'Qui peut lancer un sujet sur ce profil ?',
-      addcomment: 'Qui peut commenter les sujets ?',
+      addcomment: 'Qui peut répondre aux sujets ?',
     },
   },
 };

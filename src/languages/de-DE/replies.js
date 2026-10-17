@@ -54,7 +54,7 @@ export default {
       following: 'Leute, denen du folgst',
       mentioned: 'Leute, die du erwähnst',
     },
-    help: 'Damit schränkst du nur ein, wer antworten kann. Die Regel des Profils, wer kommentieren darf, gilt weiterhin, und unter deinem eigenen Beitrag kannst du immer antworten.',
+    help: 'Damit schränkst du nur ein, wer antworten kann. Die Regel des Profils, wer antworten darf, gilt weiterhin, und unter deinem eigenen Beitrag kannst du immer antworten.',
     label: 'Antworten: {{ who }}',
     short: {
       anyone: 'Alle',

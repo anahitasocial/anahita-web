@@ -67,11 +67,11 @@ export default {
   settings: {
     photo: {
       add: '¿Quién puede publicar fotos en este perfil?',
-      addcomment: '¿Quién puede comentar las fotos?',
+      addcomment: '¿Quién puede responder a las fotos?',
     },
     set: {
       add: '¿Quién puede crear álbumes en este perfil?',
-      addcomment: '¿Quién puede comentar los álbumes?',
+      addcomment: '¿Quién puede responder a los álbumes?',
     },
   },
 };

@@ -67,11 +67,11 @@ export default {
   settings: {
     photo: {
       add: 'Who can post photos on this profile?',
-      addcomment: 'Who can comment on photos?',
+      addcomment: 'Who can reply to photos?',
     },
     set: {
       add: 'Who can create sets on this profile?',
-      addcomment: 'Who can comment on sets?',
+      addcomment: 'Who can reply to photo sets?',
     },
   },
 };

@@ -8,7 +8,7 @@ export default {
   settings: {
     article: {
       add: 'Quem pode publicar um artigo neste perfil?',
-      addcomment: 'Quem pode comentar artigos?',
+      addcomment: 'Quem pode responder a artigos?',
       edit: 'Quem pode editar um artigo neste perfil?',
     },
   },

@@ -54,7 +54,7 @@ export default {
       following: 'People you follow',
       mentioned: 'People you mention',
     },
-    help: 'This only narrows who can reply. The profile\'s own rule for who can comment still applies, and you can always reply under your own post.',
+    help: 'This only narrows who can reply. The profile\'s own rule for who can reply still applies, and you can always reply under your own post.',
     label: 'Replies: {{ who }}',
     short: {
       anyone: 'Anyone',

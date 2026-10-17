@@ -8,7 +8,7 @@ export default {
   settings: {
     note: {
       add: 'Who can post a note on this profile?',
-      addcomment: 'Who can comment on notes?',
+      addcomment: 'Who can reply to notes?',
     },
   },
 };

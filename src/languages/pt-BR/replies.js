@@ -54,7 +54,7 @@ export default {
       following: 'Quem você segue',
       mentioned: 'Quem você menciona',
     },
-    help: 'Isto só restringe quem pode responder. A regra do próprio perfil sobre quem pode comentar continua valendo, e você sempre pode responder na sua própria publicação.',
+    help: 'Isto só restringe quem pode responder. A regra do próprio perfil sobre quem pode responder continua valendo, e você sempre pode responder na sua própria publicação.',
     label: 'Respostas: {{ who }}',
     short: {
       anyone: 'Qualquer pessoa',
