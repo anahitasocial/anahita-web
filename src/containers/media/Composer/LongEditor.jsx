@@ -29,6 +29,7 @@ import MediaIcon from '@mui/icons-material/PermMediaOutlined';
 import PhotoIcon from '@mui/icons-material/Photo';
 import GifIcon from '@mui/icons-material/GifBoxOutlined';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
+import DragHandleIcon from '@mui/icons-material/DragHandle';
 
 import EmbedNode from './EmbedNode';
 import MediaLibrary from './MediaLibrary';
@@ -320,7 +321,10 @@ const LongEditor = ({
           transform: 'translate(14px, -9px) scale(0.75)',
           px: 0.5,
           bgcolor: 'background.paper',
-          zIndex: 2,
+          // Over the buttons' row, which is drawn over what scrolls under
+          // it and would otherwise hide the lower half of the label. Once
+          // that row is stuck at the top, the label has scrolled away.
+          zIndex: 4,
         }}
       >
         {label}
@@ -507,9 +511,12 @@ const LongEditor = ({
           phone={phone}
           onPick={pickHashtag}
         />
-        {/* The corner to drag. A finger's width, and it takes the drag
-            for itself, so on a phone moving it does not scroll the page
-            instead. Pointer events are a mouse's and a finger's alike. */}
+        {/* The handle to drag, in the middle of the bottom edge, set into
+            the border as the label is into the top one, and the border's
+            own grey (the user, 2026-10-17, in place of a corner of slanted
+            lines). A finger's width, and it takes the drag for itself, so
+            on a phone moving it does not scroll the page instead. Pointer
+            events are a mouse's and a finger's alike. */}
         <Box sx={{ position: 'relative', height: 0 }}>
           <Box
             role="separator"
@@ -535,19 +542,29 @@ const LongEditor = ({
             }}
             sx={{
               position: 'absolute',
-              right: 0,
-              bottom: 0,
-              width: 32,
-              height: 32,
+              left: '50%',
+              // Its middle on the border, a pixel under the box inside it.
+              bottom: -13,
+              transform: 'translateX(-50%)',
+              zIndex: 2,
+              width: 48,
+              height: 24,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              bgcolor: 'background.paper',
               cursor: 'ns-resize',
               touchAction: 'none',
-              // Two short slanted lines in the corner, as a text box has.
-              background: (theme) => {
-                const line = theme.palette.text.disabled;
-                return `linear-gradient(135deg, transparent 0 62%, ${line} 62% 66%, transparent 66% 76%, ${line} 76% 80%, transparent 80%)`;
+              color: (theme) => {
+                return theme.palette.mode === 'dark' ?
+                  'rgba(255, 255, 255, 0.23)' :
+                  'rgba(0, 0, 0, 0.23)';
               },
+              '&:hover, &:active': { color: 'text.secondary' },
             }}
-          />
+          >
+            <DragHandleIcon />
+          </Box>
         </Box>
       </Box>
       <FormHelperText error={error} sx={{ mx: '14px' }}>
