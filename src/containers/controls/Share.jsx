@@ -21,8 +21,8 @@ const { getActorName, getURL, isActor } = utils.node;
 const ofNode = (node) => {
   return {
     path: getURL(node),
-    title: isActor(node) ? getActorName(node) : (node.name || ''),
-    text: isActor(node) ? '' : (node.body || ''),
+    title: isActor(node) ? getActorName(node) : (node.title || ''),
+    text: isActor(node) ? '' : (node.content || ''),
     access: node.access,
   };
 };

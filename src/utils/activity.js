@@ -71,7 +71,7 @@ const noteRows = (notes) => {
       key: `note-${note.id}`,
       actor: note.author,
       note,
-      excerpt: excerptOf(note.body),
+      excerpt: excerptOf(note.content),
     };
   });
 };

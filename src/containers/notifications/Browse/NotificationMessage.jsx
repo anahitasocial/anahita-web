@@ -26,7 +26,7 @@ const NotificationMessage = (props) => {
   const objectURL = notification.object ? getURL(notification.object) : '';
 
   const { target } = notification;
-  const targetName = target.id ? target.name : i18n.t('actor:unknown');
+  const targetName = target.id ? (target.name || target.title) : i18n.t('actor:unknown');
   const targetURL = target.id ? getURL(target) : '/';
   const i18nKey = _.camelCase(notification.type);
 

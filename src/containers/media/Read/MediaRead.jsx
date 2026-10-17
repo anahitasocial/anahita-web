@@ -150,8 +150,8 @@ const MediaReadView = ({
   return (
     <>
       <HeaderMeta
-        title={medium.name || medium.body}
-        description={medium.body}
+        title={medium.title || medium.content}
+        description={medium.content}
         image={portrait || cover}
         {...(isLong ? {
           type: 'article',

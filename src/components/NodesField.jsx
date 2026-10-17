@@ -101,7 +101,7 @@ const NodesField = ({
   };
 
   const nameOf = (node) => {
-    return isActor(node) ? getActorName(node) : (node.name || node.alias || '');
+    return isActor(node) ? getActorName(node) : (node.name || node.title || node.alias || '');
   };
 
   return (

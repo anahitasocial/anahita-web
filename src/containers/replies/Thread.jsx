@@ -116,8 +116,8 @@ const RepliesThread = ({
     }
 
     const sent = attached.uploads ?
-      api.replies.addWithPictures(parent, { body, language, uploads: attached.uploads }) :
-      api.replies.add(parent, { body, card, language });
+      api.replies.addWithPictures(parent, { content: body, language, uploads: attached.uploads }) :
+      api.replies.add(parent, { content: body, card, language });
 
     return sent.then((result) => {
       setReplies((current) => {
@@ -133,14 +133,14 @@ const RepliesThread = ({
   };
 
   const handleEdit = (reply, body, card = {}) => {
-    return api.replies.edit(reply, { body, card }).then((result) => {
+    return api.replies.edit(reply, { content: body, card }).then((result) => {
       setReplies((current) => {
         // Only what an edit changes. The answer to an edit is the note as
         // any note is sent, and the thread's own answers about this reply
         // are kept.
         return thread.replace(current, {
           id: reply.id,
-          body: result.data.body,
+          content: result.data.content,
           language: result.data.language,
           // Its card follows the edit: kept, changed or gone.
           linkPreview: result.data.linkPreview || null,
@@ -305,7 +305,7 @@ const RepliesThread = ({
             key={`on-the-way-${each.key}`}
             viewer={viewer}
             parent={each.parent}
-            body={each.body}
+            body={each.content}
             language={each.language}
             file={each.file}
             onReady={load}

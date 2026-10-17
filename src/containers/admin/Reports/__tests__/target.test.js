@@ -4,7 +4,7 @@ import target from '../target';
 const note = {
   id: 100,
   type: 'node.medium.text-service.note.v1',
-  body: 'First line.\n\nSecond   line.',
+  content: 'First line.\n\nSecond   line.',
 };
 
 describe('describing what was reported', () => {
@@ -30,7 +30,7 @@ describe('describing what was reported', () => {
   });
 
   it('cuts long text short', () => {
-    const item = { targetType: note.type, target: { ...note, body: 'word '.repeat(100) } };
+    const item = { targetType: note.type, target: { ...note, content: 'word '.repeat(100) } };
 
     expect(target.title(item).length).toBeLessThanOrEqual(201);
     expect(target.title(item).endsWith('…')).toBe(true);

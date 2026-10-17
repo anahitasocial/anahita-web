@@ -97,7 +97,7 @@ const MediumReadDefault = ({
   const portraitMedia = (
     <CardMedia
       component="img"
-      title={medium.name}
+      title={medium.title}
       alt={photoFiles.altOf(medium)}
       image={portrait}
     />
@@ -117,7 +117,7 @@ const MediumReadDefault = ({
         {!cover && coverUrl &&
         <CardMedia
           className={classes.cover}
-          title={medium.name}
+          title={medium.title}
           image={coverUrl}
           src="picture"
         />}
@@ -168,13 +168,13 @@ const MediumReadDefault = ({
         {editing && form}
         {!editing &&
         <>
-          {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
+          {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
           {/* The card is the <article>; this is its text. One article,
               with an h1 and a byline, is what reading views (Safari's
               Reader, Firefox's) look for: an article within an article
               read as none. */}
           <CardContent>
-            {medium.name &&
+            {medium.title &&
             <Typography
               variant="h2"
               component="h1"
@@ -182,9 +182,9 @@ const MediumReadDefault = ({
               lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
               className={classes.title}
             >
-              {medium.name}
+              {medium.title}
             </Typography>}
-            {medium.body &&
+            {medium.content &&
             <EntityBody
               contentFilter
               lang={medium.language}
@@ -193,11 +193,11 @@ const MediumReadDefault = ({
               embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
               cards={medium.linkPreviews || []}
             >
-              {medium.body}
+              {medium.content}
             </EntityBody>}
-            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.body &&
-              <Citations text={medium.body} cards={medium.linkPreviews || []} />}
-            {linkPreviews.isShown(medium.linkPreview, medium.body) &&
+            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
+              <Citations text={medium.content} cards={medium.linkPreviews || []} />}
+            {linkPreviews.isShown(medium.linkPreview, medium.content) &&
               <LinkPreviewCard preview={medium.linkPreview} />}
             {quote}
             <SignInPrompt show={Boolean(medium.truncated)} />

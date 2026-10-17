@@ -44,7 +44,7 @@ const ReplyContext = ({
   }
 
   const author = answered.author && answered.author.name;
-  const excerpt = excerptOf(answered.name || answered.body);
+  const excerpt = excerptOf(answered.title || answered.content);
 
   return (
     <>
@@ -84,8 +84,8 @@ ReplyContext.propTypes = {
   answered: PropTypes.shape({
     id: PropTypes.number,
     type: PropTypes.string,
-    name: PropTypes.string,
-    body: PropTypes.string,
+    title: PropTypes.string,
+    content: PropTypes.string,
     author: PropTypes.shape({ name: PropTypes.string }),
   }),
   owner: PropTypes.shape({ id: PropTypes.number }),

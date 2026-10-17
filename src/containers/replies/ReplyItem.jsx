@@ -196,17 +196,17 @@ const ReplyItem = ({
               mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
             }}
             >
-              <VideoPlayer video={reply.video} title={reply.name || ''} />
+              <VideoPlayer video={reply.video} title={reply.title || ''} />
             </Box>}
           {!isEditing &&
             <EntityBody contentFilter size="body2" lang={reply.language}>
-              {reply.body || ''}
+              {reply.content || ''}
             </EntityBody>}
-          {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.body) &&
+          {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.content) &&
             <LinkPreviewCard preview={reply.linkPreview} />}
           {isEditing &&
             <ReplyForm
-              initial={reply.body || ''}
+              initial={reply.content || ''}
               flush
               submitLabel={i18n.t('actions:save')}
               autoFocus

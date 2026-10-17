@@ -36,18 +36,18 @@ const title = (item) => {
     return i18n.t('abuseReports:case.targetGone');
   }
 
-  return target.name || excerpt(target.body) || `#${target.id}`;
+  return target.name || target.title || excerpt(target.content || target.body) || `#${target.id}`;
 };
 
 // The text of what was reported, when it has any beyond its title.
 const body = (item) => {
   const { target } = item;
 
-  if (!target || !target.body || isActor(target)) {
+  if (!target || !target.content || isActor(target)) {
     return '';
   }
 
-  return excerpt(target.body);
+  return excerpt(target.content);
 };
 
 // Where to go to look at it, or '' when there is nowhere: it is gone.

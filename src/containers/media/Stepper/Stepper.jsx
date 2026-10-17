@@ -55,7 +55,7 @@ const styles = (theme) => {
 };
 
 const getTitle = (medium) => {
-  return medium.name || striptags(medium.body || '').substring(0, 60);
+  return medium.title || striptags(medium.content || '').substring(0, 60);
 };
 
 const MediaStepperView = ({
@@ -98,7 +98,7 @@ const MediaStepperView = ({
         <title>
           {title}
         </title>
-        <meta name="description" content={striptags(medium.body || '')} />
+        <meta name="description" content={striptags(medium.content || '')} />
       </Helmet>
       <Toolbar className={classes.toolbar} variant="dense">
         <Tooltip title={i18n.t('commons:close')}>

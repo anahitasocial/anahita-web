@@ -265,7 +265,7 @@ const getAvatarURL = (node, size = 'medium') => {
 * @TODO add support for array of objects
 */
 const getStoryObjectName = (story) => {
-  return story.object && story.object.name;
+  return story.object && (story.object.name || story.object.title);
 };
 
 const getStorySubject = (story) => {

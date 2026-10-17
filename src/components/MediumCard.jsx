@@ -102,7 +102,7 @@ const MediumCard = ({
           <CardMedia
             className={classes.cover}
             image={cover}
-            title={medium.name}
+            title={medium.title}
             src="picture"
           />
         </Link>}
@@ -161,7 +161,7 @@ const MediumCard = ({
           >
             <CardMedia
               component="img"
-              title={medium.name}
+              title={medium.title}
               alt={photoFiles.altOf(medium)}
               image={portrait}
             />
@@ -172,7 +172,7 @@ const MediumCard = ({
         <CardContent>
           <Progress />
         </CardContent>}
-      {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
+      {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent
@@ -180,16 +180,16 @@ const MediumCard = ({
         className={classes.content}
         {...openOnClick.handlersFor(url, navigate)}
       >
-        {medium.name &&
+        {medium.title &&
           <PostTitle href={url} lang={medium.language}>
-            {medium.name}
+            {medium.title}
           </PostTitle>}
-        {medium.body && isLong(medium) && <LongSummary node={medium} url={url} />}
-        {medium.body && !isLong(medium) &&
+        {medium.content && isLong(medium) && <LongSummary node={medium} url={url} />}
+        {medium.content && !isLong(medium) &&
           <ReadMore contentFilter lang={medium.language} to={url}>
-            {medium.body}
+            {medium.content}
           </ReadMore>}
-        {linkPreviews.isShown(medium.linkPreview, medium.body) &&
+        {linkPreviews.isShown(medium.linkPreview, medium.content) &&
           <LinkPreviewCard preview={medium.linkPreview} />}
         <QuoteEmbed quote={medium.quote} />
         <SignInPrompt show={Boolean(medium.truncated)} />

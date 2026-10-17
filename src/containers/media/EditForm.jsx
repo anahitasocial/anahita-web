@@ -21,8 +21,8 @@ import { Medium as MEDIUM } from '../../constants';
 import i18n from '../../languages';
 
 const {
-  NAME,
-  BODY,
+  TITLE,
+  CONTENT,
 } = MEDIUM.FIELDS;
 
 const MediumFormEdit = (props) => {
@@ -47,7 +47,7 @@ const MediumFormEdit = (props) => {
   const changeBody = (value) => {
     handleOnChange({
       target: {
-        name: 'body',
+        name: 'content',
         value,
         type: 'text',
         required: false,
@@ -58,11 +58,11 @@ const MediumFormEdit = (props) => {
   // Hashtags in use offered as one is typed in the plain text, as when it
   // was written (roadmap row 78). The long editor offers its own.
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const hashtags = useTextareaHashtags({ value: medium.body || '', onChange: changeBody, phone });
+  const hashtags = useTextareaHashtags({ value: medium.content || '', onChange: changeBody, phone });
 
   // A photo or a video is described; anything else has content.
-  const bodyMissing = richText && !bodyOptional && !(medium.body || '').trim();
-  const bodyTooLong = (medium.body || '').trim().length > BODY.MAX_LENGTH;
+  const bodyMissing = richText && !bodyOptional && !(medium.content || '').trim();
+  const bodyTooLong = (medium.content || '').trim().length > CONTENT.MAX_LENGTH;
 
   const viewer = useSelector((state) => { return state.session.viewer; });
   const onBluesky = useOnBluesky(viewer);
@@ -72,15 +72,15 @@ const MediumFormEdit = (props) => {
   return (
     <form onSubmit={handleOnSubmit} noValidate>
       <CardContent>
-        {fields.name &&
+        {fields.title &&
           <TextField
             variant="standard"
-            name="name"
-            value={medium.name || ''}
+            name="title"
+            value={medium.title || ''}
             onChange={handleOnChange}
             label={i18n.t('composer:fields.title')}
-            error={fields.name.error !== ''}
-            helperText={fields.name.error || ' '}
+            error={fields.title.error !== ''}
+            helperText={fields.title.error || ' '}
             autoFocus
             fullWidth
             margin="normal"
@@ -89,18 +89,18 @@ const MediumFormEdit = (props) => {
             slotProps={{
               htmlInput: {
                 dir: 'auto',
-                maxLength: NAME.MAX_LENGTH,
+                maxLength: TITLE.MAX_LENGTH,
               },
             }}
           />}
-        {fields.body && richText &&
+        {fields.content && richText &&
           <LongEditor
-            value={medium.body || ''}
+            value={medium.content || ''}
             onChange={changeBody}
             label={i18n.t(bodyOptional ? 'composer:fields.description' : 'composer:fields.content')}
             required={!bodyOptional}
             error={bodyTooLong}
-            helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: BODY.MAX_LENGTH }) : ' '}
+            helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: CONTENT.MAX_LENGTH }) : ' '}
             disabled={isFetching}
             minHeight={280}
             // Under the page's bar, which is 56 pixels tall on a phone.
@@ -108,16 +108,16 @@ const MediumFormEdit = (props) => {
             uploadAccess={medium.access || 'public'}
             withMedia={withMedia}
           />}
-        {fields.body && !richText &&
+        {fields.content && !richText &&
           <TextField
             variant="standard"
-            name="body"
-            value={medium.body || ''}
+            name="content"
+            value={medium.content || ''}
             onChange={handleOnChange}
             onPaste={onBodyPaste}
             label={i18n.t(bodyOptional ? 'composer:fields.description' : 'composer:fields.content')}
-            error={fields.body.error !== ''}
-            helperText={fields.body.error || ' '}
+            error={fields.content.error !== ''}
+            helperText={fields.content.error || ' '}
             multiline
             fullWidth
             margin="normal"
@@ -127,12 +127,12 @@ const MediumFormEdit = (props) => {
             slotProps={{
               htmlInput: {
                 dir: 'auto',
-                maxLength: BODY.MAX_LENGTH,
+                maxLength: CONTENT.MAX_LENGTH,
                 ...hashtags.handlers,
               },
             }}
           />}
-        {fields.body && !richText && <HashtagSuggestions {...hashtags.overlay} />}
+        {fields.content && !richText && <HashtagSuggestions {...hashtags.overlay} />}
         <LinkPreviewCard
           preview={linkPreview}
           onRemove={isFetching ? null : onLinkPreviewRemove}

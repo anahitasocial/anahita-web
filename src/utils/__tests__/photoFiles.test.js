@@ -16,7 +16,7 @@ const file = (id, altText = '') => {
 const post = (...files) => {
   return {
     id: 7,
-    name: 'Herons',
+    title: 'Herons',
     portraitUrls: { medium: { url: 'https://media.example/cover' } },
     files,
   };
@@ -41,7 +41,7 @@ describe('how many images a post holds', () => {
 
 describe('the images of a post', () => {
   it('are none for a post that was sent without the list', () => {
-    const old = { id: 1, name: 'Old', portraitUrls: {} };
+    const old = { id: 1, title: 'Old', portraitUrls: {} };
 
     expect(photoFiles.filesOf(old)).toEqual([]);
     expect(photoFiles.hasSeveral(old)).toBe(false);
@@ -59,7 +59,7 @@ describe('the images of a post', () => {
     const second = photoFiles.asSingle(medium, 1);
 
     expect(second.portraitUrls.medium.url).toBe('https://media.example/b-medium');
-    expect(second.name).toBe('Herons');
+    expect(second.title).toBe('Herons');
     // The post itself is not changed.
     expect(medium.portraitUrls.medium.url).toBe('https://media.example/cover');
   });
@@ -69,7 +69,7 @@ describe('the images of a post', () => {
 
     expect(photoFiles.altOf(medium, 0)).toBe('A heron standing');
     expect(photoFiles.altOf(medium, 1)).toBe('Herons');
-    expect(photoFiles.altOf({ name: 'Old' }, 0)).toBe('Old');
+    expect(photoFiles.altOf({ title: 'Old' }, 0)).toBe('Old');
   });
 });
 

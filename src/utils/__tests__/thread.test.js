@@ -7,7 +7,7 @@ const reply = (id, parentId, more = {}) => {
     id,
     parentId,
     rootId: ROOT,
-    body: `reply ${id}`,
+    content: `reply ${id}`,
     ...more,
   };
 };
@@ -105,12 +105,12 @@ describe('changing a thread without reading it again', () => {
   });
 
   it('takes in an edited reply and keeps what the edit did not send', () => {
-    const edited = thread.replace(replies(), { id: 2, body: 'changed' });
+    const edited = thread.replace(replies(), { id: 2, content: 'changed' });
     const two = edited.find((item) => {
       return item.id === 2;
     });
 
-    expect(two.body).toBe('changed');
+    expect(two.content).toBe('changed');
     expect(two.parentId).toBe(1);
   });
 
@@ -129,7 +129,7 @@ describe('changing a thread without reading it again', () => {
     // What was under it is still under it.
     expect(shape(thread.nest(fewer, ROOT))).toBe('1[2[3]],4');
     expect(gone.deleted).toBe(true);
-    expect(gone.body).toBeUndefined();
+    expect(gone.content).toBeUndefined();
     expect(gone.author).toBeUndefined();
   });
 

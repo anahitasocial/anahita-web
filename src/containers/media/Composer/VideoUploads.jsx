@@ -69,7 +69,7 @@ const VideoUploads = ({
           >
             <Stack sx={{ flex: 1, minWidth: 0 }}>
               <Typography variant="body2" noWrap>
-                {item.name || i18n.t('composer:untitledVideo')}
+                {item.title || i18n.t('composer:untitledVideo')}
               </Typography>
               <Typography
                 variant="body2"
