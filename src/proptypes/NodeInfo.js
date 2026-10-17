@@ -62,6 +62,8 @@ export default shape({
     // super-administrators. GROUP-SERVICE enforces it; this document reports
     // it so the web app knows whether to offer a + on the groups page.
     groupsFrom: string,
+    // The same for connecting a website as a Pulse. pulse-service enforces it.
+    pulsesFrom: string,
     supportEmail: string,
     supportPhone: string,
     supportWebsite: string,

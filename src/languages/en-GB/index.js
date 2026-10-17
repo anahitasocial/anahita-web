@@ -28,6 +28,7 @@ import invites from './invites';
 import support from './support';
 import events from './events';
 import groups from './groups';
+import pulses from './pulses';
 import password from './password';
 import username from './username';
 import people from './people';
@@ -79,6 +80,7 @@ export default {
   support,
   events,
   groups,
+  pulses,
   people,
   password,
   username,

@@ -74,6 +74,8 @@ export const ITEMS = {
   REVOKE_PASSKEYS: 'revokePasskeys',
   REVOKE_TOTP: 'revokeTotp',
   DANGER: 'danger',
+  // A Pulse's: the few lines of HTML its site pastes in to lead to it.
+  WEBSITE: 'website',
   DISABLE: 'disable',
   // Calling an event off. Events only.
   CANCEL: 'cancel',
@@ -335,7 +337,23 @@ export const getGroupTabs = ({
   isAdmin,
   infoHasCard = false,
   canCancel = false,
+  isPulse = false,
 }) => {
+  // A Pulse is public, and nobody posts on it, so it has no audience and no
+  // permissions to choose: its Privacy tab is who it has blocked. In their
+  // place, the lines its site pastes in to lead people to it.
+  if (isPulse) {
+    return [
+      { key: ITEMS.INFO, bare: true },
+      { key: ITEMS.ADMINS, bare: true },
+      { key: ITEMS.ACCESS, bare: true },
+      { key: ITEMS.WEBSITE, bare: true },
+      { key: ITEMS.DANGER, bare: true, requiresDanger: true },
+    ].filter((item) => {
+      return !item.requiresDanger || canDelete || isAdmin;
+    });
+  }
+
   return [
     // An event's Info is the event form, which brings its own Card.
     { key: ITEMS.INFO, bare: !infoHasCard },
@@ -375,6 +393,9 @@ export const getGroupDangerItems = ({
   isAdmin,
   isSuperAdmin = false,
   canCancel = false,
+  // Not a Pulse: one is deleted, not archived, since its posts are a
+  // website's and the site keeps them.
+  canArchive = true,
 }) => {
   return [
     { key: ITEMS.CANCEL, bare: true, requiresCancel: true },
@@ -389,6 +410,10 @@ export const getGroupDangerItems = ({
     }
 
     if (item.requiresCancel && !canCancel) {
+      return false;
+    }
+
+    if (item.key === ITEMS.ARCHIVE && !canArchive) {
       return false;
     }
 

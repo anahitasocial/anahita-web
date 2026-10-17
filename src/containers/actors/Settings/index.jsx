@@ -16,6 +16,7 @@ import CancelIcon from '@mui/icons-material/EventBusy';
 import DeleteIcon from '@mui/icons-material/DeleteForever';
 import PurgeIcon from '@mui/icons-material/DeleteSweep';
 import DangerIcon from '@mui/icons-material/Warning';
+import WebsiteIcon from '@mui/icons-material/Code';
 import ActorSettingCard from '../../../components/ActorSetting';
 
 import Admins from './admins/Browse';
@@ -43,6 +44,7 @@ import ActorFediverse from './Fediverse';
 import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
+import PulseFollowSnippet from '../../pulses/FollowSnippet';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -82,6 +84,7 @@ const ITEM_ICONS = {
   [ITEMS.DELETE]: <DeleteIcon />,
   [ITEMS.PURGE]: <PurgeIcon />,
   [ITEMS.DANGER]: <DangerIcon />,
+  [ITEMS.WEBSITE]: <WebsiteIcon />,
 };
 
 // Tabs for the GROUPS namespace, which stays flat apart from the Danger zone.
@@ -315,6 +318,7 @@ const ActorsSettings = ({
   // tab groups never render, which handed MUI a Tabs value it could not match —
   // a console warning and an empty body on every /groups/:id/settings load.
   const isEvent = namespace === 'events';
+  const isPulse = namespace === 'pulses';
   // Whoever can open an event's settings looks after it, and may call it
   // off. The server decides.
   const canCancel = isEvent;
@@ -323,6 +327,7 @@ const ActorsSettings = ({
     isAdmin,
     infoHasCard: isEvent,
     canCancel,
+    isPulse,
   });
   const activeTab = groupTabs.find((entry) => {
     return entry.key === tab;
@@ -333,6 +338,7 @@ const ActorsSettings = ({
     isAdmin,
     isSuperAdmin,
     canCancel,
+    canArchive: !isPulse,
   });
 
   // Every key getGroupTabs can return needs an entry here, or selecting that
@@ -348,12 +354,14 @@ const ActorsSettings = ({
     [ITEMS.ADMINS]: <ActorAdmins />,
     // Who can see it, and who it has blocked: one of its administrators
     // blocks somebody from the menu on what they wrote in it.
-    [ITEMS.ACCESS]: (
+    // A Pulse is public: only who it has blocked.
+    [ITEMS.ACCESS]: isPulse ? <ActorBlocked actor={actor} /> : (
       <Stack spacing={2}>
         <ActorAccess />
         <ActorBlocked actor={actor} />
       </Stack>
     ),
+    [ITEMS.WEBSITE]: <PulseFollowSnippet actor={actor} />,
     // Who can do what in the group, and with what is posted in it: whether
     // its new photos and videos start out downloadable. Not an event's.
     [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (
@@ -455,6 +463,7 @@ ActorsSettings.propTypes = {
     ITEMS.INFO,
     ITEMS.ACCESS,
     ITEMS.PERMISSIONS,
+    ITEMS.WEBSITE,
     ITEMS.DANGER,
   ]),
 };

@@ -63,6 +63,7 @@ import Settings from '../containers/settings';
 import AdminRedirects from '../containers/admin/Redirects';
 import StaticPage from '../containers/page';
 import NotFoundPage from '../containers/NotFound';
+import PulseConnect from '../containers/pulses/Connect';
 
 const GroupsBrowse = Actors('groups');
 const GroupsRead = ActorsRead('groups');
@@ -98,6 +99,13 @@ const EventEditRedirect = () => {
 
   return <Navigate to={`/events/${id}/settings`} replace />;
 };
+
+// A Pulse is a website's feed as a profile, read and looked after as a
+// group is. It is made by connecting a website, not by a form of its own.
+const PulsesBrowse = Actors('pulses');
+const PulsesRead = ActorsRead('pulses');
+const PulsesSettings = ActorsSettings('pulses');
+const PulsesNotificationsEdit = ActorsNotificationsEdit('pulses');
 
 const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
@@ -317,6 +325,36 @@ const AppRoutes = () => {
             <Route path="/events/:id/:tab/:subtab" element={<EventsRead />} />
             <Route path="/events/:id/:tab" element={<EventsRead />} />
             <Route path="/events/:id" element={<EventsRead />} />
+
+            {/* Pulses — static paths before parameterized */}
+            <Route path="/pulses" element={<PulsesBrowse />} />
+            <Route
+              path="/pulses/connect"
+              element={
+                <AuthenticatedRoute>
+                  <PulseConnect />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/pulses/:id/settings"
+              element={
+                <AuthenticatedRoute>
+                  <PulsesSettings />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/pulses/:id/notifications"
+              element={
+                <AuthenticatedRoute>
+                  <PulsesNotificationsEdit />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route path="/pulses/:id/:tab/:subtab" element={<PulsesRead />} />
+            <Route path="/pulses/:id/:tab" element={<PulsesRead />} />
+            <Route path="/pulses/:id" element={<PulsesRead />} />
 
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />

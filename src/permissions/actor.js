@@ -36,6 +36,13 @@ const canAddEvent = (viewer, { eventsFrom = '' } = {}) => {
   return meetsRoleLevel(viewer, eventsFrom);
 };
 
+// Whether the viewer may connect a website as a Pulse: the installation's
+// PULSES_FROM, published in NodeInfo as pulsesFrom, administrators unless it
+// says otherwise. pulse-service enforces the same.
+const canConnect = (viewer, { pulsesFrom = '' } = {}) => {
+  return meetsRoleLevel(viewer, pulsesFrom);
+};
+
 const canEdit = (actor) => {
   const { authorized } = actor;
   return Boolean(authorized && authorized.edit);
@@ -88,6 +95,7 @@ const canViewCommands = (actor, exclude = []) => {
 export default {
   canAdd,
   canAddEvent,
+  canConnect,
   canAdminister,
   canEdit,
   canDelete,

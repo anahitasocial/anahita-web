@@ -68,6 +68,16 @@ const handleOf = (node) => {
   return node && node.alias ? `@${node.alias}` : '';
 };
 
+// A handle here as it is written on the fediverse, whole: @garden@example.org.
+// The domain is the web app's own, which is what handles here follow.
+const siteHandle = (alias) => {
+  if (!alias) {
+    return '';
+  }
+  const domain = window.location.hostname.replace(/^www\./, '');
+  return `@${alias}@${domain}`;
+};
+
 // How somebody's handle is written under their name. Somebody here is
 // @ana; somebody elsewhere is @alice@mastodon.example, whole, since the
 // server is the half of it that says who they are. `slug` is what makes a
@@ -164,6 +174,7 @@ export default {
   domainOf,
   handleOf,
   displayHandle,
+  siteHandle,
   pageOf,
   lookupKind,
   isLookup,

@@ -10,6 +10,7 @@ const READS = {
   people: ActorsRead('people'),
   groups: ActorsRead('groups'),
   events: ActorsRead('events'),
+  pulses: ActorsRead('pulses'),
 };
 
 // A profile at its alias: /@ana, /@ana/photos, /@garden, /@ana@mastodon.social.
