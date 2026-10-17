@@ -20,6 +20,8 @@ describe('a custom feed\'s definition', () => {
         keywordsAny: [],
         locationsAny: [],
         language: '',
+        near: null,
+        origin: '',
       },
       exclude: { hashtags: [], keywords: [], actors: [] },
       includeReplies: false,
@@ -156,3 +158,26 @@ describe('what a custom feed shows, in a sentence', () => {
     expect(feeds.namesOf(undefined)).toEqual({});
   });
 });
+
+describe('an area and where posts were written', () => {
+  const t = (key, values = {}) => {
+    return `${key}${values.count !== undefined ? `:${values.count}` : ''}`;
+  };
+  const around = (radiusKm) => {
+    return { filters: { near: { latitude: 49.28, longitude: -123.12, radiusKm } } };
+  };
+
+  it('narrows as a place does, within 1 to 500 km', () => {
+    expect(feeds.narrows(around(10))).toBe(true);
+    expect(feeds.problem(around(10))).toBe('');
+    expect(feeds.problem(around(900))).toBe('invalid_near');
+    expect(feeds.problem({})).toBe('too_broad');
+  });
+
+  it('is said in the summary', () => {
+    const said = feeds.summary({ filters: { ...around(25).filters, origin: 'elsewhere' } }, t);
+    expect(said).toContain('customFeeds:summary.near:25');
+    expect(said).toContain('customFeeds:summary.origin.elsewhere');
+  });
+});
+

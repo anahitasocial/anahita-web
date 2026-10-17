@@ -2,10 +2,19 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { Link as RouterLink } from 'react-router-dom';
 
+import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Link from '@mui/material/Link';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
+import LinkIcon from '@mui/icons-material/Link';
+import OutboundIcon from '@mui/icons-material/OpenInNew';
+import slugify from 'slugify';
 
 import ActorAvatar from './ActorAvatar';
 import ActorHandle from './ActorHandle';
@@ -15,6 +24,7 @@ import SmartLink from './SmartLink';
 import VideoPlayer from './VideoPlayer';
 import api from '../api';
 import embeds from '../utils/embeds';
+import linkPreviews from '../utils/linkPreviews';
 import plainText from '../utils/plainText';
 import utils from '../utils';
 import i18n from '../languages';
@@ -278,6 +288,112 @@ const readPost = (at) => {
   return reads.get(key);
 };
 
+// Each profile read once, by its alias: which kind it is, then itself.
+const profiles = new Map();
+const readProfile = (alias) => {
+  if (!profiles.has(alias)) {
+    const reading = api.handles.read(alias).then((result) => {
+      const { kind, id } = result.data;
+      return api[kind].read(id);
+    }).then((result) => {
+      return result.data;
+    }).catch((error) => {
+      profiles.delete(alias);
+      throw error;
+    });
+    profiles.set(alias, reading);
+  }
+  return profiles.get(alias);
+};
+
+const useProfile = (alias) => {
+  const [actor, setActor] = useState(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    if (!alias) {
+      return undefined;
+    }
+    let current = true;
+    setActor(null);
+    setFailed(false);
+    readProfile(alias).then((read) => {
+      if (current) {
+        setActor(read);
+      }
+    }).catch(() => {
+      if (current) {
+        setFailed(true);
+      }
+    });
+    return () => {
+      current = false;
+    };
+  }, [alias]);
+  return { actor, failed };
+};
+
+// A profile here, a person, a group or an event, framed as a page's card
+// is: its cover, who it is, a few lines of what it says of itself, and a
+// way to it (the user, 2026-10-16).
+const Profile = ({ url, alias }) => {
+  const { actor, failed } = useProfile(alias);
+
+  if (failed) {
+    return <PlainLink url={url} />;
+  }
+  if (!actor) {
+    return <Skeleton variant="rounded" height={120} sx={SPACE} />;
+  }
+
+  const cover = getCoverURL(actor, 'medium');
+  const about = excerptOf(actor.body || '', 200);
+  const to = getURL(actor);
+  return (
+    <Box
+      sx={{
+        ...SPACE,
+        border: 1,
+        borderColor: 'divider',
+        borderRadius: 1,
+        overflow: 'hidden',
+      }}
+    >
+      {cover &&
+        <Box
+          component="img"
+          src={cover}
+          alt=""
+          loading="lazy"
+          sx={{
+            width: '100%',
+            aspectRatio: '3 / 1',
+            objectFit: 'cover',
+            display: 'block',
+            borderBottom: 1,
+            borderColor: 'divider',
+          }}
+        />}
+      <Box sx={{ p: 2 }}>
+        <Who actor={actor} size={40} />
+        {about &&
+          <Typography variant="body2" component="div" dir="auto" sx={{ mt: 1, ...clamp(3) }}>
+            {about}
+          </Typography>}
+        <Typography variant="body2" component="div" sx={{ mt: 1 }}>
+          <Link component={RouterLink} to={to} underline="hover">
+            {i18n.t('media:embed.viewProfile')}
+          </Link>
+        </Typography>
+      </Box>
+    </Box>
+  );
+};
+
+Profile.propTypes = {
+  url: PropTypes.string.isRequired,
+  alias: PropTypes.string.isRequired,
+};
+
 const usePost = (at) => {
   const [post, setPost] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -363,6 +479,10 @@ const PostEmbed = ({
     if (at) {
       return <Post url={url} at={at} />;
     }
+    const profile = embeds.profileAt(url);
+    if (profile) {
+      return <Profile url={url} alias={profile.alias} />;
+    }
     return <PlainLink url={url} />;
   }
 
@@ -386,42 +506,131 @@ PostEmbed.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
 };
 
-// One line of the citations: a post here, by who wrote it and what it is
-// called or opens with; a page elsewhere, by its site and its title.
+// What a citation shows: a picture, a line saying what it is and one
+// saying whose or where, and where it goes.
+const CitationRow = ({
+  url,
+  to = '',
+  avatar,
+  primary,
+  secondary = '',
+  loading = false,
+}) => {
+  const outbound = !to;
+  // The whole row is the link, an easy target for a finger (the user,
+  // 2026-10-17): within Anahita by the app's router, elsewhere in a new
+  // tab, marked, telling that site nothing of where it came from.
+  const link = outbound ?
+    {
+      component: 'a',
+      href: url,
+      target: '_blank',
+      rel: 'noopener noreferrer nofollow',
+      title: i18n.t('media:embed.opensNewTab'),
+    } :
+    { component: RouterLink, to };
+
+  return (
+    <ListItem disablePadding>
+      <ListItemButton {...link} alignItems="flex-start" sx={{ borderRadius: 1 }}>
+        <ListItemAvatar>
+          {loading ? <Skeleton variant="circular" width={40} height={40} /> : avatar}
+        </ListItemAvatar>
+        <ListItemText
+          primary={loading ? <Skeleton width="70%" /> : primary}
+          secondary={loading ? <Skeleton width="40%" /> : secondary}
+          slotProps={{
+            primary: { dir: 'auto', sx: { ...clamp(2), overflowWrap: 'anywhere' } },
+            secondary: { dir: 'auto', noWrap: true },
+          }}
+        />
+        {outbound && !loading &&
+          <OutboundIcon fontSize="small" sx={{ color: 'text.secondary', mt: 1.5, ml: 1 }} />}
+      </ListItemButton>
+    </ListItem>
+  );
+};
+
+CitationRow.propTypes = {
+  // Where it is.
+  url: PropTypes.string.isRequired,
+  // Its path here, for one within Anahita; none for a page elsewhere.
+  to: PropTypes.string,
+  avatar: PropTypes.node,
+  primary: PropTypes.node,
+  secondary: PropTypes.node,
+  // Still being read: its place is kept, the same height.
+  loading: PropTypes.bool,
+};
+
+// Who somebody is, in a word: their name and their handle.
+const whoIs = (actor) => {
+  const handle = utils.federation.displayHandle(actor, slugify);
+  return handle ? `${getActorName(actor)} ${handle}` : getActorName(actor);
+};
+
+// One of the citations: a post here, by what it is called or opens with
+// and who wrote it; a profile here, by who it is; a page elsewhere, by its
+// title and its site. Read where it can be; as its address where not.
 const Citation = ({ url, cards }) => {
   const at = embeds.isOurs(url) ? embeds.postAt(url) : null;
-  const { post } = usePost(at);
+  const profileAt = embeds.isOurs(url) && !at ? embeds.profileAt(url) : null;
+  const read = usePost(at);
+  const who = useProfile(profileAt ? profileAt.alias : '');
 
-  if (at && post) {
-    const what = post.name || excerptOf(post.body, 120);
+  if (profileAt && !who.failed) {
+    const { actor } = who;
     return (
-      <Box
-        component="span"
-        sx={{
-          display: 'inline-flex', alignItems: 'center', columnGap: 1, flexWrap: 'wrap',
-        }}
-      >
-        <Who actor={getAuthor(post)} size={20} />
-        <Link component={RouterLink} to={getURL(post)} dir="auto" sx={{ overflowWrap: 'anywhere' }}>
-          {what || url}
-        </Link>
-      </Box>
+      <CitationRow
+        url={url}
+        to={actor ? getURL(actor) : `/@${profileAt.alias}`}
+        loading={!actor}
+        avatar={actor && <ActorAvatar actor={actor} />}
+        primary={actor && getActorName(actor)}
+        secondary={actor && utils.federation.displayHandle(actor, slugify)}
+      />
     );
   }
 
-  const card = !at && (cards || []).find((each) => {
+  if (at && !read.failed) {
+    const { post } = read;
+    const author = post && getAuthor(post);
+    return (
+      <CitationRow
+        url={url}
+        to={post ? getURL(post) : new URL(url).pathname}
+        loading={!post}
+        avatar={author && <ActorAvatar actor={author} />}
+        primary={post && (post.name || excerptOf(post.body, 160) || url)}
+        secondary={author && whoIs(author)}
+      />
+    );
+  }
+
+  const card = !at && !profileAt && (cards || []).find((each) => {
     return embeds.samePage(each.url, url);
   });
+  const image = card && linkPreviews.imageOf(card);
+  let site = card ? linkPreviews.siteOf(card) : '';
+  if (!site) {
+    try {
+      site = new URL(url).hostname.replace(/^www\./, '');
+    } catch (e) {
+      site = '';
+    }
+  }
   return (
-    <span>
-      {card && card.siteName &&
-        <Typography variant="body2" color="textSecondary" component="span" sx={{ mr: 1 }}>
-          {card.siteName}
-        </Typography>}
-      <SmartLink href={url} dir="auto" sx={{ overflowWrap: 'anywhere' }}>
-        {(card && card.title) || url}
-      </SmartLink>
-    </span>
+    <CitationRow
+      url={url}
+      to={embeds.isOurs(url) ? new URL(url).pathname : ''}
+      avatar={
+        <Avatar variant="rounded" src={image || undefined} alt="">
+          <LinkIcon />
+        </Avatar>
+      }
+      primary={(card && card.title) || url}
+      secondary={site}
+    />
   );
 };
 
@@ -430,17 +639,46 @@ Citation.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
 };
 
-// What an article or a topic cites, at its end, in the order it comes:
-// every address on a line of its own, a post here or a page elsewhere (the
-// user, 2026-10-16). The posts here are its citations in the graph too.
-const Citations = ({ text = '', cards = [] }) => {
+// A post here as a row: what it is called or opens with, and who wrote it.
+const PostRow = ({ post }) => {
+  const author = getAuthor(post);
+  return (
+    <CitationRow
+      url={getURL(post)}
+      to={getURL(post)}
+      avatar={author && <ActorAvatar actor={author} />}
+      primary={post.name || excerptOf(post.body, 160)}
+      secondary={author && whoIs(author)}
+    />
+  );
+};
+
+PostRow.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+// The addresses a text cites, each once, in the order they come: every
+// address on a line of its own.
+const citedIn = (text = '') => {
   const addresses = [];
   String(text).split('\n').forEach((line) => {
     const address = embeds.alone(line);
-    if (address && !addresses.includes(address)) {
+    // A profile shown is named, a mention, and not a citation (the user,
+    // 2026-10-17): its card is in the text, and it is not listed here.
+    const isProfile = address && embeds.isOurs(address) && embeds.profileAt(address);
+    if (address && !isProfile && !addresses.includes(address)) {
       addresses.push(address);
     }
   });
+  return addresses;
+};
+
+// What an article or a topic cites, at its end, in the order it comes:
+// every address on a line of its own, a post here or a page elsewhere (the
+// user, 2026-10-16). The posts here are its citations in the graph too.
+// A list of rows, each the whole of its width to tap.
+const Citations = ({ text = '', cards = [] }) => {
+  const addresses = citedIn(text);
 
   if (addresses.length === 0) {
     return null;
@@ -456,22 +694,20 @@ const Citations = ({ text = '', cards = [] }) => {
         sx={{
           fontWeight: 600,
           pb: 1,
-          mb: 2,
+          mb: 1,
           borderBottom: 1,
           borderColor: 'divider',
         }}
       >
         {i18n.t('media:embed.citations')}
       </Typography>
-      <Box component="ol" sx={{ m: 0, pl: 3 }}>
+      {/* In the order cited, as a numbered list is to a screen reader;
+          the rows show no numbers. Flush with the text above. */}
+      <List component="ol" disablePadding sx={{ mx: -2 }}>
         {addresses.map((address) => {
-          return (
-            <Box component="li" key={address} sx={{ mb: 1 }}>
-              <Citation url={address} cards={cards} />
-            </Box>
-          );
+          return <Citation key={address} url={address} cards={cards} />;
         })}
-      </Box>
+      </List>
     </Box>
   );
 };
@@ -481,5 +717,9 @@ Citations.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
 };
 
-export { Citations, usePost };
+export {
+  Citations,
+  PostRow,
+  usePost,
+};
 export default PostEmbed;

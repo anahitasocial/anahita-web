@@ -19,6 +19,8 @@ const CHOICES = {
   person: {
     comment: ['registered', 'followers'],
     like: ['registered', 'followers', 'leaders', 'mutuals', 'admins'],
+    // Who may mention the person (permissions.CanMention): as for likes.
+    mention: ['registered', 'followers', 'leaders', 'mutuals', 'admins'],
     content: ['followers', 'leaders', 'mutuals', 'admins'],
   },
   group: {
@@ -37,6 +39,11 @@ const FOLLOWER = 'follower';
 // invited to follow a person.
 const INVITE = 'invite';
 const INVITE_DEFAULT = 'admins';
+// Who may mention a person, for people only: a group or an event may always
+// be named. Offered to a person who saved this tab before it existed, at
+// what the server takes a missing one to mean.
+const MENTION = 'mention';
+const MENTION_DEFAULT = 'registered';
 const SOCIALGRAPH = 'socialgraph-service';
 const COMMENT = 'comment';
 
@@ -92,9 +99,16 @@ export const getPermissionGroups = (features = [], { isPerson, access }) => {
       const hasInvite = stored.some((permission) => {
         return permission.entity === INVITE;
       });
-      const offered = !isPerson && feature.service === SOCIALGRAPH && !hasInvite ?
-        [...stored, { entity: INVITE, access: INVITE_DEFAULT }] :
-        stored;
+      const hasMention = stored.some((permission) => {
+        return permission.entity === MENTION;
+      });
+      let offered = stored;
+      if (!isPerson && feature.service === SOCIALGRAPH && !hasInvite) {
+        offered = [...stored, { entity: INVITE, access: INVITE_DEFAULT }];
+      }
+      if (isPerson && feature.service === SOCIALGRAPH && !hasMention) {
+        offered = [...stored, { entity: MENTION, access: MENTION_DEFAULT }];
+      }
 
       const rows = offered
         .map((permission) => {

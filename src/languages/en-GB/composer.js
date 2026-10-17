@@ -22,7 +22,7 @@ export default {
   needsPicture: 'Add a picture or a video to post here.',
   // Under the title and the text of an article or a topic, when posting
   // without them.
-  titleNeeded: 'A title of at least {{count}} characters.',
+  titleNeeded: 'A title is needed.',
   bodyNeeded: 'Write something first.',
   // An article's cover, chosen in the extended composer.
   removeCover: 'Remove the cover',
@@ -93,4 +93,16 @@ export default {
   // A video handed over without a title, in the list of those being
   // prepared.
   untitledVideo: 'Video',
+  // Hashtags offered while writing (roadmap row 78).
+  hashtags: {
+    label: 'Hashtags',
+    suggested: 'Suggested hashtags',
+    writeMore: 'They appear as you write.',
+    none: 'None in use match what you wrote yet.',
+    full: 'Only the first {{ count }} hashtags count.',
+    // `short` is the count as a few characters: 1.2K.
+    uses_one: '{{ short }} post',
+    uses_other: '{{ short }} posts',
+    followed: 'You follow it',
+  },
 };

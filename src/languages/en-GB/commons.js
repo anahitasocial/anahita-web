@@ -3,6 +3,22 @@ export default {
   following: 'Following',
   administering: 'Administering',
   readMore: 'Read more',
+  howItWorks: 'How it works',
+  // Over what span of time a trending list is.
+  trending: {
+    daily: 'Trending today',
+    weekly: 'Trending this week',
+    monthly: 'Trending this month',
+    yearly: 'Trending this year',
+    none: 'Nothing has trended in the past year.',
+  },
+  // How many, beside a hashtag or a place in a list.
+  counts: {
+    people_one: '{{count}} person',
+    people_other: '{{count}} people',
+    posts_one: '{{count}} post',
+    posts_other: '{{count}} posts',
+  },
   close: 'Close',
   dismiss: 'Dismiss',
   enabled: 'Enabled',
@@ -19,7 +35,10 @@ export default {
     recent: 'Recent',
     updated: 'Updated',
     trending: 'Trending',
-    top: 'Popular',
+    popular: 'Popular',
+    following: 'Following',
+    all: 'All',
+    nearby: 'Nearby',
   },
   filterByType: 'Filter by type',
   filterByOptions: {

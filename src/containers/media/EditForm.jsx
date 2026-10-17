@@ -7,8 +7,11 @@ import CardContent from '@mui/material/CardContent';
 import CardActions from '@mui/material/CardActions';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import LinkPreviewCard from '../../components/LinkPreviewCard';
+import HashtagSuggestions from '../../components/HashtagSuggestions';
+import useTextareaHashtags from './Composer/useHashtagSuggestions';
 import LongEditor from './Composer/LazyLongEditor';
 import { useOnBluesky } from './Composer/useOnFediverse';
 import utils from '../../utils';
@@ -52,6 +55,11 @@ const MediumFormEdit = (props) => {
       },
     });
   };
+  // Hashtags in use offered as one is typed in the plain text, as when it
+  // was written (roadmap row 78). The long editor offers its own.
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const hashtags = useTextareaHashtags({ value: medium.body || '', onChange: changeBody, phone });
+
   // A photo or a video is described; anything else has content.
   const bodyMissing = richText && !bodyOptional && !(medium.body || '').trim();
   const bodyTooLong = (medium.body || '').trim().length > BODY.MAX_LENGTH;
@@ -82,7 +90,6 @@ const MediumFormEdit = (props) => {
               htmlInput: {
                 dir: 'auto',
                 maxLength: NAME.MAX_LENGTH,
-                minLength: NAME.MIN_LENGTH,
               },
             }}
           />}
@@ -116,13 +123,16 @@ const MediumFormEdit = (props) => {
             margin="normal"
             disabled={isFetching}
             required={!bodyOptional}
+            inputRef={hashtags.inputRef}
             slotProps={{
               htmlInput: {
                 dir: 'auto',
                 maxLength: BODY.MAX_LENGTH,
+                ...hashtags.handlers,
               },
             }}
           />}
+        {fields.body && !richText && <HashtagSuggestions {...hashtags.overlay} />}
         <LinkPreviewCard
           preview={linkPreview}
           onRemove={isFetching ? null : onLinkPreviewRemove}

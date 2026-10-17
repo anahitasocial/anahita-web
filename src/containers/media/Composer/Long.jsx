@@ -26,10 +26,12 @@ import linkPreviewsApi from '../../../api/linkPreviews';
 import CoverPicker from './CoverPicker';
 import DraftsMenu from './DraftsMenu';
 import LongEditor from './LazyLongEditor';
+import SuggestedHashtags from './SuggestedHashtags';
 import useDraft from './useDraft';
 import usePostChoices from './usePostChoices';
 
 import embeds from '../../../utils/embeds';
+import { appendHashtag } from '../../../utils/hashtagTyping';
 import uploads from '../../../utils/upload';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
@@ -162,7 +164,9 @@ const LongComposer = ({
 
   const name = title.trim();
   const text = body.trim();
-  const titleShort = name.length < NAME.MIN_LENGTH;
+  // A title is needed, of any length (the user, 2026-10-17: "Pulse" is a
+  // title; nobody else asks for ten letters).
+  const titleShort = name.trim() === '';
   const bodyMissing = !text;
   // The editor has no limit of its own, as a text box had: said as soon as
   // it is passed, since the server would refuse it.
@@ -413,7 +417,7 @@ const LongComposer = ({
             placeholder={i18n.t(words.titlePlaceholder)}
             error={tried && titleShort}
             helperText={tried && titleShort ?
-              i18n.t('composer:titleNeeded', { count: NAME.MIN_LENGTH }) : ' '}
+              i18n.t('composer:titleNeeded') : ' '}
             required
             disabled={busy}
             fullWidth
@@ -439,6 +443,14 @@ const LongComposer = ({
             stickyTop={-24}
             uploadAccess={choices.access}
             withMedia={kind === 'article'}
+          />
+          <SuggestedHashtags
+            title={title}
+            body={body}
+            disabled={busy}
+            onAdd={(hashtag) => {
+              setBody(appendHashtag(body, hashtag));
+            }}
           />
         </Box>
         <Divider />

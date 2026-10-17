@@ -11,6 +11,8 @@ import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 
 import api from '../../../api';
+import i18n from '../../../languages';
+import { Medium as MEDIUM } from '../../../constants';
 import permissions from '../../../permissions/node';
 import NodeType from '../../../proptypes/Node';
 import PersonType from '../../../proptypes/Person';
@@ -67,6 +69,8 @@ const LocationsGadget = ({
 
   const canDelete = permissions.canEdit(viewer, node);
   const canAdd = permissions.canAdd(viewer, node);
+  // Tied to as many places as a post may be: the button gives way to why.
+  const isFull = locations.length >= MEDIUM.MAX_LOCATIONS;
 
   if (locations.length === 0 && waiting) {
     return (
@@ -119,7 +123,13 @@ const LocationsGadget = ({
             );
           })}
         </List>
-        {canAdd &&
+        {canAdd && isFull &&
+          <CardActions sx={{ px: 2, pb: 2 }}>
+            <Typography variant="body2" color="textSecondary">
+              {i18n.t('locations:add.full', { count: MEDIUM.MAX_LOCATIONS })}
+            </Typography>
+          </CardActions>}
+        {canAdd && !isFull &&
           <CardActions>
             <Button
               onClick={() => {

@@ -58,6 +58,18 @@ const reasonText = (suggestion, related, t, kind = 'person') => {
       }
       return t(`recommendations:reasons.${by}More`, { name: names[0], count: count - 1 });
     }
+    // Cited by people the viewer follows, named where they can be.
+    case 'cited_by_leaders': {
+      if (names.length === 0) {
+        return t('recommendations:reasons.citedByCount', { count });
+      }
+      if (count <= 1) {
+        return t('recommendations:reasons.citedByOne', { name: names[0] });
+      }
+      return t('recommendations:reasons.citedByMore', { name: names[0], count: count - 1 });
+    }
+    case 'cited':
+      return t('recommendations:reasons.cited', { count });
     case 'hosted_by_leader':
       return names.length > 0 ?
         t('recommendations:reasons.hostedBy', { name: names[0] }) :

@@ -19,6 +19,9 @@ const LIMITS = {
   keywordMin: 2,
   keywordMax: 50,
   pinned: 10,
+  // An area's radius, in kilometres (feeds.MinRadiusKm, MaxRadiusKm).
+  radiusMin: 1,
+  radiusMax: 500,
 };
 
 const list = (value) => {
@@ -45,6 +48,16 @@ const complete = (definition) => {
       keywordsAny: list(filters.keywordsAny),
       locationsAny: list(filters.locationsAny),
       language: filters.language || '',
+      // An area: a point and a radius in kilometres, or nothing.
+      near: filters.near && filters.near.radiusKm ? {
+        latitude: Number(filters.near.latitude),
+        longitude: Number(filters.near.longitude),
+        radiusKm: Number(filters.near.radiusKm),
+        // Wherever its reader is, rather than a point kept with it.
+        live: Boolean(filters.near.live),
+      } : null,
+      // Where it was written: '' anywhere, 'here', or 'elsewhere'.
+      origin: filters.origin || '',
     },
     exclude: {
       hashtags: list(exclude.hashtags),
@@ -96,7 +109,8 @@ const narrows = (definition) => {
 
   return filters.hashtagsAny.length > 0 ||
     filters.keywordsAny.length > 0 ||
-    filters.locationsAny.length > 0;
+    filters.locationsAny.length > 0 ||
+    Boolean(filters.near);
 };
 
 // Why the server would refuse this definition, as the word it would answer
@@ -118,6 +132,10 @@ const problem = (definition) => {
   }
   if (filters.locationsAny.length > LIMITS.locations) {
     return 'too_many_locations';
+  }
+  if (filters.near && (filters.near.radiusKm < LIMITS.radiusMin ||
+    filters.near.radiusKm > LIMITS.radiusMax)) {
+    return 'invalid_near';
   }
 
   const badKeyword = [...filters.keywordsAny, ...exclude.keywords].find((keyword) => {
@@ -207,6 +225,14 @@ const summary = (definition, t, { names = {}, isOwn = true } = {}) => {
     parts.push(t('customFeeds:summary.at', {
       places: named(filters.locationsAny, 'customFeeds:summary.places'),
     }));
+  }
+  if (filters.near) {
+    parts.push(t(filters.near.live ? 'customFeeds:summary.nearLive' : 'customFeeds:summary.near', {
+      count: filters.near.radiusKm,
+    }));
+  }
+  if (filters.origin) {
+    parts.push(t(`customFeeds:summary.origin.${filters.origin}`));
   }
   if (filters.language) {
     parts.push(t('customFeeds:summary.language', { language: filters.language.toUpperCase() }));

@@ -18,10 +18,12 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 
 import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
+import TuneIcon from '@mui/icons-material/Tune';
 
 import SearchList from './SearchList';
 import RecentSearches from './RecentSearches';
 import useScopeCounts from './useScopeCounts';
+import SearchWeightsDialog from './WeightsDialog';
 import shortCount from '../../../utils/shortCount';
 import RemoteLookup from '../RemoteLookup';
 import Progress from '../../../components/Progress';
@@ -126,6 +128,12 @@ const Search = ({ viewerId }) => {
     setChoices(searchChoices.write(viewerId, { ...choices, ...what }));
   };
 
+  // Their own weights for "Most relevant", kept on the server: the dialog
+  // to change them, and how many times they have, so the results are read
+  // again after each.
+  const [isWeighing, setIsWeighing] = useState(false);
+  const [weighed, setWeighed] = useState(0);
+
   // Somebody found on another server, drawn first among the results.
   const [found, setFound] = useState(null);
   useEffect(() => {
@@ -189,7 +197,7 @@ const Search = ({ viewerId }) => {
   const list = useMemo(() => {
     return (
       <SearchList
-        key={`${q}-${sort}-${scope}-${searchRange}-${choices.followedFirst}-${choices.recentFirst}`}
+        key={`${q}-${sort}-${scope}-${searchRange}-${choices.followedFirst}-${choices.recentFirst}-${weighed}`}
         lead={found}
         counts={counts}
         onScope={(value) => {
@@ -216,6 +224,7 @@ const Search = ({ viewerId }) => {
     found,
     counts,
     choices,
+    weighed,
   ]);
 
   return (
@@ -282,8 +291,28 @@ const Search = ({ viewerId }) => {
                   />
                 );
               })}
+              <Chip
+                icon={<TuneIcon />}
+                label={i18n.t('search:weights.open')}
+                title={i18n.t('search:weights.openHelp')}
+                variant="outlined"
+                aria-haspopup="dialog"
+                onClick={() => {
+                  setIsWeighing(true);
+                }}
+              />
             </Stack>}
         </Stack>
+        {isWeighing &&
+          <SearchWeightsDialog
+            onClose={() => {
+              setIsWeighing(false);
+            }}
+            onSaved={() => {
+              setIsWeighing(false);
+              setWeighed(weighed + 1);
+            }}
+          />}
         {/* The distance, on a line of its own so that the slider has room,
             and padded so that the marks at its ends are not cut off. */}
         <Box sx={{ px: 4, pb: 1 }}>

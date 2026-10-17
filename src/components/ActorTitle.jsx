@@ -16,6 +16,7 @@ const ActorTitle = (props) => {
     linked = false,
     typographyProps = {},
     withHandle = false,
+    isAuthor = false,
   } = props;
 
   const url = getURL(actor);
@@ -26,7 +27,9 @@ const ActorTitle = (props) => {
         <Typography
           {...typographyProps}
         >
-          <Link href={url}>
+          {/* rel="author" for whoever wrote the page, as reading views
+              (Safari's Reader, Firefox's) find the byline by. */}
+          <Link href={url} rel={isAuthor ? 'author' : undefined}>
             <Truncate width={300}>
               {getActorName(actor)}
             </Truncate>
@@ -68,6 +71,8 @@ ActorTitle.propTypes = {
   typographyProps: PropTypes.object,
   // The handle after the name: on a post, a reply.
   withHandle: PropTypes.bool,
+  // Its name is the byline of the page it is on.
+  isAuthor: PropTypes.bool,
 };
 
 export default ActorTitle;

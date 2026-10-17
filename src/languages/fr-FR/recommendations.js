@@ -23,6 +23,13 @@ export default {
   dismissed: 'Retiré. Cela ne vous sera plus recommandé.',
   failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
   reasons: {
+    citedByOne: 'Cité par {{ name }}',
+    citedByMore_one: 'Cité par {{ name }} et {{ count }} autre',
+    citedByMore_other: 'Cité par {{ name }} et {{ count }} autres',
+    citedByCount_one: 'Cité par {{ count }} personne que vous suivez',
+    citedByCount_other: 'Cité par {{ count }} personnes que vous suivez',
+    cited_one: 'Cité par {{ count }} personne',
+    cited_other: 'Cité par {{ count }} personnes',
     goingOne: '{{ name }} y va',
     goingTwo: '{{ first }} et {{ second }} y vont',
     goingMore_one: '{{ name }} et {{ count }} autre y vont',
@@ -47,6 +54,12 @@ export default {
     popular: 'Beaucoup de personnes l’ont suivi récemment',
   },
   weights: {
+    howItWorks: [
+      'Les suggestions sont calculées ici, à partir de qui suit, aime et cite qui sur ce site. Il n’y a pas de modèle, et rien n’est appris sur vous ailleurs.',
+      'Chaque raison ajoute des points à un profil, jusqu’à une limite. Les personnes que vous suivez qui le suivent ou le citent comptent le plus. Puis quelqu’un qui vous suit, qui vous a invité ou que vous avez invité, dont vous avez aimé les publications, ou qui publie avec des hashtags que vous utilisez ou suivez. Être cité, mis en avant par le site ou suivi par beaucoup récemment compte un peu.',
+      'Les profils actifs récemment viennent d’abord. Une personne silencieuse depuis plus longtemps que votre choix sous « Personnes venues ici pour la dernière fois » n’est pas suggérée du tout.',
+      'Les curseurs changent la valeur de chaque raison pour vous, et Désactivé l’écarte. Ils ne changent que ce qui vous est suggéré.',
+    ],
     action: 'Ajuster les recommandations',
     title: 'Ce qui compte dans vos recommandations',
     help: 'Faites glisser chaque raison vers le haut pour qu’elle compte davantage, ou jusqu’à zéro pour l’écarter. Cela ne change que ce qui vous est suggéré.',
@@ -64,6 +77,8 @@ export default {
     sharedInterest: 'Ils publient sur vos sujets',
     featured: 'Mis en avant sur ce site',
     popular: 'Beaucoup de personnes les ont suivis récemment',
+    citedByLeaders: 'Des personnes que vous suivez les citent, eux ou leurs publications',
+    cited: 'D’autres les citent, eux ou leurs publications',
     activeWithin: {
       label: 'Personnes venues ici pour la dernière fois',
       help: 'Une personne qui n’est pas venue ici, ni n’a rien publié, depuis plus longtemps ne vous est pas suggérée. Les groupes et les événements ne sont pas concernés.',

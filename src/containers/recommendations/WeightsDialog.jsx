@@ -12,6 +12,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import Progress from '../../components/Progress';
+import { HowItWorksButton, HowItWorksPanel } from '../../components/HowItWorks';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
@@ -43,6 +44,8 @@ const SuggestionWeightsDialog = ({
   const [weights, setWeights] = useState({});
   const [activeWithin, setActiveWithin] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
+  // How it works, opened from the (i) by the title.
+  const [isExplained, setIsExplained] = useState(false);
 
   useEffect(() => {
     api.recommendations.preferences().then((result) => {
@@ -97,10 +100,27 @@ const SuggestionWeightsDialog = ({
       }}
       aria-labelledby="suggestion-weights-title"
     >
-      <DialogTitle id="suggestion-weights-title">
+      <DialogTitle
+        id="suggestion-weights-title"
+        sx={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1,
+        }}
+      >
         {i18n.t('recommendations:weights.title')}
+        <HowItWorksButton
+          open={isExplained}
+          controls="suggestion-weights-how"
+          onToggle={() => {
+            setIsExplained(!isExplained);
+          }}
+        />
       </DialogTitle>
       <DialogContent dividers>
+        <HowItWorksPanel
+          open={isExplained}
+          id="suggestion-weights-how"
+          points={i18n.t('recommendations:weights.howItWorks', { returnObjects: true })}
+        />
         {!settings && <Progress />}
         {settings &&
           <Stack spacing={2}>

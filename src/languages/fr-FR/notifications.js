@@ -21,6 +21,7 @@ export default {
   actorFollowerAdd: '<0>{{subject}}</0> a ajouté <1>{{object}}</1> comme abonné à <2>{{target}}</2>',
   actorMention: '<0>{{subject}}</0> vous a mentionné dans un <1>post</1>',
   actorMentionComment: '<0>{{subject}}</0> vous a mentionné dans un <1>commentaire</1>',
+  actorMentionReply: '<0>{{subject}}</0> vous a mentionné dans une <1>réponse</1>',
   voteup: '<0>{{subject}}</0> a aimé votre <1>post</1>',
   repostAdd: '<0>{{subject}}</0> a repartagé votre <1>post</1>',
   replyAdd: '<0>{{subject}}</0> a répondu à votre <1>publication</1>',

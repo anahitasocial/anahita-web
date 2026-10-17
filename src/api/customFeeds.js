@@ -109,6 +109,27 @@ const follow = ({ name, icon, definition }, fingerprint) => {
 
 const cursors = {};
 
+// Where the reader is, for a feed of what is near them (its area is live):
+// asked of the browser, a reading up to five minutes old will do, and sent
+// with the page, kept nowhere. Nothing for any other feed, or when the
+// browser does not say, which the server answers with location_needed.
+const whereIAm = (feed) => {
+  const filters = (feed.definition && feed.definition.filters) || {};
+  if (!filters.near || !filters.near.live || !navigator.geolocation) {
+    return Promise.resolve({});
+  }
+  return new Promise((resolve) => {
+    navigator.geolocation.getCurrentPosition((position) => {
+      resolve({
+        near_latitude: Math.round(position.coords.latitude * 1000) / 1000,
+        near_longitude: Math.round(position.coords.longitude * 1000) / 1000,
+      });
+    }, () => {
+      resolve({});
+    }, { maximumAge: 5 * 60 * 1000, timeout: 15000 });
+  });
+};
+
 // A page of a feed. `start` is how many the list holds already: 0 begins
 // again.
 const browse = ({ feed, start = 0, limit = 20 }) => {
@@ -118,8 +139,10 @@ const browse = ({ feed, start = 0, limit = 20 }) => {
     delete cursors[key];
   }
 
-  return axios.get(`/feeds/${feed.id}/items`, {
-    params: { cursor: cursors[key], limit },
+  return whereIAm(feed).then((near) => {
+    return axios.get(`/feeds/${feed.id}/items`, {
+      params: { cursor: cursors[key], limit, ...near },
+    });
   }).then((result) => {
     const { data } = result;
     const page = data.pagination || {};
@@ -141,7 +164,9 @@ const browse = ({ feed, start = 0, limit = 20 }) => {
 // The head of a feed, asked for again while it is open, to see what was
 // posted since. It leaves alone the place the feed has been read to.
 const peek = ({ feed, limit = 20 }) => {
-  return axios.get(`/feeds/${feed.id}/items`, { params: { limit } });
+  return whereIAm(feed).then((near) => {
+    return axios.get(`/feeds/${feed.id}/items`, { params: { limit, ...near } });
+  });
 };
 
 export default {

@@ -1,7 +1,9 @@
+import LIMITS from './limits';
+
 export default {
   FIELDS: {
     TITLE: {
-      MAX_LENGTH: 100,
+      MAX_LENGTH: LIMITS.PLACE_NAME_MAX,
     },
     ADDRESS: {
       MAX_LENGTH: 100,

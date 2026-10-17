@@ -10,7 +10,7 @@ export default {
   needsPicture: 'Ajoutez une image ou une vidéo pour publier ici.',
   video: 'Vidéo',
   addVideo: 'Ajouter une vidéo',
-  titleNeeded: 'Un titre d’au moins {{count}} caractères.',
+  titleNeeded: 'Un titre est nécessaire.',
   bodyNeeded: 'Écrivez quelque chose d’abord.',
   removeCover: 'Retirer la couverture',
   coverRefused: 'L’article est publié sans elle ; vous pouvez ajouter une couverture sur l’article.',
@@ -70,4 +70,14 @@ export default {
     topic: 'Sujet',
   },
   untitledVideo: 'Vidéo',
+  hashtags: {
+    label: 'Hashtags',
+    suggested: 'Hashtags suggérés',
+    writeMore: 'Ils apparaissent au fil de l’écriture.',
+    none: 'Aucun en usage ne correspond encore à votre texte.',
+    full: 'Seuls les {{ count }} premiers hashtags comptent.',
+    uses_one: '{{ short }} publication',
+    uses_other: '{{ short }} publications',
+    followed: 'Vous le suivez',
+  },
 };

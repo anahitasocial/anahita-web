@@ -55,6 +55,20 @@ const unescape = (text) => {
   return text.replace(/\\([\\`*_{}[\]()#+\-.!|~<>])/g, '$1');
 };
 
+// The profile an address here is to, as { alias }, or null: /@ana and its
+// tabs, /@alice@mastodon.example for somebody elsewhere.
+const PROFILE_PATH = /^\/@([^/]+)(?:\/.*)?$/;
+const profileAt = (address) => {
+  let path = '';
+  try {
+    path = new URL(address).pathname;
+  } catch (e) {
+    return null;
+  }
+  const match = PROFILE_PATH.exec(path);
+  return match ? { alias: decodeURIComponent(match[1]) } : null;
+};
+
 // Whether a line is an address and nothing else, as Markdown writes one:
 // bare, in angle brackets, or as a link whose words are the address. The
 // address, or ''.
@@ -131,5 +145,6 @@ export default {
   isOurs,
   pagesIn,
   postAt,
+  profileAt,
   samePage,
 };

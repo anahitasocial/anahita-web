@@ -67,13 +67,20 @@ describe('getPermissionGroups', () => {
   });
 
   // Nobody is invited to follow a person, and nobody is added to anything
-  // without saying yes, so a person has no row under the social graph.
-  it('has nothing to set for the social graph on a person', () => {
+  // without saying yes; the one row under the social graph on a person is
+  // who may mention them, offered at its default where none was saved.
+  it('offers who can mention a person under the social graph', () => {
     const groups = getPermissionGroups(FEATURES, { isPerson: true, access: 'public' });
 
     expect(groups.map((g) => {
       return g.key;
-    })).toEqual(['text', 'photo']);
+    })).toEqual(['socialgraph', 'text', 'photo']);
+    expect(groups[0].rows).toEqual([{
+      entity: 'mention',
+      access: 'registered',
+      choices: ['registered', 'followers', 'leaders', 'mutuals', 'admins'],
+      lock: null,
+    }]);
   });
 
   // The old "who can add a follower" is gone from a group too. In its place
@@ -117,7 +124,7 @@ describe('getPermissionGroups', () => {
 
     expect(getPermissionGroups(features, { isPerson: true, access: 'public' }).map((g) => {
       return g.key;
-    })).toEqual(['text']);
+    })).toEqual(['socialgraph', 'text']);
   });
 
   it('survives an actor with no features', () => {

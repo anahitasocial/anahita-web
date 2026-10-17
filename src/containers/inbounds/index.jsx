@@ -55,7 +55,7 @@ const Inbounds = ({
           textColor="primary"
         >
           <Tab
-            label={i18n.t('commons:sortByOptions.top')}
+            label={i18n.t('commons:sortByOptions.popular')}
             value={TOP}
           />
           <Tab

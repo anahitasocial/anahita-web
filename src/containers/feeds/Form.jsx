@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -15,6 +16,7 @@ import FormLabel from '@mui/material/FormLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
+import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -33,6 +35,19 @@ const { LIMITS } = customFeeds;
 
 // The form's id, for the button outside it that sends it.
 const FORM = 'custom-feed-editor-form';
+
+// Where a feed's posts come from.
+const FROM_EVERYONE = 'everyone';
+const FROM_FOLLOWING = 'following';
+const FROM_CHOSEN = 'chosen';
+
+// The radii an area may have, in kilometres, a step of the slider each.
+const RADII = [1, 2, 5, 10, 25, 50, 100, 250, 500];
+
+// An area: none, wherever the reader is, or a point kept with the feed.
+const NEAR_NONE = 'none';
+const NEAR_LIVE = 'live';
+const NEAR_FIXED = 'fixed';
 
 // What the form starts from: a feed being changed, or a new one of the
 // profiles the viewer follows.
@@ -103,13 +118,30 @@ const CustomFeedForm = ({
     return chosenFrom(values.definition.exclude.actors, references);
   });
   const [error, setError] = useState('');
-  // Whether "Profiles I follow" is as the form set it, or as the person
-  // did. A new feed starts with it ticked so that it shows something.
-  const [choseFollowing, setChoseFollowing] = useState(!isNew);
+  // Where the posts come from, as one choice of three (the user,
+  // 2026-10-17: a hashtag feed showed only the posts of profiles followed,
+  // as the tick a new feed started with said, and nobody saw it).
+  const [from, setFrom] = useState(() => {
+    if ((values.definition.sources.actors || []).length > 0) {
+      return FROM_CHOSEN;
+    }
+    return values.definition.sources.following ? FROM_FOLLOWING : FROM_EVERYONE;
+  });
+  // Whether that choice is as the form set it, or as the person did. A new
+  // feed starts from the profiles they follow so that it shows something;
+  // given a hashtag, a keyword, a place or an area before they chose, it
+  // looks at everyone, which is what that almost always means.
+  const [choseFrom, setChoseFrom] = useState(!isNew);
+  // Finding where the person is, for an area around them.
+  const [whereIAm, setWhereIAm] = useState('');
   const [isSaving, setIsSaving] = useState(false);
 
   const { definition } = values;
   const problem = customFeeds.problem(definition);
+  let nearKind = NEAR_NONE;
+  if (definition.filters.near) {
+    nearKind = definition.filters.near.live ? NEAR_LIVE : NEAR_FIXED;
+  }
 
   // Profiles named by hand, and nothing else to draw from: whose posts
   // these are is already said, and "Posted on" could only hide some of
@@ -122,13 +154,56 @@ const CustomFeedForm = ({
 
   const setDefinition = (part, changes) => {
     setError('');
-    setValues({
-      ...values,
-      definition: {
-        ...definition,
-        [part]: { ...definition[part], ...changes },
-      },
-    });
+    const next = {
+      ...definition,
+      [part]: { ...definition[part], ...changes },
+    };
+    // Narrowed for the first time, in a new feed whose source nobody has
+    // chosen: everyone, as said above.
+    if (part === 'filters' && !choseFrom && from === FROM_FOLLOWING &&
+      !customFeeds.narrows(definition) && customFeeds.narrows(next)) {
+      next.sources = { ...next.sources, following: false };
+      setFrom(FROM_EVERYONE);
+    }
+    setValues({ ...values, definition: next });
+  };
+
+  const chooseFrom = (choice) => {
+    setChoseFrom(true);
+    setFrom(choice);
+    if (choice === FROM_EVERYONE) {
+      setActors([]);
+      setDefinition('sources', { following: false, actors: [] });
+    } else if (choice === FROM_FOLLOWING) {
+      setActors([]);
+      setDefinition('sources', { following: true, actors: [] });
+    } else {
+      setDefinition('sources', { following: false });
+    }
+  };
+
+  // The area around where the browser says the person is.
+  const nearMe = () => {
+    if (!navigator.geolocation) {
+      setWhereIAm('denied');
+      return;
+    }
+    setWhereIAm('finding');
+    navigator.geolocation.getCurrentPosition((position) => {
+      setWhereIAm('');
+      setDefinition('filters', {
+        near: {
+          // A street's worth of precision, and no more: the point is kept
+          // with the feed.
+          latitude: Math.round(position.coords.latitude * 1000) / 1000,
+          longitude: Math.round(position.coords.longitude * 1000) / 1000,
+          radiusKm: (definition.filters.near && definition.filters.near.radiusKm) || 10,
+          live: false,
+        },
+      });
+    }, () => {
+      setWhereIAm('denied');
+    }, { maximumAge: 10 * 60 * 1000, timeout: 15000 });
   };
 
   const names = customFeeds.namesOf([...actors, ...locations, ...excluded]);
@@ -252,45 +327,61 @@ const CustomFeedForm = ({
           <Typography variant="subtitle1" component="h2">
             {i18n.t('customFeeds:form.sources')}
           </Typography>
-          <div>
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={definition.sources.following}
-                  disabled={isSaving}
-                  onChange={(event) => {
-                    setChoseFollowing(true);
-                    setDefinition('sources', { following: event.target.checked });
-                  }}
-                />
-              }
-              label={i18n.t('customFeeds:form.following')}
-            />
-            <Typography variant="body2" color="textSecondary" sx={{ pl: 4 }}>
-              {i18n.t('customFeeds:form.followingHelp')}
-            </Typography>
-          </div>
-          <NodesField
-            label={i18n.t('customFeeds:form.actors')}
-            helperText={i18n.t('customFeeds:form.actorsHelp')}
-            namespaces={['people', 'groups', 'remote']}
-            value={actors}
-            max={LIMITS.actors}
-            disabled={isSaving}
-            onChange={(nodes) => {
-              setActors(nodes);
-              // Sources add together. Somebody who names profiles in a
-              // new feed means those profiles, so the tick the form
-              // started with comes off, unless they put it there.
-              setDefinition('sources', choseFollowing || nodes.length === 0 ?
-                { actors: idsOf(nodes) } :
-                { actors: idsOf(nodes), following: false });
+          <RadioGroup
+            value={from}
+            onChange={(event) => {
+              chooseFrom(event.target.value);
             }}
-          />
-          {!customFeeds.hasSources(definition) &&
-            <Typography variant="body2" color="textSecondary">
-              {i18n.t('customFeeds:form.noSources')}
-            </Typography>}
+          >
+            {[FROM_EVERYONE, FROM_FOLLOWING, FROM_CHOSEN].map((choice) => {
+              return (
+                <FormControlLabel
+                  key={choice}
+                  value={choice}
+                  disabled={isSaving}
+                  control={<Radio />}
+                  label={
+                    <>
+                      <Typography variant="body1">
+                        {i18n.t(`customFeeds:form.from.${choice}`)}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {i18n.t(`customFeeds:form.from.${choice}Help`)}
+                      </Typography>
+                    </>
+                  }
+                  sx={{ alignItems: 'flex-start', mb: 1, '& .MuiRadio-root': { pt: 0.5 } }}
+                />
+              );
+            })}
+          </RadioGroup>
+          {from === FROM_CHOSEN &&
+            <>
+              <NodesField
+                label={i18n.t('customFeeds:form.actors')}
+                helperText={i18n.t('customFeeds:form.actorsHelp')}
+                namespaces={['people', 'groups', 'remote']}
+                value={actors}
+                max={LIMITS.actors}
+                disabled={isSaving}
+                onChange={(nodes) => {
+                  setActors(nodes);
+                  setDefinition('sources', { actors: idsOf(nodes) });
+                }}
+              />
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={definition.sources.following}
+                    disabled={isSaving}
+                    onChange={(event) => {
+                      setDefinition('sources', { following: event.target.checked });
+                    }}
+                  />
+                }
+                label={i18n.t('customFeeds:form.from.alsoFollowing')}
+              />
+            </>}
 
           <Typography variant="subtitle1" component="h2">
             {i18n.t('customFeeds:form.filters')}
@@ -388,6 +479,117 @@ const CustomFeedForm = ({
               setDefinition('filters', { locationsAny: idsOf(nodes) });
             }}
           />
+          {/* An area: around where the person is, as far as they choose
+              (the user, 2026-10-17: "a near me feed, and set the radius"). */}
+          <FormControl component="fieldset" disabled={isSaving}>
+            <FormLabel component="legend">
+              {i18n.t('customFeeds:form.near')}
+            </FormLabel>
+            <RadioGroup
+              value={nearKind}
+              onChange={(event) => {
+                const kind = event.target.value;
+                const { near } = definition.filters;
+                const radiusKm = (near && near.radiusKm) || 10;
+                if (kind === NEAR_NONE) {
+                  setDefinition('filters', { near: null });
+                } else if (kind === NEAR_LIVE) {
+                  setDefinition('filters', {
+                    near: {
+                      latitude: 0, longitude: 0, radiusKm, live: true,
+                    },
+                  });
+                } else {
+                  nearMe();
+                }
+              }}
+            >
+              <FormControlLabel
+                value={NEAR_NONE}
+                control={<Radio />}
+                label={i18n.t('customFeeds:form.nearOff')}
+              />
+              <FormControlLabel
+                value={NEAR_LIVE}
+                control={<Radio />}
+                label={
+                  <>
+                    <Typography variant="body1">{i18n.t('customFeeds:form.nearLive')}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {i18n.t('customFeeds:form.nearLiveHelp')}
+                    </Typography>
+                  </>
+                }
+                sx={{ alignItems: 'flex-start', '& .MuiRadio-root': { pt: 0.5 } }}
+              />
+              <FormControlLabel
+                value={NEAR_FIXED}
+                control={<Radio />}
+                disabled={whereIAm === 'finding'}
+                label={
+                  <>
+                    <Typography variant="body1">
+                      {i18n.t(whereIAm === 'finding' ?
+                        'customFeeds:form.nearFinding' :
+                        'customFeeds:form.nearFixed')}
+                    </Typography>
+                    {nearKind === NEAR_FIXED &&
+                      <Typography variant="body2" color="textSecondary">
+                        {i18n.t('customFeeds:form.nearAt', {
+                          latitude: definition.filters.near.latitude,
+                          longitude: definition.filters.near.longitude,
+                        })}
+                      </Typography>}
+                  </>
+                }
+                sx={{ alignItems: 'flex-start', '& .MuiRadio-root': { pt: 0.5 } }}
+              />
+            </RadioGroup>
+            {definition.filters.near &&
+              <Box sx={{ mt: 1, px: 1 }}>
+                <Typography id="feed-radius" variant="body2" color="textSecondary">
+                  {i18n.t('customFeeds:form.radius')}
+                  {' '}
+                  {i18n.t('customFeeds:form.radius', { count: definition.filters.near.radiusKm })}
+                </Typography>
+                <Slider
+                  aria-labelledby="feed-radius"
+                  value={Math.max(RADII.indexOf(definition.filters.near.radiusKm), 0)}
+                  min={0}
+                  max={RADII.length - 1}
+                  step={1}
+                  marks
+                  disabled={isSaving}
+                  getAriaValueText={(index) => {
+                    return i18n.t('customFeeds:form.radius', { count: RADII[index] });
+                  }}
+                  onChange={(event, index) => {
+                    setDefinition('filters', {
+                      near: { ...definition.filters.near, radiusKm: RADII[index] },
+                    });
+                  }}
+                />
+              </Box>}
+            <FormHelperText sx={{ ml: 0 }}>
+              {whereIAm === 'denied' ?
+                i18n.t('customFeeds:form.nearDenied') :
+                i18n.t('customFeeds:form.nearHelp')}
+            </FormHelperText>
+          </FormControl>
+          <TextField
+            select
+            fullWidth
+            label={i18n.t('customFeeds:form.origin')}
+            value={definition.filters.origin || ''}
+            disabled={isSaving}
+            onChange={(event) => {
+              setDefinition('filters', { origin: event.target.value });
+            }}
+          >
+            <MenuItem value="">{i18n.t('customFeeds:form.originAny')}</MenuItem>
+            <MenuItem value="here">{i18n.t('customFeeds:form.originHere')}</MenuItem>
+            <MenuItem value="elsewhere">{i18n.t('customFeeds:form.originElsewhere')}</MenuItem>
+          </TextField>
           <TextField
             select
             fullWidth

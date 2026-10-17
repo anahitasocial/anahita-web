@@ -25,6 +25,7 @@ import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
 import { Citations } from '../../../components/PostEmbed';
+import CitedByTab from './CitedByTab';
 import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
@@ -43,6 +44,7 @@ const {
 const TABS = {
   REPLIES: 'replies',
   LOCATIONS: 'locations',
+  CITED_BY: 'cited-by',
 };
 
 const MediumReadDefault = ({
@@ -152,11 +154,12 @@ const MediumReadDefault = ({
               actor={author}
               linked={Boolean(author.id)}
               withHandle
+              isAuthor
             />
             }
           subheader={
             <>
-              {createdAt}
+              <time dateTime={moment.utc(medium.createdAt).toISOString()}>{createdAt}</time>
               {access}
             </>
             }
@@ -166,10 +169,15 @@ const MediumReadDefault = ({
         {!editing &&
         <>
           {medium.video && <VideoPlayer video={medium.video} title={medium.name} />}
-          <CardContent component="article">
+          {/* The card is the <article>; this is its text. One article,
+              with an h1 and a byline, is what reading views (Safari's
+              Reader, Firefox's) look for: an article within an article
+              read as none. */}
+          <CardContent>
             {medium.name &&
             <Typography
               variant="h2"
+              component="h1"
               dir="auto"
               lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
               className={classes.title}
@@ -207,9 +215,11 @@ const MediumReadDefault = ({
       >
         <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
         <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
+        <Tab label={i18n.t('media:citations.citedBy')} value={TABS.CITED_BY} />
       </Tabs>
       {tab === TABS.REPLIES && replies}
       {tab === TABS.LOCATIONS && locations}
+      {tab === TABS.CITED_BY && <CitedByTab medium={medium} />}
     </PageColumn>
   );
 };

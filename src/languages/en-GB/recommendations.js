@@ -23,6 +23,13 @@ export default {
   dismissed: 'Removed. You will not be recommended that again.',
   failed: 'That did not work. Please try again.',
   reasons: {
+    citedByOne: 'Cited by {{ name }}',
+    citedByMore_one: 'Cited by {{ name }} and {{ count }} other',
+    citedByMore_other: 'Cited by {{ name }} and {{ count }} others',
+    citedByCount_one: 'Cited by {{ count }} person you follow',
+    citedByCount_other: 'Cited by {{ count }} people you follow',
+    cited_one: 'Cited by {{ count }} person',
+    cited_other: 'Cited by {{ count }} people',
     goingOne: '{{ name }} is going',
     goingTwo: '{{ first }} and {{ second }} are going',
     goingMore_one: '{{ name }} and {{ count }} other are going',
@@ -47,6 +54,13 @@ export default {
     popular: 'Many people followed them lately',
   },
   weights: {
+    // What the (i) beside the title opens: how suggestions are chosen.
+    howItWorks: [
+      'Suggestions are worked out here, from who follows, likes and cites whom on this site. There is no model, and nothing is learned about you anywhere else.',
+      'Each reason adds points to a profile, up to a limit. People you follow who follow or cite them count most. Then somebody who follows you, who invited you or whom you invited, whose posts you liked, or who posts with hashtags you use or follow. Being cited, featured by the site or followed by many lately count a little.',
+      'Profiles active lately come first. A person quiet for longer than your choice under "People who were last here" is not suggested at all.',
+      'The sliders change how many points each reason is worth for you, and Off leaves it out. They change only what you are suggested.',
+    ],
     action: 'Adjust recommendations',
     title: 'What counts in your recommendations',
     help: 'Slide each reason up to make it count for more when choosing for you, or down to nothing to leave it out. It changes only what you are suggested.',
@@ -64,6 +78,8 @@ export default {
     sharedInterest: 'They post about what you post about',
     featured: 'Featured on this site',
     popular: 'Many people followed them lately',
+    citedByLeaders: 'People you follow cite them or their posts',
+    cited: 'Others cite them or their posts',
     activeWithin: {
       label: 'People who were last here',
       help: 'Somebody who has not been here, or posted, for longer than this is not suggested to you. Groups and events are not left out by it.',

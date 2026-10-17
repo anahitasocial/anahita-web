@@ -7,11 +7,16 @@ export default {
     citations_one: '{{count}} citation',
     citations_other: '{{count}} citations',
   },
+  citations: {
+    citedBy: 'Cité par',
+    noneCitedBy: 'Rien ici ne cite encore ceci.',
+  },
   embed: {
     in: 'dans',
     citations: 'Citations',
     opensNewTab: 'S’ouvre dans un nouvel onglet',
     readMore: 'Lire la suite',
+    viewProfile: 'Voir le profil',
   },
   stepper: {
     position: '{{index}} sur {{total}}',

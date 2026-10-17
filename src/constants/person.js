@@ -1,4 +1,5 @@
 import async from './async';
+import LIMITS from './limits';
 
 const person = async('person');
 
@@ -11,7 +12,7 @@ export default {
     // names did not fit even before the validator rejected the space between
     // them.
     NAME: {
-      MAX_LENGTH: 100,
+      MAX_LENGTH: LIMITS.DISPLAY_NAME_MAX,
       MIN_LENGTH: 1,
     },
     PRONOUNS: {
@@ -19,11 +20,11 @@ export default {
       MIN_LENGTH: 0,
     },
     BODY: {
-      MAX_LENGTH: 500,
+      MAX_LENGTH: LIMITS.BIO_MAX,
     },
     USERNAME: {
-      MAX_LENGTH: 30,
-      MIN_LENGTH: 3,
+      MAX_LENGTH: LIMITS.USERNAME_MAX,
+      MIN_LENGTH: LIMITS.USERNAME_MIN,
     },
     EMAIL: {
       MAX_LENGTH: 80,

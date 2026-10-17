@@ -1,3 +1,5 @@
+import LIMITS from '../constants/limits';
+
 // The images of a photo post: what the server sends, what the composer and
 // the edit dialog hold while somebody arranges them, and what is sent back.
 //
@@ -10,7 +12,7 @@
 const DEFAULT_MAX = 4;
 
 // The longest description of one image. The server refuses longer.
-const ALT_TEXT_MAX_LENGTH = 1500;
+const ALT_TEXT_MAX_LENGTH = LIMITS.ALT_TEXT_MAX;
 
 const STATUS = {
   UPLOADING: 'uploading',
