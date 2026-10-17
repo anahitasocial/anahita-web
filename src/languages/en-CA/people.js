@@ -46,7 +46,7 @@ export default {
       errors: {
         nothingToArchive: 'Nothing to archive — this profile is already archived or scheduled for deletion.',
         forbidden: 'You do not have permission to archive this profile.',
-        lastSuperAdmin: 'This is the only super administrator. Promote someone else before archiving this account.',
+        lastSuperAdmin: 'This is the only super administrator. Promote someone else before archiving this profile.',
         generic: 'Could not archive this profile. Please try again.',
       },
     },
@@ -111,7 +111,7 @@ export default {
     cTitle: 'Notifications',
     cDescription: 'Edit your notification settings',
     mTitle: 'Notifications',
-    email: 'Recieve email notifications',
+    email: 'Receive email notifications',
     optionsTitle: 'Get notifications for',
     options: {
       all: 'All the posts',

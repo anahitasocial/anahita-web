@@ -9,6 +9,7 @@ import RemoveIcon from '@mui/icons-material/Remove';
 import TagType from '../../../../proptypes/Location';
 import NodeType from '../../../../proptypes/Node';
 import actions from '../../../../actions';
+import i18n from '../../../../languages';
 
 const ControlsTagsLocationDelete = React.forwardRef((props, ref) => {
   const {
@@ -23,7 +24,7 @@ const ControlsTagsLocationDelete = React.forwardRef((props, ref) => {
   return (
     <IconButton
       edge="end"
-      aria-label="delete"
+      aria-label={i18n.t('actions:delete')}
       ref={ref}
       onClick={() => {
         setIsWaiting(true);

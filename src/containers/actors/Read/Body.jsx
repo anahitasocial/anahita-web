@@ -105,7 +105,7 @@ const ActorBody = ({
           textColor="primary"
           variant="scrollable"
           scrollButtons="auto"
-          aria-label="Profile Tabs"
+          aria-label={i18n.t('actor:tabs')}
         >
           {featureTabs.map((tab) => {
             return (

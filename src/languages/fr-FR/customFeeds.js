@@ -148,9 +148,9 @@ export default {
       too_many_pins: 'Votre page d’accueil accueille jusqu’à 10 fils. Retirez-en un pour en ajouter un autre.',
       access_not_allowed: 'Ce site n’autorise pas les fils publics.',
       generic: 'Le fil n’a pas pu être enregistré. Veuillez réessayer.',
-      location_needed: 'Ce flux montre ce qui est près de vous : autorisez votre navigateur à partager votre position pour le voir.',
+      location_needed: 'Ce fil montre ce qui est près de vous : autorisez votre navigateur à partager votre position pour le voir.',
       invalid_near: 'Choisissez une zone de 1 à 500 km.',
-      unknown_origin: 'Ce flux n’a pas pu être lu. Veuillez réessayer.',
+      unknown_origin: 'Ce fil n’a pas pu être lu. Veuillez réessayer.',
     },
   },
   summary: {

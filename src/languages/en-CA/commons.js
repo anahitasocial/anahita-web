@@ -54,8 +54,9 @@ export default {
   posts: 'Posts',
   settings: 'Settings',
   ignore: 'Ignore',
-  accept: 'Accpet',
+  accept: 'Accept',
   errors: {
     404: '404: Page not found!',
   },
+  openMenu: 'Open the menu',
 };

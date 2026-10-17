@@ -5,6 +5,6 @@ export default {
   access: 'Access',
   support: 'Support',
   report: 'Report Issues',
-  guideline: 'Tribes Guideline',
+  guideline: 'Community guidelines',
   privacy: 'Privacy Policy',
 };

@@ -26,4 +26,5 @@ export default {
   download: 'Télécharger',
   search: 'Rechercher',
   repost: 'Repartager',
+  more: 'Plus',
 };

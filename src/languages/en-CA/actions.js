@@ -26,4 +26,5 @@ export default {
   download: 'Download',
   search: 'Search',
   repost: 'Repost',
+  more: 'More',
 };

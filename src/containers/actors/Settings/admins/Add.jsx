@@ -15,6 +15,7 @@ import PersonType from '../../../../proptypes/Person';
 import actions from '../../../../actions';
 import api from '../../../../utils/api';
 import utils from '../../../../utils';
+import i18n from '../../../../languages';
 
 const { getActorName } = utils.node;
 
@@ -103,7 +104,7 @@ const ActorsSettingsAdminsAdd = (props) => {
           <TextField
             variant="standard"
             {...params}
-            label="Add Admins"
+            label={i18n.t('actor:addAdmins')}
             value={keyword}
             placeholder="Jane smith ..."
             slotProps={{

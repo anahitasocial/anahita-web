@@ -29,7 +29,7 @@ export default {
     description: 'People and groups you might like, each with the reason. Nothing is followed until you choose to.',
   },
   featured: {
-    title: 'Accounts to follow',
+    title: 'Profiles to follow',
     description: 'A few people and groups to start with. Nothing is followed until you choose to.',
     inviter: 'Invited you',
     person: 'Person',
@@ -44,7 +44,7 @@ export default {
   },
   prompts: {
     error: 'Something went wrong. Please try again.',
-    followError: 'Some accounts could not be followed. You can follow them later from their profiles.',
+    followError: 'Some profiles could not be followed. You can follow them later from their profiles.',
   },
   nudge: {
     title: 'Complete your profile',

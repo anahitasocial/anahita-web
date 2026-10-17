@@ -5,6 +5,6 @@ export default {
   access: 'Accès',
   support: 'Assistance',
   report: 'Signaler un problème',
-  guideline: 'Charte des tribus',
+  guideline: 'Règles de la communauté',
   privacy: 'Politique de confidentialité',
 };

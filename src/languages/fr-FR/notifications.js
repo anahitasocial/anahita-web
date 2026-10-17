@@ -8,7 +8,7 @@ export default {
   actorAdd: '<0>{{subject}}</0> a créé <1>{{object}}</1>',
   topicAdd: '<0>{{subject}}</0> a commencé un <1>sujet</1>',
   setAdd: '<0>{{subject}}</0> a créé un <1>album photo</1>',
-  setComment: '<0>{{subject}}</0> a commenté sur <1>album photo</1>',
+  setComment: '<0>{{subject}}</0> a commenté un <1>album photo</1>',
   actorFollow: '<0>{{subject}}</0> suit <2>{{target}}</2>',
   actorFollowRequest: '<0>{{subject}}</0> a demandé à suivre <2>{{target}}</2>',
   actorFollowRequestAccept: '<0>{{subject}}</0> a accepté votre demande d’abonnement',
@@ -30,4 +30,5 @@ export default {
   articleComment: '<0>{{subject}}</0> a commenté votre <1>article</1>',
   topicComment: '<0>{{subject}}</0> a commenté votre <1>sujet</1>',
   photoComment: '<0>{{subject}}</0> a commenté votre <1>photo</1>',
+  markRead: 'Marquer comme lu',
 };

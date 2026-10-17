@@ -7,7 +7,7 @@ export default {
   password: 'Password',
   forgotPassword: 'Forgot password?',
   signup: {
-    cTitle: 'Please signup',
+    cTitle: 'Sign up',
     mTitle: 'Signup',
     invitation: 'New here? Create an account, or sign in if you already have one.',
     closed: 'This site is not open for registration. You need an invitation to join.',

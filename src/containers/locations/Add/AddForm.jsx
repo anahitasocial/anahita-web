@@ -112,7 +112,7 @@ const LocationAddForm = ({
             <CountrySelect
               id="location-country"
               name="country"
-              label="Country"
+              label={i18n.t('locations:location.country')}
               onChange={handleOnChange}
               value={location.country}
               disabled={isFetching}
@@ -130,7 +130,7 @@ const LocationAddForm = ({
             <RegionSelect
               id="state_province"
               name="state_province"
-              label="Province"
+              label={i18n.t('locations:location.province')}
               onChange={handleOnChange}
               value={location.stateProvince}
               disabled={location.country === '' || isFetching}

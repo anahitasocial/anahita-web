@@ -8,7 +8,7 @@ export default {
   actorAdd: '<0>{{subject}}</0> created <1>{{object}}</1>',
   topicAdd: '<0>{{subject}}</0> started a <1>topic</1>',
   setAdd: '<0>{{subject}}</0> created a <1>photo set</1>',
-  setComment: '<0>{{subject}}</0> commented on <1>photo set</1>',
+  setComment: '<0>{{subject}}</0> commented on a <1>photo set</1>',
   actorFollow: '<0>{{subject}}</0> is following <2>{{target}}</2>',
   actorFollowRequest: '<0>{{subject}}</0> asked to follow <2>{{target}}</2>',
   actorFollowRequestAccept: '<0>{{subject}}</0> accepted your request to follow',
@@ -30,4 +30,5 @@ export default {
   articleComment: '<0>{{subject}}</0> commented on your <1>article</1>',
   topicComment: '<0>{{subject}}</0> commented on your <1>topic</1>',
   photoComment: '<0>{{subject}}</0> commented on your <1>photo</1>',
+  markRead: 'Mark as read',
 };

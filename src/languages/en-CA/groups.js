@@ -87,7 +87,7 @@ export default {
     cTitle: 'Notifications',
     cDescription: 'Edit your notification settings',
     mTitle: 'Notifications',
-    email: 'Recieve email notifications',
+    email: 'Receive email notifications',
     optionsTitle: 'Get notifications for',
     options: {
       all: 'All the posts',

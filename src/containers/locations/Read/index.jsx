@@ -174,7 +174,7 @@ const LocationsRead = ({
                 fullWidth
                 key="location-action-cancel"
               >
-                Cancel
+                {i18n.t('actions:cancel')}
               </Button>,
               <Button
                 type="submit"
@@ -183,7 +183,7 @@ const LocationsRead = ({
                 fullWidth
                 key="location-action-update"
               >
-                Update
+                {i18n.t('actions:update')}
               </Button>,
             ]}
           />}

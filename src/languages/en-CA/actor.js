@@ -104,4 +104,6 @@ export default {
       readers: 'Anyone who can see this profile, as set under Access.',
     },
   },
+  tabs: 'Profile tabs',
+  addAdmins: 'Add administrators',
 };

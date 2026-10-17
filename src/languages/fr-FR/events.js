@@ -26,7 +26,7 @@ export default {
       errors: {
         nothingToArchive: 'Rien à archiver — cet événement est déjà archivé ou programmé pour suppression.',
         forbidden: 'Vous n\'avez pas la permission d\'archiver cet événement.',
-        lastSuperAdmin: 'Il s\'agit du seul super administrateur. Promouvez quelqu\'un d\'autre avant d\'archiver ce compte.',
+        lastSuperAdmin: 'Il s\'agit du seul super administrateur. Promouvez quelqu\'un d\'autre avant d\'archiver cet événement.',
         generic: 'Impossible d\'archiver cet événement. Veuillez réessayer.',
       },
     },

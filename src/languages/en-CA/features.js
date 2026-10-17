@@ -6,7 +6,7 @@ export default {
   },
   feed: {
     title: 'Feed',
-    description: 'Recieve updates from your socialgraph in chronological order.',
+    description: 'Receive updates from the people you follow, newest first.',
     addPermissions: {},
   },
   socialgraph: {
