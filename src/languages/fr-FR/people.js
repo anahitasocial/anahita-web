@@ -125,6 +125,8 @@ export default {
       'il',
       'elle',
       'iel',
+      'il/iel',
+      'elle/iel',
     ],
     usertype: "Type d'utilisateur",
     usertypeOptions: {

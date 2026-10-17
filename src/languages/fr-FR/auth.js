@@ -148,6 +148,35 @@ export default {
       passwordInvalid: 'Nous n’avons pas pu vérifier votre mot de passe. Réessayez.',
       invalidPasscode: 'Ce code n’est pas valide. Vérifiez votre application d’authentification et réessayez.',
       enableFailed: 'Nous n’avons pas pu activer l’authentification à deux facteurs. Réessayez.',
+      disableFailed: 'Nous n’avons pas pu désactiver l’authentification à deux facteurs. Réessayez.',
+      disableForbidden: 'Vous n’avez pas le droit de modifier l’authentification à deux facteurs de ce compte.',
+    },
+  },
+  reauth: {
+    cTitle: 'Confirmez qu’il s’agit bien de vous',
+    label: 'Pour votre sécurité, confirmez votre identité avant de modifier ceci.',
+    usePasskey: 'Utiliser une clé d’accès',
+    usePassword: 'Utiliser plutôt votre mot de passe',
+    submit: 'Confirmer',
+    fields: {
+      currentPassword: 'Mot de passe actuel',
+      totpPasscode: 'Code d’authentification',
+      totpHelper: 'Le code à 6 chiffres de votre application d’authentification, ou un code de récupération.',
+    },
+    errors: {
+      passwordRequired: 'Saisissez votre mot de passe actuel.',
+      wrongPassword: 'Le mot de passe actuel est incorrect.',
+      totpRequired: 'Saisissez le code de votre application d’authentification.',
+      invalidPasscode: 'Ce code n’est pas valide. Essayez le code actuel de votre application d’authentification.',
+      passkeyFailed: 'Cette clé d’accès n’a pas été acceptée. Réessayez, ou utilisez votre mot de passe.',
+      forbidden: 'Trop de tentatives échouées. Réessayez dans 30 minutes.',
+      generic: 'Nous n’avons pas pu confirmer votre identité. Réessayez.',
+      noMethod: 'Il faut pour cela une clé d’accès ou l’authentification à deux facteurs. Ajoutez-en une dans vos paramètres de sécurité, puis réessayez.',
+    },
+  },
+  expired: {
+    alerts: {
+      info: 'Votre session a expiré.',
     },
   },
   prompts: {

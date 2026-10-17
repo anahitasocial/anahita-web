@@ -19,7 +19,7 @@ export default {
     archive: 'Archiver',
     archivePrompts: {
       permanent: 'L\'archivage est irréversible. Il n\'y a aucun moyen de restaurer cet événement.',
-      groupDescription: 'Rien n\'est supprimé. Chaque publication, réponse et photo reste exactement où elle est et conserve son adresse, donc les liens enregistrés continueront de fonctionner. Ce qui s\'arrête, c\'est l\'activité du compte : il quitte les fils et les suggestions, et il n\'est plus possible de s\'y connecter.',
+      eventDescription: 'Rien n\'est supprimé. Chaque publication, photo et discussion reste exactement où elle est et conserve son adresse : les liens enregistrés continueront de fonctionner. Ce qui s\'arrête, c\'est l\'activité de l\'événement : il quitte les fils, les suggestions et la recherche, et plus personne ne peut y publier.',
       confirmLabel: 'Tapez {{ alias }} pour confirmer',
       action: 'Archiver définitivement',
       archived: 'Cet événement a été archivé.',
