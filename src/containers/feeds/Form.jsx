@@ -20,7 +20,6 @@ import Slider from '@mui/material/Slider';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import MyLocationIcon from '@mui/icons-material/MyLocation';
 
 import NodesField from '../../components/NodesField';
 import WordsField from '../../components/WordsField';
@@ -44,6 +43,11 @@ const FROM_CHOSEN = 'chosen';
 
 // The radii an area may have, in kilometres, a step of the slider each.
 const RADII = [1, 2, 5, 10, 25, 50, 100, 250, 500];
+
+// An area: none, wherever the reader is, or a point kept with the feed.
+const NEAR_NONE = 'none';
+const NEAR_LIVE = 'live';
+const NEAR_FIXED = 'fixed';
 
 // What the form starts from: a feed being changed, or a new one of the
 // profiles the viewer follows.
@@ -134,6 +138,10 @@ const CustomFeedForm = ({
 
   const { definition } = values;
   const problem = customFeeds.problem(definition);
+  let nearKind = NEAR_NONE;
+  if (definition.filters.near) {
+    nearKind = definition.filters.near.live ? NEAR_LIVE : NEAR_FIXED;
+  }
 
   // Profiles named by hand, and nothing else to draw from: whose posts
   // these are is already said, and "Posted on" could only hide some of
@@ -190,6 +198,7 @@ const CustomFeedForm = ({
           latitude: Math.round(position.coords.latitude * 1000) / 1000,
           longitude: Math.round(position.coords.longitude * 1000) / 1000,
           radiusKm: (definition.filters.near && definition.filters.near.radiusKm) || 10,
+          live: false,
         },
       });
     }, () => {
@@ -476,37 +485,69 @@ const CustomFeedForm = ({
             <FormLabel component="legend">
               {i18n.t('customFeeds:form.near')}
             </FormLabel>
-            {!definition.filters.near &&
-              <Box sx={{ mt: 1 }}>
-                <Button
-                  variant="outlined"
-                  startIcon={<MyLocationIcon />}
-                  disabled={isSaving || whereIAm === 'finding'}
-                  onClick={nearMe}
-                >
-                  {i18n.t(whereIAm === 'finding' ? 'customFeeds:form.nearFinding' : 'customFeeds:form.nearHere')}
-                </Button>
-              </Box>}
+            <RadioGroup
+              value={nearKind}
+              onChange={(event) => {
+                const kind = event.target.value;
+                const { near } = definition.filters;
+                const radiusKm = (near && near.radiusKm) || 10;
+                if (kind === NEAR_NONE) {
+                  setDefinition('filters', { near: null });
+                } else if (kind === NEAR_LIVE) {
+                  setDefinition('filters', {
+                    near: {
+                      latitude: 0, longitude: 0, radiusKm, live: true,
+                    },
+                  });
+                } else {
+                  nearMe();
+                }
+              }}
+            >
+              <FormControlLabel
+                value={NEAR_NONE}
+                control={<Radio />}
+                label={i18n.t('customFeeds:form.nearOff')}
+              />
+              <FormControlLabel
+                value={NEAR_LIVE}
+                control={<Radio />}
+                label={
+                  <>
+                    <Typography variant="body1">{i18n.t('customFeeds:form.nearLive')}</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      {i18n.t('customFeeds:form.nearLiveHelp')}
+                    </Typography>
+                  </>
+                }
+                sx={{ alignItems: 'flex-start', '& .MuiRadio-root': { pt: 0.5 } }}
+              />
+              <FormControlLabel
+                value={NEAR_FIXED}
+                control={<Radio />}
+                disabled={whereIAm === 'finding'}
+                label={
+                  <>
+                    <Typography variant="body1">
+                      {i18n.t(whereIAm === 'finding' ?
+                        'customFeeds:form.nearFinding' :
+                        'customFeeds:form.nearFixed')}
+                    </Typography>
+                    {nearKind === NEAR_FIXED &&
+                      <Typography variant="body2" color="textSecondary">
+                        {i18n.t('customFeeds:form.nearAt', {
+                          latitude: definition.filters.near.latitude,
+                          longitude: definition.filters.near.longitude,
+                        })}
+                      </Typography>}
+                  </>
+                }
+                sx={{ alignItems: 'flex-start', '& .MuiRadio-root': { pt: 0.5 } }}
+              />
+            </RadioGroup>
             {definition.filters.near &&
               <Box sx={{ mt: 1, px: 1 }}>
-                <Stack direction="row" spacing={1} sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-                  <Typography variant="body2">
-                    {i18n.t('customFeeds:form.nearAt', {
-                      latitude: definition.filters.near.latitude,
-                      longitude: definition.filters.near.longitude,
-                    })}
-                  </Typography>
-                  <Button
-                    size="small"
-                    disabled={isSaving}
-                    onClick={() => {
-                      setDefinition('filters', { near: null });
-                    }}
-                  >
-                    {i18n.t('customFeeds:form.nearOff')}
-                  </Button>
-                </Stack>
-                <Typography id="feed-radius" variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                <Typography id="feed-radius" variant="body2" color="textSecondary">
                   {i18n.t('customFeeds:form.radius')}
                   {' '}
                   {i18n.t('customFeeds:form.radius', { count: definition.filters.near.radiusKm })}

@@ -53,6 +53,8 @@ const complete = (definition) => {
         latitude: Number(filters.near.latitude),
         longitude: Number(filters.near.longitude),
         radiusKm: Number(filters.near.radiusKm),
+        // Wherever its reader is, rather than a point kept with it.
+        live: Boolean(filters.near.live),
       } : null,
       // Where it was written: '' anywhere, 'here', or 'elsewhere'.
       origin: filters.origin || '',
@@ -225,7 +227,9 @@ const summary = (definition, t, { names = {}, isOwn = true } = {}) => {
     }));
   }
   if (filters.near) {
-    parts.push(t('customFeeds:summary.near', { count: filters.near.radiusKm }));
+    parts.push(t(filters.near.live ? 'customFeeds:summary.nearLive' : 'customFeeds:summary.near', {
+      count: filters.near.radiusKm,
+    }));
   }
   if (filters.origin) {
     parts.push(t(`customFeeds:summary.origin.${filters.origin}`));
