@@ -443,7 +443,10 @@ const LongEditor = ({
           sx={(theme) => {
             return {
               ...theme.typography.body1,
-              px: '14px',
+              // 8px more than an outlined field's own 14px, so the text
+              // and what is embedded in it start where the B of the bold
+              // button does (the user, 2026-10-17).
+              px: '22px',
               py: 2,
               cursor: 'text',
               '& .ProseMirror': {
