@@ -9,7 +9,6 @@ export default {
   },
   citations: {
     citedBy: 'Cité par',
-    cites: 'Cite',
     noneCitedBy: 'Rien ici ne cite encore ceci.',
   },
   embed: {

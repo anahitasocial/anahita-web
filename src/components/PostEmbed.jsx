@@ -716,9 +716,7 @@ Citations.propTypes = {
 
 export {
   Citations,
-  Citation,
   PostRow,
-  citedIn,
   usePost,
 };
 export default PostEmbed;

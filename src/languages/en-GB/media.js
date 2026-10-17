@@ -9,10 +9,9 @@ export default {
     citations_other: '{{count}} citations',
   },
   // What an article shows within itself, and lists at its end.
-  // A post's Citations tab: its relations to other posts.
+  // A post's Cited by tab: what cites it here.
   citations: {
     citedBy: 'Cited by',
-    cites: 'Cites',
     noneCitedBy: 'Nothing here cites this yet.',
   },
   embed: {

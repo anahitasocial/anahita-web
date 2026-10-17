@@ -8,31 +8,17 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 
 import Progress from '../../../components/Progress';
-import { Citation, PostRow, citedIn } from '../../../components/PostEmbed';
+import { PostRow } from '../../../components/PostEmbed';
 import api from '../../../api';
 import i18n from '../../../languages';
 
 const LIMIT = 20;
 
-// A heading over one of the two lists.
-const Heading = ({ children }) => {
-  return (
-    <Typography variant="subtitle2" component="h2" color="textSecondary" sx={{ px: 2, pt: 2 }}>
-      {children}
-    </Typography>
-  );
-};
-
-Heading.propTypes = {
-  children: PropTypes.node.isRequired,
-};
-
-// A post's relations by citation, in a tab of their own beside its replies
-// and its places (the user, 2026-10-17: "citations are part of the
-// article, cited by are relations"). First what cites it here, newest
-// first, as the viewer may see them, more as they scroll; then, for an
-// article or a topic, what it cites, as at the end of its text.
-const CitationsTab = ({ medium }) => {
+// What cites a post here, in a tab of its own beside its replies and its
+// places (the user, 2026-10-17: "citations are part of the article, cited
+// by are relations"): newest first, as the viewer may see them, more as
+// they scroll. What an article cites stays at the end of its text.
+const CitedByTab = ({ medium }) => {
   const [posts, setPosts] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -55,11 +41,8 @@ const CitationsTab = ({ medium }) => {
     load(0);
   }, [medium.id]);
 
-  const cites = /\.(article|topic)\.v1$/.test(medium.type || '') ? citedIn(medium.body) : [];
-
   return (
-    <Card sx={{ pb: 1 }}>
-      <Heading>{i18n.t('media:citations.citedBy')}</Heading>
+    <Card sx={{ py: 1 }}>
       {isLoading && <Progress />}
       {!isLoading && posts.length === 0 &&
         <CardContent>
@@ -83,27 +66,12 @@ const CitationsTab = ({ medium }) => {
             })}
           </List>
         </InfiniteScroll>}
-      {cites.length > 0 &&
-        <>
-          <Heading>{i18n.t('media:citations.cites')}</Heading>
-          <List component="ol">
-            {cites.map((address) => {
-              return (
-                <Citation
-                  key={address}
-                  url={address}
-                  cards={medium.linkPreviews || []}
-                />
-              );
-            })}
-          </List>
-        </>}
     </Card>
   );
 };
 
-CitationsTab.propTypes = {
+CitedByTab.propTypes = {
   medium: PropTypes.object.isRequired,
 };
 
-export default CitationsTab;
+export default CitedByTab;
