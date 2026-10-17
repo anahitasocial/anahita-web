@@ -57,7 +57,7 @@ is read:
 | Variable | Description |
 | --- | --- |
 | `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | How often to check for new notifications, in milliseconds. `15000` (15 seconds) when unset; `.env.example` sets `1500000` (25 minutes) |
-| `REACT_APP_LANGUAGE` | The language for a visitor whose browser asks for none the app has: `en-CA`, `en-US`, `fr-FR`, `fr-CA` or `de-DE`. Unset, or anything else, is `en-CA`. See [Languages](customising.md#languages) |
+| `REACT_APP_LANGUAGE` | The language for a visitor whose browser asks for none the app has: `en-CA`, `en-US`, `fr-FR`, `fr-CA`, `de-DE`, `es-419` or `pt-BR`. Unset, or anything else, is `en-CA`. See [Languages](customising.md#languages) |
 | `REACT_APP_ASSETS` | The theme to use: the name of a directory under `src/assets/`. Unset uses `src/assets/default`. See [Themes](customising.md#themes) |
 | `REACT_APP_ANALYTICS` | Page-view analytics: `plausible`, `umami` or `matomo`. Unset means off: no script is loaded and nothing leaves the browser |
 | `REACT_APP_ANALYTICS_URL` | Where that analytics service is, for example `https://stats.example.org` |
