@@ -39,8 +39,8 @@ import { rememberOnFediverse } from '../../media/Composer/useOnFediverse';
 // back when they turned it on again. On an installation with no fediverse service
 // nothing is drawn.
 //
-// A website (`profile`) is always on the fediverse, with nobody to choose it:
-// its card has no switch, and says its handle.
+// A website (`profile`) is the same, off until one of its administrators
+// turns it on, and said in a website's words.
 const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) => {
   const [settings, setSettings] = useState(null);
   const [isAbsent, setIsAbsent] = useState(false);
@@ -59,13 +59,19 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
     return null;
   }
 
+  // A person's words, or a website's.
+  const words = profile ? 'websites:settings.fediverseCard' : 'federation:settings';
+
   const save = (enabled) => {
     setIsSaving(true);
     setIsLeaving(false);
-    api.federation.setEnabled(enabled).then((result) => {
+    api.federation.setEnabled(enabled, profile).then((result) => {
       setSettings(result.data);
-      // The composer says whether a note will be shared, from this.
-      rememberOnFediverse(result.data && result.data.enabled);
+      // The composer says whether a note will be shared, from this. A
+      // website's notes are not written in it.
+      if (!profile) {
+        rememberOnFediverse(result.data && result.data.enabled);
+      }
       alertSuccess(i18n.t('federation:settings.saved'));
     }).catch(() => {
       alertError(i18n.t('federation:settings.notSaved'));
@@ -89,31 +95,6 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
   // be on the fediverse.
   const canSwitch = settings.enabled || settings.available;
 
-  if (profile) {
-    return (
-      <Card>
-        <CardHeader
-          avatar={<Avatar><FediverseIcon /></Avatar>}
-          title={i18n.t('federation:settings.title')}
-        />
-        <Divider />
-        <CardContent>
-          <Typography variant="body2" color="textSecondary">
-            {i18n.t(settings.reason
-              ? `websites:settings.fediverseOff.${settings.reason}`
-              : 'websites:settings.fediverseHelp')}
-          </Typography>
-          {settings.handle && !settings.reason &&
-            <Typography variant="body2" sx={{ mt: 2 }}>
-              {i18n.t('websites:settings.handle')}
-              {': '}
-              <strong>{`@${settings.handle}`}</strong>
-            </Typography>}
-        </CardContent>
-      </Card>
-    );
-  }
-
   return (
     <Card>
       <CardHeader
@@ -130,20 +111,20 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
               onChange={handleChange}
             />
           }
-          label={i18n.t('federation:settings.enable')}
+          label={i18n.t(`${words}.enable`)}
         />
         <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-          {i18n.t('federation:settings.help')}
+          {i18n.t(`${words}.help`)}
         </Typography>
         {settings.handle &&
           <Typography variant="body2" sx={{ mt: 2 }}>
-            {i18n.t('federation:settings.handle')}
+            {i18n.t(`${words}.handle`)}
             {': '}
             <strong>{`@${settings.handle}`}</strong>
           </Typography>}
         {!settings.available && settings.reason &&
           <Alert severity="info" sx={{ mt: 2 }}>
-            {i18n.t(`federation:settings.unavailable.${settings.reason}`)}
+            {i18n.t(`${words}.unavailable.${settings.reason}`)}
           </Alert>}
         {settings.available &&
           <Alert severity="warning" sx={{ mt: 2 }}>
@@ -151,7 +132,7 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
           </Alert>}
         {settings.enabled &&
           <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
-            {i18n.t('federation:settings.leavesWhenPrivate')}
+            {i18n.t(`${words}.leavesWhenPrivate`)}
           </Typography>}
       </CardContent>
       <Dialog
@@ -160,10 +141,10 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>{i18n.t('federation:settings.leave.title')}</DialogTitle>
+        <DialogTitle>{i18n.t(`${words}.leave.title`)}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {i18n.t('federation:settings.leave.body')}
+            {i18n.t(`${words}.leave.body`)}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -176,7 +157,7 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
             color="error"
             onClick={() => { save(false); }}
           >
-            {i18n.t('federation:settings.leave.confirm')}
+            {i18n.t(`${words}.leave.confirm`)}
           </Button>
         </DialogActions>
       </Dialog>

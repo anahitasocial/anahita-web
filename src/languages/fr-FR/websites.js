@@ -70,12 +70,21 @@ export default {
     access: 'Bloqués',
     website: 'Sur votre site',
     fediverse: 'Fédivers',
-    fediverseHelp: 'Un site est toujours sur le fédivers : les gens sur Mastodon et d’autres serveurs le trouvent par son identifiant et le suivent, et ses notes leur sont envoyées.',
-    handle: 'Son identifiant',
-    fediverseOff: {
-      site_private: 'Ce site réserve ce qu’il contient à ses membres : aucun site web n’y est sur le fédivers.',
-      site_unreachable: 'Ce site n’a pas d’adresse que d’autres serveurs puissent joindre : aucun site web n’y est sur le fédivers.',
-      profile_not_public: 'Tant que le site est désactivé ou supprimé, il n’est pas sur le fédivers.',
+    fediverseCard: {
+      enable: 'Laisser les gens d’autres serveurs le trouver et le suivre',
+      help: 'Les gens sur Mastodon et d’autres serveurs du fédivers peuvent alors trouver le site par son identifiant et le suivre, et ses notes leur sont envoyées.',
+      handle: 'Son identifiant',
+      leavesWhenPrivate: 'Si le site est désactivé ou supprimé, il quitte aussi le fédivers, comme si vous aviez désactivé ceci.',
+      leave: {
+        title: 'Retirer le site du fédivers ?',
+        body: 'Chaque serveur qui connaît le site sera prié de le retirer, avec ses notes et ses abonnés là-bas. Cela ne peut pas être annulé d’ici : si vous réactivez ceci plus tard, les serveurs qui l’ont retiré pourraient ne pas le reprendre, et personne de ceux qui le suivaient ne le suivra plus.',
+        confirm: 'Le retirer',
+      },
+      unavailable: {
+        site_private: 'Ce site réserve ce qu’il contient à ses membres : aucun site web n’y est sur le fédivers.',
+        site_unreachable: 'Ce site n’a pas d’adresse que d’autres serveurs puissent joindre : aucun site web n’y est sur le fédivers.',
+        profile_not_public: 'Tant que le site est désactivé ou supprimé, il ne peut pas être sur le fédivers.',
+      },
     },
     blueskyHelp: 'Connectez le compte Bluesky du site lui-même, avec votre domaine comme identifiant si vous voulez (@exemple.fr) : ses notes y sont publiées aussi, et les gens sur Bluesky le suivent là-bas. Utilisez un mot de passe d’application, pas celui du compte.',
     websiteIntro: 'Collez ceci dans votre site pour mener vos lecteurs jusqu’ici.',

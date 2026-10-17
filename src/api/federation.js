@@ -19,8 +19,10 @@ const settings = (person) => {
   return axios.get('/activitypub/settings', { params });
 };
 
-const setEnabled = (enabled) => {
-  return axios.put('/activitypub/settings', { enabled: Boolean(enabled) });
+// The viewer's own choice, or, with a website, its administrators'.
+const setEnabled = (enabled, profile = null) => {
+  const params = profile && profile.id ? { person_id: profile.id } : undefined;
+  return axios.put('/activitypub/settings', { enabled: Boolean(enabled) }, { params });
 };
 
 // Somebody on another server, by their handle (@alice@mastodon.example,

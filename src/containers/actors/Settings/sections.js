@@ -348,9 +348,9 @@ export const getGroupTabs = ({
       { key: ITEMS.ADMINS, bare: true },
       { key: ITEMS.ACCESS, bare: true },
       { key: ITEMS.WEBSITE, bare: true },
-      // Named and laid out as a person's network tab is: its handle on the
-      // fediverse, where it always is, with no switch, and its own Bluesky
-      // account, where its notes are posted too. Both bring their own Card.
+      // Named and laid out as a person's network tab is: whether it is on
+      // the fediverse, off until turned on, and its own Bluesky account,
+      // where its notes are posted too. Both bring their own Card.
       { key: ITEMS.FEDIVERSE, bare: false },
       { key: ITEMS.DANGER, bare: true, requiresDanger: true },
     ].filter((item) => {

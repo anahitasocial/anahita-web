@@ -362,8 +362,8 @@ const ActorsSettings = ({
       </Stack>
     ),
     [ITEMS.WEBSITE]: <WebsiteFollowSnippet actor={actor} />,
-    // Its handle on the fediverse, where it always is, and its own Bluesky
-    // account, as a person's tab holds both.
+    // Whether it is on the fediverse, and its own Bluesky account, as a
+    // person's tab holds both.
     [ITEMS.FEDIVERSE]: (
       <Stack spacing={2}>
         <ActorFediverse profile={actor} />

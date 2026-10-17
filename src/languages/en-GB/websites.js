@@ -72,13 +72,23 @@ export default {
     access: 'Blocked',
     website: 'On your site',
     fediverse: 'Fediverse',
-    fediverseHelp: 'A website is always on the fediverse: people on Mastodon and other servers find it by its handle and follow it, and its notes are sent to them.',
-    handle: 'Its handle',
-    // Why a website is not on the fediverse after all.
-    fediverseOff: {
-      site_private: 'This site keeps what is on it to its members, so no website on it is on the fediverse.',
-      site_unreachable: 'This site has no address other servers can reach, so no website on it is on the fediverse.',
-      profile_not_public: 'While the website is switched off or deleted, it is not on the fediverse.',
+    // Its card under Fediverse: off until one of its administrators turns
+    // it on, as a person's is.
+    fediverseCard: {
+      enable: 'Let people on other servers find and follow it',
+      help: 'People on Mastodon and other servers of the fediverse can then find the website by its handle and follow it, and its notes are sent to them.',
+      handle: 'Its handle',
+      leavesWhenPrivate: 'If the website is switched off or deleted, it leaves the fediverse as well, as if you had turned this off.',
+      leave: {
+        title: 'Take the website off the fediverse?',
+        body: 'Every server that knows the website will be told to remove it, its notes and its followers there. This cannot be undone from here: if you turn this on again later, servers that removed it may not take it back, and nobody who followed it will be following it.',
+        confirm: 'Take it off',
+      },
+      unavailable: {
+        site_private: 'This site keeps what is on it to its members, so no website on it is on the fediverse.',
+        site_unreachable: 'This site has no address other servers can reach, so no website on it is on the fediverse.',
+        profile_not_public: 'While the website is switched off or deleted, it cannot be on the fediverse.',
+      },
     },
     blueskyHelp: 'Connect the website’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
     websiteIntro: 'Paste this into your site to lead your readers to it here.',
