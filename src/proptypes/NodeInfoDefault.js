@@ -34,7 +34,7 @@ export default {
     invitationsAccepted: false,
     invitesFrom: '',
     groupsFrom: '',
-    pulsesFrom: '',
+    websitesFrom: '',
     supportEmail: '',
     supportPhone: '',
     supportWebsite: '',

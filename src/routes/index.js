@@ -63,7 +63,7 @@ import Settings from '../containers/settings';
 import AdminRedirects from '../containers/admin/Redirects';
 import StaticPage from '../containers/page';
 import NotFoundPage from '../containers/NotFound';
-import PulseConnect from '../containers/pulses/Connect';
+import WebsiteConnect from '../containers/websites/Connect';
 
 const GroupsBrowse = Actors('groups');
 const GroupsRead = ActorsRead('groups');
@@ -100,12 +100,12 @@ const EventEditRedirect = () => {
   return <Navigate to={`/events/${id}/settings`} replace />;
 };
 
-// A Pulse is a website's feed as a profile, read and looked after as a
+// A website is a website's feed as a profile, read and looked after as a
 // group is. It is made by connecting a website, not by a form of its own.
-const PulsesBrowse = Actors('pulses');
-const PulsesRead = ActorsRead('pulses');
-const PulsesSettings = ActorsSettings('pulses');
-const PulsesNotificationsEdit = ActorsNotificationsEdit('pulses');
+const WebsitesBrowse = Actors('websites');
+const WebsitesRead = ActorsRead('websites');
+const WebsitesSettings = ActorsSettings('websites');
+const WebsitesNotificationsEdit = ActorsNotificationsEdit('websites');
 
 const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
@@ -326,35 +326,35 @@ const AppRoutes = () => {
             <Route path="/events/:id/:tab" element={<EventsRead />} />
             <Route path="/events/:id" element={<EventsRead />} />
 
-            {/* Pulses — static paths before parameterized */}
-            <Route path="/pulses" element={<PulsesBrowse />} />
+            {/* Websites — static paths before parameterized */}
+            <Route path="/websites" element={<WebsitesBrowse />} />
             <Route
-              path="/pulses/connect"
+              path="/websites/connect"
               element={
                 <AuthenticatedRoute>
-                  <PulseConnect />
+                  <WebsiteConnect />
                 </AuthenticatedRoute>
           }
             />
             <Route
-              path="/pulses/:id/settings"
+              path="/websites/:id/settings"
               element={
                 <AuthenticatedRoute>
-                  <PulsesSettings />
+                  <WebsitesSettings />
                 </AuthenticatedRoute>
           }
             />
             <Route
-              path="/pulses/:id/notifications"
+              path="/websites/:id/notifications"
               element={
                 <AuthenticatedRoute>
-                  <PulsesNotificationsEdit />
+                  <WebsitesNotificationsEdit />
                 </AuthenticatedRoute>
           }
             />
-            <Route path="/pulses/:id/:tab/:subtab" element={<PulsesRead />} />
-            <Route path="/pulses/:id/:tab" element={<PulsesRead />} />
-            <Route path="/pulses/:id" element={<PulsesRead />} />
+            <Route path="/websites/:id/:tab/:subtab" element={<WebsitesRead />} />
+            <Route path="/websites/:id/:tab" element={<WebsitesRead />} />
+            <Route path="/websites/:id" element={<WebsitesRead />} />
 
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />

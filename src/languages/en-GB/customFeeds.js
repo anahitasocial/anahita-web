@@ -194,7 +194,7 @@ export default {
       person: 'people\'s profiles',
       group: 'groups',
       event: 'events',
-      pulse: 'Pulses',
+      website: 'websites',
     },
   },
   icons: {
@@ -225,6 +225,6 @@ export default {
     person: 'People',
     group: 'Groups',
     event: 'Events',
-    pulse: 'Pulses',
+    website: 'Websites',
   },
 };

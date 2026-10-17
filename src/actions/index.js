@@ -17,9 +17,9 @@ const namespaces = {
     'groups',
     // An event is an actor like a group, with a time and a place.
     'events',
-    // A Pulse is a website's feed as a profile, read and looked after as a
-    // group is. It is made by connecting a website: see api/pulses.
-    'pulses',
+    // A website is a website's feed as a profile, read and looked after as a
+    // group is. It is made by connecting a website: see api/websites.
+    'websites',
     'people',
   ],
   media: [

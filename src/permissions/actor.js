@@ -36,11 +36,11 @@ const canAddEvent = (viewer, { eventsFrom = '' } = {}) => {
   return meetsRoleLevel(viewer, eventsFrom);
 };
 
-// Whether the viewer may connect a website as a Pulse: the installation's
-// PULSES_FROM, published in NodeInfo as pulsesFrom, administrators unless it
-// says otherwise. pulse-service enforces the same.
-const canConnect = (viewer, { pulsesFrom = '' } = {}) => {
-  return meetsRoleLevel(viewer, pulsesFrom);
+// Whether the viewer may connect a website as a website: the installation's
+// WEBSITES_FROM, published in NodeInfo as websitesFrom, administrators unless it
+// says otherwise. syndication-service enforces the same.
+const canConnect = (viewer, { websitesFrom = '' } = {}) => {
+  return meetsRoleLevel(viewer, websitesFrom);
 };
 
 const canEdit = (actor) => {

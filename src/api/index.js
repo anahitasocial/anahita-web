@@ -46,7 +46,7 @@ import repost from './feed/repost';
 import session from './session';
 import socialgraph from './socialgraph';
 import handles from './handles';
-import pulseConnect from './pulseConnect';
+import websiteConnect from './websiteConnect';
 import inbounds from './inbounds';
 import tagGraph from './tag_graph';
 import totp from './totp';
@@ -109,7 +109,7 @@ const namespaces = {
   actors: [
     'groups',
     'events',
-    'pulses',
+    'websites',
     'people',
   ],
   media: [
@@ -141,9 +141,9 @@ const apis = {
   federation,
   recommendations,
   handles,
-  // Connecting a website. The `pulses` namespace below is the Pulse as an
+  // Connecting a website. The `websites` namespace below is the website as an
   // actor, like `groups`.
-  pulseConnect,
+  websiteConnect,
   hashtags,
   is,
   likes,

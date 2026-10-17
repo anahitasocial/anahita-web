@@ -44,7 +44,7 @@ import ActorFediverse from './Fediverse';
 import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
-import PulseFollowSnippet from '../../pulses/FollowSnippet';
+import WebsiteFollowSnippet from '../../websites/FollowSnippet';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonMetadata from '../../people/Settings/Metadata';
@@ -318,7 +318,7 @@ const ActorsSettings = ({
   // tab groups never render, which handed MUI a Tabs value it could not match —
   // a console warning and an empty body on every /groups/:id/settings load.
   const isEvent = namespace === 'events';
-  const isPulse = namespace === 'pulses';
+  const isWebsite = namespace === 'websites';
   // Whoever can open an event's settings looks after it, and may call it
   // off. The server decides.
   const canCancel = isEvent;
@@ -327,7 +327,7 @@ const ActorsSettings = ({
     isAdmin,
     infoHasCard: isEvent,
     canCancel,
-    isPulse,
+    isWebsite,
   });
   const activeTab = groupTabs.find((entry) => {
     return entry.key === tab;
@@ -338,7 +338,7 @@ const ActorsSettings = ({
     isAdmin,
     isSuperAdmin,
     canCancel,
-    canArchive: !isPulse,
+    canArchive: !isWebsite,
   });
 
   // Every key getGroupTabs can return needs an entry here, or selecting that
@@ -354,14 +354,14 @@ const ActorsSettings = ({
     [ITEMS.ADMINS]: <ActorAdmins />,
     // Who can see it, and who it has blocked: one of its administrators
     // blocks somebody from the menu on what they wrote in it.
-    // A Pulse is public: only who it has blocked.
-    [ITEMS.ACCESS]: isPulse ? <ActorBlocked actor={actor} /> : (
+    // A website is public: only who it has blocked.
+    [ITEMS.ACCESS]: isWebsite ? <ActorBlocked actor={actor} /> : (
       <Stack spacing={2}>
         <ActorAccess />
         <ActorBlocked actor={actor} />
       </Stack>
     ),
-    [ITEMS.WEBSITE]: <PulseFollowSnippet actor={actor} />,
+    [ITEMS.WEBSITE]: <WebsiteFollowSnippet actor={actor} />,
     // Who can do what in the group, and with what is posted in it: whether
     // its new photos and videos start out downloadable. Not an event's.
     [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (

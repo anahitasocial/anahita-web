@@ -64,10 +64,10 @@ const ActorBodyAbout = (props) => {
   const websiteUrl = remote ?
     (federation.pageOf(actor) || actor.websiteUrl) :
     actor.websiteUrl;
-  // A Pulse's site is the domain proved for it: shown as that domain,
+  // A website's site is the domain proved for it: shown as that domain,
   // verified, which is what says who is behind it.
-  const isPulse = (actor.type || '').includes('.pulse.');
-  const siteShown = isPulse ? hostOf(websiteUrl) : websiteUrl;
+  const isWebsite = (actor.type || '').includes('.website.');
+  const siteShown = isWebsite ? hostOf(websiteUrl) : websiteUrl;
 
   return (
     <Card component="section">
@@ -131,11 +131,11 @@ const ActorBodyAbout = (props) => {
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
                       {siteShown}
-                      {isPulse &&
+                      {isWebsite &&
                         <VerifiedIcon
                           fontSize="small"
                           color="primary"
-                          titleAccess={i18n.t('pulses:about.verified')}
+                          titleAccess={i18n.t('websites:about.verified')}
                         />}
                     </Typography>
                   }

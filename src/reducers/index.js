@@ -26,7 +26,7 @@ const namespaces = {
     'people',
     'groups',
     'events',
-    'pulses',
+    'websites',
   ],
   media: [
     'articles',

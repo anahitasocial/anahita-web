@@ -15,7 +15,7 @@ import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
-import PulseIcon from '@mui/icons-material/MonitorHeart';
+import WebsiteIcon from '@mui/icons-material/Language';
 // ExitToApp, not LockOpen.
 //
 // An open padlock pictures an account that is NOT secured, which is the
@@ -188,13 +188,13 @@ const LeftMenu = ({
           {/* Websites' feeds, to follow here and from the fediverse. */}
           <ListItemButton
             component={Link}
-            to="/pulses/"
-            selected={pathname === '/pulses/'}
+            to="/websites/"
+            selected={pathname === '/websites/'}
           >
             <ListItemIcon>
-              <PulseIcon />
+              <WebsiteIcon />
             </ListItemIcon>
-            <ListItemText primary={i18n.t('pulses:cTitle')} />
+            <ListItemText primary={i18n.t('websites:cTitle')} />
           </ListItemButton>
           <ListItemButton
             component={Link}

@@ -19,7 +19,7 @@ const ActorFormsInfo = ({
   isFetching,
   enabled = null,
   handleOnCancel = null,
-  // A Pulse's site is the domain proved for it, not something to change.
+  // A website's site is the domain proved for it, not something to change.
   withWebsite = true,
 }) => {
   const enableSubmit = actor.id > 0 || (fields.name.isValid && fields.body.isValid);

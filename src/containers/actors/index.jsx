@@ -10,7 +10,7 @@ import Tab from '@mui/material/Tab';
 
 import GroupsIcon from '@mui/icons-material/GroupWork';
 import PeopleIcon from '@mui/icons-material/People';
-import PulseIcon from '@mui/icons-material/MonitorHeart';
+import WebsiteIcon from '@mui/icons-material/Language';
 
 import Browse from './Browse';
 import BrowseHeader from '../../components/BrowseHeader';
@@ -41,17 +41,17 @@ const useStyles = makeStyles()({
 const BROWSE_ICONS = {
   groups: <GroupsIcon />,
   people: <PeopleIcon />,
-  pulses: <PulseIcon />,
+  websites: <WebsiteIcon />,
 };
 
 // What the header offers to add, for those who may: a group is made, a
-// Pulse is connected, from a website.
+// Website is connected, from a website.
 const addActionOf = (namespace, owner, actorSettings) => {
   if (namespace === 'groups' && permissions.actor.canAdd(owner, actorSettings)) {
     return { to: '/groups/add', label: i18n.t('groups:add.cTitle') };
   }
-  if (namespace === 'pulses' && permissions.actor.canConnect(owner, actorSettings)) {
-    return { to: '/pulses/connect', label: i18n.t('pulses:connect.cTitle') };
+  if (namespace === 'websites' && permissions.actor.canConnect(owner, actorSettings)) {
+    return { to: '/websites/connect', label: i18n.t('websites:connect.cTitle') };
   }
   return { to: '', label: '' };
 };
@@ -87,9 +87,9 @@ const Actors = ({
 
   const ActorsBrowse = Browse(namespace);
 
-  // /groups and /pulses route here — /people has its own browse container.
+  // /groups and /websites route here — /people has its own browse container.
   //
-  // Gated on GROUPS_FROM and PULSES_FROM rather than on being signed in,
+  // Gated on GROUPS_FROM and WEBSITES_FROM rather than on being signed in,
   // which is all the routes themselves require. The services enforce the
   // same settings on the write, so offering a + without asking would lead
   // people to a form the server refuses.
@@ -104,7 +104,7 @@ const Actors = ({
           icon={BROWSE_ICONS[namespace]}
           title={i18n.t(`${namespace}:cTitle`)}
           // A word most people have not met here: what it is.
-          subheader={namespace === 'pulses' ? i18n.t('pulses:description') : ''}
+          subheader={namespace === 'websites' ? i18n.t('websites:description') : ''}
           actionTo={add.to}
           actionLabel={add.label}
         />

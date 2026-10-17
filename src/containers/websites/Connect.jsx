@@ -14,7 +14,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import PulseIcon from '@mui/icons-material/MonitorHeart';
+import WebsiteIcon from '@mui/icons-material/Language';
 
 import CopyValue from '../../components/CopyValue';
 import PageColumn from '../../components/PageColumn';
@@ -29,24 +29,24 @@ const { NAME, BODY } = ACTOR.FIELDS;
 
 const SITE = 0;
 const PROOF = 1;
-const PULSE = 2;
+const WEBSITE = 2;
 
-// What a refusal says, as pulse-service names it in `error`.
+// What a refusal says, as syndication-service names it in `error`.
 const refusalOf = (failure) => {
   const response = failure && failure.response;
   if (response && response.status === 429) {
-    return i18n.t('pulses:connect.errors.tooMany');
+    return i18n.t('websites:connect.errors.tooMany');
   }
   const reason = response && response.data && response.data.error;
-  const key = `pulses:connect.errors.${reason}`;
-  return reason && i18n.exists(key) ? i18n.t(key) : i18n.t('pulses:connect.errors.generic');
+  const key = `websites:connect.errors.${reason}`;
+  return reason && i18n.exists(key) ? i18n.t(key) : i18n.t('websites:connect.errors.generic');
 };
 
-// Connecting a website as a Pulse: "Connect your website", never "create".
+// Connecting a website: "Connect your website", never "create".
 // The site's address, to find its feed; the token, put in a DNS record or a
-// file on the site, and checked; then the Pulse's name, handle and
-// description. Only somebody PULSES_FROM allows is offered it.
-const PulseConnect = () => {
+// file on the site, and checked; then the website's name, handle and
+// description. Only somebody WEBSITES_FROM allows is offered it.
+const WebsiteConnect = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const viewer = useSelector((state) => { return state.session.viewer; });
@@ -62,14 +62,14 @@ const PulseConnect = () => {
   const [name, setName] = useState('');
   const [alias, setAlias] = useState('');
   const [body, setBody] = useState('');
-  const [pulseError, setPulseError] = useState({ field: '', message: '' });
+  const [websiteError, setWebsiteError] = useState({ field: '', message: '' });
 
   if (!permissions.actor.canConnect(viewer, settings)) {
     return null;
   }
 
   const cancel = () => {
-    navigate('/pulses/');
+    navigate('/websites/');
   };
 
   const find = (event) => {
@@ -79,7 +79,7 @@ const PulseConnect = () => {
     }
     setBusy(true);
     setSiteError('');
-    api.pulseConnect.start(siteUrl.trim()).then((result) => {
+    api.websiteConnect.start(siteUrl.trim()).then((result) => {
       const found = result.data;
       setConnection(found);
       setName(found.suggestedName || '');
@@ -96,15 +96,15 @@ const PulseConnect = () => {
 
   const check = () => {
     setBusy(true);
-    api.pulseConnect.check(connection).then((result) => {
+    api.websiteConnect.check(connection).then((result) => {
       const { proved, method } = result.data;
       if (proved) {
-        setProof(i18n.t('pulses:connect.proof.proved', {
-          method: i18n.t(`pulses:connect.proof.methods.${method}`),
+        setProof(i18n.t('websites:connect.proof.proved', {
+          method: i18n.t(`websites:connect.proof.methods.${method}`),
         }));
-        setStep(PULSE);
+        setStep(WEBSITE);
       } else {
-        setProof(i18n.t('pulses:connect.proof.notYet'));
+        setProof(i18n.t('websites:connect.proof.notYet'));
       }
     }).catch((failure) => {
       setProof(refusalOf(failure));
@@ -119,18 +119,18 @@ const PulseConnect = () => {
       return;
     }
     setBusy(true);
-    setPulseError({ field: '', message: '' });
-    api.pulseConnect.make(connection, {
+    setWebsiteError({ field: '', message: '' });
+    api.websiteConnect.make(connection, {
       name: name.trim(),
       alias: alias.trim(),
       body: body.trim(),
     }).then((result) => {
-      dispatch(actions.app.alert.success(i18n.t('pulses:connect.done')));
+      dispatch(actions.app.alert.success(i18n.t('websites:connect.done')));
       navigate(`/@${result.data.alias}/`);
     }).catch((failure) => {
       const { data } = (failure && failure.response) || {};
       const reason = data && data.error;
-      setPulseError({
+      setWebsiteError({
         field: reason === 'handle_taken' ? 'alias' : '',
         message: refusalOf(failure),
       });
@@ -154,18 +154,18 @@ const PulseConnect = () => {
   return (
     <>
       <Helmet>
-        <title>{i18n.t('pulses:connect.cTitle')}</title>
+        <title>{i18n.t('websites:connect.cTitle')}</title>
       </Helmet>
       <PageColumn>
         <Card>
           <CardHeader
-            avatar={<PulseIcon />}
-            title={i18n.t('pulses:connect.cTitle')}
+            avatar={<WebsiteIcon />}
+            title={i18n.t('websites:connect.cTitle')}
             slotProps={{ title: { variant: 'h6', component: 'h1' } }}
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-              {i18n.t('pulses:connect.intro')}
+              {i18n.t('websites:connect.intro')}
             </Typography>
             <Stepper activeStep={step} orientation="vertical">
               <Step>
@@ -173,18 +173,18 @@ const PulseConnect = () => {
                   optional={connection && step > SITE &&
                     <Typography variant="caption">{connection.feedUrl}</Typography>}
                 >
-                  {i18n.t('pulses:connect.steps.site')}
+                  {i18n.t('websites:connect.steps.site')}
                 </StepLabel>
                 <StepContent>
                   <form onSubmit={find} noValidate>
                     <TextField
                       variant="standard"
-                      label={i18n.t('pulses:connect.site.label')}
-                      placeholder={i18n.t('pulses:connect.site.placeholder')}
+                      label={i18n.t('websites:connect.site.label')}
+                      placeholder={i18n.t('websites:connect.site.placeholder')}
                       value={siteUrl}
                       onChange={(event) => { setSiteUrl(event.target.value); }}
                       error={siteError !== ''}
-                      helperText={siteError || i18n.t('pulses:connect.site.help')}
+                      helperText={siteError || i18n.t('websites:connect.site.help')}
                       disabled={busy}
                       fullWidth
                       autoFocus
@@ -197,7 +197,7 @@ const PulseConnect = () => {
                         fullWidth
                         disabled={busy || !siteUrl.trim()}
                       >
-                        {i18n.t('pulses:connect.site.find')}
+                        {i18n.t('websites:connect.site.find')}
                       </Button>,
                     )}
                   </form>
@@ -205,30 +205,30 @@ const PulseConnect = () => {
               </Step>
 
               <Step>
-                <StepLabel>{i18n.t('pulses:connect.steps.proof')}</StepLabel>
+                <StepLabel>{i18n.t('websites:connect.steps.proof')}</StepLabel>
                 <StepContent>
                   {connection &&
                     <>
                       {connection.feedTitle &&
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                          {i18n.t('pulses:connect.found', { title: connection.feedTitle })}
+                          {i18n.t('websites:connect.found', { title: connection.feedTitle })}
                         </Typography>}
                       <Typography variant="body2" sx={{ mb: 2 }}>
-                        {i18n.t('pulses:connect.proof.intro', { domain: connection.domain })}
+                        {i18n.t('websites:connect.proof.intro', { domain: connection.domain })}
                       </Typography>
-                      <CopyValue label={i18n.t('pulses:connect.proof.token')} value={connection.token} />
+                      <CopyValue label={i18n.t('websites:connect.proof.token')} value={connection.token} />
                       <Typography variant="subtitle2">
-                        {i18n.t('pulses:connect.proof.dnsTitle')}
+                        {i18n.t('websites:connect.proof.dnsTitle')}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {i18n.t('pulses:connect.proof.dns')}
+                        {i18n.t('websites:connect.proof.dns')}
                       </Typography>
                       <CopyValue value={connection.recordName} />
                       <Typography variant="subtitle2">
-                        {i18n.t('pulses:connect.proof.fileTitle')}
+                        {i18n.t('websites:connect.proof.fileTitle')}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {i18n.t('pulses:connect.proof.file')}
+                        {i18n.t('websites:connect.proof.file')}
                       </Typography>
                       <CopyValue value={connection.fileUrl} />
                       {/* The line the answer is written on is kept, so the
@@ -238,7 +238,7 @@ const PulseConnect = () => {
                       </Typography>
                       {actionsRow(
                         <Button variant="contained" fullWidth onClick={check} disabled={busy}>
-                          {i18n.t('pulses:connect.proof.check')}
+                          {i18n.t('websites:connect.proof.check')}
                         </Button>,
                       )}
                     </>}
@@ -246,7 +246,7 @@ const PulseConnect = () => {
               </Step>
 
               <Step>
-                <StepLabel>{i18n.t('pulses:connect.steps.pulse')}</StepLabel>
+                <StepLabel>{i18n.t('websites:connect.steps.website')}</StepLabel>
                 <StepContent>
                   <form onSubmit={make} noValidate>
                     <Typography variant="body2" color="textSecondary">
@@ -254,7 +254,7 @@ const PulseConnect = () => {
                     </Typography>
                     <TextField
                       variant="standard"
-                      label={i18n.t('pulses:connect.pulse.name')}
+                      label={i18n.t('websites:connect.website.name')}
                       value={name}
                       onChange={(event) => { setName(event.target.value); }}
                       helperText=" "
@@ -266,13 +266,13 @@ const PulseConnect = () => {
                     />
                     <TextField
                       variant="standard"
-                      label={i18n.t('pulses:connect.pulse.alias')}
+                      label={i18n.t('websites:connect.website.alias')}
                       value={alias}
                       onChange={(event) => { setAlias(event.target.value); }}
-                      error={pulseError.field === 'alias'}
-                      helperText={pulseError.field === 'alias' ?
-                        pulseError.message :
-                        i18n.t('pulses:connect.pulse.aliasHelp', { handle: utils.federation.siteHandle(alias || 'example') })}
+                      error={websiteError.field === 'alias'}
+                      helperText={websiteError.field === 'alias' ?
+                        websiteError.message :
+                        i18n.t('websites:connect.website.aliasHelp', { handle: utils.federation.siteHandle(alias || 'example') })}
                       margin="normal"
                       fullWidth
                       required
@@ -281,11 +281,11 @@ const PulseConnect = () => {
                     />
                     <TextField
                       variant="standard"
-                      label={i18n.t('pulses:connect.pulse.body')}
+                      label={i18n.t('websites:connect.website.body')}
                       value={body}
                       onChange={(event) => { setBody(event.target.value); }}
-                      helperText={(pulseError.field === '' && pulseError.message) || i18n.t('pulses:connect.pulse.seen')}
-                      error={pulseError.field === '' && pulseError.message !== ''}
+                      helperText={(websiteError.field === '' && websiteError.message) || i18n.t('websites:connect.website.seen')}
+                      error={websiteError.field === '' && websiteError.message !== ''}
                       margin="normal"
                       fullWidth
                       multiline
@@ -299,7 +299,7 @@ const PulseConnect = () => {
                         fullWidth
                         disabled={busy || !name.trim() || alias.trim().length < 3}
                       >
-                        {i18n.t('pulses:connect.pulse.connect')}
+                        {i18n.t('websites:connect.website.connect')}
                       </Button>,
                     )}
                   </form>
@@ -313,4 +313,4 @@ const PulseConnect = () => {
   );
 };
 
-export default PulseConnect;
+export default WebsiteConnect;

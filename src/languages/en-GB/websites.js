@@ -1,19 +1,19 @@
-// A Pulse is a website's feed as a profile to follow, here and from the
-// fediverse (docs/plans/pulse.md in anahita-services). Called a Pulse in
-// every language.
+// A website, as a kind of profile: a site's feed to follow, here and from
+// the fediverse (docs/websites.md in anahita-services). Named Website on
+// 2026-10-16, a plain word for the thing, for trademarks; it was Pulse.
 export default {
-  cTitle: 'Pulses',
-  mTitle: 'Pulses',
-  // What a Pulse is, where somebody meets the word.
+  cTitle: 'Websites',
+  mTitle: 'Websites',
+  // What a website is here, where somebody meets the list.
   description: 'A website’s feed, to follow here and from the fediverse.',
   connect: {
     cTitle: 'Connect your website',
     mTitle: 'Connect your website',
-    intro: 'Any site with an RSS, Atom or JSON feed can be followed as a Pulse: a WordPress or other site, a static site, an app’s changelog, a podcast. Its posts reach people here and on the fediverse, and lead them back to your site.',
+    intro: 'Any site with an RSS, Atom or JSON feed can be followed here: a WordPress or other site, a static site, an app’s changelog, a podcast. Its posts reach people here and on the fediverse, and lead them back to your site.',
     steps: {
       site: 'Your website',
       proof: 'Prove it is yours',
-      pulse: 'Your Pulse',
+      website: 'Its profile here',
     },
     site: {
       label: 'Your website’s address',
@@ -36,9 +36,9 @@ export default {
         dns: 'DNS record',
         file: 'file on your site',
       },
-      again: 'It is checked again every day. If it is gone for a week, the Pulse stops until it is back.',
+      again: 'It is checked again every day. If it is gone for a week, posting stops until it is back.',
     },
-    pulse: {
+    website: {
       name: 'Name',
       alias: 'Handle',
       aliasHelp: 'Its address here and on the fediverse: {{ handle }}. Letters, digits, - and _.',
@@ -70,17 +70,17 @@ export default {
     admins: 'Admins',
     access: 'Blocked',
     website: 'On your site',
-    websiteIntro: 'Paste this into your site to lead your readers to your Pulse.',
-    snippetLabel: 'Follow our pulse on the Fediverse',
+    websiteIntro: 'Paste this into your site to lead your readers to it here.',
+    snippetLabel: 'Follow our website on the fediverse',
     disable: 'Disable',
     disablePrompts: {
-      description: 'Disabling hides this Pulse from everyone and stops your site’s new posts appearing here.',
-      descriptionDisabled: 'This Pulse is disabled. It does not appear anywhere and posts nothing.',
+      description: 'Disabling hides this website from everyone and stops your site’s new posts appearing here.',
+      descriptionDisabled: 'This website is disabled. It does not appear anywhere and posts nothing.',
       reversible: 'This can be undone at any time, and nothing is deleted.',
       action: 'Disable',
       actionEnable: 'Enable',
-      disabled: 'This Pulse has been disabled.',
-      enabled: 'This Pulse has been enabled.',
+      disabled: 'This website has been disabled.',
+      enabled: 'This website has been enabled.',
       errors: {
         forbidden: 'You do not have permission to change this.',
         lastSuperAdmin: 'This is the only super administrator and cannot be disabled.',
@@ -91,7 +91,7 @@ export default {
     purge: 'Delete permanently',
     deletePrompts: {
       counts: {
-        intro: 'On this Pulse right now:',
+        intro: 'On this website here right now:',
         posts: '{{ count }} post',
         posts_other: '{{ count }} posts',
         replies: '{{ count }} reply',
@@ -102,15 +102,15 @@ export default {
         admins_other: '{{ count }} administrators',
         memberSince: 'Connected {{ date }}.',
       },
-      description: 'Deleting removes this Pulse, the posts it made of your site’s feed, and the replies under them. Your site itself is not touched.',
-      reversible: 'This is not immediate. The Pulse is hidden straight away and permanently erased after {{ count }} days. Any administrator can restore it from this page before then.',
+      description: 'Deleting removes this website’s profile here, the posts it made of your site’s feed, and the replies under them. Your site itself is not touched.',
+      reversible: 'This is not immediate. It is hidden straight away and permanently erased after {{ count }} days. Any administrator can restore it from this page before then.',
       revoked: 'Its followers here and on the fediverse lose it at once.',
       handle: 'The handle {{ alias }} stays reserved afterwards.',
-      scheduled: 'This Pulse is scheduled for deletion and will be erased on {{ date }}.',
-      restore: 'Restore this Pulse',
-      restored: 'This Pulse has been restored.',
+      scheduled: 'This website is scheduled for deletion and will be erased on {{ date }}.',
+      restore: 'Restore this website',
+      restored: 'This website has been restored.',
       errors: {
-        restoreFailed: 'Could not restore this Pulse. It may already have been permanently erased.',
+        restoreFailed: 'Could not restore this website. It may already have been permanently erased.',
       },
     },
     sections: {

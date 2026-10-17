@@ -122,7 +122,7 @@ const ActorsSettingsInfo = (props) => {
       handleOnSubmit={handleOnSubmit}
       handleOnCancel={handleCancel}
       isFetching={isFetching}
-      withWebsite={namespace !== 'pulses'}
+      withWebsite={namespace !== 'websites'}
       enabled={canAdmin &&
         <>
           <Typography

@@ -139,8 +139,8 @@ history. The main paths:
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/pulses`, `/pulses/:id`, `/pulses/:id/settings` | Pulses, a Pulse (a website's feed as a profile), and its settings: Info, Admins, Blocked, On your site, Danger zone. Its page is at `/@alias` like any profile |
-| `/pulses/connect` | Connecting a website as a Pulse: its address, the proof of its domain, then its name and handle. For those the installation's `pulsesFrom` allows. See [Pulses](https://github.com/purplerat/anahita-services/blob/main/docs/pulses.md) in anahita-services |
+| `/websites`, `/websites/:id`, `/websites/:id/settings` | Websites, a website (a site's feed as a profile), and its settings: Info, Admins, Blocked, On your site, Danger zone. Its page is at `/@alias` like any profile |
+| `/websites/connect` | Connecting a website: its address, the proof of its domain, then its name and handle. For those the installation's `websitesFrom` allows. See [Websites](https://github.com/purplerat/anahita-services/blob/main/docs/websites.md) in anahita-services |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |

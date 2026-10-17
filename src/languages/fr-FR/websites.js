@@ -1,18 +1,18 @@
-// Un Pulse est le fil d’un site web, à suivre ici et depuis le fédivers
-// (docs/plans/pulse.md dans anahita-services). Appelé Pulse dans toutes
-// les langues.
+// Un site web, comme sorte de profil : le fil d’un site, à suivre ici et
+// depuis le fédivers (docs/websites.md dans anahita-services). Nommé ainsi
+// le 2026-10-16, un mot ordinaire pour la chose, à cause des marques ; c’était Pulse.
 export default {
-  cTitle: 'Pulses',
-  mTitle: 'Pulses',
+  cTitle: 'Sites web',
+  mTitle: 'Sites web',
   description: 'Le fil d’un site web, à suivre ici et depuis le fédivers.',
   connect: {
     cTitle: 'Connecter votre site',
     mTitle: 'Connecter votre site',
-    intro: 'Tout site qui a un fil RSS, Atom ou JSON peut être suivi comme un Pulse : un site WordPress ou autre, un site statique, le journal des versions d’une application, un balado. Ses publications atteignent les gens ici et sur le fédivers, et les ramènent à votre site.',
+    intro: 'Tout site qui a un fil RSS, Atom ou JSON peut être suivi ici : un site WordPress ou autre, un site statique, le journal des versions d’une application, un balado. Ses publications atteignent les gens ici et sur le fédivers, et les ramènent à votre site.',
     steps: {
       site: 'Votre site',
       proof: 'Prouvez qu’il est à vous',
-      pulse: 'Votre Pulse',
+      website: 'Son profil ici',
     },
     site: {
       label: 'L’adresse de votre site',
@@ -35,9 +35,9 @@ export default {
         dns: 'enregistrement DNS',
         file: 'fichier sur votre site',
       },
-      again: 'C’est vérifié de nouveau chaque jour. S’il disparaît pendant une semaine, le Pulse s’arrête jusqu’à son retour.',
+      again: 'C’est vérifié de nouveau chaque jour. S’il disparaît pendant une semaine, la publication s’arrête jusqu’à son retour.',
     },
-    pulse: {
+    website: {
       name: 'Nom',
       alias: 'Identifiant',
       aliasHelp: 'Son adresse ici et sur le fédivers : {{ handle }}. Lettres, chiffres, - et _.',
@@ -68,17 +68,17 @@ export default {
     admins: 'Administrateurs',
     access: 'Bloqués',
     website: 'Sur votre site',
-    websiteIntro: 'Collez ceci dans votre site pour mener vos lecteurs à votre Pulse.',
-    snippetLabel: 'Suivez notre pulse sur le fédivers',
+    websiteIntro: 'Collez ceci dans votre site pour mener vos lecteurs jusqu’ici.',
+    snippetLabel: 'Suivez notre site sur le fédivers',
     disable: 'Désactiver',
     disablePrompts: {
-      description: 'Désactiver cache ce Pulse à tout le monde et arrête la parution des nouvelles publications de votre site.',
-      descriptionDisabled: 'Ce Pulse est désactivé. Il n’apparaît nulle part et ne publie rien.',
+      description: 'Désactiver cache ce site web à tout le monde et arrête la parution des nouvelles publications de votre site.',
+      descriptionDisabled: 'Ce site web est désactivé. Il n’apparaît nulle part et ne publie rien.',
       reversible: 'Cela peut être annulé à tout moment, et rien n’est supprimé.',
       action: 'Désactiver',
       actionEnable: 'Activer',
-      disabled: 'Ce Pulse a été désactivé.',
-      enabled: 'Ce Pulse a été activé.',
+      disabled: 'Ce site web a été désactivé.',
+      enabled: 'Ce site web a été activé.',
       errors: {
         forbidden: 'Vous n’avez pas la permission de modifier ceci.',
         lastSuperAdmin: 'C’est le seul super-administrateur ; il ne peut pas être désactivé.',
@@ -89,7 +89,7 @@ export default {
     purge: 'Supprimer définitivement',
     deletePrompts: {
       counts: {
-        intro: 'Sur ce Pulse en ce moment :',
+        intro: 'Sur ce site web ici en ce moment :',
         posts: '{{ count }} publication',
         posts_other: '{{ count }} publications',
         replies: '{{ count }} réponse',
@@ -100,15 +100,15 @@ export default {
         admins_other: '{{ count }} administrateurs',
         memberSince: 'Connecté le {{ date }}.',
       },
-      description: 'Supprimer retire ce Pulse, les publications qu’il a faites du fil de votre site, et les réponses en dessous. Votre site lui-même n’est pas touché.',
-      reversible: 'Ce n’est pas immédiat. Le Pulse est caché tout de suite et effacé définitivement après {{ count }} jours. Tout administrateur peut le restaurer depuis cette page d’ici là.',
+      description: 'Supprimer retire le profil de ce site ici, les publications qu’il a faites du fil de votre site, et les réponses en dessous. Votre site lui-même n’est pas touché.',
+      reversible: 'Ce n’est pas immédiat. Il est caché tout de suite et effacé définitivement après {{ count }} jours. Tout administrateur peut le restaurer depuis cette page d’ici là.',
       revoked: 'Ses abonnés ici et sur le fédivers le perdent aussitôt.',
       handle: 'L’identifiant {{ alias }} reste réservé ensuite.',
-      scheduled: 'Ce Pulse doit être supprimé et sera effacé le {{ date }}.',
-      restore: 'Restaurer ce Pulse',
-      restored: 'Ce Pulse a été restauré.',
+      scheduled: 'Ce site web doit être supprimé et sera effacé le {{ date }}.',
+      restore: 'Restaurer ce site web',
+      restored: 'Ce site web a été restauré.',
       errors: {
-        restoreFailed: 'Impossible de restaurer ce Pulse. Il a peut-être déjà été effacé définitivement.',
+        restoreFailed: 'Impossible de restaurer ce site web. Il a peut-être déjà été effacé définitivement.',
       },
     },
     sections: {
