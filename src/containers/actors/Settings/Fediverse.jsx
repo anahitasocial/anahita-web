@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -91,7 +92,8 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
         avatar={<Avatar><FediverseIcon /></Avatar>}
         title={i18n.t('federation:settings.title')}
       />
-      <CardContent sx={{ pt: 0 }}>
+      <Divider />
+      <CardContent>
         <FormControlLabel
           control={
             <Switch

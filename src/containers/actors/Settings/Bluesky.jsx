@@ -9,6 +9,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -184,7 +185,8 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
         avatar={<Avatar><BlueskyIcon /></Avatar>}
         title={i18n.t('federation:bluesky.title')}
       />
-      <CardContent sx={{ pt: 0 }}>
+      <Divider />
+      <CardContent>
         <Typography variant="body2" color="textSecondary">
           {i18n.t(profile ? 'websites:settings.blueskyHelp' : 'federation:bluesky.help')}
         </Typography>

@@ -350,8 +350,9 @@ export const getGroupTabs = ({
       { key: ITEMS.WEBSITE, bare: true },
       // Named as a person's network tab is. It is always on the fediverse,
       // so what is left to choose is its own Bluesky account, where its
-      // notes are posted too. The card brings its own Card.
-      { key: ITEMS.FEDIVERSE, bare: true },
+      // notes are posted too. The card brings its own Card, so it stands
+      // alone under the header, as on a person's tab.
+      { key: ITEMS.FEDIVERSE, bare: false },
       { key: ITEMS.DANGER, bare: true, requiresDanger: true },
     ].filter((item) => {
       return !item.requiresDanger || canDelete || isAdmin;
