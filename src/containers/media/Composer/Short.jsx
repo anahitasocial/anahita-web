@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
@@ -20,6 +19,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/ZoomOutMap';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
+import WriteIcon from '@mui/icons-material/CreateOutlined';
 
 import actions from '../../../actions';
 import ActorAvatar from '../../../components/ActorAvatar';
@@ -51,10 +51,10 @@ const { isPerson } = utils.node;
 // note, pictures a photo post, a video a video post. None of them has a title;
 // long writing, with one, is the extended composer's (`onExpand`).
 //
-// Closed, it is one line. Open, it is in place on a desktop and fills the
-// screen on a phone, where the keyboard needs the room; nothing in it changes
-// height as somebody types. What is written is kept as a draft until it is
-// posted (useDraft).
+// Closed, it is one line: an outlined button. Open, it is a dialog, in the
+// middle of the screen on a desktop and filling it on a phone, where the
+// keyboard needs the room; nothing in it changes height as somebody types.
+// What is written is kept as a draft until it is posted (useDraft).
 //
 // `kinds` is what this profile takes, of note, photo and video.
 const ShortComposer = ({
@@ -325,13 +325,13 @@ const ShortComposer = ({
         aria-label={placeholder}
         autoFocus
         disabled={busy}
-        variant={phone ? 'standard' : 'outlined'}
+        variant="standard"
         multiline
-        minRows={phone ? 6 : 3}
+        minRows={6}
         fullWidth
         inputRef={hashtags.inputRef}
         slotProps={{
-          input: phone ? { disableUnderline: true } : {},
+          input: { disableUnderline: true },
           htmlInput: {
             dir: choices.direction,
             maxLength: BODY.MAX_LENGTH,
@@ -429,155 +429,105 @@ const ShortComposer = ({
       refreshKey={handedOver}
     />;
 
-  // Closed: one line, as the reply box starts, and the way to longer
-  // writing.
+  // Closed: an outlined button saying what it is for, or how the draft
+  // begins, and the way to longer writing (the user, 2026-10-17: an
+  // outlined button, the box opening in a dialog).
   const closed = (
     <Stack direction="row" spacing={1} sx={{ alignItems: 'center', p: 2 }}>
       <ActorAvatar actor={viewer} />
-      <ButtonBase
+      <Button
+        variant="outlined"
+        startIcon={<WriteIcon />}
         onClick={() => {
           open();
         }}
         sx={{
           flexGrow: 1,
-          justifyContent: 'flex-start',
+          minWidth: 0,
           minHeight: 48,
-          px: 2,
-          // Its ends as round as the avatar beside it; the border an
-          // outlined text field's, darker on hover.
-          borderRadius: '999px',
-          border: 1,
-          borderColor: (theme) => {
-            return theme.palette.mode === 'dark' ?
-              'rgba(255, 255, 255, 0.23)' :
-              'rgba(0, 0, 0, 0.23)';
-          },
-          '&:hover': {
-            borderColor: 'text.primary',
-          },
-          color: 'text.secondary',
-          textAlign: 'start',
+          justifyContent: 'flex-start',
+          textTransform: 'none',
+          fontSize: '1rem',
         }}
       >
-        <Typography variant="body1" noWrap>
+        <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
           {body || placeholder}
-        </Typography>
-      </ButtonBase>
+        </Box>
+      </Button>
       {expandButton(false)}
     </Stack>
   );
 
-  if (phone) {
-    return (
-      <Card>
-        {closed}
-        {preparing}
-        {uploadsList}
-        <Dialog
-          fullScreen
-          open={isOpen}
-          slotProps={{
-            paper: { sx: visible ? { height: visible, maxHeight: visible } : {} },
-          }}
-          onClose={() => {
-            if (!busy) {
-              setIsOpen(false);
-            }
-          }}
-        >
-          <Box
-            component="form"
-            onSubmit={handleSubmit}
-            noValidate
-            sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-          >
-            {/* Close, Long content and Post at the top, where a thumb
-                finds them above the keyboard. */}
-            <Toolbar sx={{ gap: 1, px: 1 }}>
-              <IconButton
-                edge="start"
-                aria-label={i18n.t('composer:close')}
-                disabled={busy}
-                onClick={() => {
-                  setIsOpen(false);
-                }}
-              >
-                <CloseIcon />
-              </IconButton>
-              <Typography variant="h6" sx={{ flexGrow: 1 }}>
-                {i18n.t('composer:newPost')}
-              </Typography>
-              {expandButton(false)}
-              {postButton(false)}
-            </Toolbar>
-            <Divider />
-            <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
-              <Stack direction="row" spacing={2}>
-                <ActorAvatar actor={viewer} />
-                <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                  {content}
-                </Box>
-              </Stack>
-            </Box>
-            <Divider />
-            {/* Attachments and choices in one row at the bottom, within a
-                thumb's reach; it scrolls sideways rather than wrapping. */}
-            <Stack
-              direction="row"
-              spacing={0.5}
-              sx={{
-                alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
-              }}
-            >
-              {attachButtons}
-              {options}
-            </Stack>
-          </Box>
-        </Dialog>
-      </Card>
-    );
-  }
-
+  // Open, in a dialog: the whole screen on a phone, where the keyboard
+  // needs the room, and in the middle of it on a desktop. The same in both.
   return (
     <Card>
-      {!isOpen && closed}
-      {isOpen &&
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ p: 2 }}>
-          <Stack direction="row" spacing={2}>
-            <ActorAvatar actor={viewer} />
-            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-              {content}
-              <Stack
-                direction="row"
-                spacing={0.5}
-                sx={{
-                  alignItems: 'center', flexWrap: 'wrap', mt: 1, ml: -1,
-                }}
-              >
-                {attachButtons}
-                {options}
-                <Box sx={{ flexGrow: 1 }} />
-                {expandButton(true)}
-              </Stack>
-              {/* Buttons the width of the box, side by side, as in the
-                  reply form. Closing keeps what was written. */}
-              <Stack direction="row" spacing={1} sx={{ mt: 1 }}>
-                <Button
-                  fullWidth
-                  disabled={busy}
-                  onClick={() => {
-                    setIsOpen(false);
-                  }}
-                >
-                  {i18n.t('composer:close')}
-                </Button>
-                {postButton(true)}
-              </Stack>
-            </Box>
-          </Stack>
-        </Box>}
+      {closed}
       {preparing}
       {uploadsList}
+      <Dialog
+        fullScreen={phone}
+        fullWidth
+        maxWidth="sm"
+        open={isOpen}
+        slotProps={{
+          paper: { sx: visible ? { height: visible, maxHeight: visible } : {} },
+        }}
+        onClose={() => {
+          if (!busy) {
+            setIsOpen(false);
+          }
+        }}
+      >
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+        >
+          {/* Close, Long content and Post at the top, where a thumb
+              finds them above the keyboard. */}
+          <Toolbar sx={{ gap: 1, px: 1 }}>
+            <IconButton
+              edge="start"
+              aria-label={i18n.t('composer:close')}
+              disabled={busy}
+              onClick={() => {
+                setIsOpen(false);
+              }}
+            >
+              <CloseIcon />
+            </IconButton>
+            <Typography variant="h6" sx={{ flexGrow: 1 }}>
+              {i18n.t('composer:newPost')}
+            </Typography>
+            {expandButton(!phone)}
+            {postButton(false)}
+          </Toolbar>
+          <Divider />
+          <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
+            <Stack direction="row" spacing={2}>
+              <ActorAvatar actor={viewer} />
+              <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+                {content}
+              </Box>
+            </Stack>
+          </Box>
+          <Divider />
+          {/* Attachments and choices in one row at the bottom, within a
+              thumb's reach; it scrolls sideways rather than wrapping. */}
+          <Stack
+            direction="row"
+            spacing={0.5}
+            sx={{
+              alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
+            }}
+          >
+            {attachButtons}
+            {options}
+          </Stack>
+        </Box>
+      </Dialog>
     </Card>
   );
 };
