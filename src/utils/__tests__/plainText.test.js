@@ -6,8 +6,8 @@ import plainText from '../plainText';
 
 describe('a post as plain words', () => {
   it('keeps the words of a link, not its address', () => {
-    expect(plainText("@rastin [@julian](https://activitypub.space/user/julian) Don't forget [@bmann.ca](https://bsky.brid.gy/ap/did:plc:x)"))
-      .toBe("@rastin @julian Don't forget @bmann.ca");
+    expect(plainText("@rastin [@julian](https://activitypub.space/user/julian) Don't forget [@rastin.example](https://bsky.brid.gy/ap/did:plc:x)"))
+      .toBe("@rastin @julian Don't forget @rastin.example");
   });
 
   it('drops pictures, emphasis, code marks and headings', () => {
