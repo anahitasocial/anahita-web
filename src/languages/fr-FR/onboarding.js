@@ -29,7 +29,7 @@ export default {
     description: 'Des personnes et des groupes qui pourraient vous plaire, chacun avec la raison. Rien n’est suivi tant que vous ne l’avez pas choisi.',
   },
   featured: {
-    title: 'Comptes à suivre',
+    title: 'Profils à suivre',
     description: 'Quelques personnes et groupes pour commencer. Rien n’est suivi tant que vous ne l’avez pas choisi.',
     inviter: 'Vous a invité·e',
     person: 'Personne',
@@ -44,7 +44,7 @@ export default {
   },
   prompts: {
     error: 'Une erreur est survenue. Veuillez réessayer.',
-    followError: 'Certains comptes n’ont pas pu être suivis. Vous pourrez les suivre plus tard depuis leur profil.',
+    followError: 'Certains profils n’ont pas pu être suivis. Vous pourrez les suivre plus tard depuis leur profil.',
   },
   nudge: {
     title: 'Complétez votre profil',

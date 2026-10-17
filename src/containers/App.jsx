@@ -28,6 +28,7 @@ import NotificationButton from './notifications/Button';
 import adminTabs from './admin/tabs';
 import visitor from '../utils/visitor';
 import { Admin as ADMIN } from '../constants';
+import i18n from '../languages';
 
 const drawerWidth = 240;
 const { LeftMenu } = assets.navs;
@@ -180,7 +181,7 @@ const App = ({
         <Toolbar>
           <IconButton
             color="inherit"
-            aria-label="open drawer"
+            aria-label={i18n.t('commons:openMenu')}
             edge="start"
             onClick={handleDrawerToggle}
             className={classes.menuButton}

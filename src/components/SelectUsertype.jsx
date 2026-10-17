@@ -27,7 +27,7 @@ const SelectPersontype = ({
       value={value}
     >
       <MenuItem>
-        All
+        {i18n.t('commons:all')}
       </MenuItem>
       {usertypes.map((usertype) => {
         const key = `usertype_${usertype}`;

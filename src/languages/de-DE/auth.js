@@ -1,0 +1,191 @@
+export default {
+  cTitle: 'Bitte melde dich an',
+  mTitle: 'Anmelden',
+  logout: 'Abmelden',
+  login: 'Bitte melde dich an',
+  username: 'E-Mail oder Benutzername',
+  password: 'Passwort',
+  forgotPassword: 'Passwort vergessen?',
+  signup: {
+    cTitle: 'Bitte registriere dich',
+    mTitle: 'Registrieren',
+    invitation: 'Neu hier? Erstelle ein Konto, oder melde dich an, wenn du schon eins hast.',
+    closed: 'Auf dieser Website kann man sich nicht frei registrieren. Du brauchst eine Einladung.',
+    displayName: 'Anzeigename',
+    displayNameHelp: 'So erscheint dein Name für andere.',
+    username: 'Benutzername',
+    email: 'E-Mail',
+    password: 'Passwort',
+    passwordHelp: 'Mindestens 15 Zeichen. Nimm eine eigene Passphrase, die du nirgendwo sonst verwendest.',
+    tos: 'Ich stimme den <0>Nutzungsbedingungen</0> zu.',
+    privacy: 'Ich habe die <0>Datenschutzerklärung</0> gelesen.',
+    actions: {
+      signup: 'Registrieren',
+    },
+  },
+  authLogs: {
+    cTitle: 'Anmeldungen',
+    cDesc: '{{ name }} auf {{ device }} mit {{ os }} aus {{ city }} {{ country }}',
+    cActive: 'Gerade aktiv',
+    actions: {
+      forceLogout: 'Abmelden erzwingen',
+    },
+  },
+  webauthn: {
+    cTitle: 'Passkeys',
+    cDesc: 'Melde dich mit Fingerabdruck, Gesicht oder Geräte-PIN an statt mit deinem Passwort',
+    add: 'Hinzufügen',
+    adding: 'Warte auf dein Gerät …',
+    empty: {
+      platform: 'Füge einen Passkey hinzu, um dich mit Fingerabdruck, Gesicht oder Geräte-PIN anzumelden – ohne Passwort, ohne Bestätigungscode.',
+      roaming: 'Füge einen Passkey hinzu, um dich ohne Passwort anzumelden. Du kannst einen Sicherheitsschlüssel verwenden oder mit deinem Handy einen Code scannen.',
+      fallback: 'Dein Passwort und dein Bestätigungscode funktionieren weiterhin, du kannst dich also immer auch anders anmelden.',
+    },
+    credential: {
+      lastUsed: 'Zuletzt verwendet {{ when }}',
+      neverUsed: 'Nie verwendet',
+      added: 'Hinzugefügt am {{ date }}',
+      synced: 'Auf allen Geräten synchronisiert',
+      deviceOnly: 'Nur dieses Gerät',
+      cloneWarning: 'Dieser Passkey hat ungewöhnliche Aktivität gemeldet. Entferne ihn und füge einen neuen hinzu.',
+      actions: {
+        rename: '{{ name }} umbenennen',
+        remove: '{{ name }} entfernen',
+      },
+    },
+    renameDialog: {
+      title: 'Passkey umbenennen',
+      message: 'Gib diesem Passkey einen Namen, an dem du erkennst, auf welchem Gerät er ist.',
+    },
+    removeDialog: {
+      title: 'Diesen Passkey entfernen?',
+      message: 'Du kannst dich dann nicht mehr mit {{ name }} anmelden. Dein Passwort und dein Bestätigungscode funktionieren weiterhin.',
+    },
+    nickname: {
+      label: 'Name',
+      counter: '{{ count }}/{{ max }}',
+    },
+    alerts: {
+      added: '{{ name }} ist einsatzbereit.',
+      removed: '{{ name }} wurde entfernt.',
+      atLimit: 'Du hast die Höchstzahl von {{ max }} Passkeys erreicht. Entferne einen, um einen weiteren hinzuzufügen.',
+      unsupported: 'Dieser Browser kann keine Passkeys verwenden. Du kannst dich weiterhin mit Passwort und Bestätigungscode anmelden.',
+      browseError: 'Deine Passkeys konnten nicht geladen werden. Lade die Seite neu, um es noch einmal zu versuchen.',
+      renameError: 'Der Passkey konnte nicht umbenannt werden. Versuch es noch einmal.',
+      removeError: 'Der Passkey konnte nicht entfernt werden. Versuch es noch einmal.',
+    },
+    ceremonyErrors: {
+      alreadyRegistered: 'Dieses Gerät hat schon einen Passkey für dein Konto.',
+      cancelled: 'Die Einrichtung wurde abgebrochen. Versuch es noch einmal, wenn du so weit bist.',
+      insecureContext: 'Diese Seite kann keine Passkeys erstellen. Wende dich an den Support, wenn das immer wieder passiert.',
+      atLimit: 'Du hast die Höchstzahl an Passkeys erreicht. Entferne zuerst einen.',
+      expired: 'Das hat zu lange gedauert. Versuch es noch einmal.',
+      generic: 'Der Passkey konnte nicht hinzugefügt werden. Versuch es noch einmal.',
+    },
+  },
+  totp: {
+    cTitle: 'Zwei-Faktor-Authentifizierung',
+    cDesc: 'Schalte die Zwei-Faktor-Authentifizierung ein und verbinde dein Konto mit einer Authenticator-App deiner Wahl auf deinem Handy.',
+    disableDialog: {
+      title: 'Bist du sicher?',
+      message: 'Du schaltest gleich deine Zwei-Faktor-Authentifizierung aus. Dadurch wird dein Konto weniger sicher. Möchtest du trotzdem fortfahren?',
+    },
+    steps: {
+      cTitle: 'Zwei-Faktor-Authentifizierung einrichten',
+      pairDevice: 'Gerät verbinden',
+      downloadRecoveryCodes: 'Wiederherstellungscodes',
+      enabled: 'Eingeschaltet',
+    },
+    password: {
+      title: 'Bestätige dein Passwort',
+      label: 'Passwort',
+    },
+    pairing: {
+      cTitle: 'Authenticator-App einrichten',
+      cDesc: 'Verwende eine Handy-App wie Authy, Google Authenticator oder Microsoft Authenticator, um bei der Anmeldung 2FA-Codes zu bekommen.',
+    },
+    qrCode: {
+      cTitle: 'Scanne den QR-Code',
+      cDesc: 'Scanne den QR-Code mit deiner Authenticator-App, um sie mit deinem Konto zu verbinden',
+      passcode: {
+        title: 'Code bestätigen',
+        label: 'Gib den aktuellen Code aus deiner Authenticator-App ein',
+      },
+    },
+    recoveryCodes: {
+      cTitle: 'Lade deine Wiederherstellungscodes herunter',
+      cDesc: 'Mit Wiederherstellungscodes kannst du dich als zweiten Faktor anmelden, falls du keinen Zugriff mehr auf dein Gerät hast. Wir empfehlen, sie in einem sicheren Passwortmanager wie 1Password oder Keeper zu speichern.',
+      warning: 'Bewahre deine Wiederherstellungscodes an einem sicheren Ort auf. Wenn du dein Gerät verlierst und deine Wiederherstellungscodes nicht findest, verlierst du den Zugang zu deinem Konto.',
+      content: 'WIEDERHERSTELLUNGSCODES\n\nDienst: {{ service }}\nKonto: {{ account }}\n\n*Jeder Code kann nur EINMAL verwendet werden!*\n\n',
+      prompts: {
+        copySuccess: 'Kopiert!',
+        copyCodes: 'Codes kopieren',
+        enableTotp: 'Ich habe meine Wiederherstellungscodes gespeichert',
+      },
+    },
+    enable: {
+      cDesc: 'Du hast die Zwei-Faktor-Authentifizierung mit einer Authenticator-App eingeschaltet.',
+      // Collapsed state of the 2FA card. The wizard is a multi-step commitment
+      // — password, pairing, recovery codes — so it stays behind a button
+      // rather than opening on a settings page somebody came to read.
+      action: 'Einschalten',
+      disable: 'Ausschalten',
+      disabled: 'Die Zwei-Faktor-Authentifizierung wurde ausgeschaltet. Wir haben dir eine Bestätigung per E-Mail geschickt.',
+      on: 'Die Zwei-Faktor-Authentifizierung ist eingeschaltet',
+      onDesc: 'Bei der Anmeldung wirst du nach einem Code aus deiner Authenticator-App gefragt.',
+      off: 'Die Zwei-Faktor-Authentifizierung ist ausgeschaltet',
+    },
+    verify: {
+      cTitle: 'Zwei-Faktor-Authentifizierung',
+      cDesc: 'Gib den aktuellen Code aus deiner Authenticator-App ein, um die Anmeldung abzuschließen.',
+      passcode: 'Bestätigungscode',
+    },
+    widget: {
+      cTitle: 'Sicherheitshinweis',
+      cSubTitle: '2FA ist nicht eingeschaltet!',
+      cDesc: 'Mit Zwei-Faktor-Authentifizierung (2FA) und einer Authenticator-App wird dein Konto viel sicherer.',
+      action: '2FA einrichten',
+    },
+    errors: {
+      wrongPassword: 'Das Passwort stimmt nicht. Versuch es noch einmal.',
+      passwordInvalid: 'Dein Passwort konnte nicht überprüft werden. Versuch es noch einmal.',
+      invalidPasscode: 'Dieser Code ist nicht gültig. Sieh in deiner Authenticator-App nach und versuch es noch einmal.',
+      enableFailed: 'Die Zwei-Faktor-Authentifizierung konnte nicht eingeschaltet werden. Versuch es noch einmal.',
+      disableFailed: 'Die Zwei-Faktor-Authentifizierung konnte nicht ausgeschaltet werden. Versuch es noch einmal.',
+      disableForbidden: 'Du darfst die Zwei-Faktor-Authentifizierung dieses Kontos nicht ändern.',
+    },
+  },
+  reauth: {
+    cTitle: 'Bestätige, dass du es bist',
+    label: 'Zu deiner Sicherheit: Bestätige deine Identität, bevor du das änderst.',
+    usePasskey: 'Passkey verwenden',
+    usePassword: 'Stattdessen Passwort verwenden',
+    submit: 'Bestätigen',
+    fields: {
+      currentPassword: 'Aktuelles Passwort',
+      totpPasscode: 'Authentifizierungscode',
+      totpHelper: '6-stelliger Code aus deiner Authenticator-App oder ein Wiederherstellungscode.',
+    },
+    errors: {
+      passwordRequired: 'Gib dein aktuelles Passwort ein.',
+      wrongPassword: 'Das aktuelle Passwort stimmt nicht.',
+      totpRequired: 'Gib den Code aus deiner Authenticator-App ein.',
+      invalidPasscode: 'Dieser Code ist nicht gültig. Nimm den aktuellen Code aus deiner Authenticator-App.',
+      passkeyFailed: 'Dieser Passkey wurde nicht akzeptiert. Versuch es noch einmal oder verwende dein Passwort.',
+      forbidden: 'Zu viele Fehlversuche. Bitte versuch es in 30 Minuten noch einmal!',
+      generic: 'Deine Identität konnte nicht bestätigt werden. Bitte versuch es noch einmal.',
+      noMethod: 'Dafür brauchst du einen Passkey oder die Zwei-Faktor-Authentifizierung. Richte eins davon in deinen Sicherheitseinstellungen ein und versuch es dann noch einmal.',
+    },
+  },
+  expired: {
+    alerts: {
+      info: 'Deine Sitzung ist abgelaufen!',
+    },
+  },
+  prompts: {
+    error: 'Etwas ist schiefgelaufen!',
+    errorSignupUsernameTaken: 'Dieser Benutzername ist schon vergeben!',
+    errorSignupEmailTaken: 'Diese E-Mail-Adresse ist bei uns schon registriert!',
+    signupEmailSuccess: 'Danke! Wir haben dir gerade einen Link zum Aktivieren deines Kontos geschickt.',
+  },
+};

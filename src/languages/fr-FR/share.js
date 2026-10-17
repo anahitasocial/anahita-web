@@ -4,7 +4,7 @@ export default {
   link: 'Lien',
   copy: 'Copier le lien',
   copied: 'Lien copié.',
-  email: 'Envoyer par e-mail',
+  email: 'Envoyer par email',
   mastodon: 'Publier sur Mastodon',
   mastodonServer: 'Votre serveur Mastodon',
   bluesky: 'Publier sur Bluesky',

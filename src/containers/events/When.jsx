@@ -14,7 +14,7 @@ import events from '../../utils/events';
 // wants that one.
 const EventWhen = ({ event, dense = false }) => {
   const zone = events.browserZone();
-  const locale = i18n.language || 'en-GB';
+  const locale = i18n.language || 'en-CA';
   const here = events.when(event.startsAt, event.endsAt, zone, locale);
 
   if (!here) {

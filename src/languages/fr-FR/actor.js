@@ -92,4 +92,6 @@ export default {
       readers: 'Toute personne pouvant voir ce profil, selon le réglage Accès.',
     },
   },
+  tabs: 'Onglets du profil',
+  addAdmins: 'Ajouter des admins',
 };

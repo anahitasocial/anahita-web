@@ -1,3 +1,4 @@
 export default {
-  count: '{{count}} nœuds',
+  count: '{{count}} nœud',
+  count_other: '{{count}} nœuds',
 };

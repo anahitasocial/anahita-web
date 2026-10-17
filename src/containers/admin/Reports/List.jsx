@@ -37,7 +37,7 @@ const ANY_REASON = 'any';
 
 const formatDate = (value) => {
   const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString();
+  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleDateString(i18n.language);
 };
 
 // The cases, by status and, if wanted, by a reason somebody gave. Open

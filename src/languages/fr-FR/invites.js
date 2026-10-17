@@ -11,7 +11,7 @@ export default {
     cDescription: 'Administrateurs uniquement.',
   },
   fields: {
-    recipientEmail: 'Courriel',
+    recipientEmail: 'Email',
   },
   status: {
     pending: 'En attente',
@@ -26,7 +26,7 @@ export default {
   },
   form: {
     cTitle: 'Inviter quelqu’un',
-    cDescription: 'La personne recevra un courriel avec un lien pour nous rejoindre.',
+    cDescription: 'La personne recevra un email avec un lien pour nous rejoindre.',
   },
   confirmRevoke: {
     cTitle: 'Révoquer cette invitation ?',

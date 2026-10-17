@@ -59,24 +59,71 @@ component looks everywhere, add it under `components`, for example
 
 ## Languages
 
-Translations are in `src/languages/`, one directory per locale. `en-GB` and
-`fr-FR` are included. Each file is a namespace of strings, and `index.js` in
-each directory gathers them.
+The app is in seven languages. Five are bases, with every string; two are
+layers, with only the strings that differ from their base:
+
+| Language | Directory | Holds | Falls back to |
+| --- | --- | --- | --- |
+| English (Canada), `en-CA` | `src/languages/en-CA/` | Every string | — |
+| English (United States), `en-US` | `src/languages/en-US/` | The strings that differ: *canceled*, *license*, *gray* | `en-CA` |
+| French (France), `fr-FR` | `src/languages/fr-FR/` | Every string | `en-CA` |
+| German (Germany), `de-DE` | `src/languages/de-DE/` | Every string | `en-CA` |
+| Spanish (Latin America), `es-419` | `src/languages/es-419/` | Every string | `en-CA` |
+| Portuguese (Brazil), `pt-BR` | `src/languages/pt-BR/` | Every string | `en-CA` |
+| French (Quebec), `fr-CA` | `src/languages/fr-CA/` | The strings that differ: *courriel* for *email*, *mot-clic* for *hashtag* | `fr-FR`, then `en-CA` |
+
+Each file in a directory is a namespace of strings, and `index.js` gathers
+them. A string a language does not have is read from the one it falls back
+to.
+
+**Who translated them.** The translations, from the Canadian English the app
+is written in, are made by Claude, an AI model made by Anthropic, at the
+project's request. Nobody who speaks French, German, Spanish or Portuguese,
+or any language to come, as their first language has read them yet. They
+speak to the reader as Mastodon does in each language: *du* in German, *tú*
+in Spanish, *você* in Portuguese, and *vous* in French. If something reads wrong to you,
+please say so: a correction to a string in `src/languages/` is welcome.
+
+**Which language a visitor sees** is chosen from their browser's languages,
+in their order, by `src/languages/choose.js`:
+
+| The browser asks for | Shown |
+| --- | --- |
+| `en-US` | `en-US` |
+| Any other English: `en-CA`, `en-GB`, `en-AU`, `en` | `en-CA` |
+| `fr-CA` | `fr-CA` |
+| Any other French: `fr-FR`, `fr-BE`, `fr-CH`, `fr` | `fr-FR` |
+| Any German: `de-DE`, `de-AT`, `de-CH`, `de` | `de-DE` |
+| Any Spanish: `es-MX`, `es-ES`, `es-AR`, `es` | `es-419` |
+| Any Portuguese: `pt-BR`, `pt-PT`, `pt` | `pt-BR` |
+| None of these | The site's default, `REACT_APP_LANGUAGE`; `en-CA` when unset |
+
+So somebody whose browser prefers Japanese, then French, sees French. It is
+chosen again on each visit. There is no choice of language in a person's
+settings: the operating system is the source of truth, and the browser
+passes on its languages. Dates, times and numbers are written in the
+language shown, and the page's `lang` follows it.
+
+**The space before `?`, `!` and `;`** is written once in the French strings,
+as an ordinary space, and made as each string is shown
+(`src/languages/frenchSpacing.js`): a narrow no-break space in `fr-FR`, so
+the mark never starts a line, and none in `fr-CA`.
 
 To add a language:
 
-1. Copy `src/languages/en-GB` to a directory named for the new locale, for
-   example `de-DE`, and translate its files. Keep every key; a missing key
-   shows the key itself instead of text.
+1. Copy `src/languages/en-CA` to a directory named for the new locale, for
+   example `de-DE`, and translate its files. Keep every key.
 2. Import it in `src/languages/index.js` and add it to `resources`.
+3. Add it to `LANGUAGES` and `FALLBACK` in `src/languages/choose.js`, and say
+   in `match` which of the browser's languages it is shown for.
 
-The app is currently fixed to English: `lng: 'en'` in
-`src/languages/index.js`. To use another language, change `lng`. To follow each
-visitor's browser, remove `lng` and let the language detector, which is
-already installed, choose.
+To add a layer, such as `fr-BE`, make a directory with only the strings that
+differ, and give it its base in `FALLBACK`. The tests check that every base
+has every string the Canadian English has and no other (add a new base to
+`BASES` in `choose.js`), and that a layer has no key its base does not.
 
-When you add a string to the app, add it to every language. The English files
-are the reference.
+When you add a string to the app, add it to both bases. Add it to a layer
+only when it differs there. The Canadian English files are the reference.
 
 ## Terms of Service and Privacy Policy
 
@@ -112,7 +159,9 @@ use the app again. This applies to existing members and new ones alike.
 | Applying a theme's styles over the app's defaults | `src/styles/index.js` (`createTheme`) |
 | A theme's Markdown pages, at `/pages/:alias` | `src/assets/default/pages/`, `src/containers/page/index.jsx` |
 | The page title and meta tags | `src/components/HeaderMeta.jsx` |
-| The languages, and the one in use (`lng`) | `src/languages/index.js`, `src/languages/en-GB/`, `src/languages/fr-FR/` |
+| The languages, and the one in use | `src/languages/index.js`, `src/languages/en-CA/`, `en-US/`, `fr-FR/`, `fr-CA/` |
+| Choosing the language from the browser's | `src/languages/choose.js`, tested in `src/languages/__tests__/languages.test.js` |
+| The space before `?`, `!` and `;` in French | `src/languages/frenchSpacing.js` |
 | The legal documents and their versions | `src/statics/legal/` |
 | Who must accept a new version | `src/utils/agreements.js` (`needsAcceptance`), tested in `src/utils/__tests__/agreements.test.js` |
 | The page that asks for it, at `/agreements` | `src/containers/agreements/` |

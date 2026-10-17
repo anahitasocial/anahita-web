@@ -19,14 +19,14 @@ export default {
     archive: 'Archiver',
     archivePrompts: {
       permanent: 'L\'archivage est irréversible. Il n\'y a aucun moyen de restaurer cet événement.',
-      groupDescription: 'Rien n\'est supprimé. Chaque publication, réponse et photo reste exactement où elle est et conserve son adresse, donc les liens enregistrés continueront de fonctionner. Ce qui s\'arrête, c\'est l\'activité du compte : il quitte les fils et les suggestions, et il n\'est plus possible de s\'y connecter.',
+      eventDescription: 'Rien n\'est supprimé. Chaque publication, photo et discussion reste exactement où elle est et conserve son adresse : les liens enregistrés continueront de fonctionner. Ce qui s\'arrête, c\'est l\'activité de l\'événement : il quitte les fils, les suggestions et la recherche, et plus personne ne peut y publier.',
       confirmLabel: 'Tapez {{ alias }} pour confirmer',
       action: 'Archiver définitivement',
       archived: 'Cet événement a été archivé.',
       errors: {
         nothingToArchive: 'Rien à archiver — cet événement est déjà archivé ou programmé pour suppression.',
         forbidden: 'Vous n\'avez pas la permission d\'archiver cet événement.',
-        lastSuperAdmin: 'Il s\'agit du seul super administrateur. Promouvez quelqu\'un d\'autre avant d\'archiver ce compte.',
+        lastSuperAdmin: 'Il s\'agit du seul super administrateur. Promouvez quelqu\'un d\'autre avant d\'archiver cet événement.',
         generic: 'Impossible d\'archiver cet événement. Veuillez réessayer.',
       },
     },
@@ -80,7 +80,7 @@ export default {
     cTitle: 'Notifications',
     cDescription: 'Modifiez vos paramètres de notification',
     mTitle: 'Notifications',
-    email: 'Recevoir les notifications par e-mail',
+    email: 'Recevoir les notifications par email',
     optionsTitle: 'Recevoir des notifications pour',
     options: {
       all: 'Toutes les publications',

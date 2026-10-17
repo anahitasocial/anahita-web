@@ -29,6 +29,8 @@ import support from './support';
 import events from './events';
 import groups from './groups';
 import websites from './websites';
+import password from './password';
+import username from './username';
 import people from './people';
 import notes from './notes';
 import photos from './photos';
@@ -45,6 +47,7 @@ import locations from './locations';
 import search from './search';
 import inbounds from './inbounds';
 import commons from './commons';
+import email from './email';
 
 export default {
   apps,
@@ -79,6 +82,8 @@ export default {
   groups,
   websites,
   people,
+  password,
+  username,
   notes,
   photos,
   videos,
@@ -93,5 +98,6 @@ export default {
   locations,
   search,
   inbounds,
+  email,
   commons,
 };

@@ -40,7 +40,7 @@ const size = (bytes) => {
 };
 
 // A day, as the person's own language writes one.
-const day = (value, language = 'en-GB') => {
+const day = (value, language = 'en-CA') => {
   const date = new Date(value);
   if (!value || Number.isNaN(date.getTime())) {
     return '';

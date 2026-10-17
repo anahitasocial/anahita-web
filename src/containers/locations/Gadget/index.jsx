@@ -98,7 +98,7 @@ const LocationsGadget = ({
                 fontSize: 24,
               }}
             >
-              Locations
+              {i18n.t('locations:cTitle')}
             </Typography>
           }
         />

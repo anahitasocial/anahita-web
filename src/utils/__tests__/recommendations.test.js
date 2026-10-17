@@ -6,7 +6,7 @@ import i18n from '../../languages';
 import recommendations from '../recommendations';
 
 const t = (key, options) => {
-  return i18n.t(key, { lng: 'en-GB', ...options });
+  return i18n.t(key, { lng: 'en-CA', ...options });
 };
 
 const related = [
@@ -71,7 +71,7 @@ describe('why somebody is suggested', () => {
     expect(recommendations.weightKey('follows_you')).toBe('followsYou');
     expect(recommendations.weightKey('followed_by_leaders')).toBe('followedByLeaders');
     expect(recommendations.weightKey('popular')).toBe('popular');
-    expect(i18n.exists('recommendations:weights.hostedByLeader', { lng: 'en-GB' })).toBe(true);
+    expect(i18n.exists('recommendations:weights.hostedByLeader', { lng: 'en-CA' })).toBe(true);
   });
 
   it('gives the first reason, and nothing for none or one it does not know', () => {

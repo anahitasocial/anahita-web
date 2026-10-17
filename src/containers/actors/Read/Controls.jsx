@@ -47,7 +47,7 @@ const ActorsReadControls = ({
   return (
     <>
       <IconButton
-        aria-label="More"
+        aria-label={i18n.t('actions:more')}
         aria-owns={anchorEl ? 'long-menu' : null}
         aria-haspopup="true"
         onClick={handleOpen}

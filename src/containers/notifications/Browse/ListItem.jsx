@@ -13,6 +13,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import i18n from '../../../languages';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
@@ -51,7 +52,7 @@ const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
       <ListItemSecondaryAction>
         <IconButton
           edge="end"
-          aria-label="actions"
+          aria-label={i18n.t('actions:more')}
           onClick={(event) => {
             return setAnchorEl(event.currentTarget);
           }}
@@ -73,7 +74,7 @@ const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
             }}
             disabled={item.isRead}
           >
-            Mark as read
+            {i18n.t('notifications:markRead')}
           </MenuItem>
           <MenuItem
             onClick={() => {
@@ -81,7 +82,7 @@ const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
               handleDelete(item);
             }}
           >
-            Delete notification
+            {i18n.t('actions:delete')}
           </MenuItem>
         </Menu>
         <Badge

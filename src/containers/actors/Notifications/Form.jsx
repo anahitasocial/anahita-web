@@ -27,7 +27,7 @@ const ActorsNotificationsForm = (props) => {
           {i18n.t(`${namespace}:notifications.optionsTitle`)}
         </FormLabel>
         <RadioGroup
-          aria-label="gender"
+          aria-label={i18n.t(`${namespace}:notifications.optionsTitle`)}
           value={isSubscribed ? 0 : 1}
           onChange={handleEditType}
         >

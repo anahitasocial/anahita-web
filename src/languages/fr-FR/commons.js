@@ -56,4 +56,5 @@ export default {
   errors: {
     404: '404 : Page introuvable !',
   },
+  openMenu: 'Ouvrir le menu',
 };

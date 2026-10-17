@@ -46,6 +46,9 @@ const AuthViewer = ({
         }}
         color="inherit"
         variant="outlined"
+        // One line in every language: "Iniciar sesión" wrapped on a phone.
+        // The search box beside it gives up the room.
+        sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       >
         {i18n.t('actions:login')}
       </Button>}

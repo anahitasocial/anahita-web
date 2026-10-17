@@ -63,11 +63,11 @@ export default {
   settings: {
     photo: {
       add: 'Qui peut publier des photos sur ce profil ?',
-      addcomment: 'Qui peut commenter les photos ?',
+      addcomment: 'Qui peut répondre aux photos ?',
     },
     set: {
       add: 'Qui peut créer des albums sur ce profil ?',
-      addcomment: 'Qui peut commenter les albums ?',
+      addcomment: 'Qui peut répondre aux albums ?',
     },
   },
 };

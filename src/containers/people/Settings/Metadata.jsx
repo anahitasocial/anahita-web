@@ -23,7 +23,7 @@ const formatDateTime = (value) => {
 
   const date = new Date(value);
 
-  return Number.isNaN(date.getTime()) ? null : date.toLocaleString();
+  return Number.isNaN(date.getTime()) ? null : date.toLocaleString(i18n.language);
 };
 
 // When somebody joined, and when they were last here.

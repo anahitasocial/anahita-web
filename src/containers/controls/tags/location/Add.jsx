@@ -26,7 +26,7 @@ const ControlsTagsLocationAdd = React.forwardRef((props, ref) => {
   return (
     <IconButton
       edge="end"
-      aria-label="delete"
+      aria-label={i18n.t('actions:add')}
       ref={ref}
       onClick={() => {
         setIsWaiting(true);

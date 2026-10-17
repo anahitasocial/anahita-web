@@ -1,0 +1,77 @@
+export default {
+  cTitle: 'Fotos',
+  mTitle: 'Fotos',
+  composer: {
+    namePlaceholder: 'Título de la foto...',
+    bodyPlaceholder: 'Escribe una descripción...',
+  },
+  editor: {
+    title: 'Fotos de esta publicación',
+    edit: 'Editar fotos',
+    add: 'Selecciona o suelta fotos aquí',
+    // Where a post may hold a video instead.
+    addOrVideo: 'Selecciona o suelta fotos o un video aquí',
+    addMore: 'Añadir otra',
+    limit: 'Hasta {{max}} fotos por publicación. La primera se muestra primero.',
+    first: 'Primera',
+    leftOut_one: 'Una publicación admite {{max}} fotos, así que 1 de las que elegiste quedó fuera.',
+    leftOut_other: 'Una publicación admite {{max}} fotos, así que {{count}} de las que elegiste quedaron fuera.',
+    remove: 'Quitar esta foto',
+    earlier: 'Mover antes',
+    later: 'Mover después',
+    alt: 'ALT',
+    describe: 'Describe esta foto',
+    described: 'Cambiar la descripción',
+    describeTitle: 'Describe esta foto',
+    altLabel: 'Texto alternativo',
+    askAlt: 'Añadir un texto alternativo',
+    askAltWhy: 'Se lee en voz alta a las personas que no pueden ver la foto, y se muestra cuando una foto no carga.',
+    altWhy: 'Se lee en voz alta a las personas que no pueden ver la foto. No es el pie de foto: di qué hay en la imagen.',
+    altHelp: 'Por ejemplo: un banano enano junto a una ventana, al lado de un sillón gris.',
+    undescribed_one: '1 foto todavía no tiene texto alternativo.',
+    undescribed_other: '{{count}} fotos todavía no tienen texto alternativo.',
+    uploading: 'Subiendo',
+    failed: 'No se pudo subir esta foto. Quítala e inténtalo de nuevo.',
+    unsupported: 'Solo se pueden subir fotos JPEG y PNG.',
+    tooLarge: 'Esta foto es demasiado grande. El límite es de 10 MB.',
+    unreadable: 'Este archivo no se pudo leer como foto.',
+    stillUploading: 'Las fotos todavía se están subiendo. Inténtalo de nuevo en un momento.',
+    needOne: 'Una publicación de fotos necesita al menos una foto.',
+    tooMany: 'Son más fotos de las que admite una publicación.',
+    gone: 'Una de las fotos ya no está. Cierra esto e inténtalo de nuevo.',
+    altTooLong: 'Una de las descripciones es demasiado larga.',
+    saved: 'Se actualizaron las fotos.',
+    notSaved: 'No se pudieron actualizar las fotos.',
+  },
+  // On a photo that has a description, for somebody who can see it.
+  alt: {
+    show: 'Leer la descripción de esta foto',
+    title: 'Texto alternativo',
+  },
+  // In place of the pictures of a post from another server that are no
+  // longer stored here.
+  removed: {
+    kept: 'Esta publicación tiene una imagen que ya no se guarda aquí.',
+    kept_other: 'Esta publicación tiene {{count}} imágenes que ya no se guardan aquí.',
+    show: 'Mostrar la imagen',
+    show_other: 'Mostrar las imágenes',
+    gone: 'La imagen de esta publicación ya no está disponible en {{domain}}.',
+    gone_other: 'Las {{count}} imágenes de esta publicación ya no están disponibles en {{domain}}.',
+    failed: 'No se pudieron obtener ahora. Inténtalo de nuevo en un momento.',
+  },
+  slides: {
+    position: '{{index}} de {{total}}',
+    next: 'Foto siguiente',
+    previous: 'Foto anterior',
+  },
+  settings: {
+    photo: {
+      add: '¿Quién puede publicar fotos en este perfil?',
+      addcomment: '¿Quién puede responder a las fotos?',
+    },
+    set: {
+      add: '¿Quién puede crear álbumes en este perfil?',
+      addcomment: '¿Quién puede responder a los álbumes?',
+    },
+  },
+};

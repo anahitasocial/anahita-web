@@ -27,6 +27,13 @@ import ActorType from '../../../proptypes/Actor';
 // What genuinely differs from deletion is worth being concrete about, because
 // it is the reason to choose this: nothing is destroyed, and the posts stay
 // readable at their URLs forever.
+// What archiving keeps and stops, said for each kind of profile.
+const DESCRIPTION = {
+  people: 'personDescription',
+  groups: 'groupDescription',
+  events: 'eventDescription',
+};
+
 const ActorsSettingsArchive = (props) => {
   const {
     actor,
@@ -120,7 +127,7 @@ const ActorsSettingsArchive = (props) => {
           color="textSecondary"
           sx={{ marginBottom: '16px' }}
         >
-          {copy(isPerson ? 'personDescription' : 'groupDescription')}
+          {copy(DESCRIPTION[namespace] || 'groupDescription')}
         </Typography>
 
         {isPerson && isSelf &&

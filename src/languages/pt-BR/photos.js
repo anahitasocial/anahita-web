@@ -1,0 +1,77 @@
+export default {
+  cTitle: 'Fotos',
+  mTitle: 'Fotos',
+  composer: {
+    namePlaceholder: 'Título da foto ...',
+    bodyPlaceholder: 'Escreva uma descrição ...',
+  },
+  editor: {
+    title: 'Fotos nesta publicação',
+    edit: 'Editar fotos',
+    add: 'Selecione ou solte fotos aqui',
+    // Where a post may hold a video instead.
+    addOrVideo: 'Selecione ou solte fotos ou um vídeo aqui',
+    addMore: 'Adicionar outra',
+    limit: 'Até {{max}} fotos por publicação. A primeira aparece primeiro.',
+    first: 'Primeira',
+    leftOut_one: 'Uma publicação comporta {{max}} fotos, então 1 das que você escolheu ficou de fora.',
+    leftOut_other: 'Uma publicação comporta {{max}} fotos, então {{count}} das que você escolheu ficaram de fora.',
+    remove: 'Remover esta foto',
+    earlier: 'Mover para antes',
+    later: 'Mover para depois',
+    alt: 'ALT',
+    describe: 'Descrever esta foto',
+    described: 'Mudar a descrição',
+    describeTitle: 'Descrever esta foto',
+    altLabel: 'Descrição da imagem',
+    askAlt: 'Adicionar uma descrição da imagem',
+    askAltWhy: 'Ela é lida em voz alta para quem não consegue ver a foto, e aparece quando uma foto não carrega.',
+    altWhy: 'Lida em voz alta para quem não consegue ver a foto. Não é a legenda: diga o que há na imagem.',
+    altHelp: 'Por exemplo: uma bananeira-anã perto de uma janela, ao lado de uma poltrona cinza.',
+    undescribed_one: '1 foto ainda não tem descrição da imagem.',
+    undescribed_other: '{{count}} fotos ainda não têm descrição da imagem.',
+    uploading: 'Enviando',
+    failed: 'Não foi possível enviar esta foto. Remova e tente de novo.',
+    unsupported: 'Só é possível enviar fotos JPEG e PNG.',
+    tooLarge: 'Esta foto é grande demais. O limite é 10 MB.',
+    unreadable: 'Não foi possível ler este arquivo como foto.',
+    stillUploading: 'As fotos ainda estão sendo enviadas. Tente de novo daqui a pouco.',
+    needOne: 'Uma publicação de fotos precisa de pelo menos uma foto.',
+    tooMany: 'São mais fotos do que uma publicação comporta.',
+    gone: 'Uma das fotos não está mais lá. Feche isto e tente de novo.',
+    altTooLong: 'Uma das descrições é longa demais.',
+    saved: 'As fotos foram atualizadas.',
+    notSaved: 'Não foi possível atualizar as fotos.',
+  },
+  // On a photo that has a description, for somebody who can see it.
+  alt: {
+    show: 'Ler a descrição desta foto',
+    title: 'Descrição da imagem',
+  },
+  // In place of the pictures of a post from another server that are no
+  // longer stored here.
+  removed: {
+    kept: 'Esta publicação tem uma imagem que não é mais guardada aqui.',
+    kept_other: 'Esta publicação tem {{count}} imagens que não são mais guardadas aqui.',
+    show: 'Mostrar a imagem',
+    show_other: 'Mostrar as imagens',
+    gone: 'A imagem desta publicação não está mais disponível em {{domain}}.',
+    gone_other: 'As {{count}} imagens desta publicação não estão mais disponíveis em {{domain}}.',
+    failed: 'Não foi possível buscá-las agora. Tente de novo daqui a pouco.',
+  },
+  slides: {
+    position: '{{index}} de {{total}}',
+    next: 'Próxima foto',
+    previous: 'Foto anterior',
+  },
+  settings: {
+    photo: {
+      add: 'Quem pode publicar fotos neste perfil?',
+      addcomment: 'Quem pode responder a fotos?',
+    },
+    set: {
+      add: 'Quem pode criar álbuns neste perfil?',
+      addcomment: 'Quem pode responder a álbuns?',
+    },
+  },
+};

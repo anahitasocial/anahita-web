@@ -1,0 +1,232 @@
+export default {
+  cTitle: 'Veranstaltungen',
+  mTitle: 'Veranstaltungen',
+  add: {
+    cTitle: 'Veranstaltung erstellen',
+    mTitle: 'Veranstaltung erstellen',
+  },
+  settings: {
+    cancel: 'Veranstaltung absagen',
+    info: 'Infos',
+    admins: 'Admins',
+    features: 'Funktionen',
+    permissions: 'Berechtigungen',
+    access: 'Privatsphäre',
+    // Deletion copy, namespace-specific. The shared actor:delete strings told
+    // event administrators to "sign in to restore", which an event cannot do,
+    // and that their passkeys would be removed, which an event has none of.
+    delete: 'Löschen',
+    // The card title. Its text is in the accounts namespace, shared with
+    // the accounts list.
+    purge: 'Endgültig löschen',
+    // Archive. The copy does the work here: archive sits next to delete and
+    // must never read as the gentler option. Permanence first, then what is
+    // preserved — which is the reason to choose it, not a softener.
+    archive: 'Archivieren',
+    archivePrompts: {
+      permanent: 'Archivieren lässt sich nicht rückgängig machen. Diese Veranstaltung kann nicht zurückgeholt werden.',
+      eventDescription: 'Nichts wird gelöscht. Jeder Beitrag, jedes Foto und jede Diskussion bleibt genau dort, wo sie ist, und behält ihre Adresse, sodass gespeicherte Links weiter funktionieren. Was aufhört, ist die Veranstaltung selbst: Sie verschwindet aus Feeds, Vorschlägen und der Suche, und niemand kann dort mehr etwas veröffentlichen.',
+      confirmLabel: 'Gib {{ alias }} ein, um zu bestätigen',
+      action: 'Endgültig archivieren',
+      archived: 'Diese Veranstaltung wurde archiviert.',
+      errors: {
+        nothingToArchive: 'Nichts zu archivieren – diese Veranstaltung ist schon archiviert oder zum Löschen vorgemerkt.',
+        forbidden: 'Du darfst diese Veranstaltung nicht archivieren.',
+        lastSuperAdmin: 'Das ist die einzige Super-Administrator:in. Ernenne erst jemand anderen, bevor du diese Veranstaltung archivierst.',
+        generic: 'Die Veranstaltung konnte nicht archiviert werden. Bitte versuch es noch einmal.',
+      },
+    },
+    // Disable. Deliberately light — it is a switch, and dressing it up like
+    // the two below trains people to type confirmations without reading.
+    disable: 'Deaktivieren',
+    disablePrompts: {
+      description: 'Deaktivieren verbirgt diese Veranstaltung vor allen. Solange sie deaktiviert ist, können ihre Follower dort nichts veröffentlichen und sie nicht finden.',
+      descriptionDisabled: 'Diese Veranstaltung ist deaktiviert. Sie erscheint nirgends, und niemand kann dort etwas veröffentlichen.',
+      reversible: 'Das lässt sich jederzeit rückgängig machen, und nichts wird gelöscht. Um ein Profil endgültig zu entfernen, archiviere oder lösche es stattdessen.',
+      action: 'Deaktivieren',
+      actionEnable: 'Aktivieren',
+      disabled: 'Diese Veranstaltung wurde deaktiviert.',
+      enabled: 'Diese Veranstaltung wurde aktiviert.',
+      errors: {
+        forbidden: 'Du darfst das nicht ändern.',
+        lastSuperAdmin: 'Das ist die einzige Super-Administrator:in und kann nicht deaktiviert werden.',
+        generic: 'Das konnte nicht geändert werden. Bitte versuch es noch einmal.',
+      },
+    },
+    deletePrompts: {
+      counts: {
+        intro: 'In dieser Veranstaltung gerade:',
+        posts: '{{ count }} Beitrag',
+        posts_other: '{{ count }} Beiträge',
+        replies: '{{ count }} Antwort',
+        replies_other: '{{ count }} Antworten',
+        followers: '{{ count }} Follower',
+        followers_other: '{{ count }} Follower',
+        admins: '{{ count }} Administrator:in',
+        admins_other: '{{ count }} Administrator:innen',
+        memberSince: 'Erstellt am {{ date }}.',
+      },
+      description: 'Löschen entfernt diese Veranstaltung und alles darin: Beiträge, Fotos, Antworten und die Liste der Follower. Was ihre Follower beigetragen haben, verschwindet mit.',
+      reversible: 'Das passiert nicht sofort. Die Veranstaltung wird gleich verborgen und nach {{ count }} Tagen endgültig gelöscht. Bis dahin kann jede Administrator:in sie auf dieser Seite wiederherstellen.',
+      revoked: 'Follower verlieren sofort den Zugriff, und die Veranstaltung verschwindet aus ihren Profilen und Feeds.',
+      handle: 'Der Name {{ alias }} bleibt danach reserviert, sodass keine andere Veranstaltung ihn nehmen kann.',
+      scheduled: 'Diese Veranstaltung ist zum Löschen vorgemerkt und wird am {{ date }} endgültig gelöscht.',
+      restore: 'Diese Veranstaltung wiederherstellen',
+      restored: 'Diese Veranstaltung wurde wiederhergestellt.',
+      errors: {
+        restoreFailed: 'Die Veranstaltung konnte nicht wiederhergestellt werden. Vielleicht wurde sie schon endgültig gelöscht.',
+      },
+    },
+    // Labels the tab; the card inside it still reads "Delete".
+    sections: {
+      danger: 'Gefahrenbereich',
+    },
+    notifications: 'Benachrichtigungseinstellungen',
+    followRequests: 'Folgeanfragen',
+  },
+  notifications: {
+    cTitle: 'Benachrichtigungen',
+    cDescription: 'Bearbeite deine Benachrichtigungseinstellungen',
+    mTitle: 'Benachrichtigungen',
+    email: 'Benachrichtigungen per E-Mail erhalten',
+    optionsTitle: 'Benachrichtigungen erhalten für',
+    options: {
+      all: 'Alle Beiträge',
+      following: 'Nur Beiträge, denen du folgst',
+    },
+  },
+  // What only an event has.
+  event: {
+    mine: {
+      upcoming: 'Demnächst',
+      invited: 'Eingeladen',
+      hosting: 'Veranstaltet',
+      past: 'Vergangen',
+    },
+    none: {
+      upcoming: 'Nichts in Sicht. Veranstaltungen, zu denen du gehst, erscheinen hier.',
+      invited: 'Keine offenen Einladungen.',
+      hosting: 'Du veranstaltest gerade nichts.',
+      past: 'Keine vergangenen Veranstaltungen.',
+      hosted: 'Keine Veranstaltungen.',
+    },
+    failed: 'Die Veranstaltungen konnten nicht geladen werden.',
+    form: {
+      name: 'Wie heißt sie?',
+      body: 'Beschreibung',
+      startsAt: 'Beginn',
+      endsAt: 'Ende',
+      timezone: 'Zeitzone',
+      capacity: 'Plätze',
+      capacityUnlimited: 'Unbegrenzt',
+      capacityHelp: 'Wie viele Personen kommen können. Ganz nach oben heißt: ohne Grenze.',
+      onlineUrl: 'Link zur Online-Teilnahme',
+      onlineUrlHelp: 'Nur für Personen sichtbar, die teilnehmen.',
+      websiteUrl: 'Website',
+      websiteUrlHelp: 'Für alle sichtbar, die die Veranstaltung sehen können.',
+      access: 'Wer kann sie sehen?',
+      accessOptions: {
+        public: 'Alle',
+        registered: 'Alle, die angemeldet sind',
+        followers: 'Nur Personen, die teilnehmen oder eingeladen sind',
+      },
+      hostedBy: 'Veranstaltet von {{ name }}',
+      openToHostFollowers: 'Alle, die {{ name }} folgen, können sie sehen und antworten',
+      address: {
+        title: 'Wo findet sie statt?',
+        help: 'Nur für Personen sichtbar, die teilnehmen. Sie wird nicht zu den Orten der Website hinzugefügt.',
+        street: 'Adresse',
+        city: 'Stadt',
+        stateProvince: 'Bundesland oder Provinz',
+        country: 'Land',
+        showMap: 'Karte anzeigen',
+        showMapHelp: 'Die Adresse wird an einen Kartendienst geschickt, um sie zu finden. Die Karte ist nur für Personen sichtbar, die teilnehmen.',
+      },
+      create: 'Erstellen',
+      save: 'Speichern',
+      edit: 'Veranstaltung bearbeiten',
+      errors: {
+        invalid_time: 'Wähle, wann sie beginnt und endet.',
+        ends_before_start: 'Sie muss nach dem Beginn enden.',
+        too_long: 'Eine Veranstaltung kann höchstens ein Jahr dauern.',
+        invalid_timezone: 'Wähle eine Zeitzone.',
+        already_over: 'Diese Zeit ist schon vorbei.',
+        host_not_allowed: 'Du kannst eine Veranstaltung nur mit einer Gruppe ausrichten, die du verwaltest.',
+        generic: 'Die Veranstaltung konnte nicht gespeichert werden.',
+      },
+    },
+    when: {
+      // The same day: 5 November 2026, 19:00 to 21:00.
+      sameDay: '{{ date }}, {{ start }} bis {{ end }}',
+      // Different days.
+      range: '{{ start }} bis {{ end }}',
+      inZone: 'Zeiten in {{ zone }}.',
+      eventZone: 'Die Veranstaltung ist in {{ zone }}: dort {{ time }}.',
+    },
+    state: {
+      upcoming: 'Demnächst',
+      happening: 'Läuft gerade',
+      past: 'Diese Veranstaltung ist vorbei.',
+      cancelled: 'Diese Veranstaltung wurde abgesagt.',
+    },
+    rsvp: {
+      label: 'Deine Antwort',
+      going: 'Ich komme',
+      maybe: 'Vielleicht',
+      leave: 'Ich komme nicht',
+      youAreGoing: 'Du kommst',
+      youSaidMaybe: 'Du hast vielleicht gesagt',
+      full: 'Die Veranstaltung ist ausgebucht',
+      closed: 'Für diese Veranstaltung werden keine Antworten mehr angenommen.',
+      failed: 'Das hat nicht geklappt.',
+    },
+    counts: {
+      going_one: '{{ count }} kommt',
+      going_other: '{{ count }} kommen',
+      maybe_one: '{{ count }} vielleicht',
+      maybe_other: '{{ count }} vielleicht',
+      places: '{{ going }} von {{ capacity }} Plätzen belegt',
+    },
+    attendees: {
+      title: 'Wer kommt',
+      going: 'Kommen',
+      maybe: 'Vielleicht',
+      none: {
+        going: 'Noch hat niemand zugesagt.',
+        maybe: 'Niemand hat vielleicht gesagt.',
+      },
+    },
+    online: {
+      join: 'Online teilnehmen',
+      forGoing: 'Es gibt einen Link zur Online-Teilnahme. Er ist für Personen sichtbar, die teilnehmen.',
+    },
+    host: 'Veranstaltet von',
+    address: {
+      title: 'Wo',
+      maps: {
+        apple: 'Apple Maps',
+        google: 'Google Maps',
+        osm: 'OpenStreetMap',
+      },
+      forGoing: 'Die Adresse ist für Personen sichtbar, die teilnehmen.',
+    },
+    viaHost: 'Diese Veranstaltung ist für die Follower der Gruppe, die sie ausrichtet. Du folgst dieser Gruppe, also kannst du antworten.',
+    calendar: 'Zum Kalender hinzufügen',
+    cancel: {
+      already: 'Diese Veranstaltung wurde abgesagt.',
+      over: 'Diese Veranstaltung ist vorbei, es gibt also nichts abzusagen.',
+      action: 'Veranstaltung absagen',
+      title: 'Diese Veranstaltung absagen?',
+      message: 'Alle, die kommen, sehen, dass sie abgesagt wurde. Die Veranstaltung bleibt, wo sie ist, und das lässt sich nicht rückgängig machen.',
+      confirm: 'Veranstaltung absagen',
+      keep: 'Behalten',
+      done: 'Die Veranstaltung wurde abgesagt.',
+      failed: 'Die Veranstaltung konnte nicht abgesagt werden.',
+    },
+    add: 'Veranstaltung hinzufügen',
+    tab: 'Veranstaltungen',
+  },
+  confirm: {
+    delete: 'Möchtest du das Profil von {{ name }} löschen?',
+  },
+};

@@ -54,7 +54,7 @@ export default {
       following: 'Les personnes que vous suivez',
       mentioned: 'Les personnes que vous mentionnez',
     },
-    help: 'Ce réglage ne fait que restreindre qui peut répondre. La règle du profil sur les commentaires s\'applique toujours, et vous pouvez toujours répondre sous votre propre publication.',
+    help: 'Ce réglage ne fait que restreindre qui peut répondre. La règle du profil sur qui peut répondre s\'applique toujours, et vous pouvez toujours répondre sous votre propre publication.',
     label: 'Réponses : {{ who }}',
     short: {
       anyone: 'Tout le monde',
