@@ -2,12 +2,12 @@ export default {
   cTitle: 'Personnes',
   mTitle: 'Personnes',
   browse: {
-    title: 'Personnes locales',
-    local: 'Les personnes qui ont un profil sur {{ site }}.',
-    localUnnamed: 'Les personnes qui ont un profil sur ce site.',
+    title: 'Personnes',
+    local: 'Les personnes locales de {{ site }}.',
+    localUnnamed: 'Les personnes locales de cette instance.',
     elsewhere: {
-      both: 'Pour trouver quelqu’un sur Mastodon ou Bluesky, cherchez son identifiant.',
-      activitypub: 'Pour trouver quelqu’un sur Mastodon ou un autre serveur du fédivers, cherchez son identifiant.',
+      both: 'Pour trouver quelqu’un sur le fédivers ou Bluesky, cherchez son identifiant.',
+      activitypub: 'Pour trouver quelqu’un sur le fédivers, cherchez son identifiant.',
       atproto: 'Pour trouver quelqu’un sur Bluesky, cherchez son identifiant.',
     },
   },

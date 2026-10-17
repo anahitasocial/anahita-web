@@ -195,7 +195,8 @@ const ActorsRead = (props) => {
     reportPermissions.canAdd(viewer, actor)
   );
   const showEditNotifications = isAuthenticated && actor.isLeader;
-  const showFollowRequests = isAuthenticated && canAdminister;
+  // A website is public and followed outright: nobody asks.
+  const showFollowRequests = isAuthenticated && canAdminister && namespace !== 'websites';
   const FollowRequests = ActorsFollowRequests(namespace);
   const featureTabs = getActorFeatureTabs(actor);
 

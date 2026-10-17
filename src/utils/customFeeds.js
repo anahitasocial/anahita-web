@@ -7,7 +7,7 @@
 // whoever reads it.
 
 const MEDIA_TYPES = ['note', 'article', 'topic', 'photo', 'video'];
-const ACTOR_TYPES = ['person', 'group', 'event'];
+const ACTOR_TYPES = ['person', 'group', 'event', 'website'];
 const ACCESS = ['myself', 'followers', 'registered', 'public'];
 
 // The server's limits, repeated so the editor can stop at them.

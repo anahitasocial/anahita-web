@@ -28,6 +28,7 @@ import invites from './invites';
 import support from './support';
 import events from './events';
 import groups from './groups';
+import websites from './websites';
 import people from './people';
 import notes from './notes';
 import photos from './photos';
@@ -76,6 +77,7 @@ export default {
   support,
   events,
   groups,
+  websites,
   people,
   notes,
   photos,

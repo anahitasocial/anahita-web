@@ -17,6 +17,7 @@ import MapIcon from '@mui/icons-material/MapOutlined';
 import OpenIcon from '@mui/icons-material/ExpandMore';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 import WebsiteIcon from '@mui/icons-material/Web';
+import VerifiedIcon from '@mui/icons-material/Verified';
 import FediverseIcon from '@mui/icons-material/Hub';
 
 import i18n from '../../../languages';
@@ -27,6 +28,15 @@ import BlueskyIcon from '../../../components/BlueskyIcon';
 import federation from '../../../utils/federation';
 import events from '../../../utils/events';
 import ActorType from '../../../proptypes/Actor';
+
+// The host of an address, without its "www.": example.com.
+const hostOf = (address) => {
+  try {
+    return new URL(address).hostname.replace(/^www\./, '');
+  } catch (e) {
+    return address;
+  }
+};
 
 const ActorBodyAbout = (props) => {
   const { actor } = props;
@@ -54,6 +64,10 @@ const ActorBodyAbout = (props) => {
   const websiteUrl = remote ?
     (federation.pageOf(actor) || actor.websiteUrl) :
     actor.websiteUrl;
+  // A website's site is the domain proved for it: shown as that domain,
+  // verified, which is what says who is behind it.
+  const isWebsite = (actor.type || '').includes('.website.');
+  const siteShown = isWebsite ? hostOf(websiteUrl) : websiteUrl;
 
   return (
     <Card component="section">
@@ -113,8 +127,16 @@ const ActorBodyAbout = (props) => {
                     <Typography
                       variant="body1"
                       noWrap
+                      component="span"
+                      sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
-                      {websiteUrl}
+                      {siteShown}
+                      {isWebsite &&
+                        <VerifiedIcon
+                          fontSize="small"
+                          color="primary"
+                          titleAccess={i18n.t('websites:about.verified')}
+                        />}
                     </Typography>
                   }
                 />}

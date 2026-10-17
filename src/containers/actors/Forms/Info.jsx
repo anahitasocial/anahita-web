@@ -19,6 +19,8 @@ const ActorFormsInfo = ({
   isFetching,
   enabled = null,
   handleOnCancel = null,
+  // A website's site is the domain proved for it, not something to change.
+  withWebsite = true,
 }) => {
   const enableSubmit = actor.id > 0 || (fields.name.isValid && fields.body.isValid);
 
@@ -65,6 +67,7 @@ const ActorFormsInfo = ({
             },
           }}
         />
+        {withWebsite &&
         <TextField
           variant="standard"
           name="websiteUrl"
@@ -85,7 +88,7 @@ const ActorFormsInfo = ({
           slotProps={{
             htmlInput: { maxLength: 255, inputMode: 'url' },
           }}
-        />
+        />}
       </CardContent>
       {/* Cancel only when a handler is supplied. The settings card opens
           this form from a read view and needs a way back; actors/Add renders
@@ -122,6 +125,7 @@ ActorFormsInfo.propTypes = {
   isFetching: PropTypes.bool.isRequired,
   enabled: PropTypes.node,
   handleOnCancel: PropTypes.func,
+  withWebsite: PropTypes.bool,
 };
 
 export default ActorFormsInfo;

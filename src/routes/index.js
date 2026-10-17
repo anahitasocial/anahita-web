@@ -63,6 +63,7 @@ import Settings from '../containers/settings';
 import AdminRedirects from '../containers/admin/Redirects';
 import StaticPage from '../containers/page';
 import NotFoundPage from '../containers/NotFound';
+import WebsiteConnect from '../containers/websites/Connect';
 
 const GroupsBrowse = Actors('groups');
 const GroupsRead = ActorsRead('groups');
@@ -98,6 +99,13 @@ const EventEditRedirect = () => {
 
   return <Navigate to={`/events/${id}/settings`} replace />;
 };
+
+// A website is a website's feed as a profile, read and looked after as a
+// group is. It is made by connecting a website, not by a form of its own.
+const WebsitesBrowse = Actors('websites');
+const WebsitesRead = ActorsRead('websites');
+const WebsitesSettings = ActorsSettings('websites');
+const WebsitesNotificationsEdit = ActorsNotificationsEdit('websites');
 
 const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
@@ -317,6 +325,36 @@ const AppRoutes = () => {
             <Route path="/events/:id/:tab/:subtab" element={<EventsRead />} />
             <Route path="/events/:id/:tab" element={<EventsRead />} />
             <Route path="/events/:id" element={<EventsRead />} />
+
+            {/* Websites — static paths before parameterized */}
+            <Route path="/websites" element={<WebsitesBrowse />} />
+            <Route
+              path="/websites/connect"
+              element={
+                <AuthenticatedRoute>
+                  <WebsiteConnect />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/websites/:id/settings"
+              element={
+                <AuthenticatedRoute>
+                  <WebsitesSettings />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route
+              path="/websites/:id/notifications"
+              element={
+                <AuthenticatedRoute>
+                  <WebsitesNotificationsEdit />
+                </AuthenticatedRoute>
+          }
+            />
+            <Route path="/websites/:id/:tab/:subtab" element={<WebsitesRead />} />
+            <Route path="/websites/:id/:tab" element={<WebsitesRead />} />
+            <Route path="/websites/:id" element={<WebsitesRead />} />
 
             <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
             <Route path="/groups/:id/:tab" element={<GroupsRead />} />

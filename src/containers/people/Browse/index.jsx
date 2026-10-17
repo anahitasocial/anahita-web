@@ -26,8 +26,8 @@ const Browse = ActorsBrowse('people');
 // clears the level it requires. Both are server settings arriving through
 // NodeInfo, so the viewer alone cannot answer it.
 //
-// The line under the title says whose list this is: the people who have a
-// profile on this site. On a site that is part of other networks, the
+// The line under the title says whose list this is: the local people on
+// this instance, by its name. On a site that is part of other networks, the
 // people it follows there are not in it, and somebody looking for one would
 // wonder; so it also says where they are found, which is by searching for
 // their handle.

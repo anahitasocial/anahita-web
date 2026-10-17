@@ -30,6 +30,7 @@ const ActorsSettingsInfo = (props) => {
     editActor,
     isFetching,
     viewer,
+    namespace,
     actor: defaultActor,
   } = props;
 
@@ -121,6 +122,7 @@ const ActorsSettingsInfo = (props) => {
       handleOnSubmit={handleOnSubmit}
       handleOnCancel={handleCancel}
       isFetching={isFetching}
+      withWebsite={namespace !== 'websites'}
       enabled={canAdmin &&
         <>
           <Typography
@@ -149,6 +151,7 @@ ActorsSettingsInfo.propTypes = {
   actor: ActorType.isRequired,
   viewer: PersonType.isRequired,
   isFetching: PropTypes.bool.isRequired,
+  namespace: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (namespace) => {

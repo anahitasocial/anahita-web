@@ -17,7 +17,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
-import ExpandIcon from '@mui/icons-material/ZoomOutMap';
+import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import WriteIcon from '@mui/icons-material/CreateOutlined';
 
@@ -266,8 +266,8 @@ const ShortComposer = ({
 
   // Hidden rather than disabled while posting: a tooltip on a disabled
   // button is never seen. The icon alone beside the closed box and on a
-  // phone, named Long content; "Expand" beside it in the open box on a
-  // desktop, where there is room for a short word.
+  // phone, named Long content; with those words beside it in the open box
+  // on a desktop.
   const expandButton = (withWords) => {
     if (!onExpand || busy) {
       return null;
@@ -290,7 +290,7 @@ const ShortComposer = ({
         sx={{ color: 'text.secondary', flexShrink: 0 }}
         onClick={expand}
       >
-        {i18n.t('composer:expand')}
+        {i18n.t('composer:longContent')}
       </Button>
     );
   };

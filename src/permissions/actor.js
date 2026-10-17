@@ -36,6 +36,13 @@ const canAddEvent = (viewer, { eventsFrom = '' } = {}) => {
   return meetsRoleLevel(viewer, eventsFrom);
 };
 
+// Whether the viewer may connect a website as a website: the installation's
+// WEBSITES_FROM, published in NodeInfo as websitesFrom, administrators unless it
+// says otherwise. syndication-service enforces the same.
+const canConnect = (viewer, { websitesFrom = '' } = {}) => {
+  return meetsRoleLevel(viewer, websitesFrom);
+};
+
 const canEdit = (actor) => {
   const { authorized } = actor;
   return Boolean(authorized && authorized.edit);
@@ -88,6 +95,7 @@ const canViewCommands = (actor, exclude = []) => {
 export default {
   canAdd,
   canAddEvent,
+  canConnect,
   canAdminister,
   canEdit,
   canDelete,

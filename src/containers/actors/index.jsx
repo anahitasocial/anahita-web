@@ -10,6 +10,7 @@ import Tab from '@mui/material/Tab';
 
 import GroupsIcon from '@mui/icons-material/GroupWork';
 import PeopleIcon from '@mui/icons-material/People';
+import WebsiteIcon from '@mui/icons-material/RssFeed';
 
 import Browse from './Browse';
 import BrowseHeader from '../../components/BrowseHeader';
@@ -40,6 +41,19 @@ const useStyles = makeStyles()({
 const BROWSE_ICONS = {
   groups: <GroupsIcon />,
   people: <PeopleIcon />,
+  websites: <WebsiteIcon />,
+};
+
+// What the header offers to add, for those who may: a group is made, a
+// Website is connected, from a website.
+const addActionOf = (namespace, owner, actorSettings) => {
+  if (namespace === 'groups' && permissions.actor.canAdd(owner, actorSettings)) {
+    return { to: '/groups/add', label: i18n.t('groups:add.cTitle') };
+  }
+  if (namespace === 'websites' && permissions.actor.canConnect(owner, actorSettings)) {
+    return { to: '/websites/connect', label: i18n.t('websites:connect.cTitle') };
+  }
+  return { to: '', label: '' };
 };
 
 const Actors = ({
@@ -73,16 +87,13 @@ const Actors = ({
 
   const ActorsBrowse = Browse(namespace);
 
-  // Only /groups routes here today — /people has its own browse container —
-  // so the add action is the group one. The icon and title come from the
-  // namespace either way, so nothing here assumes which one arrived.
+  // /groups and /websites route here — /people has its own browse container.
   //
-  // Gated on GROUPS_FROM rather than on being signed in, which is all the
-  // route itself requires. group-service enforces the same setting on the
-  // write, so offering a + without asking would lead people to a form the
-  // server refuses.
-  const canAddGroup = namespace === 'groups'
-    && permissions.actor.canAdd(owner, actorSettings);
+  // Gated on GROUPS_FROM and WEBSITES_FROM rather than on being signed in,
+  // which is all the routes themselves require. The services enforce the
+  // same settings on the write, so offering a + without asking would lead
+  // people to a form the server refuses.
+  const add = addActionOf(namespace, owner, actorSettings);
 
   return (
     <>
@@ -92,8 +103,10 @@ const Actors = ({
         <BrowseHeader
           icon={BROWSE_ICONS[namespace]}
           title={i18n.t(`${namespace}:cTitle`)}
-          actionTo={canAddGroup ? '/groups/add' : ''}
-          actionLabel={i18n.t('groups:add.cTitle')}
+          // A word most people have not met here: what it is.
+          subheader={namespace === 'websites' ? i18n.t('websites:description') : ''}
+          actionTo={add.to}
+          actionLabel={add.label}
         />
       </Box>
       <AppBar

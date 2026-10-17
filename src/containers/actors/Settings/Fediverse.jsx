@@ -8,6 +8,7 @@ import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import Divider from '@mui/material/Divider';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -37,31 +38,40 @@ import { rememberOnFediverse } from '../../media/Composer/useOnFediverse';
 // told to remove the person, and in the lab the one tried did not take them
 // back when they turned it on again. On an installation with no fediverse service
 // nothing is drawn.
-const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
+//
+// A website (`profile`) is the same, off until one of its administrators
+// turns it on, and said in a website's words.
+const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) => {
   const [settings, setSettings] = useState(null);
   const [isAbsent, setIsAbsent] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
   const [isLeaving, setIsLeaving] = useState(false);
 
   useEffect(() => {
-    api.federation.settings().then((result) => {
+    api.federation.settings(profile).then((result) => {
       setSettings(result.data);
     }).catch((error) => {
       setIsAbsent(federation.isAbsent(error));
     });
-  }, []);
+  }, [profile && profile.id]);
 
   if (isAbsent || !settings) {
     return null;
   }
 
+  // A person's words, or a website's.
+  const words = profile ? 'websites:settings.fediverseCard' : 'federation:settings';
+
   const save = (enabled) => {
     setIsSaving(true);
     setIsLeaving(false);
-    api.federation.setEnabled(enabled).then((result) => {
+    api.federation.setEnabled(enabled, profile).then((result) => {
       setSettings(result.data);
-      // The composer says whether a note will be shared, from this.
-      rememberOnFediverse(result.data && result.data.enabled);
+      // The composer says whether a note will be shared, from this. A
+      // website's notes are not written in it.
+      if (!profile) {
+        rememberOnFediverse(result.data && result.data.enabled);
+      }
       alertSuccess(i18n.t('federation:settings.saved'));
     }).catch(() => {
       alertError(i18n.t('federation:settings.notSaved'));
@@ -91,7 +101,8 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
         avatar={<Avatar><FediverseIcon /></Avatar>}
         title={i18n.t('federation:settings.title')}
       />
-      <CardContent sx={{ pt: 0 }}>
+      <Divider />
+      <CardContent>
         <FormControlLabel
           control={
             <Switch
@@ -100,20 +111,20 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
               onChange={handleChange}
             />
           }
-          label={i18n.t('federation:settings.enable')}
+          label={i18n.t(`${words}.enable`)}
         />
         <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
-          {i18n.t('federation:settings.help')}
+          {i18n.t(`${words}.help`)}
         </Typography>
         {settings.handle &&
           <Typography variant="body2" sx={{ mt: 2 }}>
-            {i18n.t('federation:settings.handle')}
+            {i18n.t(`${words}.handle`)}
             {': '}
             <strong>{`@${settings.handle}`}</strong>
           </Typography>}
         {!settings.available && settings.reason &&
           <Alert severity="info" sx={{ mt: 2 }}>
-            {i18n.t(`federation:settings.unavailable.${settings.reason}`)}
+            {i18n.t(`${words}.unavailable.${settings.reason}`)}
           </Alert>}
         {settings.available &&
           <Alert severity="warning" sx={{ mt: 2 }}>
@@ -121,7 +132,7 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
           </Alert>}
         {settings.enabled &&
           <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
-            {i18n.t('federation:settings.leavesWhenPrivate')}
+            {i18n.t(`${words}.leavesWhenPrivate`)}
           </Typography>}
       </CardContent>
       <Dialog
@@ -130,10 +141,10 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
         fullWidth
         maxWidth="sm"
       >
-        <DialogTitle>{i18n.t('federation:settings.leave.title')}</DialogTitle>
+        <DialogTitle>{i18n.t(`${words}.leave.title`)}</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            {i18n.t('federation:settings.leave.body')}
+            {i18n.t(`${words}.leave.body`)}
           </DialogContentText>
         </DialogContent>
         <DialogActions>
@@ -146,7 +157,7 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
             color="error"
             onClick={() => { save(false); }}
           >
-            {i18n.t('federation:settings.leave.confirm')}
+            {i18n.t(`${words}.leave.confirm`)}
           </Button>
         </DialogActions>
       </Dialog>
@@ -155,6 +166,8 @@ const ActorsSettingsFediverse = ({ alertSuccess, alertError }) => {
 };
 
 ActorsSettingsFediverse.propTypes = {
+  // A website, whose card this is; the viewer's own when left out.
+  profile: PropTypes.shape({ id: PropTypes.number }),
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };

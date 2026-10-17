@@ -1,0 +1,156 @@
+// A website, as a kind of profile: a site's feed to follow, here and from
+// the fediverse (docs/websites.md in anahita-services). Named Website on
+// 2026-10-16, a plain word for the thing, for trademarks; it was Pulse.
+export default {
+  cTitle: 'Websites',
+  mTitle: 'Websites',
+  // What a website is here, where somebody meets the list.
+  description: 'A website’s feed, to follow here and from the fediverse.',
+  connect: {
+    cTitle: 'Connect your website',
+    mTitle: 'Connect your website',
+    intro: 'Any site with an RSS, Atom or JSON feed can be followed here: a WordPress or other site, a static site, an app’s changelog, a podcast. Its posts reach people here and on the fediverse, and lead them back to your site.',
+    steps: {
+      site: 'Your website',
+      proof: 'Prove it is yours',
+      website: 'Its profile here',
+    },
+    site: {
+      label: 'Your website’s address',
+      placeholder: 'example.com',
+      help: 'The site, or its feed. Its feed must be on the same domain.',
+      find: 'Find its feed',
+    },
+    found: 'Found the feed “{{ title }}”.',
+    proof: {
+      intro: 'Only somebody who controls {{ domain }} can connect it. Put this token in one of these two places, whichever is easier, then check.',
+      token: 'Token',
+      dnsTitle: 'A DNS record',
+      dns: 'Add a TXT record with this name, holding the token:',
+      fileTitle: 'A file on your site',
+      file: 'Or publish the token, on a line of its own, at this address:',
+      check: 'Check',
+      notYet: 'The token is in neither place yet. A new DNS record can take a while to be seen: check again in a few minutes.',
+      proved: 'Proved by the {{ method }}.',
+      methods: {
+        dns: 'DNS record',
+        file: 'file on your site',
+      },
+      again: 'It is checked again every day. If it is gone for a week, posting stops until it is back.',
+    },
+    website: {
+      name: 'Name',
+      alias: 'Handle',
+      aliasHelp: 'Its address here and on the fediverse: {{ handle }}. Letters, digits, - and _.',
+      body: 'Description',
+      connect: 'Connect',
+      seen: 'Your ten newest posts appear at once; what you publish from now on follows.',
+    },
+    copy: 'Copy',
+    copied: 'Copied',
+    done: 'Your website is connected.',
+    errors: {
+      not_a_domain: 'That is not a website’s address.',
+      no_feed: 'No feed was found there. Give the feed’s own address if the site does not name it.',
+      unreadable: 'The site could not be read. Check the address and try again.',
+      feed_not_on_domain: 'The feed is on another domain, which you cannot prove is yours.',
+      private_feed: 'That feed is private: it needs a login, or its address carries a secret. A website’s posts are public, so only a public feed can be connected.',
+      feed_taken: 'That feed is already connected.',
+      handle_taken: 'That handle is taken.',
+      not_proved: 'Prove the domain is yours first.',
+      tooMany: 'Too many tries. Try again in an hour.',
+      generic: 'Something went wrong. Please try again.',
+    },
+  },
+  // In its About card.
+  about: {
+    verified: 'Verified',
+  },
+  settings: {
+    info: 'Info',
+    admins: 'Admins',
+    access: 'Blocked',
+    website: 'On your site',
+    fediverse: 'Fediverse',
+    // Its card under Fediverse: off until one of its administrators turns
+    // it on, as a person's is.
+    fediverseCard: {
+      enable: 'Let people on other servers find and follow it',
+      help: 'People on Mastodon and other servers of the fediverse can then find the website by its handle and follow it, and its notes are sent to them.',
+      handle: 'Its handle',
+      leavesWhenPrivate: 'If the website is switched off or deleted, it leaves the fediverse as well, as if you had turned this off.',
+      leave: {
+        title: 'Take the website off the fediverse?',
+        body: 'Every server that knows the website will be told to remove it, its notes and its followers there. This cannot be undone from here: if you turn this on again later, servers that removed it may not take it back, and nobody who followed it will be following it.',
+        confirm: 'Take it off',
+      },
+      unavailable: {
+        site_private: 'This site keeps what is on it to its members, so no website on it is on the fediverse.',
+        site_unreachable: 'This site has no address other servers can reach, so no website on it is on the fediverse.',
+        profile_not_public: 'While the website is switched off or deleted, it cannot be on the fediverse.',
+      },
+    },
+    blueskyHelp: 'Connect the website’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
+    websiteIntro: 'Paste this into your site to lead your readers to it here.',
+    snippetLabel: 'Follow our website on the fediverse',
+    disable: 'Disable',
+    disablePrompts: {
+      description: 'Disabling hides this website from everyone and stops your site’s new posts appearing here.',
+      descriptionDisabled: 'This website is disabled. It does not appear anywhere and posts nothing.',
+      reversible: 'This can be undone at any time, and nothing is deleted.',
+      action: 'Disable',
+      actionEnable: 'Enable',
+      disabled: 'This website has been disabled.',
+      enabled: 'This website has been enabled.',
+      errors: {
+        forbidden: 'You do not have permission to change this.',
+        lastSuperAdmin: 'This is the only super administrator and cannot be disabled.',
+        generic: 'Could not change this. Please try again.',
+      },
+    },
+    delete: 'Delete',
+    purge: 'Delete permanently',
+    deletePrompts: {
+      counts: {
+        intro: 'On this website here right now:',
+        posts: '{{ count }} post',
+        posts_other: '{{ count }} posts',
+        replies: '{{ count }} reply',
+        replies_other: '{{ count }} replies',
+        followers: '{{ count }} follower',
+        followers_other: '{{ count }} followers',
+        admins: '{{ count }} administrator',
+        admins_other: '{{ count }} administrators',
+        memberSince: 'Connected {{ date }}.',
+      },
+      description: 'Deleting removes this website’s profile here, the posts it made of your site’s feed, and the replies under them. Your site itself is not touched.',
+      reversible: 'This is not immediate. It is hidden straight away and permanently erased after {{ count }} days. Any administrator can restore it from this page before then.',
+      revoked: 'Its followers here and on the fediverse lose it at once.',
+      handle: 'The handle {{ alias }} stays reserved afterwards.',
+      scheduled: 'This website is scheduled for deletion and will be erased on {{ date }}.',
+      restore: 'Restore this website',
+      restored: 'This website has been restored.',
+      errors: {
+        restoreFailed: 'Could not restore this website. It may already have been permanently erased.',
+      },
+    },
+    sections: {
+      danger: 'Danger zone',
+    },
+    notifications: 'Notification settings',
+  },
+  notifications: {
+    cTitle: 'Notifications',
+    cDescription: 'Edit your notification settings',
+    mTitle: 'Notifications',
+    email: 'Receive email notifications',
+    optionsTitle: 'Get notifications for',
+    options: {
+      all: 'All the posts',
+      following: 'Only the posts that you are following',
+    },
+  },
+  confirm: {
+    delete: 'Do you want to delete {{ name }}?',
+  },
+};

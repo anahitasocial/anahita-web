@@ -49,12 +49,13 @@ const ActorDeleteForm = (props) => {
   // Already scheduled. The form would offer to delete something that is
   // already on its way out; what is wanted here is the way back.
   //
-  // GROUPS ONLY, and the namespace check is load-bearing rather than tidiness.
+  // GROUPS AND WEBSITES ONLY, and the namespace check is load-bearing rather
+  // than tidiness.
   // People restore themselves by signing in, so there is no person restore
   // endpoint and no person restore copy — without this guard an administrator
   // opening a deleted person's settings got a button labelled with the raw
   // i18n key that would have 404ed if pressed.
-  const canRestore = namespace === 'groups';
+  const canRestore = namespace === 'groups' || namespace === 'websites';
 
   if (actor.deletedAt && canRestore) {
     const purgeDate = new Date(actor.deletedAt);

@@ -15,6 +15,7 @@ import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
+import WebsiteIcon from '@mui/icons-material/RssFeed';
 // ExitToApp, not LockOpen.
 //
 // An open padlock pictures an account that is NOT secured, which is the
@@ -184,6 +185,17 @@ const LeftMenu = ({
               </ListItemIcon>
               <ListItemText primary={i18n.t('events:cTitle')} />
             </ListItemButton>}
+          {/* Websites' feeds, to follow here and from the fediverse. */}
+          <ListItemButton
+            component={Link}
+            to="/websites/"
+            selected={pathname === '/websites/'}
+          >
+            <ListItemIcon>
+              <WebsiteIcon />
+            </ListItemIcon>
+            <ListItemText primary={i18n.t('websites:cTitle')} />
+          </ListItemButton>
           <ListItemButton
             component={Link}
             to="/hashtags/"
