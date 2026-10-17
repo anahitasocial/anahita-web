@@ -57,7 +57,8 @@ UI:
   always the last action, after Download.
 - No Delete inside an edit form when the list or page has one already.
 - A person's settings have a Fediverse tab for network settings.
-- Every string is in `src/languages/en-GB` and `fr-FR`.
+- Every string is in both bases, `src/languages/en-CA` and `fr-FR`; in a
+  layer (`en-US`, `fr-CA`) only when it differs there.
 
 ## Checking a change
 

@@ -1360,13 +1360,19 @@ The rules are the server's, in the services' `docs/permissions.md`, Replies.
 ## Translations
 
 Text is translated with i18next (`src/languages/`). Each language is a
-directory named for its locale, such as `en-GB` or `fr-FR`. Each file in it is
+directory named for its locale, such as `en-CA` or `fr-FR`. Each file in it is
 a namespace, such as `people.js` or `settings.js`, used as
 `i18n.t('people:settings.info')`.
 
-The app is currently set to English (`lng: 'en'` in `src/languages/index.js`).
-The French translations are maintained, but are not used unless that setting
-changes. See [Languages](customising.md#languages).
+`en-CA` and `fr-FR` are bases, with every string; `en-US` and `fr-CA` are
+layers, with only the strings that differ, and `fallbackLng` reads the rest
+from the base. The language is chosen from the browser's when the app starts
+(`src/languages/choose.js`), and `REACT_APP_LANGUAGE` is the default when the
+browser asks for none of them. When it changes, `src/languages/index.js` sets
+moment's locale and the page's `lang`. Code that formats a date or a number
+with `Intl` or `toLocale…` passes `i18n.language`. A post processor makes the
+space before `?`, `!` and `;` in French (`src/languages/frenchSpacing.js`).
+See [Languages](customising.md#languages).
 
 ## Styling
 

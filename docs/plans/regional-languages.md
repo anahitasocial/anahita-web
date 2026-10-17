@@ -149,13 +149,19 @@ development.
 - What headless Chrome cannot tell: how a real Quebec or French reader takes
   the words.
 
+## Settled while building (user, 2026-10-17)
+
+1. **Hashtag in `fr-FR` is *hashtag*,** as French Mastodon says; `fr-CA`
+   says *mot-clic*.
+2. **The `fr-CA` strings go out as drafted,** and are corrected when
+   operators in Quebec report something.
+
 ## Open questions
 
 1. **The one word for email in `fr-FR`:** *e-mail*, as proposed, or
    *courriel*, which France's official terminology prefers and Quebec uses?
-2. **The one word for hashtag in `fr-FR`:** *hashtag*, as proposed and as
-   French Mastodon says, or *mot-dièse*, France's official word?
-3. **Who reads the `fr-CA` strings** before they are relied on?
+   Until it is settled, `fr-FR` keeps its three words and `fr-CA` has no
+   email strings of its own.
 
 ## Estimate
 
@@ -173,4 +179,4 @@ development.
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-17 |
-| Implementation | not begun |
+| Implementation | begun 2026-10-17. Built: the four languages and the matching (`src/languages/choose.js`), `<html lang>` and moment following the language, `en-CA` and `en-US`, *hashtag* in `fr-FR` and *mot-clic* in `fr-CA`, *publication* for *post* in three notifications, the spacing rule (`src/languages/frenchSpacing.js`), dates and numbers in the language shown, `REACT_APP_LANGUAGE`, the docs. Checked in headless Chrome signed out in six browser languages, at desktop and phone. Left: one word for email |
