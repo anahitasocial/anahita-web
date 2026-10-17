@@ -12,6 +12,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import Progress from '../../../components/Progress';
+import { HowItWorksButton, HowItWorksPanel } from '../../../components/HowItWorks';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -39,6 +40,8 @@ const SearchWeightsDialog = ({
   const [settings, setSettings] = useState(null);
   const [steps, setSteps] = useState({});
   const [isSaving, setIsSaving] = useState(false);
+  // How it works, opened from the (i) by the title.
+  const [isExplained, setIsExplained] = useState(false);
 
   useEffect(() => {
     api.searchPreferences.read().then((result) => {
@@ -83,10 +86,27 @@ const SearchWeightsDialog = ({
       }}
       aria-labelledby="search-weights-title"
     >
-      <DialogTitle id="search-weights-title">
+      <DialogTitle
+        id="search-weights-title"
+        sx={{
+          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1,
+        }}
+      >
         {i18n.t('search:weights.title')}
+        <HowItWorksButton
+          open={isExplained}
+          controls="search-weights-how"
+          onToggle={() => {
+            setIsExplained(!isExplained);
+          }}
+        />
       </DialogTitle>
       <DialogContent dividers>
+        <HowItWorksPanel
+          open={isExplained}
+          id="search-weights-how"
+          points={i18n.t('search:weights.howItWorks', { returnObjects: true })}
+        />
         {!settings && <Progress />}
         {settings &&
           <Stack spacing={2}>

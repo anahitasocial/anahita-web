@@ -54,6 +54,13 @@ export default {
     popular: 'Many people followed them lately',
   },
   weights: {
+    // What the (i) beside the title opens: how suggestions are chosen.
+    howItWorks: [
+      'Suggestions are worked out here, from who follows, likes and cites whom on this site. There is no model, and nothing is learned about you anywhere else.',
+      'Each reason adds points to a profile, up to a limit. People you follow who follow or cite them count most. Then somebody who follows you, who invited you or whom you invited, whose posts you liked, or who posts with hashtags you use or follow. Being cited, featured by the site or followed by many lately count a little.',
+      'Profiles active lately come first. A person quiet for longer than your choice under "People who were last here" is not suggested at all.',
+      'The sliders change how many points each reason is worth for you, and Off leaves it out. They change only what you are suggested.',
+    ],
     action: 'Adjust recommendations',
     title: 'What counts in your recommendations',
     help: 'Slide each reason up to make it count for more when choosing for you, or down to nothing to leave it out. It changes only what you are suggested.',

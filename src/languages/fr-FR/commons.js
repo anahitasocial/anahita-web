@@ -3,6 +3,7 @@ export default {
   following: 'Suivis',
   administering: 'Administrés',
   readMore: 'Lire la suite',
+  howItWorks: 'Comment ça marche',
   close: 'Fermer',
   dismiss: 'Masquer',
   enabled: 'Activé',

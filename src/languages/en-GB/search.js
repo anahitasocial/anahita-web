@@ -35,6 +35,14 @@ export default {
     recentFirstHelp: 'Among results that match equally well, the newest first',
   },
   weights: {
+    // What the (i) beside the title opens: how Most relevant orders.
+    howItWorks: [
+      'Results that match your words best come first: a handle or a name exactly, then names that begin with them, then hashtags, then words in posts. However popular a post is, a better match comes before it.',
+      'Among results that match equally well, the ones people found useful come first: each like, save, reply, follower and citation counts. Many of them help, but one very popular post does not bury everything else.',
+      'Nothing is pushed down for being old. Recent interest counts a little more, fading over about a year by default, so a guide saved this month stands as high as this week\'s news. Citations do not fade.',
+      'Who and what you follow, and what is posted on them, get a boost.',
+      'Your sliders multiply the site\'s own weights for you: Off ignores a sign, Much more doubles it. They change only what you see.',
+    ],
     open: 'Adjust',
     openHelp: 'How much each sign that something was found useful counts for you',
     title: 'Adjust “Most relevant”',

@@ -3,6 +3,7 @@ export default {
   following: 'Following',
   administering: 'Administering',
   readMore: 'Read more',
+  howItWorks: 'How it works',
   close: 'Close',
   dismiss: 'Dismiss',
   enabled: 'Enabled',
