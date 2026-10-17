@@ -82,7 +82,7 @@ Each result is given a score from four parts, then a fixed tiebreak by id so tha
 
 | Where the words are | Points |
 | --- | --- |
-| The handle exactly (`bmann.ca`, `rastin`) | 100 |
+| The handle exactly (`rastin.example`, `ana`) | 100 |
 | The name exactly | 90 |
 | The name begins with them | 70 |
 | A word in the name begins with them ("Jericho **Bea**ch") | 60 |
@@ -110,7 +110,7 @@ Interest kept by when it happened needs the time of each like, save and reply, w
 - **The operator,** with every number above in a weights file, as the recommendation service has. The recipes (item 40) give each kind of site its own: `newsroom` short, `library`, `research`, `school` and `university` long or never.
 - **Each person,** with a switch or two rather than weights, kept with their settings: "put people and groups I follow first", and perhaps "prefer what is recent". Which switches is to be settled with the user.
 
-**To check it:** a handful of searches the user really makes, with the result they expect first ("coffee", "bmann"), made into tests, so that the weights are held to what people expect and not to guesses.
+**To check it:** a handful of searches the user really makes, with the result they expect first ("coffee", "rastin"), made into tests, so that the weights are held to what people expect and not to guesses.
 
 Services only, apart from the switches. **About 1½–2 sessions,** with time counted by interest; half a session more for the switches. "Most recent" stays as it is.
 
@@ -232,12 +232,12 @@ Built in graph-grpc-service, as planned, with these differences:
 
 - **The order is in three steps, not one score.** Where the words are first; then, among results that match alike, their standing (how useful people have found them, and whether the searcher follows them); then the id. So a profile called *Coffee* always comes before a post that mentions coffee, however liked, which a single sum could not promise.
 - **A profile is weighed by its followers counted by when they followed,** the same way posts are weighed by their likes, rather than by when the profile was last active: it is the same rule of "still found useful" for both.
-- **Inside the handle** (`decafcoffeeclub`) counts as inside the name, and a handle typed with its `@` is matched without it, so `@bmann.ca` finds bmann.ca (it was found before only by posts that mention him).
+- **Inside the handle** (`decafcoffeeclub`) counts as inside the name, and a handle typed with its `@` is matched without it, so `@rastin.example` finds rastin.example (such a handle was found before only by posts that mention it).
 - **Interest fades by half every 365 days as it comes.** `half_life_days` in the file; 0 for never.
 - **The weights are in `graph-grpc-defaults/search_ranking.json`,** read again when it changes; anahita-services `docs/search.md` says how to tune it.
 - **Not built: each person's switches.** Which ones is still to be settled with the user.
 
-Checked against MySQL with searches as people make them (`search_ranking_integration_test.go`), and on the development database: "coffee" opens on the group *Coffee Love*, then photos whose titles begin with the word; "bmann" on Boris, then a handle with it inside (`webmanna`), then posts that mention him.
+Checked against MySQL with searches as people make them (`search_ranking_integration_test.go`), and on the development database: "coffee" opens on the group *Coffee Love*, then photos whose titles begin with the word; a person's handle on that person, then a handle with it inside, then posts that mention it.
 - **Too slow at first, for common words** (found by the user: "joomla" answered 500). A word in thousands of posts took 11 to 36 seconds and the query was cut off at three. Not the character sets, which were checked and are the same throughout (`utf8mb4_0900_ai_ci`), but one lookup: quotes were counted by when they were made, and with nearly no post quoting another, the database judged the index on `quote_id` not worth using and read every node for every result. The index is now named in the query. With it, and the page's ids ranked before its rows are read whole, the commonest words answer in a third of a second.
 
 ### Each person's choices: 2026-10-14

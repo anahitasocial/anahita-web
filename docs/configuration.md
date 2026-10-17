@@ -9,6 +9,7 @@ Every environment variable the app reads, and why most settings are not here.
 - [How configuration works](#how-configuration-works)
 - [Variables](#variables)
 - [Settings that live on the server](#settings-that-live-on-the-server)
+- [Where the code is](#where-the-code-is)
 
 ## How configuration works
 
@@ -115,3 +116,16 @@ Some older variables are no longer read:
 | `REACT_APP_GOOGLE_MAPS_API_KEY` | Nothing. Maps use Leaflet with OpenStreetMap |
 | `REACT_APP_THEME` | `REACT_APP_ASSETS` |
 | `SUPPORT_EMAIL` and the other `SUPPORT_*` | The server's `SUPPORT_*`. Without the `REACT_APP_` prefix these never reached the app |
+
+## Where the code is
+
+| Variable | Read in |
+| --- | --- |
+| `REACT_APP_API_BASE_URL` | `src/api/index.js`, `src/api/publicClient.js`, and the helpers in `src/utils/` that build file addresses |
+| `REACT_APP_NAME`, `REACT_APP_DESCRIPTION` | `src/components/HeaderMeta.jsx`, `src/components/Logo.jsx`, and page titles throughout `src/containers/` |
+| `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | `src/containers/notifications/Icon.jsx` |
+| `REACT_APP_ASSETS` | `src/assets/index.js` |
+| `REACT_APP_ANALYTICS`, `REACT_APP_ANALYTICS_URL`, `REACT_APP_ANALYTICS_SITE_ID` | `src/utils/analytics.js` |
+| `REACT_APP_MAP_TILE_URL`, `REACT_APP_MAP_TILE_ATTRIBUTION` | `src/components/Map.jsx` |
+| `REACT_APP_LOCATION_FIXED_*` | `src/containers/locations/Add/Add.jsx`, `src/containers/locations/Read/index.jsx` |
+| The server's NodeInfo document | `src/api/nodeInfo.js` |

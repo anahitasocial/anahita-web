@@ -7,6 +7,9 @@ networking platform and framework. It is a single-page app built with React 19,
 Material UI 9 and Redux. It is a client of **anahita-services**, the Go
 microservices back end, and talks to it only through its HTTP API.
 
+Changing the code, as a person or with an agent: begin with
+[AGENTS.md](AGENTS.md), the project's working rules.
+
 People use it to keep a profile, follow people, groups and events, post
 notes, articles, topics, photos and videos, reply, like, repost and quote,
 build their own feeds, and run their account. They follow and answer

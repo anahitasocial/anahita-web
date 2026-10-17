@@ -1,0 +1,122 @@
+# Working on anahita-web
+
+Anahita's web app: React with Material UI, talking to the Go services in
+anahita-services. This file is for anybody changing the code, a person or
+an agent. It holds only what the code cannot tell you; everything else is in
+the docs.
+
+- Website: <https://www.anahita.io>
+- Founder & Core Architect: Rastin Mehr
+- Maintained and developed by rmd Studio, <https://www.rmdstudio.com>
+- Commercial inquiries: <https://www.rmdstudio.com/contact>
+
+## Where to begin
+
+| To learn | Read |
+| --- | --- |
+| What there is, page by page | [`docs/README.md`](docs/README.md) |
+| How the app is built | [`docs/architecture.md`](docs/architecture.md) |
+| Running it against the services | [`docs/getting-started.md`](docs/getting-started.md) |
+| What is planned, and in what order | [`docs/plans/roadmap.md`](docs/plans/roadmap.md) |
+| The services, the API and its reference | anahita-services: `docs/README.md` and `docs/api/` |
+
+Roadmap rows are referred to by number. Read the row and its plan before
+starting one, and keep the plan's status up to date as work lands.
+
+## Material UI
+
+The app is on `@mui/material` v9 throughout; nothing imports the old
+`@material-ui/*` packages. This repository configures the MUI MCP server
+(`mui-mcp`, in `.mcp.json`). For any question or change involving Material
+UI:
+
+1. Call `useMuiDocs` for the documentation of the relevant MUI package.
+2. Call `fetchDocs` for further pages, using only addresses the previous
+   calls returned.
+3. Repeat until everything relevant is gathered, then answer from what was
+   fetched, not from memory.
+
+## The interface
+
+- Buttons in forms and dialogs are full width and side by side in one row,
+  never stacked: Cancel on the left, the main action on the right
+  (`<Stack direction="row" spacing={1}>`, as in `ReplyForm.jsx`).
+- Spacing (margins, paddings, gaps) in whole 8-pixel steps.
+- Menu items carry an icon before their label (`MenuItemLabel.jsx`).
+- Infinite scroll, not "Show more", inside dialogs too
+  (`react-infinite-scroll-component` with `scrollableTarget`).
+- Nothing jumps: a form or dialog keeps its height as somebody types.
+  Reserve the error line (`helperText={error || ' '}`), or put what appears
+  where it moves nothing.
+- A profile's tab row is for content. Lists about a profile open in a
+  dialog from a count; what is private to the viewer goes in the left menu
+  or settings. Prefer dialogs to new tabs.
+- Facts about a profile go in its About card, not in a wide banner.
+- A card's main action goes in its action area at the bottom. Keep a list
+  card's action row short: Download only on a post's own page. Share is
+  always the last action, after Download.
+- No Delete inside an edit form when the list or page has one already.
+- A person's settings have a Fediverse tab for network settings.
+- Every string is in `src/languages/en-GB` and `fr-FR`.
+
+## Checking a change
+
+Look at every interface change yourself before handing it over: headless
+Chrome (puppeteer-core) against the development stack, at desktop
+(1280×900) and phone (390×844, touch) sizes. Look at the screenshots, and
+check the API's answer and the rows in MySQL. Say what headless Chrome
+cannot tell: Safari, real keyboards, how it feels. Delete what you posted to
+try it.
+
+People and places made up for a test, or to try a change, are named after
+Star Trek characters and places.
+
+## Product principles
+
+The same in anahita-services' AGENTS.md.
+
+- Fediverse first: ActivityPub and AT Protocol natively; nothing that does
+  not federate sensibly. Federation is opt-in for each profile: sharing is
+  consented to, never assumed.
+- The default feed is chronological. There is no site-wide "For You"; a
+  ranked feed is one a person makes, and is always called a **custom feed**.
+- Nobody is tracked: no profile analytics, share counts or viewer lists.
+- Old and useful counts as much as new: nothing is pushed down only for
+  being old, and how fast the past fades is the operator's choice.
+- The breadth (groups, events, articles, custom feeds) is the product, for
+  schools, newsrooms, libraries, research groups and non-profits leaving
+  Meta and X.
+
+## Wording, in anything people read
+
+- A group has **followers**, never members ("abonnés" in French). "Member"
+  is somebody with an account on the site.
+- **Profile**, not "actor" or "account". "Actor" is the code's word;
+  "account" is for signing in.
+- **+ Follow** (a plus icon, then Follow), with no name after it: no
+  "Follow back", no "Follow #tag".
+- Action labels name no entity: "Delete", "Edit", "View", not "Delete
+  reply", unless two actions in one menu would otherwise read the same.
+
+## Docs
+
+- One set of docs, for people and agents alike: descriptive, plain and
+  current. The same word for the same thing every time; exact paths,
+  settings, endpoints and defaults, in tables where there are several.
+- When a feature, a setting or a page changes, grep the docs of both
+  repositories for its name and change every page that says it. Remove "not
+  built" the day it is built.
+- A renamed heading breaks the links to it: `yarn test` names them
+  (`src/__tests__/docsLinks.test.js`).
+- A phase is not finished until its docs match the code. A finished plan
+  moves to `docs/plans/done/` in the same commit, with every link to it
+  fixed.
+
+## Commits and branches
+
+- One branch per milestone or feature, from an up-to-date `main`
+  (`git fetch` first); one commit per item, in each repository.
+- A commit message is a short subject line, a blank line, then one line per
+  change, each beginning with its kind: `- added:`, `- changed:`,
+  `- removed:`, `- fixed:` or `- note:` (what stays the same, what it goes
+  with). Only the kinds that apply.
