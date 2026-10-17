@@ -98,8 +98,10 @@ in their order, by `src/languages/choose.js`:
 | Any Portuguese: `pt-BR`, `pt-PT`, `pt` | `pt-BR` |
 | None of these | The site's default, `REACT_APP_LANGUAGE`; `en-CA` when unset |
 
-So somebody whose browser prefers German, then French, sees French. It is
-chosen again on each visit. Dates, times and numbers are written in the
+So somebody whose browser prefers Japanese, then French, sees French. It is
+chosen again on each visit. There is no choice of language in a person's
+settings: the operating system is the source of truth, and the browser
+passes on its languages. Dates, times and numbers are written in the
 language shown, and the page's `lang` follows it.
 
 **The space before `?`, `!` and `;`** is written once in the French strings,

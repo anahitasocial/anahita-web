@@ -32,8 +32,10 @@ Settled with the user on 2026-10-17:
 - **The browser's language chooses** among them. The operator sets the
   site's default with a build variable, `REACT_APP_LANGUAGE`, as the site's
   name and theme are set. Nothing is read from the server for it.
-- **A person cannot choose a language in their settings yet.** The row does
-  not ask for it; it is a later item.
+- **The operating system is the source of truth for the language** (user,
+  2026-10-17): there is no choice of language in a person's settings, now or
+  later. The browser passes on the system's languages, in order, and the app
+  reads them.
 - **Dates and numbers follow the language shown.**
 
 ## Design
