@@ -9,8 +9,12 @@ export default {
     country: 'Country',
   },
   add: {
-    cTitle: 'Add Locations',
-    mTitle: 'Add Locations',
+    search: 'Search for a location',
+    noneFound: 'No location called “{{ name }}” yet.',
+    noneNearby: 'No locations nearby yet. Search for one, or add it.',
+    create: 'Add “{{ name }}”',
+    cTitle: 'Add locations',
+    mTitle: 'Add locations',
     // At the most places a post may be tied to (Medium.MAX_LOCATIONS).
     full: 'A post can have up to {{ count }} places.',
   },

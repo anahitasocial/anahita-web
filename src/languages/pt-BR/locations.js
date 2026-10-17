@@ -9,6 +9,10 @@ export default {
     country: 'País',
   },
   add: {
+    search: 'Buscar um local',
+    noneFound: 'Ainda não há nenhum local chamado “{{ name }}”.',
+    noneNearby: 'Ainda não há locais por perto. Busque um ou adicione-o.',
+    create: 'Adicionar “{{ name }}”',
     cTitle: 'Adicionar locais',
     mTitle: 'Adicionar locais',
     // At the most places a post may be tied to (Medium.MAX_LOCATIONS).

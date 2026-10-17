@@ -27,4 +27,5 @@ export default {
   search: 'Rechercher',
   repost: 'Repartager',
   more: 'Plus',
+  close: 'Fermer',
 };

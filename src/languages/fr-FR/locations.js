@@ -9,6 +9,10 @@ export default {
     country: 'Pays',
   },
   add: {
+    search: 'Rechercher un lieu',
+    noneFound: 'Aucun lieu nommé « {{ name }} » pour l’instant.',
+    noneNearby: 'Aucun lieu à proximité pour l’instant. Recherchez-en un, ou ajoutez-le.',
+    create: 'Ajouter « {{ name }} »',
     cTitle: 'Ajouter des lieux',
     mTitle: 'Ajouter des lieux',
     full: 'Une publication peut avoir jusqu’à {{ count }} lieux.',
