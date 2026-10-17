@@ -97,6 +97,25 @@ const useStyles = makeStyles()((theme) => {
         fontFamily: 'monospace',
         whiteSpace: 'pre',
       },
+      // A quotation set apart from the words around it: a bar on the side
+      // the text starts from, a light ground, and no browser indent, which
+      // left a quote looking like a stray paragraph pushed in.
+      '& blockquote': {
+        margin: theme.spacing(2, 0),
+        padding: theme.spacing(1, 2),
+        borderInlineStart: `4px solid ${theme.palette.primary.main}`,
+        // The corners away from the bar, on whichever side that is.
+        borderStartEndRadius: theme.spacing(1),
+        borderEndEndRadius: theme.spacing(1),
+        backgroundColor: theme.palette.action.hover,
+        color: theme.palette.text.secondary,
+      },
+      '& blockquote > :first-child': {
+        marginTop: 0,
+      },
+      '& blockquote > :last-child': {
+        marginBottom: 0,
+      },
       // Each paragraph runs in the direction of what is written in it, so
       // a Persian paragraph and an English one in the same post both read
       // properly.
