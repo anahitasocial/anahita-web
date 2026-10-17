@@ -639,11 +639,27 @@ Citation.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
 };
 
-// What an article or a topic cites, at its end, in the order it comes:
-// every address on a line of its own, a post here or a page elsewhere (the
-// user, 2026-10-16). The posts here are its citations in the graph too.
-// A list of rows, each the whole of its width to tap.
-const Citations = ({ text = '', cards = [] }) => {
+// A post here as a row: what it is called or opens with, and who wrote it.
+const PostRow = ({ post }) => {
+  const author = getAuthor(post);
+  return (
+    <CitationRow
+      url={getURL(post)}
+      to={getURL(post)}
+      avatar={author && <ActorAvatar actor={author} />}
+      primary={post.name || excerptOf(post.body, 160)}
+      secondary={author && whoIs(author)}
+    />
+  );
+};
+
+PostRow.propTypes = {
+  post: PropTypes.object.isRequired,
+};
+
+// The addresses a text cites, each once, in the order they come: every
+// address on a line of its own.
+const citedIn = (text = '') => {
   const addresses = [];
   String(text).split('\n').forEach((line) => {
     const address = embeds.alone(line);
@@ -651,6 +667,15 @@ const Citations = ({ text = '', cards = [] }) => {
       addresses.push(address);
     }
   });
+  return addresses;
+};
+
+// What an article or a topic cites, at its end, in the order it comes:
+// every address on a line of its own, a post here or a page elsewhere (the
+// user, 2026-10-16). The posts here are its citations in the graph too.
+// A list of rows, each the whole of its width to tap.
+const Citations = ({ text = '', cards = [] }) => {
+  const addresses = citedIn(text);
 
   if (addresses.length === 0) {
     return null;
@@ -689,5 +714,11 @@ Citations.propTypes = {
   cards: PropTypes.arrayOf(PropTypes.object),
 };
 
-export { Citations, usePost };
+export {
+  Citations,
+  Citation,
+  PostRow,
+  citedIn,
+  usePost,
+};
 export default PostEmbed;

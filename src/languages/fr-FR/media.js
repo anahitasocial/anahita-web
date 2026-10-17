@@ -7,6 +7,11 @@ export default {
     citations_one: '{{count}} citation',
     citations_other: '{{count}} citations',
   },
+  citations: {
+    citedBy: 'Cité par',
+    cites: 'Cite',
+    noneCitedBy: 'Rien ici ne cite encore ceci.',
+  },
   embed: {
     in: 'dans',
     citations: 'Citations',

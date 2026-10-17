@@ -25,6 +25,7 @@ import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
 import { Citations } from '../../../components/PostEmbed';
+import CitationsTab from './CitationsTab';
 import SignInPrompt from '../../../components/SignInPrompt';
 import i18n from '../../../languages';
 import utils from '../../../utils';
@@ -43,6 +44,7 @@ const {
 const TABS = {
   REPLIES: 'replies',
   LOCATIONS: 'locations',
+  CITATIONS: 'citations',
 };
 
 const MediumReadDefault = ({
@@ -207,9 +209,11 @@ const MediumReadDefault = ({
       >
         <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
         <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
+        <Tab label={i18n.t('media:embed.citations')} value={TABS.CITATIONS} />
       </Tabs>
       {tab === TABS.REPLIES && replies}
       {tab === TABS.LOCATIONS && locations}
+      {tab === TABS.CITATIONS && <CitationsTab medium={medium} />}
     </PageColumn>
   );
 };
