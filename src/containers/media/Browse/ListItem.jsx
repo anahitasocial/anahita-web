@@ -12,6 +12,8 @@ import MediumType from '../../../proptypes/Medium';
 
 import MediumMenu from '../MediaMenu';
 import { ShareAction, ofNode } from '../../controls/Share';
+import ControlRepost from '../../controls/Repost';
+import FeedReplyButton from '../../feed/components/ReplyButton';
 import utils from '../../../utils';
 import perms from '../../../permissions';
 
@@ -49,8 +51,11 @@ const MediaListItem = ({
       stats={
         <LikesStats node={medium} />
       }
+      // The same as a post in a feed: Download only on the post's own page.
       actions={isAuthenticated && [
         <Like node={medium} key={`medium-like-${medium.id}`} />,
+        <FeedReplyButton post={medium} key={`medium-reply-${medium.id}`} />,
+        <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />,
         <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />,
       ]}
     />
