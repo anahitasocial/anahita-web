@@ -153,9 +153,13 @@ const MediumCard = ({
               width: '100%',
               display: 'inline',
             }}
-            // One photo opens its post, as its title does. Only a post
-            // with several is stepped through (PhotoSlides, above).
+            // In a list that steps through its photos (a profile's Photos
+            // tab), one photo opens there too, as a post with several does;
+            // anywhere else it opens its post, as its title does.
             onClick={() => {
+              if (handleView) {
+                return handleView(medium.id);
+              }
               return navigate(url);
             }}
           >
