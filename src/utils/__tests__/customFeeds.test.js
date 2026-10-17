@@ -6,7 +6,7 @@ import i18n from '../../languages';
 import feeds from '../customFeeds';
 
 const t = (key, options) => {
-  return i18n.t(key, { lng: 'en-GB', ...options });
+  return i18n.t(key, { lng: 'en-CA', ...options });
 };
 
 describe('a custom feed\'s definition', () => {

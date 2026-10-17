@@ -84,7 +84,7 @@ export default {
     },
     notifications: 'Paramètres de notification',
     followRequests: "Demandes d'abonnement",
-    // These three were missing while en-GB had them, so the password, email
+    // These three were missing while English had them, so the password, email
     // and username cards rendered their raw key names in French.
     password: 'Mot de passe',
     email: 'E-mail',

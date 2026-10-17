@@ -33,7 +33,7 @@ export default {
     article: 'Article',
     topic: 'Sujet',
     photo: 'Photo',
-    hashtag: 'Mot-clic',
+    hashtag: 'Hashtag',
     location: 'Lieu',
     other: 'Élément',
   },

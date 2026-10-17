@@ -160,7 +160,7 @@ export default {
       delete: 'The OAuth client could not be deleted.',
       rotate: 'The secret could not be rotated.',
       forbidden: 'You are not allowed to do that.',
-      invalidScope: 'This site does not recognise one of the scopes.',
+      invalidScope: 'This site does not recognize one of the scopes.',
     },
   },
   oauthSigningKeys: {

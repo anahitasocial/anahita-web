@@ -48,7 +48,7 @@ export default {
   },
   nudge: {
     title: 'Complete your profile',
-    description: 'Add a photo and a short bio so people recognise you.',
+    description: 'Add a photo and a short bio so people recognize you.',
     action: 'Complete profile',
     dismiss: 'Dismiss',
   },
