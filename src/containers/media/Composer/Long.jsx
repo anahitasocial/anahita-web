@@ -28,6 +28,7 @@ import DraftsMenu from './DraftsMenu';
 import LongEditor from './LazyLongEditor';
 import SuggestedHashtags from './SuggestedHashtags';
 import useDraft from './useDraft';
+import useOnFediverse from './useOnFediverse';
 import usePostChoices from './usePostChoices';
 
 import embeds from '../../../utils/embeds';
@@ -80,6 +81,10 @@ const LongComposer = ({
   const viewer = useSelector((state) => { return state.session.viewer; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
+  // An article open to everybody on the writer's own profile goes to their
+  // followers on other servers, as a note does; said before posting when it
+  // will not. A topic stays here, and is said nothing of.
+  const onFediverse = useOnFediverse(viewer);
 
   const [tab, setTab] = useState(kinds[0]);
   useEffect(() => {
@@ -453,6 +458,10 @@ const LongComposer = ({
             }}
           />
         </Box>
+        {kind === 'article' && onFediverse && actor.id === viewer.id && choices.access !== 'public' &&
+          <Typography variant="caption" color="textSecondary" component="p" sx={{ px: 2, pb: 1 }}>
+            {i18n.t('federation:composer.articleStaysHere')}
+          </Typography>}
         <Divider />
         {/* The post's choices in one row at the bottom; it scrolls
             sideways on a phone rather than wrapping. Pictures and videos

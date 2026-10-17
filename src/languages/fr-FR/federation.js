@@ -24,6 +24,7 @@ export default {
     editStaysHereBluesky: 'Bluesky ne fait qu’ajouter ou supprimer des publications : cette modification n’atteindra pas la copie là-bas.',
     replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky. Pour répondre là-bas aussi, connectez votre compte Bluesky dans vos paramètres, sous Fédivers.',
     staysHere: 'Cette note ne sera pas partagée avec le fédivers : seule une note ouverte à tout le monde l’est.',
+    articleStaysHere: 'Cet article ne sera pas partagé avec le fédivers : seul un article ouvert à tout le monde l’est.',
   },
   leaving: {
     byClosing: 'Ce profil est sur le fédivers, où seul un profil visible par tout le monde peut être. Enregistrer ce choix le retire du fédivers : les autres serveurs seront invités à le retirer, ainsi que ses notes et ses abonnés là-bas, et pourraient ne pas le reprendre s’il est rouvert.',

@@ -24,6 +24,7 @@ export default {
     editStaysHereBluesky: 'Bluesky only adds and deletes posts, so this change will not reach the copy there.',
     replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Fediverse.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
+    articleStaysHere: 'This article will not be shared with the fediverse: only an article open to everybody is.',
   },
   leaving: {
     byClosing: 'This profile is on the fediverse, where only a profile open to everybody can be. Saving this takes it off the fediverse: other servers are told to remove it, its notes and its followers there, and may not take it back if it is opened again.',
