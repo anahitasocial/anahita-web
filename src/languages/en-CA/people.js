@@ -18,7 +18,7 @@ export default {
   },
   settings: {
     authLogs: 'Authentications',
-    webauthn: 'Pass keys',
+    webauthn: 'Passkeys',
     totp: '2FA',
     info: 'Info',
     features: 'Features',
@@ -155,7 +155,7 @@ export default {
     prompts: {
       error: 'Something went wrong!',
       errorUsernameTaken: 'Username is already taken!',
-      errorEmailTaken: 'Email is already available in our system!',
+      errorEmailTaken: 'That email address is already in use.',
     },
   },
 

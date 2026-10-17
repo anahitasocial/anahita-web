@@ -12,7 +12,7 @@ export default {
     absent: 'Downloading your data is not available on this site.',
     failed: 'That could not be done.',
   },
-  cTitle: 'Site Settings',
+  cTitle: 'Site settings',
   cDescription: 'Configuration only super administrators can change.',
   mTitle: 'Settings',
   restricted: {

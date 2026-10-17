@@ -1,6 +1,6 @@
 export default {
-  cTitle: 'Signup Requests',
-  mTitle: 'Signup Requests',
+  cTitle: 'Sign-up requests',
+  mTitle: 'Sign-up requests',
   empty: 'Nobody is waiting.',
   restricted: {
     cTitle: 'Signup requests are restricted',

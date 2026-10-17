@@ -22,7 +22,7 @@ export default {
   create: 'Create',
   post: 'Post',
   publish: 'Publish',
-  login: 'Login',
+  login: 'Sign in',
   download: 'Download',
   search: 'Search',
   repost: 'Repost',

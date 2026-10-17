@@ -1,10 +1,10 @@
 export default {
   about: 'About',
-  tos: 'Terms Of Service',
-  join: 'Join Us',
+  tos: 'Terms of Service',
+  join: 'Join us',
   access: 'Access',
   support: 'Support',
-  report: 'Report Issues',
+  report: 'Report issues',
   guideline: 'Community guidelines',
   privacy: 'Privacy Policy',
 };

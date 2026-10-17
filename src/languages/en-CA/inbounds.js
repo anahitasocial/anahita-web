@@ -1,3 +1,4 @@
 export default {
-  count: '{{count}} nodes',
+  count: '{{count}} node',
+  count_other: '{{count}} nodes',
 };

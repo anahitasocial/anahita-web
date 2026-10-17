@@ -1,14 +1,14 @@
 export default {
-  cTitle: 'Please log in',
-  mTitle: 'Login',
-  logout: 'Logout',
-  login: 'Please log in',
-  username: 'Email or Username',
+  cTitle: 'Sign in',
+  mTitle: 'Sign in',
+  logout: 'Sign out',
+  login: 'Sign in',
+  username: 'Email or username',
   password: 'Password',
   forgotPassword: 'Forgot password?',
   signup: {
     cTitle: 'Sign up',
-    mTitle: 'Signup',
+    mTitle: 'Sign up',
     invitation: 'New here? Create an account, or sign in if you already have one.',
     closed: 'This site is not open for registration. You need an invitation to join.',
     displayName: 'Display name',
@@ -20,7 +20,7 @@ export default {
     tos: 'I agree to the <0>Terms of Service</0>.',
     privacy: 'I have read the <0>Privacy Policy</0>.',
     actions: {
-      signup: 'Signup',
+      signup: 'Sign up',
     },
   },
   authLogs: {
@@ -28,7 +28,7 @@ export default {
     cDesc: '{{ name }} on a {{ device }} running {{ os }} from {{ city }} {{ country }}',
     cActive: 'Active now',
     actions: {
-      forceLogout: 'Force Logout',
+      forceLogout: 'Sign out',
     },
   },
   webauthn: {
@@ -101,7 +101,7 @@ export default {
       label: 'Password',
     },
     pairing: {
-      cTitle: 'Setup authenticator app',
+      cTitle: 'Set up an authenticator app',
       cDesc: 'Use a phone app like Authy, Google Authenticator, or Microsoft Authenticator, etc. to get 2FA codes when prompted during sign-in.',
     },
     qrCode: {
@@ -144,7 +144,7 @@ export default {
       cTitle: 'Security Reminder',
       cSubTitle: '2FA is not enabled!',
       cDesc: 'Enabling Two-Factor Auth (2FA) and using an Authenticator app will make your account a lot more secure.',
-      action: 'Setup 2FA',
+      action: 'Set up 2FA',
     },
     errors: {
       wrongPassword: 'That password is not correct. Try again.',
@@ -185,7 +185,7 @@ export default {
   prompts: {
     error: 'Something went wrong!',
     errorSignupUsernameTaken: 'Username is already taken!',
-    errorSignupEmailTaken: 'Email is already available in our system!',
+    errorSignupEmailTaken: 'That email address is already in use.',
     signupEmailSuccess: 'Thank you! We just emailed you an account activation link.',
   },
 };
