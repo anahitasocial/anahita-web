@@ -3,7 +3,8 @@ export default {
   mTitle: 'Personnes',
   browse: {
     title: 'Personnes',
-    local: 'Les personnes locales de cette instance.',
+    local: 'Les personnes locales de {{ site }}.',
+    localUnnamed: 'Les personnes locales de cette instance.',
     elsewhere: {
       both: 'Pour trouver quelqu’un sur le fédivers ou Bluesky, cherchez son identifiant.',
       activitypub: 'Pour trouver quelqu’un sur le fédivers, cherchez son identifiant.',
