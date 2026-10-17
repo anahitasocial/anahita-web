@@ -663,7 +663,10 @@ const citedIn = (text = '') => {
   const addresses = [];
   String(text).split('\n').forEach((line) => {
     const address = embeds.alone(line);
-    if (address && !addresses.includes(address)) {
+    // A profile shown is named, a mention, and not a citation (the user,
+    // 2026-10-17): its card is in the text, and it is not listed here.
+    const isProfile = address && embeds.isOurs(address) && embeds.profileAt(address);
+    if (address && !isProfile && !addresses.includes(address)) {
       addresses.push(address);
     }
   });

@@ -50,6 +50,11 @@ const contentsOf = (text = '', origin = window.location.origin) => {
       return;
     }
     seen.push(address);
+    // A profile shown is named, a mention, and not one of its citations
+    // (the user, 2026-10-17).
+    if (embeds.isOurs(address, origin) && embeds.profileAt(address)) {
+      return;
+    }
     counts.citations += 1;
     const at = embeds.isOurs(address, origin) ? embeds.postAt(address) : null;
     if (at && at.kind === 'photo') {

@@ -16,6 +16,7 @@ export default {
       title: 'Autorisations',
       follower: 'Qui peut ajouter un abonné ?',
       invite: 'Qui peut inviter des personnes à suivre ?',
+      mention: 'Qui peut vous mentionner ?',
     },
   },
   text: {
