@@ -5,11 +5,15 @@ import 'moment/locale/en-ca';
 import 'moment/locale/fr';
 import 'moment/locale/fr-ca';
 import 'moment/locale/de';
+import 'moment/locale/es';
+import 'moment/locale/pt-br';
 import enCA from './en-CA';
 import enUS from './en-US';
 import frFR from './fr-FR';
 import frCA from './fr-CA';
 import deDE from './de-DE';
+import es419 from './es-419';
+import ptBR from './pt-BR';
 import choose from './choose';
 import frenchSpacing from './frenchSpacing';
 
@@ -24,9 +28,13 @@ const browserLanguages = typeof navigator === 'undefined' ? [] :
   (navigator.languages && navigator.languages.length && navigator.languages) ||
   [navigator.language];
 
-// moment names its locales in lower case, and calls American English "en".
+// moment names its locales in lower case, calls American English "en", and
+// has one Spanish, "es".
 const momentLocale = (language) => {
-  return language === 'en-US' ? 'en' : language.toLowerCase();
+  if (language === 'en-US') {
+    return 'en';
+  }
+  return language === 'es-419' ? 'es' : language.toLowerCase();
 };
 
 // Everything outside i18next that writes in the language shown: the page's
@@ -53,6 +61,8 @@ i18n
       'fr-FR': frFR,
       'fr-CA': frCA,
       'de-DE': deDE,
+      'es-419': es419,
+      'pt-BR': ptBR,
     },
     supportedLngs: choose.LANGUAGES,
     lng: choose.choose(browserLanguages, setting),

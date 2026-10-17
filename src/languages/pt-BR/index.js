@@ -1,0 +1,103 @@
+import apps from './apps';
+import notifications from './notifications';
+import actions from './actions';
+import prompts from './prompts';
+import access from './access';
+import features from './features';
+import pages from './pages';
+import social from './social';
+import feed from './feed';
+import customFeeds from './customFeeds';
+import share from './share';
+import linkPreviews from './linkPreviews';
+import federation from './federation';
+import recommendations from './recommendations';
+import replies from './replies';
+import composer from './composer';
+import auth from './auth';
+import actor from './actor';
+import blogs from './blogs';
+import home from './home';
+import about from './about';
+import abuseReports from './abuseReports';
+import accounts from './accounts';
+import admin from './admin';
+import settings from './settings';
+import signupRequests from './signupRequests';
+import invites from './invites';
+import support from './support';
+import events from './events';
+import groups from './groups';
+import websites from './websites';
+import password from './password';
+import username from './username';
+import people from './people';
+import notes from './notes';
+import photos from './photos';
+import videos from './videos';
+import media from './media';
+import topics from './topics';
+import articles from './articles';
+import socialgraph from './socialgraph';
+import hashtags from './hashtags';
+import agreements from './agreements';
+import onboarding from './onboarding';
+import legal from './legal';
+import locations from './locations';
+import search from './search';
+import inbounds from './inbounds';
+import commons from './commons';
+import email from './email';
+
+export default {
+  apps,
+  notifications,
+  actions,
+  prompts,
+  access,
+  features,
+  pages,
+  social,
+  feed,
+  customFeeds,
+  share,
+  linkPreviews,
+  federation,
+  recommendations,
+  replies,
+  composer,
+  auth,
+  actor,
+  blogs,
+  home,
+  about,
+  abuseReports,
+  accounts,
+  admin,
+  settings,
+  signupRequests,
+  invites,
+  support,
+  events,
+  groups,
+  websites,
+  people,
+  password,
+  username,
+  notes,
+  photos,
+  videos,
+  media,
+  topics,
+  articles,
+  socialgraph,
+  hashtags,
+  agreements,
+  onboarding,
+  legal,
+  locations,
+  search,
+  inbounds,
+  email,
+  commons,
+};

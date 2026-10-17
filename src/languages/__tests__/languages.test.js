@@ -7,6 +7,8 @@ import enUS from '../en-US';
 import frFR from '../fr-FR';
 import frCA from '../fr-CA';
 import deDE from '../de-DE';
+import es419 from '../es-419';
+import ptBR from '../pt-BR';
 
 const RESOURCES = {
   'en-CA': enCA,
@@ -14,6 +16,8 @@ const RESOURCES = {
   'fr-FR': frFR,
   'fr-CA': frCA,
   'de-DE': deDE,
+  'es-419': es419,
+  'pt-BR': ptBR,
 };
 
 const { NARROW_NO_BREAK } = frenchSpacing;
@@ -53,12 +57,18 @@ describe('choosing the language', () => {
     [['de-AT'], 'de-DE'],
     [['de-CH'], 'de-DE'],
     [['de'], 'de-DE'],
+    [['es-MX'], 'es-419'],
+    [['es-ES'], 'es-419'],
+    [['es'], 'es-419'],
+    [['pt-BR'], 'pt-BR'],
+    [['pt-PT'], 'pt-BR'],
+    [['pt'], 'pt-BR'],
   ])('shows %j as %s', (browser, shown) => {
     expect(choose.choose(browser, undefined)).toBe(shown);
   });
 
   it('takes the first of the reader\'s languages it has', () => {
-    expect(choose.choose(['es-MX', 'fr-CA', 'en-US'], undefined)).toBe('fr-CA');
+    expect(choose.choose(['ja-JP', 'fr-CA', 'en-US'], undefined)).toBe('fr-CA');
   });
 
   it('shows the site\'s default when it has none of them', () => {

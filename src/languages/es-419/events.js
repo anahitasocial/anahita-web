@@ -1,0 +1,232 @@
+export default {
+  cTitle: 'Eventos',
+  mTitle: 'Eventos',
+  add: {
+    cTitle: 'Crear evento',
+    mTitle: 'Crear evento',
+  },
+  settings: {
+    cancel: 'Cancelar evento',
+    info: 'Información',
+    admins: 'Admins',
+    features: 'Funciones',
+    permissions: 'Permisos',
+    access: 'Privacidad',
+    // Deletion copy, namespace-specific. The shared actor:delete strings told
+    // event administrators to "sign in to restore", which an event cannot do,
+    // and that their passkeys would be removed, which an event has none of.
+    delete: 'Eliminar',
+    // The card title. Its text is in the accounts namespace, shared with
+    // the accounts list.
+    purge: 'Eliminar de forma permanente',
+    // Archive. The copy does the work here: archive sits next to delete and
+    // must never read as the gentler option. Permanence first, then what is
+    // preserved — which is the reason to choose it, not a softener.
+    archive: 'Archivar',
+    archivePrompts: {
+      permanent: 'Archivar no se puede deshacer. No hay forma de recuperar este evento.',
+      eventDescription: 'No se elimina nada. Cada publicación, foto y conversación se queda exactamente donde está y conserva su dirección, así que los enlaces que la gente guardó seguirán funcionando. Lo que termina es la actividad del evento: sale de los feeds, las sugerencias y la búsqueda, y nadie puede volver a publicar en él.',
+      confirmLabel: 'Escribe {{ alias }} para confirmar',
+      action: 'Archivar de forma permanente',
+      archived: 'Este evento se archivó.',
+      errors: {
+        nothingToArchive: 'No hay nada que archivar: este evento ya está archivado o tiene la eliminación programada.',
+        forbidden: 'No tienes permiso para archivar este evento.',
+        lastSuperAdmin: 'Esta es la única persona con rol de superadmin. Asigna ese rol a alguien más antes de archivar este evento.',
+        generic: 'No se pudo archivar este evento. Inténtalo de nuevo.',
+      },
+    },
+    // Disable. Deliberately light — it is a switch, and dressing it up like
+    // the two below trains people to type confirmations without reading.
+    disable: 'Desactivar',
+    disablePrompts: {
+      description: 'Al desactivar este evento, se oculta para todo el mundo. Mientras esté desactivado, sus seguidores no pueden publicar en él ni encontrarlo.',
+      descriptionDisabled: 'Este evento está desactivado. No aparece en ningún lado y nadie puede publicar en él.',
+      reversible: 'Esto se puede deshacer en cualquier momento y no se elimina nada. Para quitar un perfil de forma permanente, archívalo o elimínalo.',
+      action: 'Desactivar',
+      actionEnable: 'Activar',
+      disabled: 'Este evento se desactivó.',
+      enabled: 'Este evento se activó.',
+      errors: {
+        forbidden: 'No tienes permiso para cambiar esto.',
+        lastSuperAdmin: 'Esta es la única persona con rol de superadmin y no se puede desactivar.',
+        generic: 'No se pudo cambiar esto. Inténtalo de nuevo.',
+      },
+    },
+    deletePrompts: {
+      counts: {
+        intro: 'En este evento ahora mismo:',
+        posts: '{{ count }} publicación',
+        posts_other: '{{ count }} publicaciones',
+        replies: '{{ count }} respuesta',
+        replies_other: '{{ count }} respuestas',
+        followers: '{{ count }} seguidor',
+        followers_other: '{{ count }} seguidores',
+        admins: '{{ count }} admin',
+        admins_other: '{{ count }} admins',
+        memberSince: 'Creado el {{ date }}.',
+      },
+      description: 'Al eliminar este evento, se quita junto con todo lo que contiene: publicaciones, fotos, respuestas y la lista de seguidores. Lo que aportaron sus seguidores también se elimina.',
+      reversible: 'No es inmediato. El evento se oculta de inmediato y se borra de forma permanente después de {{ count }} días. Hasta entonces, cualquier admin puede restaurarlo desde esta página.',
+      revoked: 'Sus seguidores pierden el acceso de inmediato, y el evento desaparece de sus perfiles y feeds.',
+      handle: 'El nombre {{ alias }} queda reservado después, para que ningún otro evento pueda usarlo.',
+      scheduled: 'Este evento tiene la eliminación programada y se borrará el {{ date }}.',
+      restore: 'Restaurar este evento',
+      restored: 'Este evento se restauró.',
+      errors: {
+        restoreFailed: 'No se pudo restaurar este evento. Es posible que ya se haya borrado de forma permanente.',
+      },
+    },
+    // Labels the tab; the card inside it still reads "Delete".
+    sections: {
+      danger: 'Zona de peligro',
+    },
+    notifications: 'Configuración de notificaciones',
+    followRequests: 'Solicitudes de seguimiento',
+  },
+  notifications: {
+    cTitle: 'Notificaciones',
+    cDescription: 'Edita tu configuración de notificaciones',
+    mTitle: 'Notificaciones',
+    email: 'Recibir notificaciones por correo electrónico',
+    optionsTitle: 'Recibir notificaciones de',
+    options: {
+      all: 'Todas las publicaciones',
+      following: 'Solo las publicaciones que sigues',
+    },
+  },
+  // What only an event has.
+  event: {
+    mine: {
+      upcoming: 'Próximos',
+      invited: 'Invitaciones',
+      hosting: 'Organizo',
+      past: 'Pasados',
+    },
+    none: {
+      upcoming: 'No hay nada próximo. Aquí aparecen los eventos a los que dices que vas.',
+      invited: 'No tienes invitaciones pendientes.',
+      hosting: 'No organizas ningún evento.',
+      past: 'No hay eventos pasados.',
+      hosted: 'No hay eventos que mostrar.',
+    },
+    failed: 'No se pudieron cargar los eventos.',
+    form: {
+      name: '¿Cómo se llama?',
+      body: 'Descripción',
+      startsAt: 'Empieza',
+      endsAt: 'Termina',
+      timezone: 'Zona horaria',
+      capacity: 'Cupo',
+      capacityUnlimited: 'Sin límite',
+      capacityHelp: 'Cuántas personas pueden ir. Al máximo, no hay límite.',
+      onlineUrl: 'Enlace para unirse en línea',
+      onlineUrlHelp: 'Solo lo ven quienes van.',
+      websiteUrl: 'Sitio web',
+      websiteUrlHelp: 'Lo ve todo el mundo que puede ver el evento.',
+      access: '¿Quién puede verlo?',
+      accessOptions: {
+        public: 'Cualquiera',
+        registered: 'Cualquiera con sesión iniciada',
+        followers: 'Solo quienes van o tienen invitación',
+      },
+      hostedBy: 'Organizado por {{ name }}',
+      openToHostFollowers: 'Todo el mundo que sigue a {{ name }} puede verlo y responder',
+      address: {
+        title: '¿Dónde es?',
+        help: 'Solo lo ven quienes van. No se agrega a los lugares del sitio.',
+        street: 'Dirección',
+        city: 'Ciudad',
+        stateProvince: 'Provincia o estado',
+        country: 'País',
+        showMap: 'Mostrar un mapa',
+        showMapHelp: 'La dirección se envía a un servicio de mapas para encontrarla. El mapa solo lo ven quienes van.',
+      },
+      create: 'Crear',
+      save: 'Guardar',
+      edit: 'Editar evento',
+      errors: {
+        invalid_time: 'Elige cuándo empieza y cuándo termina.',
+        ends_before_start: 'Tiene que terminar después de empezar.',
+        too_long: 'Un evento puede durar un año como máximo.',
+        invalid_timezone: 'Elige una zona horaria.',
+        already_over: 'Esa hora ya pasó.',
+        host_not_allowed: 'Solo puedes organizar un evento con un grupo que administras.',
+        generic: 'No se pudo guardar el evento.',
+      },
+    },
+    when: {
+      // The same day: 5 November 2026, 19:00 to 21:00.
+      sameDay: '{{ date }}, de {{ start }} a {{ end }}',
+      // Different days.
+      range: 'Del {{ start }} al {{ end }}',
+      inZone: 'Horarios en {{ zone }}.',
+      eventZone: 'El evento es en {{ zone }}: allí son las {{ time }}.',
+    },
+    state: {
+      upcoming: 'Próximo',
+      happening: 'En curso',
+      past: 'Este evento ya terminó.',
+      cancelled: 'Este evento se canceló.',
+    },
+    rsvp: {
+      label: 'Tu respuesta',
+      going: 'Voy',
+      maybe: 'Quizás',
+      leave: 'No voy',
+      youAreGoing: 'Vas',
+      youSaidMaybe: 'Dijiste quizás',
+      full: 'El evento está lleno',
+      closed: 'Este evento ya no recibe respuestas.',
+      failed: 'No se pudo hacer.',
+    },
+    counts: {
+      going_one: '{{ count }} va',
+      going_other: '{{ count }} van',
+      maybe_one: '{{ count }} quizás',
+      maybe_other: '{{ count }} quizás',
+      places: '{{ going }} de {{ capacity }} lugares ocupados',
+    },
+    attendees: {
+      title: 'Quiénes van',
+      going: 'Van',
+      maybe: 'Quizás',
+      none: {
+        going: 'Nadie ha dicho todavía que va.',
+        maybe: 'Nadie ha dicho quizás.',
+      },
+    },
+    online: {
+      join: 'Unirse en línea',
+      forGoing: 'Hay un enlace para unirse en línea. Lo ven quienes van.',
+    },
+    host: 'Organiza',
+    address: {
+      title: 'Dónde',
+      maps: {
+        apple: 'Apple Maps',
+        google: 'Google Maps',
+        osm: 'OpenStreetMap',
+      },
+      forGoing: 'La dirección la ven quienes van.',
+    },
+    viaHost: 'Este evento es para quienes siguen al grupo que lo organiza. Sigues a ese grupo, así que puedes responder.',
+    calendar: 'Agregar al calendario',
+    cancel: {
+      already: 'Este evento se canceló.',
+      over: 'Este evento ya terminó, así que no hay nada que cancelar.',
+      action: 'Cancelar evento',
+      title: '¿Cancelar este evento?',
+      message: 'Todas las personas que van verán que se canceló. El evento se queda donde está, y esto no se puede deshacer.',
+      confirm: 'Cancelar evento',
+      keep: 'Mantenerlo',
+      done: 'El evento se canceló.',
+      failed: 'No se pudo cancelar el evento.',
+    },
+    add: 'Agregar evento',
+    tab: 'Eventos',
+  },
+  confirm: {
+    delete: '¿Quieres eliminar el perfil de {{ name }}?',
+  },
+};

@@ -1,0 +1,191 @@
+export default {
+  cTitle: 'Inicia sesión',
+  mTitle: 'Iniciar sesión',
+  logout: 'Cerrar sesión',
+  login: 'Inicia sesión',
+  username: 'Correo o nombre de usuario',
+  password: 'Contraseña',
+  forgotPassword: '¿Olvidaste tu contraseña?',
+  signup: {
+    cTitle: 'Registrarse',
+    mTitle: 'Registrarse',
+    invitation: '¿Primera vez aquí? Crea un perfil, o inicia sesión si ya tienes una cuenta.',
+    closed: 'Este sitio no está abierto al registro. Necesitas una invitación para unirte.',
+    displayName: 'Nombre visible',
+    displayNameHelp: 'Así es como otras personas ven tu nombre.',
+    username: 'Nombre de usuario',
+    email: 'Correo electrónico',
+    password: 'Contraseña',
+    passwordHelp: 'Al menos 15 caracteres. Usa una frase de contraseña única que no uses en otro lugar.',
+    tos: 'Acepto las <0>Condiciones del servicio</0>.',
+    privacy: 'He leído la <0>Política de privacidad</0>.',
+    actions: {
+      signup: 'Registrarse',
+    },
+  },
+  authLogs: {
+    cTitle: 'Inicios de sesión',
+    cDesc: '{{ name }} en {{ device }} con {{ os }} desde {{ city }} {{ country }}',
+    cActive: 'Activa ahora',
+    actions: {
+      forceLogout: 'Forzar cierre de sesión',
+    },
+  },
+  webauthn: {
+    cTitle: 'Llaves de acceso',
+    cDesc: 'Inicia sesión con tu huella, tu rostro o el PIN de tu dispositivo en lugar de tu contraseña',
+    add: 'Agregar',
+    adding: 'Esperando a tu dispositivo…',
+    empty: {
+      platform: 'Agrega una llave de acceso para iniciar sesión con tu huella, tu rostro o el PIN de tu dispositivo, sin contraseña ni código de verificación.',
+      roaming: 'Agrega una llave de acceso para iniciar sesión sin tu contraseña. Puedes usar una llave de seguridad o escanear un código con tu teléfono.',
+      fallback: 'Tu contraseña y tu código de verificación seguirían funcionando, así que siempre podrás iniciar sesión de otra forma.',
+    },
+    credential: {
+      lastUsed: 'Último uso: {{ when }}',
+      neverUsed: 'Nunca se usó',
+      added: 'Agregada el {{ date }}',
+      synced: 'Sincronizada entre dispositivos',
+      deviceOnly: 'Solo en este dispositivo',
+      cloneWarning: 'Esta llave de acceso informó una actividad inesperada. Elimínala y agrega una nueva.',
+      actions: {
+        rename: 'Cambiar el nombre de {{ name }}',
+        remove: 'Eliminar {{ name }}',
+      },
+    },
+    renameDialog: {
+      title: 'Cambiar el nombre de la llave de acceso',
+      message: 'Ponle a esta llave de acceso un nombre que te diga en qué dispositivo está.',
+    },
+    removeDialog: {
+      title: '¿Eliminar esta llave de acceso?',
+      message: 'Ya no podrás iniciar sesión con {{ name }}. Tu contraseña y tu código de verificación siguen funcionando.',
+    },
+    nickname: {
+      label: 'Nombre',
+      counter: '{{ count }}/{{ max }}',
+    },
+    alerts: {
+      added: '{{ name }} está lista para usarse.',
+      removed: 'Se eliminó {{ name }}.',
+      atLimit: 'Llegaste al máximo de {{ max }} llaves de acceso. Elimina una para agregar otra.',
+      unsupported: 'Este navegador no puede usar llaves de acceso. Puedes seguir iniciando sesión con tu contraseña y tu código de verificación.',
+      browseError: 'No pudimos cargar tus llaves de acceso. Actualiza la página para intentarlo de nuevo.',
+      renameError: 'No pudimos cambiar el nombre de esa llave de acceso. Inténtalo de nuevo.',
+      removeError: 'No pudimos eliminar esa llave de acceso. Inténtalo de nuevo.',
+    },
+    ceremonyErrors: {
+      alreadyRegistered: 'Este dispositivo ya tiene una llave de acceso para tu cuenta.',
+      cancelled: 'Se canceló la configuración. Inténtalo de nuevo cuando quieras.',
+      insecureContext: 'Esta página no puede crear llaves de acceso. Contacta con soporte si sigue pasando.',
+      atLimit: 'Llegaste al número máximo de llaves de acceso. Primero elimina una.',
+      expired: 'Tardó demasiado. Inténtalo de nuevo.',
+      generic: 'No pudimos agregar esa llave de acceso. Inténtalo de nuevo.',
+    },
+  },
+  totp: {
+    cTitle: 'Autenticación de dos factores',
+    cDesc: 'Activa la autenticación de dos factores y vincula tu cuenta con la app de autenticación que prefieras en tu teléfono.',
+    disableDialog: {
+      title: '¿Lo confirmas?',
+      message: 'Estás a punto de desactivar la autenticación de dos factores. Esto reducirá la seguridad de tu cuenta. ¿Quieres continuar?',
+    },
+    steps: {
+      cTitle: 'Configurar la autenticación de dos factores',
+      pairDevice: 'Vincular dispositivo',
+      downloadRecoveryCodes: 'Códigos de recuperación',
+      enabled: 'Activada',
+    },
+    password: {
+      title: 'Confirma tu contraseña',
+      label: 'Contraseña',
+    },
+    pairing: {
+      cTitle: 'Configurar la app de autenticación',
+      cDesc: 'Usa una app para teléfono como Authy, Google Authenticator o Microsoft Authenticator para obtener los códigos de 2FA cuando se te pidan al iniciar sesión.',
+    },
+    qrCode: {
+      cTitle: 'Escanea el código QR',
+      cDesc: 'Usa tu app de autenticación para escanear el código QR y vincularla con tu cuenta',
+      passcode: {
+        title: 'Verifica el código',
+        label: 'Escribe el código actual de tu app de autenticación',
+      },
+    },
+    recoveryCodes: {
+      cTitle: 'Descarga tus códigos de recuperación',
+      cDesc: 'Puedes usar los códigos de recuperación como segundo factor para autenticarte si pierdes el acceso a tu dispositivo. Te recomendamos guardarlos en un gestor de contraseñas seguro, como 1Password o Keeper.',
+      warning: 'Guarda tus códigos de recuperación en un lugar seguro. Si pierdes tu dispositivo y no encuentras tus códigos de recuperación, perderás el acceso a tu cuenta.',
+      content: 'CÓDIGOS DE RECUPERACIÓN\n\nServicio: {{ service }}\nCuenta: {{ account }}\n\n*¡Solo puedes usar cada código UNA VEZ!*\n\n',
+      prompts: {
+        copySuccess: '¡Copiados!',
+        copyCodes: 'Copiar códigos',
+        enableTotp: 'Ya guardé mis códigos de recuperación',
+      },
+    },
+    enable: {
+      cDesc: 'Activaste la autenticación de dos factores con una app de autenticación.',
+      // Collapsed state of the 2FA card. The wizard is a multi-step commitment
+      // — password, pairing, recovery codes — so it stays behind a button
+      // rather than opening on a settings page somebody came to read.
+      action: 'Activar',
+      disable: 'Desactivar',
+      disabled: 'Se desactivó la autenticación de dos factores. Te enviamos un correo de confirmación.',
+      on: 'La autenticación de dos factores está activada',
+      onDesc: 'Se te pedirá un código de tu app de autenticación al iniciar sesión.',
+      off: 'La autenticación de dos factores está desactivada',
+    },
+    verify: {
+      cTitle: 'Autenticación de dos factores',
+      cDesc: 'Escribe el código actual de tu app de autenticación para terminar de iniciar sesión.',
+      passcode: 'Código de verificación',
+    },
+    widget: {
+      cTitle: 'Recordatorio de seguridad',
+      cSubTitle: '¡La 2FA no está activada!',
+      cDesc: 'Activar la autenticación de dos factores (2FA) y usar una app de autenticación hará tu cuenta mucho más segura.',
+      action: 'Configurar 2FA',
+    },
+    errors: {
+      wrongPassword: 'Esa contraseña no es correcta. Inténtalo de nuevo.',
+      passwordInvalid: 'No pudimos verificar tu contraseña. Inténtalo de nuevo.',
+      invalidPasscode: 'Ese código no es válido. Revisa tu app de autenticación e inténtalo de nuevo.',
+      enableFailed: 'No pudimos activar la autenticación de dos factores. Inténtalo de nuevo.',
+      disableFailed: 'No pudimos desactivar la autenticación de dos factores. Inténtalo de nuevo.',
+      disableForbidden: 'No tienes permiso para cambiar la autenticación de dos factores de esta cuenta.',
+    },
+  },
+  reauth: {
+    cTitle: 'Confirma que eres tú',
+    label: 'Por tu seguridad, confirma tu identidad antes de cambiar esto.',
+    usePasskey: 'Usar una llave de acceso',
+    usePassword: 'Usar tu contraseña',
+    submit: 'Confirmar',
+    fields: {
+      currentPassword: 'Contraseña actual',
+      totpPasscode: 'Código de autenticación',
+      totpHelper: 'Código de 6 dígitos de tu app de autenticación, o un código de recuperación.',
+    },
+    errors: {
+      passwordRequired: 'Escribe tu contraseña actual.',
+      wrongPassword: 'La contraseña actual no es correcta.',
+      totpRequired: 'Escribe el código de tu app de autenticación.',
+      invalidPasscode: 'Ese código no es válido. Prueba con el código actual de tu app de autenticación.',
+      passkeyFailed: 'No se aceptó esa llave de acceso. Inténtalo de nuevo, o usa tu contraseña.',
+      forbidden: 'Demasiados intentos fallidos. ¡Inténtalo de nuevo en 30 minutos!',
+      generic: 'No se pudo confirmar tu identidad. Inténtalo de nuevo.',
+      noMethod: 'Esto requiere una llave de acceso o la autenticación de dos factores. Agrega una en tu configuración de seguridad e inténtalo de nuevo.',
+    },
+  },
+  expired: {
+    alerts: {
+      info: '¡Tu sesión expiró!',
+    },
+  },
+  prompts: {
+    error: '¡Algo salió mal!',
+    errorSignupUsernameTaken: '¡Ese nombre de usuario ya está en uso!',
+    errorSignupEmailTaken: '¡Ese correo electrónico ya está registrado!',
+    signupEmailSuccess: '¡Gracias! Te acabamos de enviar por correo un enlace para activar tu cuenta.',
+  },
+};
