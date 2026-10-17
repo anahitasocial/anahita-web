@@ -103,7 +103,11 @@ The same in anahita-services' AGENTS.md.
 - One set of docs, for people and agents alike: descriptive, plain and
   current. The same word for the same thing every time; exact paths,
   settings, endpoints and defaults, in tables where there are several.
-- Remove "not built" the day it is built.
+- When a feature, a setting or a page changes, grep the docs of both
+  repositories for its name and change every page that says it. Remove "not
+  built" the day it is built.
+- A renamed heading breaks the links to it: `yarn test` names them
+  (`src/__tests__/docsLinks.test.js`).
 - A phase is not finished until its docs match the code. A finished plan
   moves to `docs/plans/done/` in the same commit, with every link to it
   fixed.

@@ -81,6 +81,10 @@ components. For example, `src/containers/actors/Settings/__tests__/` checks
 the settings tabs and the permission rules as data. That is why several of
 those modules are kept free of JSX.
 
+`src/__tests__/docsLinks.test.js` checks the docs: it fails on a link between
+them that leads nowhere, a page that is not there or a `#heading` it does not
+have.
+
 ## Linting
 
 The code follows the Airbnb style guide (`.eslintrc.json`), with a few changes.
