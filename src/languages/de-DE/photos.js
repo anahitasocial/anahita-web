@@ -1,0 +1,77 @@
+export default {
+  cTitle: 'Fotos',
+  mTitle: 'Fotos',
+  composer: {
+    namePlaceholder: 'Titel des Fotos ...',
+    bodyPlaceholder: 'Schreib eine Beschreibung ...',
+  },
+  editor: {
+    title: 'Fotos in diesem Beitrag',
+    edit: 'Fotos bearbeiten',
+    add: 'Fotos auswählen oder hier ablegen',
+    // Where a post may hold a video instead.
+    addOrVideo: 'Fotos oder ein Video auswählen oder hier ablegen',
+    addMore: 'Weiteres hinzufügen',
+    limit: 'Bis zu {{max}} Fotos pro Beitrag. Das erste wird zuerst gezeigt.',
+    first: 'Erstes',
+    leftOut_one: 'Ein Beitrag fasst {{max}} Fotos, daher wurde 1 der ausgewählten weggelassen.',
+    leftOut_other: 'Ein Beitrag fasst {{max}} Fotos, daher wurden {{count}} der ausgewählten weggelassen.',
+    remove: 'Dieses Foto entfernen',
+    earlier: 'Nach vorne',
+    later: 'Nach hinten',
+    alt: 'ALT',
+    describe: 'Dieses Foto beschreiben',
+    described: 'Beschreibung ändern',
+    describeTitle: 'Dieses Foto beschreiben',
+    altLabel: 'Bildbeschreibung',
+    askAlt: 'Bildbeschreibung hinzufügen',
+    askAltWhy: 'Sie wird Menschen vorgelesen, die das Foto nicht sehen können, und angezeigt, wenn ein Foto nicht lädt.',
+    altWhy: 'Wird Menschen vorgelesen, die das Foto nicht sehen können. Das ist nicht die Bildunterschrift: Beschreib, was auf dem Bild ist.',
+    altHelp: 'Zum Beispiel: eine Zwergbanane an einem Fenster, neben einem grauen Sessel.',
+    undescribed_one: '1 Foto hat noch keine Bildbeschreibung.',
+    undescribed_other: '{{count}} Fotos haben noch keine Bildbeschreibung.',
+    uploading: 'Wird hochgeladen',
+    failed: 'Dieses Foto konnte nicht hochgeladen werden. Entferne es und versuch es noch einmal.',
+    unsupported: 'Nur JPEG- und PNG-Fotos können hochgeladen werden.',
+    tooLarge: 'Dieses Foto ist zu groß. Das Limit liegt bei 10 MB.',
+    unreadable: 'Diese Datei konnte nicht als Foto gelesen werden.',
+    stillUploading: 'Die Fotos werden noch hochgeladen. Versuch es gleich noch einmal.',
+    needOne: 'Ein Fotobeitrag braucht mindestens ein Foto.',
+    tooMany: 'Das sind mehr Fotos, als ein Beitrag fassen kann.',
+    gone: 'Eins der Fotos ist nicht mehr da. Schließ dies und versuch es noch einmal.',
+    altTooLong: 'Eine der Beschreibungen ist zu lang.',
+    saved: 'Die Fotos wurden aktualisiert.',
+    notSaved: 'Die Fotos konnten nicht aktualisiert werden.',
+  },
+  // On a photo that has a description, for somebody who can see it.
+  alt: {
+    show: 'Beschreibung dieses Fotos lesen',
+    title: 'Bildbeschreibung',
+  },
+  // In place of the pictures of a post from another server that are no
+  // longer stored here.
+  removed: {
+    kept: 'Dieser Beitrag hat ein Bild, das hier nicht mehr gespeichert ist.',
+    kept_other: 'Dieser Beitrag hat {{count}} Bilder, die hier nicht mehr gespeichert sind.',
+    show: 'Bild zeigen',
+    show_other: 'Bilder zeigen',
+    gone: 'Das Bild dieses Beitrags ist auf {{domain}} nicht mehr verfügbar.',
+    gone_other: 'Die {{count}} Bilder dieses Beitrags sind auf {{domain}} nicht mehr verfügbar.',
+    failed: 'Sie konnten gerade nicht abgerufen werden. Versuch es gleich noch einmal.',
+  },
+  slides: {
+    position: '{{index}} von {{total}}',
+    next: 'Nächstes Foto',
+    previous: 'Vorheriges Foto',
+  },
+  settings: {
+    photo: {
+      add: 'Wer kann Fotos in diesem Profil veröffentlichen?',
+      addcomment: 'Wer kann Fotos kommentieren?',
+    },
+    set: {
+      add: 'Wer kann Alben in diesem Profil erstellen?',
+      addcomment: 'Wer kann Alben kommentieren?',
+    },
+  },
+};

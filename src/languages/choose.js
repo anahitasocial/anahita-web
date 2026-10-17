@@ -6,19 +6,21 @@
 // string; American English and Quebec French are layers over them, of the
 // strings that differ. Any other English is shown as Canadian, and any
 // other French as French from France: their readers read those best.
+// German, from anywhere, is German from Germany.
 
 const BASE = 'en-CA';
 
-const LANGUAGES = ['en-CA', 'en-US', 'fr-FR', 'fr-CA'];
+const LANGUAGES = ['en-CA', 'en-US', 'fr-FR', 'fr-CA', 'de-DE'];
 
 // The languages with every string. The rest are layers over one of them.
-const BASES = ['en-CA', 'fr-FR'];
+const BASES = ['en-CA', 'fr-FR', 'de-DE'];
 
 // What each language falls back to, for a string it does not have.
 const FALLBACK = {
   'en-US': ['en-CA'],
   'fr-CA': ['fr-FR', 'en-CA'],
   'fr-FR': ['en-CA'],
+  'de-DE': ['en-CA'],
   default: [BASE],
 };
 
@@ -30,6 +32,9 @@ const match = (tag) => {
   }
   if (primary === 'fr') {
     return region === 'ca' ? 'fr-CA' : 'fr-FR';
+  }
+  if (primary === 'de') {
+    return 'de-DE';
   }
   return '';
 };

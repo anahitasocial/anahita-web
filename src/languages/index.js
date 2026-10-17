@@ -4,10 +4,12 @@ import moment from 'moment';
 import 'moment/locale/en-ca';
 import 'moment/locale/fr';
 import 'moment/locale/fr-ca';
+import 'moment/locale/de';
 import enCA from './en-CA';
 import enUS from './en-US';
 import frFR from './fr-FR';
 import frCA from './fr-CA';
+import deDE from './de-DE';
 import choose from './choose';
 import frenchSpacing from './frenchSpacing';
 
@@ -50,6 +52,7 @@ i18n
       'en-US': enUS,
       'fr-FR': frFR,
       'fr-CA': frCA,
+      'de-DE': deDE,
     },
     supportedLngs: choose.LANGUAGES,
     lng: choose.choose(browserLanguages, setting),

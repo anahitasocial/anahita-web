@@ -6,12 +6,14 @@ import enCA from '../en-CA';
 import enUS from '../en-US';
 import frFR from '../fr-FR';
 import frCA from '../fr-CA';
+import deDE from '../de-DE';
 
 const RESOURCES = {
   'en-CA': enCA,
   'en-US': enUS,
   'fr-FR': frFR,
   'fr-CA': frCA,
+  'de-DE': deDE,
 };
 
 const { NARROW_NO_BREAK } = frenchSpacing;
@@ -47,23 +49,27 @@ describe('choosing the language', () => {
     [['fr-CH'], 'fr-FR'],
     [['fr'], 'fr-FR'],
     [['en_us'], 'en-US'],
+    [['de-DE'], 'de-DE'],
+    [['de-AT'], 'de-DE'],
+    [['de-CH'], 'de-DE'],
+    [['de'], 'de-DE'],
   ])('shows %j as %s', (browser, shown) => {
     expect(choose.choose(browser, undefined)).toBe(shown);
   });
 
   it('takes the first of the reader\'s languages it has', () => {
-    expect(choose.choose(['de-DE', 'fr-CA', 'en-US'], undefined)).toBe('fr-CA');
+    expect(choose.choose(['es-MX', 'fr-CA', 'en-US'], undefined)).toBe('fr-CA');
   });
 
   it('shows the site\'s default when it has none of them', () => {
-    expect(choose.choose(['de-DE'], undefined)).toBe('en-CA');
-    expect(choose.choose(['de-DE'], 'fr-FR')).toBe('fr-FR');
+    expect(choose.choose(['ja-JP'], undefined)).toBe('en-CA');
+    expect(choose.choose(['ja-JP'], 'fr-FR')).toBe('fr-FR');
     expect(choose.choose([], 'en-US')).toBe('en-US');
   });
 
   it('treats a default that is not one of its languages as unset', () => {
-    expect(choose.choose(['de-DE'], 'de-DE')).toBe('en-CA');
-    expect(choose.choose(['de-DE'], 'en-GB')).toBe('en-CA');
+    expect(choose.choose(['ja-JP'], 'ja-JP')).toBe('en-CA');
+    expect(choose.choose(['ja-JP'], 'en-GB')).toBe('en-CA');
   });
 });
 
