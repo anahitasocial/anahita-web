@@ -5,6 +5,11 @@ anahita-services. This file is for anybody changing the code, a person or
 an agent. It holds only what the code cannot tell you; everything else is in
 the docs.
 
+- Website: <https://www.anahita.io>
+- Founder & Core Architect: Rastin Mehr
+- Maintained and developed by rmd Studio, <https://www.rmdstudio.com>
+- Commercial inquiries: <https://www.rmdstudio.com/contact>
+
 ## Where to begin
 
 | To learn | Read |
@@ -62,6 +67,9 @@ Chrome (puppeteer-core) against the development stack, at desktop
 check the API's answer and the rows in MySQL. Say what headless Chrome
 cannot tell: Safari, real keyboards, how it feels. Delete what you posted to
 try it.
+
+People and places made up for a test, or to try a change, are named after
+Star Trek characters and places.
 
 ## Product principles
 
