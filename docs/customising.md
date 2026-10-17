@@ -59,7 +59,7 @@ component looks everywhere, add it under `components`, for example
 
 ## Languages
 
-The app is in four languages. Two are bases, with every string; two are
+The app is in five languages. Three are bases, with every string; two are
 layers, with only the strings that differ from their base:
 
 | Language | Directory | Holds | Falls back to |
@@ -67,6 +67,7 @@ layers, with only the strings that differ from their base:
 | English (Canada), `en-CA` | `src/languages/en-CA/` | Every string | — |
 | English (United States), `en-US` | `src/languages/en-US/` | The strings that differ: *canceled*, *license*, *gray* | `en-CA` |
 | French (France), `fr-FR` | `src/languages/fr-FR/` | Every string | `en-CA` |
+| German (Germany), `de-DE` | `src/languages/de-DE/` | Every string | `en-CA` |
 | French (Quebec), `fr-CA` | `src/languages/fr-CA/` | The strings that differ: *courriel* for *email*, *mot-clic* for *hashtag* | `fr-FR`, then `en-CA` |
 
 Each file in a directory is a namespace of strings, and `index.js` gathers
@@ -75,8 +76,9 @@ to.
 
 **Who translated them.** The translations, from the Canadian English the app
 is written in, are made by Claude, an AI model made by Anthropic, at the
-project's request. Nobody who speaks French, or any language to come, as
-their first language has read them yet. If something reads wrong to you,
+project's request. Nobody who speaks French or German, or any language to
+come, as their first language has read them yet. The German uses the
+informal *du*, as German Mastodon does. If something reads wrong to you,
 please say so: a correction to a string in `src/languages/` is welcome.
 
 **Which language a visitor sees** is chosen from their browser's languages,
@@ -88,6 +90,7 @@ in their order, by `src/languages/choose.js`:
 | Any other English: `en-CA`, `en-GB`, `en-AU`, `en` | `en-CA` |
 | `fr-CA` | `fr-CA` |
 | Any other French: `fr-FR`, `fr-BE`, `fr-CH`, `fr` | `fr-FR` |
+| Any German: `de-DE`, `de-AT`, `de-CH`, `de` | `de-DE` |
 | None of these | The site's default, `REACT_APP_LANGUAGE`; `en-CA` when unset |
 
 So somebody whose browser prefers German, then French, sees French. It is

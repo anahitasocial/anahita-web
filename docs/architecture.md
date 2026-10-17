@@ -1364,7 +1364,7 @@ directory named for its locale, such as `en-CA` or `fr-FR`. Each file in it is
 a namespace, such as `people.js` or `settings.js`, used as
 `i18n.t('people:settings.info')`.
 
-`en-CA` and `fr-FR` are bases, with every string; `en-US` and `fr-CA` are
+`en-CA`, `fr-FR` and `de-DE` are bases, with every string; `en-US` and `fr-CA` are
 layers, with only the strings that differ, and `fallbackLng` reads the rest
 from the base. The language is chosen from the browser's when the app starts
 (`src/languages/choose.js`), and `REACT_APP_LANGUAGE` is the default when the
