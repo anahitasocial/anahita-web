@@ -1,11 +1,12 @@
+import LIMITS from './limits';
+
 export default {
   FIELDS: {
     NAME: {
-      MIN_LENGTH: 10,
-      MAX_LENGTH: 100,
+      MAX_LENGTH: LIMITS.TITLE_MAX,
     },
     BODY: {
-      MAX_LENGTH: 8000,
+      MAX_LENGTH: LIMITS.POST_BODY_MAX,
     },
   },
   // The most hashtags a post is filed under: the first this many different

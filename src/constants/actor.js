@@ -1,3 +1,5 @@
+import LIMITS from './limits';
+
 export default {
   FILTER: {
     ADMINISTERING: 'administering',
@@ -5,14 +7,15 @@ export default {
   },
   FIELDS: {
     NAME: {
-      MAX_LENGTH: 100,
+      MAX_LENGTH: LIMITS.DISPLAY_NAME_MAX,
     },
+    // Typed to confirm deleting a profile: whatever its address is.
     ALIAS: {
       MAX_LENGTH: 100,
       MIN_LENGTH: 3,
     },
     BODY: {
-      MAX_LENGTH: 1000,
+      MAX_LENGTH: LIMITS.BIO_MAX,
     },
     METADATA: {
       MAX_LENGTH: 100,

@@ -25,6 +25,7 @@ import api from '../../api';
 import i18n from '../../languages';
 import events from '../../utils/events';
 import utils from '../../utils';
+import LIMITS from '../../constants/limits';
 
 const { getURL, getActorName } = utils.node;
 
@@ -176,7 +177,7 @@ const EventForm = ({
             value={values.name}
             onChange={set('name')}
             disabled={isSaving}
-            slotProps={{ htmlInput: { maxLength: 100 } }}
+            slotProps={{ htmlInput: { maxLength: LIMITS.DISPLAY_NAME_MAX } }}
           />
           <TextField
             fullWidth
@@ -186,7 +187,7 @@ const EventForm = ({
             value={values.body}
             onChange={set('body')}
             disabled={isSaving}
-            slotProps={{ htmlInput: { maxLength: 10000, dir: 'auto' } }}
+            slotProps={{ htmlInput: { maxLength: LIMITS.POST_BODY_MAX, dir: 'auto' } }}
           />
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2}>
             <TextField

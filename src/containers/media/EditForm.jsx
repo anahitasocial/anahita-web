@@ -90,7 +90,6 @@ const MediumFormEdit = (props) => {
               htmlInput: {
                 dir: 'auto',
                 maxLength: NAME.MAX_LENGTH,
-                minLength: NAME.MIN_LENGTH,
               },
             }}
           />}

@@ -22,7 +22,7 @@ export default {
   needsPicture: 'Add a picture or a video to post here.',
   // Under the title and the text of an article or a topic, when posting
   // without them.
-  titleNeeded: 'A title of at least {{count}} characters.',
+  titleNeeded: 'A title is needed.',
   bodyNeeded: 'Write something first.',
   // An article's cover, chosen in the extended composer.
   removeCover: 'Remove the cover',

@@ -10,7 +10,7 @@ export default {
   needsPicture: 'Ajoutez une image ou une vidéo pour publier ici.',
   video: 'Vidéo',
   addVideo: 'Ajouter une vidéo',
-  titleNeeded: 'Un titre d’au moins {{count}} caractères.',
+  titleNeeded: 'Un titre est nécessaire.',
   bodyNeeded: 'Écrivez quelque chose d’abord.',
   removeCover: 'Retirer la couverture',
   coverRefused: 'L’article est publié sans elle ; vous pouvez ajouter une couverture sur l’article.',

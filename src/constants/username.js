@@ -1,5 +1,6 @@
 // Bounds and character set for the username-change flow, mirroring
-// requests.UsernameChangeEdit on the server (`min=3,max=32,username`).
+// requests.UsernameChangeEdit on the server (`min=3,max=30,username`), and
+// constants/limits.js.
 //
 // USERNAME_PATTERN is the same expression as validateUsername in
 // anahita-libs/validators. Duplicated rather than inferred so the
@@ -10,8 +11,10 @@
 // The restriction is the impersonation guard, not tidiness: without it
 // a handle could carry spaces, dots, or lookalike Unicode and read as
 // somebody else's.
-const USERNAME_MIN_LENGTH = 3;
-const USERNAME_MAX_LENGTH = 32;
+import LIMITS from './limits';
+
+const USERNAME_MIN_LENGTH = LIMITS.USERNAME_MIN;
+const USERNAME_MAX_LENGTH = LIMITS.USERNAME_MAX;
 const USERNAME_PATTERN = /^[a-zA-Z0-9\-_]+$/;
 
 export default {
