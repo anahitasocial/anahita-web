@@ -164,6 +164,11 @@ export default (theme) => {
       zIndex: 1,
       backgroundColor: theme.palette.background.paper,
       borderBottom: `1px solid ${theme.palette.divider}`,
+      // Three tabs in the side panel, narrower than the theme's 160 pixels
+      // a tab on a wide screen: they share it out instead.
+      '& .MuiTab-root': {
+        minWidth: 0,
+      },
     },
     footerNav: {
       display: 'flex',

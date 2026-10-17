@@ -21,6 +21,8 @@ import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
@@ -34,6 +36,8 @@ import ActorTitle from '../../../../components/ActorTitle';
 import ActorAvatar from '../../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../../components/MediumOwnerCardHeader';
 import { PhotoSlideImage } from '../../../../components/PhotoSlides';
+import CitedByTab from '../../Read/CitedByTab';
+import VideoPlayer from '../../../../components/VideoPlayer';
 import EntityBody from '../../../../components/NodeBody';
 import i18n from '../../../../languages';
 import utils from '../../../../utils';
@@ -55,7 +59,13 @@ const DRAG_THRESHOLD = 5;
 const TABS = {
   REPLIES: 'replies',
   LOCATIONS: 'locations',
+  CITED_BY: 'cited-by',
 };
+
+// What scrolls, for Cited by's infinite scroll: the side panel beside the
+// picture, or the whole lightbox where the two are stacked.
+const ROOT_ID = 'medium-stepper-root';
+const DETAILS_ID = 'medium-stepper-details';
 
 const MediumStepperLightboxDefault = ({
   classes,
@@ -75,6 +85,7 @@ const MediumStepperLightboxDefault = ({
   handlePrev,
 }) => {
   const [tab, setTab] = useState(TABS.REPLIES);
+  const isStacked = useMediaQuery(useTheme().breakpoints.down('md'));
   const [resolvedSrc, setResolvedSrc] = useState('');
   const [loadedSrc, setLoadedSrc] = useState('');
   const [isZoomed, setIsZoomed] = useState(false);
@@ -143,6 +154,7 @@ const MediumStepperLightboxDefault = ({
   // Zoomed, it is the one image at full size, as for any photo.
   const hasRow = fileCount > 1;
   const hasPortrait = portraits.length > 0;
+  const hasVideo = Boolean(medium && medium.video);
   const src = isZoomed ? zoom : resolvedSrc;
   // Derived rather than reset in an effect: an effect lands a frame late, and
   // that frame shows the previous photo under the new src.
@@ -355,8 +367,31 @@ const MediumStepperLightboxDefault = ({
   ) : null;
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} id={ROOT_ID}>
       <Grid container>
+        {/* A video plays where a photo would be shown; the arrows to step
+            are under the post, as for anything without a picture. */}
+        {!hasPortrait && hasVideo &&
+          <Grid
+            className={classes.mediaPane}
+            size={{ xs: 12, md: 8 }}
+          >
+            <Box
+              sx={{
+                width: '100%',
+                // As tall as the pane at most, so a portrait video keeps its
+                // controls in view (styles.js: the pane's two heights).
+                '& video': {
+                  display: 'block',
+                  width: '100%',
+                  maxHeight: { xs: '60vh', md: 'calc(100vh - 49px)' },
+                  objectFit: 'contain',
+                },
+              }}
+            >
+              <VideoPlayer video={medium.video} title={medium.title} />
+            </Box>
+          </Grid>}
         {hasPortrait &&
           <Grid
             ref={paneRef}
@@ -485,9 +520,9 @@ const MediumStepperLightboxDefault = ({
               </Tooltip>
             </div>}
           </Grid>}
-        <Grid size={{ xs: 12, md: hasPortrait ? 4 : 12 }}>
-          <div className={classes.details}>
-            <div className={hasPortrait ? undefined : classes.detailsInner}>
+        <Grid size={{ xs: 12, md: hasPortrait || hasVideo ? 4 : 12 }}>
+          <div className={classes.details} id={DETAILS_ID}>
+            <div className={hasPortrait || hasVideo ? undefined : classes.detailsInner}>
               <Card>
                 {medium.owner && medium.owner.type &&
                   getNamespace(medium.owner) !== 'people' &&
@@ -571,9 +606,15 @@ const MediumStepperLightboxDefault = ({
               >
                 <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
                 <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
+                <Tab label={i18n.t('media:citations.citedBy')} value={TABS.CITED_BY} />
               </Tabs>
               {tab === TABS.REPLIES && replies}
               {tab === TABS.LOCATIONS && locations}
+              {tab === TABS.CITED_BY &&
+                <CitedByTab
+                  medium={medium}
+                  scrollableTarget={isStacked ? ROOT_ID : DETAILS_ID}
+                />}
             </div>
           </div>
         </Grid>

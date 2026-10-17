@@ -18,7 +18,9 @@ const LIMIT = 20;
 // places (the user, 2026-10-17: "citations are part of the article, cited
 // by are relations"): newest first, as the viewer may see them, more as
 // they scroll. What an article cites stays at the end of its text.
-const CitedByTab = ({ medium }) => {
+// scrollableTarget is the id of the element that scrolls, where that is not
+// the window: the stepper's side panel.
+const CitedByTab = ({ medium, scrollableTarget = undefined }) => {
   const [posts, setPosts] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,6 +60,7 @@ const CitedByTab = ({ medium }) => {
           }}
           hasMore={posts.length < total}
           loader={<Progress key="cited-by-progress" />}
+          scrollableTarget={scrollableTarget}
           style={{ overflow: 'visible' }}
         >
           <List>
@@ -72,6 +75,7 @@ const CitedByTab = ({ medium }) => {
 
 CitedByTab.propTypes = {
   medium: PropTypes.object.isRequired,
+  scrollableTarget: PropTypes.string,
 };
 
 export default CitedByTab;
