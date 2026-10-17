@@ -115,7 +115,6 @@ export default {
       danger: 'Zone de danger',
     },
     notifications: 'Paramètres de notification',
-    followRequests: 'Demandes d’abonnement',
   },
   notifications: {
     cTitle: 'Notifications',

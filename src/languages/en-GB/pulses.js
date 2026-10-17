@@ -117,7 +117,6 @@ export default {
       danger: 'Danger zone',
     },
     notifications: 'Notification settings',
-    followRequests: 'Follow requests',
   },
   notifications: {
     cTitle: 'Notifications',
