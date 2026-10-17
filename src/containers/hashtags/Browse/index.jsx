@@ -10,6 +10,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 
 import Progress from '../../../components/Progress';
+import TrendingWindow from '../../../components/TrendingWindow';
 
 import HashtagsType from '../../../proptypes/Hashtags';
 
@@ -37,6 +38,7 @@ const HashtagsBrowse = ({
   queryFilters = DEFAULT_FILTERS,
   total = 0,
   isFetching = false,
+  trendingWindow = '',
 }) => {
   const {
     q = '',
@@ -74,7 +76,6 @@ const HashtagsBrowse = ({
     browseList({
       start,
       limit: LIMIT,
-      time_window: sort === TRENDING ? 'weekly' : undefined,
       ...queryFilters,
     });
   }, [start, queryKey]);
@@ -99,6 +100,11 @@ const HashtagsBrowse = ({
 
   return (
     <List>
+      {sort === TRENDING &&
+        <TrendingWindow
+          window={trendingWindow}
+          empty={!isFetching && items.allIds.length === 0}
+        />}
       <InfiniteScroll
         dataLength={items.allIds.length}
         next={fetchList}
@@ -139,6 +145,8 @@ HashtagsBrowse.propTypes = {
   error: PropTypes.string.isRequired,
   total: PropTypes.number,
   isFetching: PropTypes.bool,
+  // Over what span of time the trending list is.
+  trendingWindow: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -147,6 +155,7 @@ const mapStateToProps = (state) => {
     error,
     total,
     isFetching,
+    window,
   } = state.hashtags;
 
   return {
@@ -154,6 +163,7 @@ const mapStateToProps = (state) => {
     error,
     total,
     isFetching,
+    trendingWindow: window,
   };
 };
 

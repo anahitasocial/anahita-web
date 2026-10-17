@@ -62,6 +62,9 @@ const browseSuccess = (results, namespace, requestId) => {
     limit,
     start,
     hasMore,
+    // Over what span of time a trending list is (anahita-libs/trending),
+    // where the answer says.
+    window: data.window || '',
     requestId,
   };
 };

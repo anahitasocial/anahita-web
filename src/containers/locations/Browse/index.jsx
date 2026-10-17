@@ -7,6 +7,7 @@ import List from '@mui/material/List';
 
 import ListItem from './ListItem';
 import Progress from '../../../components/Progress';
+import TrendingWindow from '../../../components/TrendingWindow';
 import LocationsType from '../../../proptypes/Locations';
 
 import actions from '../../../actions';
@@ -33,6 +34,7 @@ const LocationsBrowse = ({
   queryFilters = DEFAULT_FILTERS,
   total = 0,
   isFetching = false,
+  trendingWindow = '',
 }) => {
   const {
     q = '',
@@ -70,7 +72,6 @@ const LocationsBrowse = ({
     browseList({
       start,
       limit: LIMIT,
-      time_window: sort === TRENDING ? 'weekly' : undefined,
       ...queryFilters,
     });
   }, [start, queryKey]);
@@ -94,24 +95,31 @@ const LocationsBrowse = ({
   };
 
   return (
-    <InfiniteScroll
-      dataLength={items.allIds.length}
-      next={fetchList}
-      hasMore={hasMore}
-      loader={
-        <Progress key="items-progress" />
-      }
-    >
-      <List>
-        {items.allIds.map((itemId) => {
-          const node = items.byId[itemId];
-          const key = `locations_node_list_item_${itemId}`;
-          return (
-            <ListItem location={node} key={key} />
-          );
-        })}
-      </List>
-    </InfiniteScroll>
+    <>
+      {sort === TRENDING &&
+        <TrendingWindow
+          window={trendingWindow}
+          empty={!isFetching && items.allIds.length === 0}
+        />}
+      <InfiniteScroll
+        dataLength={items.allIds.length}
+        next={fetchList}
+        hasMore={hasMore}
+        loader={
+          <Progress key="items-progress" />
+        }
+      >
+        <List>
+          {items.allIds.map((itemId) => {
+            const node = items.byId[itemId];
+            const key = `locations_node_list_item_${itemId}`;
+            return (
+              <ListItem location={node} key={key} />
+            );
+          })}
+        </List>
+      </InfiniteScroll>
+    </>
   );
 };
 
@@ -124,6 +132,8 @@ LocationsBrowse.propTypes = {
   error: PropTypes.string.isRequired,
   total: PropTypes.number,
   isFetching: PropTypes.bool,
+  // Over what span of time the trending list is.
+  trendingWindow: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {
@@ -132,6 +142,7 @@ const mapStateToProps = (state) => {
     error,
     total,
     isFetching,
+    window,
   } = state.locations;
 
   return {
@@ -139,6 +150,7 @@ const mapStateToProps = (state) => {
     error,
     total,
     isFetching,
+    trendingWindow: window,
   };
 };
 

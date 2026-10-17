@@ -83,9 +83,9 @@ const Locations = ({
           indicatorColor="primary"
           textColor="primary"
         >
-          <Tab label="Trending" value={TRENDING} />
-          <Tab label="Top" value={TOP} />
-          <Tab label="Recent" value={RECENT} />
+          <Tab label={i18n.t('commons:sortByOptions.trending')} value={TRENDING} />
+          <Tab label={i18n.t('commons:sortByOptions.popular')} value={TOP} />
+          <Tab label={i18n.t('commons:sortByOptions.recent')} value={RECENT} />
         </Tabs>
       </AppBar>
       {useMemo(() => {

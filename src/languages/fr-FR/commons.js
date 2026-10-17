@@ -4,6 +4,13 @@ export default {
   administering: 'Administrés',
   readMore: 'Lire la suite',
   howItWorks: 'Comment ça marche',
+  trending: {
+    daily: 'Tendances du jour',
+    weekly: 'Tendances de la semaine',
+    monthly: 'Tendances du mois',
+    yearly: 'Tendances de l’année',
+    none: 'Rien n’a été en tendance cette année.',
+  },
   close: 'Fermer',
   dismiss: 'Masquer',
   enabled: 'Activé',
@@ -20,7 +27,7 @@ export default {
     recent: 'Récent',
     updated: 'Mis à jour',
     trending: 'Tendances',
-    top: 'Populaire',
+    popular: 'Populaire',
   },
   filterByType: 'Filtrer par type',
   filterByOptions: {

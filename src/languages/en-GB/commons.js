@@ -4,6 +4,14 @@ export default {
   administering: 'Administering',
   readMore: 'Read more',
   howItWorks: 'How it works',
+  // Over what span of time a trending list is.
+  trending: {
+    daily: 'Trending today',
+    weekly: 'Trending this week',
+    monthly: 'Trending this month',
+    yearly: 'Trending this year',
+    none: 'Nothing has trended in the past year.',
+  },
   close: 'Close',
   dismiss: 'Dismiss',
   enabled: 'Enabled',
@@ -20,7 +28,7 @@ export default {
     recent: 'Recent',
     updated: 'Updated',
     trending: 'Trending',
-    top: 'Popular',
+    popular: 'Popular',
   },
   filterByType: 'Filter by type',
   filterByOptions: {

@@ -84,7 +84,7 @@ const Hashtags = ({
           textColor="primary"
         >
           <Tab label={i18n.t('commons:sortByOptions.trending')} value={TRENDING} />
-          <Tab label={i18n.t('commons:sortByOptions.top')} value={TOP} />
+          <Tab label={i18n.t('commons:sortByOptions.popular')} value={TOP} />
           <Tab label={i18n.t('commons:sortByOptions.recent')} value={RECENT} />
         </Tabs>
       </AppBar>
