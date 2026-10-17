@@ -43,7 +43,7 @@ export default {
       aliasHelp: 'Son adresse ici et sur le fédivers : {{ handle }}. Lettres, chiffres, - et _.',
       body: 'Description',
       connect: 'Connecter',
-      seen: 'Ce que contient votre fil maintenant n’est pas publié ; ce que vous publierez désormais le sera.',
+      seen: 'Vos dix publications les plus récentes paraissent aussitôt ; ce que vous publierez ensuite suivra.',
     },
     copy: 'Copier',
     copied: 'Copié',

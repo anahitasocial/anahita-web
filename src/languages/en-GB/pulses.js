@@ -44,7 +44,7 @@ export default {
       aliasHelp: 'Its address here and on the fediverse: {{ handle }}. Letters, digits, - and _.',
       body: 'Description',
       connect: 'Connect',
-      seen: 'What your feed holds now is not posted; what you publish from now on is.',
+      seen: 'Your ten newest posts appear at once; what you publish from now on follows.',
     },
     copy: 'Copy',
     copied: 'Copied',
