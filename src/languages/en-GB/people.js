@@ -3,12 +3,11 @@ export default {
   mTitle: 'People',
   // Under the title of the list of people: whose list it is.
   browse: {
-    title: 'Local people',
-    local: 'People with a profile on {{ site }}.',
-    localUnnamed: 'People with a profile on this site.',
+    title: 'People',
+    local: 'Local people on this instance.',
     elsewhere: {
-      both: 'To find somebody on Mastodon or Bluesky, search for their handle.',
-      activitypub: 'To find somebody on Mastodon or another server of the fediverse, search for their handle.',
+      both: 'To find somebody on the fediverse or Bluesky, search for their handle.',
+      activitypub: 'To find somebody on the fediverse, search for their handle.',
       atproto: 'To find somebody on Bluesky, search for their handle.',
     },
   },
