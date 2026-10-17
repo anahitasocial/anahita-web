@@ -15,7 +15,7 @@ import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
 import EventsIcon from '@mui/icons-material/Event';
 import PeopleIcon from '@mui/icons-material/People';
 import GroupsIcon from '@mui/icons-material/GroupWork';
-import WebsiteIcon from '@mui/icons-material/Language';
+import WebsiteIcon from '@mui/icons-material/RssFeed';
 // ExitToApp, not LockOpen.
 //
 // An open padlock pictures an account that is NOT secured, which is the

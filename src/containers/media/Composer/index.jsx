@@ -5,7 +5,7 @@ import AppBar from '@mui/material/AppBar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
-import ExpandIcon from '@mui/icons-material/ZoomOutMap';
+import ExpandIcon from '@mui/icons-material/OpenInFull';
 
 import ShortComposer from './Short';
 import LongComposer from './Long';

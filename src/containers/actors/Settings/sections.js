@@ -348,6 +348,9 @@ export const getGroupTabs = ({
       { key: ITEMS.ADMINS, bare: true },
       { key: ITEMS.ACCESS, bare: true },
       { key: ITEMS.WEBSITE, bare: true },
+      // Its own Bluesky account, where its notes are posted too. The
+      // card brings its own Card.
+      { key: ITEMS.BLUESKY, bare: true },
       { key: ITEMS.DANGER, bare: true, requiresDanger: true },
     ].filter((item) => {
       return !item.requiresDanger || canDelete || isAdmin;

@@ -65,7 +65,14 @@ const importChoices = (preview) => {
 // keeps neither: it exchanges the password for a token and keeps that.
 //
 // Nothing is drawn on an installation that does not write to Bluesky.
-const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
+//
+// Given a website, it is that website's own account, connected by one of
+// its administrators: its notes are posted there too, so that people on
+// Bluesky follow it there (docs/websites.md). A website follows nobody, and
+// answers from here only as itself, so there is no following to bring here
+// and nothing for the viewer's own reply box to say.
+const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => {
+  const profileId = profile ? profile.id : 0;
   const [settings, setSettings] = useState(null);
   const [isAbsent, setIsAbsent] = useState(false);
   const [handle, setHandle] = useState('');
@@ -78,12 +85,12 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
   const [howMany, setHowMany] = useState(0);
 
   useEffect(() => {
-    api.federation.blueskySettings().then((result) => {
+    api.federation.blueskySettings(profileId).then((result) => {
       setSettings(result.data);
     }).catch((error) => {
       setIsAbsent(federation.isAbsent(error) || federation.reasonOf(error) === 'bluesky_writing_off');
     });
-  }, []);
+  }, [profileId]);
 
   if (isAbsent || !settings) {
     return null;
@@ -91,8 +98,11 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
 
   const took = (data) => {
     setSettings(data);
-    // The reply box says whether a reply will reach Bluesky, from this.
-    rememberOnBluesky(Boolean(data && data.connected && !data.broken));
+    // The reply box says whether a reply will reach Bluesky, from this:
+    // the viewer's own account, not a website's.
+    if (!profile) {
+      rememberOnBluesky(Boolean(data && data.connected && !data.broken));
+    }
   };
 
   const handleConnect = (event) => {
@@ -102,7 +112,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
     api.federation.connectBluesky({
       handle: handle.trim(),
       appPassword: password.trim(),
-    }).then((result) => {
+    }, profileId).then((result) => {
       took(result.data);
       setHandle('');
       setPassword('');
@@ -121,7 +131,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
     setIsLeaving(false);
     setIsSaving(true);
 
-    api.federation.disconnectBluesky().then((result) => {
+    api.federation.disconnectBluesky(profileId).then((result) => {
       took(result.data);
       alertSuccess(i18n.t('federation:bluesky.disconnected'));
     }).catch(() => {
@@ -176,7 +186,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
       />
       <CardContent sx={{ pt: 0 }}>
         <Typography variant="body2" color="textSecondary">
-          {i18n.t('federation:bluesky.help')}
+          {i18n.t(profile ? 'websites:settings.blueskyHelp' : 'federation:bluesky.help')}
         </Typography>
 
         {settings.connected &&
@@ -186,7 +196,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
             <strong>{`@${settings.handle}`}</strong>
           </Typography>}
 
-        {works &&
+        {works && !profile &&
           <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
             {i18n.t('federation:bluesky.import.help')}
           </Typography>}
@@ -242,15 +252,16 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
             >
               {i18n.t('federation:bluesky.disconnect')}
             </Button>
-            <Button
-              fullWidth
-              variant="contained"
-              color="secondary"
-              disabled={isSaving || isImported}
-              onClick={openImport}
-            >
-              {i18n.t('federation:bluesky.import.action')}
-            </Button>
+            {!profile &&
+              <Button
+                fullWidth
+                variant="contained"
+                color="secondary"
+                disabled={isSaving || isImported}
+                onClick={openImport}
+              >
+                {i18n.t('federation:bluesky.import.action')}
+              </Button>}
           </> :
           <>
             {settings.connected &&
@@ -368,6 +379,8 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError }) => {
 ActorsSettingsBluesky.propTypes = {
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
+  // A website the viewer looks after; left out, the viewer.
+  profile: PropTypes.shape({ id: PropTypes.number }),
 };
 
 const mapDispatchToProps = (dispatch) => {

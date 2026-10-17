@@ -36,18 +36,25 @@ const lookup = (query) => {
 // things from Bluesky is done there as it. Where the installation does not
 // write to Bluesky, the answer is an error, taken for there being nothing
 // to show.
-const blueskySettings = () => {
-  return axios.get('/atproto/settings');
+//
+// `profileId`, when given, is a website the viewer looks after: its own
+// Bluesky account, which its notes are posted to.
+const forProfile = (profileId) => {
+  return profileId ? { params: { profile_id: profileId } } : {};
+};
+
+const blueskySettings = (profileId = 0) => {
+  return axios.get('/atproto/settings', forProfile(profileId));
 };
 
 // `appPassword` is a password made for an app, on Bluesky. The server
 // exchanges it for a token and does not keep it.
-const connectBluesky = ({ handle, appPassword }) => {
-  return axios.put('/atproto/settings', { handle, app_password: appPassword });
+const connectBluesky = ({ handle, appPassword }, profileId = 0) => {
+  return axios.put('/atproto/settings', { handle, app_password: appPassword }, forProfile(profileId));
 };
 
-const disconnectBluesky = () => {
-  return axios.delete('/atproto/settings');
+const disconnectBluesky = (profileId = 0) => {
+  return axios.delete('/atproto/settings', forProfile(profileId));
 };
 
 // Follows here the accounts the viewer's Bluesky account follows already.

@@ -362,6 +362,7 @@ const ActorsSettings = ({
       </Stack>
     ),
     [ITEMS.WEBSITE]: <WebsiteFollowSnippet actor={actor} />,
+    [ITEMS.BLUESKY]: <ActorBluesky profile={actor} />,
     // Who can do what in the group, and with what is posted in it: whether
     // its new photos and videos start out downloadable. Not an event's.
     [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (

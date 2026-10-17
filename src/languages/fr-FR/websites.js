@@ -69,6 +69,8 @@ export default {
     admins: 'Administrateurs',
     access: 'Bloqués',
     website: 'Sur votre site',
+    bluesky: 'Bluesky',
+    blueskyHelp: 'Connectez le compte Bluesky du site lui-même, avec votre domaine comme identifiant si vous voulez (@exemple.fr) : ses notes y sont publiées aussi, et les gens sur Bluesky le suivent là-bas. Utilisez un mot de passe d’application, pas celui du compte.',
     websiteIntro: 'Collez ceci dans votre site pour mener vos lecteurs jusqu’ici.',
     snippetLabel: 'Suivez notre site sur le fédivers',
     disable: 'Désactiver',

@@ -14,7 +14,7 @@ import StepLabel from '@mui/material/StepLabel';
 import Stepper from '@mui/material/Stepper';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
-import WebsiteIcon from '@mui/icons-material/Language';
+import WebsiteIcon from '@mui/icons-material/RssFeed';
 
 import CopyValue from '../../components/CopyValue';
 import PageColumn from '../../components/PageColumn';

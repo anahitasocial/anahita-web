@@ -10,7 +10,7 @@ import Tab from '@mui/material/Tab';
 
 import GroupsIcon from '@mui/icons-material/GroupWork';
 import PeopleIcon from '@mui/icons-material/People';
-import WebsiteIcon from '@mui/icons-material/Language';
+import WebsiteIcon from '@mui/icons-material/RssFeed';
 
 import Browse from './Browse';
 import BrowseHeader from '../../components/BrowseHeader';

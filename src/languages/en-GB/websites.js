@@ -71,6 +71,8 @@ export default {
     admins: 'Admins',
     access: 'Blocked',
     website: 'On your site',
+    bluesky: 'Bluesky',
+    blueskyHelp: 'Connect the website’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
     websiteIntro: 'Paste this into your site to lead your readers to it here.',
     snippetLabel: 'Follow our website on the fediverse',
     disable: 'Disable',
