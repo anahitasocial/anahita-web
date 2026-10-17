@@ -27,8 +27,8 @@ const suggest = (q, { limit = 8 } = {}) => {
 };
 
 // Hashtags in use that are words of a text, leaving out those it has.
-const suggestFor = ({ title = '', body = '', limit = 8 }) => {
-  return axios.post('/hashtags/_suggest', { title, body, limit });
+const suggestFor = ({ title = '', content = '', limit = 8 }) => {
+  return axios.post('/hashtags/_suggest', { title, content, limit });
 };
 
 // The lists of the Hashtags page (the user, 2026-10-17). Each answers a

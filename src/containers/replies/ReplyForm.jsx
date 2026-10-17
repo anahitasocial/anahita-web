@@ -26,7 +26,7 @@ import videos from '../../utils/videos';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
 
-const { BODY } = MEDIUM.FIELDS;
+const { CONTENT } = MEDIUM.FIELDS;
 
 // The box a reply is written in: under a post, under a reply, or in place of
 // a reply that is being changed.
@@ -143,7 +143,7 @@ const ReplyForm = ({
         slotProps={{
           htmlInput: {
             dir: direction,
-            maxLength: BODY.MAX_LENGTH,
+            maxLength: CONTENT.MAX_LENGTH,
             ...hashtags.handlers,
           },
         }}

@@ -21,7 +21,7 @@ import photoFiles from '../../../utils/photoFiles';
 
 const { getPortraitURL, getNamespace } = utils.node;
 
-const formFields = form.createFormFields(['name', 'body']);
+const formFields = form.createFormFields(['title', 'content']);
 
 // Arrow keys belong to whatever the viewer is typing in — a comment box, the
 // edit form — before they belong to the stepper.

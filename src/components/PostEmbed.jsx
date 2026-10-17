@@ -88,10 +88,10 @@ const clamp = (lines) => {
 // classes and a tag.
 const Caption = ({ post }) => {
   const author = getAuthor(post);
-  const said = plainText(post.body || '').replace(/\s+/g, ' ').trim();
+  const said = plainText(post.content || '').replace(/\s+/g, ' ').trim();
   return (
     <Box sx={{ mt: 1 }}>
-      {post.name &&
+      {post.title &&
         <Typography variant="body2" component="div" dir="auto" sx={{ fontWeight: 500 }}>
           <Link
             component={RouterLink}
@@ -99,7 +99,7 @@ const Caption = ({ post }) => {
             underline="hover"
             sx={{ '&&&': { color: 'text.primary' } }}
           >
-            {post.name}
+            {post.title}
           </Link>
         </Typography>}
       {said &&
@@ -199,7 +199,7 @@ Who.propTypes = {
 // opens it in a tab of its own so the article being read stays open.
 const Words = ({ post }) => {
   const cover = getCoverURL(post, 'medium');
-  const text = excerptOf(post.body);
+  const text = excerptOf(post.content);
   const author = getAuthor(post);
   const { owner } = post;
   const elsewhere = owner && owner.id && owner.id !== author.id;
@@ -244,10 +244,10 @@ const Words = ({ post }) => {
               <Who actor={owner} size={20} />
             </>}
         </Box>
-        {post.name &&
+        {post.title &&
           <Typography variant="subtitle1" component="div" dir="auto" sx={{ fontWeight: 600 }}>
             <Link component={RouterLink} to={url} underline="hover">
-              {post.name}
+              {post.title}
             </Link>
           </Typography>}
         {text &&
@@ -449,7 +449,7 @@ const Post = ({ url, at }) => {
   if (at.kind === 'video' && post.video) {
     return (
       <Box sx={SPACE}>
-        <VideoPlayer video={post.video} title={post.name} />
+        <VideoPlayer video={post.video} title={post.title} />
         <Caption post={post} />
       </Box>
     );
@@ -601,7 +601,7 @@ const Citation = ({ url, cards }) => {
         to={post ? getURL(post) : new URL(url).pathname}
         loading={!post}
         avatar={author && <ActorAvatar actor={author} />}
-        primary={post && (post.name || excerptOf(post.body, 160) || url)}
+        primary={post && (post.title || excerptOf(post.content, 160) || url)}
         secondary={author && whoIs(author)}
       />
     );
@@ -647,7 +647,7 @@ const PostRow = ({ post }) => {
       url={getURL(post)}
       to={getURL(post)}
       avatar={author && <ActorAvatar actor={author} />}
-      primary={post.name || excerptOf(post.body, 160)}
+      primary={post.title || excerptOf(post.content, 160)}
       secondary={author && whoIs(author)}
     />
   );

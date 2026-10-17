@@ -19,7 +19,7 @@ const relatedById = (related) => {
 };
 
 const nameOf = (node) => {
-  return (node && (node.name || node.alias)) || '';
+  return (node && (node.name || node.title || node.alias)) || '';
 };
 
 // Why a suggestion is one, as a line to read under its name: its first

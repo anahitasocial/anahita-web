@@ -15,9 +15,12 @@ export default shape({
   id: number,
   owner: ActorType,
   type: string,
+  // A profile's name and description; a post has a title and content.
   name: string,
+  title: string,
   alias: string,
   body: string,
+  content: string,
   imageURLs: ImageUrls,
   coverURLs: ImageUrls,
   administrators: arrayOf(PersonType),

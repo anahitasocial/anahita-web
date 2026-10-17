@@ -37,7 +37,7 @@ import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
 
-const { NAME, BODY } = MEDIUM.FIELDS;
+const { TITLE, CONTENT } = MEDIUM.FIELDS;
 
 // The words of the title and the content, as each kind of writing has them.
 const WORDS = {
@@ -170,11 +170,11 @@ const LongComposer = ({
   const bodyMissing = !text;
   // The editor has no limit of its own, as a text box had: said as soon as
   // it is passed, since the server would refuse it.
-  const bodyTooLong = text.length > BODY.MAX_LENGTH;
+  const bodyTooLong = text.length > CONTENT.MAX_LENGTH;
   const ready = !titleShort && !bodyMissing && !bodyTooLong;
   let bodyError = '';
   if (bodyTooLong) {
-    bodyError = i18n.t('composer:tooLong', { count: BODY.MAX_LENGTH });
+    bodyError = i18n.t('composer:tooLong', { count: CONTENT.MAX_LENGTH });
   } else if (tried && bodyMissing) {
     bodyError = i18n.t('composer:bodyNeeded');
   }
@@ -218,7 +218,7 @@ const LongComposer = ({
   // What a draft says now, saved over what it said.
   const saveOver = () => {
     return api[namespace].edit({
-      id: draftId, name, body: text, language: choices.language,
+      id: draftId, title: name, content: text, language: choices.language,
     });
   };
 
@@ -233,7 +233,7 @@ const LongComposer = ({
     const saving = draftId ?
       saveOver() :
       api[namespace].add({
-        name, body: text, ...choices.request(), draft: true,
+        title: name, content: text, ...choices.request(), draft: true,
       }, actor).then((result) => {
         setDraftRef(`${kind}:${result.data.id}`);
       });
@@ -272,7 +272,7 @@ const LongComposer = ({
       }).then((result) => {
         return posted(result.data);
       }) :
-      dispatch(actions[namespace].add({ name, body: text, ...choices.request() }, actor))
+      dispatch(actions[namespace].add({ title: name, content: text, ...choices.request() }, actor))
         .then(posted);
     posting.catch(() => {
       // What was written stays, to post again.
@@ -331,8 +331,8 @@ const LongComposer = ({
             disabled={busy}
             onOpen={(draft) => {
               setTab(draft.kind);
-              setTitle(draft.name || '');
-              setBody(draft.body || '');
+              setTitle(draft.title || '');
+              setBody(draft.content || '');
               setDraftRef(`${draft.kind}:${draft.id}`);
               setTried(false);
             }}
@@ -423,7 +423,7 @@ const LongComposer = ({
             fullWidth
             autoFocus={!phone}
             slotProps={{
-              htmlInput: { dir: choices.direction, maxLength: NAME.MAX_LENGTH },
+              htmlInput: { dir: choices.direction, maxLength: TITLE.MAX_LENGTH },
               inputLabel: { shrink: true },
             }}
           />

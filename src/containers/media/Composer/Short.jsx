@@ -43,7 +43,7 @@ import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
 
-const { BODY } = MEDIUM.FIELDS;
+const { CONTENT } = MEDIUM.FIELDS;
 const { isPerson } = utils.node;
 
 // The one box a post is written in, as a reply is: words, pictures, or a GIF
@@ -160,7 +160,7 @@ const ShortComposer = ({
   };
 
   const shared = () => {
-    return { body: text, ...choices.request() };
+    return { content: text, ...choices.request() };
   };
 
   const posted = () => {
@@ -178,8 +178,8 @@ const ShortComposer = ({
 
     if (video) {
       upload.start(actor, {
-        name: '',
-        body: text,
+        title: '',
+        content: text,
         ...choices.request(),
         allowDownload: choices.allowDownload,
       }, video).then((ok) => {
@@ -194,7 +194,7 @@ const ShortComposer = ({
     const kind = composer.kindOf({ hasPhotos: photosReady });
     const post = kind === 'photo' ? {
       ...shared(),
-      name: '',
+      title: '',
       uploads: photoFiles.toRequest(photoItems),
       allow_download: choices.allowDownload,
     } : {
@@ -334,7 +334,7 @@ const ShortComposer = ({
           input: { disableUnderline: true },
           htmlInput: {
             dir: choices.direction,
-            maxLength: BODY.MAX_LENGTH,
+            maxLength: CONTENT.MAX_LENGTH,
             ...hashtags.handlers,
           },
         }}

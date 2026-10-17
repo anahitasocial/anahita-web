@@ -269,7 +269,7 @@ const PhotoSlides = ({
       className={classes.root}
       role="group"
       aria-roledescription={several ? 'carousel' : undefined}
-      aria-label={medium.name || i18n.t('photos:mTitle')}
+      aria-label={medium.title || i18n.t('photos:mTitle')}
       tabIndex={0}
       onKeyDown={handleKeyDown}
     >

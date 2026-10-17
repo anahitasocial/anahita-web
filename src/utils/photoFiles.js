@@ -58,7 +58,7 @@ const urlOf = (file, size = 'medium') => {
 // before images could be described.
 const altOf = (medium, index = 0) => {
   const file = filesOf(medium)[index];
-  return (file && file.altText) || (medium && medium.name) || '';
+  return (file && file.altText) || (medium && medium.title) || '';
 };
 
 // What its author said an image shows, and nothing else: no falling back

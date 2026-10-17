@@ -117,7 +117,7 @@ const Grid = ({ kind, ownerId, onPick }) => {
       >
         {items.map((post) => {
           const thumb = thumbOf(post, kind);
-          const name = post.name || i18n.t(`composer:library.untitled.${kind}`);
+          const name = post.title || i18n.t(`composer:library.untitled.${kind}`);
           return (
             <ButtonBase
               key={`library-${kind}-${post.id}`}
@@ -216,8 +216,8 @@ const Upload = ({
     setIsSending(true);
     setProblem('');
     api.photos.add({
-      name: '',
-      body: '',
+      title: '',
+      content: '',
       access,
       library_only: true,
       uploads: photoFiles.toRequest(items),
@@ -238,8 +238,8 @@ const Upload = ({
     }
     setProblem('');
     upload.start(viewer, {
-      name: '',
-      body: '',
+      title: '',
+      content: '',
       access,
       libraryOnly: true,
     }, chosen);

@@ -41,7 +41,7 @@ const SuggestedHashtags = ({
     }
     let current = true;
     const timer = setTimeout(() => {
-      api.hashtags.suggestFor({ title, body }).then((result) => {
+      api.hashtags.suggestFor({ title, content: body }).then((result) => {
         if (current) {
           setItems((result.data && result.data.data) || []);
         }

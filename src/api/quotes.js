@@ -6,13 +6,13 @@ import utils from '../utils';
 // A quote is a note, made where notes are made, on the profile of whoever
 // writes it. Sent as JSON so the id of the quoted post goes as a number.
 const add = (viewer, {
-  body,
+  content,
   quoteId,
   access,
   language,
 }) => {
   return axios.post(`/notes/${viewer.id}/`, {
-    body,
+    content,
     quoteId,
     access,
     language,

@@ -5,9 +5,9 @@ import ImageUrlsDefault from './ImageUrlsDefault';
 export default {
   id: null,
   objectType: '',
-  name: '',
+  title: '',
   alias: '',
-  body: '',
+  content: '',
   portraitURL: ImageUrlsDefault,
   coverURL: ImageUrlsDefault,
   commands: [],

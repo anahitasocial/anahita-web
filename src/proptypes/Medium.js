@@ -14,9 +14,9 @@ import ImageUrls from './ImageUrls';
 export default shape({
   id: number,
   type: string,
-  name: string,
+  title: string,
   alias: string,
-  body: string,
+  content: string,
   portraitUrls: ImageUrls,
   // The images of a photo post, in order. The first is the one
   // portraitUrls shows. Not sent for other kinds of post.

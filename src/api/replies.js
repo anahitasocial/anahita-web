@@ -19,19 +19,19 @@ const thread = (root) => {
 // `card` says which link in it to show a card for (`linkPreviewUrl`), or,
 // for an edit, that its card was taken off (`linkPreviewRemove`). What the
 // card says is the server's.
-const add = (parent, { body, language, card = {} }) => {
-  return axios.post(`/notes/${parent.id}/replies`, { body, language, ...card });
+const add = (parent, { content, language, card = {} }) => {
+  return axios.post(`/notes/${parent.id}/replies`, { content, language, ...card });
 };
 
 // Answers a post or a reply with pictures, uploaded first for the person
 // replying (api/photos#upload with their own profile): `uploads` as
 // utils/photoFiles#toRequest makes them.
-const addWithPictures = (parent, { body, language, uploads }) => {
-  return axios.post(`/photos/${parent.id}/replies`, { body, language, uploads });
+const addWithPictures = (parent, { content, language, uploads }) => {
+  return axios.post(`/photos/${parent.id}/replies`, { content, language, uploads });
 };
 
-const edit = (reply, { body, card = {} }) => {
-  return axios.patch(`/notes/${reply.id}`, { body, ...card });
+const edit = (reply, { content, card = {} }) => {
+  return axios.patch(`/notes/${reply.id}`, { content, ...card });
 };
 
 const remove = (reply) => {

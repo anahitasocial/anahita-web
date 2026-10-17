@@ -112,7 +112,7 @@ const DraftsMenu = ({
               }}
             >
               <ListItemText
-                primary={draft.name || i18n.t('composer:drafts.untitled')}
+                primary={draft.title || i18n.t('composer:drafts.untitled')}
                 secondary={`${i18n.t(`composer:kinds.${draft.kind}`)} · ${moment.utc(draft.updatedAt || draft.createdAt).fromNow()}`}
                 slotProps={{ primary: { noWrap: true, dir: 'auto' } }}
               />

@@ -67,7 +67,7 @@ const QuoteEmbed = ({
   const author = post.author || {};
   const url = getURL(post);
   const image = getPortraitURL(post, 'medium');
-  const excerpt = excerptOf(post.body);
+  const excerpt = excerptOf(post.content);
   const createdAt = post.createdAt ? moment.utc(post.createdAt) : null;
 
   return (
@@ -96,10 +96,10 @@ const QuoteEmbed = ({
           </Link>}
       />
       <Box sx={{ p: 2 }}>
-        {post.name &&
+        {post.title &&
           <Typography variant="subtitle2" dir="auto">
             <Link href={url} color="inherit">
-              {post.name}
+              {post.title}
             </Link>
           </Typography>}
         {excerpt &&
@@ -110,7 +110,7 @@ const QuoteEmbed = ({
           >
             {excerpt}
           </Typography>}
-        {!post.name && !excerpt && !image &&
+        {!post.title && !excerpt && !image &&
           <Link href={url} variant="body2">
             {i18n.t('replies:quote.open')}
           </Link>}
@@ -120,7 +120,7 @@ const QuoteEmbed = ({
           <Box
             component="img"
             src={image}
-            alt={post.name || ''}
+            alt={post.title || ''}
             sx={{
               width: '100%',
               maxHeight: 320,

@@ -2,10 +2,10 @@ import LIMITS from './limits';
 
 export default {
   FIELDS: {
-    NAME: {
+    TITLE: {
       MAX_LENGTH: LIMITS.TITLE_MAX,
     },
-    BODY: {
+    CONTENT: {
       MAX_LENGTH: LIMITS.POST_BODY_MAX,
     },
   },

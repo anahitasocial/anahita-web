@@ -9,8 +9,8 @@ import axios from 'axios';
 // what is sent and received, which a signed address would refuse.
 const storage = axios.create({ withCredentials: false });
 
-// Begins an upload on a profile. `post` is what the post will say (name,
-// body, access, language, replyAccess, quotePolicy); the file is only
+// Begins an upload on a profile. `post` is what the post will say (title,
+// content, access, language, replyAccess, quotePolicy); the file is only
 // described.
 const start = (owner, post, file) => {
   return axios.post(`/videos/${owner.id}/uploads`, {

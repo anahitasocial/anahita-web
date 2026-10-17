@@ -263,7 +263,7 @@ const namesOf = (references) => {
   const names = {};
 
   list(references).forEach((node) => {
-    names[node.id] = node.name || node.alias || '';
+    names[node.id] = node.name || node.title || node.alias || '';
   });
 
   return names;

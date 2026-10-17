@@ -37,9 +37,9 @@ const MediaRead = ({
   const { id } = useParams();
 
   const formFields = useMemo(() => {
-    let names = ['name', 'body'];
+    let names = ['title', 'content'];
     if (namespace === 'notes') {
-      names = ['body'];
+      names = ['content'];
     }
     return utils.form.createFormFields(names);
   }, [namespace]);
@@ -125,11 +125,11 @@ const MediaRead = ({
   // place. See the composer's useLinkPreview.
   const knownCard = useMemo(() => {
     return medium && medium.linkPreview ?
-      { url: linkPreviews.urlToPreview(medium.body), preview: medium.linkPreview } :
+      { url: linkPreviews.urlToPreview(medium.content), preview: medium.linkPreview } :
       null;
-  }, [medium && medium.id, medium && medium.linkPreview, medium && medium.body]);
+  }, [medium && medium.id, medium && medium.linkPreview, medium && medium.content]);
   const linkPreview = useLinkPreview(
-    isEditing ? current.body : '',
+    isEditing ? current.content : '',
     isEditing && namespace === 'notes',
     knownCard,
   );

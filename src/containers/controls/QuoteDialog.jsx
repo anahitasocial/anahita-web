@@ -58,7 +58,7 @@ const QuoteDialog = ({
     setIsSending(true);
 
     api.quotes.add(viewer, {
-      body: text,
+      content: text,
       quoteId: post.id,
       access: audience.defaultFor(viewer, viewer),
       language: postLanguage.defaultFor(viewer),

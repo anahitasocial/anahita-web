@@ -520,17 +520,17 @@ const MediumStepperLightboxDefault = ({
                 {!editing &&
                   <>
                     <CardContent component="article">
-                      {medium.name &&
+                      {medium.title &&
                         <Typography
                           variant="h2"
                           className={classes.title}
                         >
-                          {medium.name}
+                          {medium.title}
                         </Typography>}
-                      {medium.body &&
+                      {medium.content &&
                         <EntityBody>
                           {utils.contentfilter({
-                            text: medium.body,
+                            text: medium.content,
                             filters: [
                               'hashtag',
                               'mention',

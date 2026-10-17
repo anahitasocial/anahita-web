@@ -76,10 +76,8 @@ const FeedCardDefault = ({
   const authorName = getPersonName(node.author);
   const portrait = getPortraitURL(node, 'medium');
   const cover = getCoverURL(node, 'medium');
-  // A post's title is its name. This read `title`, which no post is sent
-  // with, so no title was ever drawn on a card in a feed.
-  const { body } = node;
-  const title = node.name || '';
+  const { content } = node;
+  const title = node.title || '';
   const url = getURL(node);
   const long = isLong(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
@@ -168,12 +166,12 @@ const FeedCardDefault = ({
           </PostTitle>}
         {/* An article or a topic by its summary: what it shows within
             itself is on its page. */}
-        {body && long && <LongSummary node={node} url={url} />}
-        {body && !long &&
+        {content && long && <LongSummary node={node} url={url} />}
+        {content && !long &&
           <ReadMore contentFilter to={url}>
-            {body}
+            {content}
           </ReadMore>}
-        {linkPreviews.isShown(node.linkPreview, body) &&
+        {linkPreviews.isShown(node.linkPreview, content) &&
           <LinkPreviewCard preview={node.linkPreview} />}
         <QuoteEmbed quote={node.quote} />
       </CardContent>

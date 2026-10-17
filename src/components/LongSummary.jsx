@@ -22,7 +22,7 @@ const isLong = (node) => {
 // The picture of an article that has no cover: the first photo it shows,
 // as WordPress takes a featured image.
 const SummaryPicture = ({ node, url }) => {
-  const { firstPhoto } = summary.contentsOf(node.body);
+  const { firstPhoto } = summary.contentsOf(node.content);
   const { post } = usePost(firstPhoto);
   const image = post ? (getPortraitURL(post, 'medium') || getPortraitURL(post, 'large')) : '';
   if (!image) {
@@ -52,8 +52,8 @@ SummaryPicture.propTypes = {
 // what is in it, and Read more, which opens it in place. What it shows
 // within itself is on its page.
 const LongSummary = ({ node, url }) => {
-  const opening = summary.openingOf(node.body);
-  const contents = summary.contentsOf(node.body);
+  const opening = summary.openingOf(node.content);
+  const contents = summary.contentsOf(node.content);
   const inside = ['photos', 'videos', 'citations'].filter((what) => {
     return contents[what] > 0;
   }).map((what) => {

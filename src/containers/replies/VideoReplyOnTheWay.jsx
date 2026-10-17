@@ -39,7 +39,7 @@ const VideoReplyOnTheWay = ({
       return;
     }
     started.current = true;
-    upload.start(viewer, { parentId: parent.id, body, language }, file);
+    upload.start(viewer, { parentId: parent.id, content: body, language }, file);
   }, []);
 
   useEffect(() => {
