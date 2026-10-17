@@ -45,7 +45,7 @@ export default {
       reply: 'Réponses',
       follow: 'Abonnés',
       cite: 'Citations',
-      following: 'Ce que je suis',
+      following: 'Qui ou ce que je suis',
     },
     steps: {
       off: 'Désactivé',

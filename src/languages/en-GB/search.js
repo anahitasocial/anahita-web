@@ -45,7 +45,7 @@ export default {
       reply: 'Replies',
       follow: 'Followers',
       cite: 'Citations',
-      following: 'What I follow',
+      following: 'Who or what I follow',
     },
     steps: {
       off: 'Off',
