@@ -54,6 +54,7 @@ export default {
       no_feed: 'No feed was found there. Give the feed’s own address if the site does not name it.',
       unreadable: 'The site could not be read. Check the address and try again.',
       feed_not_on_domain: 'The feed is on another domain, which you cannot prove is yours.',
+      private_feed: 'That feed is private: it needs a login, or its address carries a secret. A website’s posts are public, so only a public feed can be connected.',
       feed_taken: 'That feed is already connected.',
       handle_taken: 'That handle is taken.',
       not_proved: 'Prove the domain is yours first.',

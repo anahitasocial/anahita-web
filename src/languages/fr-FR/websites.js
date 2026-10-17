@@ -53,6 +53,7 @@ export default {
       no_feed: 'Aucun fil n’a été trouvé. Donnez l’adresse du fil lui-même si le site ne l’indique pas.',
       unreadable: 'Le site n’a pas pu être lu. Vérifiez l’adresse et réessayez.',
       feed_not_on_domain: 'Le fil est sur un autre domaine, que vous ne pouvez pas prouver être à vous.',
+      private_feed: 'Ce fil est privé : il demande une connexion, ou son adresse porte un secret. Les publications d’un site web sont publiques ; seul un fil public peut être connecté.',
       feed_taken: 'Ce fil est déjà connecté.',
       handle_taken: 'Cet identifiant est déjà pris.',
       not_proved: 'Prouvez d’abord que le domaine est à vous.',
