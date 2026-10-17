@@ -11,6 +11,7 @@ documents.
 - [Themes](#themes)
 - [Languages](#languages)
 - [Terms of Service and Privacy Policy](#terms-of-service-and-privacy-policy)
+- [Where the code is](#where-the-code-is)
 
 ## Name and description
 
@@ -101,3 +102,18 @@ use the app again. This applies to existing members and new ones alike.
 - The two documents are versioned separately. Raise only the one whose text
   changed, or people are asked to accept a document they have already
   accepted.
+
+## Where the code is
+
+| What | Where |
+| --- | --- |
+| Choosing the theme (`REACT_APP_ASSETS`) | `src/assets/index.js` |
+| The default theme | `src/assets/default/` |
+| Applying a theme's styles over the app's defaults | `src/styles/index.js` (`createTheme`) |
+| A theme's Markdown pages, at `/pages/:alias` | `src/assets/default/pages/`, `src/containers/page/index.jsx` |
+| The page title and meta tags | `src/components/HeaderMeta.jsx` |
+| The languages, and the one in use (`lng`) | `src/languages/index.js`, `src/languages/en-GB/`, `src/languages/fr-FR/` |
+| The legal documents and their versions | `src/statics/legal/` |
+| Who must accept a new version | `src/utils/agreements.js` (`needsAcceptance`), tested in `src/utils/__tests__/agreements.test.js` |
+| The page that asks for it, at `/agreements` | `src/containers/agreements/` |
+| The documents as pages, at `/legal/tos` and `/legal/privacy` | `src/containers/legal/index.jsx` |

@@ -17,6 +17,7 @@ documented in anahita-services, which will be released later in 2026.
    - [How configuration works](configuration.md#how-configuration-works)
    - [Variables](configuration.md#variables)
    - [Settings that live on the server](configuration.md#settings-that-live-on-the-server)
+   - [Where the code is](configuration.md#where-the-code-is)
 3. [Architecture](architecture.md): how the app is put together
    - [Directory layout](architecture.md#directory-layout)
    - [Talking to the API](architecture.md#talking-to-the-api)
@@ -31,6 +32,7 @@ documented in anahita-services, which will be released later in 2026.
    - [Themes](customising.md#themes)
    - [Languages](customising.md#languages)
    - [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy)
+   - [Where the code is](customising.md#where-the-code-is)
 5. [Deploying](deploying.md): building and hosting the app
    - [Building](deploying.md#building)
    - [What the server needs to know](deploying.md#what-the-server-needs-to-know)
