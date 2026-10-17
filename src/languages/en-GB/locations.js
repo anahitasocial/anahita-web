@@ -17,4 +17,13 @@ export default {
   confirm: {
     delete: 'Do you want to delete this location?',
   },
+  // The lists of the Locations page.
+  lists: {
+    search: 'Search places',
+    noneFound: 'No places match.',
+    noneNearby: 'No places near you yet.',
+    asking: 'Finding where you are…',
+    denied: 'Let your browser share your location to see places near you.',
+    tryAgain: 'Try again',
+  },
 };

@@ -16,4 +16,12 @@ export default {
   confirm: {
     delete: 'Voulez-vous supprimer ce lieu ?',
   },
+  lists: {
+    search: 'Rechercher des lieux',
+    noneFound: 'Aucun lieu ne correspond.',
+    noneNearby: 'Aucun lieu près de vous pour l’instant.',
+    asking: 'Recherche de votre position…',
+    denied: 'Autorisez votre navigateur à partager votre position pour voir les lieux proches.',
+    tryAgain: 'Réessayer',
+  },
 };

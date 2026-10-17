@@ -11,6 +11,12 @@ export default {
     yearly: 'Tendances de l’année',
     none: 'Rien n’a été en tendance cette année.',
   },
+  counts: {
+    people_one: '{{count}} personne',
+    people_other: '{{count}} personnes',
+    posts_one: '{{count}} publication',
+    posts_other: '{{count}} publications',
+  },
   close: 'Fermer',
   dismiss: 'Masquer',
   enabled: 'Activé',
@@ -28,6 +34,9 @@ export default {
     updated: 'Mis à jour',
     trending: 'Tendances',
     popular: 'Populaire',
+    following: 'Suivis',
+    all: 'Tous',
+    nearby: 'À proximité',
   },
   filterByType: 'Filtrer par type',
   filterByOptions: {

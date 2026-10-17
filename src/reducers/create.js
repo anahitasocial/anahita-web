@@ -43,8 +43,6 @@ export default (namespace, defaultNode) => {
     },
     total: 0,
     hasMore: true,
-    // Over what span of time a trending list is, where it says.
-    window: '',
     lastResetId: 0,
     error: '',
     success: false,
@@ -97,7 +95,6 @@ export default (namespace, defaultNode) => {
           },
           total: action.total,
           hasMore: action.hasMore,
-          window: action.window || '',
           isFetching: false,
         };
       case `${namespace.toUpperCase()}_READ_SUCCESS`:
