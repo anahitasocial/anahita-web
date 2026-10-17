@@ -107,6 +107,12 @@ describe('the layers', () => {
       .toBe(i18n.t('events:event.cancel.keep', { lng: 'fr-FR' }));
   });
 
+  it('says email in French from France and courriel in Quebec French', () => {
+    expect(i18n.t('people:settings.email', { lng: 'fr-FR' })).toBe('Email');
+    expect(i18n.t('people:settings.email', { lng: 'fr-CA' })).toBe('Courriel');
+    expect(i18n.t('invites:alerts.sent', { lng: 'fr-CA', email: 'ana@example.org' })).toContain('ana@example.org');
+  });
+
   it('says hashtag in French from France and mot-clic in Quebec French', () => {
     expect(i18n.t('onboarding:interests.follow', { lng: 'fr-FR', count: 2 })).toBe('Suivre 2 hashtags');
     expect(i18n.t('onboarding:interests.follow', { lng: 'fr-CA', count: 2 })).toBe('Suivre 2 mots-clics');

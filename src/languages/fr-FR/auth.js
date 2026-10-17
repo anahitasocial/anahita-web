@@ -3,7 +3,7 @@ export default {
   mTitle: 'Connexion',
   logout: 'Déconnexion',
   login: 'Veuillez vous connecter',
-  username: "E-mail ou nom d'utilisateur",
+  username: "Email ou nom d'utilisateur",
   password: 'Mot de passe',
   forgotPassword: 'Mot de passe oublié ?',
   signup: {
@@ -14,7 +14,7 @@ export default {
     displayName: "Nom d'affichage",
     displayNameHelp: 'Voici comment votre nom apparaît aux autres.',
     username: "Nom d'utilisateur",
-    email: 'E-mail',
+    email: 'Email',
     password: 'Mot de passe',
     passwordHelp: "Au moins 15 caractères. Utilisez une phrase secrète que vous n'utilisez nulle part ailleurs.",
     tos: "J'accepte les <0>conditions d'utilisation</0>.",
@@ -127,7 +127,7 @@ export default {
       cDesc: 'Vous avez activé l’authentification à deux facteurs avec une application d’authentification.',
       action: 'Activer',
       disable: 'Désactiver',
-      disabled: 'L’authentification à deux facteurs a été désactivée. Un e-mail de confirmation a été envoyé.',
+      disabled: 'L’authentification à deux facteurs a été désactivée. Un email de confirmation a été envoyé.',
       on: 'L’authentification à deux facteurs est activée',
       onDesc: 'Un code de votre application d’authentification vous sera demandé lors de la connexion.',
       off: 'L’authentification à deux facteurs est désactivée',
@@ -153,7 +153,7 @@ export default {
   prompts: {
     error: 'Une erreur est survenue !',
     errorSignupUsernameTaken: "Ce nom d'utilisateur est déjà pris !",
-    errorSignupEmailTaken: 'Cette adresse e-mail est déjà utilisée dans notre système !',
-    signupEmailSuccess: "Merci ! Nous venons de vous envoyer un lien d'activation de compte par e-mail.",
+    errorSignupEmailTaken: 'Cette adresse email est déjà utilisée dans notre système !',
+    signupEmailSuccess: "Merci ! Nous venons de vous envoyer un lien d'activation de compte par email.",
   },
 };

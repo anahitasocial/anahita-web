@@ -20,11 +20,11 @@ export default {
   },
   confirmApprove: {
     cTitle: 'Approuver cette demande ?',
-    cDescription: 'Crée un compte pour {{username}} et envoie un courriel à {{email}}.',
+    cDescription: 'Crée un compte pour {{username}} et envoie un email à {{email}}.',
   },
   confirmReject: {
     cTitle: 'Refuser cette demande ?',
-    cDescription: 'Refuse {{username}} et lui envoie un courriel.',
+    cDescription: 'Refuse {{username}} et lui envoie un email.',
   },
   alerts: {
     approved: '{{username}} a été approuvé',
@@ -36,6 +36,6 @@ export default {
     reject: "La demande n'a pas pu être refusée.",
     usernameTaken: "Ce nom d'utilisateur a été pris pendant l'attente. Refusez la demande et demandez-en un autre.",
     alreadyDecided: 'Un autre administrateur a déjà répondu à cette demande.',
-    notVerified: "Cette personne n'a pas encore confirmé son adresse courriel.",
+    notVerified: "Cette personne n'a pas encore confirmé son adresse email.",
   },
 };

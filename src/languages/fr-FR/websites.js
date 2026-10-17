@@ -139,7 +139,7 @@ export default {
     cTitle: 'Notifications',
     cDescription: 'Modifier vos paramètres de notification',
     mTitle: 'Notifications',
-    email: 'Recevoir les notifications par courriel',
+    email: 'Recevoir les notifications par email',
     optionsTitle: 'Recevoir des notifications pour',
     options: {
       all: 'Toutes les publications',

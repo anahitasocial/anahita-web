@@ -33,7 +33,7 @@ export default {
     archivePrompts: {
       permanent: 'L\'archivage est irréversible. Il n\'y a aucun moyen de restaurer ce profil.',
       personDescription: 'Rien n\'est supprimé. Chaque publication, réponse et photo reste exactement où elle est et conserve son adresse, donc les liens enregistrés continueront de fonctionner. Ce qui s\'arrête, c\'est l\'activité du compte : il quitte les fils et les suggestions, et il n\'est plus possible de s\'y connecter.',
-      selfSignIn: 'Vous ne pourrez plus vous connecter après cela, et personne d\'autre non plus — l\'adresse e-mail et le nom d\'utilisateur restent réservés afin que personne ne puisse les prendre.',
+      selfSignIn: 'Vous ne pourrez plus vous connecter après cela, et personne d\'autre non plus — l\'adresse email et le nom d\'utilisateur restent réservés afin que personne ne puisse les prendre.',
       confirmLabel: 'Tapez {{ alias }} pour confirmer',
       action: 'Archiver définitivement',
       archived: 'Ce profil a été archivé.',
@@ -87,7 +87,7 @@ export default {
     // These three were missing while English had them, so the password, email
     // and username cards rendered their raw key names in French.
     password: 'Mot de passe',
-    email: 'E-mail',
+    email: 'Email',
     username: "Nom d'utilisateur",
     // Section labels for the grouped person settings page.
     sections: {
@@ -104,7 +104,7 @@ export default {
     cTitle: 'Notifications',
     cDescription: 'Modifiez vos paramètres de notification',
     mTitle: 'Notifications',
-    email: 'Recevoir les notifications par e-mail',
+    email: 'Recevoir les notifications par email',
     optionsTitle: 'Recevoir des notifications pour',
     options: {
       all: 'Toutes les publications',
@@ -114,7 +114,7 @@ export default {
   person: {
     displayName: "Nom d'affichage",
     username: "Nom d'utilisateur",
-    email: 'E-mail',
+    email: 'Email',
     body: 'Bio',
     pronouns: 'Pronoms',
     pronounsUnset: 'Je préfère ne pas le dire',
@@ -143,7 +143,7 @@ export default {
     prompts: {
       error: 'Une erreur est survenue !',
       errorUsernameTaken: "Ce nom d'utilisateur est déjà pris !",
-      errorEmailTaken: 'Cette adresse e-mail est déjà utilisée dans notre système !',
+      errorEmailTaken: 'Cette adresse email est déjà utilisée dans notre système !',
     },
   },
 

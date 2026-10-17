@@ -79,7 +79,7 @@ export default {
     cTitle: 'Notifications',
     cDescription: 'Modifiez vos paramètres de notification',
     mTitle: 'Notifications',
-    email: 'Recevoir les notifications par e-mail',
+    email: 'Recevoir les notifications par email',
     optionsTitle: 'Recevoir des notifications pour',
     options: {
       all: 'Toutes les publications',
