@@ -12,8 +12,8 @@ import i18n from '../../languages';
 
 const {
   SORTING: {
-    TOP,
     RECENT,
+    RELEVANT,
   },
 } = APP.BROWSE;
 
@@ -26,8 +26,11 @@ const useStyles = makeStyles()({
   },
 });
 
+// A hashtag's or a place's posts: newest first by default, as every list of
+// posts is, or Most relevant, ranked as search ranks it (the user,
+// 2026-10-17; Popular, an all-time sum, kept an old hit on top for good).
 const Inbounds = ({
-  selectedTab = TOP,
+  selectedTab = RECENT,
   tag,
 }) => {
   const { classes } = useStyles();
@@ -55,12 +58,12 @@ const Inbounds = ({
           textColor="primary"
         >
           <Tab
-            label={i18n.t('commons:sortByOptions.popular')}
-            value={TOP}
+            label={i18n.t('search:sortOptions.recent')}
+            value={RECENT}
           />
           <Tab
-            label={i18n.t('commons:sortByOptions.recent')}
-            value={RECENT}
+            label={i18n.t('search:sortOptions.relevant')}
+            value={RELEVANT}
           />
         </Tabs>
       </AppBar>
@@ -81,8 +84,8 @@ const Inbounds = ({
 Inbounds.propTypes = {
   tag: NodeType.isRequired,
   selectedTab: PropTypes.oneOf([
-    TOP,
     RECENT,
+    RELEVANT,
   ]),
 };
 
