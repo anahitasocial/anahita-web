@@ -1,4 +1,4 @@
 export default {
-  count: '{{count}} nœud',
-  count_other: '{{count}} nœuds',
+  count: '{{count}} publication',
+  count_other: '{{count}} publications',
 };

@@ -1,4 +1,4 @@
 export default {
-  count: '{{count}} nodo',
-  count_other: '{{count}} nodos',
+  count: '{{count}} publicación',
+  count_other: '{{count}} publicaciones',
 };
