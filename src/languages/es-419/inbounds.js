@@ -1,4 +1,4 @@
 export default {
-  count: '{{count}} publicación',
-  count_other: '{{count}} publicaciones',
+  count: '{{count}} etiquetado',
+  count_other: '{{count}} etiquetados',
 };

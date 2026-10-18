@@ -1,4 +1,4 @@
 export default {
-  count: '{{count}} Beitrag',
-  count_other: '{{count}} Beiträge',
+  count: '{{count}} markiert',
+  count_other: '{{count}} markiert',
 };
