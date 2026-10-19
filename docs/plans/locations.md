@@ -134,10 +134,9 @@ the code before relying on it.
 
 - anahita-web: branch `locations` from `main` (row 90 merged), holding this
   plan and roadmap rows 82 and 94. Nothing built yet.
-- anahita-services: `release-polish` (row 90's server side: list post flags,
-  Most relevant for a hashtag's and a location's posts) was pushed but **not
-  merged** when this was written. Make sure it is merged, then branch
-  `locations` from an up-to-date `main` (`git fetch` first).
+- anahita-services: `release-polish` (row 90's server side) is merged, and
+  branch `locations` was made from that `main` on 2026-10-18. Nothing on it
+  yet; `git fetch` and bring it up to date with `main` before starting.
 - Work in the order of the Design, one commit per part in each repository.
   Ask the user before each commit, showing the message (their `CLAUDE.md`).
   Say when the row is ready to merge, with the pull request text for both.
@@ -293,4 +292,4 @@ where the photo uploads start). Nothing about the position is sent but the
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-18 |
-| Implementation | not begun; the services' part waits for `release-polish` to be merged there |
+| Implementation | not begun; branch `locations` in both repositories |
