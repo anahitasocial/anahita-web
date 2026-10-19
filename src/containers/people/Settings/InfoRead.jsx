@@ -59,13 +59,8 @@ const InfoRead = ({
             live switch for these; showing an interactive control in a view
             whose Save button is not on screen would let somebody toggle an
             account's access and watch nothing happen. */}
-        {canAdmin &&
-          <ListItem>
-            <ListItemText
-              primary={i18n.t('people:person.usertype')}
-              secondary={i18n.t(`people:person.usertypeOptions.${person.personType}`)}
-            />
-          </ListItem>}
+        {/* The account type is in Administration, on a card of its own
+            (AccountType.jsx), where it can be changed. */}
         {canAdmin &&
           <ListItem>
             <ListItemText

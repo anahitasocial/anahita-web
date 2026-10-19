@@ -70,6 +70,9 @@ export const ITEMS = {
   BLUESKY: 'bluesky',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
+  // A person's account type: registered, administrator or super
+  // administrator, and changing it.
+  ACCOUNT_TYPE: 'accountType',
   METADATA: 'metadata',
   REVOKE_PASSKEYS: 'revokePasskeys',
   REVOKE_TOTP: 'revokeTotp',
@@ -184,6 +187,9 @@ const ALL_SECTIONS = [
     // passkeys have their own cards with proper enrolment flows, and
     // agreements sit in Account above.
     items: [
+      {
+        key: ITEMS.ACCOUNT_TYPE, bare: false, requiresAdmin: true, notViewer: true,
+      },
       {
         key: ITEMS.AGREEMENTS, bare: false, requiresAdmin: true, notViewer: true,
       },

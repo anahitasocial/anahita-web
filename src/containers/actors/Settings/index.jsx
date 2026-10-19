@@ -47,6 +47,7 @@ import EventCancelSetting from '../../events/CancelSetting';
 import WebsiteFollowSnippet from '../../websites/FollowSnippet';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
+import PersonAccountType from '../../people/Settings/AccountType';
 import PersonMetadata from '../../people/Settings/Metadata';
 import PersonRevokePasskeys from '../../people/Settings/RevokePasskeys';
 import PersonRevokeTotp from '../../people/Settings/RevokeTotp';
@@ -254,6 +255,7 @@ const ActorsSettings = ({
       // at rather than the viewer — the endpoints behind them are the
       // admin counterparts of the viewer-scoped ones in Security, and
       // sections.js keeps them off the viewer's own profile.
+      [ITEMS.ACCOUNT_TYPE]: <PersonAccountType person={actor} />,
       [ITEMS.AGREEMENTS]: <PersonAgreements personId={actor.id} />,
       [ITEMS.METADATA]: <PersonMetadata person={actor} />,
       [ITEMS.REVOKE_PASSKEYS]: <PersonRevokePasskeys person={actor} />,

@@ -97,6 +97,9 @@ The same in anahita-services' AGENTS.md.
   only for the ActivityStreams type a post from elsewhere carries.
 - **Profile**, not "actor" or "account". "Actor" is the code's word;
   "account" is for signing in.
+- **Account type** for registered, administrator or super administrator,
+  never "user type", "person type" or "role"; `person_type` is the code's
+  word.
 - **+ Follow** (a plus icon, then Follow), with no name after it: no
   "Follow back", no "Follow #tag".
 - Action labels name no entity: "Delete", "Edit", "View", not "Delete

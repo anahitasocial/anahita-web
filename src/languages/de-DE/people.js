@@ -138,7 +138,7 @@ export default {
       'er/dey',
       'sie/dey',
     ],
-    usertype: 'Benutzertyp',
+    usertype: 'Kontotyp',
     usertypeOptions: {
       guest: 'Gast',
       registered: 'Registriert',
@@ -215,6 +215,27 @@ export default {
     },
     errors: {
       revoke: 'Die Authentifizierungs-App konnte nicht entfernt werden.',
+    },
+  },
+  accountType: {
+    cTitle: 'Kontotyp',
+    action: 'Kontotyp ändern',
+    title: 'Kontotyp von {{name}} ändern',
+    registered: 'Registriert',
+    registeredHelp: 'Macht mit wie alle Angemeldeten.',
+    administrator: 'Administrator:in',
+    administratorHelp: 'Darf bei jedem Profil und Beitrag handeln, egal was dort eingestellt ist, entscheidet über Meldungen und macht Registrierte zu Administrator:innen.',
+    superAdministrator: 'Super-Administrator:in',
+    superAdministratorHelp: 'Kümmert sich außerdem um die Installation: ernennt Super-Administrator:innen, nimmt Kontotypen zurück, sieht die Kontenliste und löscht Konten endgültig.',
+    when: 'Die Änderung gilt, sobald die Anmeldung erneuert wird, spätestens nach 15 Minuten.',
+    cancel: 'Abbrechen',
+    save: 'Speichern',
+    done: 'Der Kontotyp von {{name}} wurde geändert.',
+    notYours: 'Nur eine Super-Administrator:in kann den Kontotyp einer Administrator:in ändern.',
+    errors: {
+      notAllowed: 'Nur eine Super-Administrator:in darf Super-Administrator:innen ernennen oder einen Kontotyp zurücknehmen.',
+      own: 'Niemand ändert den eigenen Kontotyp. Eine andere Super-Administrator:in kann ihn ändern.',
+      generic: 'Der Kontotyp konnte nicht geändert werden.',
     },
   },
 };

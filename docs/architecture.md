@@ -233,6 +233,19 @@ The same purge for one account is the last card in a profile's Danger zone,
 super administrators on anybody's profile but their own. What a purge removes
 is in the services' `docs/account-lifecycle.md`.
 
+A person's **account type** (registered, administrator or super
+administrator) is changed on the **Account type** card, the first in the
+Administration section of their settings (`people/Settings/AccountType.jsx`),
+offered to administrators on anybody's settings but their own. Its dialog
+(`AccountTypeDialog.jsx`) offers only what the viewer may make
+(`permissions.account.personTypesFor`, mirroring `MayChangePersonType` in
+anahita-libs): an administrator makes administrators of registered people,
+and making a super administrator or taking an account type away is a super
+administrator's. It is saved with `PATCH /accounts/:id/person-type` after a
+proof of identity (`useStepUp`). Nobody is offered their own, which the server
+refuses too: that is what keeps the last super administrator. The change takes
+effect within fifteen minutes, when the person's sign-in is next renewed.
+
 A tab the viewer may not see is not drawn, and its address lands on the first
 tab they may. Somebody with no tabs sees a "restricted" message, and has no
 Administration entry in the left menu.

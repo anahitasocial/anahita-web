@@ -138,7 +138,7 @@ export default {
       'él/elle',
       'ella/elle',
     ],
-    usertype: 'Tipo de usuario',
+    usertype: 'Tipo de cuenta',
     usertypeOptions: {
       guest: 'Invitado',
       registered: 'Registrado',
@@ -215,6 +215,27 @@ export default {
     },
     errors: {
       revoke: 'No se pudo quitar la app de autenticación.',
+    },
+  },
+  accountType: {
+    cTitle: 'Tipo de cuenta',
+    action: 'Cambiar tipo de cuenta',
+    title: 'Cambiar el tipo de cuenta de {{name}}',
+    registered: 'Registrado',
+    registeredHelp: 'Participa como cualquier persona con sesión iniciada.',
+    administrator: 'Admin',
+    administratorHelp: 'Puede actuar en cualquier perfil y publicación, sin importar su configuración, decide los reportes y da el rol de admin a personas registradas.',
+    superAdministrator: 'Superadmin',
+    superAdministratorHelp: 'Además se ocupa de la instalación: da el rol de superadmin, quita tipos de cuenta, ve la lista de cuentas y elimina cuentas para siempre.',
+    when: 'El cambio surte efecto la próxima vez que se renueve su sesión, en menos de 15 minutos.',
+    cancel: 'Cancelar',
+    save: 'Guardar',
+    done: 'Se cambió el tipo de cuenta de {{name}}.',
+    notYours: 'Solo una cuenta con rol de superadmin puede cambiar el tipo de cuenta de un admin.',
+    errors: {
+      notAllowed: 'Solo una cuenta con rol de superadmin puede dar ese rol o quitar un tipo de cuenta.',
+      own: 'Nadie cambia su propio tipo de cuenta. Otra cuenta con rol de superadmin puede cambiarlo.',
+      generic: 'No se pudo cambiar el tipo de cuenta.',
     },
   },
 };
