@@ -72,11 +72,10 @@ describe('hasOutdatedRules', () => {
     expect(hasOutdatedRules(member(null), { rules: { version: '1', items: [] } })).toBe(false);
   });
 
-  // SITE_RULES off: a super administrator who never agreed is reminded once.
-  it('with the rules off, asks only a super administrator, once', () => {
+  // SITE_RULES off: nobody is asked; whoever installed Anahita made its
+  // creator's pledge on the server.
+  it('with the rules off, asks nobody', () => {
     expect(hasOutdatedRules(member(null), site, false)).toBe(false);
-    const superAdmin = { personType: 'super-administrator', rulesAgreement: null };
-    expect(hasOutdatedRules(superAdmin, site, false)).toBe(true);
-    expect(hasOutdatedRules({ ...superAdmin, rulesAgreement: { accepted: true, version: '1' } }, site, false)).toBe(false);
+    expect(hasOutdatedRules({ personType: 'super-administrator', rulesAgreement: null }, site, false)).toBe(false);
   });
 });

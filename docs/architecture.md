@@ -91,8 +91,8 @@ Four components guard routes (`src/routes/`):
   page (`containers/rules`) each is ticked in turn: the next zooms forward
   a moment after the one before is ticked, the keyboard following; for
   anybody not behind on them it is a numbered list to read. With
-  `metadata.siteRules` false, only a super administrator who never agreed
-  is sent. `OnboardingGate` waits for both. The About page shows the
+  `metadata.siteRules` false, nobody is sent: whoever installs Anahita makes
+  its creator's pledge on auth-service's set-password page instead. `OnboardingGate` waits for both. The About page shows the
   site's promises first, from the same `GET /site`, with the way to
   `/rules` (`containers/about/Promises.jsx`). An administrator removes a
   person or a group as spam, at once, from its menu or from a report's case

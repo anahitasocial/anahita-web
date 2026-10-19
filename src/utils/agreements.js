@@ -57,20 +57,15 @@ const hasOutdatedTerms = (viewer) => {
 // Whether the viewer has to tick the site's rules (roadmap row 102): the
 // rules and their version are the server's (GET /site), and the version
 // agreed to arrives on the session. Nothing to ask while the site has not
-// said, or has no rules. With SITE_RULES off (`rulesOn` false), only a super
-// administrator who never agreed is shown them, once: a reminder of what
-// Anahita is not for.
+// said, or has no rules, or with SITE_RULES off (`rulesOn` false). Whoever
+// installs Anahita makes its creator's pledge on the server, when they set
+// their first password, whatever the site's rules are.
 const hasOutdatedRules = (viewer, site, rulesOn = true) => {
   const rules = site && site.rules;
-  if (!rules || !Array.isArray(rules.items) || rules.items.length === 0) {
+  if (!rulesOn || !rules || !Array.isArray(rules.items) || rules.items.length === 0) {
     return false;
   }
-  const agreement = viewer && viewer.rulesAgreement;
-  if (!rulesOn) {
-    return Boolean(viewer) && viewer.personType === 'super-administrator' &&
-      !(agreement && agreement.accepted);
-  }
-  return needsAcceptance(agreement, rules.version);
+  return needsAcceptance(viewer && viewer.rulesAgreement, rules.version);
 };
 
 export default {

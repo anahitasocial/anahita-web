@@ -66,8 +66,7 @@ export const textIn = (text, language) => {
 
 // Whether the viewer is behind on the site's rules (roadmap row 102), for the
 // gates and the pages: `known` once the site has answered, or failed to.
-// SITE_RULES off (NodeInfo's `siteRules` false) asks only a super
-// administrator who never agreed.
+// SITE_RULES off (NodeInfo's `siteRules` false) asks nobody.
 export const useRules = () => {
   const site = useSite();
   const [known, setKnown] = useState(false);
