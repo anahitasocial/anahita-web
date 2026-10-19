@@ -1,4 +1,7 @@
 export default {
+  // A profile deleted and not yet purged: ScheduledDeletion.jsx.
+  scheduledDeletion_one: 'Scheduled for deletion · {{count}} day left',
+  scheduledDeletion_other: 'Scheduled for deletion · {{count}} days left',
   about: 'About',
   name: 'Name',
   alias: 'Alias',

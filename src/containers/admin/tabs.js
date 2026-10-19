@@ -48,6 +48,16 @@ const TABS = [
     },
   },
   {
+    // Every profile scheduled for deletion, of every kind, with the days
+    // it has left (the user, 2026-10-18). Super administrators only, who
+    // see them all; nowhere else lists them together.
+    key: 'scheduled',
+    title: 'admin:scheduled.title',
+    canView: (viewer) => {
+      return permissions.account.canBrowse(viewer);
+    },
+  },
+  {
     // Every person and group, for clearing out the ones nobody uses.
     // Super administrators only: what this tab is for is removing
     // accounts for good, which an administrator may not do. Last, because

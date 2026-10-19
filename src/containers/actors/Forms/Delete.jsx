@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 
 import ActorType from '../../../proptypes/Actor';
 import { Actor as ACTOR } from '../../../constants';
+import { GRACE_DAYS } from '../../../utils/deletion';
 import i18n from '../../../languages';
 
 const { ALIAS } = ACTOR.FIELDS;
@@ -17,7 +18,6 @@ const { ALIAS } = ACTOR.FIELDS;
 // Days a deleted profile can be restored before it is erased. Mirrors
 // constants.AccountGraceDays in auth-service and GraceDays in the sweeper — if
 // that number moves, this text stops being true.
-const GRACE_DAYS = 30;
 
 // Delete form.
 //
@@ -55,7 +55,10 @@ const ActorDeleteForm = (props) => {
   // endpoint and no person restore copy — without this guard an administrator
   // opening a deleted person's settings got a button labelled with the raw
   // i18n key that would have 404ed if pressed.
-  const canRestore = namespace === 'groups' || namespace === 'websites';
+  // Events too (the user, 2026-10-18): POST /events/:id/restore was there
+  // and its strings were, but an event's administrators were never offered
+  // it.
+  const canRestore = ['groups', 'websites', 'events'].includes(namespace);
 
   if (actor.deletedAt && canRestore) {
     const purgeDate = new Date(actor.deletedAt);

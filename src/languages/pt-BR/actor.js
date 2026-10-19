@@ -1,4 +1,6 @@
 export default {
+  scheduledDeletion_one: 'Exclusão programada · falta {{count}} dia',
+  scheduledDeletion_other: 'Exclusão programada · faltam {{count}} dias',
   about: 'Sobre',
   name: 'Nome',
   alias: 'Nome de usuário',

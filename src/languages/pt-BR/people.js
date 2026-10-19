@@ -138,7 +138,7 @@ export default {
       'ele/elu',
       'ela/elu',
     ],
-    usertype: 'Tipo de usuário',
+    usertype: 'Tipo de conta',
     usertypeOptions: {
       guest: 'Visitante',
       registered: 'Cadastrado',
@@ -215,6 +215,27 @@ export default {
     },
     errors: {
       revoke: 'Não foi possível remover o autenticador.',
+    },
+  },
+  accountType: {
+    cTitle: 'Tipo de conta',
+    action: 'Mudar tipo de conta',
+    title: 'Mudar o tipo de conta de {{name}}',
+    registered: 'Cadastrado',
+    registeredHelp: 'Participa como qualquer pessoa conectada.',
+    administrator: 'Admin',
+    administratorHelp: 'Pode agir em qualquer perfil e publicação, seja qual for a configuração, decide as denúncias e torna admin quem é cadastrado.',
+    superAdministrator: 'Superadmin',
+    superAdministratorHelp: 'Também cuida da instalação: torna alguém superadmin, retira tipos de conta, vê a lista de contas e remove contas para sempre.',
+    when: 'A mudança vale na próxima renovação do login, em até 15 minutos.',
+    cancel: 'Cancelar',
+    save: 'Salvar',
+    done: 'O tipo de conta de {{name}} foi mudado.',
+    notYours: 'Só um superadmin pode mudar o tipo de conta de um admin.',
+    errors: {
+      notAllowed: 'Só um superadmin pode tornar alguém superadmin ou retirar um tipo de conta.',
+      own: 'Ninguém muda o próprio tipo de conta. Outro superadmin pode mudá-lo.',
+      generic: 'Não foi possível mudar o tipo de conta.',
     },
   },
 };

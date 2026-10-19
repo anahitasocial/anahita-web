@@ -147,9 +147,10 @@ const PersonAddForm = (props) => {
 
             So the control could not show a role and could not change one. An
             administrator using it believed they had, which is worse than it
-            not being there. It comes back when a deliberate promote/demote
-            flow exists — super-admin only, guarded against removing the last
-            super administrator, audited — not before. */}
+            not being there. The deliberate flow is built (2026-10-18): an
+            administrator changes a person's account type from the Account
+            type card in Administration (people/Settings/AccountType.jsx),
+            never their own, after proving who they are, and it is recorded. */}
       </CardContent>
       <CardActions>
         {dismissPath &&

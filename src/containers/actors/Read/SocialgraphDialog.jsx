@@ -24,6 +24,7 @@ import SortIcon from '@mui/icons-material/SwapVert';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import Progress from '../../../components/Progress';
+import ScheduledDeletion from '../../../components/ScheduledDeletion';
 import SignInPrompt from '../../../components/SignInPrompt';
 import ControlFollow from '../../controls/Follow';
 import ControlRemoveFollower from '../../controls/RemoveFollower';
@@ -255,7 +256,15 @@ const SocialgraphDialog = ({
                           {getActorName(row)}
                         </Link>
                       }
-                      secondary={socialgraph.rowNote(row, i18n.t('socialgraph:followsYou'))}
+                      secondary={row.deletedAt ?
+                        <>
+                          <Box component="span" sx={{ display: 'block' }}>
+                            {socialgraph.rowNote(row, i18n.t('socialgraph:followsYou'))}
+                          </Box>
+                          <ScheduledDeletion actor={row} sx={{ mt: 0.5 }} />
+                        </> :
+                        socialgraph.rowNote(row, i18n.t('socialgraph:followsYou'))}
+                      slotProps={{ secondary: { component: 'div' } }}
                     />
                   </ListItem>
                 );

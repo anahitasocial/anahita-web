@@ -97,6 +97,20 @@ const makeRegistered = (total) => {
   });
 };
 
+// Gives a person an account type: 'registered', 'administrator' or
+// 'super-administrator'. An administrator makes administrators of
+// registered people; the rest is a super administrator's; never one's own.
+//
+// 200 { id, person_type, previous, changed }; 403 `step_up_required`
+// prove who you are first, or `person_type_not_allowed`; 404
+// `not_a_person`; 409 `own_person_type`.
+// It takes effect at the person's next token, within fifteen minutes.
+const editPersonType = (id, personType) => {
+  return axios.patch(`/accounts/${id}/person-type`, {
+    person_type: personType,
+  });
+};
+
 export default {
   NAMESPACES,
   BATCH_MAX,
@@ -106,4 +120,5 @@ export default {
   purgeProgress,
   publicContent,
   makeRegistered,
+  editPersonType,
 };

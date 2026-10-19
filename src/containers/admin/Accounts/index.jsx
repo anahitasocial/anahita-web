@@ -35,7 +35,9 @@ import PersonType from '../../../proptypes/Person';
 import PurgeDialog from './PurgeDialog';
 
 const PAGE_SIZE = 50;
-const KINDS = ['person', 'group'];
+// Events too (the user, 2026-10-18), so a super administrator can find a
+// deleted one, which no other list shows them.
+const KINDS = ['person', 'group', 'event', 'website'];
 const TIERS = ['empty', 'dormant', 'active'];
 const STATES = ['active', 'disabled', 'archived', 'deleted'];
 
@@ -66,9 +68,19 @@ const formatDate = (value) => {
 
 // Where an account's own page is.
 const profilePath = (account) => {
-  return account.kind === 'group' ?
-    `/groups/${account.id}/` :
-    `/people/${account.alias}/`;
+  if (account.kind === 'group') {
+    return `/groups/${account.id}/`;
+  }
+  if (account.kind === 'event' || account.kind === 'website') {
+    return `/@${account.alias}/`;
+  }
+  return `/people/${account.alias}/`;
+};
+
+// Where an account's settings are, for appointing an administrator, and for
+// restoring a deleted group or event or removing it for good.
+const settingsPath = (account) => {
+  return `/${account.kind}s/${account.id}/settings`;
 };
 
 // The accounts list: every person or group, least recently active first,
@@ -110,6 +122,12 @@ const Accounts = ({
   const [purgeOpen, setPurgeOpen] = useState(false);
 
   const isGroup = kind === 'group';
+  // An event or a website is removed for good one at a time, from its
+  // settings: there is no batch purge of them, so the list offers no ticks.
+  const oneAtATime = kind === 'event' || kind === 'website';
+  // What groups, events and websites share: content posted in them, and
+  // administrators of their own.
+  const hasAdmins = isGroup || oneAtATime;
 
   // The search box filters as it is typed in, once the typing pauses.
   useEffect(() => {
@@ -163,7 +181,8 @@ const Accounts = ({
   }, [fetchPage]);
 
   const canSelect = (account) => {
-    return account.id !== viewer.id &&
+    return account.kind !== 'event' && account.kind !== 'website' &&
+      account.id !== viewer.id &&
       !PROTECTED_TYPES.includes(account.personType) &&
       permissions.account.canBrowse(viewer);
   };
@@ -430,12 +449,12 @@ const Accounts = ({
                 />
               </Box>
               <Box sx={{ display: 'flex', flexDirection: 'column', mt: 1 }}>
-                {tick('onlyWithoutContent', i18n.t(isGroup ?
+                {tick('onlyWithoutContent', i18n.t(hasAdmins ?
                   'accounts:filters.onlyWithoutContentGroup' :
                   'accounts:filters.onlyWithoutContent'))}
-                {!isGroup && tick('onlyUnverified', i18n.t('accounts:filters.onlyUnverified'))}
-                {!isGroup && tick('onlyNotOnboarded', i18n.t('accounts:filters.onlyNotOnboarded'))}
-                {isGroup && tick('onlyWithoutAdmin', i18n.t('accounts:filters.onlyWithoutAdmin'))}
+                {!hasAdmins && tick('onlyUnverified', i18n.t('accounts:filters.onlyUnverified'))}
+                {!hasAdmins && tick('onlyNotOnboarded', i18n.t('accounts:filters.onlyNotOnboarded'))}
+                {hasAdmins && tick('onlyWithoutAdmin', i18n.t('accounts:filters.onlyWithoutAdmin'))}
               </Box>
             </>}
         </CardContent>
@@ -477,6 +496,7 @@ const Accounts = ({
             {/* What is selected, and the one thing to do with it. Above
                 the list, so it is in reach without scrolling past
                 hundreds of rows. */}
+            {!oneAtATime &&
             <CardContent sx={{ pb: 0 }}>
               <Box
                 sx={{
@@ -537,7 +557,7 @@ const Accounts = ({
                 <Typography variant="caption" color="textSecondary" component="p">
                   {i18n.t('accounts:list.protected')}
                 </Typography>}
-            </CardContent>
+            </CardContent>}
 
             <List>
               {items.map((account) => {
@@ -545,6 +565,7 @@ const Accounts = ({
 
                 return (
                   <ListItem key={account.id} divider alignItems="flex-start">
+                    {!oneAtATime &&
                     <ListItemIcon sx={{ minWidth: 40 }}>
                       <Checkbox
                         edge="start"
@@ -562,7 +583,7 @@ const Accounts = ({
                           },
                         }}
                       />
-                    </ListItemIcon>
+                    </ListItemIcon>}
                     <ListItemText
                       disableTypography
                       primary={
@@ -593,7 +614,7 @@ const Accounts = ({
                             {` · ${i18n.t('accounts:list.created', {
                               date: formatDate(account.createdAt),
                             })}`}
-                            {` · ${i18n.t(isGroup ? 'accounts:list.contentGroup' : 'accounts:list.content', {
+                            {` · ${i18n.t(hasAdmins ? 'accounts:list.contentGroup' : 'accounts:list.content', {
                               count: account.contentCount,
                             })}`}
                             {` · ${i18n.t('accounts:list.followers', {
@@ -607,12 +628,20 @@ const Accounts = ({
                               sx={{ mr: 0.5, mb: 0.5 }}
                               label={i18n.t(`accounts:tiers.${account.tier}`)}
                             />
+                            {/* A deleted group or event leads to its
+                                settings, to restore it or remove it for
+                                good. */}
                             {account.state !== 'active' &&
                               <Chip
                                 size="small"
                                 variant="outlined"
                                 sx={{ mr: 0.5, mb: 0.5 }}
                                 label={i18n.t(`accounts:states.${account.state}`)}
+                                {...(account.state === 'deleted' && hasAdmins ? {
+                                  component: Link,
+                                  to: settingsPath(account),
+                                  clickable: true,
+                                } : {})}
                               />}
                             {role &&
                               <Chip
@@ -646,7 +675,7 @@ const Accounts = ({
                                 sx={{ mr: 0.5, mb: 0.5 }}
                                 label={`${i18n.t('accounts:list.noAdmin')} · ${i18n.t('accounts:list.appointAdmin')}`}
                                 component={Link}
-                                to={`/groups/${account.id}/settings`}
+                                to={settingsPath(account)}
                                 clickable
                               />}
                           </Box>

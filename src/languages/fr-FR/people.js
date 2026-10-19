@@ -128,7 +128,7 @@ export default {
       'il/iel',
       'elle/iel',
     ],
-    usertype: "Type d'utilisateur",
+    usertype: 'Type de compte',
     usertypeOptions: {
       guest: 'Invité',
       registered: 'Inscrit',
@@ -202,6 +202,27 @@ export default {
     },
     errors: {
       revoke: "L'authentificateur n'a pas pu être supprimé.",
+    },
+  },
+  accountType: {
+    cTitle: 'Type de compte',
+    action: 'Changer le type de compte',
+    title: 'Changer le type de compte de {{name}}',
+    registered: 'Inscrit',
+    registeredHelp: 'Participe comme toute personne connectée.',
+    administrator: 'Administrateur',
+    administratorHelp: 'Peut agir sur tous les profils et toutes les publications, quels que soient leurs réglages, tranche les signalements et nomme administrateurs les personnes inscrites.',
+    superAdministrator: 'Super administrateur',
+    superAdministratorHelp: 'S’occupe aussi de l’installation : nomme des super administrateurs, retire des types de compte, voit la liste des comptes et supprime des comptes définitivement.',
+    when: 'Le changement prend effet au prochain renouvellement de sa connexion, dans les 15 minutes.',
+    cancel: 'Annuler',
+    save: 'Enregistrer',
+    done: 'Le type de compte de {{name}} a été changé.',
+    notYours: 'Seul un super administrateur peut changer le type de compte d’un administrateur.',
+    errors: {
+      notAllowed: 'Seul un super administrateur peut nommer un super administrateur ou retirer un type de compte.',
+      own: 'Personne ne change son propre type de compte. Un autre super administrateur peut le changer.',
+      generic: 'Le type de compte n’a pas pu être changé.',
     },
   },
 };

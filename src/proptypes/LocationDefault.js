@@ -16,6 +16,5 @@ export default {
   address: '',
   city: '',
   state_province: '',
-  postal_code: '',
   country: '',
 };

@@ -138,7 +138,7 @@ export default {
       'he/they',
       'she/they',
     ],
-    usertype: 'User type',
+    usertype: 'Account type',
     usertypeOptions: {
       guest: 'Guest',
       registered: 'Registered',
@@ -215,6 +215,28 @@ export default {
     },
     errors: {
       revoke: 'The authenticator could not be removed.',
+    },
+  },
+  // A person's account type, in Administration: AccountType.jsx.
+  accountType: {
+    cTitle: 'Account type',
+    action: 'Change account type',
+    title: 'Change the account type of {{name}}',
+    registered: 'Registered',
+    registeredHelp: 'Takes part like anybody signed in.',
+    administrator: 'Administrator',
+    administratorHelp: 'May act on every profile and post, whatever it has set, decides reports, and makes registered people administrators.',
+    superAdministrator: 'Super administrator',
+    superAdministratorHelp: 'Also looks after the installation: makes super administrators, takes account types away, sees the accounts list and removes accounts for good.',
+    when: 'It takes effect the next time their sign-in is renewed, within 15 minutes.',
+    cancel: 'Cancel',
+    save: 'Save',
+    done: 'The account type of {{name}} was changed.',
+    notYours: 'Only a super administrator can change the account type of an administrator.',
+    errors: {
+      notAllowed: 'Only a super administrator may make a super administrator or take an account type away.',
+      own: 'Nobody changes their own account type. Another super administrator can change it.',
+      generic: 'The account type could not be changed.',
     },
   },
 };

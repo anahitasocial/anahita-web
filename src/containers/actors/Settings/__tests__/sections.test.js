@@ -236,3 +236,24 @@ describe('an event\'s Danger zone', () => {
     })).not.toContain(ITEMS.DANGER);
   });
 });
+
+// A group, event or website scheduled for deletion offers only the way back,
+// Restore on the Delete card, and removing it for good (the user,
+// 2026-10-18).
+describe('getGroupDangerItems for a profile scheduled for deletion', () => {
+  it('keeps only Delete, which shows Restore, and Purge for a super administrator', () => {
+    const keys = (isSuperAdmin) => {
+      return getGroupDangerItems({
+        canDelete: true,
+        isAdmin: true,
+        isSuperAdmin,
+        canCancel: true,
+        isDeleted: true,
+      }).map((item) => {
+        return item.key;
+      });
+    };
+    expect(keys(false)).toEqual([ITEMS.DELETE]);
+    expect(keys(true)).toEqual([ITEMS.DELETE, ITEMS.PURGE]);
+  });
+});
