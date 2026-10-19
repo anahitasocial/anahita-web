@@ -1,5 +1,11 @@
 export default {
   newPost: 'Nouvelle publication',
+  thread: {
+    add: 'Ajouter au fil',
+    placeholder: 'Ajoutez la suite…',
+    part: 'Note {{number}} du fil',
+    remove: 'Retirer du fil',
+  },
   close: 'Fermer',
   longContent: 'Contenu long',
   photo: 'Photo',

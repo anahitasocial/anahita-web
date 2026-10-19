@@ -1276,6 +1276,14 @@ draws nothing (`utils/federation.js#isAbsent`).
   fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
   date by the switch in settings). Nothing is said to anybody else, or
   about any other kind of post: only public notes go out.
+- **A thread written in one go** (roadmap row 101): under a note's words,
+  "Add to thread" opens a box for the next note, up to ten in all
+  (`Composer/ThreadParts.jsx`, `THREAD_PARTS_MAX`). Post sends them together
+  (`api.replies.addThread`, `POST /notes/:owner_id/thread`): the first takes
+  the post's audience, who may reply and quote, its locations and its card;
+  the rest are replies to the one before. Only for words alone: adding
+  photos or a video hides it. The notes after the first are not kept as a
+  draft.
 - **What other networks will show** of a public post on the viewer's own
   profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
   past 300 characters, when their Bluesky account is connected, that

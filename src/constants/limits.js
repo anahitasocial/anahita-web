@@ -26,4 +26,7 @@ export default {
   // link to the rest here.
   BLUESKY_POST_MAX: 300,
   PICTURES_SHOWN_MAX: 4,
+  // How many notes a thread written in one go may have: the services'
+  // ThreadPartsMax (roadmap row 101).
+  THREAD_PARTS_MAX: 10,
 };

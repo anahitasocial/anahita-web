@@ -2,6 +2,12 @@
 // for writing at length.
 export default {
   newPost: 'Neuer Beitrag',
+  thread: {
+    add: 'Zum Thread hinzufügen',
+    placeholder: 'Weiterschreiben…',
+    part: 'Beitrag {{number}} des Threads',
+    remove: 'Aus dem Thread entfernen',
+  },
   close: 'Schließen',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Langer Inhalt',

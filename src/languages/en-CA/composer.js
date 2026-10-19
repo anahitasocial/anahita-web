@@ -2,6 +2,14 @@
 // for writing at length.
 export default {
   newPost: 'New post',
+  // A thread written in one go: the notes after the first (roadmap row
+  // 101).
+  thread: {
+    add: 'Add to thread',
+    placeholder: 'Say more…',
+    part: 'Note {{number}} of the thread',
+    remove: 'Remove from the thread',
+  },
   close: 'Close',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Long content',

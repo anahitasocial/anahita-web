@@ -2,6 +2,12 @@
 // for writing at length.
 export default {
   newPost: 'Nueva publicación',
+  thread: {
+    add: 'Agregar al hilo',
+    placeholder: 'Sigue escribiendo…',
+    part: 'Nota {{number}} del hilo',
+    remove: 'Quitar del hilo',
+  },
   close: 'Cerrar',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Contenido largo',

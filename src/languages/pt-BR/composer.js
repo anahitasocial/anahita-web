@@ -2,6 +2,12 @@
 // for writing at length.
 export default {
   newPost: 'Nova publicação',
+  thread: {
+    add: 'Adicionar ao fio',
+    placeholder: 'Continue escrevendo…',
+    part: 'Nota {{number}} do fio',
+    remove: 'Remover do fio',
+  },
   close: 'Fechar',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Texto longo',

@@ -40,6 +40,21 @@ const remove = (reply) => {
 };
 
 // Hides a reply from its thread for everybody, or shows it again.
+// A thread written in one go (roadmap row 101): up to ten notes made
+// together, in order, all or none, each after the first a reply to the one
+// before. `parts` is a list of { content, language, linkPreviewUrl }.
+//
+// One that begins a post on `owner`, with what a post takes (`post`: its
+// audience, who may reply and quote, its locations).
+const addThread = (owner, post, parts) => {
+  return axios.post(`/notes/${owner.id}/thread`, { ...post, parts });
+};
+
+// One that answers a post or a reply.
+const addReplyThread = (parent, parts) => {
+  return axios.post(`/notes/${parent.id}/replies/thread`, { parts });
+};
+
 const setHidden = (reply, hidden) => {
   return axios.patch(`/notes/${reply.id}/hidden`, { hidden });
 };
@@ -53,6 +68,8 @@ const setAccess = (medium, replyAccess) => {
 
 export default {
   add,
+  addReplyThread,
+  addThread,
   addWithPictures,
   edit,
   remove,
