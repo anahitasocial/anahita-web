@@ -549,9 +549,10 @@ a request that fails as it does without the service
 
 - **Who to follow** on the home page, above the feed
   (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
-  reason, a Follow button and a way to say not interested, and a button on
-  to the rest. As wide as the feeds: three side by side when they are read
-  in columns, a list when they are not. Not drawn while it is read or when there is nobody. The ✕ in
+  reason, **+ Follow** and a ✕ for not interested, and a button on to the
+  rest. As wide as the feeds: when they are read in columns, the three are
+  side by side, each outlined like a card with its ✕ a small circle on the
+  top left corner; otherwise a list. Not drawn while it is read or when there is nobody. The ✕ in
   its header puts the whole card away for seven days, remembered in the
   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
   page brings it back.

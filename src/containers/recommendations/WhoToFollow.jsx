@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -17,7 +18,6 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
-import Typography from '@mui/material/Typography';
 
 import DismissIcon from '@mui/icons-material/Close';
 
@@ -38,14 +38,15 @@ const SHOWN = 3;
 // each with the reason it is suggested, a Follow button and a way to say
 // not interested.
 //
+// `columns`: the three side by side, as the feeds under it are when they
+// are read in columns (the user, 2026-10-19); a list, one under another,
+// when they are not.
+//
 // The ✕ in its corner puts the whole card away for a week.
 //
 // Nothing is drawn while it is being read, when there is nobody to suggest,
 // or on an installation with no recommendation service: the home page is
 // then as it was without it.
-//
-// `columns`: side by side, three across, as the feeds under it are when
-// they are read in columns; a list, one under another, when they are not.
 const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
   const {
     items,
@@ -70,54 +71,73 @@ const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
     });
   };
 
-  const dismissButton = (actor) => {
+  // Not interested in them: a ✕, at the end of a line of the list, or a
+  // small round one on the corner of a card.
+  const dismissButton = (actor, small = false) => {
     return (
       <Tooltip title={i18n.t('recommendations:dismiss')}>
         <IconButton
+          edge={small ? false : 'end'}
+          size={small ? 'small' : 'medium'}
           aria-label={i18n.t('recommendations:dismiss')}
           onClick={() => {
             handleDismiss(actor);
           }}
+          sx={small ? {
+            position: 'absolute',
+            top: -12,
+            left: -12,
+            zIndex: 1,
+            p: 0.5,
+            bgcolor: 'background.paper',
+            border: 1,
+            borderColor: 'divider',
+            '&:hover': { bgcolor: 'background.paper' },
+          } : {}}
         >
-          <DismissIcon />
+          <DismissIcon fontSize={small ? 'inherit' : 'medium'} />
         </IconButton>
       </Tooltip>
     );
   };
 
-  const nameLink = (actor) => {
+  // One person, as a line of the list. On a card (`onCard`), the ✕ is on
+  // the card's corner, and the line has room for more of the name.
+  const row = (item, onCard = false) => {
+    const { actor } = item;
+
     return (
-      <Link component={RouterLink} to={getURL(actor)} color="inherit" underline="hover">
-        {getActorName(actor)}
-      </Link>
+      <ListItem
+        key={`who-to-follow-${actor.id}`}
+        component="div"
+        secondaryAction={
+          <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+            <ControlFollow actor={actor} />
+            {!onCard && dismissButton(actor)}
+          </Stack>
+        }
+        // Room for the buttons, so a long name is cut short before it runs
+        // under them.
+        sx={{ pr: onCard ? 16 : 22 }}
+      >
+        <ListItemAvatar>
+          <ActorAvatar actor={actor} linked />
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <Link component={RouterLink} to={getURL(actor)} color="inherit" underline="hover">
+              {getActorName(actor)}
+            </Link>
+          }
+          secondary={recommendations.reasonText(item, related, i18n.t.bind(i18n))}
+          slotProps={{
+            primary: { noWrap: true },
+            secondary: { noWrap: true },
+          }}
+        />
+      </ListItem>
     );
   };
-
-  // Three across: each a picture, a name, why, and its buttons.
-  const across = (
-    <Grid container spacing={2} sx={{ p: 2 }}>
-      {items.map((item) => {
-        const { actor } = item;
-        return (
-          <Grid key={`who-to-follow-${actor.id}`} size={4}>
-            <Stack spacing={1} sx={{ alignItems: 'center', textAlign: 'center', minWidth: 0 }}>
-              <ActorAvatar actor={actor} linked size="large" />
-              <Typography variant="subtitle1" noWrap sx={{ maxWidth: '100%' }}>
-                {nameLink(actor)}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" noWrap sx={{ maxWidth: '100%' }}>
-                {recommendations.reasonText(item, related, i18n.t.bind(i18n))}
-              </Typography>
-              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <ControlFollow actor={actor} />
-                {dismissButton(actor)}
-              </Stack>
-            </Stack>
-          </Grid>
-        );
-      })}
-    </Grid>
-  );
 
   return (
     <Card component="section" sx={{ mb: 2 }}>
@@ -140,39 +160,32 @@ const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
         }
       />
       <Divider />
-      {columns ? across :
-      <List>
-        {items.map((item) => {
-          const { actor } = item;
-
-          return (
-            <ListItem
-              key={`who-to-follow-${actor.id}`}
-              secondaryAction={
-                <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                  <ControlFollow actor={actor} />
-                  {dismissButton(actor)}
-                </Stack>
-              }
-              // Room for the two buttons, so a long name is cut short
-              // before it runs under them.
-              sx={{ pr: 22 }}
-            >
-              <ListItemAvatar>
-                <ActorAvatar actor={actor} linked />
-              </ListItemAvatar>
-              <ListItemText
-                primary={nameLink(actor)}
-                secondary={recommendations.reasonText(item, related, i18n.t.bind(i18n))}
-                slotProps={{
-                  primary: { noWrap: true },
-                  secondary: { noWrap: true },
-                }}
-              />
-            </ListItem>
-          );
-        })}
-      </List>}
+      {columns ?
+        // Each in an outline of its own, like a card.
+        <Grid
+          container
+          component="ul"
+          spacing={2}
+          sx={{
+            listStyle: 'none', m: 0, p: 2,
+          }}
+        >
+          {items.map((item) => {
+            return (
+              <Grid key={`who-to-follow-cell-${item.actor.id}`} component="li" size={4} sx={{ minWidth: 0 }}>
+                <Box sx={{ position: 'relative' }}>
+                  {dismissButton(item.actor, true)}
+                  <Card variant="outlined">
+                    {row(item, true)}
+                  </Card>
+                </Box>
+              </Grid>
+            );
+          })}
+        </Grid> :
+        <List>
+          {items.map(row)}
+        </List>}
       <CardActions sx={{ p: 1, pt: 0 }}>
         <Button fullWidth component={RouterLink} to="/recommendations">
           {i18n.t('recommendations:seeMore')}

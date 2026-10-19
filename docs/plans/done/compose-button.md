@@ -54,8 +54,9 @@ Settled with the user on 2026-10-19:
 
 Asked for on the way, the same day:
 
-- **Who to follow** on the home page is as wide as the feeds: three side by
-  side when they are read in columns, a list when they are not.
+- **Who to follow** on the home page is as wide as the feeds: when they are
+  read in columns, its three are side by side, each outlined like a card; a
+  list otherwise.
 - **Mark all read** on the notifications page (`PATCH
   /notifications/read-all`), brought forward from row 97.
 
