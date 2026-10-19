@@ -2,18 +2,13 @@
 // anahita-services' docs/notifications.md lists them. Each has its words in
 // the `notifications` strings, by its name in camel case (`reply_add`,
 // `replyAdd`), and a test keeps it so; a kind the app does not know is shown
-// with the words `other`.
+// with the words `other`. An edit tells nobody (the user, 2026-10-19).
 const KINDS = [
   'note_add',
   'article_add',
   'photo_add',
   'topic_add',
   'video_add',
-  'note_edit',
-  'article_edit',
-  'photo_edit',
-  'topic_edit',
-  'video_edit',
   'reply_add',
   'quote_add',
   'repost_add',
