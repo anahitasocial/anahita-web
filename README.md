@@ -117,6 +117,25 @@ The documentation is in [`docs/`](docs/README.md):
   contacts and the other settings an operator changes without a rebuild are
   read from the server's NodeInfo document.
 
+## Using Anahita responsibly
+
+Anahita is built to create safe online spaces. The people who join your
+online space will trust you with their words, their pictures and their
+communities. Whoever installs Anahita makes this pledge, item by item, when
+they set their first password:
+
+**I won't use Anahita to:**
+
+- Spread hate or organize hate groups, including against women, LGBTQIA+ people, or marginalized communities.
+- Harm or exploit children.
+- Harass, threaten, or expose the private data (dox) of anyone.
+- Promote violent extremism or terrorism.
+- Spread misinformation about health or science.
+- Abuse the system through spam, malware, financial scams, or data harvesting.
+
+It is a pledge to the people who will trust you, from Anahita's creator,
+Rastin Mehr; not a term of the licence, which is unchanged.
+
 ## Licence
 
 [MIT](LICENSE)
