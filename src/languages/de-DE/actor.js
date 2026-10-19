@@ -1,4 +1,6 @@
 export default {
+  scheduledDeletion_one: 'Löschung geplant · noch {{count}} Tag',
+  scheduledDeletion_other: 'Löschung geplant · noch {{count}} Tage',
   about: 'Über',
   name: 'Name',
   alias: 'Alias',

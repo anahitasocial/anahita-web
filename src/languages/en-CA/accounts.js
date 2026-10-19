@@ -7,6 +7,8 @@ export default {
   kinds: {
     person: 'People',
     group: 'Groups',
+    event: 'Events',
+    website: 'Websites',
   },
   filters: {
     kind: 'Show',

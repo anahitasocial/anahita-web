@@ -211,22 +211,39 @@ failure is left to be seen.
 | Reports | `/admin/reports`, and `/admin/reports/:id` for one case | Administrators and super administrators |
 | Signup requests | `/admin/signup-requests` | Administrators and super administrators |
 | Invites | `/admin/invites` | Administrators and super administrators |
+| Scheduled for deletion | `/admin/scheduled` | Super administrators only |
 | Accounts | `/admin/accounts` | Super administrators only |
+
+**Scheduled for deletion** (`containers/admin/Scheduled`) lists every profile
+on its way out, people, groups, events and websites together, soonest first,
+each with its days left and a Settings button to restore it or remove it for
+good. It asks `GET /accounts` for the deleted of each kind.
 
 Site settings are not a tab. They configure the installation, where this area
 looks after the people on it, so they keep their own page (`/settings`) and
 menu entry.
 
-**Accounts** (`containers/admin/Accounts`) lists every person or group, least
-recently active first, with filters for finding the ones nobody uses: an
-activity tier (empty, dormant, active), dates, never verified, never onboarded,
-nothing written, and for groups, no administrator. Accounts are ticked, or all
-that match are selected at once, up to 500, and "Delete permanently" opens a
+**Accounts** (`containers/admin/Accounts`) lists every person, group, event or
+website, least recently active first, with filters for finding the ones nobody
+uses: an activity tier (empty, dormant, active), a state (active, disabled,
+archived, deleted), dates, never verified, never onboarded, nothing written,
+and for groups, events and websites, no administrator. A deleted group, event
+or website's Deleted chip leads to its settings, to restore it or remove it
+for good. Accounts are ticked, or all
+that match are selected at once, up to 500 (people and groups; events and
+websites are removed one at a time, from their settings), and "Delete permanently" opens a
 dialog that says what will go, asks for the count to be typed (`PURGE 37`) and
 for a proof of identity, then shows the progress. The server answers a purge
 before the work is done, so `usePurgeProgress` asks how the batch is doing
 until nothing is queued. Administrators and the viewer cannot be ticked. A
 group with no administrator links to its settings, where one is appointed.
+
+A profile scheduled for deletion, of any kind, carries a **Scheduled for
+deletion · N days left** label (`components/ScheduledDeletion.jsx`,
+`utils/deletion.js`) on its page and in the lists of who somebody follows,
+which keep it for its followers and administrators only (graph-grpc-service,
+`setLiveNeighboursQuery`). Its Danger zone offers only Restore, for a group,
+an event or a website, and Delete permanently.
 
 The same purge for one account is the last card in a profile's Danger zone,
 "Delete permanently" (`containers/actors/Settings/Purge.jsx`), offered to

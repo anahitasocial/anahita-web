@@ -8,6 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import SocialgraphMeta from './SocialgraphMeta';
+import ScheduledDeletion from '../../../components/ScheduledDeletion';
 import ActorType from '../../../proptypes/Actor';
 import i18n from '../../../languages';
 import utils from '../../../utils';
@@ -118,6 +119,9 @@ const ActorHeader = ({
           {utils.federation.displayHandle(actor, slugify)}
           {actor.isFollowingViewer && ` · ${i18n.t('socialgraph:followsYou')}`}
         </Typography>
+        {/* Seen only by its followers and administrators, and site
+            administrators: anybody else cannot reach a deleted profile. */}
+        <ScheduledDeletion actor={actor} sx={{ mt: 1 }} />
         <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
       </Box>
     </Card>

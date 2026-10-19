@@ -406,6 +406,11 @@ export const getGroupDangerItems = ({
   // Not a website: one is deleted, not archived, since its posts are a
   // website's and the site keeps them.
   canArchive = true,
+  // Scheduled for deletion: only the way back is offered, the Delete card
+  // showing Restore, and removing it for good (the user, 2026-10-18).
+  // Calling it off, disabling it and archiving it are for a live one, and
+  // its Disable card would read "disabled" with an Enable that is refused.
+  isDeleted = false,
 }) => {
   return [
     { key: ITEMS.CANCEL, bare: true, requiresCancel: true },
@@ -415,6 +420,10 @@ export const getGroupDangerItems = ({
     // Delete permanently, with no thirty days. Super administrators only.
     { key: ITEMS.PURGE, bare: true, requiresSuperAdmin: true },
   ].filter((item) => {
+    if (isDeleted && item.key !== ITEMS.DELETE && item.key !== ITEMS.PURGE) {
+      return false;
+    }
+
     if (item.requiresSuperAdmin && !isSuperAdmin) {
       return false;
     }

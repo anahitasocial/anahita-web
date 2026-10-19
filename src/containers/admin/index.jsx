@@ -23,6 +23,7 @@ import SignupRequests from '../auth/SignupRequests';
 import Invites from '../auth/Invites';
 import Accounts from './Accounts';
 import Reports from './Reports';
+import Scheduled from './Scheduled';
 
 import tabs from './tabs';
 
@@ -33,6 +34,7 @@ const PANELS = {
   reports: Reports,
   'signup-requests': SignupRequests,
   invites: Invites,
+  scheduled: Scheduled,
   accounts: Accounts,
 };
 

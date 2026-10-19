@@ -341,6 +341,7 @@ const ActorsSettings = ({
     isSuperAdmin,
     canCancel,
     canArchive: !isWebsite,
+    isDeleted: Boolean(actor.deletedAt),
   });
 
   // Every key getGroupTabs can return needs an entry here, or selecting that

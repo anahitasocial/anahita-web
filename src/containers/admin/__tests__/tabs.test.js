@@ -19,9 +19,9 @@ describe('administration tabs', () => {
 
   // Removing accounts for good is a super administrator's power, so the
   // list for choosing them is theirs alone.
-  it('shows a super administrator the accounts tab as well', () => {
+  it('shows a super administrator what is scheduled for deletion, and the accounts', () => {
     expect(keys(tabs.visibleTabs(viewer('super-administrator'))))
-      .toEqual(['reports', 'signup-requests', 'invites', 'accounts']);
+      .toEqual(['reports', 'signup-requests', 'invites', 'scheduled', 'accounts']);
   });
 
   // Site settings are a page of their own, for super administrators.
