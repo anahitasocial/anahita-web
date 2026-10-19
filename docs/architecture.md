@@ -1283,7 +1283,9 @@ draws nothing (`utils/federation.js#isAbsent`).
   the post's audience, who may reply and quote, its locations and its card;
   the rest are replies to the one before. Only for words alone: adding
   photos or a video hides it. The notes after the first are not kept as a
-  draft.
+  draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
+  `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
+  are shown as any replies are, each under the one before.
 - **What other networks will show** of a public post on the viewer's own
   profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
   past 300 characters, when their Bluesky account is connected, that

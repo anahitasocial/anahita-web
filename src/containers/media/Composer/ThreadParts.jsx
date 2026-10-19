@@ -28,6 +28,7 @@ const ThreadParts = ({
   disabled = false,
   direction = 'ltr',
   goesToBluesky = false,
+  outlined = false,
 }) => {
   const change = (index, value) => {
     onChange(parts.map((each, at) => { return at === index ? value : each; }));
@@ -57,12 +58,13 @@ const ThreadParts = ({
                 aria-label={i18n.t('composer:thread.part', { number: index + 2 })}
                 autoFocus={index === parts.length - 1}
                 disabled={disabled}
-                variant="standard"
+                variant={outlined ? 'outlined' : 'standard'}
+                size={outlined ? 'small' : 'medium'}
                 multiline
                 minRows={2}
                 fullWidth
                 slotProps={{
-                  input: { disableUnderline: true },
+                  ...(outlined ? {} : { input: { disableUnderline: true } }),
                   htmlInput: { dir: direction, maxLength: LIMITS.POST_BODY_MAX },
                 }}
               />
@@ -113,6 +115,8 @@ ThreadParts.propTypes = {
   disabled: PropTypes.bool,
   direction: PropTypes.string,
   goesToBluesky: PropTypes.bool,
+  // Boxed, as in the reply form; plain, as in the composer.
+  outlined: PropTypes.bool,
 };
 
 export default ThreadParts;
