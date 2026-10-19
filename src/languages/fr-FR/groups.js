@@ -10,6 +10,7 @@ export default {
     admins: 'Administrateurs',
     features: 'Fonctionnalités',
     permissions: 'Autorisations',
+    rules: 'Règles',
     access: 'Confidentialité',
     delete: 'Supprimer',
     // The card title. Its text is in the accounts namespace, shared with

@@ -20,6 +20,7 @@ import blogs from './blogs';
 import home from './home';
 import about from './about';
 import abuseReports from './abuseReports';
+import rules from './rules';
 import accounts from './accounts';
 import admin from './admin';
 import settings from './settings';
@@ -72,6 +73,7 @@ export default {
   home,
   about,
   abuseReports,
+  rules,
   accounts,
   admin,
   settings,

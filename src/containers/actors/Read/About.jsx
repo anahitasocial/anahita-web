@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -12,6 +14,7 @@ import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import RulesIcon from '@mui/icons-material/Rule';
 
 import MapIcon from '@mui/icons-material/MapOutlined';
 import OpenIcon from '@mui/icons-material/ExpandMore';
@@ -39,7 +42,10 @@ const hostOf = (address) => {
 };
 
 const ActorBodyAbout = (props) => {
-  const { actor } = props;
+  const { actor, rules = null } = props;
+  // Its rules, which whoever follows it or answers it agrees to (roadmap
+  // row 102, part 5): shown at all times, in order.
+  const ruleItems = (rules && rules.items) || [];
   const { body } = actor;
 
   // Where an event is held: the address kept on it, which the server sends
@@ -192,6 +198,34 @@ const ActorBodyAbout = (props) => {
             );
           })}
         </Menu>}
+      {ruleItems.length > 0 &&
+        <>
+          {(body || address || event.hasAddress || websiteUrl) && <Divider />}
+          <CardContent>
+            <Typography
+              variant="subtitle1"
+              component="h4"
+              sx={{
+                display: 'flex', alignItems: 'center', gap: 1, mb: 1,
+              }}
+            >
+              <RulesIcon fontSize="small" color="action" />
+              {i18n.t('rules:about.title')}
+            </Typography>
+            <Box component="ol" sx={{ m: 0, pl: 3 }}>
+              {ruleItems.map((rule, index) => {
+                return (
+                  // eslint-disable-next-line react/no-array-index-key
+                  <li key={`rule-${index}`}>
+                    <Typography variant="body2">{rule.title}</Typography>
+                    {rule.body &&
+                      <Typography variant="body2" color="textSecondary">{rule.body}</Typography>}
+                  </li>
+                );
+              })}
+            </Box>
+          </CardContent>
+        </>}
       {address && hasPoint &&
         <AnahitaMap
           locations={[{
@@ -209,6 +243,8 @@ const ActorBodyAbout = (props) => {
 
 ActorBodyAbout.propTypes = {
   actor: ActorType.isRequired,
+  // From GET .../rules: { version, items, agreedVersion }, or null.
+  rules: PropTypes.object,
 };
 
 export default ActorBodyAbout;

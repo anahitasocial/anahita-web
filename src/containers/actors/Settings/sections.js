@@ -73,6 +73,9 @@ export const ITEMS = {
   // What the person is told about: eight kinds of thing, on or off.
   NOTIFICATIONS: 'notifications',
   PERMISSIONS: 'permissions',
+  // A group's or an event's rules, ticked before following or answering it
+  // (roadmap row 102, part 5).
+  RULES: 'rules',
   AGREEMENTS: 'agreements',
   // A person's account type: registered, administrator or super
   // administrator, and changing it.
@@ -382,6 +385,9 @@ export const getGroupTabs = ({
     { key: ITEMS.ACCESS, bare: false },
     // Brings its own Card, like Access.
     { key: ITEMS.PERMISSIONS, bare: false },
+    // What somebody agrees to before following it or answering it. A form
+    // of its own, in the Card the page supplies.
+    { key: ITEMS.RULES, bare: true },
     // ONE Danger zone tab holding the three lifecycle actions, rather than
     // three tabs of their own.
     //
