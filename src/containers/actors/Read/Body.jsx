@@ -33,7 +33,6 @@ const ActorBody = ({
   actor,
   viewer,
   admins = null,
-  composers = null,
   feed = null,
   replies = null,
   reposts = null,
@@ -151,9 +150,6 @@ const ActorBody = ({
           </Grid>
           <Grid size={{ xs: 12, md: 8 }}>
             <Grid size={12}>
-              {composers}
-            </Grid>
-            <Grid size={12}>
               {feed}
             </Grid>
           </Grid>
@@ -176,7 +172,6 @@ ActorBody.propTypes = {
   classes: PropTypes.object.isRequired,
   actor: ActorType.isRequired,
   viewer: PersonType.isRequired,
-  composers: PropTypes.node,
   feed: PropTypes.node,
   // The profile's other two lists.
   replies: PropTypes.node,

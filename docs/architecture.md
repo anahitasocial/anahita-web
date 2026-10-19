@@ -123,7 +123,7 @@ history. The main paths:
 
 | Path | Page |
 | --- | --- |
-| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
+| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the feed and the + button to post. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/@:alias`, `/@:alias/:tab` | A profile of any kind at its alias, as it is known on the fediverse: a person (`/@rastin`), somebody on another server by their whole handle (`/@alice@mastodon.example`, `/@alice.bsky.social`), a group (`/@anahita-atrium`) or an event. `containers/actors/ByHandle.jsx` asks the API which profile the alias is (`api.handles`, `GET /actors/:alias`) and draws its page, its tabs under `/@:alias`. `utils/node.getURL` gives every profile this address; `getKindURL` gives the one by kind, under which settings are |
 | `/people`, `/people/:id` | People. A person's old address, `/people/:id` and its tabs, sends to `/@:id` |
@@ -522,9 +522,22 @@ replies, made directly to the post.
 ### Home
 
 Home for somebody signed in is `containers/feeds/index.jsx` (it was
-`Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
-of the people and groups the viewer follows, with the custom feeds the viewer
-keeps there as tabs after it.
+`Dashboard.jsx`; the menu says "Home" either way): the feed of the people and
+groups the viewer follows, with the custom feeds the viewer keeps there as
+tabs after it.
+
+**Posting is the + button** at the bottom right
+(`containers/media/Composer/ComposeButton.jsx`; roadmap row 99,
+[plans/done/compose-button.md](plans/done/compose-button.md)), on the home page and on
+a profile the viewer may post to, and nowhere else. The page says where it
+posts while it is open (`reducers/composeTarget.js`): from home to the
+viewer's own profile, from a profile to that one. It opens the short
+composer, "New post" (`Composer/Short.jsx`), whose Long content opens the
+long one (`Composer/Long.jsx`); a profile that takes only long writing opens
+that at once. A ring goes round the button while a video posted from it is
+being prepared. What the viewer posts is at the head of an open feed it
+belongs in at once (`reducers/lastPosted.js`, `feed/usePosted.js`): the
+home feed, and the profile it was posted to.
 
 ### Suggestions
 
@@ -534,10 +547,11 @@ service is optional, and everything here draws nothing where there is none:
 a request that fails as it does without the service
 (`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
 
-- **Who to follow** on the home page, under the composer
+- **Who to follow** on the home page, above the feed
   (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
   reason, a Follow button and a way to say not interested, and a button on
-  to the rest. Not drawn while it is read or when there is nobody. The ✕ in
+  to the rest. As wide as the feeds: three side by side when they are read
+  in columns, a list when they are not. Not drawn while it is read or when there is nobody. The ✕ in
   its header puts the whole card away for seven days, remembered in the
   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
   page brings it back.
@@ -597,8 +611,9 @@ own, because a video is too big to be sent with the post (the services'
   three at a time, each tried again when it fails, asking for addresses a
   few at a time. The page has to stay open for that, and says so. When
   everything is sent the server prepares the video, and the page can be
-  left: the composer asks after it and says when it is posted.
-- **Videos on the way** are listed under the composer: ones still being
+  left: the composer asks after it and says when it is posted, and the +
+  button has a ring round it until then.
+- **Videos on the way** are listed in the composer: ones still being
   prepared, and ones that failed in the last day, each with why.
 - **The parts go to storage, not to the API**, through an axios instance
   of their own (`api/videos.js#sendPart`) that sends no cookies and none
@@ -885,6 +900,9 @@ emailed.
   `notifications:other`. Its links stay in the app, unread is said in
   words to a screen reader, and the next page begins after what is on the
   page, so deleting one skips nothing.
+- **Mark all read**, in the page's header (the icon alone on a phone),
+  marks every one read (`PATCH /notifications/read-all`), the list and the
+  bell with them.
 - **Get notifications** in a post's menu subscribes to its replies
   (`containers/controls/medium/NotificationSub.jsx`), and Stop
   notifications ends it.

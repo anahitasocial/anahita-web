@@ -9,8 +9,12 @@ import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
+import MarkAllReadIcon from '@mui/icons-material/DoneAll';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import NotificationsList from './List';
@@ -34,6 +38,8 @@ const NotificationsBrowse = ({
   successAlert,
   errorAlert,
   lessUnread,
+  readAll,
+  unread,
   items,
   isFetching,
   newestAt,
@@ -107,6 +113,19 @@ const NotificationsBrowse = ({
     });
   };
 
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const [isMarking, setIsMarking] = useState(false);
+  const handleReadAll = () => {
+    setIsMarking(true);
+    readAll().then(() => {
+      successAlert(i18n.t('notifications:allMarkedRead'));
+    }).catch(() => {
+      errorAlert(i18n.t('prompts:updated.error'));
+    }).finally(() => {
+      setIsMarking(false);
+    });
+  };
+
   const empty = answered && !isFetching && items.allIds.length === 0;
 
   return (
@@ -123,6 +142,27 @@ const NotificationsBrowse = ({
               {i18n.t('notifications:cTitle')}
             </Typography>
           }
+          // The words on a desktop; on a phone, the icon, which they name.
+          action={phone ?
+            <Tooltip title={i18n.t('notifications:markAllRead')}>
+              <span>
+                <IconButton
+                  aria-label={i18n.t('notifications:markAllRead')}
+                  disabled={isMarking || unread === 0}
+                  onClick={handleReadAll}
+                >
+                  <MarkAllReadIcon />
+                </IconButton>
+              </span>
+            </Tooltip> :
+            <Button
+              startIcon={<MarkAllReadIcon />}
+              disabled={isMarking || unread === 0}
+              onClick={handleReadAll}
+              sx={{ mt: 1 }}
+            >
+              {i18n.t('notifications:markAllRead')}
+            </Button>}
         />
         {failed &&
           <CardContent>
@@ -170,6 +210,8 @@ NotificationsBrowse.propTypes = {
   successAlert: PropTypes.func.isRequired,
   errorAlert: PropTypes.func.isRequired,
   lessUnread: PropTypes.func.isRequired,
+  readAll: PropTypes.func.isRequired,
+  unread: PropTypes.number.isRequired,
   items: NotificationsType.isRequired,
   isFetching: PropTypes.bool.isRequired,
   newestAt: PropTypes.string.isRequired,
@@ -188,6 +230,7 @@ const mapStateToProps = (state) => {
     total,
     isFetching,
     newestAt: state.notificationsUnread.newestAt,
+    unread: state.notificationsUnread.count,
   };
 };
 
@@ -213,6 +256,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     lessUnread: () => {
       return dispatch(actions.notifications.unread.less());
+    },
+    readAll: () => {
+      return dispatch(actions.notifications.readAll());
     },
   };
 };

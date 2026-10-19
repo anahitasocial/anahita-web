@@ -30,4 +30,6 @@ export default {
   none: 'Noch nichts da. Hier erscheint, wer dir folgt, dir antwortet oder dich erwähnt.',
   failed: 'Deine Benachrichtigungen konnten nicht geladen werden',
   markRead: 'Als gelesen markieren',
+  markAllRead: 'Alle als gelesen markieren',
+  allMarkedRead: 'Alle als gelesen markiert',
 };

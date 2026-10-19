@@ -30,4 +30,6 @@ export default {
   none: 'Nada por aqui ainda. Aqui você verá quem segue você, responde a você ou menciona você.',
   failed: 'Não foi possível carregar suas notificações',
   markRead: 'Marcar como lida',
+  markAllRead: 'Marcar tudo como lido',
+  allMarkedRead: 'Tudo marcado como lido',
 };

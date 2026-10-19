@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
+import Grid from '@mui/material/Grid';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
@@ -16,6 +17,7 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
+import Typography from '@mui/material/Typography';
 
 import DismissIcon from '@mui/icons-material/Close';
 
@@ -41,7 +43,10 @@ const SHOWN = 3;
 // Nothing is drawn while it is being read, when there is nobody to suggest,
 // or on an installation with no recommendation service: the home page is
 // then as it was without it.
-const WhoToFollow = ({ alertSuccess, alertError }) => {
+//
+// `columns`: side by side, three across, as the feeds under it are when
+// they are read in columns; a list, one under another, when they are not.
+const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
   const {
     items,
     related,
@@ -65,6 +70,55 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
     });
   };
 
+  const dismissButton = (actor) => {
+    return (
+      <Tooltip title={i18n.t('recommendations:dismiss')}>
+        <IconButton
+          aria-label={i18n.t('recommendations:dismiss')}
+          onClick={() => {
+            handleDismiss(actor);
+          }}
+        >
+          <DismissIcon />
+        </IconButton>
+      </Tooltip>
+    );
+  };
+
+  const nameLink = (actor) => {
+    return (
+      <Link component={RouterLink} to={getURL(actor)} color="inherit" underline="hover">
+        {getActorName(actor)}
+      </Link>
+    );
+  };
+
+  // Three across: each a picture, a name, why, and its buttons.
+  const across = (
+    <Grid container spacing={2} sx={{ p: 2 }}>
+      {items.map((item) => {
+        const { actor } = item;
+        return (
+          <Grid key={`who-to-follow-${actor.id}`} size={4}>
+            <Stack spacing={1} sx={{ alignItems: 'center', textAlign: 'center', minWidth: 0 }}>
+              <ActorAvatar actor={actor} linked size="large" />
+              <Typography variant="subtitle1" noWrap sx={{ maxWidth: '100%' }}>
+                {nameLink(actor)}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" noWrap sx={{ maxWidth: '100%' }}>
+                {recommendations.reasonText(item, related, i18n.t.bind(i18n))}
+              </Typography>
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                <ControlFollow actor={actor} />
+                {dismissButton(actor)}
+              </Stack>
+            </Stack>
+          </Grid>
+        );
+      })}
+    </Grid>
+  );
+
   return (
     <Card component="section" sx={{ mb: 2 }}>
       <CardHeader
@@ -86,6 +140,7 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
         }
       />
       <Divider />
+      {columns ? across :
       <List>
         {items.map((item) => {
           const { actor } = item;
@@ -96,17 +151,7 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
               secondaryAction={
                 <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                   <ControlFollow actor={actor} />
-                  <Tooltip title={i18n.t('recommendations:dismiss')}>
-                    <IconButton
-                      edge="end"
-                      aria-label={i18n.t('recommendations:dismiss')}
-                      onClick={() => {
-                        handleDismiss(actor);
-                      }}
-                    >
-                      <DismissIcon />
-                    </IconButton>
-                  </Tooltip>
+                  {dismissButton(actor)}
                 </Stack>
               }
               // Room for the two buttons, so a long name is cut short
@@ -117,11 +162,7 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
                 <ActorAvatar actor={actor} linked />
               </ListItemAvatar>
               <ListItemText
-                primary={
-                  <Link component={RouterLink} to={getURL(actor)} color="inherit" underline="hover">
-                    {getActorName(actor)}
-                  </Link>
-                }
+                primary={nameLink(actor)}
                 secondary={recommendations.reasonText(item, related, i18n.t.bind(i18n))}
                 slotProps={{
                   primary: { noWrap: true },
@@ -131,7 +172,7 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
             </ListItem>
           );
         })}
-      </List>
+      </List>}
       <CardActions sx={{ p: 1, pt: 0 }}>
         <Button fullWidth component={RouterLink} to="/recommendations">
           {i18n.t('recommendations:seeMore')}
@@ -144,6 +185,7 @@ const WhoToFollow = ({ alertSuccess, alertError }) => {
 WhoToFollow.propTypes = {
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
+  columns: PropTypes.bool,
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -104,6 +104,15 @@ actions.locationsGraph = createGraphAction('locations')(apis.tagGraph);
 
 actions.notifications = {
   ...createAction('notifications')(apis.notifications),
+  // Mark all read: every one of the viewer's, then the list and the bell.
+  readAll: () => {
+    return (dispatch) => {
+      return apis.notifications.editAll().then(() => {
+        dispatch({ type: 'NOTIFICATIONS_READ_ALL' });
+        dispatch({ type: 'NOTIFICATIONS_UNREAD_LESS', by: Number.MAX_SAFE_INTEGER });
+      });
+    };
+  },
   // The bell's count (reducers/notificationsUnread.js).
   unread: {
     set: (count, newestAt) => {
@@ -115,6 +124,20 @@ actions.notifications = {
     reset: () => {
       return { type: 'NOTIFICATIONS_UNREAD_RESET' };
     },
+  },
+};
+
+// Where the + button posts (reducers/composeTarget.js).
+actions.composeTarget = {
+  set: (actor) => {
+    return { type: 'COMPOSE_TARGET_SET', actor };
+  },
+  // The home page: the viewer's own profile.
+  home: () => {
+    return { type: 'COMPOSE_TARGET_SET', actor: { id: 'home', home: true } };
+  },
+  clear: (id) => {
+    return { type: 'COMPOSE_TARGET_CLEAR', id };
   },
 };
 

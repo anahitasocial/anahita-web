@@ -10,6 +10,11 @@ function edit(item) {
   return axios.patch(`/notifications/${item.id}`);
 }
 
+// Mark all read.
+function editAll() {
+  return axios.patch('/notifications/read-all');
+}
+
 function deleteItem(item) {
   return axios.delete(`/notifications/${item.id}`);
 }
@@ -21,6 +26,7 @@ function count() {
 export default {
   browse,
   edit,
+  editAll,
   deleteItem,
   count,
 };
