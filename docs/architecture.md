@@ -904,6 +904,11 @@ emailed.
 - **Read when opened:** following any of a notification's links marks it
   read, quietly (`Browse/ListItem.jsx`, `onClickCapture`); seeing it in the
   list does not. A profile with no name yet is named by its handle.
+- **Actions** under a notification (`Browse/Actions.jsx`), as the server
+  says they are still to be done (`actions`): Decline and Accept a request
+  to follow, **+ Follow** whoever followed, and Reply, which opens the reply
+  form under it and answers the reply itself, or the post. Using one reads
+  the notification.
 - **Mark all read**, in the page's header (the icon alone on a phone),
   marks every one read (`PATCH /notifications/read-all`), the list and the
   bell with them.

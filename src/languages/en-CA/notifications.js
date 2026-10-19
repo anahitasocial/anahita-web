@@ -30,6 +30,12 @@ export default {
   none: 'Nothing here yet. Who follows you, replies to you or mentions you will show up here.',
   failed: "Your notifications couldn't be loaded",
   markRead: 'Mark as read',
+  accept: 'Accept',
+  decline: 'Decline',
+  accepted: 'Accepted',
+  declined: 'Declined',
+  replied: 'Replied',
+  answerFailed: 'That could not be answered. Try again.',
   markAllRead: 'Mark all read',
   allMarkedRead: 'All marked as read',
 };

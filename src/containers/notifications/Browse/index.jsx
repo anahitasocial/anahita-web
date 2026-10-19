@@ -104,6 +104,9 @@ const NotificationsBrowse = ({
 
   // Opened by one of its links: read, quietly.
   const handleOpen = (item) => {
+    if (item.isRead) {
+      return;
+    }
     editItem(item).then(() => {
       lessUnread();
     }).catch(() => {

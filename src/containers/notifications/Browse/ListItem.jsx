@@ -19,6 +19,7 @@ import i18n from '../../../languages';
 import ActorAvatar from '../../../components/ActorAvatar';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
+import NotificationActions from './Actions';
 import NotificationMessage from './NotificationMessage';
 
 import NotificationType from '../../../proptypes/Notification';
@@ -128,6 +129,8 @@ const NotificationListItem = ({
               <Box component="span" sx={{ display: 'block', pt: 1, maxWidth: 320 }}>
                 <ControlInviteAnswer actor={target} />
               </Box>}
+            {/* And what else is still to be done from it. */}
+            <NotificationActions item={item} onActed={handleOpen} />
           </>
         }
         // The buttons are not text, so the line that holds them is not a
