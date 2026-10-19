@@ -14,7 +14,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import TextField from '@mui/material/TextField';
 
-import HashtagsIcon from '@mui/icons-material/Label';
+import HashtagsIcon from '@mui/icons-material/Tag';
 import SearchIcon from '@mui/icons-material/Search';
 
 import BrowseHeader from '../../components/BrowseHeader';
