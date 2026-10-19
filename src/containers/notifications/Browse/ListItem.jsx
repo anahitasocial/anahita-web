@@ -105,7 +105,18 @@ const NotificationListItem = ({
       }
       sx={{ pr: 13 }}
     >
-      <ListItemAvatar>
+      {/* Smaller on a phone, where the words need the room (the user,
+          2026-10-19): 32 pixels, not 48. */}
+      <ListItemAvatar
+        sx={{
+          minWidth: { xs: 44, sm: 56 },
+          '& > .MuiAvatar-root, & > a > .MuiAvatar-root': {
+            width: { xs: 32, sm: 48 },
+            height: { xs: 32, sm: 48 },
+            fontSize: { xs: 14, sm: 20 },
+          },
+        }}
+      >
         {item.others && item.others.length > 0 ?
           // Several: in a row, each a little over the one after it, the
           // newest on top.
