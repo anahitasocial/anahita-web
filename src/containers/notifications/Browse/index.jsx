@@ -23,6 +23,7 @@ import Progress from '../../../components/Progress';
 import NotificationsType from '../../../proptypes/Notifications';
 
 import actions from '../../../actions';
+import api from '../../../api';
 import i18n from '../../../languages';
 import { App as APP } from '../../../constants';
 
@@ -38,6 +39,7 @@ const NotificationsBrowse = ({
   successAlert,
   errorAlert,
   lessUnread,
+  setUnread,
   readAll,
   unread,
   items,
@@ -84,18 +86,51 @@ const NotificationsBrowse = ({
     }
   }, [newestAt]);
 
+  // How many notifications are on the page: a line of several is as many
+  // as it groups (roadmap row 97, part 3).
+  const rows = items.allIds.reduce((count, id) => {
+    const each = items.byId[id];
+    return count + ((each && each.ids && each.ids.length) || 1);
+  }, 0);
+
   // The next page begins after those on the page: a notification deleted
   // here, or taken away by the server, moves the rest up.
   const fetchList = () => {
-    load(items.allIds.length);
+    load(rows);
+  };
+
+  // The rest of a line of several: what is done to it is done to them all.
+  const rest = (item) => {
+    return (item.ids || []).filter((id) => { return id !== item.id; });
+  };
+
+  // After a line of several, the bell asks again rather than guess how
+  // many of them were unread.
+  const counted = (item) => {
+    if (rest(item).length === 0) {
+      lessUnread();
+      return;
+    }
+    api.notifications.count().then(({ data }) => {
+      setUnread(Number(data.count) || 0, data.newestAt || '');
+    }).catch(() => {
+      // The bell's next look says it.
+    });
+  };
+
+  const readAllOf = (item) => {
+    return editItem(item).then(() => {
+      return Promise.all(rest(item).map((id) => { return api.notifications.edit({ id }); }));
+    }).then(() => {
+      counted(item);
+    });
   };
 
   const handleEdit = (item) => {
     if (item.isRead) {
       return;
     }
-    editItem(item).then(() => {
-      lessUnread();
+    readAllOf(item).then(() => {
       successAlert(i18n.t('notifications:markedRead'));
     }).catch(() => {
       errorAlert(i18n.t('prompts:updated.error'));
@@ -107,17 +142,17 @@ const NotificationsBrowse = ({
     if (item.isRead) {
       return;
     }
-    editItem(item).then(() => {
-      lessUnread();
-    }).catch(() => {
+    readAllOf(item).catch(() => {
       // Still unread; nothing to say while they go where they meant to.
     });
   };
 
   const handleDelete = (item) => {
     deleteItem(item).then(() => {
+      return Promise.all(rest(item).map((id) => { return api.notifications.deleteItem({ id }); }));
+    }).then(() => {
       if (!item.isRead) {
-        lessUnread();
+        counted(item);
       }
       successAlert(i18n.t('prompts:deleted.success'));
     }).catch(() => {
@@ -204,7 +239,7 @@ const NotificationsBrowse = ({
           </CardContent>}
         <NotificationsList
           items={items}
-          hasMore={!failed && total > items.allIds.length}
+          hasMore={!failed && total > rows}
           fetchList={fetchList}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
@@ -223,6 +258,7 @@ NotificationsBrowse.propTypes = {
   successAlert: PropTypes.func.isRequired,
   errorAlert: PropTypes.func.isRequired,
   lessUnread: PropTypes.func.isRequired,
+  setUnread: PropTypes.func.isRequired,
   readAll: PropTypes.func.isRequired,
   unread: PropTypes.number.isRequired,
   items: NotificationsType.isRequired,
@@ -272,6 +308,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     readAll: () => {
       return dispatch(actions.notifications.readAll());
+    },
+    setUnread: (count, newestAt) => {
+      return dispatch(actions.notifications.unread.set(count, newestAt));
     },
   };
 };

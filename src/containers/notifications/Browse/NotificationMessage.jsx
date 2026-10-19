@@ -45,13 +45,20 @@ const NotificationMessage = ({ notification }) => {
   const target = notification.target || {};
   const targetName = target.id ? (target.title || getActorName(target)) : i18n.t('actor:unknown');
 
-  const known = `notifications:${_.camelCase(notification.type)}`;
-  const i18nKey = notification.type && i18n.exists(known) ? known : 'notifications:other';
+  // Several who did the same (roadmap row 97, part 3): "Worf and 2
+  // others liked your post", the others counted.
+  const others = (notification.others || []).length + (notification.othersCount || 0);
+  const kind = `notifications:${_.camelCase(notification.type)}`;
+  const known = others > 0 && i18n.exists(`${kind}Others_other`) ? `${kind}Others` : kind;
+  const i18nKey = notification.type && (i18n.exists(known) || i18n.exists(`${known}_other`)) ?
+    known :
+    'notifications:other';
 
   return (
     <Typography variant="body1" component="span">
       <Trans
         i18nKey={i18nKey}
+        count={others > 0 ? others : undefined}
         values={{
           subject: subjectName,
           object: objectName,

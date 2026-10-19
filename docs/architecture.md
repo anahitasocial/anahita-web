@@ -904,6 +904,13 @@ emailed.
 - **Read when opened:** following any of a notification's links marks it
   read, quietly (`Browse/ListItem.jsx`, `onClickCapture`); seeing it in the
   list does not. A profile with no name yet is named by its handle.
+- **Several as one:** likes of one post, reposts of one post and follows of
+  one profile come as one line (`ids`, `others`, `others_count`), "dax and 1
+  other liked your post" (`notifications:voteupOthers`, in each language's
+  plurals), with their pictures overlapping. Reading, opening or deleting
+  it does so to all of them, and the bell asks again how many are unread;
+  the next page begins after every row on the page. Marking one read keeps
+  its line whole (`reducers/notifications.js`).
 - **Actions** under a notification (`Browse/Actions.jsx`), as the server
   says they are still to be done (`actions`): Decline and Accept a request
   to follow, **+ Follow** whoever followed, and Reply, which opens the reply

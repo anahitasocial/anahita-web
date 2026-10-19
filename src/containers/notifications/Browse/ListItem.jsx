@@ -106,10 +106,32 @@ const NotificationListItem = ({
       sx={{ pr: 13 }}
     >
       <ListItemAvatar>
-        <ActorAvatar
-          actor={subject}
-          linked={Boolean(subject.id)}
-        />
+        {item.others && item.others.length > 0 ?
+          // Several: in a row, each a little over the one after it, the
+          // newest on top.
+          <Box sx={{ display: 'flex', pr: 1 }}>
+            {[subject, ...item.others].slice(0, 3).map((actor, index) => {
+              return (
+                <Box
+                  key={`grouped-${item.id}-${actor.id}`}
+                  sx={{
+                    position: 'relative',
+                    zIndex: 3 - index,
+                    ml: index === 0 ? 0 : -1,
+                    borderRadius: '50%',
+                    border: 2,
+                    borderColor: 'background.paper',
+                  }}
+                >
+                  <ActorAvatar actor={actor} linked={Boolean(actor.id)} size="small" />
+                </Box>
+              );
+            })}
+          </Box> :
+          <ActorAvatar
+            actor={subject}
+            linked={Boolean(subject.id)}
+          />}
       </ListItemAvatar>
       <ListItemText
         primary={
