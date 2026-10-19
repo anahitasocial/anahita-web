@@ -12,6 +12,9 @@ export default {
     actors: 'Profiles',
     feeds: 'Feeds',
   },
+  // A search that failed, and asking again.
+  failed: 'Search didn’t work just now.',
+  retry: 'Try again',
   boxPlaceholder: 'Search...',
   recent: {
     title: 'Recent searches',

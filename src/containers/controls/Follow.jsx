@@ -10,6 +10,8 @@ import UnfollowIcon from '@mui/icons-material/PersonRemoveOutlined';
 import MenuItemLabel from '../../components/MenuItemLabel';
 
 import actions from '../../actions/socialgraph';
+import appActions from '../../actions/app';
+import utils from '../../utils';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
 
@@ -17,6 +19,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
   const {
     followActor,
     unfollowActor,
+    alertError,
     actor,
     component = 'button',
     // One word wherever anything is followed, a profile, a hashtag or a
@@ -39,13 +42,24 @@ const ControlsFollow = React.forwardRef((props, ref) => {
   const [leader, setLeader] = useState(actor.isLeadingViewer);
   const [waiting, setWaiting] = useState(false);
 
+  // A follow or an unfollow that fails gives the button back and says so,
+  // in a sentence (the user, 2026-10-19). It used to wait for ever: the
+  // failure was never caught, and nothing was said.
+  const failed = (key) => {
+    return () => {
+      setWaiting(false);
+      alertError(i18n.t(`socialgraph:${key}`, { name: utils.node.getActorName(actor) }));
+    };
+  };
+
   const handleFollow = () => {
     setWaiting(true);
     followActor({ actor, viewer })
       .then(() => {
         setWaiting(false);
         setLeader(true);
-      });
+      })
+      .catch(failed('followFailed'));
   };
 
   const handleUnfollow = () => {
@@ -54,7 +68,8 @@ const ControlsFollow = React.forwardRef((props, ref) => {
       .then(() => {
         setWaiting(false);
         setLeader(false);
-      });
+      })
+      .catch(failed('unfollowFailed'));
   };
 
   const askLabel = followLabel ||
@@ -99,6 +114,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
 ControlsFollow.propTypes = {
   followActor: PropTypes.func.isRequired,
   unfollowActor: PropTypes.func.isRequired,
+  alertError: PropTypes.func.isRequired,
   actor: PropTypes.object.isRequired,
   component: PropTypes.oneOf(['button', 'menuitem']),
   followLabel: PropTypes.string,
@@ -126,6 +142,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     unfollowActor: (params) => {
       return dispatch(actions.unfollow(params));
+    },
+    alertError: (message) => {
+      return dispatch(appActions.alert.error(message));
     },
   };
 };

@@ -11,6 +11,9 @@ export default {
   mutuals: 'In common',
   blocks: 'Blocked',
   followsYou: 'Follows you',
+  // A follow or an unfollow that failed.
+  followFailed: 'Couldn’t follow {{ name }} just now. Try again in a moment.',
+  unfollowFailed: 'Couldn’t unfollow {{ name }} just now. Try again in a moment.',
   blockedNotice: {
     title: 'You blocked {{name}}',
     help: 'They cannot follow you, see your posts here, reply to you or like what you post, and you do not see theirs. If you have connected your Bluesky account, they are blocked there too.',

@@ -138,21 +138,31 @@ const isLookup = (text) => {
 
 // Whether what was typed is unmistakably somebody on another network, so
 // that searching for it may ask their server at once rather than offer a
-// button: `@alice@mastodon.social`, a Bluesky DID, or a Bluesky handle
-// written with its `@` or on bsky.social. A bare name with dots in it
-// (`seeds.org`) may be a word somebody is searching for, and an address
-// may be anything; those keep the button.
+// button: `@alice@mastodon.social`, a Bluesky DID, a Bluesky handle written
+// with its `@` or on bsky.social, or the address of a profile
+// (`https://pixelfed.social/dansup`), which is what Pixelfed and others show
+// people (the user, 2026-10-19). A bare name with dots in it (`seeds.org`)
+// may be a word somebody is searching for, and keeps the button.
 const isClearHandle = (text) => {
   const query = typeof text === 'string' ? text.trim() : '';
   const kind = lookupKind(query);
   if (kind === ACTIVITYPUB) {
-    return HANDLE.test(query);
+    return HANDLE.test(query) || /^https:\/\//i.test(query);
   }
   if (kind === ATPROTO) {
-    return BLUESKY_DID.test(query) ||
+    return BLUESKY_DID.test(query) || /^https:\/\//i.test(query) ||
       (BLUESKY_HANDLE.test(query) && (query.startsWith('@') || /\.bsky\.social$/i.test(query)));
   }
   return false;
+};
+
+// The reasons a lookup can fail that may be different a moment later, and
+// so are offered Try again: the server did not answer, too many were asked,
+// or something unknown. The rest are answers, and are only said.
+const RETRYABLE = ['lookup_failed', 'too_many_lookups', 'failed', 'site_unreachable'];
+
+const isRetryable = (reason) => {
+  return RETRYABLE.includes(reason);
 };
 
 // Whether an error says the installation has no fediverse service at all,
@@ -169,6 +179,7 @@ const reasonOf = (error) => {
 };
 
 export default {
+  isRetryable,
   isRemote,
   fromFediverse,
   domainOf,

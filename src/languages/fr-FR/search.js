@@ -12,6 +12,8 @@ export default {
     actors: 'Profils',
     feeds: 'Fils',
   },
+  failed: 'La recherche n’a pas marché pour l’instant.',
+  retry: 'Réessayer',
   boxPlaceholder: 'Rechercher...',
   recent: {
     title: 'Recherches récentes',

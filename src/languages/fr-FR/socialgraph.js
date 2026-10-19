@@ -11,6 +11,8 @@ export default {
   mutuals: 'En commun',
   blocks: 'Bloqués',
   followsYou: 'Vous suit',
+  followFailed: 'Impossible de suivre {{ name }} pour l’instant. Réessayez dans un instant.',
+  unfollowFailed: 'Impossible de ne plus suivre {{ name }} pour l’instant. Réessayez dans un instant.',
   blockedNotice: {
     title: 'Vous avez bloqué {{name}}',
     help: 'Cette personne ne peut ni vous suivre, ni voir vos publications ici, ni vous répondre, ni aimer ce que vous publiez, et vous ne voyez pas les siennes. Si vous avez connecté votre compte Bluesky, elle y est bloquée aussi.',

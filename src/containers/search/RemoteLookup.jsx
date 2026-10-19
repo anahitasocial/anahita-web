@@ -33,6 +33,13 @@ import federation from '../../utils/federation';
 // Drawn for nothing else, and nothing is drawn on an installation without
 // the service that would be asked: the first press says so and the card
 // goes, for that network and not for the other.
+//
+// A lookup that fails says what happened and what to try, naming the server
+// (the user, 2026-10-19: lookups are part of searching and following, and
+// should be pleasant). An answer (nobody by that name, not a profile, a
+// server this site does not connect to) is said, and the button goes; a
+// failure that may pass (the server did not answer, too many lookups) offers
+// Try again.
 const RemoteLookup = ({ query = '', now = false, onFound }) => {
   const [isLooking, setIsLooking] = useState(false);
   const [found, setFound] = useState(null);
@@ -112,22 +119,28 @@ const RemoteLookup = ({ query = '', now = false, onFound }) => {
             i18n.t(onBluesky ? 'federation:lookup.promptBluesky' : 'federation:lookup.prompt', { query: asked })}
         </Typography>
         {error &&
-          <Alert severity="warning" sx={{ mt: 2 }}>
-            {i18n.t(`federation:lookup.errors.${error}`)}
+          <Alert
+            severity={federation.isRetryable(error) ? 'warning' : 'info'}
+            sx={{ mt: 2 }}
+          >
+            {i18n.t(`federation:lookup.errors.${error}`, { domain })}
           </Alert>}
       </CardContent>
-      <CardActions>
-        <Button
-          fullWidth
-          variant="contained"
-          onClick={() => {
-            handleLookup();
-          }}
-          disabled={isLooking}
-        >
-          {i18n.t('federation:lookup.button')}
-        </Button>
-      </CardActions>
+      {(!error || federation.isRetryable(error)) &&
+        <CardActions>
+          <Button
+            fullWidth
+            variant="contained"
+            onClick={() => {
+              handleLookup();
+            }}
+            disabled={isLooking}
+          >
+            {error ?
+              i18n.t('federation:lookup.retry') :
+              i18n.t('federation:lookup.button')}
+          </Button>
+        </CardActions>}
     </Card>
   );
 };

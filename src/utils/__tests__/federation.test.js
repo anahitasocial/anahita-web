@@ -49,14 +49,23 @@ describe('people and posts from other servers', () => {
 
   it('asks another server at once only for what is unmistakably a handle', () => {
     ['@alice@mastodon.example', 'alice@mastodon.example', ' alice.bsky.social ', '@nytimes.com',
-      'did:plc:z72i7hdynmk6r22z27h6tvur'].forEach((text) => {
+      'did:plc:z72i7hdynmk6r22z27h6tvur', 'https://mastodon.example/@alice',
+      'https://pixelfed.social/dansup', 'https://bsky.app/profile/alice.bsky.social'].forEach((text) => {
       expect(federation.isClearHandle(text)).toBe(true);
     });
-    // A word with dots in it, an address, or nothing to look up: the
-    // button, or nothing.
-    ['nytimes.com', 'seeds.org', 'https://mastodon.example/@alice',
-      'https://bsky.app/profile/alice.bsky.social', 'gardening tips', ''].forEach((text) => {
+    // A word with dots in it, or nothing to look up: the button, or
+    // nothing.
+    ['nytimes.com', 'seeds.org', 'gardening tips', ''].forEach((text) => {
       expect(federation.isClearHandle(text)).toBe(false);
+    });
+  });
+
+  it('offers Try again only for a failure that may pass', () => {
+    ['lookup_failed', 'too_many_lookups', 'failed', 'site_unreachable'].forEach((reason) => {
+      expect(federation.isRetryable(reason)).toBe(true);
+    });
+    ['lookup_not_found', 'lookup_not_a_person', 'lookup_refused', 'lookup_is_here', 'lookup_unreadable'].forEach((reason) => {
+      expect(federation.isRetryable(reason)).toBe(false);
     });
   });
 

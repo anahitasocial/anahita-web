@@ -11,6 +11,8 @@ export default {
   mutuals: 'En común',
   blocks: 'Bloqueados',
   followsYou: 'Te sigue',
+  followFailed: 'No se pudo seguir a {{ name }} en este momento. Inténtalo de nuevo en un momento.',
+  unfollowFailed: 'No se pudo dejar de seguir a {{ name }} en este momento. Inténtalo de nuevo en un momento.',
   blockedNotice: {
     title: 'Bloqueaste a {{name}}',
     help: 'No puede seguirte, ver tus publicaciones aquí, responderte ni dar Me gusta a lo que publicas, y tú no ves lo suyo. Si conectaste tu cuenta de Bluesky, también está bloqueado allí.',

@@ -11,6 +11,8 @@ export default {
   mutuals: 'Gemeinsam',
   blocks: 'Blockiert',
   followsYou: 'Folgt dir',
+  followFailed: '{{ name }} konnte gerade nicht gefolgt werden. Versuch es gleich noch einmal.',
+  unfollowFailed: 'Entfolgen von {{ name }} hat gerade nicht geklappt. Versuch es gleich noch einmal.',
   blockedNotice: {
     title: 'Du hast {{name}} blockiert',
     help: 'Diese Person kann dir nicht folgen, deine Beiträge hier nicht sehen, dir nicht antworten und nichts von dir mit „Gefällt mir“ markieren, und du siehst ihre nicht. Wenn du dein Bluesky-Konto verbunden hast, ist sie auch dort blockiert.',

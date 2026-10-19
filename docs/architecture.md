@@ -1259,10 +1259,21 @@ draws nothing (`utils/federation.js#isAbsent`).
   search page's results, with their card and its Follow button. It asks at once,
   without the button, when somebody signed in typed an unmistakable
   handle into the search box and pressed Enter (`isClearHandle`:
-  `@alice@mastodon.example`, a Bluesky DID, or a Bluesky handle written
-  with `@` or on `bsky.social`). The box says so in the router's state; a
+  `@alice@mastodon.example`, a Bluesky DID, a Bluesky handle written
+  with `@` or on `bsky.social`, or the address of a profile,
+  `https://pixelfed.social/dansup`, which is what Pixelfed and others show
+  people). The box says so in the router's state; a
   link to the same search does not, so a link cannot make this site call
   another server just by being opened. See [Search](#search).
+- **A lookup that fails** says what happened and what to try, naming the
+  server (`federation:lookup.errors`): nobody by that name, a group or a
+  post rather than a profile, a server this site does not connect to, or
+  somebody on this site are answers, said with no button; a server that did
+  not answer, or too many lookups, may pass, and offer **Try again**
+  (`utils/federation.js#isRetryable`). A search of this site that fails
+  says so in a sentence with Try again, never the request's own message;
+  and a follow or an unfollow that fails gives the button back and says so
+  (`controls/Follow.jsx`).
 - **Bluesky is read through a service of its own,** which may be there
   when the fediverse's is not, or the other way round. To the app,
   somebody on Bluesky is somebody from another server like any other.

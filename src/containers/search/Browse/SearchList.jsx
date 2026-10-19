@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import { makeStyles } from 'tss-react/mui';
-import Typography from '@mui/material/Typography';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
 
@@ -22,6 +23,7 @@ import searchChoices from '../../../utils/searchChoices';
 import { App as APP, Search as SEARCH } from '../../../constants';
 
 import utils from '../../../utils/node';
+import i18n from '../../../languages';
 
 const { LIMIT } = APP.BROWSE;
 
@@ -41,7 +43,6 @@ const useStyles = makeStyles()((theme) => {
 const SearchList = ({
   browseList,
   resetList,
-  alertError,
   items,
   error,
   isFetching,
@@ -62,6 +63,8 @@ const SearchList = ({
   const { classes } = useStyles();
 
   const [start, setStart] = useState(0);
+  // Asked again with Try again, after a search that failed.
+  const [tries, setTries] = useState(0);
 
   // Whether this search has had its answer: the list is drawn anew for
   // each search, and until the answer comes an empty list says nothing.
@@ -100,8 +103,11 @@ const SearchList = ({
       coord_lat: near ? coordLat : '',
       limit: LIMIT,
       term: q,
+    }).catch(() => {
+      // Said below, from the store, as a sentence and not a status code.
     });
   }, [
+    tries,
     sort,
     start,
     scope,
@@ -111,23 +117,34 @@ const SearchList = ({
     coordLat,
   ]);
 
-  useEffect(() => {
-    if (error) {
-      alertError(error);
-    }
-  }, [error]);
-
   const fetchList = () => {
     return setStart(start + LIMIT);
   };
 
   const hasMore = total > items.allIds.length;
 
+  // A search that failed, said once and plainly, with the way to ask
+  // again: never the request's own message ("Request failed with status
+  // code 400"), which says nothing to anybody reading it (the user,
+  // 2026-10-19).
   if (error) {
     return (
-      <Typography variant="body1" color="error" align="center">
-        {error}
-      </Typography>
+      <Alert
+        severity="warning"
+        action={
+          <Button
+            color="inherit"
+            size="small"
+            onClick={() => {
+              setTries(tries + 1);
+            }}
+          >
+            {i18n.t('search:retry')}
+          </Button>
+        }
+      >
+        {i18n.t('search:failed')}
+      </Alert>
     );
   }
 
@@ -198,7 +215,6 @@ const mapStateToProps = (state) => {
 SearchList.propTypes = {
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
   items: NodesType.isRequired,
   queryParams: PropTypes.shape({
     sort: PropTypes.oneOf([RELEVANT, RECENT]),
@@ -232,9 +248,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetList: () => {
       return dispatch(actions.search.reset());
-    },
-    alertError: (message) => {
-      return dispatch(actions.app.alert.error(message));
     },
   };
 };

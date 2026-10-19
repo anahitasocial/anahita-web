@@ -12,6 +12,8 @@ export default {
     actors: 'Perfis',
     feeds: 'Feeds',
   },
+  failed: 'A busca não funcionou agora.',
+  retry: 'Tentar de novo',
   boxPlaceholder: 'Buscar...',
   recent: {
     title: 'Buscas recentes',
