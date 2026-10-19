@@ -34,6 +34,7 @@ import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import useOnFediverse from './useOnFediverse';
 import useVideoUpload from './Video/useVideoUpload';
 import usePostChoices from './usePostChoices';
+import usePostLocations from './usePostLocations';
 
 import composer from '../../../utils/composer';
 import photoFiles from '../../../utils/photoFiles';
@@ -100,6 +101,9 @@ const ShortComposer = ({
   const canVideo = kinds.includes('video') && videos.isOn(nodeInfo);
 
   const choices = usePostChoices(actor, viewer);
+  // Locations to tag the post with. Not with a video, whose post is made
+  // only once the upload is ready.
+  const postLocations = usePostLocations(actor.id);
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
@@ -122,6 +126,8 @@ const ShortComposer = ({
   // followers on other servers. Said before posting when it will not.
   const onFediverse = useOnFediverse(viewer);
   const staysHere = onFediverse && actor.id === viewer.id && choices.access !== 'public';
+  // And, when it will go, its locations go with it.
+  const goesOut = onFediverse && actor.id === viewer.id && choices.access === 'public';
 
   const limits = {
     size: videos.megabytes(videos.maxBytes(nodeInfo)),
@@ -150,6 +156,7 @@ const ShortComposer = ({
   // language stay; who may reply is asked of each post.
   const reset = () => {
     clearDraft();
+    postLocations.clear();
     setPhotoItems([]);
     setIsAddingPhotos(false);
     setVideo(null);
@@ -160,7 +167,12 @@ const ShortComposer = ({
   };
 
   const shared = () => {
-    return { content: text, ...choices.request() };
+    return {
+      content: text,
+      ...choices.request(),
+      // Tied as it is made, so it goes to other servers with them.
+      ...(postLocations.locations.length > 0 ? { location_ids: postLocations.ids() } : {}),
+    };
   };
 
   const posted = () => {
@@ -230,6 +242,7 @@ const ShortComposer = ({
   };
 
   const open = () => {
+    postLocations.reload();
     setIsOpen(true);
   };
 
@@ -345,6 +358,7 @@ const ShortComposer = ({
           preview={linkPreview.preview}
           onRemove={busy ? null : linkPreview.remove}
         />}
+      {!video && postLocations.chips({ disabled: busy, goesOut })}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>
           <PhotoFilesEditor
@@ -524,6 +538,7 @@ const ShortComposer = ({
             }}
           >
             {attachButtons}
+            {!video && !busy && postLocations.button()}
             {options}
           </Stack>
         </Box>

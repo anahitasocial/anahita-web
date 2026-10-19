@@ -103,4 +103,12 @@ export default {
     uses_other: '{{ short }} publicações',
     followed: 'Você segue',
   },
+  locations: {
+    add: 'Adicionar local',
+    nearMe: 'Perto de mim',
+    hint: 'Digite um nome ou toque em Perto de mim.',
+    addNew: 'Adicionar “{{name}}” como novo local',
+    addTitle: 'Adicionar local',
+    goesOut: 'Vai com a publicação para outros servidores do fediverso.',
+  },
 };

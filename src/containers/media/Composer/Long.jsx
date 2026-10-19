@@ -30,6 +30,7 @@ import SuggestedHashtags from './SuggestedHashtags';
 import useDraft from './useDraft';
 import useOnFediverse from './useOnFediverse';
 import usePostChoices from './usePostChoices';
+import usePostLocations from './usePostLocations';
 
 import embeds from '../../../utils/embeds';
 import { appendHashtag } from '../../../utils/hashtagTyping';
@@ -81,6 +82,13 @@ const LongComposer = ({
   const viewer = useSelector((state) => { return state.session.viewer; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
+  // Locations to tag it with, the same list as the short box's, so they
+  // come along when it becomes this.
+  const postLocations = usePostLocations(actor.id);
+  // Sent with the post, to be tied as it is made.
+  const locationIds = () => {
+    return postLocations.locations.length > 0 ? { location_ids: postLocations.ids() } : {};
+  };
   // An article open to everybody on the writer's own profile goes to their
   // followers on other servers, as a note does; said before posting when it
   // will not. A topic stays here, and is said nothing of.
@@ -116,6 +124,9 @@ const LongComposer = ({
   useEffect(() => {
     if (open && carried && !body.includes(carried)) {
       setBody(body ? `${body}\n\n${carried}` : carried);
+    }
+    if (open) {
+      postLocations.reload();
     }
   }, [open]);
 
@@ -200,6 +211,7 @@ const LongComposer = ({
     setCover(null);
     setTried(false);
     choices.posted();
+    postLocations.clear();
     onClose();
   };
 
@@ -238,7 +250,7 @@ const LongComposer = ({
     const saving = draftId ?
       saveOver() :
       api[namespace].add({
-        title: name, content: text, ...choices.request(), draft: true,
+        title: name, content: text, ...choices.request(), draft: true, ...locationIds(),
       }, actor).then((result) => {
         setDraftRef(`${kind}:${result.data.id}`);
       });
@@ -271,13 +283,19 @@ const LongComposer = ({
     setIsSending(true);
     // A draft taken up again: what it says now, then published, a post
     // from now and announced as one.
+    // Its locations tied before it is published, as a new one's are as it
+    // is made, so that it goes to other servers with them.
     const posting = draftId ?
       saveOver().then(() => {
+        return postLocations.tag({ id: draftId });
+      }).then(() => {
         return api[namespace].publish({ id: draftId }, choices.access);
       }).then((result) => {
         return posted(result.data);
       }) :
-      dispatch(actions[namespace].add({ title: name, content: text, ...choices.request() }, actor))
+      dispatch(actions[namespace].add({
+        title: name, content: text, ...choices.request(), ...locationIds(),
+      }, actor))
         .then(posted);
     posting.catch(() => {
       // What was written stays, to post again.
@@ -457,6 +475,10 @@ const LongComposer = ({
               setBody(appendHashtag(body, hashtag));
             }}
           />
+          {postLocations.chips({
+            disabled: busy,
+            goesOut: kind === 'article' && onFediverse && actor.id === viewer.id && choices.access === 'public',
+          })}
         </Box>
         {kind === 'article' && onFediverse && actor.id === viewer.id && choices.access !== 'public' &&
           <Typography variant="caption" color="textSecondary" component="p" sx={{ px: 2, pb: 1 }}>
@@ -473,6 +495,7 @@ const LongComposer = ({
             alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
           }}
         >
+          {!busy && postLocations.button()}
           {choices.render({ busy })}
         </Stack>
       </Box>

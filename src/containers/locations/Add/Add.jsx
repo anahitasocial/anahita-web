@@ -45,7 +45,7 @@ const typedAddress = (formData) => {
 
 const LocationsSelectorAdd = (props) => {
   const {
-    node,
+    node = null,
     name,
     callback,
     near = null,
@@ -62,7 +62,6 @@ const LocationsSelectorAdd = (props) => {
     country: process.env.REACT_APP_LOCATION_FIXED_COUNTRY,
     state_province: process.env.REACT_APP_LOCATION_FIXED_STATE_PROVINCE,
     city: process.env.REACT_APP_LOCATION_FIXED_CITY,
-    source_id: node.id,
   });
   const [isFetching, setIsFetching] = useState(false);
   const [point, setPoint] = useState(null);
@@ -84,6 +83,10 @@ const LocationsSelectorAdd = (props) => {
 
   const handleOnSubmit = (event) => {
     event.preventDefault();
+    // Its own submit only. Opened from a composer, this form is drawn
+    // outside the composer's form but inside its React tree, which passes
+    // the submit on to the composer, and posted the post with it.
+    event.stopPropagation();
 
     const { target } = event;
     const newFields = form.validateForm(target, fields);
@@ -111,11 +114,18 @@ const LocationsSelectorAdd = (props) => {
       setIsFetching(true);
       api.locations.add(formData)
         .then((response) => {
+          // From a composer there is no post yet: the location goes back to
+          // it, to be tied to the post once it is posted.
+          if (!node) {
+            setIsFetching(false);
+            callback(response.data);
+            return;
+          }
           api.tagGraph(node)
             .add(response.data)
             .then(() => {
               setIsFetching(false);
-              callback();
+              callback(response.data);
             })
             .catch((err) => {
               console.error('Error adding location to tag graph', err);
@@ -163,8 +173,11 @@ const LocationsSelectorAdd = (props) => {
 };
 
 LocationsSelectorAdd.propTypes = {
-  node: NodeType.isRequired,
+  // The post to tie the new location to; none from a composer, whose post
+  // is not made yet.
+  node: NodeType,
   name: PropTypes.string.isRequired,
+  // Called with the location made.
   callback: PropTypes.func.isRequired,
   near: PropTypes.shape({
     latitude: PropTypes.number,

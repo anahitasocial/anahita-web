@@ -103,4 +103,13 @@ export default {
     uses_other: '{{ short }} posts',
     followed: 'You follow it',
   },
+  // The Add location button and its chips (roadmap row 82, part 3).
+  locations: {
+    add: 'Add location',
+    nearMe: 'Near me',
+    hint: 'Type a name, or tap Near me.',
+    addNew: 'Add “{{name}}” as a new location',
+    addTitle: 'Add location',
+    goesOut: 'Goes with the post to other servers on the fediverse.',
+  },
 };

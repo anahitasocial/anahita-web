@@ -79,4 +79,12 @@ export default {
     uses_other: '{{ short }} publications',
     followed: 'Vous le suivez',
   },
+  locations: {
+    add: 'Ajouter un lieu',
+    nearMe: 'Près de moi',
+    hint: 'Tapez un nom, ou touchez Près de moi.',
+    addNew: 'Ajouter « {{name}} » comme nouveau lieu',
+    addTitle: 'Ajouter un lieu',
+    goesOut: 'Part avec la publication vers les autres serveurs du fédivers.',
+  },
 };
