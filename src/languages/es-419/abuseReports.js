@@ -42,12 +42,21 @@ export default {
     actioned: 'Atendido',
     dismissed: 'Descartado',
   },
+  spam: {
+    action: 'Eliminar como spam',
+    confirmTitle: '¿Eliminar como spam?',
+    confirmText: '{{name}} y todo lo que publicó se eliminará ahora, para siempre. No se puede deshacer.',
+    confirm: 'Eliminar',
+    removed: 'Eliminado como spam.',
+    failed: 'No se pudo eliminar. Inténtalo de nuevo.',
+  },
   actions: {
     none: 'No se hizo nada',
     deleted: 'Se eliminó',
     disabled: 'Se desactivó la cuenta',
     archived: 'Se archivó',
     blocked: 'Se bloqueó a la persona',
+    removed_as_spam: 'Se eliminó como spam',
     other: 'Otra cosa',
   },
   list: {

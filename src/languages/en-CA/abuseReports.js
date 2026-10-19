@@ -42,12 +42,22 @@ export default {
     actioned: 'Actioned',
     dismissed: 'Dismissed',
   },
+  // Removing a person or a group as spam, at once (roadmap row 102).
+  spam: {
+    action: 'Remove as spam',
+    confirmTitle: 'Remove as spam?',
+    confirmText: "{{name}} and everything they posted will be removed now, for good. This can't be undone.",
+    confirm: 'Remove',
+    removed: 'Removed as spam.',
+    failed: 'It could not be removed. Please try again.',
+  },
   actions: {
     none: 'Nothing was done',
     deleted: 'It was deleted',
     disabled: 'The account was disabled',
     archived: 'It was archived',
     blocked: 'The person was blocked',
+    removed_as_spam: 'It was removed as spam',
     other: 'Something else',
   },
   list: {

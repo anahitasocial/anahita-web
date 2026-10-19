@@ -42,12 +42,21 @@ export default {
     actioned: 'Resolvida',
     dismissed: 'Arquivada',
   },
+  spam: {
+    action: 'Remover como spam',
+    confirmTitle: 'Remover como spam?',
+    confirmText: '{{name}} e tudo o que publicou serão removidos agora, para sempre. Não dá para desfazer.',
+    confirm: 'Remover',
+    removed: 'Removido como spam.',
+    failed: 'Não foi possível remover. Tente de novo.',
+  },
   actions: {
     none: 'Nada foi feito',
     deleted: 'Foi excluído',
     disabled: 'A conta foi desativada',
     archived: 'Foi arquivado',
     blocked: 'A pessoa foi bloqueada',
+    removed_as_spam: 'Foi removido como spam',
     other: 'Outra coisa',
   },
   list: {

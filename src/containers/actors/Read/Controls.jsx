@@ -6,11 +6,13 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import ReportIcon from '@mui/icons-material/FlagOutlined';
+import SpamIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
 import { ShareMenuItem, ofNode } from '../../controls/Share';
 import useReport from '../../reports/useReport';
+import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -43,6 +45,9 @@ const ActorsReadControls = ({
   const showEdit = perms.canEdit(actor);
   const showFeature = isAuthenticated && perms.canFeature(actor, viewer);
   const report = useReport(viewer, actor);
+  // An administrator removing spam at once (roadmap row 102), then the
+  // page read again, which finds it gone.
+  const spam = useRemoveAsSpam(viewer, actor, onChanged);
 
   return (
     <>
@@ -117,8 +122,20 @@ const ActorsReadControls = ({
               {i18n.t('abuseReports:report')}
             </MenuItemLabel>
           </MenuItem>}
+        {spam.canRemove &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              spam.open();
+            }}
+          >
+            <MenuItemLabel icon={<SpamIcon fontSize="small" />}>
+              {i18n.t('abuseReports:spam.action')}
+            </MenuItemLabel>
+          </MenuItem>}
       </Menu>
       {report.dialog}
+      {spam.dialog}
     </>
   );
 };

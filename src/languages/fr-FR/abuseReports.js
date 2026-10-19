@@ -42,12 +42,21 @@ export default {
     actioned: 'Traités',
     dismissed: 'Rejetés',
   },
+  spam: {
+    action: 'Supprimer comme spam',
+    confirmTitle: 'Supprimer comme spam ?',
+    confirmText: "{{name}} et tout ce qui a été publié seront supprimés maintenant, définitivement. C'est irréversible.",
+    confirm: 'Supprimer',
+    removed: 'Supprimé comme spam.',
+    failed: 'La suppression a échoué. Veuillez réessayer.',
+  },
   actions: {
     none: 'Rien n’a été fait',
     deleted: 'Le contenu a été supprimé',
     disabled: 'Le compte a été désactivé',
     archived: 'Le contenu a été archivé',
     blocked: 'La personne a été bloquée',
+    removed_as_spam: 'Supprimé comme spam',
     other: 'Autre chose',
   },
   list: {

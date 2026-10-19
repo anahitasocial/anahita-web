@@ -42,12 +42,21 @@ export default {
     actioned: 'Bearbeitet',
     dismissed: 'Abgewiesen',
   },
+  spam: {
+    action: 'Als Spam entfernen',
+    confirmTitle: 'Als Spam entfernen?',
+    confirmText: '{{name}} und alles, was gepostet wurde, wird jetzt endgültig entfernt. Das lässt sich nicht rückgängig machen.',
+    confirm: 'Entfernen',
+    removed: 'Als Spam entfernt.',
+    failed: 'Das Entfernen ist fehlgeschlagen. Bitte versuche es erneut.',
+  },
   actions: {
     none: 'Nichts wurde unternommen',
     deleted: 'Es wurde gelöscht',
     disabled: 'Das Profil wurde deaktiviert',
     archived: 'Es wurde archiviert',
     blocked: 'Die Person wurde blockiert',
+    removed_as_spam: 'Als Spam entfernt',
     other: 'Etwas anderes',
   },
   list: {

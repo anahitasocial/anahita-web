@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -27,6 +27,7 @@ import i18n from '../../../languages';
 import utils from '../../../utils';
 
 import ResolveDialog from './ResolveDialog';
+import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
 import target from './target';
 
 const { getURL } = utils.node;
@@ -69,6 +70,17 @@ const ReportsCase = ({
   const [notFound, setNotFound] = useState(false);
   const [resolving, setResolving] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const viewer = useSelector((state) => { return state.session.viewer; });
+  // A person or a group reported as spam, removed from here at once (roadmap
+  // row 102); the case is then closed as removed as spam.
+  const spam = useRemoveAsSpam(
+    viewer,
+    item && item.status === 'open' && !item.targetGone ? item.target : null,
+    () => {
+      // eslint-disable-next-line no-use-before-define
+      handleResolve({ status: 'actioned', action: 'removed_as_spam', note: '' });
+    },
+  );
 
   const fetchCase = useCallback(() => {
     setIsFetching(true);
@@ -227,6 +239,10 @@ const ReportsCase = ({
                 <Button component={RouterLink} to={targetUrl} color="primary">
                   {i18n.t('abuseReports:case.open')}
                 </Button>
+                {spam.canRemove &&
+                  <Button color="error" disabled={submitting} onClick={spam.open}>
+                    {i18n.t('abuseReports:spam.action')}
+                  </Button>}
               </CardActions>
             </>}
         </Card>
@@ -382,6 +398,7 @@ const ReportsCase = ({
           }}
           onConfirm={handleResolve}
         />}
+      {spam.dialog}
     </>
   );
 };

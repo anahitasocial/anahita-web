@@ -94,7 +94,9 @@ Four components guard routes (`src/routes/`):
   `metadata.siteRules` false, only a super administrator who never agreed
   is sent. `OnboardingGate` waits for both. The About page shows the
   site's promises first, from the same `GET /site`, with the way to
-  `/rules` (`containers/about/Promises.jsx`). See
+  `/rules` (`containers/about/Promises.jsx`). An administrator removes a
+  person or a group as spam, at once, from its menu or from a report's case
+  (`containers/moderation/useRemoveAsSpam.jsx`, asked once more). See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
 - **`OnboardingGate`**, inside it, sends a signed-in person with an
   incomplete profile to `/onboarding`, once, and waits while the agreements
