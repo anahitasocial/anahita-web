@@ -15,6 +15,15 @@ function editAll() {
   return axios.patch('/notifications/read-all');
 }
 
+// What the viewer is told about, and turning a kind of thing on or off.
+function settings() {
+  return axios.get('/notifications/settings');
+}
+
+function editSettings(topic, on) {
+  return axios.patch('/notifications/settings', { topic, on });
+}
+
 function deleteItem(item) {
   return axios.delete(`/notifications/${item.id}`);
 }
@@ -27,6 +36,8 @@ export default {
   browse,
   edit,
   editAll,
+  settings,
+  editSettings,
   deleteItem,
   count,
 };

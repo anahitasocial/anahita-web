@@ -102,6 +102,7 @@ export default {
       access: 'Privatsphäre',
       permissions: 'Berechtigungen',
       fediverse: 'Fediverse',
+      notifications: 'Benachrichtigungen',
       administration: 'Verwaltung',
       danger: 'Gefahrenbereich',
     },

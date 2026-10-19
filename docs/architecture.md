@@ -898,6 +898,9 @@ emailed.
   the latest eight as on the page, grouped and with their actions, Mark all
   read and See all. Following a link in it reads that one and closes it. On
   a phone the bell goes to the page.
+- **What one is told about** is a person's own Notifications section in
+  settings (`actors/Settings/NotificationChoices.jsx`): eight kinds of
+  thing, on or off, each saved as it is switched.
 - **The list** is `containers/notifications/Browse/`. Each kind has its
   words in `notifications` (`notifications:replyAdd` for `reply_add`), and
   `constants/notifications.js` lists the kinds the services send, which a
