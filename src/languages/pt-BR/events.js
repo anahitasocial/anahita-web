@@ -81,19 +81,7 @@ export default {
     sections: {
       danger: 'Zona de perigo',
     },
-    notifications: 'Configurações de notificação',
     followRequests: 'Pedidos para seguir',
-  },
-  notifications: {
-    cTitle: 'Notificações',
-    cDescription: 'Edite as suas configurações de notificação',
-    mTitle: 'Notificações',
-    email: 'Receber notificações por e-mail',
-    optionsTitle: 'Receber notificações de',
-    options: {
-      all: 'Todas as publicações',
-      following: 'Só as publicações que você está seguindo',
-    },
   },
   // What only an event has.
   event: {

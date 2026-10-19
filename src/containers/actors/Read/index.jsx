@@ -17,7 +17,6 @@ import Avatar from './Avatar';
 import Composers from '../../media/Composer';
 import ActorControls from './Controls';
 import Cover from '../../cover';
-import NotificationsDialog from '../Notifications/Dialog';
 
 import ControlFollow from '../../controls/Follow';
 import ControlFollowRequest from '../../controls/FollowRequest';
@@ -194,7 +193,6 @@ const ActorsRead = (props) => {
     permissions.canFeature(actor, viewer) ||
     reportPermissions.canAdd(viewer, actor)
   );
-  const showEditNotifications = isAuthenticated && actor.isLeader;
   // A website is public and followed outright: nobody asks.
   const showFollowRequests = isAuthenticated && canAdminister && namespace !== 'websites';
   const FollowRequests = ActorsFollowRequests(namespace);
@@ -257,7 +255,6 @@ const ActorsRead = (props) => {
         muted={isBlocked}
         followAction={
           <>
-            {showEditNotifications && <NotificationsDialog actor={actor} />}
             {showInvite && <ActorInvite actor={actor} canSeeWaiting={canAdminister} />}
             {showFollowRequests && <FollowRequests actor={actor} />}
             {showInviteAnswer &&

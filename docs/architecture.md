@@ -134,7 +134,6 @@ history. The main paths:
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
 | `/people/add`, `/groups/add` | Making a person (administrators) or a group |
-| `/people/:id/notifications`, and the same for groups and events | What notifications the viewer gets from that profile |
 | `/people/:id/settings/password` | The old address of the password form, linked from older emails. Sends to Security |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
@@ -851,6 +850,44 @@ feed).
   the page goes before what is held, in the server's order, and what is
   held already is brought up to date. When none of the page is held, more
   was posted than a page holds, and the feed is begun again from it.
+
+### Notifications
+
+The bell in the top bar says how many notifications are unread, and leads
+to `/notifications`, the list of them. What the services tell, and to
+whom, is in anahita-services' `docs/notifications.md`; none is ever
+emailed.
+
+- **The bell asks; there are no sockets** (`containers/notifications/useUnreadCount.js`).
+  It asks at once when the app opens, when the tab is looked at again,
+  when the window comes into focus and when the connection comes back;
+  then after 15 seconds, 30, 1 minute, 2, and every 5 minutes after that
+  (`REACT_APP_NOTIFICATIONS_CHECK_INTERVAL`), for as long as the tab is
+  looked at, and never from a tab that is not. Something new, or the
+  viewer doing anything that tends to bring answers (a post, a reply, a
+  follow: any request but a `GET`, theirs or for notifications), begins it
+  again at 15 seconds. Each wait is a fifth longer or shorter at random,
+  and a failure keeps the last count. All of it is `utils/heartbeat.js`
+  with `holdLast` and `spread`.
+- **One tab asks for all of them.** The tab being looked at takes a Web
+  Lock (`anahita-notifications-check`) and tells the others the count over
+  a `BroadcastChannel` (`anahita-notifications`); when it is hidden or
+  closed, the next one looked at takes over. Where a browser has neither,
+  each tab asks for itself.
+- **The count is in the store** (`reducers/notificationsUnread.js`), with
+  when the newest was told (`newestAt`, from `GET /notifications/unread-count`).
+  Marking one read or deleting an unread one lowers it at once. The list,
+  when open, loads again from its start when something newer comes.
+- **The list** is `containers/notifications/Browse/`. Each kind has its
+  words in `notifications` (`notifications:replyAdd` for `reply_add`), and
+  `constants/notifications.js` lists the kinds the services send, which a
+  test keeps in step with the words; a kind the app does not know says
+  `notifications:other`. Its links stay in the app, unread is said in
+  words to a screen reader, and the next page begins after what is on the
+  page, so deleting one skips nothing.
+- **Get notifications** in a post's menu subscribes to its replies
+  (`containers/controls/medium/NotificationSub.jsx`), and Stop
+  notifications ends it.
 
 ### Custom feeds
 

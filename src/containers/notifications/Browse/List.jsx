@@ -12,21 +12,19 @@ import NotificationsType from '../../../proptypes/Notifications';
 
 const NotificationsList = ({
   items,
-  total,
+  hasMore,
   fetchList,
   handleEdit,
   handleDelete,
 }) => {
-  const hasMore = total > items.allIds.length;
-
   return (
-    <List id="scrollableDiv">
-      <InfiniteScroll
-        dataLength={items.allIds.length}
-        next={fetchList}
-        hasMore={hasMore}
-        loader={<Progress key="items-progress" />}
-      >
+    <InfiniteScroll
+      dataLength={items.allIds.length}
+      next={fetchList}
+      hasMore={hasMore}
+      loader={<Progress key="items-progress" />}
+    >
+      <List disablePadding>
         {items.allIds.map((itemId) => {
           const item = items.byId[itemId];
           return (
@@ -38,14 +36,14 @@ const NotificationsList = ({
             />
           );
         })}
-      </InfiniteScroll>
-    </List>
+      </List>
+    </InfiniteScroll>
   );
 };
 
 NotificationsList.propTypes = {
   items: NotificationsType.isRequired,
-  total: PropTypes.number.isRequired,
+  hasMore: PropTypes.bool.isRequired,
   fetchList: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,

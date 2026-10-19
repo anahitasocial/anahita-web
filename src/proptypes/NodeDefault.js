@@ -19,7 +19,6 @@ export default {
   editor: PersonDefault,
   updatedAt: '0000-00-00 00:00:00',
   isAdministrated: false,
-  isLeader: false,
   isSubscribedByViewer: false,
   repostCount: 0,
   isRepostedByViewer: false,

@@ -81,19 +81,7 @@ export default {
     sections: {
       danger: 'Gefahrenbereich',
     },
-    notifications: 'Benachrichtigungseinstellungen',
     followRequests: 'Folgeanfragen',
-  },
-  notifications: {
-    cTitle: 'Benachrichtigungen',
-    cDescription: 'Bearbeite deine Benachrichtigungseinstellungen',
-    mTitle: 'Benachrichtigungen',
-    email: 'Benachrichtigungen per E-Mail erhalten',
-    optionsTitle: 'Benachrichtigungen erhalten für',
-    options: {
-      all: 'Alle Beiträge',
-      following: 'Nur Beiträge, denen du folgst',
-    },
   },
   // What only an event has.
   event: {

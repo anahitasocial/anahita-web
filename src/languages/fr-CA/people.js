@@ -6,9 +6,6 @@ export default {
     },
     email: 'Courriel',
   },
-  notifications: {
-    email: 'Recevoir les notifications par courriel',
-  },
   person: {
     email: 'Courriel',
   },

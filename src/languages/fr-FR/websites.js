@@ -133,18 +133,6 @@ export default {
     sections: {
       danger: 'Zone de danger',
     },
-    notifications: 'Paramètres de notification',
-  },
-  notifications: {
-    cTitle: 'Notifications',
-    cDescription: 'Modifier vos paramètres de notification',
-    mTitle: 'Notifications',
-    email: 'Recevoir les notifications par email',
-    optionsTitle: 'Recevoir des notifications pour',
-    options: {
-      all: 'Toutes les publications',
-      following: 'Seulement les publications que vous suivez',
-    },
   },
   confirm: {
     delete: 'Voulez-vous supprimer {{ name }} ?',

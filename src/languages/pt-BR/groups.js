@@ -80,19 +80,7 @@ export default {
     sections: {
       danger: 'Zona de perigo',
     },
-    notifications: 'Configurações de notificações',
     followRequests: 'Pedidos para seguir',
-  },
-  notifications: {
-    cTitle: 'Notificações',
-    cDescription: 'Edite suas configurações de notificações',
-    mTitle: 'Notificações',
-    email: 'Receber notificações por e-mail',
-    optionsTitle: 'Receber notificações de',
-    options: {
-      all: 'Todas as publicações',
-      following: 'Só as publicações que você segue',
-    },
   },
   confirm: {
     delete: 'Você quer excluir o perfil de {{ name }}?',

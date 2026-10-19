@@ -137,18 +137,6 @@ export default {
     sections: {
       danger: 'Gefahrenbereich',
     },
-    notifications: 'Benachrichtigungseinstellungen',
-  },
-  notifications: {
-    cTitle: 'Benachrichtigungen',
-    cDescription: 'Bearbeite deine Benachrichtigungseinstellungen',
-    mTitle: 'Benachrichtigungen',
-    email: 'Benachrichtigungen per E-Mail bekommen',
-    optionsTitle: 'Benachrichtigungen bekommen für',
-    options: {
-      all: 'Alle Beiträge',
-      following: 'Nur die Beiträge, denen du folgst',
-    },
   },
   confirm: {
     delete: 'Möchtest du {{ name }} löschen?',

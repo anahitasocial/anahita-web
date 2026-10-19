@@ -73,14 +73,6 @@ const canFeature = (actor, viewer) => {
   return utils.node.isSuperAdmin(viewer) && Boolean(actor && actor.id);
 };
 
-const canNotificationSettings = (actor) => {
-  return !isRegistered(actor) &&
-  _.intersection(
-    actor.commands,
-    ['notifications-settings'],
-  ).length > 0;
-};
-
 const canViewCommands = (actor, exclude = []) => {
   if (utils.node.isPerson(actor) && !isRegistered(actor)) {
     return false;
@@ -102,6 +94,5 @@ export default {
   canFollow,
   canBlock,
   canFeature,
-  canNotificationSettings,
   canViewCommands,
 };

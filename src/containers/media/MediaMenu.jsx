@@ -88,6 +88,7 @@ const MediaMenu = ({
       <IconButton
         aria-owns={menuAnchorEl ? `medium-card-menu-${medium.id}` : undefined}
         aria-haspopup="true"
+        aria-label={i18n.t('actions:more')}
         onClick={handleOpenMenu}
         size="large"
       >

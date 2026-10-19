@@ -6,8 +6,6 @@ import accounts from './accounts';
 import auth from './auth';
 import composer from './composer';
 import customFeeds from './customFeeds';
-import events from './events';
-import groups from './groups';
 import hashtags from './hashtags';
 import home from './home';
 import invites from './invites';
@@ -17,7 +15,6 @@ import recommendations from './recommendations';
 import search from './search';
 import share from './share';
 import signupRequests from './signupRequests';
-import websites from './websites';
 
 export default {
   abuseReports,
@@ -25,8 +22,6 @@ export default {
   auth,
   composer,
   customFeeds,
-  events,
-  groups,
   hashtags,
   home,
   invites,
@@ -36,5 +31,4 @@ export default {
   search,
   share,
   signupRequests,
-  websites,
 };

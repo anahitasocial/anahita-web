@@ -104,7 +104,18 @@ actions.locationsGraph = createGraphAction('locations')(apis.tagGraph);
 
 actions.notifications = {
   ...createAction('notifications')(apis.notifications),
-  subs: createAction('notifications_sub')(apis.notificationsSub),
+  // The bell's count (reducers/notificationsUnread.js).
+  unread: {
+    set: (count, newestAt) => {
+      return { type: 'NOTIFICATIONS_UNREAD_SET', count, newestAt };
+    },
+    less: (by = 1) => {
+      return { type: 'NOTIFICATIONS_UNREAD_LESS', by };
+    },
+    reset: () => {
+      return { type: 'NOTIFICATIONS_UNREAD_RESET' };
+    },
+  },
 };
 
 export default actions;

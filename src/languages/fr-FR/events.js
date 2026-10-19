@@ -73,19 +73,7 @@ export default {
     sections: {
       danger: 'Zone de danger',
     },
-    notifications: 'Paramètres de notification',
     followRequests: "Demandes d'abonnement",
-  },
-  notifications: {
-    cTitle: 'Notifications',
-    cDescription: 'Modifiez vos paramètres de notification',
-    mTitle: 'Notifications',
-    email: 'Recevoir les notifications par email',
-    optionsTitle: 'Recevoir des notifications pour',
-    options: {
-      all: 'Toutes les publications',
-      following: 'Uniquement les publications que vous suivez',
-    },
   },
   // Ce qui est propre à un événement.
   event: {

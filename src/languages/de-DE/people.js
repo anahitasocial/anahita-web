@@ -90,7 +90,6 @@ export default {
       handle: 'Das Handle {{ alias }} bleibt danach reserviert, sodass niemand anders es nehmen kann.',
       scheduled: 'Dieses Profil ist zum Löschen vorgemerkt. Melde dich vor dem {{ date }} an, um es wiederherzustellen.',
     },
-    notifications: 'Benachrichtigungseinstellungen',
     followRequests: 'Folgeanfragen',
     password: 'Passwort',
     email: 'E-Mail',
@@ -105,17 +104,6 @@ export default {
       fediverse: 'Fediverse',
       administration: 'Verwaltung',
       danger: 'Gefahrenbereich',
-    },
-  },
-  notifications: {
-    cTitle: 'Benachrichtigungen',
-    cDescription: 'Bearbeite deine Benachrichtigungseinstellungen',
-    mTitle: 'Benachrichtigungen',
-    email: 'Benachrichtigungen per E-Mail erhalten',
-    optionsTitle: 'Benachrichtigungen erhalten für',
-    options: {
-      all: 'Alle Beiträge',
-      following: 'Nur Beiträge, denen du folgst',
     },
   },
   person: {

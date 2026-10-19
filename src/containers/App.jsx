@@ -193,7 +193,7 @@ const App = ({
               the search would only be refused. */}
           {!isShutOut && <SearchBox />}
           <div className={classes.grow} />
-          {isAuthenticated && <NotificationButton viewer={viewer} />}
+          {isAuthenticated && <NotificationButton />}
           <Viewer
             viewer={viewer}
             isAuthenticated={isAuthenticated}

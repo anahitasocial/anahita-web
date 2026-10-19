@@ -8,90 +8,120 @@ import IconButton from '@mui/material/IconButton';
 import ListItem from '@mui/material/ListItem';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
-import ListItemSecondaryAction from '@mui/material/ListItemSecondaryAction';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import MarkReadIcon from '@mui/icons-material/DoneAll';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import i18n from '../../../languages';
 
 import ActorAvatar from '../../../components/ActorAvatar';
+import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
 import NotificationMessage from './NotificationMessage';
 
 import NotificationType from '../../../proptypes/Notification';
 
+// Read by a screen reader and not seen: the dot says it to the eye.
+const unseen = {
+  position: 'absolute',
+  width: 1,
+  height: 1,
+  overflow: 'hidden',
+  clip: 'rect(0 0 0 0)',
+  whiteSpace: 'nowrap',
+};
+
 const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const subject = item.subject || {};
+  const target = item.target || {};
 
   return (
-    <ListItem divider>
+    <ListItem
+      divider
+      secondaryAction={
+        <>
+          <Badge
+            color="primary"
+            variant="dot"
+            invisible={item.isRead}
+            sx={{ mr: 2 }}
+          />
+          <IconButton
+            edge="end"
+            aria-label={i18n.t('actions:more')}
+            onClick={(event) => {
+              return setAnchorEl(event.currentTarget);
+            }}
+            size="large"
+          >
+            <MoreVertIcon />
+          </IconButton>
+          <Menu
+            anchorEl={anchorEl}
+            open={Boolean(anchorEl)}
+            onClose={() => {
+              return setAnchorEl(null);
+            }}
+          >
+            <MenuItem
+              onClick={() => {
+                setAnchorEl(null);
+                handleEdit(item);
+              }}
+              disabled={item.isRead}
+            >
+              <MenuItemLabel icon={<MarkReadIcon fontSize="small" />}>
+                {i18n.t('notifications:markRead')}
+              </MenuItemLabel>
+            </MenuItem>
+            <MenuItem
+              onClick={() => {
+                setAnchorEl(null);
+                handleDelete(item);
+              }}
+            >
+              <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
+                {i18n.t('actions:delete')}
+              </MenuItemLabel>
+            </MenuItem>
+          </Menu>
+        </>
+      }
+      sx={{ pr: 13 }}
+    >
       <ListItemAvatar>
         <ActorAvatar
-          actor={item.subject}
-          linked={Boolean(item.subject.id)}
+          actor={subject}
+          linked={Boolean(subject.id)}
         />
       </ListItemAvatar>
       <ListItemText
-        primary={<NotificationMessage notification={item} />}
+        primary={
+          <>
+            {!item.isRead &&
+              <Box component="span" sx={unseen}>
+                {`${i18n.t('notifications:unread')}: `}
+              </Box>}
+            <NotificationMessage notification={item} />
+          </>
+        }
         secondary={
           <>
             {moment.utc(item.createdAt).fromNow()}
             {/* An invitation is answered from where it is read. */}
-            {item.type === 'actor_invite' && item.target && item.target.id &&
+            {item.type === 'actor_invite' && target.id &&
               <Box component="span" sx={{ display: 'block', pt: 1, maxWidth: 320 }}>
-                <ControlInviteAnswer actor={item.target} />
+                <ControlInviteAnswer actor={target} />
               </Box>}
           </>
         }
         // The buttons are not text, so the line that holds them is not a
         // paragraph.
         slotProps={{ secondary: { component: 'div' } }}
-        sx={{ pr: 6 }}
       />
-      <ListItemSecondaryAction>
-        <IconButton
-          edge="end"
-          aria-label={i18n.t('actions:more')}
-          onClick={(event) => {
-            return setAnchorEl(event.currentTarget);
-          }}
-          size="large"
-        >
-          <MoreVertIcon />
-        </IconButton>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={() => {
-            return setAnchorEl(null);
-          }}
-        >
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              handleEdit(item);
-            }}
-            disabled={item.isRead}
-          >
-            {i18n.t('notifications:markRead')}
-          </MenuItem>
-          <MenuItem
-            onClick={() => {
-              setAnchorEl(null);
-              handleDelete(item);
-            }}
-          >
-            {i18n.t('actions:delete')}
-          </MenuItem>
-        </Menu>
-        <Badge
-          color="primary"
-          variant="dot"
-          invisible={item.isRead}
-          style={{ marginLeft: 24 }}
-        />
-      </ListItemSecondaryAction>
     </ListItem>
   );
 };

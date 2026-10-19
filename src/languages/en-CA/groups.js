@@ -80,19 +80,7 @@ export default {
     sections: {
       danger: 'Danger zone',
     },
-    notifications: 'Notification settings',
     followRequests: 'Follow requests',
-  },
-  notifications: {
-    cTitle: 'Notifications',
-    cDescription: 'Edit your notification settings',
-    mTitle: 'Notifications',
-    email: 'Receive email notifications',
-    optionsTitle: 'Get notifications for',
-    options: {
-      all: 'All the posts',
-      following: 'Only the posts that you are following',
-    },
   },
   confirm: {
     delete: "Do you want to delete {{ name }}'s profile?",

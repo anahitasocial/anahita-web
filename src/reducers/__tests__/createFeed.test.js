@@ -1,3 +1,4 @@
+/* eslint-env jest */
 import createFeed from '../createFeed';
 
 const feed = createFeed('feed_actor');

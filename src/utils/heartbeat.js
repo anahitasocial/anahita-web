@@ -8,6 +8,12 @@
 //
 // `beat` does the asking and answers with a promise of whether anything
 // new was found. Nothing is asked while the page is not being looked at.
+//
+// `holdLast` keeps asking at the longest wait instead of stopping, for
+// something that must stay current while the page is open, such as the
+// count of unread notifications. `spread` makes each wait up to that share
+// longer or shorter at random, so that pages opened together do not ask
+// together.
 
 // How long is waited before each asking, in milliseconds. When the last
 // of them finds nothing, there is no next one.
@@ -17,6 +23,9 @@ const createHeartbeat = ({
   beat,
   waits = WAITS,
   isHidden = () => { return typeof document !== 'undefined' && document.hidden; },
+  holdLast = false,
+  spread = 0,
+  random = Math.random,
 }) => {
   let step = 0;
   let timer = null;
@@ -37,11 +46,12 @@ const createHeartbeat = ({
 
   const wait = () => {
     clear();
-    if (!running || step >= waits.length) {
+    if (!running || (step >= waits.length && !holdLast)) {
       running = false;
       return;
     }
-    timer = setTimeout(ask, waits[step]);
+    const base = waits[Math.min(step, waits.length - 1)];
+    timer = setTimeout(ask, Math.round(base * (1 + (spread * ((2 * random()) - 1)))));
   };
 
   ask = () => {
