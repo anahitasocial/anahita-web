@@ -106,7 +106,11 @@ const NotificationActions = ({
             onActed(item);
           }}
         >
-          <ControlFollow actor={{ ...item.subject, isLeadingViewer: false }} variant="outlined" />
+          {/* They follow the viewer, so: + Follow back. */}
+          <ControlFollow
+            actor={{ ...item.subject, isLeadingViewer: false, isFollowingViewer: true }}
+            variant="outlined"
+          />
         </Box>}
       {can.includes('reply') && !replying && (replied ?
         <Typography variant="body2" color="textSecondary" component="span">
