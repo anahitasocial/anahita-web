@@ -76,6 +76,7 @@ const LocationMenu = ({
             node={location}
             redirect="/locations/"
             key={`location-delete-${location.id}`}
+            component="menuitem"
             confirmMessage={i18n.t('locations:confirm.delete')}
           />}
         {report.canReport &&
