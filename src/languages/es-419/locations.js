@@ -6,6 +6,7 @@ export default {
     address: 'Dirección',
     city: 'Ciudad',
     province: 'Provincia o estado',
+    postalCode: 'Código postal',
     country: 'País',
   },
   add: {
@@ -29,5 +30,12 @@ export default {
     asking: 'Buscando dónde estás…',
     denied: 'Permite que tu navegador comparta tu ubicación para ver lugares cerca de ti.',
     tryAgain: 'Intentar de nuevo',
+  },
+  point: {
+    label: 'Dónde está el lugar',
+    hint: 'Toca el mapa para poner el pin y arrástralo para moverlo.',
+    useMine: 'Usar mi ubicación',
+    denied: 'Tu navegador no compartió tu ubicación.',
+    needed: 'Pon el pin o da una dirección para encontrarlo.',
   },
 };

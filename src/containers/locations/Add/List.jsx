@@ -35,7 +35,7 @@ const LocationsList = ({
   resetList,
   keyword,
   onKeywordChange,
-  onCreate,
+  onCreate = null,
   items,
   hasMore,
   node,
@@ -121,16 +121,17 @@ const LocationsList = ({
                 i18n.t('locations:add.noneFound', { name: debouncedKeyword }) :
                 i18n.t('locations:add.noneNearby')}
             </Typography>
-            <Button
-              variant="outlined"
-              startIcon={<AddIcon />}
-              onClick={onCreate}
-              fullWidth
-            >
-              {searched ?
-                i18n.t('locations:add.create', { name: debouncedKeyword }) :
-                i18n.t('actions:add')}
-            </Button>
+            {onCreate &&
+              <Button
+                variant="outlined"
+                startIcon={<AddIcon />}
+                onClick={onCreate}
+                fullWidth
+              >
+                {searched ?
+                  i18n.t('locations:add.create', { name: debouncedKeyword }) :
+                  i18n.t('actions:add')}
+              </Button>}
           </Box>}
         {count === 0 && !settled && <Progress />}
         {count > 0 &&
@@ -177,7 +178,8 @@ LocationsList.propTypes = {
   resetList: PropTypes.func.isRequired,
   keyword: PropTypes.string.isRequired,
   onKeywordChange: PropTypes.func.isRequired,
-  onCreate: PropTypes.func.isRequired,
+  // Offered only to those who may add a location.
+  onCreate: PropTypes.func,
   queryFilters: PropTypes.object,
   items: LocationsType.isRequired,
   hasMore: PropTypes.bool.isRequired,

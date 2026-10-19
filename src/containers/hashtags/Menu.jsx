@@ -61,6 +61,7 @@ const HashtagMenu = ({
             node={hashtag}
             redirect="/hashtags/"
             key={`hashtag-delete-${hashtag.id}`}
+            component="menuitem"
             confirmMessage={i18n.t('hashtags:confirm.delete')}
           />}
         {report.canReport &&

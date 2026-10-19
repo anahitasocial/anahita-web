@@ -12,8 +12,8 @@ export default {
     none: 'Rien n’a été en tendance cette année.',
   },
   counts: {
-    people_one: '{{count}} personne',
-    people_other: '{{count}} personnes',
+    profiles_one: '{{count}} profil',
+    profiles_other: '{{count}} profils',
     posts_one: '{{count}} publication',
     posts_other: '{{count}} publications',
   },

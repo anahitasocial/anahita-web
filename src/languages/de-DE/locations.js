@@ -6,6 +6,7 @@ export default {
     address: 'Adresse',
     city: 'Stadt',
     province: 'Bundesland',
+    postalCode: 'Postleitzahl',
     country: 'Land',
   },
   add: {
@@ -29,5 +30,12 @@ export default {
     asking: 'Dein Standort wird ermittelt …',
     denied: 'Erlaube deinem Browser, deinen Standort zu teilen, um Orte in deiner Nähe zu sehen.',
     tryAgain: 'Noch einmal versuchen',
+  },
+  point: {
+    label: 'Wo der Ort liegt',
+    hint: 'Tippe auf die Karte, um die Stecknadel zu setzen, und ziehe sie, um sie zu verschieben.',
+    useMine: 'Meinen Standort verwenden',
+    denied: 'Dein Browser hat deinen Standort nicht geteilt.',
+    needed: 'Setze die Stecknadel oder gib eine Adresse an, um sie zu finden.',
   },
 };

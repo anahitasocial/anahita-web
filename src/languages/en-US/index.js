@@ -3,6 +3,7 @@
 import about from './about';
 import auth from './auth';
 import events from './events';
+import locations from './locations';
 import notifications from './notifications';
 import photos from './photos';
 
@@ -10,6 +11,7 @@ export default {
   about,
   auth,
   events,
+  locations,
   notifications,
   photos,
 };

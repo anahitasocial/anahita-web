@@ -10,8 +10,17 @@ import { Locations as LOCATION } from '../../../constants';
 import LocationType from '../../../proptypes/Location';
 import CountrySelect from '../../../components/SelectCountry';
 import RegionSelect from '../../../components/SelectRegion';
+import PointPicker from '../../../components/PointPicker';
 
 import i18n from '../../../languages';
+
+// As long as the server keeps it (geo_postalcode).
+const POSTAL_CODE_MAX_LENGTH = 15;
+
+const PointType = PropTypes.shape({
+  latitude: PropTypes.number,
+  longitude: PropTypes.number,
+});
 
 const {
   TITLE,
@@ -26,13 +35,13 @@ const LocationAddForm = ({
   location,
   isFetching,
   actions = null,
-  requiredFields = [
-    'name',
-    'address',
-    'city',
-    'state_province',
-    'country',
-  ],
+  // A location needs a name and a point; the address is there to find the
+  // point by, or to be read, and may be left out.
+  requiredFields = ['name'],
+  point = null,
+  onPointChange,
+  pointError = '',
+  near = null,
   id = undefined,
 }) => {
   return (
@@ -62,6 +71,13 @@ const LocationAddForm = ({
               maxLength: TITLE.MAX_LENGTH,
             },
           }}
+        />
+        <PointPicker
+          point={point}
+          onChange={onPointChange}
+          near={near}
+          error={pointError}
+          disabled={isFetching}
         />
         <TextField
           id="location-address"
@@ -141,6 +157,25 @@ const LocationAddForm = ({
               country={location.country}
             />
           </FormControl>}
+        <TextField
+          id="location-postal-code"
+          margin="normal"
+          variant="outlined"
+          label={i18n.t('locations:location.postalCode')}
+          onChange={handleOnChange}
+          name="postal_code"
+          value={location.postal_code ?? location.postalCode ?? ''}
+          error={fields.postal_code.error !== ''}
+          helperText={fields.postal_code.error || ' '}
+          disabled={isFetching}
+          fullWidth
+          required={requiredFields.includes('postal_code')}
+          slotProps={{
+            htmlInput: {
+              maxLength: POSTAL_CODE_MAX_LENGTH,
+            },
+          }}
+        />
       </CardContent>
       {actions &&
       <CardActions>
@@ -159,6 +194,10 @@ LocationAddForm.propTypes = {
   actions: PropTypes.node,
   isFetching: PropTypes.bool.isRequired,
   requiredFields: PropTypes.arrayOf(PropTypes.string),
+  point: PointType,
+  onPointChange: PropTypes.func.isRequired,
+  pointError: PropTypes.string,
+  near: PointType,
 };
 
 export default LocationAddForm;

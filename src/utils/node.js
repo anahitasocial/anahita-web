@@ -179,6 +179,10 @@ const getAddress = (node) => {
     fields.push(node.stateProvince);
   }
 
+  if (node.postalCode) {
+    fields.push(node.postalCode);
+  }
+
   if (node.country) {
     fields.push(countryList.getName(node.country));
   }

@@ -93,6 +93,8 @@ The same in anahita-services' AGENTS.md.
 
 - A group has **followers**, never members ("abonnés" in French). "Member"
   is somebody with an account on the site.
+- **Location**, as Instagram has it, for a place posts are tagged with; "Place"
+  only for the ActivityStreams type a post from elsewhere carries.
 - **Profile**, not "actor" or "account". "Actor" is the code's word;
   "account" is for signing in.
 - **+ Follow** (a plus icon, then Follow), with no name after it: no

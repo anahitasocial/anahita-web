@@ -36,11 +36,11 @@ const useStyles = makeStyles()({
   },
 });
 
-// A hashtag in a list, and how many: people lately, in what is trending;
+// A hashtag in a list, and how many: profiles lately, in what is trending;
 // posts anybody may see, in the others.
 const HashtagRow = ({ hashtag }) => {
-  const count = hashtag.people ?
-    i18n.t('commons:counts.people', { count: hashtag.people }) :
+  const count = hashtag.profiles ?
+    i18n.t('commons:counts.profiles', { count: hashtag.profiles }) :
     i18n.t('commons:counts.posts', { count: hashtag.uses || 0 });
   return (
     <ListItemButton component={RouterLink} to={`/hashtags/${hashtag.alias}/`} divider>
@@ -61,7 +61,7 @@ HashtagRow.propTypes = {
     id: PropTypes.number,
     name: PropTypes.string,
     alias: PropTypes.string,
-    people: PropTypes.number,
+    profiles: PropTypes.number,
     uses: PropTypes.number,
   }).isRequired,
 };
@@ -76,7 +76,7 @@ const row = (hashtag) => {
 };
 
 // The Hashtags page (the user, 2026-10-17): what is trending, with how many
-// people posted with each and over what span of time; the ones somebody
+// profiles used each and over what span of time; the ones somebody
 // follows; and all of them, A to Z, to search. Popular and Recent were
 // dropped: an all-time count that never changes, and the newest hashtags,
 // which are mostly one-offs.

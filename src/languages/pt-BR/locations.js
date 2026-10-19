@@ -6,6 +6,7 @@ export default {
     address: 'Endereço',
     city: 'Cidade',
     province: 'Estado',
+    postalCode: 'CEP',
     country: 'País',
   },
   add: {
@@ -29,5 +30,12 @@ export default {
     asking: 'Descobrindo onde você está…',
     denied: 'Permita que seu navegador compartilhe sua localização para ver locais perto de você.',
     tryAgain: 'Tentar de novo',
+  },
+  point: {
+    label: 'Onde fica o local',
+    hint: 'Toque no mapa para colocar o alfinete e arraste-o para movê-lo.',
+    useMine: 'Usar minha localização',
+    denied: 'Seu navegador não compartilhou sua localização.',
+    needed: 'Coloque o alfinete ou informe um endereço para encontrá-lo.',
   },
 };

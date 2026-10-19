@@ -2,6 +2,7 @@ import account from './account';
 import actor from './actor';
 import invite from './invite';
 import like from './like';
+import location from './location';
 import medium from './medium';
 import node from './node';
 import oauthClient from './oauthClient';
@@ -16,6 +17,7 @@ export default {
   actor,
   invite,
   like,
+  location,
   medium,
   node,
   oauthClient,
