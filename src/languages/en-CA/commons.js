@@ -12,7 +12,7 @@ export default {
     yearly: 'Trending this year',
     none: 'Nothing has trended in the past year.',
   },
-  // How many, beside a hashtag or a place in a list.
+  // How many, beside a hashtag or a location in a list.
   counts: {
     people_one: '{{count}} person',
     people_other: '{{count}} people',

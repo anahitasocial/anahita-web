@@ -18,7 +18,7 @@ export default {
       },
       feeds: {
         title: 'Feeds you shape yourself',
-        body: 'Build your own feeds from hashtags, places and the profiles you choose. Nothing is ranked behind your back: the newest comes first.',
+        body: 'Build your own feeds from hashtags, locations and the profiles you choose. Nothing is ranked behind your back: the newest comes first.',
       },
       yours: {
         title: 'What you post stays yours',

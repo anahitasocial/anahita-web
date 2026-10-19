@@ -34,7 +34,7 @@ export default {
     topic: 'Topic',
     photo: 'Photo',
     hashtag: 'Hashtag',
-    location: 'Place',
+    location: 'Location',
     other: 'Item',
   },
   statuses: {

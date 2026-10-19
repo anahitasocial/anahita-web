@@ -292,4 +292,4 @@ where the photo uploads start). Nothing about the position is sent but the
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-18 |
-| Implementation | not begun; branch `locations` in both repositories |
+| Implementation | begun 2026-10-18 on branch `locations` in both repositories. Part 1, one word, done |

@@ -134,7 +134,7 @@ export default {
       openToHostFollowers: 'Everyone who follows {{ name }} can see it and answer',
       address: {
         title: 'Where is it?',
-        help: 'Shown only to people who are going. It is not added to the site\'s places.',
+        help: 'Shown only to people who are going. It is not added to the site\'s locations.',
         street: 'Address',
         city: 'City',
         stateProvince: 'Province or state',
