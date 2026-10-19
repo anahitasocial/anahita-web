@@ -9,6 +9,7 @@ import utils from '../../../utils';
 import i18n from '../../../languages';
 
 const {
+  getActorName,
   getURL,
   getStorySubject,
   getStoryObjectName,
@@ -37,11 +38,12 @@ To.propTypes = {
 // the app does not know says only who it is from (`notifications:other`).
 const NotificationMessage = ({ notification }) => {
   const subject = getStorySubject(notification);
-  const subjectName = subject.id ? subject.name : i18n.t('actor:unknown');
+  // A profile with no name yet goes by its handle, as everywhere else.
+  const subjectName = subject.id ? getActorName(subject) : i18n.t('actor:unknown');
   const objectName = getStoryObjectName(notification) || '';
   const object = notification.object || {};
   const target = notification.target || {};
-  const targetName = target.id ? (target.name || target.title) : i18n.t('actor:unknown');
+  const targetName = target.id ? (target.title || getActorName(target)) : i18n.t('actor:unknown');
 
   const known = `notifications:${_.camelCase(notification.type)}`;
   const i18nKey = notification.type && i18n.exists(known) ? known : 'notifications:other';

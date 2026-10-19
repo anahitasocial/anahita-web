@@ -102,6 +102,15 @@ const NotificationsBrowse = ({
     });
   };
 
+  // Opened by one of its links: read, quietly.
+  const handleOpen = (item) => {
+    editItem(item).then(() => {
+      lessUnread();
+    }).catch(() => {
+      // Still unread; nothing to say while they go where they meant to.
+    });
+  };
+
   const handleDelete = (item) => {
     deleteItem(item).then(() => {
       if (!item.isRead) {
@@ -196,6 +205,7 @@ const NotificationsBrowse = ({
           fetchList={fetchList}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
+          handleOpen={handleOpen}
         />
       </Card>
     </Container>

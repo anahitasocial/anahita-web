@@ -901,6 +901,9 @@ emailed.
   `notifications:other`. Its links stay in the app, unread is said in
   words to a screen reader, and the next page begins after what is on the
   page, so deleting one skips nothing.
+- **Read when opened:** following any of a notification's links marks it
+  read, quietly (`Browse/ListItem.jsx`, `onClickCapture`); seeing it in the
+  list does not. A profile with no name yet is named by its handle.
 - **Mark all read**, in the page's header (the icon alone on a phone),
   marks every one read (`PATCH /notifications/read-all`), the list and the
   bell with them.

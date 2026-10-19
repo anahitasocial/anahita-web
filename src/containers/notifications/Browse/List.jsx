@@ -16,6 +16,7 @@ const NotificationsList = ({
   fetchList,
   handleEdit,
   handleDelete,
+  handleOpen,
 }) => {
   return (
     <InfiniteScroll
@@ -33,6 +34,7 @@ const NotificationsList = ({
               item={item}
               handleEdit={handleEdit}
               handleDelete={handleDelete}
+              handleOpen={handleOpen}
             />
           );
         })}
@@ -47,6 +49,7 @@ NotificationsList.propTypes = {
   fetchList: PropTypes.func.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  handleOpen: PropTypes.func.isRequired,
 };
 
 export default NotificationsList;

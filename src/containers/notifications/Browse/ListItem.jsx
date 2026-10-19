@@ -33,7 +33,12 @@ const unseen = {
   whiteSpace: 'nowrap',
 };
 
-const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
+const NotificationListItem = ({
+  item,
+  handleEdit,
+  handleDelete,
+  handleOpen,
+}) => {
   const [anchorEl, setAnchorEl] = useState(null);
   const subject = item.subject || {};
   const target = item.target || {};
@@ -41,6 +46,13 @@ const NotificationListItem = ({ item, handleEdit, handleDelete }) => {
   return (
     <ListItem
       divider
+      // Opened, by any of its links, it is read (roadmap row 97): seeing it
+      // in the list is not reading it.
+      onClickCapture={(event) => {
+        if (!item.isRead && event.target.closest && event.target.closest('a')) {
+          handleOpen(item);
+        }
+      }}
       secondaryAction={
         <>
           <Badge
@@ -130,6 +142,7 @@ NotificationListItem.propTypes = {
   item: NotificationType.isRequired,
   handleEdit: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  handleOpen: PropTypes.func.isRequired,
 };
 
 export default NotificationListItem;
