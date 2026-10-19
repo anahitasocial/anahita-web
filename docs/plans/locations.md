@@ -57,6 +57,7 @@ prose. The translations already use their language's ordinary word (*Lieux*,
 | | Today | Becomes |
 | --- | --- | --- |
 | Address, city, country | Required | Optional |
+| Postal code | Kept (`geo_postalcode`), but not taken or shown | Optional, taken as `postal_code`, part of the address looked up, and shown |
 | The point | Always geocoded from the address | Given (`latitude`, `longitude`), or geocoded from an address when one is given and no point is |
 | A geocoder that finds nothing | 400, nothing saved | 400 only when there is no point either |
 | An edit | Geocodes again when the address changes | Geocodes again only when the address changes, is not empty, and no point is given; clearing the address keeps the point |
@@ -292,4 +293,4 @@ where the photo uploads start). Nothing about the position is sent but the
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-18 |
-| Implementation | begun 2026-10-18 on branch `locations` in both repositories. Part 1, one word, done |
+| Implementation | begun 2026-10-18 on branch `locations` in both repositories. Part 1, one word, done. Part 2, without an address, done, with a postal code; saving from the form is not yet tried in a browser, the test account not being an administrator, who alone may add a location. On the way: trending counts profiles of every kind, each once |

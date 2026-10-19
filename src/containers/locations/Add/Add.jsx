@@ -28,15 +28,27 @@ if (!process.env.REACT_APP_LOCATION_FIXED_COUNTRY) {
   fieldNames.push('country');
 }
 
+fieldNames.push('postal_code');
+
 const formFields = form.createFormFields(fieldNames);
 
 const FORM_ID = 'location-add-form';
+
+// What the person typed that the server can find a point by. A city, state or
+// country the operator fixed is not enough on its own: it would put the pin
+// in the middle of the city.
+const typedAddress = (formData) => {
+  return ['address', 'city', 'postal_code'].some((key) => {
+    return fieldNames.includes(key) && String(formData[key] || '').trim() !== '';
+  });
+};
 
 const LocationsSelectorAdd = (props) => {
   const {
     node,
     name,
     callback,
+    near = null,
   } = props;
 
   formFields.name.value = name;
@@ -53,6 +65,13 @@ const LocationsSelectorAdd = (props) => {
     source_id: node.id,
   });
   const [isFetching, setIsFetching] = useState(false);
+  const [point, setPoint] = useState(null);
+  const [pointError, setPointError] = useState('');
+
+  const handlePointChange = (newPoint) => {
+    setPoint(newPoint);
+    setPointError('');
+  };
 
   const handleOnChange = (event) => {
     const { target } = event;
@@ -69,8 +88,18 @@ const LocationsSelectorAdd = (props) => {
     const { target } = event;
     const newFields = form.validateForm(target, fields);
 
-    if (form.isValid(newFields)) {
-      const formData = form.fieldsToData(newFields);
+    const formData = form.fieldsToData(newFields);
+    const located = Boolean(point) || typedAddress(formData);
+
+    setPointError(located ? '' : i18n.t('locations:point.needed'));
+
+    if (form.isValid(newFields) && located) {
+      // A pin placed wins over the address; with none, the server finds the
+      // point by the address.
+      if (point) {
+        formData.latitude = point.latitude;
+        formData.longitude = point.longitude;
+      }
 
       formData.city = process.env.REACT_APP_LOCATION_FIXED_CITY || formData.city;
 
@@ -111,6 +140,10 @@ const LocationsSelectorAdd = (props) => {
           handleOnChange={handleOnChange}
           handleOnSubmit={handleOnSubmit}
           isFetching={isFetching}
+          point={point}
+          onPointChange={handlePointChange}
+          pointError={pointError}
+          near={near}
         />
       </DialogContent>
       <DialogActions sx={{ px: 3, pb: 2 }}>
@@ -133,6 +166,10 @@ LocationsSelectorAdd.propTypes = {
   node: NodeType.isRequired,
   name: PropTypes.string.isRequired,
   callback: PropTypes.func.isRequired,
+  near: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+  }),
 };
 
 export default LocationsSelectorAdd;

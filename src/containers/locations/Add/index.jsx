@@ -145,6 +145,7 @@ const LocationsSelector = ({
       <AddLocation
         node={node}
         name={keyword}
+        near={here}
         callback={() => {
           handleChanged();
           handleClose();

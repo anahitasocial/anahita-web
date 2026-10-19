@@ -6,6 +6,7 @@ export default {
     address: 'Adresse',
     city: 'Ville',
     province: 'Province',
+    postalCode: 'Code postal',
     country: 'Pays',
   },
   add: {
@@ -27,5 +28,12 @@ export default {
     asking: 'Recherche de votre position…',
     denied: 'Autorisez votre navigateur à partager votre position pour voir les lieux proches.',
     tryAgain: 'Réessayer',
+  },
+  point: {
+    label: 'Où se trouve le lieu',
+    hint: 'Touchez la carte pour placer l’épingle, puis faites-la glisser pour la déplacer.',
+    useMine: 'Utiliser ma position',
+    denied: 'Votre navigateur n’a pas partagé votre position.',
+    needed: 'Placez l’épingle, ou donnez une adresse pour la trouver.',
   },
 };

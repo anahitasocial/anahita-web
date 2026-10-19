@@ -6,6 +6,7 @@ export default {
     address: 'Address',
     city: 'City',
     province: 'Province',
+    postalCode: 'Postal code',
     country: 'Country',
   },
   add: {
@@ -29,5 +30,13 @@ export default {
     asking: 'Finding where you are…',
     denied: 'Let your browser share your location to see locations near you.',
     tryAgain: 'Try again',
+  },
+  // The pin on the map of the Add and Edit forms.
+  point: {
+    label: 'Where the location is',
+    hint: 'Tap the map to place the pin, then drag it to move it.',
+    useMine: 'Use my position',
+    denied: 'Your browser did not share your position.',
+    needed: 'Place the pin, or give an address to find it by.',
   },
 };

@@ -46,6 +46,8 @@ if (!process.env.REACT_APP_LOCATION_FIXED_COUNTRY) {
   fieldNames.push('country');
 }
 
+fieldNames.push('postal_code');
+
 const formFields = form.createFormFields(fieldNames);
 
 const LocationsRead = ({
@@ -64,6 +66,9 @@ const LocationsRead = ({
   const { current: location } = items;
   const [isEditing, setIsEditing] = useState(false);
   const [fields, setFields] = useState(formFields);
+  // The pin, once moved; until then the location's own point is shown, and
+  // an edit that leaves it sends none, so a changed address is looked up.
+  const [point, setPoint] = useState(null);
 
   useEffect(() => {
     readItem(id);
@@ -80,6 +85,7 @@ const LocationsRead = ({
   }, [error, alertError, success, alertSuccess]);
 
   const handleEdit = () => {
+    setPoint(null);
     setIsEditing(true);
   };
 
@@ -114,6 +120,11 @@ const LocationsRead = ({
       formData.state_province;
 
       formData.country = process.env.REACT_APP_LOCATION_FIXED_COUNTRY || formData.country;
+
+      if (point) {
+        formData.latitude = point.latitude;
+        formData.longitude = point.longitude;
+      }
 
       editItem({
         id: location.id,
@@ -168,6 +179,11 @@ const LocationsRead = ({
             handleOnChange={handleOnChange}
             handleOnSubmit={handleOnSubmit}
             isFetching={isFetching}
+            point={point || {
+              latitude: Number(location.latitude),
+              longitude: Number(location.longitude),
+            }}
+            onPointChange={setPoint}
             actions={[
               <Button
                 onClick={handleCancel}
@@ -187,7 +203,7 @@ const LocationsRead = ({
               </Button>,
             ]}
           />}
-        {location.id &&
+        {location.id && !isEditing &&
           <AnahitaMap
             locations={[location]}
             height={MAP_HEIGHT}
