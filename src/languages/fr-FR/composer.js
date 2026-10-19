@@ -82,6 +82,8 @@ export default {
   locations: {
     add: 'Ajouter un lieu',
     nearMe: 'Près de moi',
+    photoSuggest: 'Cette photo a une position. Suggérer des lieux à proximité ?',
+    nearPhoto: 'Près de la photo',
     hint: 'Tapez un nom, ou touchez Près de moi.',
     addNew: 'Ajouter « {{name}} » comme nouveau lieu',
     addTitle: 'Ajouter un lieu',

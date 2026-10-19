@@ -692,6 +692,14 @@ whose post is made only once its upload is ready.
   may add one (`LOCATIONS_FROM`), opens the Add locations form with the name
   filled in, and what it makes is chosen.
 - **Shown** as chips under the text, removed with their ✕.
+- **From a photo's position:** when a photo with a GPS position is picked
+  for a post, the browser reads it (`utils/photoPosition.js`, with
+  `exifr`, loaded only then, reading only the start of the file), and the
+  popover offers **This photo has a location. Suggest locations near it?**
+  Only when that is tapped is the position used, once, as the point of that
+  search, and as the pin's start if a new location is added; it is never
+  shown, sent elsewhere or kept, and the file uploaded is the one chosen,
+  stripped on the server as always (roadmap row 82, part 5).
 - **Kept** with the draft in this browser, one list for each profile, shared
   by the short box and the extended composer, so they come along when one
   becomes the other.

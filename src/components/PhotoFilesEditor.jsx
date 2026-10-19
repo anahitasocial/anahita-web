@@ -194,6 +194,7 @@ const PhotoFilesEditor = ({
   disabled = false,
   videoMimetypes = [],
   onVideo = null,
+  onPicked = null,
 }) => {
   const { classes, cx } = useStyles();
   // Which photo is on show, read from where the row has been scrolled to.
@@ -238,6 +239,12 @@ const PhotoFilesEditor = ({
 
     // No more than there is room for; the rest are left out, not queued.
     setLeftOut(Math.max(files.length - room, 0));
+
+    // The files themselves, to whoever wants to read something of them in
+    // this browser: the composer, for where a photo was taken (part 5).
+    if (onPicked) {
+      onPicked(files.slice(0, room));
+    }
 
     files.slice(0, room).forEach((file) => {
       const previewUrl = URL.createObjectURL(file);
@@ -563,6 +570,8 @@ PhotoFilesEditor.propTypes = {
   // it: a video, in the composer.
   videoMimetypes: PropTypes.arrayOf(PropTypes.string),
   onVideo: PropTypes.func,
+  // Given the files picked, as they are picked.
+  onPicked: PropTypes.func,
 };
 
 export default PhotoFilesEditor;

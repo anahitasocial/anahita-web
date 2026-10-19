@@ -49,6 +49,7 @@ const LocationsSelectorAdd = (props) => {
     name,
     callback,
     near = null,
+    startPoint = null,
   } = props;
 
   formFields.name.value = name;
@@ -64,7 +65,9 @@ const LocationsSelectorAdd = (props) => {
     city: process.env.REACT_APP_LOCATION_FIXED_CITY,
   });
   const [isFetching, setIsFetching] = useState(false);
-  const [point, setPoint] = useState(null);
+  // Where the pin starts: none, unless the composer was searching near a
+  // photo's position, where the new location most likely is (part 5).
+  const [point, setPoint] = useState(startPoint);
   const [pointError, setPointError] = useState('');
 
   const handlePointChange = (newPoint) => {
@@ -180,6 +183,11 @@ LocationsSelectorAdd.propTypes = {
   // Called with the location made.
   callback: PropTypes.func.isRequired,
   near: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+  }),
+  // A pin already placed, to be moved if need be.
+  startPoint: PropTypes.shape({
     latitude: PropTypes.number,
     longitude: PropTypes.number,
   }),

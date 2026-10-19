@@ -13,6 +13,7 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Popover from '@mui/material/Popover';
+import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
@@ -22,6 +23,7 @@ import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import LocationIcon from '@mui/icons-material/LocationOnOutlined';
 import NearMeIcon from '@mui/icons-material/MyLocation';
+import PhotoIcon from '@mui/icons-material/PhotoOutlined';
 
 import AddLocation from '../../locations/Add/Add';
 import api from '../../../api';
@@ -39,10 +41,15 @@ const LIMIT = 8;
 // for a position only when tapped, and, for those who may add a location
 // (LOCATIONS_FROM), Add "…" as a new location. The arrow keys and Enter work
 // as in the hashtag suggestions. What is chosen goes to `onPick`.
+//
+// `photoPoint` is where a photo of the post was taken, read in the browser
+// (part 5). It is offered in one line, and only when that line is tapped is
+// it used, as the point of this search; never shown, sent elsewhere or kept.
 const LocationPicker = ({
   chosen,
   onPick,
   disabled = false,
+  photoPoint = null,
 }) => {
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const canAdd = useSelector((state) => {
@@ -57,6 +64,9 @@ const LocationPicker = ({
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState('');
   const [near, setNear] = useState(null);
+  // Whose point `near` is: the viewer's, asked of the browser, or the
+  // photo's.
+  const [nearFrom, setNearFrom] = useState('');
   const [asking, setAsking] = useState(false);
   const [denied, setDenied] = useState(false);
   const [results, setResults] = useState([]);
@@ -128,8 +138,9 @@ const LocationPicker = ({
   // One reading of where the viewer is, only when Near me is tapped, used
   // for this search and kept nowhere.
   const askNear = () => {
-    if (near) {
+    if (near && nearFrom === 'me') {
       setNear(null);
+      setNearFrom('');
       return;
     }
     if (!navigator.geolocation) {
@@ -140,6 +151,7 @@ const LocationPicker = ({
     setDenied(false);
     navigator.geolocation.getCurrentPosition((position) => {
       setAsking(false);
+      setNearFrom('me');
       setNear({
         latitude: position.coords.latitude,
         longitude: position.coords.longitude,
@@ -237,16 +249,28 @@ const LocationPicker = ({
                   },
                 }}
               />
-              <Chip
-                icon={<NearMeIcon />}
-                label={i18n.t('composer:locations.nearMe')}
-                size="small"
-                color={near ? 'primary' : 'default'}
-                variant={near ? 'filled' : 'outlined'}
-                onClick={askNear}
-                disabled={asking}
-                sx={{ mt: 1 }}
-              />
+              <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 1 }}>
+                <Chip
+                  icon={<NearMeIcon />}
+                  label={i18n.t('composer:locations.nearMe')}
+                  size="small"
+                  color={nearFrom === 'me' ? 'primary' : 'default'}
+                  variant={nearFrom === 'me' ? 'filled' : 'outlined'}
+                  onClick={askNear}
+                  disabled={asking}
+                />
+                {nearFrom === 'photo' &&
+                  <Chip
+                    icon={<PhotoIcon />}
+                    label={i18n.t('composer:locations.nearPhoto')}
+                    size="small"
+                    color="primary"
+                    onDelete={() => {
+                      setNear(null);
+                      setNearFrom('');
+                    }}
+                  />}
+              </Stack>
             </>}
         </Box>
         {!full &&
@@ -256,6 +280,20 @@ const LocationPicker = ({
               <Typography variant="body2" color="textSecondary" sx={{ px: 2, pb: 1 }}>
                 {hint}
               </Typography>}
+            {photoPoint && !nearFrom &&
+              <List dense sx={{ pt: 0 }}>
+                <ListItemButton
+                  onClick={() => {
+                    setNearFrom('photo');
+                    setNear(photoPoint);
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 40 }}>
+                    <PhotoIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={i18n.t('composer:locations.photoSuggest')} />
+                </ListItemButton>
+              </List>}
             {rows > 0 &&
               <List dense sx={{ pt: 0 }}>
                 {results.map((location, index) => {
@@ -329,6 +367,7 @@ const LocationPicker = ({
           <AddLocation
             name={keyword}
             near={near}
+            startPoint={nearFrom === 'photo' ? near : null}
             callback={(location) => {
               setAdding(false);
               setQ('');
@@ -349,6 +388,11 @@ LocationPicker.propTypes = {
   })).isRequired,
   onPick: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  // Where a photo of the post was taken, offered for a search near it.
+  photoPoint: PropTypes.shape({
+    latitude: PropTypes.number,
+    longitude: PropTypes.number,
+  }),
 };
 
 export default LocationPicker;

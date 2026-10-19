@@ -106,6 +106,8 @@ export default {
   locations: {
     add: 'Ort hinzufügen',
     nearMe: 'In meiner Nähe',
+    photoSuggest: 'Dieses Foto hat einen Standort. Orte in der Nähe vorschlagen?',
+    nearPhoto: 'In der Nähe des Fotos',
     hint: 'Gib einen Namen ein oder tippe auf In meiner Nähe.',
     addNew: '„{{name}}“ als neuen Ort hinzufügen',
     addTitle: 'Ort hinzufügen',

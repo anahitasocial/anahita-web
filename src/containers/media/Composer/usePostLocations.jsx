@@ -117,9 +117,16 @@ const usePostLocations = (actorId) => {
     },
     ids,
     tag,
-    button: ({ disabled = false } = {}) => {
+    // `photoPoint`, where a photo of the post was taken, is offered for
+    // suggesting locations near it (part 5).
+    button: ({ disabled = false, photoPoint = null } = {}) => {
       return (
-        <LocationPicker chosen={locations} onPick={add} disabled={disabled} />
+        <LocationPicker
+          chosen={locations}
+          onPick={add}
+          disabled={disabled}
+          photoPoint={photoPoint}
+        />
       );
     },
     // Under the text, where the link card is; and, where the post will go

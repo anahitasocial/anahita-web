@@ -107,6 +107,8 @@ export default {
   locations: {
     add: 'Add location',
     nearMe: 'Near me',
+    photoSuggest: 'This photo has a location. Suggest locations near it?',
+    nearPhoto: 'Near the photo',
     hint: 'Type a name, or tap Near me.',
     addNew: 'Add “{{name}}” as a new location',
     addTitle: 'Add location',

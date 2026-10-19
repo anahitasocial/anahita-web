@@ -35,6 +35,7 @@ import useOnFediverse from './useOnFediverse';
 import useVideoUpload from './Video/useVideoUpload';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
+import photoPosition from '../../../utils/photoPosition';
 
 import composer from '../../../utils/composer';
 import photoFiles from '../../../utils/photoFiles';
@@ -104,6 +105,10 @@ const ShortComposer = ({
   // Locations to tag the post with. Not with a video, whose post is made
   // only once the upload is ready.
   const postLocations = usePostLocations(actor.id);
+  // Where the first photo with a position was taken, read in this browser
+  // as it was picked; offered for suggesting locations near it, and used
+  // only if asked. Kept nowhere but here, and gone with the photos.
+  const [photoPoint, setPhotoPoint] = useState(null);
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
@@ -158,6 +163,7 @@ const ShortComposer = ({
     clearDraft();
     postLocations.clear();
     setPhotoItems([]);
+    setPhotoPoint(null);
     setIsAddingPhotos(false);
     setVideo(null);
     setVideoProblem('');
@@ -369,6 +375,15 @@ const ShortComposer = ({
             disabled={busy}
             videoMimetypes={canVideo ? videos.TYPES : []}
             onVideo={takeVideo}
+            onPicked={(files) => {
+              if (!photoPoint) {
+                photoPosition.read(files).then((point) => {
+                  if (point) {
+                    setPhotoPoint(point);
+                  }
+                });
+              }
+            }}
           />
           {!hasPhotos &&
             <Button
@@ -538,7 +553,7 @@ const ShortComposer = ({
             }}
           >
             {attachButtons}
-            {!video && !busy && postLocations.button()}
+            {!video && !busy && postLocations.button({ photoPoint: hasPhotos ? photoPoint : null })}
             {options}
           </Stack>
         </Box>
