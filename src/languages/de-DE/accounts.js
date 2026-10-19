@@ -41,7 +41,7 @@ export default {
     active: 'In Gebrauch',
     disabled: 'Deaktiviert',
     archived: 'Archiviert',
-    deleted: 'Gelöscht, die 30 Tage laufen noch',
+    deleted: 'Gelöscht, wartet auf die endgültige Entfernung',
   },
   list: {
     loadError: 'Die Profile konnten nicht geladen werden.',
@@ -76,7 +76,7 @@ export default {
   purge: {
     title_one: '{{count}} Profil endgültig löschen?',
     title_other: '{{count}} Profile endgültig löschen?',
-    permanent: 'Das lässt sich nicht rückgängig machen, und es gibt keine 30 Tage Bedenkzeit.',
+    permanent: 'Das lässt sich nicht rückgängig machen, und es gibt keine Frist, es sich anders zu überlegen.',
     whatGoes: 'Alles, was diese Profile veröffentlicht oder geantwortet haben, verschwindet, wo auch immer es steht, zusammen mit den Antworten anderer unter ihren Beiträgen, ihren „Gefällt mir“-Angaben und Follows, ihren hochgeladenen Dateien und ihren Anmeldedaten.',
     whatGoesGroup: 'Alles, was in diesen Gruppen veröffentlicht wurde, verschwindet, egal von wem, zusammen mit den Antworten unter diesen Beiträgen und den hochgeladenen Dateien.',
     whatStays: 'Jeder Benutzername bleibt reserviert, damit niemand sonst ihn nehmen kann.',
@@ -112,7 +112,7 @@ export default {
   },
   // The card in a profile's Danger zone, for one account.
   single: {
-    permanent: 'Das entfernt das Profil endgültig, sofort. Es gibt keine 30 Tage Bedenkzeit und keinen Weg, es zurückzuholen.',
+    permanent: 'Das entfernt das Konto jetzt endgültig. Es gibt keine Frist, es sich anders zu überlegen, und keinen Weg, es zurückzuholen.',
     personDescription: 'Alles, was {{ name }} veröffentlicht oder geantwortet hat, verschwindet, wo auch immer es steht, zusammen mit den Antworten anderer unter den Beiträgen, den „Gefällt mir“-Angaben und Follows, den hochgeladenen Dateien und den Anmeldedaten. Der Benutzername bleibt reserviert.',
     groupDescription: 'Alles, was in {{ name }} veröffentlicht wurde, verschwindet, egal von wem, zusammen mit den Antworten unter diesen Beiträgen und den hochgeladenen Dateien. Die Adresse der Gruppe bleibt reserviert.',
     notModeration: 'Das ist zum Aufräumen von Profilen gedacht, die niemand nutzt. Um jemanden von der Website auszuschließen, deaktiviere stattdessen das Profil.',

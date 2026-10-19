@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
 
 import Button from '@mui/material/Button';
@@ -10,7 +11,7 @@ import Typography from '@mui/material/Typography';
 
 import ActorType from '../../../proptypes/Actor';
 import { Actor as ACTOR } from '../../../constants';
-import { GRACE_DAYS } from '../../../utils/deletion';
+import { graceDays } from '../../../utils/deletion';
 import i18n from '../../../languages';
 
 const { ALIAS } = ACTOR.FIELDS;
@@ -38,6 +39,9 @@ const ActorDeleteForm = (props) => {
     namespace,
     isFetching,
   } = props;
+  // The days a deleted profile can be brought back: the site's
+  // (ACCOUNT_GRACE_DAYS), from NodeInfo.
+  const grace = useSelector((state) => { return graceDays(state.app.nodeInfo); });
 
   // Namespace-specific, because the two differ in what is true. A person is
   // told to sign in to restore and that their passkeys go; neither applies to a
@@ -62,7 +66,7 @@ const ActorDeleteForm = (props) => {
 
   if (actor.deletedAt && canRestore) {
     const purgeDate = new Date(actor.deletedAt);
-    purgeDate.setDate(purgeDate.getDate() + GRACE_DAYS);
+    purgeDate.setDate(purgeDate.getDate() + grace);
 
     return (
       <>
@@ -81,7 +85,7 @@ const ActorDeleteForm = (props) => {
             })}
           </Typography>
           <Typography variant="body2" color="textSecondary">
-            {copy('reversible', { count: GRACE_DAYS })}
+            {copy('reversible', { count: grace })}
           </Typography>
         </CardContent>
         <CardActions>
@@ -108,7 +112,7 @@ const ActorDeleteForm = (props) => {
           {copy('scheduled', {
             date: (() => {
               const purge = new Date(actor.deletedAt);
-              purge.setDate(purge.getDate() + GRACE_DAYS);
+              purge.setDate(purge.getDate() + grace);
               return purge.toLocaleDateString(undefined, {
                 year: 'numeric',
                 month: 'long',
@@ -207,7 +211,7 @@ const ActorDeleteForm = (props) => {
           color="textSecondary"
           sx={{ marginBottom: '16px' }}
         >
-          {copy('reversible', { count: GRACE_DAYS })}
+          {copy('reversible', { count: grace })}
         </Typography>
 
         <Typography

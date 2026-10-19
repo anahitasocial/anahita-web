@@ -50,6 +50,7 @@ export default {
     confirm: 'Remove',
     removed: 'Removed as spam.',
     failed: 'It could not be removed. Please try again.',
+    tooOld: 'Only an account made in the last {{days}} days can be removed as spam. Disable or delete this one instead.',
   },
   actions: {
     none: 'Nothing was done',

@@ -49,6 +49,7 @@ export default {
     confirm: 'Entfernen',
     removed: 'Als Spam entfernt.',
     failed: 'Das Entfernen ist fehlgeschlagen. Bitte versuche es erneut.',
+    tooOld: 'Nur ein Konto, das in den letzten {{days}} Tagen erstellt wurde, kann als Spam entfernt werden. Deaktiviere oder lösche dieses stattdessen.',
   },
   actions: {
     none: 'Nichts wurde unternommen',

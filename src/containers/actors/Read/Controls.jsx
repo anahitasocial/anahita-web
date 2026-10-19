@@ -20,8 +20,6 @@ import utils from '../../../utils';
 import i18n from '../../../languages';
 import perms from '../../../permissions/actor';
 
-const ITEM_HEIGHT = 48;
-
 const { node } = utils;
 
 const ActorsReadControls = ({
@@ -65,10 +63,12 @@ const ActorsReadControls = ({
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        // No height of its own: a profile's menu is a few items, and an
+        // administrator's (with Remove as spam) were cut short by one, behind
+        // a scrollbar.
         slotProps={{
           paper: {
             style: {
-              maxHeight: ITEM_HEIGHT * 4.5,
               minWidth: 200,
             },
           },

@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 
 import Chip from '@mui/material/Chip';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
-import deletion from '../utils/deletion';
+import deletion, { graceDays } from '../utils/deletion';
 import i18n from '../languages';
 
 // "Scheduled for deletion · 27 days left", on a profile that was deleted and
@@ -12,7 +13,8 @@ import i18n from '../languages';
 // still find it, in their lists and on its page, and an administrator can
 // restore it from its settings until then. Nothing when it is not scheduled.
 const ScheduledDeletion = ({ actor, sx = {} }) => {
-  const days = deletion.daysLeft(actor);
+  const grace = useSelector((state) => { return graceDays(state.app.nodeInfo); });
+  const days = deletion.daysLeft(actor, Date.now(), grace);
   if (days === null) {
     return null;
   }

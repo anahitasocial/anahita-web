@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { singularize } from 'inflection';
 import ActorDeleteForm from '../Forms/Delete';
@@ -8,6 +8,7 @@ import StepUp from '../../auth/StepUp';
 import api from '../../../api';
 import Progress from '../../../components/Progress';
 import actions from '../../../actions';
+import { graceDays } from '../../../utils/deletion';
 import form from '../../../utils/form';
 import i18n from '../../../languages';
 
@@ -16,19 +17,16 @@ import PersonType from '../../../proptypes/Person';
 
 const formFields = form.createFormFields(['alias']);
 
-// Mirrors constants.AccountGraceDays in auth-service and GraceDays in the
-// sweeper. Used only to tell the person the date they have until.
-const GRACE_DAYS = 30;
-
 // purgeDate is the day the sweeper will erase the profile, formatted for
 // somebody to read and act on.
 //
 // Computed client-side because the delete response carries no body. That is
 // accurate to the day, which is what the person needs — the sweeper runs
 // hourly against the same window, so the two cannot drift by more than an hour.
-const purgeDate = () => {
+// The days are the site's (ACCOUNT_GRACE_DAYS), from NodeInfo.
+const purgeDate = (days) => {
   const date = new Date();
-  date.setDate(date.getDate() + GRACE_DAYS);
+  date.setDate(date.getDate() + days);
   return date.toLocaleDateString(undefined, {
     year: 'numeric',
     month: 'long',
@@ -49,6 +47,7 @@ const ActorsSettingsDelete = (props) => {
     isFetching,
     namespace,
   } = props;
+  const grace = useSelector((state) => { return graceDays(state.app.nodeInfo); });
   const navigate = useNavigate();
   const [fields, setFields] = useState(formFields);
   const [stepUpOpen, setStepUpOpen] = useState(false);
@@ -125,7 +124,7 @@ const ActorsSettingsDelete = (props) => {
         if (isViewer) {
           logout();
           alertSuccess(i18n.t('actor:delete.scheduled', {
-            date: purgeDate(),
+            date: purgeDate(grace),
           }));
         } else {
           alertSuccess(i18n.t('prompts:deleted.success'));

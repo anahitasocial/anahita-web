@@ -49,6 +49,7 @@ export default {
     confirm: 'Supprimer',
     removed: 'Supprimé comme spam.',
     failed: 'La suppression a échoué. Veuillez réessayer.',
+    tooOld: 'Seul un compte créé au cours des {{days}} derniers jours peut être supprimé comme spam. Désactivez ou supprimez celui-ci.',
   },
   actions: {
     none: 'Rien n’a été fait',
