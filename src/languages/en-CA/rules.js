@@ -17,6 +17,8 @@ export default {
   join: {
     title: "{{name}}'s rules",
     intro: 'Tick each one to agree to it before you join.',
+    introChanged: 'The rules have changed since you agreed. Tick each one again.',
+    introPost: 'Tick each one to agree to it before you post.',
     agree: 'I agree',
   },
   prompts: {

@@ -16,6 +16,8 @@ export default {
   join: {
     title: 'As regras de {{name}}',
     intro: 'Marque cada uma para concordar antes de entrar.',
+    introChanged: 'As regras mudaram desde que você concordou. Marque cada uma de novo.',
+    introPost: 'Marque cada uma para concordar antes de publicar.',
     agree: 'Concordo',
   },
   prompts: {

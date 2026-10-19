@@ -104,7 +104,9 @@ Four components guard routes (`src/routes/`):
   or accepting an invitation first asks for its rules, ticked one at a time
   in a dialog (`containers/rules/useRulesFirst.jsx`, `components/RulesChecklist.jsx`,
   which `/rules` uses too), unless the viewer agreed to the version they are
-  at; the server refuses otherwise (409 `rules_not_agreed`). See
+  at; the server refuses otherwise (409 `rules_not_agreed`). A new post on
+  one asks the same when its rules changed since (both composers, with
+  `useRulesFirst(actor, 'post')`). See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
 - **`OnboardingGate`**, inside it, sends a signed-in person with an
   incomplete profile to `/onboarding`, once, and waits while the agreements

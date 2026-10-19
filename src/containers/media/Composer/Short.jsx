@@ -45,6 +45,7 @@ import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
 import i18n from '../../../languages';
+import useRulesFirst from '../../rules/useRulesFirst';
 
 const { CONTENT } = MEDIUM.FIELDS;
 const { isPerson } = utils.node;
@@ -210,6 +211,10 @@ const ShortComposer = ({
     reset();
   };
 
+  // Posting on a group or an event whose rules changed since the writer
+  // agreed: agreed to again first (roadmap row 102, part 5c).
+  const rules = useRulesFirst(actor, 'post');
+
   const handleSubmit = (event) => {
     if (event) {
       event.preventDefault();
@@ -217,7 +222,13 @@ const ShortComposer = ({
     if (!hasSomething || isHeldBack) {
       return;
     }
+    rules.run(() => {
+      // eslint-disable-next-line no-use-before-define
+      sendPost();
+    });
+  };
 
+  const sendPost = () => {
     if (video) {
       upload.start(actor, {
         title: '',
@@ -609,6 +620,7 @@ const ShortComposer = ({
           {options}
         </Stack>
       </Box>
+      {rules.dialog}
     </Dialog>
   );
 };

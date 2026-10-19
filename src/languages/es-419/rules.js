@@ -16,6 +16,8 @@ export default {
   join: {
     title: 'Las reglas de {{name}}',
     intro: 'Marca cada una para aceptarla antes de unirte.',
+    introChanged: 'Las reglas cambiaron desde que las aceptaste. Marca cada una de nuevo.',
+    introPost: 'Marca cada una para aceptarla antes de publicar.',
     agree: 'Acepto',
   },
   prompts: {

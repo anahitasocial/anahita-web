@@ -16,6 +16,8 @@ export default {
   join: {
     title: 'Die Regeln von {{name}}',
     intro: 'Hake jede einzeln ab, um ihr zuzustimmen, bevor du beitrittst.',
+    introChanged: 'Die Regeln haben sich geändert, seit du zugestimmt hast. Hake jede erneut ab.',
+    introPost: 'Hake jede einzeln ab, um ihr zuzustimmen, bevor du postest.',
     agree: 'Ich stimme zu',
   },
   prompts: {

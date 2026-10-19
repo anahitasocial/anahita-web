@@ -26,7 +26,8 @@ import i18n from '../../languages';
 // `run` reads the rules; with none, or agreed to already, it does the thing
 // at once; otherwise it asks, and does it once they are agreed to. An
 // administrator, who writes them, is not asked: the server lets them by.
-const useRulesFirst = (actor) => {
+// `purpose` is 'join' (following, asking, answering, accepting) or 'post'.
+const useRulesFirst = (actor, purpose = 'join') => {
   const dispatch = useDispatch();
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [asking, setAsking] = useState(null);
@@ -82,7 +83,10 @@ const useRulesFirst = (actor) => {
         </DialogTitle>
         <DialogContent>
           <DialogContentText variant="body2" sx={{ mb: 2 }}>
-            {i18n.t('rules:join.intro')}
+            {/* Agreed before: they changed since. Otherwise, what for. */}
+            {i18n.t(asking.rules.agreedVersion > 0 ?
+              'rules:join.introChanged' :
+              `rules:join.${purpose === 'post' ? 'introPost' : 'intro'}`)}
           </DialogContentText>
           <RulesChecklist
             items={asking.rules.items}

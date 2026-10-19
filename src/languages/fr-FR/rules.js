@@ -16,6 +16,8 @@ export default {
   join: {
     title: 'Les règles de {{name}}',
     intro: "Cochez chacune pour l'accepter avant de rejoindre.",
+    introChanged: 'Les règles ont changé depuis votre accord. Cochez chacune de nouveau.',
+    introPost: "Cochez chacune pour l'accepter avant de publier.",
     agree: "J'accepte",
   },
   prompts: {
