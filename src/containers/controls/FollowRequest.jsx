@@ -8,6 +8,7 @@ import actions from '../../actions';
 import api from '../../api';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
+import useRulesFirst from '../rules/useRulesFirst';
 
 // Asking to follow a profile the viewer may not see, and taking the asking
 // back.
@@ -24,14 +25,18 @@ const ControlsFollowRequest = ({
   const [requested, setRequested] = useState(Boolean(actor.isFollowRequestedByViewer));
   const [waiting, setWaiting] = useState(false);
 
-  const handleClick = () => {
+  // A group's or an event's rules, ticked before asking (roadmap row 102,
+  // part 5b). Not to withdraw.
+  const rules = useRulesFirst(actor);
+
+  const send = () => {
     setWaiting(true);
 
     const call = requested ?
       api.socialgraph.withdrawFollowRequest({ actor, viewer }) :
       api.socialgraph.requestFollow({ actor, viewer });
 
-    call.then(() => {
+    return call.then(() => {
       setRequested(!requested);
     }).catch(() => {
       alertError(i18n.t('actor:limited.failed'));
@@ -40,17 +45,28 @@ const ControlsFollowRequest = ({
     });
   };
 
+  const handleClick = () => {
+    if (requested) {
+      send();
+    } else {
+      rules.run(send);
+    }
+  };
+
   return (
-    <Button
-      fullWidth
-      variant={requested ? 'outlined' : 'contained'}
-      color={requested ? 'inherit' : 'primary'}
-      disabled={waiting}
-      onClick={handleClick}
-      title={requested ? i18n.t('actor:limited.withdraw') : undefined}
-    >
-      {requested ? i18n.t('actor:limited.requested') : i18n.t('actor:limited.request')}
-    </Button>
+    <>
+      <Button
+        fullWidth
+        variant={requested ? 'outlined' : 'contained'}
+        color={requested ? 'inherit' : 'primary'}
+        disabled={waiting}
+        onClick={handleClick}
+        title={requested ? i18n.t('actor:limited.withdraw') : undefined}
+      >
+        {requested ? i18n.t('actor:limited.requested') : i18n.t('actor:limited.request')}
+      </Button>
+      {rules.dialog}
+    </>
   );
 };
 

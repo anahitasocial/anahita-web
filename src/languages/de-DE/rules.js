@@ -12,7 +12,14 @@ export default {
     siteRules: 'Die Regeln der Seite gelten auch hier.',
     siteRulesLink: 'Lesen',
   },
+  // Before joining a group or an event with rules.
+  join: {
+    title: 'Die Regeln von {{name}}',
+    intro: 'Hake jede einzeln ab, um ihr zuzustimmen, bevor du beitrittst.',
+    agree: 'Ich stimme zu',
+  },
   prompts: {
+    notAgreed: 'Deine Zustimmung konnte nicht gespeichert werden. Bitte versuche es erneut.',
     saved: 'Regeln gespeichert. Alle, die zugestimmt haben, werden erneut gefragt.',
     notSaved: 'Die Regeln konnten nicht gespeichert werden.',
   },

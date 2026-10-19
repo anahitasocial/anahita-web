@@ -12,7 +12,14 @@ export default {
     siteRules: 'As regras do site também valem aqui.',
     siteRulesLink: 'Ler',
   },
+  // Before joining a group or an event with rules.
+  join: {
+    title: 'As regras de {{name}}',
+    intro: 'Marque cada uma para concordar antes de entrar.',
+    agree: 'Concordo',
+  },
   prompts: {
+    notAgreed: 'Não foi possível registrar seu acordo. Tente de novo.',
     saved: 'Regras salvas. Todos que concordaram serão perguntados de novo.',
     notSaved: 'Não foi possível salvar as regras.',
   },

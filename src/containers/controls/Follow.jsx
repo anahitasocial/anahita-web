@@ -14,6 +14,7 @@ import appActions from '../../actions/app';
 import utils from '../../utils';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
+import useRulesFirst from '../rules/useRulesFirst';
 
 const ControlsFollow = React.forwardRef((props, ref) => {
   const {
@@ -52,14 +53,19 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     };
   };
 
+  // A group's or an event's rules, ticked first (roadmap row 102, part 5b).
+  const rules = useRulesFirst(actor);
+
   const handleFollow = () => {
-    setWaiting(true);
-    followActor({ actor, viewer })
-      .then(() => {
-        setWaiting(false);
-        setLeader(true);
-      })
-      .catch(failed('followFailed'));
+    rules.run(() => {
+      setWaiting(true);
+      return followActor({ actor, viewer })
+        .then(() => {
+          setWaiting(false);
+          setLeader(true);
+        })
+        .catch(failed('followFailed'));
+    });
   };
 
   const handleUnfollow = () => {
@@ -84,30 +90,36 @@ const ControlsFollow = React.forwardRef((props, ref) => {
 
   if (component === 'menuitem') {
     return (
-      <MenuItem
-        onClick={onClick}
-        disabled={waiting}
-        ref={ref}
-      >
-        <MenuItemLabel icon={leader ? <UnfollowIcon fontSize="small" /> : <FollowIcon fontSize="small" />}>
-          {title}
-        </MenuItemLabel>
-      </MenuItem>
+      <>
+        <MenuItem
+          onClick={onClick}
+          disabled={waiting}
+          ref={ref}
+        >
+          <MenuItemLabel icon={leader ? <UnfollowIcon fontSize="small" /> : <FollowIcon fontSize="small" />}>
+            {title}
+          </MenuItemLabel>
+        </MenuItem>
+        {rules.dialog}
+      </>
     );
   }
 
   return (
-    <Button
-      onClick={onClick}
-      disabled={waiting}
-      color={color}
-      fullWidth={fullWidth}
-      variant={drawn}
-      startIcon={leader ? null : <AddIcon />}
-      ref={ref}
-    >
-      {title}
-    </Button>
+    <>
+      <Button
+        onClick={onClick}
+        disabled={waiting}
+        color={color}
+        fullWidth={fullWidth}
+        variant={drawn}
+        startIcon={leader ? null : <AddIcon />}
+        ref={ref}
+      >
+        {title}
+      </Button>
+      {rules.dialog}
+    </>
   );
 });
 

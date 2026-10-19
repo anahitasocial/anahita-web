@@ -12,7 +12,14 @@ export default {
     siteRules: "Les règles du site s'appliquent aussi ici.",
     siteRulesLink: 'Les lire',
   },
+  // Before joining a group or an event with rules.
+  join: {
+    title: 'Les règles de {{name}}',
+    intro: "Cochez chacune pour l'accepter avant de rejoindre.",
+    agree: "J'accepte",
+  },
   prompts: {
+    notAgreed: "Votre accord n'a pas pu être enregistré. Veuillez réessayer.",
     saved: 'Règles enregistrées. Tous ceux qui les avaient acceptées devront les accepter de nouveau.',
     notSaved: "Les règles n'ont pas pu être enregistrées.",
   },

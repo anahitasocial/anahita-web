@@ -13,7 +13,14 @@ export default {
     siteRules: "The site's rules apply here too.",
     siteRulesLink: 'Read them',
   },
+  // Before joining a group or an event with rules.
+  join: {
+    title: "{{name}}'s rules",
+    intro: 'Tick each one to agree to it before you join.',
+    agree: 'I agree',
+  },
   prompts: {
+    notAgreed: 'Your agreement could not be recorded. Please try again.',
     saved: 'Rules saved. Everybody who agreed will be asked again.',
     notSaved: 'The rules could not be saved.',
   },

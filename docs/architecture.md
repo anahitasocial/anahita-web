@@ -100,7 +100,11 @@ Four components guard routes (`src/routes/`):
   and an event's rules are written in a Rules tab of its settings
   (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
   suggestions or written) and listed in its About card
-  (`actors/Read/useRules.js`). See
+  (`actors/Read/useRules.js`). Following one, asking to, answering an event
+  or accepting an invitation first asks for its rules, ticked one at a time
+  in a dialog (`containers/rules/useRulesFirst.jsx`, `components/RulesChecklist.jsx`,
+  which `/rules` uses too), unless the viewer agreed to the version they are
+  at; the server refuses otherwise (409 `rules_not_agreed`). See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
 - **`OnboardingGate`**, inside it, sends a signed-in person with an
   incomplete profile to `/onboarding`, once, and waits while the agreements
