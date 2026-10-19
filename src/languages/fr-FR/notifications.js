@@ -30,6 +30,7 @@ export default {
   none: 'Rien pour l’instant. Vous verrez ici qui vous suit, vous répond ou vous mentionne.',
   failed: 'Impossible de charger vos notifications',
   markRead: 'Marquer comme lu',
+  seeAll: 'Tout voir',
   voteupOthers_one: '<0>{{subject}}</0> et {{count}} autre personne ont aimé votre <1>publication</1>',
   voteupOthers_other: '<0>{{subject}}</0> et {{count}} autres personnes ont aimé votre <1>publication</1>',
   repostAddOthers_one: '<0>{{subject}}</0> et {{count}} autre personne ont repartagé votre <1>publication</1>',

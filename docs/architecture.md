@@ -894,6 +894,10 @@ emailed.
   when the newest was told (`newestAt`, from `GET /notifications/unread-count`).
   Marking one read or deleting an unread one lowers it at once. The list,
   when open, loads again from its start when something newer comes.
+- **The bell's menu** (`containers/notifications/Menu.jsx`), on a desktop:
+  the latest eight as on the page, grouped and with their actions, Mark all
+  read and See all. Following a link in it reads that one and closes it. On
+  a phone the bell goes to the page.
 - **The list** is `containers/notifications/Browse/`. Each kind has its
   words in `notifications` (`notifications:replyAdd` for `reply_add`), and
   `constants/notifications.js` lists the kinds the services send, which a

@@ -30,6 +30,7 @@ export default {
   none: 'Todavía no hay nada. Aquí verás quién te sigue, te responde o te menciona.',
   failed: 'No se pudieron cargar tus notificaciones',
   markRead: 'Marcar como leída',
+  seeAll: 'Ver todas',
   voteupOthers_one: '<0>{{subject}}</0> y {{count}} persona más le dieron Me gusta a tu <1>publicación</1>',
   voteupOthers_other: '<0>{{subject}}</0> y {{count}} personas más le dieron Me gusta a tu <1>publicación</1>',
   repostAddOthers_one: '<0>{{subject}}</0> y {{count}} persona más compartieron tu <1>publicación</1>',

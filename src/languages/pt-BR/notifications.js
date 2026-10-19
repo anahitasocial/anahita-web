@@ -30,6 +30,7 @@ export default {
   none: 'Nada por aqui ainda. Aqui você verá quem segue você, responde a você ou menciona você.',
   failed: 'Não foi possível carregar suas notificações',
   markRead: 'Marcar como lida',
+  seeAll: 'Ver todas',
   voteupOthers_one: '<0>{{subject}}</0> e mais {{count}} pessoa curtiram sua <1>publicação</1>',
   voteupOthers_other: '<0>{{subject}}</0> e mais {{count}} pessoas curtiram sua <1>publicação</1>',
   repostAddOthers_one: '<0>{{subject}}</0> e mais {{count}} pessoa repostaram sua <1>publicação</1>',

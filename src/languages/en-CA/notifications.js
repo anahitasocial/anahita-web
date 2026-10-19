@@ -30,6 +30,7 @@ export default {
   none: 'Nothing here yet. Who follows you, replies to you or mentions you will show up here.',
   failed: "Your notifications couldn't be loaded",
   markRead: 'Mark as read',
+  seeAll: 'See all',
   voteupOthers_one: '<0>{{subject}}</0> and {{count}} other liked your <1>post</1>',
   voteupOthers_other: '<0>{{subject}}</0> and {{count}} others liked your <1>post</1>',
   repostAddOthers_one: '<0>{{subject}}</0> and {{count}} other reposted your <1>post</1>',

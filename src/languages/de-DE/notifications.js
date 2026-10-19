@@ -30,6 +30,7 @@ export default {
   none: 'Noch nichts da. Hier erscheint, wer dir folgt, dir antwortet oder dich erwähnt.',
   failed: 'Deine Benachrichtigungen konnten nicht geladen werden',
   markRead: 'Als gelesen markieren',
+  seeAll: 'Alle ansehen',
   voteupOthers_one: '<0>{{subject}}</0> und {{count}} weitere Person haben deinen <1>Beitrag</1> mit „Gefällt mir“ markiert',
   voteupOthers_other: '<0>{{subject}}</0> und {{count}} weitere Personen haben deinen <1>Beitrag</1> mit „Gefällt mir“ markiert',
   repostAddOthers_one: '<0>{{subject}}</0> und {{count}} weitere Person haben deinen <1>Beitrag</1> geteilt',
