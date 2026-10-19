@@ -20,4 +20,10 @@ export default {
   PLACE_NAME_MAX: 100,
   // An image's description, as written here: what Bluesky's app takes.
   ALT_TEXT_MAX: 2000,
+  // What other networks show of a post (bsky.PostMax and ap.PicturesShownMax
+  // in the services): Bluesky's 300 letters, and the four pictures of a
+  // stock Mastodon server and Bluesky. A post over either goes out with a
+  // link to the rest here.
+  BLUESKY_POST_MAX: 300,
+  PICTURES_SHOWN_MAX: 4,
 };

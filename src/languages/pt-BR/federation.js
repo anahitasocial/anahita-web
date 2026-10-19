@@ -25,6 +25,10 @@ export default {
     replyStaysHereBluesky: 'Sua resposta será lida aqui, e não no Bluesky. Para responder lá também, conecte sua conta do Bluesky nas suas configurações, em Fediverso.',
     staysHere: 'Esta nota não será compartilhada com o fediverso: só uma nota aberta a todo mundo é.',
     articleStaysHere: 'Este artigo não será compartilhado com o fediverso: só um artigo aberto a todo mundo é.',
+    cutForBluesky: 'O Bluesky mostra os primeiros {{max}} caracteres, com um link para o resto aqui.',
+    morePictures: 'O Mastodon e o Bluesky mostram as primeiras {{max}} fotos, com um link para todas aqui.',
+    morePicturesMastodon: 'O Mastodon mostra as primeiras {{max}} fotos, com um link para todas aqui.',
+    morePicturesBluesky: 'O Bluesky mostra as primeiras {{max}} fotos, com um link para todas aqui.',
   },
   leaving: {
     byClosing: 'Este perfil está no fediverso, onde só pode estar um perfil aberto a todo mundo. Salvar isto tira o perfil do fediverso: os outros servidores são avisados para remover o perfil, as notas e os seguidores dele de lá, e podem não aceitá-lo de volta se ele for aberto de novo.',
