@@ -5,6 +5,12 @@ export default {
   cDescription: 'What this site is running.',
   unavailable: 'This site did not return its NodeInfo document.',
   readOnly: 'Reported by the server. Change these in the server configuration.',
+  // What the site promises (site.json, roadmap row 102), and the way to
+  // its rules.
+  promises: {
+    title: 'Our promises to you',
+    rules: 'Read our rules',
+  },
   // Two headings and one set of bare field labels, so a row says
   // "Repository" rather than "Server repository" under a heading
   // that already said Server.

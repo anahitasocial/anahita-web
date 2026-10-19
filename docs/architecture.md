@@ -92,7 +92,9 @@ Four components guard routes (`src/routes/`):
   a moment after the one before is ticked, the keyboard following; for
   anybody not behind on them it is a numbered list to read. With
   `metadata.siteRules` false, only a super administrator who never agreed
-  is sent. `OnboardingGate` waits for both. See
+  is sent. `OnboardingGate` waits for both. The About page shows the
+  site's promises first, from the same `GET /site`, with the way to
+  `/rules` (`containers/about/Promises.jsx`). See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
 - **`OnboardingGate`**, inside it, sends a signed-in person with an
   incomplete profile to `/onboarding`, once, and waits while the agreements

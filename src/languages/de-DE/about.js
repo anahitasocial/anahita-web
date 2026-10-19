@@ -5,6 +5,10 @@ export default {
   cDescription: 'Was auf dieser Website läuft.',
   unavailable: 'Diese Website hat ihr NodeInfo-Dokument nicht geliefert.',
   readOnly: 'Vom Server gemeldet. Ändern lässt sich das in der Serverkonfiguration.',
+  promises: {
+    title: 'Unsere Versprechen an dich',
+    rules: 'Unsere Regeln lesen',
+  },
   // Two headings and one set of bare field labels, so a row says
   // "Repository" rather than "Server repository" under a heading
   // that already said Server.

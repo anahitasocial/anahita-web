@@ -18,6 +18,7 @@ import { makeStyles } from 'tss-react/mui';
 import AboutIcon from '@mui/icons-material/Info';
 
 import i18n from '../../languages';
+import Promises from './Promises';
 import NodeInfoType from '../../proptypes/NodeInfo';
 import packageInfo from '../../../package.json';
 
@@ -96,6 +97,9 @@ const SettingsAbout = ({
 
   return (
     <Container maxWidth="md" className={classes.container}>
+      {/* What the site promises, first: what somebody deciding whether to
+          join wants to know before what software it runs. */}
+      <Promises />
       <Card>
         {/* Titled with the instance name and subtitled with the
             operator's own description — the pair those two NodeInfo
