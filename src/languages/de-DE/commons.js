@@ -14,8 +14,8 @@ export default {
   },
   // How many, beside a hashtag or a place in a list.
   counts: {
-    people_one: '{{count}} Person',
-    people_other: '{{count}} Personen',
+    profiles_one: '{{count}} Profil',
+    profiles_other: '{{count}} Profile',
     posts_one: '{{count}} Beitrag',
     posts_other: '{{count}} Beiträge',
   },

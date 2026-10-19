@@ -40,16 +40,14 @@ const trendingHeader = (answer, isEmpty) => {
   return <TrendingWindow window={answer ? answer.window : ''} empty={isEmpty} />;
 };
 
-// A place in a list; in what is trending, with how many people lately.
+// A location in a list; in what is trending, with how many profiles lately.
 const row = (location) => {
   return (
     <ListItem
       key={`location-${location.id}`}
       location={location}
-      actions={location.people ?
-        <Typography variant="body2" color="textSecondary">
-          {i18n.t('commons:counts.people', { count: location.people })}
-        </Typography> :
+      detail={location.profiles ?
+        i18n.t('commons:counts.profiles', { count: location.profiles }) :
         null}
     />
   );
@@ -93,7 +91,7 @@ const useWhereIAm = (wanted) => {
 };
 
 // The Locations page (the user, 2026-10-17): what is trending, with how
-// many people tied a post to each and over what span of time; the places
+// many profiles used each and over what span of time; the locations
 // nearest the viewer; and all of them, A to Z, to search. Popular and
 // Recent were dropped, as on the Hashtags page.
 const Locations = () => {
