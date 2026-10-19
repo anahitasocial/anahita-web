@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useSelector } from 'react-redux';
 import { useGeolocated } from 'react-geolocated';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -15,6 +16,7 @@ import NodeType from '../../../proptypes/Node';
 import LocationsList from './List';
 import AddLocation from './Add';
 import i18n from '../../../languages';
+import permissions from '../../../permissions';
 
 const TABS = {
   SEARCH: 'search',
@@ -37,6 +39,15 @@ const LocationsSelector = ({
 }) => {
   const theme = useTheme();
   const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+  // Who may add a location is the installation's (LOCATIONS_FROM); the
+  // others search and tie their post to one that exists.
+  const canAdd = useSelector((state) => {
+    const { nodeInfo } = state.app;
+    return permissions.location.canAdd(
+      state.session.viewer,
+      (nodeInfo && nodeInfo.metadata) || {},
+    );
+  });
 
   // The dialog stays mounted while closed, so it asks for the viewer's
   // position when it opens, not when it mounts.
@@ -112,6 +123,7 @@ const LocationsSelector = ({
           <CloseIcon />
         </IconButton>
       </DialogTitle>
+      {canAdd &&
       <Tabs
         value={tab}
         onChange={(event, value) => {
@@ -123,7 +135,7 @@ const LocationsSelector = ({
       >
         <Tab label={i18n.t('actions:search')} value={TABS.SEARCH} />
         <Tab label={i18n.t('actions:add')} value={TABS.ADD} />
-      </Tabs>
+      </Tabs>}
       <Divider />
       {tab === TABS.SEARCH &&
       <LocationsList
@@ -135,13 +147,13 @@ const LocationsSelector = ({
           nearby_longitude: here.longitude,
         }}
         handleClose={handleClose}
-        onCreate={() => {
+        onCreate={canAdd ? () => {
           setTab(TABS.ADD);
-        }}
+        } : null}
         selectedLocations={selectedLocations}
         onChange={handleChanged}
       />}
-      {tab === TABS.ADD &&
+      {canAdd && tab === TABS.ADD &&
       <AddLocation
         node={node}
         name={keyword}

@@ -293,4 +293,4 @@ where the photo uploads start). Nothing about the position is sent but the
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-18 |
-| Implementation | begun 2026-10-18 on branch `locations` in both repositories. Part 1, one word, done. Part 2, without an address, done, with a postal code; saving from the form is not yet tried in a browser, the test account not being an administrator, who alone may add a location. On the way: trending counts profiles of every kind, each once |
+| Implementation | begun 2026-10-18 on branch `locations` in both repositories. Part 1, one word, done. Part 2, without an address, done, with a postal code; saving from the form is not yet tried in a browser, the test account not being an administrator, who alone may add a location. On the way: trending counts profiles of every kind, each once; and who may add a location is the installation's, `LOCATIONS_FROM`, administrators unless set. Parts 3, 4 and 5 to come |

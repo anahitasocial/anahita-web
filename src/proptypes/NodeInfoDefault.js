@@ -35,6 +35,7 @@ export default {
     invitesFrom: '',
     groupsFrom: '',
     websitesFrom: '',
+    locationsFrom: '',
     supportEmail: '',
     supportPhone: '',
     supportWebsite: '',
