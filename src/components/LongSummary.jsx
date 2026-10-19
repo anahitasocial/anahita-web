@@ -64,7 +64,8 @@ const LongSummary = ({ node, url }) => {
   return (
     <Box>
       {opening &&
-        <Typography variant="body1" dir="auto" lang={lang}>
+        // A long address breaks rather than running past the card.
+        <Typography variant="body1" dir="auto" lang={lang} sx={{ overflowWrap: 'anywhere' }}>
           {opening}
         </Typography>}
       {inside.length > 0 &&

@@ -22,6 +22,8 @@ import RepliesThread from '../../replies/Thread';
 import LocationsGadget from '../../locations/Gadget';
 import Likes from '../../likes';
 import MediaMenu from '../MediaMenu';
+import ControlRepost from '../../controls/Repost';
+import { ShareAction, ofNode } from '../../controls/Share';
 import Lightbox from './Lightbox';
 import MediumForm from '../EditForm';
 
@@ -174,11 +176,15 @@ const MediaStepperView = ({
             handleEdit={handleEdit}
             key={`${namespace}-menu-${medium.id}`}
           />}
-        actions={isAuthenticated && Like &&
-          <Like
-            node={medium}
-            key={`like-${medium.id}`}
-          />}
+        // As on the post's own page, without Download, which has no room
+        // beside the picture. No Reply: the Replies tab below has the box.
+        actions={isAuthenticated && [
+          Like && <Like node={medium} key={`like-${medium.id}`} />,
+          // A reply is not passed on without its thread.
+          !medium.rootId &&
+            <ControlRepost parent={medium} key={`repost-${medium.id}`} />,
+          <ShareAction what={ofNode(medium)} key={`share-${medium.id}`} />,
+        ]}
         stats={
           <Likes node={medium} key={`likes-${medium.id}`} />
         }

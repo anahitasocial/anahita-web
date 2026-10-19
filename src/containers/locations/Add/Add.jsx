@@ -4,7 +4,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
 
 import LocationForm from './AddForm';
 import api from '../../../api';
@@ -29,6 +30,8 @@ if (!process.env.REACT_APP_LOCATION_FIXED_COUNTRY) {
 
 const formFields = form.createFormFields(fieldNames);
 
+const FORM_ID = 'location-add-form';
+
 const LocationsSelectorAdd = (props) => {
   const {
     node,
@@ -42,6 +45,8 @@ const LocationsSelectorAdd = (props) => {
   /* eslint no-unused-vars: "off" */
   const [location, setLocation] = useState({
     ...LocationDefault,
+    // What was searched for, so a place not found is added under that name.
+    name,
     country: process.env.REACT_APP_LOCATION_FIXED_COUNTRY,
     state_province: process.env.REACT_APP_LOCATION_FIXED_STATE_PROVINCE,
     city: process.env.REACT_APP_LOCATION_FIXED_CITY,
@@ -94,28 +99,33 @@ const LocationsSelectorAdd = (props) => {
     setFields({ ...newFields });
   };
 
+  // The form scrolls inside the dialog's fixed height, and its button stays
+  // in view under it, tied to the form by its id.
   return (
-    <Card>
-      <LocationForm
-        fields={fields}
-        location={location}
-        handleOnChange={handleOnChange}
-        handleOnSubmit={handleOnSubmit}
-        isFetching={isFetching}
-        actions={
-          <Button
-            type="submit"
-            color="primary"
-            disabled={isFetching}
-            variant="contained"
-            size="small"
-            fullWidth
-          >
-            {i18n.t('actions:add')}
-          </Button>
-        }
-      />
-    </Card>
+    <>
+      <DialogContent sx={{ p: 0 }}>
+        <LocationForm
+          id={FORM_ID}
+          fields={fields}
+          location={location}
+          handleOnChange={handleOnChange}
+          handleOnSubmit={handleOnSubmit}
+          isFetching={isFetching}
+        />
+      </DialogContent>
+      <DialogActions sx={{ px: 3, pb: 2 }}>
+        <Button
+          type="submit"
+          form={FORM_ID}
+          color="primary"
+          disabled={isFetching}
+          variant="contained"
+          fullWidth
+        >
+          {i18n.t('actions:add')}
+        </Button>
+      </DialogActions>
+    </>
   );
 };
 

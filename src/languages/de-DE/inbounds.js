@@ -1,4 +1,4 @@
 export default {
-  count: '{{count}} Knoten',
-  count_other: '{{count}} Knoten',
+  count: '{{count}} markiert',
+  count_other: '{{count}} markiert',
 };

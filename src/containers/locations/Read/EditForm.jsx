@@ -110,6 +110,7 @@ const LocationEditForm = ({
               {i18n.t('locations:location.country')}
             </InputLabel>
             <CountrySelect
+              variant="outlined"
               id="location-country"
               name="country"
               label={i18n.t('locations:location.country')}
@@ -128,6 +129,7 @@ const LocationEditForm = ({
               {i18n.t('locations:location.province')}
             </InputLabel>
             <RegionSelect
+              variant="outlined"
               id="state_province"
               name="state_province"
               label={i18n.t('locations:location.province')}

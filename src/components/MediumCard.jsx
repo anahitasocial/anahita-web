@@ -8,6 +8,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
+import PlayCircleIcon from '@mui/icons-material/PlayCircleOutlined';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
 
@@ -22,6 +23,8 @@ import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
 import LinkPreviewCard from './LinkPreviewCard';
 import VideoPlayer from './VideoPlayer';
+import videos from '../utils/videos';
+import i18n from '../languages';
 import linkPreviews from '../utils/linkPreviews';
 import Progress from './Progress';
 import LongSummary, { isLong, SummaryPicture } from './LongSummary';
@@ -153,9 +156,13 @@ const MediumCard = ({
               width: '100%',
               display: 'inline',
             }}
-            // One photo opens its post, as its title does. Only a post
-            // with several is stepped through (PhotoSlides, above).
+            // In a list that steps through its photos (a profile's Photos
+            // tab), one photo opens there too, as a post with several does;
+            // anywhere else it opens its post, as its title does.
             onClick={() => {
+              if (handleView) {
+                return handleView(medium.id);
+              }
               return navigate(url);
             }}
           >
@@ -172,7 +179,33 @@ const MediumCard = ({
         <CardContent>
           <Progress />
         </CardContent>}
-      {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
+      {/* In a list that steps through its posts (a profile's Videos tab), a
+          video is its poster, opened in the stepper to play; elsewhere it
+          plays where it is. */}
+      {medium.video && handleView &&
+        <ButtonBase
+          onClick={() => {
+            return handleView(medium.id);
+          }}
+          aria-label={i18n.t('media:stepper.open')}
+          sx={{
+            display: 'block', width: '100%', position: 'relative', bgcolor: '#000',
+          }}
+        >
+          {medium.video.poster &&
+            <CardMedia
+              component="img"
+              image={videos.urlOf(medium.video.poster)}
+              alt={medium.title || ''}
+            />}
+          <PlayCircleIcon
+            sx={{
+              position: 'absolute', inset: 0, m: 'auto', fontSize: 64, color: '#fff', opacity: 0.9,
+            }}
+          />
+        </ButtonBase>}
+      {medium.video && !handleView &&
+        <VideoPlayer video={medium.video} title={medium.title} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent

@@ -33,9 +33,11 @@ const LocationAddForm = ({
     'state_province',
     'country',
   ],
+  id = undefined,
 }) => {
   return (
     <form
+      id={id}
       onSubmit={handleOnSubmit}
       noValidate
       autoComplete="off"
@@ -110,6 +112,7 @@ const LocationAddForm = ({
               {i18n.t('locations:location.country')}
             </InputLabel>
             <CountrySelect
+              variant="outlined"
               id="location-country"
               name="country"
               label={i18n.t('locations:location.country')}
@@ -128,6 +131,7 @@ const LocationAddForm = ({
               {i18n.t('locations:location.province')}
             </InputLabel>
             <RegionSelect
+              variant="outlined"
               id="state_province"
               name="state_province"
               label={i18n.t('locations:location.province')}
@@ -147,6 +151,7 @@ const LocationAddForm = ({
 };
 
 LocationAddForm.propTypes = {
+  id: PropTypes.string,
   handleOnChange: PropTypes.func.isRequired,
   handleOnSubmit: PropTypes.func.isRequired,
   location: LocationType.isRequired,

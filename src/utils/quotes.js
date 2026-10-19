@@ -49,6 +49,15 @@ const isQuotedAuthor = (quote, viewer) => {
   );
 };
 
+// Why Quote is not offered on a post, as a string to show under it. Only a
+// public post can be quoted, the viewer's own included; on a public post
+// it is the author's choice that stops it.
+const whyNot = (post) => {
+  return post && post.access && post.access !== 'public' ?
+    'replies:quote.refused.not_public' :
+    'replies:quote.notOffered';
+};
+
 // Why the server refused a quote, as a string to show.
 const refusalKey = (error) => {
   const data = error && error.response && error.response.data;
@@ -69,5 +78,6 @@ export default {
   isQuotedAuthor,
   normalize,
   refusalKey,
+  whyNot,
   stateOf,
 };

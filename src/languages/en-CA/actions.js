@@ -27,4 +27,5 @@ export default {
   search: 'Search',
   repost: 'Repost',
   more: 'More',
+  close: 'Close',
 };

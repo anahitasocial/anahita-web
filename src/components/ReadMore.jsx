@@ -81,7 +81,9 @@ const ReadMore = ({
     <>
       <Box
         ref={body}
-        sx={isOpen ? undefined : {
+        // A long address breaks rather than running past the card.
+        sx={isOpen ? { overflowWrap: 'anywhere' } : {
+          overflowWrap: 'anywhere',
           maxHeight: `${lines * LINE}em`,
           overflow: 'hidden',
           ...(isClipped ? { maskImage: fade, WebkitMaskImage: fade } : {}),
