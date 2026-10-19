@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
+import Box from '@mui/material/Box';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import LocationIcon from '@mui/icons-material/LocationOnOutlined';
 
 import LocationPicker from './LocationPicker';
 import api from '../../../api';
+import i18n from '../../../languages';
 import { Medium as MEDIUM } from '../../../constants';
 
 // What is kept of a location with the draft: enough to show its chip and to
@@ -50,9 +53,10 @@ const write = (key, locations) => {
 // each profile, shared by the short box and the extended composer, so that
 // they go along when one becomes the other.
 //
-// The post is tagged once it exists, with the calls its Locations tab uses.
-// A tag that fails does not lose the post: `tag` says how many failed, and
-// they can be added from the post's page.
+// They are sent with the post (`location_ids`), and the server ties them as
+// it makes it, before it goes to other servers, which it then goes with
+// (the user, 2026-10-19; part 3b). A draft kept on the server is tied to
+// them before it is published (`tag`), for the same reason.
 const usePostLocations = (actorId) => {
   const key = keyFor(actorId);
   const [locations, setLocations] = useState(() => {
@@ -80,7 +84,13 @@ const usePostLocations = (actorId) => {
     change(locations.filter((each) => { return each.id !== location.id; }));
   };
 
-  // Ties the post to each location, answering how many could not be.
+  // What is sent with the post.
+  const ids = () => {
+    return locations.map((location) => { return location.id; });
+  };
+
+  // Ties a post that exists already, a draft, to each location, answering
+  // how many could not be.
   const tag = (post) => {
     if (!post || !post.id || locations.length === 0) {
       return Promise.resolve(0);
@@ -105,34 +115,43 @@ const usePostLocations = (actorId) => {
     clear: () => {
       change([]);
     },
+    ids,
     tag,
     button: ({ disabled = false } = {}) => {
       return (
         <LocationPicker chosen={locations} onPick={add} disabled={disabled} />
       );
     },
-    // Under the text, where the link card is.
-    chips: ({ disabled = false } = {}) => {
+    // Under the text, where the link card is; and, where the post will go
+    // to other servers, that they go with it, which is the consent it
+    // asks for.
+    chips: ({ disabled = false, goesOut = false } = {}) => {
       if (locations.length === 0) {
         return null;
       }
       return (
-        <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 1 }}>
-          {locations.map((location) => {
-            return (
-              <Chip
-                key={location.id}
-                icon={<LocationIcon />}
-                label={location.name}
-                size="small"
-                variant="outlined"
-                onDelete={disabled ? undefined : () => {
-                  remove(location);
-                }}
-              />
-            );
-          })}
-        </Stack>
+        <Box sx={{ mt: 1 }}>
+          <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1 }}>
+            {locations.map((location) => {
+              return (
+                <Chip
+                  key={location.id}
+                  icon={<LocationIcon />}
+                  label={location.name}
+                  size="small"
+                  variant="outlined"
+                  onDelete={disabled ? undefined : () => {
+                    remove(location);
+                  }}
+                />
+              );
+            })}
+          </Stack>
+          {goesOut &&
+          <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 0.5 }}>
+            {i18n.t('composer:locations.goesOut')}
+          </Typography>}
+        </Box>
       );
     },
   };

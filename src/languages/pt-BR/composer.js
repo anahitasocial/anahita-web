@@ -109,7 +109,6 @@ export default {
     hint: 'Digite um nome ou toque em Perto de mim.',
     addNew: 'Adicionar “{{name}}” como novo local',
     addTitle: 'Adicionar local',
-    failed_one: 'Publicado, mas {{count}} local não pôde ser adicionado. Você pode adicioná-lo na página da publicação.',
-    failed_other: 'Publicado, mas {{count}} locais não puderam ser adicionados. Você pode adicioná-los na página da publicação.',
+    goesOut: 'Vai com a publicação para outros servidores do fediverso.',
   },
 };

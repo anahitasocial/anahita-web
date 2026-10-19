@@ -695,9 +695,14 @@ whose post is made only once its upload is ready.
 - **Kept** with the draft in this browser, one list for each profile, shared
   by the short box and the extended composer, so they come along when one
   becomes the other.
-- **On posting** the post is tagged with the calls its Locations tab uses. A
-  tag that fails does not lose the post: the composer says so, and it can be
-  added from the post's page.
+- **On posting** they are sent with the post (`location_ids`), and the
+  server ties them as it makes it, before it goes to other servers, which it
+  then goes with: the first as its `location`, all as `Place`s in its `tag`
+  (the user, 2026-10-19: choosing them is the author's consent, for that
+  post; part 3b). Where the post will go out, a line under the chips says
+  so. A draft kept on the server is tied to them before it is published.
+  A form sends a list as the same key once for each item
+  (`utils/api.js#constructFormData`).
 
 ### Link previews
 

@@ -14,7 +14,10 @@ A post is tied to a location only after it is posted, from its Locations tab.
 Row 82 began as locations to and from other servers. On 2026-10-17 the user
 decided that locations come in from the fediverse and none go out; on
 2026-10-18 the row took in four smaller pieces of work on locations that make
-it easier for people here, done first.
+it easier for people here, done first. On 2026-10-19, with the composer's
+location button built, the user decided that a location somebody chooses for
+a post goes out with it (part 3b): choosing it is their consent, for that
+post.
 
 ## Decisions
 
@@ -25,9 +28,13 @@ Settled with the user on 2026-10-18:
   ActivityStreams type, `Place`.
 - **A location needs a name and a point.** The address is optional: it is
   there to find a point, and many locations have none.
-- **Locations come in from the fediverse, and none go out.** A `Place` on a
-  post from another server becomes a location here, or is matched to one,
-  and the post is tagged with it.
+- **Locations come in from the fediverse,** and **go out with a post its
+  author tagged** (the user, 2026-10-19). A `Place` on a post from another
+  server becomes a location here, or is matched to one, and the post is
+  tagged with it. A location chosen for a post here goes out with the post,
+  and no further: only with a post that goes to other servers anyway, and
+  the composer says so. Choosing it is the author's consent, for that post;
+  nobody's own position goes out (row 94).
 - **Nobody's position is kept.** The only position stored is a location's
   own point, chosen or found on purpose. The one exception was always a
   location tag, which is kept as it is.
@@ -91,6 +98,29 @@ height: the map sits in its scrolling part.
   location can be added from the post's page.
 - A draft keeps its locations.
 
+### 3b. Locations go out with the post
+
+Decided by the user on 2026-10-19 ("If people select a location, wouldn't
+that be a form of consent?").
+
+- **What goes out:** the first location chosen as the post's `location`, one
+  `Place` with its name, point and address, as Pixelfed sends and reads it;
+  every location, the first included, as a `Place` in the post's `tag`.
+  ActivityStreams 2.0 allows several in `location`, but servers that read it
+  expect one. Mastodon ignores both and shows nothing; Bluesky has no field,
+  and nothing goes there.
+- **Only with a post that goes out anyway:** public, on a profile that takes
+  part in the fediverse. The location is part of the post and goes no
+  further than the post.
+- **Before it is sent:** the composer sends the chosen locations with the
+  post (`location_ids` on adding a note, photo, article or topic), and the
+  post is tagged before it federates, so the `Create` carries them. Tagging
+  after posting, as part 3 did, sent the post without them.
+- **When they change:** adding or taking off a location on the post's page
+  sends the post again, as an `Update`.
+- **The composer says so:** where the post will go to other servers, the
+  location chips carry a line, "Goes with the post to other servers".
+
 ### 4. Locations from the fediverse
 
 In activitypub-service, when a post is kept (`store`, for public posts by
@@ -111,8 +141,8 @@ people followed here):
    version: tags it no longer names are taken off. A post taken away takes
    its tags with it, as today.
 
-Nothing is sent out: posts from here carry no `location`. Bluesky has no
-field for one and is left alone. `Arrive` and other check-ins are not read:
+What goes out is part 3b. Bluesky has no field for a location and is left
+alone. `Arrive` and other check-ins are not read:
 they are about where a person is (row 94).
 
 ### 5. Suggesting locations from a photo's position
@@ -293,4 +323,4 @@ where the photo uploads start). Nothing about the position is sent but the
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-18 |
-| Implementation | begun 2026-10-18 in both repositories. Parts 1 (one word) and 2 (without an address, with a postal code) done and merged, on branch `locations`; adding from the form tried by somebody registered under `LOCATIONS_FROM=registered`, editing and deleting by an administrator. On the way: trending counts profiles of every kind, each once; who may add a location is the installation's, `LOCATIONS_FROM`, administrators unless set; and deleting a location works (it was refused with 400). Part 3, the composer button, done on branch `locations-composer`, tried at both sizes: search, Near me, the keyboard, a new location, the draft, the extended composer, and the tags on posting. Parts 4 and 5 to come |
+| Implementation | begun 2026-10-18 in both repositories. Parts 1 (one word) and 2 (without an address, with a postal code) done and merged, on branch `locations`; adding from the form tried by somebody registered under `LOCATIONS_FROM=registered`, editing and deleting by an administrator. On the way: trending counts profiles of every kind, each once; who may add a location is the installation's, `LOCATIONS_FROM`, administrators unless set; and deleting a location works (it was refused with 400). Part 3, the composer button, done on branch `locations-composer`, tried at both sizes: search, Near me, the keyboard, a new location, the draft, the extended composer, and the tags on posting. Part 3b, locations going out with the post, done on the same branch: tied as the post is made (`location_ids`), sent as its `location` and as `Place`s in its `tag`, and sent again as an `Update` when they change on its page; tried from the composer to the graph, the outgoing note covered by activitypub-service's tests, since the test account does not take part in the fediverse. Parts 4 and 5 to come |

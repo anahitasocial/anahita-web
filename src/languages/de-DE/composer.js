@@ -109,7 +109,6 @@ export default {
     hint: 'Gib einen Namen ein oder tippe auf In meiner Nähe.',
     addNew: '„{{name}}“ als neuen Ort hinzufügen',
     addTitle: 'Ort hinzufügen',
-    failed_one: 'Veröffentlicht, aber {{count}} Ort konnte nicht hinzugefügt werden. Du kannst ihn auf der Seite des Beitrags hinzufügen.',
-    failed_other: 'Veröffentlicht, aber {{count}} Orte konnten nicht hinzugefügt werden. Du kannst sie auf der Seite des Beitrags hinzufügen.',
+    goesOut: 'Geht mit dem Beitrag an andere Server im Fediverse.',
   },
 };

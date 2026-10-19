@@ -15,7 +15,15 @@ const constructFormData = (params) => {
   const formData = new FormData();
   const keys = Object.keys(params);
 
+  // A list goes as the same key once for each item, as a form sends one
+  // (`location_ids=12&location_ids=31`), which the services read as a list;
+  // appended whole it would be one "12,31".
   keys.map((key) => {
+    if (Array.isArray(params[key])) {
+      return params[key].forEach((each) => {
+        formData.append(key, each);
+      });
+    }
     return formData.append(key, params[key]);
   });
 

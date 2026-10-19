@@ -110,7 +110,6 @@ export default {
     hint: 'Type a name, or tap Near me.',
     addNew: 'Add “{{name}}” as a new location',
     addTitle: 'Add location',
-    failed_one: 'Posted, but {{count}} location could not be added. You can add it from the post’s page.',
-    failed_other: 'Posted, but {{count}} locations could not be added. You can add them from the post’s page.',
+    goesOut: 'Goes with the post to other servers on the fediverse.',
   },
 };

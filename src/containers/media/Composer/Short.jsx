@@ -126,6 +126,8 @@ const ShortComposer = ({
   // followers on other servers. Said before posting when it will not.
   const onFediverse = useOnFediverse(viewer);
   const staysHere = onFediverse && actor.id === viewer.id && choices.access !== 'public';
+  // And, when it will go, its locations go with it.
+  const goesOut = onFediverse && actor.id === viewer.id && choices.access === 'public';
 
   const limits = {
     size: videos.megabytes(videos.maxBytes(nodeInfo)),
@@ -165,20 +167,17 @@ const ShortComposer = ({
   };
 
   const shared = () => {
-    return { content: text, ...choices.request() };
+    return {
+      content: text,
+      ...choices.request(),
+      // Tied as it is made, so it goes to other servers with them.
+      ...(postLocations.locations.length > 0 ? { location_ids: postLocations.ids() } : {}),
+    };
   };
 
-  // Tagged with its locations once it exists. A tag that fails does not
-  // lose the post: it is said, and can be added from the post's page.
-  const posted = (node) => {
-    return postLocations.tag(node).then((failed) => {
-      if (failed > 0) {
-        alertError(i18n.t('composer:locations.failed', { count: failed }));
-      } else {
-        alertSuccess(i18n.t('prompts:posted.success'));
-      }
-      reset();
-    });
+  const posted = () => {
+    alertSuccess(i18n.t('prompts:posted.success'));
+    reset();
   };
 
   const handleSubmit = (event) => {
@@ -359,7 +358,7 @@ const ShortComposer = ({
           preview={linkPreview.preview}
           onRemove={busy ? null : linkPreview.remove}
         />}
-      {!video && postLocations.chips({ disabled: busy })}
+      {!video && postLocations.chips({ disabled: busy, goesOut })}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>
           <PhotoFilesEditor

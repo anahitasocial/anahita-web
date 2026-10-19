@@ -19,7 +19,10 @@ describe('deletion.daysLeft', () => {
   });
 
   it('counts part of a day as a day, and never goes below 0', () => {
-    expect(deletion.daysLeft({ deletedAt: new Date(NOW - (29.5 * DAY)).toISOString() }, NOW)).toBe(1);
-    expect(deletion.daysLeft({ deletedAt: new Date(NOW - (40 * DAY)).toISOString() }, NOW)).toBe(0);
+    const daysAgo = (days) => {
+      return { deletedAt: new Date(NOW - (days * DAY)).toISOString() };
+    };
+    expect(deletion.daysLeft(daysAgo(29.5), NOW)).toBe(1);
+    expect(deletion.daysLeft(daysAgo(40), NOW)).toBe(0);
   });
 });

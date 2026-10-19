@@ -109,7 +109,6 @@ export default {
     hint: 'Escribe un nombre o toca Cerca de mí.',
     addNew: 'Agregar “{{name}}” como lugar nuevo',
     addTitle: 'Agregar lugar',
-    failed_one: 'Se publicó, pero no se pudo agregar {{count}} lugar. Puedes agregarlo desde la página de la publicación.',
-    failed_other: 'Se publicó, pero no se pudieron agregar {{count}} lugares. Puedes agregarlos desde la página de la publicación.',
+    goesOut: 'Se envía con la publicación a otros servidores del fediverso.',
   },
 };
