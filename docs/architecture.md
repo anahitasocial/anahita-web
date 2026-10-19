@@ -383,8 +383,10 @@ What the server stores and accepts is in the services'
 
 ### The photos of a post
 
-A photo post holds up to four images. The number comes from the server
-(`metadata.photoMaxFiles` in NodeInfo); the app does not carry it.
+A photo post holds up to twenty images, or fewer where the installation says
+so (`PHOTO_MAX_FILES`). The number comes from the server
+(`metadata.photoMaxFiles` in NodeInfo); the app does not carry it, but for
+four when the server has not said (`utils/photoFiles.js`).
 
 **Making one.** The photo composer (`Composer/Forms/Photo.jsx`) shows
 `components/PhotoFilesEditor.jsx`: pick or drop several images, put them in
