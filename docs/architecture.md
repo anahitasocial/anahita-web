@@ -383,8 +383,10 @@ What the server stores and accepts is in the services'
 
 ### The photos of a post
 
-A photo post holds up to four images. The number comes from the server
-(`metadata.photoMaxFiles` in NodeInfo); the app does not carry it.
+A photo post holds up to twenty images, or fewer where the installation says
+so (`PHOTO_MAX_FILES`). The number comes from the server
+(`metadata.photoMaxFiles` in NodeInfo); the app does not carry it, but for
+four when the server has not said (`utils/photoFiles.js`).
 
 **Making one.** The photo composer (`Composer/Forms/Photo.jsx`) shows
 `components/PhotoFilesEditor.jsx`: pick or drop several images, put them in
@@ -1274,6 +1276,15 @@ draws nothing (`utils/federation.js#isAbsent`).
   fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
   date by the switch in settings). Nothing is said to anybody else, or
   about any other kind of post: only public notes go out.
+- **What other networks will show** of a public post on the viewer's own
+  profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
+  past 300 characters, when their Bluesky account is connected, that
+  Bluesky shows the first 300 with a link to the rest; with more than four
+  photos, that Mastodon, Bluesky or both show the first four with a link to
+  all of them. The Bluesky line's room is kept while the post goes there, so
+  nothing moves as the words pass 300. The numbers are `BLUESKY_POST_MAX` and
+  `PICTURES_SHOWN_MAX` in `constants/limits.js`; the count is of what is
+  typed, Markdown's marks included, a little more than Bluesky is sent.
 - **Answering something from another server** is offered where the server
   says the viewer may (`authorized.comment`), as for any post: the reply is
   the viewer's own note and is sent to whoever it answers when the viewer

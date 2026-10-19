@@ -25,6 +25,10 @@ export default {
     replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Fediverse.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
     articleStaysHere: 'This article will not be shared with the fediverse: only an article open to everybody is.',
+    cutForBluesky: 'Bluesky shows the first {{max}} characters, with a link to the rest here.',
+    morePictures: 'Mastodon and Bluesky show the first {{max}} photos, with a link to all of them here.',
+    morePicturesMastodon: 'Mastodon shows the first {{max}} photos, with a link to all of them here.',
+    morePicturesBluesky: 'Bluesky shows the first {{max}} photos, with a link to all of them here.',
   },
   leaving: {
     byClosing: 'This profile is on the fediverse, where only a profile open to everybody can be. Saving this takes it off the fediverse: other servers are told to remove it, its notes and its followers there, and may not take it back if it is opened again.',

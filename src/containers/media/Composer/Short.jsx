@@ -29,7 +29,7 @@ import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
 import useTextareaHashtags from './useHashtagSuggestions';
 import HashtagSuggestions from '../../../components/HashtagSuggestions';
-import useOnFediverse from './useOnFediverse';
+import useOnFediverse, { useOnBluesky } from './useOnFediverse';
 import useVideoUpload from './Video/useVideoUpload';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
@@ -41,6 +41,7 @@ import utils from '../../../utils';
 import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
+import LIMITS from '../../../constants/limits';
 import i18n from '../../../languages';
 
 const { CONTENT } = MEDIUM.FIELDS;
@@ -135,6 +136,17 @@ const ShortComposer = ({
   const staysHere = onFediverse && actor.id === viewer.id && choices.access !== 'public';
   // And, when it will go, its locations go with it.
   const goesOut = onFediverse && actor.id === viewer.id && choices.access === 'public';
+  // And to Bluesky, where the writer has connected their account there.
+  const onBluesky = useOnBluesky(viewer);
+  const goesToBluesky = onBluesky && actor.id === viewer.id && choices.access === 'public';
+  // What other networks will show of it, said before it is posted (roadmap
+  // row 100): the first 300 letters on Bluesky, the first four pictures on
+  // Mastodon and Bluesky, with a link to the post here for the rest.
+  const cutForBluesky = goesToBluesky && [...body].length > LIMITS.BLUESKY_POST_MAX;
+  const morePictures = photoItems.length > LIMITS.PICTURES_SHOWN_MAX && (
+    (goesOut && goesToBluesky && 'federation:composer.morePictures') ||
+    (goesOut && 'federation:composer.morePicturesMastodon') ||
+    (goesToBluesky && 'federation:composer.morePicturesBluesky'));
 
   const limits = {
     size: videos.megabytes(videos.maxBytes(nodeInfo)),
@@ -449,6 +461,18 @@ const ShortComposer = ({
       {staysHere &&
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {i18n.t('federation:composer.staysHere')}
+        </Typography>}
+      {morePictures &&
+        <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+          {i18n.t(morePictures, { max: LIMITS.PICTURES_SHOWN_MAX })}
+        </Typography>}
+      {/* Its line is kept while the post goes to Bluesky, so that nothing
+          moves when the words grow past what a post there holds. */}
+      {goesToBluesky &&
+        <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+          {cutForBluesky ?
+            i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
+            ' '}
         </Typography>}
     </>
   );
