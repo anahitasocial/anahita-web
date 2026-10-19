@@ -130,9 +130,11 @@ people followed here):
    `tag` (what it is about), with the existing `ReadPlace`: a name and a
    point, and its `id` when it has one (places.pub gives OpenStreetMap
    places stable addresses). At most five, as for any post.
-2. **Match** each to a location here: one with the same address (its `uri`,
-   where an earlier `Place` set it); else one with the same name within
-   25 km (Pixelfed's places are mostly cities); else any within 100 m.
+2. **Match** each to a location here: one with the same name within
+   25 km (Pixelfed's places are mostly cities); else any within 100 m. A
+   place's own address is not kept yet (built 2026-10-19): the graph keeps
+   addresses only for profiles and posts from elsewhere, and Pixelfed sends
+   none; keeping one would need the graph to take it for a location.
 3. **Make** one when none matches: its name, its point rounded to four
    decimals (about 11 m), its address as its `uri` when it has one, and the
    post's author as the one who made it, as hashtags are put down to whoever
@@ -304,8 +306,8 @@ where the photo uploads start). Nothing about the position is sent but the
 
 ## Open questions
 
-1. **An operator's switch** for taking in locations from the fediverse: on by
-   default, off by default, or none?
+None. The operator's switch was settled by the user on 2026-10-19:
+`FEDERATION_LOCATIONS`, on unless `off`.
 
 ## Estimate
 
@@ -323,4 +325,4 @@ where the photo uploads start). Nothing about the position is sent but the
 | Item | State |
 | --- | --- |
 | Plan | written 2026-10-18 |
-| Implementation | begun 2026-10-18 in both repositories. Parts 1 (one word) and 2 (without an address, with a postal code) done and merged, on branch `locations`; adding from the form tried by somebody registered under `LOCATIONS_FROM=registered`, editing and deleting by an administrator. On the way: trending counts profiles of every kind, each once; who may add a location is the installation's, `LOCATIONS_FROM`, administrators unless set; and deleting a location works (it was refused with 400). Part 3, the composer button, done on branch `locations-composer`, tried at both sizes: search, Near me, the keyboard, a new location, the draft, the extended composer, and the tags on posting. Part 3b, locations going out with the post, done on the same branch: tied as the post is made (`location_ids`), sent as its `location` and as `Place`s in its `tag`, and sent again as an `Update` when they change on its page; tried from the composer to the graph, the outgoing note covered by activitypub-service's tests, since the test account does not take part in the fediverse. Parts 4 and 5 to come |
+| Implementation | begun 2026-10-18 in both repositories. Parts 1 (one word) and 2 (without an address, with a postal code) done and merged, on branch `locations`; adding from the form tried by somebody registered under `LOCATIONS_FROM=registered`, editing and deleting by an administrator. On the way: trending counts profiles of every kind, each once; who may add a location is the installation's, `LOCATIONS_FROM`, administrators unless set; and deleting a location works (it was refused with 400). Part 3, the composer button, done on branch `locations-composer`, tried at both sizes: search, Near me, the keyboard, a new location, the draft, the extended composer, and the tags on posting. Part 4, locations from the fediverse, done on the same branch: a post kept from elsewhere is tagged with the Places it names, matched by name within 25 km or by point within 100 m, or made; an edit takes off what it no longer names; `FEDERATION_LOCATIONS` turns it off; tested with fakes, not yet with a post from a real server. Part 3b, locations going out with the post, done on the same branch: tied as the post is made (`location_ids`), sent as its `location` and as `Place`s in its `tag`, and sent again as an `Update` when they change on its page; tried from the composer to the graph, the outgoing note covered by activitypub-service's tests, since the test account does not take part in the fediverse. Part 5 to come |
