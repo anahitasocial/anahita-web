@@ -51,3 +51,32 @@ describe('needsAcceptance', () => {
     expect(needsAcceptance({ accepted: true, version: '2.0.0' }, '1.0.0')).toBe(false);
   });
 });
+
+// The site's rules (roadmap row 102): their version is the server's, from
+// GET /site; the version agreed to is on the session.
+describe('hasOutdatedRules', () => {
+  const { hasOutdatedRules } = agreements;
+  const site = { rules: { version: '2', items: [{ title: { 'en-CA': 'No hate.' } }] } };
+  const member = (version) => {
+    return { personType: 'registered', rulesAgreement: version ? { accepted: true, version } : null };
+  };
+
+  it('asks somebody who never agreed, and somebody behind', () => {
+    expect(hasOutdatedRules(member(null), site)).toBe(true);
+    expect(hasOutdatedRules(member('1'), site)).toBe(true);
+    expect(hasOutdatedRules(member('2'), site)).toBe(false);
+  });
+
+  it('asks nothing while the site has not said, or has no rules', () => {
+    expect(hasOutdatedRules(member(null), null)).toBe(false);
+    expect(hasOutdatedRules(member(null), { rules: { version: '1', items: [] } })).toBe(false);
+  });
+
+  // SITE_RULES off: a super administrator who never agreed is reminded once.
+  it('with the rules off, asks only a super administrator, once', () => {
+    expect(hasOutdatedRules(member(null), site, false)).toBe(false);
+    const superAdmin = { personType: 'super-administrator', rulesAgreement: null };
+    expect(hasOutdatedRules(superAdmin, site, false)).toBe(true);
+    expect(hasOutdatedRules({ ...superAdmin, rulesAgreement: { accepted: true, version: '1' } }, site, false)).toBe(false);
+  });
+});

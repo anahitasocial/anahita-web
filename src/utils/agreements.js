@@ -54,10 +54,30 @@ const hasOutdatedTerms = (viewer) => {
   return hasOutdatedTos(viewer) || hasOutdatedPrivacy(viewer);
 };
 
+// Whether the viewer has to tick the site's rules (roadmap row 102): the
+// rules and their version are the server's (GET /site), and the version
+// agreed to arrives on the session. Nothing to ask while the site has not
+// said, or has no rules. With SITE_RULES off (`rulesOn` false), only a super
+// administrator who never agreed is shown them, once: a reminder of what
+// Anahita is not for.
+const hasOutdatedRules = (viewer, site, rulesOn = true) => {
+  const rules = site && site.rules;
+  if (!rules || !Array.isArray(rules.items) || rules.items.length === 0) {
+    return false;
+  }
+  const agreement = viewer && viewer.rulesAgreement;
+  if (!rulesOn) {
+    return Boolean(viewer) && viewer.personType === 'super-administrator' &&
+      !(agreement && agreement.accepted);
+  }
+  return needsAcceptance(agreement, rules.version);
+};
+
 export default {
   compareVersions,
   needsAcceptance,
   hasOutdatedTos,
+  hasOutdatedRules,
   hasOutdatedPrivacy,
   hasOutdatedTerms,
 };

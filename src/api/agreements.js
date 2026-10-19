@@ -29,8 +29,15 @@ const editPrivacy = (version) => {
   return axios.patch('/agreements/privacy', { version, accepted: true });
 };
 
+// The site's rules, each ticked (roadmap row 102). The version is the one
+// GET /site has now: the server refuses any other.
+const editRules = (version) => {
+  return axios.patch('/agreements/rules', { version, accepted: true });
+};
+
 export default {
   read,
   editTos,
   editPrivacy,
+  editRules,
 };

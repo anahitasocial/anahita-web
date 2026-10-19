@@ -84,7 +84,15 @@ Four components guard routes (`src/routes/`):
   every reload.
 - **`AgreementsGate`** wraps the whole route table. It sends a signed-in person
   to `/agreements` when the Terms of Service or Privacy Policy has a newer
-  version than the one they accepted. See
+  version than the one they accepted; after that, to `/rules` when the
+  site's rules have (roadmap row 102). The rules are the server's, read once
+  from `GET /site` (`containers/site/useSite.js`, `useRules`, with its own
+  client: no credentials, and language names left as they are). On their
+  page (`containers/rules`) each is ticked in turn: the next zooms forward
+  a moment after the one before is ticked, the keyboard following; for
+  anybody not behind on them it is a numbered list to read. With
+  `metadata.siteRules` false, only a super administrator who never agreed
+  is sent. `OnboardingGate` waits for both. See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
 - **`OnboardingGate`**, inside it, sends a signed-in person with an
   incomplete profile to `/onboarding`, once, and waits while the agreements
