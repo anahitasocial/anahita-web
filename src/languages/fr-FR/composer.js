@@ -79,4 +79,13 @@ export default {
     uses_other: '{{ short }} publications',
     followed: 'Vous le suivez',
   },
+  locations: {
+    add: 'Ajouter un lieu',
+    nearMe: 'Près de moi',
+    hint: 'Tapez un nom, ou touchez Près de moi.',
+    addNew: 'Ajouter « {{name}} » comme nouveau lieu',
+    addTitle: 'Ajouter un lieu',
+    failed_one: 'Publié, mais {{count}} lieu n’a pas pu être ajouté. Vous pouvez l’ajouter depuis la page de la publication.',
+    failed_other: 'Publié, mais {{count}} lieux n’ont pas pu être ajoutés. Vous pouvez les ajouter depuis la page de la publication.',
+  },
 };

@@ -103,4 +103,13 @@ export default {
     uses_other: '{{ short }} publicaciones',
     followed: 'Lo sigues',
   },
+  locations: {
+    add: 'Agregar lugar',
+    nearMe: 'Cerca de mí',
+    hint: 'Escribe un nombre o toca Cerca de mí.',
+    addNew: 'Agregar “{{name}}” como lugar nuevo',
+    addTitle: 'Agregar lugar',
+    failed_one: 'Se publicó, pero no se pudo agregar {{count}} lugar. Puedes agregarlo desde la página de la publicación.',
+    failed_other: 'Se publicó, pero no se pudieron agregar {{count}} lugares. Puedes agregarlos desde la página de la publicación.',
+  },
 };

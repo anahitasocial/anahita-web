@@ -676,6 +676,29 @@ installation's export service (`/exports`; the services'
 - **Where there is no export service**, the card says the download is not
   available here (`utils/exports.js#isAbsent`).
 
+### Locations of a new post
+
+The pin among a composer's small buttons, **Add location**, in the short box
+and the extended composer, tags a new post with up to five locations
+(`containers/media/Composer/usePostLocations.jsx`, `LocationPicker.jsx`; roadmap
+row 82, part 3). Not replies, which belong to their thread, and not a video,
+whose post is made only once its upload is ready.
+
+- **Choosing:** a popover with a search as one types, the arrow keys and
+  Enter, and a **Near me** chip that asks the browser for one position only
+  when it is tapped, to put the nearest first; it is used for that search and
+  kept nowhere.
+- **A new one:** the last line, **Add "…" as a new location**, for those who
+  may add one (`LOCATIONS_FROM`), opens the Add locations form with the name
+  filled in, and what it makes is chosen.
+- **Shown** as chips under the text, removed with their ✕.
+- **Kept** with the draft in this browser, one list for each profile, shared
+  by the short box and the extended composer, so they come along when one
+  becomes the other.
+- **On posting** the post is tagged with the calls its Locations tab uses. A
+  tag that fails does not lose the post: the composer says so, and it can be
+  added from the post's page.
+
 ### Link previews
 
 A note with a link in it can carry a card for the link: the page's picture,

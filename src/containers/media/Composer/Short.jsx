@@ -34,6 +34,7 @@ import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import useOnFediverse from './useOnFediverse';
 import useVideoUpload from './Video/useVideoUpload';
 import usePostChoices from './usePostChoices';
+import usePostLocations from './usePostLocations';
 
 import composer from '../../../utils/composer';
 import photoFiles from '../../../utils/photoFiles';
@@ -100,6 +101,9 @@ const ShortComposer = ({
   const canVideo = kinds.includes('video') && videos.isOn(nodeInfo);
 
   const choices = usePostChoices(actor, viewer);
+  // Locations to tag the post with. Not with a video, whose post is made
+  // only once the upload is ready.
+  const postLocations = usePostLocations(actor.id);
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
@@ -150,6 +154,7 @@ const ShortComposer = ({
   // language stay; who may reply is asked of each post.
   const reset = () => {
     clearDraft();
+    postLocations.clear();
     setPhotoItems([]);
     setIsAddingPhotos(false);
     setVideo(null);
@@ -163,9 +168,17 @@ const ShortComposer = ({
     return { content: text, ...choices.request() };
   };
 
-  const posted = () => {
-    alertSuccess(i18n.t('prompts:posted.success'));
-    reset();
+  // Tagged with its locations once it exists. A tag that fails does not
+  // lose the post: it is said, and can be added from the post's page.
+  const posted = (node) => {
+    return postLocations.tag(node).then((failed) => {
+      if (failed > 0) {
+        alertError(i18n.t('composer:locations.failed', { count: failed }));
+      } else {
+        alertSuccess(i18n.t('prompts:posted.success'));
+      }
+      reset();
+    });
   };
 
   const handleSubmit = (event) => {
@@ -230,6 +243,7 @@ const ShortComposer = ({
   };
 
   const open = () => {
+    postLocations.reload();
     setIsOpen(true);
   };
 
@@ -345,6 +359,7 @@ const ShortComposer = ({
           preview={linkPreview.preview}
           onRemove={busy ? null : linkPreview.remove}
         />}
+      {!video && postLocations.chips({ disabled: busy })}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>
           <PhotoFilesEditor
@@ -524,6 +539,7 @@ const ShortComposer = ({
             }}
           >
             {attachButtons}
+            {!video && !busy && postLocations.button()}
             {options}
           </Stack>
         </Box>

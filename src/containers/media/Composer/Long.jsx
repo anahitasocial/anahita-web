@@ -30,6 +30,7 @@ import SuggestedHashtags from './SuggestedHashtags';
 import useDraft from './useDraft';
 import useOnFediverse from './useOnFediverse';
 import usePostChoices from './usePostChoices';
+import usePostLocations from './usePostLocations';
 
 import embeds from '../../../utils/embeds';
 import { appendHashtag } from '../../../utils/hashtagTyping';
@@ -81,6 +82,9 @@ const LongComposer = ({
   const viewer = useSelector((state) => { return state.session.viewer; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
+  // Locations to tag it with, the same list as the short box's, so they
+  // come along when it becomes this.
+  const postLocations = usePostLocations(actor.id);
   // An article open to everybody on the writer's own profile goes to their
   // followers on other servers, as a note does; said before posting when it
   // will not. A topic stays here, and is said nothing of.
@@ -116,6 +120,9 @@ const LongComposer = ({
   useEffect(() => {
     if (open && carried && !body.includes(carried)) {
       setBody(body ? `${body}\n\n${carried}` : carried);
+    }
+    if (open) {
+      postLocations.reload();
     }
   }, [open]);
 
@@ -200,6 +207,7 @@ const LongComposer = ({
     setCover(null);
     setTried(false);
     choices.posted();
+    postLocations.clear();
     onClose();
   };
 
@@ -252,12 +260,18 @@ const LongComposer = ({
     });
   };
 
+  // Its cover, then its locations, once it exists. A location that fails
+  // does not lose the post: it is said, and can be added from its page.
   const posted = (node) => {
     return withCover(node).then((ok) => {
-      if (ok) {
-        alertSuccess(i18n.t('prompts:posted.success'));
-      }
-      reset();
+      return postLocations.tag(node).then((failed) => {
+        if (failed > 0) {
+          alertError(i18n.t('composer:locations.failed', { count: failed }));
+        } else if (ok) {
+          alertSuccess(i18n.t('prompts:posted.success'));
+        }
+        reset();
+      });
     });
   };
 
@@ -457,6 +471,7 @@ const LongComposer = ({
               setBody(appendHashtag(body, hashtag));
             }}
           />
+          {postLocations.chips({ disabled: busy })}
         </Box>
         {kind === 'article' && onFediverse && actor.id === viewer.id && choices.access !== 'public' &&
           <Typography variant="caption" color="textSecondary" component="p" sx={{ px: 2, pb: 1 }}>
@@ -473,6 +488,7 @@ const LongComposer = ({
             alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
           }}
         >
+          {!busy && postLocations.button()}
           {choices.render({ busy })}
         </Stack>
       </Box>

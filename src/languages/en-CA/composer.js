@@ -103,4 +103,14 @@ export default {
     uses_other: '{{ short }} posts',
     followed: 'You follow it',
   },
+  // The Add location button and its chips (roadmap row 82, part 3).
+  locations: {
+    add: 'Add location',
+    nearMe: 'Near me',
+    hint: 'Type a name, or tap Near me.',
+    addNew: 'Add “{{name}}” as a new location',
+    addTitle: 'Add location',
+    failed_one: 'Posted, but {{count}} location could not be added. You can add it from the post’s page.',
+    failed_other: 'Posted, but {{count}} locations could not be added. You can add them from the post’s page.',
+  },
 };
