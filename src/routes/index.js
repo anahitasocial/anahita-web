@@ -20,7 +20,6 @@ import ActorsRead from '../containers/actors/Read';
 import ActorByHandle from '../containers/actors/ByHandle';
 import ActorsAdd from '../containers/actors/Add';
 import ActorsSettings from '../containers/actors/Settings';
-import ActorsNotificationsEdit from '../containers/actors/Notifications/Edit';
 
 import Blogs from '../containers/blogs';
 import SupportPage from '../containers/support';
@@ -69,7 +68,6 @@ const GroupsBrowse = Actors('groups');
 const GroupsRead = ActorsRead('groups');
 const GroupsAdd = ActorsAdd('groups');
 const GroupsSettings = ActorsSettings('groups');
-const GroupsNotificationsEdit = ActorsNotificationsEdit('groups');
 
 // A hashtag's page is told to other servers as /tags/<name>, where
 // Mastodon and most of the fediverse have theirs, because some of the apps
@@ -105,11 +103,9 @@ const EventEditRedirect = () => {
 const WebsitesBrowse = Actors('websites');
 const WebsitesRead = ActorsRead('websites');
 const WebsitesSettings = ActorsSettings('websites');
-const WebsitesNotificationsEdit = ActorsNotificationsEdit('websites');
 
 const EventsRead = ActorsRead('events');
 const EventsSettings = ActorsSettings('events');
-const EventsNotificationsEdit = ActorsNotificationsEdit('events');
 
 // An old address of a person's page, /people/ana/photos, sent to /@ana/photos.
 const PeopleToHandle = () => {
@@ -118,7 +114,6 @@ const PeopleToHandle = () => {
   return <Navigate to={`/@${id}${rest ? `/${rest}` : ''}`} replace />;
 };
 const PeopleSettings = ActorsSettings('people');
-const PeopleNotificationsEdit = ActorsNotificationsEdit('people');
 
 // Sends an old per-card settings URL to the section that card now lives in,
 // keeping the :id it arrived with. replace, so the back button skips the
@@ -244,14 +239,6 @@ const AppRoutes = () => {
                 </AuthenticatedRoute>
           }
             />
-            <Route
-              path="/people/:id/notifications"
-              element={
-                <AuthenticatedRoute>
-                  <PeopleNotificationsEdit />
-                </AuthenticatedRoute>
-          }
-            />
             {/* A person's page is at their alias, /@ana: an old address
                 is sent there, with its tab. */}
             <Route path="/people/:id/:tab/:subtab" element={<PeopleToHandle />} />
@@ -273,14 +260,6 @@ const AppRoutes = () => {
               element={
                 <AuthenticatedRoute>
                   <GroupsSettings />
-                </AuthenticatedRoute>
-          }
-            />
-            <Route
-              path="/groups/:id/notifications"
-              element={
-                <AuthenticatedRoute>
-                  <GroupsNotificationsEdit />
                 </AuthenticatedRoute>
           }
             />
@@ -314,14 +293,6 @@ const AppRoutes = () => {
                 </AuthenticatedRoute>
           }
             />
-            <Route
-              path="/events/:id/notifications"
-              element={
-                <AuthenticatedRoute>
-                  <EventsNotificationsEdit />
-                </AuthenticatedRoute>
-          }
-            />
             <Route path="/events/:id/:tab/:subtab" element={<EventsRead />} />
             <Route path="/events/:id/:tab" element={<EventsRead />} />
             <Route path="/events/:id" element={<EventsRead />} />
@@ -341,14 +312,6 @@ const AppRoutes = () => {
               element={
                 <AuthenticatedRoute>
                   <WebsitesSettings />
-                </AuthenticatedRoute>
-          }
-            />
-            <Route
-              path="/websites/:id/notifications"
-              element={
-                <AuthenticatedRoute>
-                  <WebsitesNotificationsEdit />
                 </AuthenticatedRoute>
           }
             />

@@ -123,7 +123,7 @@ history. The main paths:
 
 | Path | Page |
 | --- | --- |
-| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the composer and the feed. `/dashboard` leads here |
+| `/` | The landing page when signed out. Signed in, home: `containers/feeds`, with the feed and the + button to post. `/dashboard` leads here |
 | `/auth`, `/oauth/callback` | Signing in |
 | `/@:alias`, `/@:alias/:tab` | A profile of any kind at its alias, as it is known on the fediverse: a person (`/@rastin`), somebody on another server by their whole handle (`/@alice@mastodon.example`, `/@alice.bsky.social`), a group (`/@anahita-atrium`) or an event. `containers/actors/ByHandle.jsx` asks the API which profile the alias is (`api.handles`, `GET /actors/:alias`) and draws its page, its tabs under `/@:alias`. `utils/node.getURL` gives every profile this address; `getKindURL` gives the one by kind, under which settings are |
 | `/people`, `/people/:id` | People. A person's old address, `/people/:id` and its tabs, sends to `/@:id` |
@@ -134,7 +134,6 @@ history. The main paths:
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
 | `/people/add`, `/groups/add` | Making a person (administrators) or a group |
-| `/people/:id/notifications`, and the same for groups and events | What notifications the viewer gets from that profile |
 | `/people/:id/settings/password` | The old address of the password form, linked from older emails. Sends to Security |
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
@@ -523,9 +522,22 @@ replies, made directly to the post.
 ### Home
 
 Home for somebody signed in is `containers/feeds/index.jsx` (it was
-`Dashboard.jsx`; the menu says "Home" either way): the composer and the feed
-of the people and groups the viewer follows, with the custom feeds the viewer
-keeps there as tabs after it.
+`Dashboard.jsx`; the menu says "Home" either way): the feed of the people and
+groups the viewer follows, with the custom feeds the viewer keeps there as
+tabs after it.
+
+**Posting is the + button** at the bottom right
+(`containers/media/Composer/ComposeButton.jsx`; roadmap row 99,
+[plans/done/compose-button.md](plans/done/compose-button.md)), on the home page and on
+a profile the viewer may post to, and nowhere else. The page says where it
+posts while it is open (`reducers/composeTarget.js`): from home to the
+viewer's own profile, from a profile to that one. It opens the short
+composer, "New post" (`Composer/Short.jsx`), whose Long content opens the
+long one (`Composer/Long.jsx`); a profile that takes only long writing opens
+that at once. A ring goes round the button while a video posted from it is
+being prepared. What the viewer posts is at the head of an open feed it
+belongs in at once (`reducers/lastPosted.js`, `feed/usePosted.js`): the
+home feed, and the profile it was posted to.
 
 ### Suggestions
 
@@ -535,10 +547,12 @@ service is optional, and everything here draws nothing where there is none:
 a request that fails as it does without the service
 (`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
 
-- **Who to follow** on the home page, under the composer
+- **Who to follow** on the home page, above the feed
   (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
-  reason, a Follow button and a way to say not interested, and a button on
-  to the rest. Not drawn while it is read or when there is nobody. The ✕ in
+  reason, **+ Follow** and a ✕ for not interested, and a button on to the
+  rest. As wide as the feeds: when they are read in columns, the three are
+  side by side, each outlined like a card with its ✕ a small circle on the
+  top left corner; otherwise a list. Not drawn while it is read or when there is nobody. The ✕ in
   its header puts the whole card away for seven days, remembered in the
   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
   page brings it back.
@@ -598,8 +612,9 @@ own, because a video is too big to be sent with the post (the services'
   three at a time, each tried again when it fails, asking for addresses a
   few at a time. The page has to stay open for that, and says so. When
   everything is sent the server prepares the video, and the page can be
-  left: the composer asks after it and says when it is posted.
-- **Videos on the way** are listed under the composer: ones still being
+  left: the composer asks after it and says when it is posted, and the +
+  button has a ring round it until then.
+- **Videos on the way** are listed in the composer: ones still being
   prepared, and ones that failed in the last day, each with why.
 - **The parts go to storage, not to the API**, through an axios instance
   of their own (`api/videos.js#sendPart`) that sends no cookies and none
@@ -851,6 +866,69 @@ feed).
   the page goes before what is held, in the server's order, and what is
   held already is brought up to date. When none of the page is held, more
   was posted than a page holds, and the feed is begun again from it.
+
+### Notifications
+
+The bell in the top bar says how many notifications are unread, and leads
+to `/notifications`, the list of them. What the services tell, and to
+whom, is in anahita-services' `docs/notifications.md`; none is ever
+emailed.
+
+- **The bell asks; there are no sockets** (`containers/notifications/useUnreadCount.js`).
+  It asks at once when the app opens, when the tab is looked at again,
+  when the window comes into focus and when the connection comes back;
+  then after 15 seconds, 30, 1 minute, 2, and every 5 minutes after that
+  (`REACT_APP_NOTIFICATIONS_CHECK_INTERVAL`), for as long as the tab is
+  looked at, and never from a tab that is not. Something new, or the
+  viewer doing anything that tends to bring answers (a post, a reply, a
+  follow: any request but a `GET`, theirs or for notifications), begins it
+  again at 15 seconds. Each wait is a fifth longer or shorter at random,
+  and a failure keeps the last count. All of it is `utils/heartbeat.js`
+  with `holdLast` and `spread`.
+- **One tab asks for all of them.** The tab being looked at takes a Web
+  Lock (`anahita-notifications-check`) and tells the others the count over
+  a `BroadcastChannel` (`anahita-notifications`); when it is hidden or
+  closed, the next one looked at takes over. Where a browser has neither,
+  each tab asks for itself.
+- **The count is in the store** (`reducers/notificationsUnread.js`), with
+  when the newest was told (`newestAt`, from `GET /notifications/unread-count`).
+  Marking one read or deleting an unread one lowers it at once. The list,
+  when open, loads again from its start when something newer comes.
+- **The bell's menu** (`containers/notifications/Menu.jsx`), on a desktop:
+  the latest eight as on the page, grouped and with their actions, Mark all
+  read and See all. Following a link in it reads that one and closes it. On
+  a phone the bell goes to the page.
+- **What one is told about** is a person's own Notifications section in
+  settings (`actors/Settings/NotificationChoices.jsx`): eight kinds of
+  thing, on or off, each saved as it is switched.
+- **The list** is `containers/notifications/Browse/`. Each kind has its
+  words in `notifications` (`notifications:replyAdd` for `reply_add`), and
+  `constants/notifications.js` lists the kinds the services send, which a
+  test keeps in step with the words; a kind the app does not know says
+  `notifications:other`. Its links stay in the app, unread is said in
+  words to a screen reader, and the next page begins after what is on the
+  page, so deleting one skips nothing.
+- **Read when opened:** following any of a notification's links marks it
+  read, quietly (`Browse/ListItem.jsx`, `onClickCapture`); seeing it in the
+  list does not. A profile with no name yet is named by its handle.
+- **Several as one:** likes of one post, reposts of one post and follows of
+  one profile come as one line (`ids`, `others`, `others_count`), "dax and 1
+  other liked your post" (`notifications:voteupOthers`, in each language's
+  plurals), with their pictures overlapping. Reading, opening or deleting
+  it does so to all of them, and the bell asks again how many are unread;
+  the next page begins after every row on the page. Marking one read keeps
+  its line whole (`reducers/notifications.js`).
+- **Actions** under a notification (`Browse/Actions.jsx`), as the server
+  says they are still to be done (`actions`): Decline and Accept a request
+  to follow, **+ Follow** whoever followed, and Reply, which opens the reply
+  form under it and answers the reply itself, or the post. Using one reads
+  the notification.
+- **Mark all read**, in the page's header (the icon alone on a phone),
+  marks every one read (`PATCH /notifications/read-all`), the list and the
+  bell with them.
+- **Get notifications** in a post's menu subscribes to its replies
+  (`containers/controls/medium/NotificationSub.jsx`), and Stop
+  notifications ends it.
 
 ### Custom feeds
 

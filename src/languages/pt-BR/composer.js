@@ -14,7 +14,6 @@ export default {
   addVideo: 'Adicionar um vídeo',
   // The extended composer's heading, and the button where a profile takes
   // only long writing.
-  writeLong: 'Escrever um texto longo',
   // Said under the box where a profile takes pictures and videos but not
   // words alone.
   needsPicture: 'Adicione uma imagem ou um vídeo para publicar aqui.',

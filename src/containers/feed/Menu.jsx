@@ -70,6 +70,7 @@ const FeedItemMenu = ({
       <IconButton
         aria-owns={menuAnchorEl ? `node-card-menu-${id}` : undefined}
         aria-haspopup="true"
+        aria-label={i18n.t('actions:more')}
         onClick={handleOpenMenu}
         size="large"
       >

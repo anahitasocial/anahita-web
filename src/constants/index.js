@@ -10,6 +10,7 @@ import Likes from './likes';
 import Locations from './locations';
 import Medium from './medium';
 import Node from './node';
+import Notifications from './notifications';
 import Onboarding from './onboarding';
 import OAuthClients from './oauth_clients';
 import Email from './email';
@@ -35,6 +36,7 @@ export {
   Locations,
   Medium,
   Node,
+  Notifications,
   Onboarding,
   OAuthClients,
   Email,

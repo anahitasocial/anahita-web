@@ -10,6 +10,7 @@ import Progress from '../../../components/Progress';
 import FeedItems from '../components/Items';
 import NewPosts from '../components/NewPosts';
 import useNewPosts from '../useNewPosts';
+import usePosted from '../usePosted';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
@@ -49,6 +50,12 @@ const FeedLeadersBrowse = ({
   columns = false,
 }) => {
   const [start, setStart] = useState(0);
+
+  // What the viewer posts is in what they follow, at once.
+  usePosted({
+    belongs: () => { return true; },
+    put: prependList,
+  });
 
   useEffect(() => {
     return () => {

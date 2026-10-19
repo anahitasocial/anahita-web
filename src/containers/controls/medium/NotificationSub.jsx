@@ -8,80 +8,66 @@ import UnsubscribeIcon from '@mui/icons-material/NotificationsOffOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 
 import actions from '../../../actions';
+import api from '../../../api';
 import MediumType from '../../../proptypes/Medium';
 import i18n from '../../../languages';
 
+// Get notifications, in a post's menu: its replies are told to whoever
+// asks (roadmap row 96, part 4), until they stop them.
 const ControlsMediumNotification = React.forwardRef(({
-  subscribe,
-  unsubscribe,
   medium,
   isSubscribedByViewer = false,
   subscribeLabel = i18n.t('actions:subscribe'),
   unsubscribeLabel = i18n.t('actions:unsubscribe'),
-  isFetching,
+  alertError,
 }, ref) => {
   const [subscribed, setSubscribed] = useState(isSubscribedByViewer);
+  const [busy, setBusy] = useState(false);
 
-  const handleSubscribe = () => {
-    subscribe(medium).then(() => {
-      setSubscribed(true);
+  const onClick = () => {
+    setBusy(true);
+    const asked = subscribed ?
+      api.notificationsSub.deleteItem(medium) :
+      api.notificationsSub.add(medium);
+    asked.then(() => {
+      setSubscribed(!subscribed);
+    }).catch(() => {
+      alertError(i18n.t('prompts:updated.error'));
+    }).finally(() => {
+      setBusy(false);
     });
   };
-
-  const handleUnsubscribe = () => {
-    unsubscribe(medium).then(() => {
-      setSubscribed(false);
-    });
-  };
-
-  const title = subscribed ? unsubscribeLabel : subscribeLabel;
-  const onClick = subscribed ? handleUnsubscribe : handleSubscribe;
 
   return (
     <MenuItem
       onClick={onClick}
-      disabled={isFetching}
+      disabled={busy}
       ref={ref}
     >
       <MenuItemLabel icon={subscribed ? <UnsubscribeIcon fontSize="small" /> : <SubscribeIcon fontSize="small" />}>
-        {title}
+        {subscribed ? unsubscribeLabel : subscribeLabel}
       </MenuItemLabel>
     </MenuItem>
   );
 });
 
 ControlsMediumNotification.propTypes = {
-  subscribe: PropTypes.func.isRequired,
-  unsubscribe: PropTypes.func.isRequired,
   medium: MediumType.isRequired,
   isSubscribedByViewer: PropTypes.bool,
   subscribeLabel: PropTypes.string,
   unsubscribeLabel: PropTypes.string,
-  isFetching: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = (state) => {
-  const {
-    isFetching,
-  } = state.notifications;
-
-  return {
-    isFetching,
-  };
+  alertError: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = (dispatch) => {
   return {
-    subscribe: (medium) => {
-      return dispatch(actions.notifications.subs.add(medium));
-    },
-    unsubscribe: (medium) => {
-      return dispatch(actions.notifications.subs.remove(medium));
+    alertError: (message) => {
+      return dispatch(actions.app.alert.error(message));
     },
   };
 };
 
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(ControlsMediumNotification);

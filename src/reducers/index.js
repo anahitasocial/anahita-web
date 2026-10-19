@@ -3,10 +3,13 @@ import createReducer from './create';
 
 import admin from './admin';
 import app from './app';
+import composeTarget from './composeTarget';
 import locations from './locations';
 import locationsGraph from './locationsGraph';
 import hashtags from './hashtags';
+import lastPosted from './lastPosted';
 import notifications from './notifications';
+import notificationsUnread from './notificationsUnread';
 import search from './search';
 import session from './session';
 import socialgraph from './socialgraph';
@@ -44,10 +47,13 @@ const namespaces = {
 const reducers = {
   admin,
   app,
+  composeTarget,
   locations,
   locationsGraph,
   hashtags,
+  lastPosted,
   notifications,
+  notificationsUnread,
   search,
   session,
   socialgraph,

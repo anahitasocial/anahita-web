@@ -31,7 +31,6 @@ export default shape({
   editor: PersonType,
   updatedAt: string,
   isAdministrated: bool,
-  isLeader: bool,
   isSubscribedByViewer: bool,
   repostCount: number,
   isRepostedByViewer: bool,

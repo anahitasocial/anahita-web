@@ -1,47 +1,19 @@
-/* eslint-disable no-undef */
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import Badge from '@mui/material/Badge';
-import Icon from '@mui/icons-material/Notifications';
-import ErrorIcon from '@mui/icons-material/Error';
-import api from '../../api';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
-let interval = null;
-const PERIOD = process.env.REACT_APP_NOTIFICATIONS_CHECK_INTERVAL || 15000;
-
-const NotificationsIcon = () => {
-  const [count, setCount] = useState(0);
-  const [error, setError] = useState(false);
-
-  useEffect(() => {
-    if (!interval) {
-      interval = setInterval(() => {
-        api.notifications.count()
-          .then((response) => {
-            const { count: newCount } = response.data;
-            setCount(newCount);
-          }).catch((err) => {
-            setError(err);
-          });
-      }, PERIOD);
-    }
-
-    // eslint-disable-next-line consistent-return
-    return () => {
-      clearInterval(interval);
-    };
-  }, []);
-
-  if (error) {
-    return (
-      <ErrorIcon color="error" />
-    );
-  }
-
+// The bell, with how many are unread.
+const NotificationsBell = ({ count = 0 }) => {
   return (
     <Badge badgeContent={count} color="primary" overlap="rectangular">
-      <Icon />
+      <NotificationsIcon />
     </Badge>
   );
 };
 
-export default NotificationsIcon;
+NotificationsBell.propTypes = {
+  count: PropTypes.number,
+};
+
+export default NotificationsBell;

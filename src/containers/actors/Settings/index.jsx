@@ -40,6 +40,7 @@ import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
 import DataExport from './DataExport';
 import ActorSuggestions from './Suggestions';
+import ActorNotificationChoices from './NotificationChoices';
 import ActorFediverse from './Fediverse';
 import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
@@ -249,6 +250,7 @@ const ActorsSettings = ({
       [ITEMS.DATA_EXPORT]: <DataExport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.FEDIVERSE]: <ActorFediverse />,
+      [ITEMS.NOTIFICATIONS]: <ActorNotificationChoices />,
       [ITEMS.BLUESKY]: <ActorBluesky />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked

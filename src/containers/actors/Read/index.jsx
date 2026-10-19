@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -14,10 +14,8 @@ import ActorsFollowRequests from './FollowRequests';
 import ActorsBrowseFeature from '../Browse/Gadget';
 import Admins from './Admins';
 import Avatar from './Avatar';
-import Composers from '../../media/Composer';
 import ActorControls from './Controls';
 import Cover from '../../cover';
-import NotificationsDialog from '../Notifications/Dialog';
 
 import ControlFollow from '../../controls/Follow';
 import ControlFollowRequest from '../../controls/FollowRequest';
@@ -122,6 +120,22 @@ const ActorsRead = (props) => {
     readItem(id);
   }, [id, namespace]);
 
+  // While it is open, the + button posts here, when the viewer may
+  // (roadmap row 99): to their own profile, or a group or an event that
+  // takes their posts.
+  const dispatch = useDispatch();
+  const mayPost = Boolean(isAuthenticated && actor.id &&
+    utils.node.getComposers(actor).length > 0);
+  useEffect(() => {
+    if (!mayPost) {
+      return undefined;
+    }
+    dispatch(actions.composeTarget.set(actor));
+    return () => {
+      dispatch(actions.composeTarget.clear(actor.id));
+    };
+  }, [mayPost, actor.id, actor.authorized]);
+
   if (!actor.id) {
     if (isFetching) {
       return (
@@ -194,7 +208,6 @@ const ActorsRead = (props) => {
     permissions.canFeature(actor, viewer) ||
     reportPermissions.canAdd(viewer, actor)
   );
-  const showEditNotifications = isAuthenticated && actor.isLeader;
   // A website is public and followed outright: nobody asks.
   const showFollowRequests = isAuthenticated && canAdminister && namespace !== 'websites';
   const FollowRequests = ActorsFollowRequests(namespace);
@@ -257,7 +270,6 @@ const ActorsRead = (props) => {
         muted={isBlocked}
         followAction={
           <>
-            {showEditNotifications && <NotificationsDialog actor={actor} />}
             {showInvite && <ActorInvite actor={actor} canSeeWaiting={canAdminister} />}
             {showFollowRequests && <FollowRequests actor={actor} />}
             {showInviteAnswer &&
@@ -312,8 +324,6 @@ const ActorsRead = (props) => {
         tabPanels={tabPanels}
         admins={actor.administrators &&
         <Admins actor={actor} />}
-        composers={isAuthenticated && actor.id && viewer.id &&
-        <Composers actor={actor} />}
         onTabChange={(newTab) => {
           navigate(newTab ? `${base}/${newTab}` : base);
         }}

@@ -137,17 +137,24 @@ export default (namespace, defaultNode) => {
             defaultNode,
           ),
         };
-      case `${namespace.toUpperCase()}_DELETE_SUCCESS`:
+      // The one the action names: two deletes at once each take their own,
+      // where `current` is only the last asked for. The total goes down with
+      // it, so that a list knows what is left to load.
+      case `${namespace.toUpperCase()}_DELETE_SUCCESS`: {
+        const gone = action.node && action.node.id ? action.node : state[namespace].current;
+        const listed = state[namespace].allIds.includes(gone.id);
         return {
           ...state,
           isFetching: false,
           success: false,
           [namespace]: deleteItem(
             state[namespace],
-            state[namespace].current,
+            gone,
             defaultNode,
           ),
+          total: listed && state.total > 0 ? state.total - 1 : state.total,
         };
+      }
       case `${namespace.toUpperCase()}_BROWSE_FAILURE`:
         // A stale failure must not permanently kill scrolling on the new list.
         if (isStale(action, state)) {

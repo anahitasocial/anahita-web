@@ -90,7 +90,6 @@ export default {
       handle: 'El identificador {{ alias }} queda reservado después, para que nadie más pueda usarlo.',
       scheduled: 'Este perfil tiene la eliminación programada. Inicia sesión antes del {{ date }} para restaurarlo.',
     },
-    notifications: 'Configuración de notificaciones',
     followRequests: 'Solicitudes de seguimiento',
     password: 'Contraseña',
     email: 'Correo electrónico',
@@ -103,19 +102,9 @@ export default {
       access: 'Privacidad',
       permissions: 'Permisos',
       fediverse: 'Fediverso',
+      notifications: 'Notificaciones',
       administration: 'Administración',
       danger: 'Zona de peligro',
-    },
-  },
-  notifications: {
-    cTitle: 'Notificaciones',
-    cDescription: 'Edita tu configuración de notificaciones',
-    mTitle: 'Notificaciones',
-    email: 'Recibir notificaciones por correo electrónico',
-    optionsTitle: 'Recibir notificaciones de',
-    options: {
-      all: 'Todas las publicaciones',
-      following: 'Solo las publicaciones que sigues',
     },
   },
   person: {

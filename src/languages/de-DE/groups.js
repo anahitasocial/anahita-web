@@ -80,19 +80,7 @@ export default {
     sections: {
       danger: 'Gefahrenbereich',
     },
-    notifications: 'Benachrichtigungseinstellungen',
     followRequests: 'Folgeanfragen',
-  },
-  notifications: {
-    cTitle: 'Benachrichtigungen',
-    cDescription: 'Deine Benachrichtigungseinstellungen bearbeiten',
-    mTitle: 'Benachrichtigungen',
-    email: 'Benachrichtigungen per E-Mail erhalten',
-    optionsTitle: 'Benachrichtigungen erhalten für',
-    options: {
-      all: 'Alle Beiträge',
-      following: 'Nur Beiträge, denen du folgst',
-    },
   },
   confirm: {
     delete: 'Willst du das Profil von {{ name }} löschen?',

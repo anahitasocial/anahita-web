@@ -82,7 +82,6 @@ export default {
       handle: 'Le nom {{ alias }} reste réservé, personne d\'autre ne pourra le prendre.',
       scheduled: 'Ce profil est programmé pour suppression. Connectez-vous avant le {{ date }} pour le restaurer.',
     },
-    notifications: 'Paramètres de notification',
     followRequests: "Demandes d'abonnement",
     // These three were missing while English had them, so the password, email
     // and username cards rendered their raw key names in French.
@@ -96,19 +95,9 @@ export default {
       access: 'Confidentialité',
       permissions: 'Autorisations',
       fediverse: 'Fédivers',
+      notifications: 'Notifications',
       administration: 'Administration',
       danger: 'Zone de danger',
-    },
-  },
-  notifications: {
-    cTitle: 'Notifications',
-    cDescription: 'Modifiez vos paramètres de notification',
-    mTitle: 'Notifications',
-    email: 'Recevoir les notifications par email',
-    optionsTitle: 'Recevoir des notifications pour',
-    options: {
-      all: 'Toutes les publications',
-      following: 'Uniquement les publications que vous suivez',
     },
   },
   person: {

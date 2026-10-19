@@ -56,7 +56,7 @@ is read:
 
 | Variable | Description |
 | --- | --- |
-| `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | How often to check for new notifications, in milliseconds. `15000` (15 seconds) when unset; `.env.example` sets `1500000` (25 minutes) |
+| `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | The longest wait between two checks of the bell's count, in milliseconds: `300000` (5 minutes) when unset. The bell asks sooner after something new, and at once when the tab is looked at again. See [Notifications](architecture.md#notifications) |
 | `REACT_APP_LANGUAGE` | The language for a visitor whose browser asks for none the app has: `en-CA`, `en-US`, `fr-FR`, `fr-CA`, `de-DE`, `es-419` or `pt-BR`. Unset, or anything else, is `en-CA`. See [Languages](customising.md#languages) |
 | `REACT_APP_ASSETS` | The theme to use: the name of a directory under `src/assets/`. Unset uses `src/assets/default`. See [Themes](customising.md#themes) |
 | `REACT_APP_ANALYTICS` | Page-view analytics: `plausible`, `umami` or `matomo`. Unset means off: no script is loaded and nothing leaves the browser |
@@ -124,7 +124,7 @@ Some older variables are no longer read:
 | --- | --- |
 | `REACT_APP_API_BASE_URL` | `src/api/index.js`, `src/api/publicClient.js`, and the helpers in `src/utils/` that build file addresses |
 | `REACT_APP_NAME`, `REACT_APP_DESCRIPTION` | `src/components/HeaderMeta.jsx`, `src/components/Logo.jsx`, and page titles throughout `src/containers/` |
-| `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | `src/containers/notifications/Icon.jsx` |
+| `REACT_APP_NOTIFICATIONS_CHECK_INTERVAL` | `src/containers/notifications/useUnreadCount.js` |
 | `REACT_APP_LANGUAGE` | `src/languages/index.js`, through `src/languages/choose.js` |
 | `REACT_APP_ASSETS` | `src/assets/index.js` |
 | `REACT_APP_ANALYTICS`, `REACT_APP_ANALYTICS_URL`, `REACT_APP_ANALYTICS_SITE_ID` | `src/utils/analytics.js` |

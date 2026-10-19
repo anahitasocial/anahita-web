@@ -20,6 +20,5 @@ export default {
   editor: personDefault,
   updatedAt: '0000-00-00 00:00:00',
   isAdministrated: false,
-  isLeader: false,
   websiteUrl: '',
 };

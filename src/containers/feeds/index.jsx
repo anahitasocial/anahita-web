@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 
@@ -18,7 +17,6 @@ import ManageIcon from '@mui/icons-material/TuneOutlined';
 import StreamIcon from '@mui/icons-material/ViewStreamOutlined';
 
 import CompleteProfileCard from './CompleteProfileCard';
-import Composers from '../media/Composer';
 import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
 import usePinnedFeeds from './usePinnedFeeds';
@@ -69,21 +67,24 @@ const rememberView = (view) => {
 // beside it, and then take the width of the page. On a narrow one there is
 // one column either way, and the buttons are not shown.
 const FeedsPage = ({
-  readPerson,
   viewer,
-  person,
 }) => {
   const pinned = usePinnedFeeds(true);
+
+  // The + button posts from here, to the viewer's own profile.
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(actions.composeTarget.home());
+    return () => {
+      dispatch(actions.composeTarget.clear('home'));
+    };
+  }, []);
   const [view, setView] = useState(rememberedView);
   const isWide = useMediaQuery((theme) => {
     return theme.breakpoints.up('md');
   });
   const columns = isWide && view === COLUMNS;
   const [params, setParams] = useSearchParams();
-
-  useEffect(() => {
-    readPerson(viewer.alias);
-  }, [readPerson, viewer.alias]);
 
   const asked = Number(params.get('feed')) || FOLLOWING;
   const open = pinned.find((feed) => {
@@ -97,10 +98,11 @@ const FeedsPage = ({
       </Helmet>
       <PageColumn>
         <CompleteProfileCard viewer={viewer} />
-        {person.id &&
-          <Composers actor={person} />}
-        {/* A few people to follow, when the installation suggests any. */}
-        <WhoToFollow />
+      </PageColumn>
+      {/* A few people to follow, when the installation suggests any: as
+          wide as the feeds, side by side when they are in columns. */}
+      <PageColumn wide={columns}>
+        <WhoToFollow columns={columns} />
       </PageColumn>
       <PageColumn wide={columns}>
         <Box
@@ -191,37 +193,13 @@ const FeedsPage = ({
 };
 
 FeedsPage.propTypes = {
-  readPerson: PropTypes.func.isRequired,
   viewer: PersonType.isRequired,
-  person: PersonType.isRequired,
 };
 
 const mapStateToProps = (state) => {
-  const {
-    viewer,
-  } = state.session;
-
-  const {
-    people: {
-      current: person,
-    },
-  } = state.people;
-
   return {
-    viewer,
-    person,
+    viewer: state.session.viewer,
   };
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    readPerson: (alias) => {
-      return dispatch(actions.people.read(alias, 'people'));
-    },
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FeedsPage);
+export default connect(mapStateToProps)(FeedsPage);

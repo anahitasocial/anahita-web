@@ -24,6 +24,7 @@ import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
 import i18n from '../../../languages';
 import utils from '../../../utils';
+import usePosted from '../usePosted';
 
 const {
   isRepost,
@@ -58,6 +59,7 @@ const FeedActorBrowse = ({
   filter = FILTER.POSTS,
   browseList,
   resetList,
+  prependList,
   alertError,
   items,
   hasMore = true,
@@ -67,6 +69,16 @@ const FeedActorBrowse = ({
   isFetching,
 }) => {
   const [start, setStart] = useState(0);
+
+  // What the viewer posts to this profile is at the head of its posts at
+  // once.
+  usePosted({
+    belongs: (post) => {
+      const owner = (post.owner && post.owner.id) || post.ownerId;
+      return filter === FILTER.POSTS && owner === actor.id;
+    },
+    put: prependList,
+  });
 
   useEffect(() => {
     return () => {
@@ -290,6 +302,7 @@ FeedActorBrowse.propTypes = {
   filter: PropTypes.oneOf(['posts', 'replies', 'reposts']),
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
+  prependList: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
   items: NodesType.isRequired,
   hasMore: PropTypes.bool,
@@ -329,6 +342,9 @@ const mapDispatchToProps = (dispatch) => {
     },
     resetList: () => {
       return dispatch(actions.feed_actor.reset());
+    },
+    prependList: (nodes) => {
+      return dispatch(actions.feed_actor.prepend(nodes));
     },
     alertError: (message) => {
       return dispatch(actions.app.alert.error(message));

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { useTheme } from '@mui/material/styles';
 import { makeStyles } from 'tss-react/mui';
 import CssBaseline from '@mui/material/CssBaseline';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
@@ -25,6 +25,7 @@ import Alerts from './Alerts';
 import MenuLogo from '../components/Logo';
 import actions from '../actions';
 import NotificationButton from './notifications/Button';
+import ComposeButton from './media/Composer/ComposeButton';
 import adminTabs from './admin/tabs';
 import visitor from '../utils/visitor';
 import { Admin as ADMIN } from '../constants';
@@ -79,6 +80,11 @@ const useStyles = makeStyles()((theme) => {
       overflow: 'auto',
       paddingBottom: theme.spacing(2),
     },
+    // Room for the + button at the bottom right, where it is, so that
+    // nothing at the foot of the page is under it.
+    contentUnderButton: {
+      paddingBottom: theme.spacing(12),
+    },
     // Below lg the page runs edge to edge; from lg up the Container's own
     // maxWidth and gutters take over.
     container: {
@@ -117,6 +123,9 @@ const App = ({
   // and whenever the window comes back into focus, which is when
   // somebody returning to the tab wants it to be right.
   const hasAdminArea = isAuthenticated && adminTabs.canBrowse(viewer);
+  // On the home page and a profile the viewer may post to (roadmap row 99).
+  const composeTarget = useSelector((state) => { return state.composeTarget; });
+  const hasComposeButton = isAuthenticated && Boolean(composeTarget);
 
   useEffect(() => {
     if (!hasAdminArea) {
@@ -193,7 +202,7 @@ const App = ({
               the search would only be refused. */}
           {!isShutOut && <SearchBox />}
           <div className={classes.grow} />
-          {isAuthenticated && <NotificationButton viewer={viewer} />}
+          {isAuthenticated && <NotificationButton />}
           <Viewer
             viewer={viewer}
             isAuthenticated={isAuthenticated}
@@ -228,7 +237,7 @@ const App = ({
           {drawer()}
         </Drawer>
       </nav>
-      <main className={classes.content}>
+      <main className={`${classes.content} ${hasComposeButton ? classes.contentUnderButton : ''}`}>
         <div className={classes.appBarSpacer} />
         {/*
           `children` must be rendered exactly once. Selecting the layout with
@@ -241,6 +250,7 @@ const App = ({
           {children}
         </Container>
       </main>
+      {hasComposeButton && <ComposeButton />}
     </div>
   );
 };

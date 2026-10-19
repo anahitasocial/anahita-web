@@ -5,7 +5,6 @@ export default {
   photo: 'Photo',
   gif: 'GIF',
   addGif: 'Ajouter un GIF',
-  writeLong: 'Écrire plus long',
   needsPicture: 'Ajoutez une image ou une vidéo pour publier ici.',
   video: 'Vidéo',
   addVideo: 'Ajouter une vidéo',

@@ -1,20 +1,30 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Container from '@mui/material/Container';
+import IconButton from '@mui/material/IconButton';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
+import MarkAllReadIcon from '@mui/icons-material/DoneAll';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import NotificationsList from './List';
+import Progress from '../../../components/Progress';
 
 import NotificationsType from '../../../proptypes/Notifications';
 
 import actions from '../../../actions';
+import api from '../../../api';
+import i18n from '../../../languages';
 import { App as APP } from '../../../constants';
 
 const {
@@ -27,12 +37,30 @@ const NotificationsBrowse = ({
   editItem,
   deleteItem,
   successAlert,
-  alertError,
+  errorAlert,
+  lessUnread,
+  setUnread,
+  readAll,
+  unread,
   items,
-  error,
+  isFetching,
+  newestAt,
   total = 0,
 }) => {
-  const [start, setStart] = useState(0);
+  // Each time the list is loaded from its start.
+  const [round, setRound] = useState(0);
+  const [failed, setFailed] = useState(false);
+  const [answered, setAnswered] = useState(false);
+  const loadedAt = useRef(null);
+
+  const load = (start) => {
+    setFailed(false);
+    return browseList({ start, limit: LIMIT }).then(() => {
+      setAnswered(true);
+    }).catch(() => {
+      setFailed(true);
+    });
+  };
 
   useEffect(() => {
     return () => {
@@ -41,35 +69,111 @@ const NotificationsBrowse = ({
   }, []);
 
   useEffect(() => {
-    browseList({
-      start,
-      limit: LIMIT,
-    });
-  }, [start]);
+    resetList();
+    loadedAt.current = newestAt;
+    load(0);
+  }, [round]);
 
+  // Something new, by the bell's last check: the list is loaded again from
+  // its start, so that it is at the top. Only newer: deleting the newest
+  // makes it older, and moves nothing.
   useEffect(() => {
-    if (error) {
-      alertError(error);
+    if (loadedAt.current === null || !newestAt) {
+      return;
     }
-  }, [error]);
+    if (!loadedAt.current || Date.parse(newestAt) > Date.parse(loadedAt.current)) {
+      setRound(round + 1);
+    }
+  }, [newestAt]);
 
+  // How many notifications are on the page: a line of several is as many
+  // as it groups (roadmap row 97, part 3).
+  const rows = items.allIds.reduce((count, id) => {
+    const each = items.byId[id];
+    return count + ((each && each.ids && each.ids.length) || 1);
+  }, 0);
+
+  // The next page begins after those on the page: a notification deleted
+  // here, or taken away by the server, moves the rest up.
   const fetchList = () => {
-    setStart(start + LIMIT);
+    load(rows);
+  };
+
+  // The rest of a line of several: what is done to it is done to them all.
+  const rest = (item) => {
+    return (item.ids || []).filter((id) => { return id !== item.id; });
+  };
+
+  // After a line of several, the bell asks again rather than guess how
+  // many of them were unread.
+  const counted = (item) => {
+    if (rest(item).length === 0) {
+      lessUnread();
+      return;
+    }
+    api.notifications.count().then(({ data }) => {
+      setUnread(Number(data.count) || 0, data.newestAt || '');
+    }).catch(() => {
+      // The bell's next look says it.
+    });
+  };
+
+  const readAllOf = (item) => {
+    return editItem(item).then(() => {
+      return Promise.all(rest(item).map((id) => { return api.notifications.edit({ id }); }));
+    }).then(() => {
+      counted(item);
+    });
   };
 
   const handleEdit = (item) => {
-    if (!item.isRead) {
-      editItem(item).then(() => {
-        successAlert('Notification marked as read');
-      });
+    if (item.isRead) {
+      return;
     }
+    readAllOf(item).then(() => {
+      successAlert(i18n.t('notifications:markedRead'));
+    }).catch(() => {
+      errorAlert(i18n.t('prompts:updated.error'));
+    });
+  };
+
+  // Opened by one of its links: read, quietly.
+  const handleOpen = (item) => {
+    if (item.isRead) {
+      return;
+    }
+    readAllOf(item).catch(() => {
+      // Still unread; nothing to say while they go where they meant to.
+    });
   };
 
   const handleDelete = (item) => {
     deleteItem(item).then(() => {
-      successAlert('Notification deleted');
+      return Promise.all(rest(item).map((id) => { return api.notifications.deleteItem({ id }); }));
+    }).then(() => {
+      if (!item.isRead) {
+        counted(item);
+      }
+      successAlert(i18n.t('prompts:deleted.success'));
+    }).catch(() => {
+      errorAlert(i18n.t('prompts:deleted.error'));
     });
   };
+
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const [isMarking, setIsMarking] = useState(false);
+  const handleReadAll = () => {
+    setIsMarking(true);
+    readAll().then(() => {
+      successAlert(i18n.t('notifications:allMarkedRead'));
+    }).catch(() => {
+      errorAlert(i18n.t('prompts:updated.error'));
+    }).finally(() => {
+      setIsMarking(false);
+    });
+  };
+
+  const empty = answered && !isFetching && items.allIds.length === 0;
 
   return (
     <Container maxWidth="md">
@@ -81,15 +185,65 @@ const NotificationsBrowse = ({
             </Avatar>
           }
           title={
-            <Typography variant="h6">Notifications</Typography>
+            <Typography variant="h6" component="h1">
+              {i18n.t('notifications:cTitle')}
+            </Typography>
           }
+          // The words on a desktop; on a phone, the icon, which they name.
+          action={phone ?
+            <Tooltip title={i18n.t('notifications:markAllRead')}>
+              <span>
+                <IconButton
+                  aria-label={i18n.t('notifications:markAllRead')}
+                  disabled={isMarking || unread === 0}
+                  onClick={handleReadAll}
+                >
+                  <MarkAllReadIcon />
+                </IconButton>
+              </span>
+            </Tooltip> :
+            <Button
+              startIcon={<MarkAllReadIcon />}
+              disabled={isMarking || unread === 0}
+              onClick={handleReadAll}
+              sx={{ mt: 1 }}
+            >
+              {i18n.t('notifications:markAllRead')}
+            </Button>}
         />
+        {failed &&
+          <CardContent>
+            <Alert
+              severity="warning"
+              action={
+                <Button
+                  color="inherit"
+                  size="small"
+                  onClick={() => {
+                    load(items.allIds.length);
+                  }}
+                >
+                  {i18n.t('search:retry')}
+                </Button>
+              }
+            >
+              {i18n.t('notifications:failed')}
+            </Alert>
+          </CardContent>}
+        {!answered && !failed && <Progress />}
+        {empty && !failed &&
+          <CardContent>
+            <Typography variant="body2" color="textSecondary">
+              {i18n.t('notifications:none')}
+            </Typography>
+          </CardContent>}
         <NotificationsList
           items={items}
-          total={total}
+          hasMore={!failed && total > rows}
           fetchList={fetchList}
           handleEdit={handleEdit}
           handleDelete={handleDelete}
+          handleOpen={handleOpen}
         />
       </Card>
     </Container>
@@ -102,25 +256,30 @@ NotificationsBrowse.propTypes = {
   editItem: PropTypes.func.isRequired,
   deleteItem: PropTypes.func.isRequired,
   successAlert: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
+  errorAlert: PropTypes.func.isRequired,
+  lessUnread: PropTypes.func.isRequired,
+  setUnread: PropTypes.func.isRequired,
+  readAll: PropTypes.func.isRequired,
+  unread: PropTypes.number.isRequired,
   items: NotificationsType.isRequired,
-  error: PropTypes.string.isRequired,
+  isFetching: PropTypes.bool.isRequired,
+  newestAt: PropTypes.string.isRequired,
   total: PropTypes.number,
 };
 
 const mapStateToProps = (state) => {
   const {
     notifications: items,
-    error,
     total,
     isFetching,
   } = state.notifications;
 
   return {
     items,
-    error,
     total,
     isFetching,
+    newestAt: state.notificationsUnread.newestAt,
+    unread: state.notificationsUnread.count,
   };
 };
 
@@ -141,8 +300,17 @@ const mapDispatchToProps = (dispatch) => {
     successAlert: (message) => {
       return dispatch(actions.app.alert.success(message));
     },
-    alertError: (message) => {
+    errorAlert: (message) => {
       return dispatch(actions.app.alert.error(message));
+    },
+    lessUnread: () => {
+      return dispatch(actions.notifications.unread.less());
+    },
+    readAll: () => {
+      return dispatch(actions.notifications.readAll());
+    },
+    setUnread: (count, newestAt) => {
+      return dispatch(actions.notifications.unread.set(count, newestAt));
     },
   };
 };

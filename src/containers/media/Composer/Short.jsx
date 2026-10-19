@@ -4,7 +4,6 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
 import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
@@ -19,7 +18,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
-import WriteIcon from '@mui/icons-material/CreateOutlined';
 
 import actions from '../../../actions';
 import ActorAvatar from '../../../components/ActorAvatar';
@@ -53,23 +51,27 @@ const { isPerson } = utils.node;
 // note, pictures a photo post, a video a video post. None of them has a title;
 // long writing, with one, is the extended composer's (`onExpand`).
 //
-// Closed, it is one line: an outlined button. Open, it is a dialog, in the
-// middle of the screen on a desktop and filling it on a phone, where the
+// A dialog, opened by the + button (ComposeButton.jsx, roadmap row 99), in
+// the middle of the screen on a desktop and filling it on a phone, where the
 // keyboard needs the room; nothing in it changes height as somebody types.
 // What is written is kept as a draft until it is posted (useDraft).
 //
 // `kinds` is what this profile takes, of note, photo and video.
+// `onPreparing` is told whether a video posted from
+// it is still being prepared, which the button shows once it is closed.
 const ShortComposer = ({
   actor,
   kinds,
+  open: isOpen,
+  onClose,
   onExpand = null,
+  onPreparing = null,
 }) => {
   const dispatch = useDispatch();
   const viewer = useSelector((state) => { return state.session.viewer; });
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
-  const [isOpen, setIsOpen] = useState(false);
   // The height of what can be seen, which a phone's keyboard takes from:
   // the full-screen composer keeps its bottom row above the keyboard. iOS
   // shrinks only this, not the page.
@@ -169,7 +171,7 @@ const ShortComposer = ({
     setVideoProblem('');
     choices.posted();
     linkPreview.reset();
-    setIsOpen(false);
+    onClose();
   };
 
   const shared = () => {
@@ -247,10 +249,20 @@ const ShortComposer = ({
     }
   };
 
-  const open = () => {
-    postLocations.reload();
-    setIsOpen(true);
-  };
+  // Opened: the locations offered are read again.
+  useEffect(() => {
+    if (isOpen) {
+      postLocations.reload();
+    }
+  }, [isOpen]);
+
+  // A video still being prepared, said to the button.
+  const isPreparing = upload.phase === 'processing';
+  useEffect(() => {
+    if (onPreparing) {
+      onPreparing(isPreparing);
+    }
+  }, [isPreparing]);
 
   const placeholder = isPerson(actor) && actor.id !== viewer.id ?
     i18n.t('notes:composer.bodyPlaceholderPerson', { name: actor.name }) :
@@ -278,7 +290,7 @@ const ShortComposer = ({
   // What is written goes along to the extended composer, and is its draft
   // from then on.
   const expand = () => {
-    setIsOpen(false);
+    onClose();
     onExpand(body);
     clearDraft();
   };
@@ -441,9 +453,9 @@ const ShortComposer = ({
     </>
   );
 
-  // A video being prepared, said when the box is closed again.
-  const preparing = upload.phase === 'processing' &&
-    <Stack spacing={1} sx={{ px: 2, pb: 2 }}>
+  // A video being prepared.
+  const preparing = isPreparing &&
+    <Stack spacing={1} sx={{ pt: 2 }}>
       <LinearProgress />
       <Typography variant="body2" color="textSecondary">
         {i18n.t('videos:upload.processing')}
@@ -458,107 +470,75 @@ const ShortComposer = ({
       refreshKey={handedOver}
     />;
 
-  // Closed: an outlined button saying what it is for, or how the draft
-  // begins, and the way to longer writing (the user, 2026-10-17: an
-  // outlined button, the box opening in a dialog).
-  const closed = (
-    <Stack direction="row" spacing={1} sx={{ alignItems: 'center', p: 2 }}>
-      <ActorAvatar actor={viewer} />
-      <Button
-        variant="outlined"
-        startIcon={<WriteIcon />}
-        onClick={() => {
-          open();
-        }}
-        sx={{
-          flexGrow: 1,
-          minWidth: 0,
-          minHeight: 48,
-          justifyContent: 'flex-start',
-          textTransform: 'none',
-          fontSize: '1rem',
-        }}
-      >
-        <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-          {body || placeholder}
-        </Box>
-      </Button>
-      {expandButton(false)}
-    </Stack>
-  );
-
   // Open, in a dialog: the whole screen on a phone, where the keyboard
   // needs the room, and in the middle of it on a desktop. The same in both.
   return (
-    <Card>
-      {closed}
-      {preparing}
-      {uploadsList}
-      <Dialog
-        fullScreen={phone}
-        fullWidth
-        maxWidth="sm"
-        open={isOpen}
-        slotProps={{
-          paper: { sx: visible ? { height: visible, maxHeight: visible } : {} },
-        }}
-        onClose={() => {
-          if (!busy) {
-            setIsOpen(false);
-          }
-        }}
+    <Dialog
+      fullScreen={phone}
+      fullWidth
+      maxWidth="sm"
+      open={isOpen}
+      slotProps={{
+        paper: { sx: visible ? { height: visible, maxHeight: visible } : {} },
+      }}
+      onClose={() => {
+        if (!busy) {
+          onClose();
+        }
+      }}
+    >
+      <Box
+        component="form"
+        onSubmit={handleSubmit}
+        noValidate
+        sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
       >
-        <Box
-          component="form"
-          onSubmit={handleSubmit}
-          noValidate
-          sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
-        >
-          {/* Close, Long content and Post at the top, where a thumb
+        {/* Close, Long content and Post at the top, where a thumb
               finds them above the keyboard. */}
-          <Toolbar sx={{ gap: 1, px: 1 }}>
-            <IconButton
-              edge="start"
-              aria-label={i18n.t('composer:close')}
-              disabled={busy}
-              onClick={() => {
-                setIsOpen(false);
-              }}
-            >
-              <CloseIcon />
-            </IconButton>
-            <Typography variant="h6" sx={{ flexGrow: 1 }}>
-              {i18n.t('composer:newPost')}
-            </Typography>
-            {expandButton(!phone)}
-            {postButton(false)}
-          </Toolbar>
-          <Divider />
-          <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
-            <Stack direction="row" spacing={2}>
-              <ActorAvatar actor={viewer} />
-              <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-                {content}
-              </Box>
-            </Stack>
-          </Box>
-          <Divider />
-          {/* Attachments and choices in one row at the bottom, within a
-              thumb's reach; it scrolls sideways rather than wrapping. */}
-          <Stack
-            direction="row"
-            spacing={0.5}
-            sx={{
-              alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
+        <Toolbar sx={{ gap: 1, px: 1 }}>
+          <IconButton
+            edge="start"
+            aria-label={i18n.t('composer:close')}
+            disabled={busy}
+            onClick={() => {
+              onClose();
             }}
           >
-            {attachButtons}
-            {!video && !busy && postLocations.button({ photoPoint: hasPhotos ? photoPoint : null })}
-            {options}
+            <CloseIcon />
+          </IconButton>
+          <Typography variant="h6" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>
+            {i18n.t('composer:newPost')}
+          </Typography>
+          {expandButton(!phone)}
+          {postButton(false)}
+        </Toolbar>
+        <Divider />
+        <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
+          <Stack direction="row" spacing={2}>
+            <ActorAvatar actor={viewer} />
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+              {content}
+            </Box>
           </Stack>
+          {preparing}
+          {uploadsList}
         </Box>
-      </Dialog>
-    </Card>
+        <Divider />
+        {/* Attachments and choices in one row at the bottom, within a
+              thumb's reach; it scrolls sideways rather than wrapping. */}
+        <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{
+            alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
+          }}
+        >
+          {attachButtons}
+          {!video && !busy && postLocations.button({ photoPoint: hasPhotos ? photoPoint : null })}
+          {options}
+        </Stack>
+      </Box>
+    </Dialog>
   );
 };
 
@@ -569,6 +549,9 @@ ShortComposer.propTypes = {
   // Opens the extended composer, with what was written so far. Not given
   // where the profile takes no articles or topics.
   onExpand: PropTypes.func,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onPreparing: PropTypes.func,
 };
 
 export default ShortComposer;

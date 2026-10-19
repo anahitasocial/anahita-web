@@ -34,6 +34,8 @@ export const SECTIONS = {
   // for both, since to whoever sets them they are one question: where
   // else am I, and what of mine goes there.
   FEDIVERSE: 'fediverse',
+  // What the person is told about (roadmap row 97). Their own.
+  NOTIFICATIONS: 'notifications',
   // Looking at somebody else's account as an administrator. Never the
   // viewer's own — see the notViewer flag below.
   ADMINISTRATION: 'administration',
@@ -68,6 +70,8 @@ export const ITEMS = {
   SUGGESTIONS: 'suggestions',
   FEDIVERSE: 'fediverse',
   BLUESKY: 'bluesky',
+  // What the person is told about: eight kinds of thing, on or off.
+  NOTIFICATIONS: 'notifications',
   PERMISSIONS: 'permissions',
   AGREEMENTS: 'agreements',
   // A person's account type: registered, administrator or super
@@ -158,6 +162,13 @@ const ALL_SECTIONS = [
       { key: ITEMS.PERMISSIONS, bare: false, viewerOnly: false },
       { key: ITEMS.QUOTES, bare: false, viewerOnly: false },
       { key: ITEMS.DOWNLOADS, bare: false, viewerOnly: false },
+    ],
+  },
+  {
+    key: SECTIONS.NOTIFICATIONS,
+    // Theirs alone to choose.
+    items: [
+      { key: ITEMS.NOTIFICATIONS, bare: false, viewerOnly: true },
     ],
   },
   {

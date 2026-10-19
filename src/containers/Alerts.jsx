@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
@@ -15,6 +15,7 @@ const Alerts = ({
   alerts = [],
   deleteItem,
 }) => {
+  const underButton = useSelector((state) => { return Boolean(state.composeTarget); });
   const handleClose = (event, id) => {
     deleteItem(id);
   };
@@ -26,6 +27,11 @@ const Alerts = ({
       <Snackbar
         open
         autoHideDuration={6000}
+        // On a phone, above the + button where there is one (roadmap row
+        // 99): it is across the bottom of the screen there.
+        sx={underButton ?
+          { bottom: { xs: 'calc(96px + env(safe-area-inset-bottom))', sm: 24 } } :
+          {}}
         onClose={(e) => {
           return handleClose(e, alert.id);
         }}
