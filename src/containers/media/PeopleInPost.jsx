@@ -14,6 +14,7 @@ import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
 import utils from '../../utils';
+import { PEOPLE_TAGS_CHANGED } from './TagPeopleDialog';
 
 const { getURL } = utils.node;
 
@@ -70,6 +71,20 @@ const PeopleInPost = ({
       current = false;
     };
   }, [medium.id, taggable, revision]);
+
+  // Read again when somebody tagged or untagged people in it elsewhere on
+  // the page.
+  useEffect(() => {
+    const changed = (event) => {
+      if (event.detail && event.detail.postId === medium.id) {
+        setRevision((before) => { return before + 1; });
+      }
+    };
+    window.addEventListener(PEOPLE_TAGS_CHANGED, changed);
+    return () => {
+      window.removeEventListener(PEOPLE_TAGS_CHANGED, changed);
+    };
+  }, [medium.id]);
 
   if (people.length === 0) {
     return null;

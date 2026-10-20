@@ -18,6 +18,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
+import TagPeopleIcon from '@mui/icons-material/PersonAddOutlined';
+import PersonIcon from '@mui/icons-material/PersonOutlined';
+import Chip from '@mui/material/Chip';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -46,6 +49,7 @@ import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
 import i18n from '../../../languages';
 import useRulesFirst from '../../rules/useRulesFirst';
+import { TagPeoplePicker, tagPeople, tagOutcomeMessage } from '../TagPeopleDialog';
 
 const { CONTENT } = MEDIUM.FIELDS;
 const { isPerson } = utils.node;
@@ -98,6 +102,9 @@ const ShortComposer = ({
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
+  // Who is in the photos, tagged once the post is made (roadmap row 103).
+  const [people, setPeople] = useState([]);
+  const [isTagging, setIsTagging] = useState(false);
   // The notes of a thread after the first, written in one go (roadmap row
   // 101).
   const [moreParts, setMoreParts] = useState([]);
@@ -187,6 +194,7 @@ const ShortComposer = ({
     clearDraft();
     postLocations.clear();
     setPhotoItems([]);
+    setPeople([]);
     setMoreParts([]);
     setPhotoPoint(null);
     setIsAddingPhotos(false);
@@ -284,7 +292,26 @@ const ShortComposer = ({
     const namespace = kind === 'photo' ? 'photos' : 'notes';
 
     setIsSending(true);
-    dispatch(actions[namespace].add(post, actor)).then(posted).catch(() => {
+    // Whoever is in the photos is tagged once the post is made; who could
+    // not be, or is asked first, is said so instead of "Posted".
+    const tagged = kind === 'photo' ? people : [];
+    dispatch(actions[namespace].add(post, actor)).then((made) => {
+      if (tagged.length === 0 || !made || !made.id) {
+        posted();
+        return null;
+      }
+      return tagPeople(made, tagged).then((outcomes) => {
+        const said = tagOutcomeMessage(outcomes);
+        if (said.error) {
+          alertError(said.text);
+        } else if (outcomes.some((each) => { return each.outcome === 'asked'; })) {
+          alertSuccess(said.text);
+        } else {
+          alertSuccess(i18n.t('prompts:posted.success'));
+        }
+        reset();
+      });
+    }).catch(() => {
       // The words and pictures stay, to post again.
       alertError(i18n.t('prompts:posted.error'));
     }).finally(() => {
@@ -484,6 +511,27 @@ const ShortComposer = ({
               {i18n.t('replies:attachments.noPhotos')}
             </Button>}
         </Box>}
+      {hasPhotos && people.length > 0 &&
+        <Stack
+          direction="row"
+          spacing={1}
+          useFlexGap
+          sx={{ alignItems: 'center', flexWrap: 'wrap', mt: 1 }}
+        >
+          <PersonIcon fontSize="small" color="action" />
+          {people.map((person) => {
+            return (
+              <Chip
+                key={`tagged-${person.id}`}
+                size="small"
+                label={utils.node.getActorName(person)}
+                onDelete={busy ? undefined : () => {
+                  setPeople(people.filter((each) => { return each.id !== person.id; }));
+                }}
+              />
+            );
+          })}
+        </Stack>}
       {video &&
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mt: 1 }}>
           <VideoIcon fontSize="small" color="action" />
@@ -617,10 +665,26 @@ const ShortComposer = ({
         >
           {attachButtons}
           {!video && !busy && postLocations.button({ photoPoint: hasPhotos ? photoPoint : null })}
+          {hasPhotos && !busy &&
+            <Tooltip title={i18n.t('peopleTags:menu')}>
+              <IconButton
+                size="small"
+                aria-label={i18n.t('peopleTags:menu')}
+                onClick={() => { setIsTagging(true); }}
+              >
+                <TagPeopleIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>}
           {options}
         </Stack>
       </Box>
       {rules.dialog}
+      <TagPeoplePicker
+        open={isTagging}
+        value={people}
+        onChange={setPeople}
+        onClose={() => { setIsTagging(false); }}
+      />
     </Dialog>
   );
 };

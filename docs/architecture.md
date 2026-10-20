@@ -744,6 +744,13 @@ themselves out later with **Remove me**. Not on cards in a feed, which would
 ask the server once for every card. Who may tag whom is anahita-services'
 `docs/permissions.md`.
 
+Its author tags people with **Tag people**: in the composer, among its small
+buttons once there are photos, the people chosen shown as chips and tagged
+as soon as the post is made; and from a photo's or a video's menu, which
+adds and takes off (`containers/media/TagPeopleDialog.jsx`). Each person
+decides: tagged at once, asked first, or not at all, and the author is told
+who is asked and who cannot be. People are found by name or by handle.
+
 ### Locations of a new post
 
 The pin among a composer's small buttons, **Add location**, in the short box

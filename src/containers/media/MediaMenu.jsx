@@ -7,6 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import PhotosIcon from '@mui/icons-material/PhotoLibraryOutlined';
+import TagPeopleIcon from '@mui/icons-material/PersonAddOutlined';
 import ActivityIcon from '@mui/icons-material/BarChartOutlined';
 import RepliesIcon from '@mui/icons-material/ForumOutlined';
 import ReportIcon from '@mui/icons-material/FlagOutlined';
@@ -27,6 +28,7 @@ import { DownloadSwitchMenuItem } from '../controls/medium/Download';
 import PostActivity from '../activity/PostActivity';
 import useReport from '../reports/useReport';
 import PhotoFilesDialog from './PhotoFilesDialog';
+import TagPeopleDialog from './TagPeopleDialog';
 
 import PersonType from '../../proptypes/Person';
 import MediumType from '../../proptypes/Medium';
@@ -52,6 +54,7 @@ const MediaMenu = ({
 }) => {
   const [menuAnchorEl, setAnchorEl] = React.useState(null);
   const [isEditingPhotos, setIsEditingPhotos] = React.useState(false);
+  const [isTagging, setIsTagging] = React.useState(false);
   const [isSettingReplies, setIsSettingReplies] = React.useState(false);
   const [isShowingActivity, setIsShowingActivity] = React.useState(false);
 
@@ -77,6 +80,9 @@ const MediaMenu = ({
   // A photo post's images are changed in a dialog of their own: their
   // order, their descriptions, and which there are.
   const canEditPhotos = canEdit && getNamespace(medium) === 'photos';
+  // Who is in a photo or a video is its author's to say (roadmap row 103).
+  const canTagPeople = Boolean(viewer && medium.author && medium.author.id === viewer.id) &&
+    ['photos', 'videos'].includes(getNamespace(medium)) && !utils.federation.isRemote(medium);
 
   // Somebody who may do nothing else here may still report it, so the
   // menu is drawn for them too.
@@ -134,6 +140,17 @@ const MediaMenu = ({
           >
             <MenuItemLabel icon={<PhotosIcon fontSize="small" />}>
               {i18n.t('photos:editor.edit')}
+            </MenuItemLabel>
+          </MenuItem>}
+        {canTagPeople &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setIsTagging(true);
+            }}
+          >
+            <MenuItemLabel icon={<TagPeopleIcon fontSize="small" />}>
+              {i18n.t('peopleTags:menu')}
             </MenuItemLabel>
           </MenuItem>}
         {isSubscribable(medium) &&
@@ -227,6 +244,14 @@ const MediaMenu = ({
           open={isEditingPhotos}
           onClose={() => {
             setIsEditingPhotos(false);
+          }}
+        />}
+      {canTagPeople &&
+        <TagPeopleDialog
+          medium={medium}
+          open={isTagging}
+          onClose={() => {
+            setIsTagging(false);
           }}
         />}
     </>
