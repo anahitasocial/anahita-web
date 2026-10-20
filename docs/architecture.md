@@ -982,7 +982,8 @@ emailed.
   its line whole (`reducers/notifications.js`).
 - **Actions** under a notification (`Browse/Actions.jsx`), as the server
   says they are still to be done (`actions`): Decline and Accept a request
-  to follow, **+ Follow** whoever followed, and Reply, which opens the reply
+  to follow, or a request to be tagged in a photo or a video (`answer_tag`,
+  roadmap row 103), **+ Follow** whoever followed, and Reply, which opens the reply
   form under it and answers the reply itself, or the post. Using one reads
   the notification.
 - **Mark all read**, in the page's header (the icon alone on a phone),
