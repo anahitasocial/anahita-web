@@ -114,12 +114,14 @@ const QuoteDialog = ({
               that does it. */}
           <Stack sx={{ justifyContent: 'flex-end' }} direction="row" spacing={1}>
             <Button
+              fullWidth
               disabled={isSending}
               onClick={onClose}
             >
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               variant="contained"
               color="primary"
               disabled={isSending || text.length === 0}

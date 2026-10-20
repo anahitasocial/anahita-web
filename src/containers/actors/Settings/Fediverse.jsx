@@ -148,10 +148,11 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setIsLeaving(false); }}>
+          <Button fullWidth onClick={() => { setIsLeaving(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="error"
             onClick={() => { save(false); }}

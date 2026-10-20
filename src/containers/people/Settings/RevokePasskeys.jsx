@@ -177,6 +177,7 @@ const RevokePasskeys = ({
         </DialogContent>
         <DialogActions>
           <Button
+            fullWidth
             onClick={() => {
               setConfirming(false);
             }}
@@ -184,6 +185,7 @@ const RevokePasskeys = ({
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="primary"
             onClick={() => {

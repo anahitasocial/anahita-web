@@ -44,7 +44,7 @@ const v4Look = (prefersDarkMode) => {
         defaultProps: { color: 'secondary' },
       },
       // A dialog's buttons line up with its text, and sit off its bottom
-      // edge: normal size, aligned right (AGENTS.md, "The interface").
+      // edge (AGENTS.md, "The interface").
       MuiDialogActions: {
         styleOverrides: {
           root: {

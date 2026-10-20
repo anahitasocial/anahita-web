@@ -128,12 +128,14 @@ const EmailEdit = ({
 
             <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
+                fullWidth
                 onClick={onCancel}
                 disabled={confirming}
               >
                 {i18n.t('actions:cancel')}
               </Button>
               <Button
+                fullWidth
                 type="submit"
                 color="primary"
                 variant="contained"
@@ -183,12 +185,14 @@ const EmailEdit = ({
 
             <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
+                fullWidth
                 onClick={onCancel}
                 disabled={submitting}
               >
                 {i18n.t('actions:cancel')}
               </Button>
               <Button
+                fullWidth
                 type="submit"
                 color="primary"
                 variant="contained"

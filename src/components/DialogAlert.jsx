@@ -33,11 +33,13 @@ const DialogAlert = ({
       </DialogContent>
       <DialogActions>
         <Button
+          fullWidth
           onClick={handleDismiss}
         >
           {dismiss}
         </Button>
         <Button
+          fullWidth
           onClick={handleConfirm}
           color="primary"
           autoFocus

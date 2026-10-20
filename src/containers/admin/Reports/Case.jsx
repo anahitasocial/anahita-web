@@ -302,6 +302,7 @@ const ReportsCase = ({
             {isOpen &&
               <>
                 <Button
+                  fullWidth
                   disabled={submitting}
                   onClick={() => {
                     setResolving('dismissed');
@@ -310,6 +311,7 @@ const ReportsCase = ({
                   {i18n.t('abuseReports:resolve.dismiss')}
                 </Button>
                 <Button
+                  fullWidth
                   color="primary"
                   variant="contained"
                   disabled={submitting}

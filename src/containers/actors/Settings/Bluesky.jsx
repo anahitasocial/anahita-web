@@ -335,10 +335,11 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
             </>}
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={() => { setIsChoosing(false); }}>
+          <Button fullWidth variant="outlined" onClick={() => { setIsChoosing(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="secondary"
             disabled={!preview || !howMany}
@@ -361,10 +362,10 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button variant="outlined" onClick={() => { setIsLeaving(false); }}>
+          <Button fullWidth variant="outlined" onClick={() => { setIsLeaving(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
-          <Button variant="contained" color="error" onClick={handleDisconnect}>
+          <Button fullWidth variant="contained" color="error" onClick={handleDisconnect}>
             {i18n.t('federation:bluesky.disconnect')}
           </Button>
         </DialogActions>

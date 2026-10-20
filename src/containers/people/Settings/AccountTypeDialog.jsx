@@ -145,10 +145,11 @@ const AccountTypeDialog = ({
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
           <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
-            <Button onClick={onClose} disabled={submitting}>
+            <Button fullWidth onClick={onClose} disabled={submitting}>
               {i18n.t('people:accountType.cancel')}
             </Button>
             <Button
+              fullWidth
               onClick={save}
               color="primary"
               variant="contained"

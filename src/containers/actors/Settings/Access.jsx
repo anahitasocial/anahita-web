@@ -264,10 +264,11 @@ const ActorsSettingsAccess = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => { setIsConfirmingLeave(false); }}>
+          <Button fullWidth onClick={() => { setIsConfirmingLeave(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="error"
             onClick={() => { handleOnSubmit(); }}

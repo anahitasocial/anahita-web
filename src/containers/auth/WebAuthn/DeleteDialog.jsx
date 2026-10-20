@@ -51,12 +51,14 @@ const DeleteDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
+          fullWidth
           onClick={handleCancel}
           disabled={isBusy}
         >
           {t('actions:cancel')}
         </Button>
         <Button
+          fullWidth
           color="secondary"
           variant="contained"
           onClick={handleConfirm}

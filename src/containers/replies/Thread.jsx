@@ -421,6 +421,7 @@ const RepliesThread = ({
         </DialogContent>
         <DialogActions>
           <Button
+            fullWidth
             onClick={() => {
               setAsking(null);
             }}
@@ -428,6 +429,7 @@ const RepliesThread = ({
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="primary"
             onClick={() => {

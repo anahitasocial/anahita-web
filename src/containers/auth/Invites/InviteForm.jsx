@@ -115,10 +115,11 @@ const InviteForm = ({
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={onClose} disabled={submitting}>
+          <Button fullWidth onClick={onClose} disabled={submitting}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             type="submit"
             color="primary"
             variant="contained"

@@ -408,6 +408,7 @@ const EventForm = ({
               does it. */}
           <Stack sx={{ justifyContent: 'flex-end' }} direction="row" spacing={1}>
             <Button
+              fullWidth
               disabled={isSaving}
               onClick={() => {
                 navigate(actor ? getURL(actor) : '/events');
@@ -416,6 +417,7 @@ const EventForm = ({
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               type="submit"
               variant="contained"
               color="primary"

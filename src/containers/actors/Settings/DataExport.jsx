@@ -163,6 +163,7 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
         <CardActions sx={{ p: 2, pt: 0, justifyContent: 'flex-end' }}>
           {(isActive || dataExports.isReady(shown)) &&
             <Button
+              fullWidth
               disabled={isWorking}
               onClick={() => {
                 remove(shown);
@@ -172,6 +173,7 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
             </Button>}
           {dataExports.isReady(shown) &&
             <Button
+              fullWidth
               variant="contained"
               startIcon={<DownloadIcon />}
               disabled={isWorking}
@@ -183,6 +185,7 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
             </Button>}
           {!isActive && !dataExports.isReady(shown) &&
             <Button
+              fullWidth
               variant="contained"
               disabled={isWorking || !canAsk}
               onClick={ask}

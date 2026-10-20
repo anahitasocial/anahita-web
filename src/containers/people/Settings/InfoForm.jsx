@@ -84,12 +84,14 @@ const PersonInfo = ({
           string; actions:save is the key the rest of the app uses for it. */}
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           onClick={handleOnCancel}
           disabled={isFetching}
         >
           {i18n.t('actions:cancel')}
         </Button>
         <Button
+          fullWidth
           type="submit"
           variant="contained"
           color="primary"

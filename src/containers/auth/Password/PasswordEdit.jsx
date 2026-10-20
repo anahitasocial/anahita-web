@@ -100,12 +100,14 @@ const PasswordEdit = ({
 
           <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
+              fullWidth
               onClick={onCancel}
               disabled={submitting}
             >
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               type="submit"
               color="primary"
               variant="contained"

@@ -704,16 +704,18 @@ const CustomFeedForm = ({
     </>
   );
 
-  // Normal size, aligned right: Cancel, then the one that saves.
+  // Side by side, each half the width: Cancel, then the one that saves.
   const buttons = (
     <>
       <Button
+        fullWidth
         disabled={isSaving}
         onClick={onClose}
       >
         {i18n.t('customFeeds:form.cancel')}
       </Button>
       <Button
+        fullWidth
         type="submit"
         form={FORM}
         variant="contained"

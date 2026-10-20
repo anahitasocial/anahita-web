@@ -161,12 +161,14 @@ const ReplyAccessDialog = ({
               that does it. */}
           <Stack sx={{ justifyContent: 'flex-end' }} direction="row" spacing={1}>
             <Button
+              fullWidth
               disabled={saving}
               onClick={onClose}
             >
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               variant="contained"
               color="primary"
               disabled={saving}

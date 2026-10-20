@@ -223,13 +223,14 @@ const PurgeDialog = ({
           </DialogContent>}
 
         <DialogActions>
-          <Button onClick={close}>
+          <Button fullWidth onClick={close}>
             {started || nothingToDo ?
               i18n.t('accounts:purge.close') :
               i18n.t('accounts:purge.cancel')}
           </Button>
           {!over && !started &&
             <Button
+              fullWidth
               color="secondary"
               variant="contained"
               disabled={!confirmed || submitting}

@@ -284,17 +284,19 @@ const ReplyForm = ({
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {hint}
         </Typography>}
-      {/* Normal size, aligned right: one for sending, and before it one
-          for backing out where there is something to back out of. */}
+      {/* One for sending, and before it one for backing out where there is
+          something to back out of: the two side by side, each half the
+          width; the one alone at its own size, at the right. */}
       <Box sx={{
         display: 'flex', gap: 1, mt: 1, justifyContent: 'flex-end',
       }}
       >
         {onCancel &&
-          <Button onClick={onCancel} disabled={isSending}>
+          <Button fullWidth onClick={onCancel} disabled={isSending}>
             {i18n.t('actions:cancel')}
           </Button>}
         <Button
+          fullWidth={Boolean(onCancel)}
           type="submit"
           variant="contained"
           color="primary"
