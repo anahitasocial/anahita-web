@@ -2,6 +2,14 @@
 // for writing at length.
 export default {
   newPost: 'New post',
+  // A thread written in one go: the notes after the first (roadmap row
+  // 101).
+  thread: {
+    add: 'Add to thread',
+    placeholder: 'Say more…',
+    part: 'Note {{number}} of the thread',
+    remove: 'Remove from the thread',
+  },
   close: 'Close',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Long content',
@@ -53,7 +61,7 @@ export default {
     upload: 'Upload',
     uploadNote: 'Put up here, it is in your library and in this writing only: not in your feed or on your profile.',
     insert: 'Insert',
-    chooseVideo: 'Choose a GIF or a video',
+    chooseVideo: 'GIF or video',
     preparing: 'Preparing your video. It goes in as soon as it is ready.',
     none: {
       photos: 'No photos yet.',

@@ -107,7 +107,6 @@ const ActorsFollowRequests = React.forwardRef(({
         <DialogActions>
           <Button
             onClick={handleClose}
-            fullWidth
           >
             {i18n.t('commons:close')}
           </Button>

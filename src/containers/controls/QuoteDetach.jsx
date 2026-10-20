@@ -75,7 +75,6 @@ const QuoteDetach = ({
         </DialogContent>
         <DialogActions>
           <Button
-            fullWidth
             onClick={() => {
               setIsAsking(false);
             }}
@@ -83,7 +82,6 @@ const QuoteDetach = ({
             {i18n.t('actions:cancel')}
           </Button>
           <Button
-            fullWidth
             variant="contained"
             color="primary"
             onClick={handleDetach}

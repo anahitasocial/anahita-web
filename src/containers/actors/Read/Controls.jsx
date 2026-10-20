@@ -6,19 +6,19 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import ReportIcon from '@mui/icons-material/FlagOutlined';
+import SpamIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
 import { ShareMenuItem, ofNode } from '../../controls/Share';
 import useReport from '../../reports/useReport';
+import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
 import utils from '../../../utils';
 import i18n from '../../../languages';
 import perms from '../../../permissions/actor';
-
-const ITEM_HEIGHT = 48;
 
 const { node } = utils;
 
@@ -43,6 +43,9 @@ const ActorsReadControls = ({
   const showEdit = perms.canEdit(actor);
   const showFeature = isAuthenticated && perms.canFeature(actor, viewer);
   const report = useReport(viewer, actor);
+  // An administrator removing spam at once (roadmap row 102), then the
+  // page read again, which finds it gone.
+  const spam = useRemoveAsSpam(viewer, actor, onChanged);
 
   return (
     <>
@@ -60,10 +63,12 @@ const ActorsReadControls = ({
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        // No height of its own: a profile's menu is a few items, and an
+        // administrator's (with Remove as spam) were cut short by one, behind
+        // a scrollbar.
         slotProps={{
           paper: {
             style: {
-              maxHeight: ITEM_HEIGHT * 4.5,
               minWidth: 200,
             },
           },
@@ -117,8 +122,20 @@ const ActorsReadControls = ({
               {i18n.t('abuseReports:report')}
             </MenuItemLabel>
           </MenuItem>}
+        {spam.canRemove &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              spam.open();
+            }}
+          >
+            <MenuItemLabel icon={<SpamIcon fontSize="small" />}>
+              {i18n.t('abuseReports:spam.action')}
+            </MenuItemLabel>
+          </MenuItem>}
       </Menu>
       {report.dialog}
+      {spam.dialog}
     </>
   );
 };

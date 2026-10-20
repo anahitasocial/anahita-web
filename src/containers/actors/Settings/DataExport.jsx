@@ -160,10 +160,9 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
           </Typography>}
       </CardContent>
       {items && !isAbsent &&
-        <CardActions sx={{ p: 2, pt: 0 }}>
+        <CardActions sx={{ p: 2, pt: 0, justifyContent: 'flex-end' }}>
           {(isActive || dataExports.isReady(shown)) &&
             <Button
-              fullWidth
               disabled={isWorking}
               onClick={() => {
                 remove(shown);
@@ -173,7 +172,6 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
             </Button>}
           {dataExports.isReady(shown) &&
             <Button
-              fullWidth
               variant="contained"
               startIcon={<DownloadIcon />}
               disabled={isWorking}
@@ -185,7 +183,6 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
             </Button>}
           {!isActive && !dataExports.isReady(shown) &&
             <Button
-              fullWidth
               variant="contained"
               disabled={isWorking || !canAsk}
               onClick={ask}

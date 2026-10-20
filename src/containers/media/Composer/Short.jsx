@@ -20,10 +20,12 @@ import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import actions from '../../../actions';
+import api from '../../../api';
 import ActorAvatar from '../../../components/ActorAvatar';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
+import ThreadParts from './ThreadParts';
 import VideoUploads from './VideoUploads';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
@@ -43,6 +45,7 @@ import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
 import i18n from '../../../languages';
+import useRulesFirst from '../../rules/useRulesFirst';
 
 const { CONTENT } = MEDIUM.FIELDS;
 const { isPerson } = utils.node;
@@ -95,6 +98,9 @@ const ShortComposer = ({
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
+  // The notes of a thread after the first, written in one go (roadmap row
+  // 101).
+  const [moreParts, setMoreParts] = useState([]);
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
   const [handedOver, setHandedOver] = useState(0);
@@ -115,6 +121,10 @@ const ShortComposer = ({
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
+  // A thread is of notes: words alone, no pictures and no video.
+  const canThread = canWords && !hasPhotos && !video && !isAddingPhotos;
+  const threadParts = canThread ?
+    moreParts.map((each) => { return each.trim(); }).filter(Boolean) : [];
   const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
   const isUploading = upload.phase === 'uploading';
   const busy = isSending || isUploading;
@@ -177,6 +187,7 @@ const ShortComposer = ({
     clearDraft();
     postLocations.clear();
     setPhotoItems([]);
+    setMoreParts([]);
     setPhotoPoint(null);
     setIsAddingPhotos(false);
     setVideo(null);
@@ -200,6 +211,10 @@ const ShortComposer = ({
     reset();
   };
 
+  // Posting on a group or an event whose rules changed since the writer
+  // agreed: agreed to again first (roadmap row 102, part 5c).
+  const rules = useRulesFirst(actor, 'post');
+
   const handleSubmit = (event) => {
     if (event) {
       event.preventDefault();
@@ -207,7 +222,13 @@ const ShortComposer = ({
     if (!hasSomething || isHeldBack) {
       return;
     }
+    rules.run(() => {
+      // eslint-disable-next-line no-use-before-define
+      sendPost();
+    });
+  };
 
+  const sendPost = () => {
     if (video) {
       upload.start(actor, {
         title: '',
@@ -219,6 +240,32 @@ const ShortComposer = ({
           setHandedOver(handedOver + 1);
           reset();
         }
+      });
+      return;
+    }
+
+    // A thread: its notes made together, in order, all or none. The first
+    // takes what a post takes; the rest are replies to the one before.
+    if (threadParts.length > 0) {
+      const { language } = choices.request();
+      const post = shared();
+      delete post.content;
+      const parts = [text, ...threadParts].map((content, at) => {
+        return {
+          content,
+          language,
+          ...(at === 0 && linkPreview.url ? { linkPreviewUrl: linkPreview.url } : {}),
+        };
+      });
+      setIsSending(true);
+      api.replies.addThread(actor, post, parts).then((result) => {
+        // Its first note, at the head of the open feed, as any post.
+        dispatch({ type: 'NOTES_ADD_SUCCESS', node: result.data.parts[0] });
+        posted();
+      }).catch(() => {
+        alertError(i18n.t('prompts:posted.error'));
+      }).finally(() => {
+        setIsSending(false);
       });
       return;
     }
@@ -383,10 +430,28 @@ const ShortComposer = ({
         }}
       />
       <HashtagSuggestions {...hashtags.overlay} />
+      {/* Its line is kept while the post goes to Bluesky, so that nothing
+          moves when the words grow past what a post there holds. */}
+      {goesToBluesky &&
+        <Typography variant="caption" color="textSecondary" component="p">
+          {cutForBluesky ?
+            i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
+            ' '}
+        </Typography>}
       {!hasPhotos && !video &&
         <LinkPreviewCard
           preview={linkPreview.preview}
           onRemove={busy ? null : linkPreview.remove}
+        />}
+      {canThread &&
+        <ThreadParts
+          parts={moreParts}
+          onChange={setMoreParts}
+          canAdd={Boolean(text) && !moreParts.some((each) => { return !each.trim(); })}
+          max={LIMITS.THREAD_PARTS_MAX}
+          disabled={busy}
+          direction={choices.direction}
+          goesToBluesky={goesToBluesky}
         />}
       {!video && postLocations.chips({ disabled: busy, goesOut })}
       {isAddingPhotos &&
@@ -466,14 +531,7 @@ const ShortComposer = ({
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {i18n.t(morePictures, { max: LIMITS.PICTURES_SHOWN_MAX })}
         </Typography>}
-      {/* Its line is kept while the post goes to Bluesky, so that nothing
-          moves when the words grow past what a post there holds. */}
-      {goesToBluesky &&
-        <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
-          {cutForBluesky ?
-            i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
-            ' '}
-        </Typography>}
+
     </>
   );
 
@@ -562,6 +620,7 @@ const ShortComposer = ({
           {options}
         </Stack>
       </Box>
+      {rules.dialog}
     </Dialog>
   );
 };

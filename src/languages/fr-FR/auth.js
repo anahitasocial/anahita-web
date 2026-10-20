@@ -120,7 +120,7 @@ export default {
       prompts: {
         copySuccess: 'Copie réussie !',
         copyCodes: 'Copier les codes',
-        enableTotp: 'J’ai enregistré mes codes de récupération',
+        enableTotp: "C'est fait",
       },
     },
     enable: {
@@ -156,7 +156,7 @@ export default {
     cTitle: 'Confirmez qu’il s’agit bien de vous',
     label: 'Pour votre sécurité, confirmez votre identité avant de modifier ceci.',
     usePasskey: 'Utiliser une clé d’accès',
-    usePassword: 'Utiliser plutôt votre mot de passe',
+    usePassword: 'Mot de passe',
     submit: 'Confirmer',
     fields: {
       currentPassword: 'Mot de passe actuel',

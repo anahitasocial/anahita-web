@@ -171,6 +171,9 @@ const ReportsList = ({
             <MenuItem value={ANY_REASON}>
               {i18n.t('abuseReports:list.anyReason')}
             </MenuItem>
+            <MenuItem value="rule">
+              {i18n.t('abuseReports:dialog.rule')}
+            </MenuItem>
             {reasons.map((item) => {
               return (
                 <MenuItem key={item.key} value={item.key}>
@@ -232,8 +235,8 @@ const ReportsList = ({
                               variant="outlined"
                               sx={{ mr: 0.5, mb: 0.5 }}
                               label={given.count > 1 ?
-                                `${given.label} × ${given.count}` :
-                                given.label}
+                                `${target.reasonLabel(given)} × ${given.count}` :
+                                target.reasonLabel(given)}
                             />
                           );
                         })}

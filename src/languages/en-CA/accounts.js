@@ -41,7 +41,7 @@ export default {
     active: 'In use',
     disabled: 'Disabled',
     archived: 'Archived',
-    deleted: 'Deleted, waiting out the 30 days',
+    deleted: 'Deleted, waiting to be removed for good',
   },
   list: {
     loadError: 'Could not load the accounts.',
@@ -76,7 +76,7 @@ export default {
   purge: {
     title_one: 'Delete {{count}} account permanently?',
     title_other: 'Delete {{count}} accounts permanently?',
-    permanent: 'This cannot be undone, and there are no 30 days to change your mind.',
+    permanent: 'This cannot be undone, and there is no time to change your mind.',
     whatGoes: "Everything these accounts posted or replied goes, wherever it is, along with other people's replies under their posts, their likes and follows, their uploaded files and their sign-in details.",
     whatGoesGroup: 'Everything posted in these groups goes, by whoever posted it, along with the replies under those posts and the uploaded files.',
     whatStays: 'Each username stays reserved, so nobody else can take it.',
@@ -112,7 +112,7 @@ export default {
   },
   // The card in a profile's Danger zone, for one account.
   single: {
-    permanent: 'This removes the account for good, now. There are no 30 days to change your mind, and no way to bring it back.',
+    permanent: 'This removes the account for good, now. There is no time to change your mind, and no way to bring it back.',
     personDescription: "Everything {{ name }} posted or replied goes, wherever it is, along with other people's replies under their posts, their likes and follows, their uploaded files and their sign-in details. The username stays reserved.",
     groupDescription: "Everything posted in {{ name }} goes, by whoever posted it, along with the replies under those posts and the uploaded files. The group's address stays reserved.",
     notModeration: 'This is for clearing out accounts nobody uses. To stop somebody using the site, disable the account instead.',

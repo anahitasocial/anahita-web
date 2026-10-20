@@ -71,9 +71,8 @@ const RecentSearches = ({ viewerId }) => {
           );
         })}
       </List>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
-          fullWidth
           variant="outlined"
           onClick={() => {
             setSearches(recentSearches.clear(viewerId));

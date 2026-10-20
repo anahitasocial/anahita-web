@@ -82,12 +82,11 @@ const EmailEdit = ({
         </CardContent>}
 
       {!isEditing &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             onClick={onOpen}
             color="primary"
             variant="outlined"
-            fullWidth
           >
             {i18n.t('email:change')}
           </Button>
@@ -127,11 +126,10 @@ const EmailEdit = ({
               />
             </CardContent>
 
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
                 onClick={onCancel}
                 disabled={confirming}
-                fullWidth
               >
                 {i18n.t('actions:cancel')}
               </Button>
@@ -141,7 +139,6 @@ const EmailEdit = ({
                 variant="contained"
                 disabled={confirming}
                 startIcon={confirming ? <CircularProgress size={16} color="inherit" /> : null}
-                fullWidth
               >
                 {confirming ? i18n.t('email:confirming') : i18n.t('email:confirm')}
               </Button>
@@ -184,11 +181,10 @@ const EmailEdit = ({
 
             </CardContent>
 
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
                 onClick={onCancel}
                 disabled={submitting}
-                fullWidth
               >
                 {i18n.t('actions:cancel')}
               </Button>
@@ -198,7 +194,6 @@ const EmailEdit = ({
                 variant="contained"
                 disabled={submitting}
                 startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
-                fullWidth
               >
                 {submitting ? i18n.t('email:submitting') : i18n.t('email:submit')}
               </Button>

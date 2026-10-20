@@ -14,7 +14,7 @@ import i18n from '../../../languages';
 
 // What can be recorded as having been done. "none" is not offered: that is
 // what dismissing means.
-const ACTIONS = ['deleted', 'disabled', 'archived', 'blocked', 'other'];
+const ACTIONS = ['deleted', 'disabled', 'archived', 'blocked', 'removed_as_spam', 'other'];
 
 const NOTE_MAX = 2000;
 
@@ -87,11 +87,10 @@ const ResolveDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button fullWidth onClick={onClose} disabled={submitting}>
+        <Button onClick={onClose} disabled={submitting}>
           {i18n.t('actions:cancel')}
         </Button>
         <Button
-          fullWidth
           color="primary"
           variant="contained"
           disabled={submitting}

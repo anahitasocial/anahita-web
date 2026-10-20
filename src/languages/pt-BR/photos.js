@@ -24,7 +24,7 @@ export default {
     described: 'Mudar a descrição',
     describeTitle: 'Descrever esta foto',
     altLabel: 'Descrição da imagem',
-    askAlt: 'Adicionar uma descrição da imagem',
+    askAlt: 'Adicionar descrição',
     askAltWhy: 'Ela é lida em voz alta para quem não consegue ver a foto, e aparece quando uma foto não carrega.',
     altWhy: 'Lida em voz alta para quem não consegue ver a foto. Não é a legenda: diga o que há na imagem.',
     altHelp: 'Por exemplo: uma bananeira-anã perto de uma janela, ao lado de uma poltrona cinza.',

@@ -189,11 +189,10 @@ const SuggestionWeightsDialog = ({
       </DialogContent>
       {/* Side by side: Cancel, Reset, then the one that saves. */}
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth disabled={isSaving} onClick={onClose}>
+        <Button disabled={isSaving} onClick={onClose}>
           {i18n.t('recommendations:weights.cancel')}
         </Button>
         <Button
-          fullWidth
           disabled={isSaving || !settings}
           onClick={() => {
             setWeights({ ...(settings.defaultWeights || {}) });
@@ -208,7 +207,6 @@ const SuggestionWeightsDialog = ({
           {i18n.t('recommendations:weights.reset')}
         </Button>
         <Button
-          fullWidth
           variant="contained"
           disabled={isSaving || !settings}
           onClick={handleSave}

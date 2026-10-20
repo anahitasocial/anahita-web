@@ -175,7 +175,7 @@ const SuggestionPreferencesDialog = ({
           </List>}
       </DialogContent>
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={close}>
+        <Button onClick={close}>
           {i18n.t('commons:close')}
         </Button>
       </DialogActions>

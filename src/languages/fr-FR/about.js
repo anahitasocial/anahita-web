@@ -5,6 +5,10 @@ export default {
   cDescription: 'Ce que ce site exécute.',
   unavailable: "Ce site n'a pas renvoyé son document NodeInfo.",
   readOnly: 'Valeurs rapportées par le serveur. Modifiez-les dans sa configuration.',
+  promises: {
+    title: 'Nos engagements envers vous',
+    rules: 'Lire nos règles',
+  },
   server: {
     mTitle: 'Serveur',
   },

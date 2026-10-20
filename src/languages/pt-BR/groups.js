@@ -10,6 +10,8 @@ export default {
     admins: 'Admins',
     features: 'Recursos',
     permissions: 'Permissões',
+    rules: 'Regras',
+    reports: 'Denúncias',
     access: 'Privacidade',
     // Deletion copy, namespace-specific. The shared actor:delete strings told
     // group administrators to "sign in to restore", which a group cannot do,

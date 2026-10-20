@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import agreementsUtil from '../utils/agreements';
+import { useRules } from '../containers/site/useSite';
 import isReachable from './reachable';
 
 // Sends a signed-in person to /agreements when either legal document has moved
@@ -30,6 +31,9 @@ const AgreementsGate = ({ children }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
   const isAuthenticated = useSelector((state) => { return state.session.isAuthenticated; });
   const isResolved = useSelector((state) => { return state.session.isResolved; });
+  // The site's rules (roadmap row 102), ticked on a page of their own after
+  // the Terms and the Privacy Policy.
+  const rules = useRules();
 
   // Nothing is decided until the session has been READ, not merely restored
   // from the cache. A cached viewer from before an acceptance would otherwise
@@ -38,8 +42,15 @@ const AgreementsGate = ({ children }) => {
     return children;
   }
 
-  if (agreementsUtil.hasOutdatedTerms(viewer) && !isReachable(location.pathname, '/agreements')) {
-    return <Navigate to="/agreements" replace />;
+  if (agreementsUtil.hasOutdatedTerms(viewer)) {
+    if (!isReachable(location.pathname, '/agreements')) {
+      return <Navigate to="/agreements" replace />;
+    }
+    return children;
+  }
+
+  if (rules.outdated && !isReachable(location.pathname, '/rules')) {
+    return <Navigate to="/rules" replace />;
   }
 
   return children;

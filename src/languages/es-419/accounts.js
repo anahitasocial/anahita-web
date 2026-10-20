@@ -41,7 +41,7 @@ export default {
     active: 'En uso',
     disabled: 'Desactivada',
     archived: 'Archivada',
-    deleted: 'Eliminada, esperando los 30 días',
+    deleted: 'Eliminada, a la espera de borrarse para siempre',
   },
   list: {
     loadError: 'No se pudieron cargar las cuentas.',
@@ -76,7 +76,7 @@ export default {
   purge: {
     title_one: '¿Eliminar definitivamente {{count}} cuenta?',
     title_other: '¿Eliminar definitivamente {{count}} cuentas?',
-    permanent: 'Esto no se puede deshacer, y no hay 30 días para cambiar de opinión.',
+    permanent: 'No se puede deshacer, y no hay plazo para cambiar de opinión.',
     whatGoes: 'Todo lo que estas cuentas publicaron o respondieron se borra, esté donde esté, junto con las respuestas de otras personas a sus publicaciones, sus Me gusta y sus seguimientos, sus archivos subidos y sus datos de inicio de sesión.',
     whatGoesGroup: 'Todo lo publicado en estos grupos se borra, sin importar quién lo publicó, junto con las respuestas a esas publicaciones y los archivos subidos.',
     whatStays: 'Cada nombre de usuario queda reservado, para que nadie más pueda usarlo.',
@@ -112,7 +112,7 @@ export default {
   },
   // The card in a profile's Danger zone, for one account.
   single: {
-    permanent: 'Esto elimina la cuenta para siempre, ahora mismo. No hay 30 días para cambiar de opinión, ni forma de recuperarla.',
+    permanent: 'Esto elimina la cuenta para siempre, ahora. No hay plazo para cambiar de opinión ni forma de recuperarla.',
     personDescription: 'Todo lo que {{ name }} publicó o respondió se borra, esté donde esté, junto con las respuestas de otras personas a sus publicaciones, sus Me gusta y sus seguimientos, sus archivos subidos y sus datos de inicio de sesión. El nombre de usuario queda reservado.',
     groupDescription: 'Todo lo publicado en {{ name }} se borra, sin importar quién lo publicó, junto con las respuestas a esas publicaciones y los archivos subidos. La dirección del grupo queda reservada.',
     notModeration: 'Esto sirve para limpiar las cuentas que nadie usa. Para impedir que alguien use el sitio, mejor desactiva la cuenta.',

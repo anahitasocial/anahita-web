@@ -41,7 +41,7 @@ export default {
     active: 'Em uso',
     disabled: 'Desativado',
     archived: 'Arquivado',
-    deleted: 'Excluído, aguardando os 30 dias',
+    deleted: 'Excluída, aguardando a remoção definitiva',
   },
   list: {
     loadError: 'Não foi possível carregar as contas.',
@@ -76,7 +76,7 @@ export default {
   purge: {
     title_one: 'Excluir {{count}} conta definitivamente?',
     title_other: 'Excluir {{count}} contas definitivamente?',
-    permanent: 'Isso não pode ser desfeito, e não há 30 dias para mudar de ideia.',
+    permanent: 'Não dá para desfazer, e não há prazo para mudar de ideia.',
     whatGoes: 'Tudo o que essas contas publicaram ou responderam é apagado, onde quer que esteja, junto com as respostas de outras pessoas às publicações delas, as curtidas delas, quem elas seguiam, os arquivos enviados e os dados de acesso.',
     whatGoesGroup: 'Tudo o que foi publicado nesses grupos é apagado, não importa quem publicou, junto com as respostas a essas publicações e os arquivos enviados.',
     whatStays: 'Cada nome de usuário continua reservado, para que ninguém mais possa usá-lo.',
@@ -112,7 +112,7 @@ export default {
   },
   // The card in a profile's Danger zone, for one account.
   single: {
-    permanent: 'Isto remove a conta de vez, agora. Não há 30 dias para mudar de ideia, nem como recuperá-la.',
+    permanent: 'Isto remove a conta para sempre, agora. Não há prazo para mudar de ideia nem como recuperá-la.',
     personDescription: 'Tudo o que {{ name }} publicou ou respondeu é apagado, onde quer que esteja, junto com as respostas de outras pessoas às publicações, as curtidas, quem seguia, os arquivos enviados e os dados de acesso. O nome de usuário continua reservado.',
     groupDescription: 'Tudo o que foi publicado em {{ name }} é apagado, não importa quem publicou, junto com as respostas a essas publicações e os arquivos enviados. O endereço do grupo continua reservado.',
     notModeration: 'Isto serve para limpar contas que ninguém usa. Para impedir alguém de usar o site, desative a conta.',

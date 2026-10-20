@@ -275,13 +275,12 @@ const WebAuthn = () => {
         </List>}
 
       {supported &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             color="primary"
             startIcon={<AddIcon />}
             disabled={isBusy || isFetching || atLimit}
             onClick={handleAdd}
-            fullWidth
             variant="outlined"
           >
             {isBusy ? t('auth:webauthn.adding') : t('auth:webauthn.add')}

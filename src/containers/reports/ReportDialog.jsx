@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 
 import Button from '@mui/material/Button';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -12,6 +12,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import FormControl from '@mui/material/FormControl';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormHelperText from '@mui/material/FormHelperText';
+import MenuItem from '@mui/material/MenuItem';
 import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import TextField from '@mui/material/TextField';
@@ -20,8 +21,31 @@ import Typography from '@mui/material/Typography';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
+import useActorRules from '../actors/Read/useRules';
+import { textIn, useRules } from '../site/useSite';
 
 const DETAILS_MAX = 1000;
+
+// "Breaks a rule": not one of the installation's reasons, for the rules are
+// the reasons (roadmap row 102, part 6).
+const RULE = 'rule';
+
+const isRulesProfile = (node) => {
+  const type = (node && node.type) || '';
+  return type.includes('.group.') || type.includes('.event.');
+};
+
+// The group or event whose rules the node is under: itself, or the one it
+// was posted in.
+const rulesProfileOf = (node) => {
+  if (isRulesProfile(node)) {
+    return node;
+  }
+  if (isRulesProfile(node.owner)) {
+    return node.owner;
+  }
+  return null;
+};
 
 // The reasons for one kind of node in one language do not change while the
 // app is open, so each list is fetched once. Keyed by both: switching
@@ -67,13 +91,19 @@ const submitError = (err) => {
   if (code === 'details_required') {
     return i18n.t('abuseReports:errors.detailsRequired');
   }
+  if (code === 'rule_required') {
+    return i18n.t('abuseReports:errors.chooseRule');
+  }
+  if (code === 'rule_not_applicable') {
+    return i18n.t('abuseReports:errors.ruleNotApplicable');
+  }
 
   return i18n.t('abuseReports:errors.generic');
 };
 
 // The form somebody fills in to report a node: a reason from the
-// installation's list, and, if they wish or the reason demands, a few
-// words.
+// installation's list, or a rule it breaks, the site's or its group's or
+// event's; and, if they wish or the reason demands, a few words.
 //
 // Rendered only while open, so every opening starts from an empty form.
 const ReportDialog = ({
@@ -88,6 +118,31 @@ const ReportDialog = ({
   const [details, setDetails] = useState('');
   const [error, setError] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // The rule chosen, by its place in `rules`.
+  const [ruleIndex, setRuleIndex] = useState('');
+
+  const { site } = useRules();
+  const rulesOn = useSelector((state) => {
+    const { metadata } = state.app.nodeInfo || {};
+    return !metadata || metadata.siteRules !== false;
+  });
+  const profile = rulesProfileOf(node);
+  const profileRules = useActorRules(profile);
+
+  // Every rule it could break, in one list: a group or an event has the
+  // site's rules and its own after them. Each knows whose it is, for the
+  // server.
+  const siteItems = (rulesOn && site && site.rules && site.rules.items) || [];
+  const ownItems = (profile && profileRules && profileRules.items) || [];
+  const rules = [
+    ...siteItems.map((item) => {
+      return { profileId: 0, title: textIn(item.title, i18n.language) };
+    }),
+    ...ownItems.map((item) => {
+      return { profileId: profile.id, title: item.title };
+    }),
+  ];
+  const chosenRule = ruleIndex === '' ? null : rules[ruleIndex] || null;
 
   useEffect(() => {
     let current = true;
@@ -109,7 +164,8 @@ const ReportDialog = ({
     };
   }, [node.type]);
 
-  const reason = (reasons || []).find((item) => {
+  const breaksRule = reasonKey === RULE;
+  const reason = breaksRule ? null : (reasons || []).find((item) => {
     return item.key === reasonKey;
   });
   const detailsRequired = Boolean(reason && reason.requiresDetails);
@@ -120,8 +176,12 @@ const ReportDialog = ({
     if (submitting) {
       return;
     }
-    if (!reason) {
+    if (!reason && !breaksRule) {
       setError(i18n.t('abuseReports:errors.chooseReason'));
+      return;
+    }
+    if (breaksRule && !chosenRule) {
+      setError(i18n.t('abuseReports:errors.chooseRule'));
       return;
     }
     if (detailsRequired && !details.trim()) {
@@ -135,6 +195,8 @@ const ReportDialog = ({
       targetId: node.id,
       reasonKey,
       details: details.trim(),
+      rule: chosenRule ? chosenRule.title : '',
+      ruleProfileId: chosenRule ? chosenRule.profileId : 0,
     })
       .then((response) => {
         alertSuccess(response.status === 200 ?
@@ -188,7 +250,7 @@ const ReportDialog = ({
             <FormControl
               variant="standard"
               margin="normal"
-              error={Boolean(error) && !reason}
+              error={Boolean(error) && !reason && !chosenRule}
               fullWidth
             >
               <RadioGroup
@@ -199,6 +261,38 @@ const ReportDialog = ({
                   setError('');
                 }}
               >
+                {rules.length > 0 &&
+                  <FormControlLabel
+                    value={RULE}
+                    control={<Radio size="small" />}
+                    label={i18n.t('abuseReports:dialog.rule')}
+                    disabled={submitting}
+                  />}
+                {/* Which rule, right under the choice. */}
+                {breaksRule &&
+                  <TextField
+                    select
+                    variant="outlined"
+                    size="small"
+                    name="rule"
+                    label={i18n.t('abuseReports:dialog.whichRule')}
+                    value={ruleIndex}
+                    onChange={(event) => {
+                      setRuleIndex(event.target.value);
+                      setError('');
+                    }}
+                    disabled={submitting}
+                    sx={{ mt: 1, mb: 1 }}
+                    fullWidth
+                  >
+                    {rules.map((item, index) => {
+                      return (
+                        <MenuItem key={`${item.profileId}-${item.title}`} value={index}>
+                          {item.title}
+                        </MenuItem>
+                      );
+                    })}
+                  </TextField>}
                 {reasons.map((item) => {
                   return (
                     <FormControlLabel
@@ -252,12 +346,11 @@ const ReportDialog = ({
             </Typography>}
         </DialogContent>
         <DialogActions>
-          <Button fullWidth onClick={onClose} disabled={submitting}>
+          <Button onClick={onClose} disabled={submitting}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
             type="submit"
-            fullWidth
             color="primary"
             variant="contained"
             disabled={submitting || !reasons}

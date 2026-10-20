@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
@@ -27,6 +27,7 @@ import i18n from '../../../languages';
 import utils from '../../../utils';
 
 import ResolveDialog from './ResolveDialog';
+import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
 import target from './target';
 
 const { getURL } = utils.node;
@@ -69,6 +70,17 @@ const ReportsCase = ({
   const [notFound, setNotFound] = useState(false);
   const [resolving, setResolving] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  const viewer = useSelector((state) => { return state.session.viewer; });
+  // A person or a group reported as spam, removed from here at once (roadmap
+  // row 102); the case is then closed as removed as spam.
+  const spam = useRemoveAsSpam(
+    viewer,
+    item && item.status === 'open' && !item.targetGone ? item.target : null,
+    () => {
+      // eslint-disable-next-line no-use-before-define
+      handleResolve({ status: 'actioned', action: 'removed_as_spam', note: '' });
+    },
+  );
 
   const fetchCase = useCallback(() => {
     setIsFetching(true);
@@ -199,9 +211,20 @@ const ReportsCase = ({
                   </>}
               </>
             }
-            action={<Chip label={statusLabel} color={isOpen ? 'primary' : 'default'} />}
+            action={
+              <Chip
+                size="small"
+                label={statusLabel}
+                color={isOpen ? 'primary' : 'default'}
+              />
+            }
+            // The text wraps beside the status, never under it.
+            sx={{
+              '& .MuiCardHeader-content': { minWidth: 0, overflowWrap: 'anywhere' },
+              '& .MuiCardHeader-action': { alignSelf: 'flex-start', m: 0, ml: 2 },
+            }}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           {(body || item.targetGone) &&
@@ -227,6 +250,10 @@ const ReportsCase = ({
                 <Button component={RouterLink} to={targetUrl} color="primary">
                   {i18n.t('abuseReports:case.open')}
                 </Button>
+                {spam.canRemove &&
+                  <Button color="error" disabled={submitting} onClick={spam.open}>
+                    {i18n.t('abuseReports:spam.action')}
+                  </Button>}
               </CardActions>
             </>}
         </Card>
@@ -264,11 +291,17 @@ const ReportsCase = ({
                   {`${i18n.t('abuseReports:case.note')}: ${item.decisionNote}`}
                 </Typography>}
             </CardContent>}
-          <CardActions>
+          {/* What each choice means, beside two short buttons. */}
+          {isOpen &&
+            <CardContent sx={{ pt: 0 }}>
+              <Typography variant="body2" color="textSecondary">
+                {i18n.t('abuseReports:resolve.hint')}
+              </Typography>
+            </CardContent>}
+          <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
             {isOpen &&
               <>
                 <Button
-                  fullWidth
                   disabled={submitting}
                   onClick={() => {
                     setResolving('dismissed');
@@ -277,7 +310,6 @@ const ReportsCase = ({
                   {i18n.t('abuseReports:resolve.dismiss')}
                 </Button>
                 <Button
-                  fullWidth
                   color="primary"
                   variant="contained"
                   disabled={submitting}
@@ -318,10 +350,10 @@ const ReportsCase = ({
                       <Typography variant="subtitle2">
                         {report.reporter ?
                           <Link component={RouterLink} to={getURL(report.reporter)}>
-                            {report.reporter.name}
+                            {report.reporter.name || `@${report.reporter.alias}`}
                           </Link> :
                           `#${report.reporterId}`}
-                        {` · ${report.reasonLabel}`}
+                        {` · ${target.reasonOf(report)}`}
                       </Typography>
                     }
                     secondary={
@@ -382,6 +414,7 @@ const ReportsCase = ({
           }}
           onConfirm={handleResolve}
         />}
+      {spam.dialog}
     </>
   );
 };

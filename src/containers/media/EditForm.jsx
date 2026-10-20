@@ -144,10 +144,9 @@ const MediumFormEdit = (props) => {
             {i18n.t('federation:composer.editStaysHereBluesky')}
           </Typography>}
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           disabled={isFetching}
-          fullWidth
           onClick={handleCancel}
         >
           {i18n.t('actions:cancel')}
@@ -157,7 +156,6 @@ const MediumFormEdit = (props) => {
           variant="contained"
           color="primary"
           disabled={isFetching || bodyMissing || bodyTooLong}
-          fullWidth
         >
           {i18n.t('actions:update')}
         </Button>

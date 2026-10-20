@@ -24,7 +24,7 @@ import WebsiteIcon from '@mui/icons-material/RssFeed';
 // state toggle between secure and insecure rather than as an action.
 // A door with an arrow through it says leave.
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import LabelIcon from '@mui/icons-material/Label';
+import HashtagIcon from '@mui/icons-material/Tag';
 import LocationIcon from '@mui/icons-material/LocationOn';
 import AdminIcon from '@mui/icons-material/AdminPanelSettings';
 import SettingsIcon from '@mui/icons-material/Settings';
@@ -202,7 +202,7 @@ const LeftMenu = ({
             selected={pathname === '/hashtags/'}
           >
             <ListItemIcon>
-              <LabelIcon />
+              <HashtagIcon />
             </ListItemIcon>
             <ListItemText primary={i18n.t('hashtags:cTitle')} />
           </ListItemButton>

@@ -178,7 +178,7 @@ const LocationAddForm = ({
         />
       </CardContent>
       {actions &&
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         {actions}
       </CardActions>}
     </form>

@@ -240,13 +240,12 @@ const ActorsSettingsAccess = (props) => {
         </ListItem>
 
         <Divider />
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             type="submit"
             variant="contained"
             color="primary"
             disabled={waiting}
-            fullWidth
           >
             {i18n.t('actions:update')}
           </Button>
@@ -265,11 +264,10 @@ const ActorsSettingsAccess = (props) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button fullWidth onClick={() => { setIsConfirmingLeave(false); }}>
+          <Button onClick={() => { setIsConfirmingLeave(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
-            fullWidth
             variant="contained"
             color="error"
             onClick={() => { handleOnSubmit(); }}

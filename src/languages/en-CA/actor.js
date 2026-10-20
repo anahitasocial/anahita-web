@@ -13,7 +13,7 @@ export default {
     private: 'This profile is private. Its followers can see it.',
     request: 'Request to follow',
     requested: 'Requested',
-    withdraw: 'Take the request back',
+    withdraw: 'Withdraw',
     failed: 'That could not be done.',
   },
   featured: {
@@ -30,7 +30,7 @@ export default {
     // red button. These strings are the disclosure.
     prompts: {
       challenge: 'Type {{ alias }} to confirm',
-      inProgress: 'Deleting in progress ...',
+      inProgress: 'Deleting…',
     },
     errors: {
       generic: 'Could not delete this profile. Please try again.',

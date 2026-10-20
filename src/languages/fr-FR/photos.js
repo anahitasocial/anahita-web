@@ -23,7 +23,7 @@ export default {
     described: 'Modifier la description',
     describeTitle: 'Décrire cette photo',
     altLabel: 'Description alternative',
-    askAlt: 'Ajouter une description alternative',
+    askAlt: 'Ajouter un texte alternatif',
     askAltWhy: 'Elle est lue aux personnes qui ne peuvent pas voir la photo, et affichée quand une photo ne se charge pas.',
     altWhy: 'Lue aux personnes qui ne peuvent pas voir la photo. Ce n’est pas la légende : dites ce que l’on voit sur l’image.',
     altHelp: 'Par exemple : un bananier nain près d’une fenêtre, à côté d’un fauteuil gris.',

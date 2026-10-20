@@ -10,6 +10,7 @@ import Tab from '@mui/material/Tab';
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
 import ActorBodyAbout from './About';
+import useActorRules from './useRules';
 import i18n from '../../../languages';
 import eventDetails from '../../../utils/events';
 import utils from '../../../utils';
@@ -44,6 +45,9 @@ const ActorBody = ({
   selectedTab = null,
 }) => {
   const namespace = getNamespace(actor);
+  // A group's or an event's rules, for its About card (roadmap row 102).
+  const rules = useActorRules(actor);
+  const hasRules = Boolean(rules && rules.items && rules.items.length > 0);
   // The profile's own lists come first: what was posted on it and, for a
   // person, what they replied and what they reposted. Only people reply
   // and repost, so a group or any other kind of actor has the first alone.
@@ -131,9 +135,9 @@ const ActorBody = ({
           <Grid size={{ xs: 12, md: 4 }}>
             <Grid container spacing={2}>
               {(actor.body || actor.websiteUrl || eventDetails.hasWhere(actor) ||
-                utils.federation.isRemote(actor)) && (
+                utils.federation.isRemote(actor) || hasRules) && (
                 <Grid size={12}>
-                  <ActorBodyAbout actor={actor} />
+                  <ActorBodyAbout actor={actor} rules={rules} />
                 </Grid>
               )}
               {admins && (

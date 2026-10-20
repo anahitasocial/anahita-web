@@ -120,7 +120,7 @@ export default {
       prompts: {
         copySuccess: 'Kopiert!',
         copyCodes: 'Codes kopieren',
-        enableTotp: 'Ich habe meine Wiederherstellungscodes gespeichert',
+        enableTotp: 'Gespeichert',
       },
     },
     enable: {
@@ -159,7 +159,7 @@ export default {
     cTitle: 'Bestätige, dass du es bist',
     label: 'Zu deiner Sicherheit: Bestätige deine Identität, bevor du das änderst.',
     usePasskey: 'Passkey verwenden',
-    usePassword: 'Stattdessen Passwort verwenden',
+    usePassword: 'Passwort verwenden',
     submit: 'Bestätigen',
     fields: {
       currentPassword: 'Aktuelles Passwort',

@@ -17,6 +17,8 @@ import DeleteIcon from '@mui/icons-material/DeleteForever';
 import PurgeIcon from '@mui/icons-material/DeleteSweep';
 import DangerIcon from '@mui/icons-material/Warning';
 import WebsiteIcon from '@mui/icons-material/Code';
+import RulesIcon from '@mui/icons-material/Rule';
+import ReportsIcon from '@mui/icons-material/OutlinedFlag';
 import ActorSettingCard from '../../../components/ActorSetting';
 
 import Admins from './admins/Browse';
@@ -34,6 +36,8 @@ import Info from './Info';
 import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
 import Permissions from './Permissions';
+import ActorRules from './Rules';
+import ActorReports from './Reports';
 import RepostsOnProfile from './RepostsOnProfile';
 import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
@@ -87,6 +91,8 @@ const ITEM_ICONS = {
   [ITEMS.PURGE]: <PurgeIcon />,
   [ITEMS.DANGER]: <DangerIcon />,
   [ITEMS.WEBSITE]: <WebsiteIcon />,
+  [ITEMS.RULES]: <RulesIcon />,
+  [ITEMS.REPORTS]: <ReportsIcon />,
 };
 
 // Tabs for the GROUPS namespace, which stays flat apart from the Danger zone.
@@ -367,6 +373,8 @@ const ActorsSettings = ({
       </Stack>
     ),
     [ITEMS.WEBSITE]: <WebsiteFollowSnippet actor={actor} />,
+    [ITEMS.RULES]: <ActorRules actor={actor} />,
+    [ITEMS.REPORTS]: <ActorReports actor={actor} />,
     // Whether it is on the fediverse, and its own Bluesky account, as a
     // person's tab holds both.
     [ITEMS.FEDIVERSE]: (

@@ -12,7 +12,7 @@ export default {
     private: 'Dieses Profil ist privat. Seine Follower können es sehen.',
     request: 'Anfrage zum Folgen',
     requested: 'Angefragt',
-    withdraw: 'Anfrage zurückziehen',
+    withdraw: 'Zurückziehen',
     failed: 'Das hat nicht geklappt.',
   },
   featured: {
@@ -29,7 +29,7 @@ export default {
     // red button. These strings are the disclosure.
     prompts: {
       challenge: 'Gib {{ alias }} ein, um zu bestätigen',
-      inProgress: 'Wird gelöscht ...',
+      inProgress: 'Wird gelöscht…',
     },
     errors: {
       generic: 'Dieses Profil konnte nicht gelöscht werden. Bitte versuch es noch einmal.',

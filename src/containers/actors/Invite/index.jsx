@@ -322,9 +322,8 @@ const ActorsInvite = ({
         <DialogActions>
           {/* Side by side, each half the width: Close, then the one that
               does it. */}
-          <Stack direction="row" spacing={1} sx={{ width: '100%' }}>
+          <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
             <Button
-              fullWidth
               disabled={isSending}
               onClick={() => {
                 setOpen(false);
@@ -334,7 +333,6 @@ const ActorsInvite = ({
             </Button>
             {tab === FOLLOWERS &&
               <Button
-                fullWidth
                 variant="contained"
                 color="primary"
                 disabled={isSending || chosen.length === 0}

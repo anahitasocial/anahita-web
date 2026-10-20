@@ -130,12 +130,11 @@ const QuoteEmbed = ({
           />
         </Link>}
       {(onDetach || onRemove) &&
-        <Box sx={{ p: 1 }}>
+        <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>
           {onDetach &&
             <Button
               size="small"
               color="inherit"
-              fullWidth
               disabled={detaching}
               onClick={onDetach}
             >
@@ -145,7 +144,6 @@ const QuoteEmbed = ({
             <Button
               size="small"
               color="inherit"
-              fullWidth
               onClick={onRemove}
             >
               {i18n.t('replies:quote.remove')}

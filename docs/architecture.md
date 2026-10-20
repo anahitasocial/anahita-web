@@ -84,7 +84,31 @@ Four components guard routes (`src/routes/`):
   every reload.
 - **`AgreementsGate`** wraps the whole route table. It sends a signed-in person
   to `/agreements` when the Terms of Service or Privacy Policy has a newer
-  version than the one they accepted. See
+  version than the one they accepted; after that, to `/rules` when the
+  site's rules have (roadmap row 102). The rules are the server's, read once
+  from `GET /site` (`containers/site/useSite.js`, `useRules`, with its own
+  client: no credentials, and language names left as they are). On their
+  page (`containers/rules`) each is ticked in turn: the next zooms forward
+  a moment after the one before is ticked, the keyboard following; for
+  anybody not behind on them it is a numbered list to read. With
+  `metadata.siteRules` false, nobody is sent: whoever installs Anahita makes
+  its creator's pledge on auth-service's set-password page instead. `OnboardingGate` waits for both. The About page shows the
+  site's promises first, from the same `GET /site`, with the way to
+  `/rules` (`containers/about/Promises.jsx`). An administrator removes a
+  person or a group as spam, at once, from its menu or from a report's case
+  (`containers/moderation/useRemoveAsSpam.jsx`, asked once more). A group's
+  and an event's rules are written in a Rules tab of its settings
+  (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
+  suggestions or written) and listed in its About card
+  (`actors/Read/useRules.js`). Every list of rules, here, on `/rules`, in
+  the checklists and on the server's sign-up pages, is numbered when it has
+  more than three (`utils/lists.js`). Following one, asking to, answering an event
+  or accepting an invitation first asks for its rules, ticked one at a time
+  in a dialog (`containers/rules/useRulesFirst.jsx`, `components/RulesChecklist.jsx`,
+  which `/rules` uses too), unless the viewer agreed to the version they are
+  at; the server refuses otherwise (409 `rules_not_agreed`). A new post on
+  one asks the same when its rules changed since (both composers, with
+  `useRulesFirst(actor, 'post')`). See
   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
 - **`OnboardingGate`**, inside it, sends a signed-in person with an
   incomplete profile to `/onboarding`, once, and waits while the agreements
@@ -283,6 +307,20 @@ The item comes from the `useReport(viewer, node)` hook in
 beside the menu, not inside it, because choosing the item closes the menu.
 The reasons it lists come from the server, for the kind of thing being
 reported and in the app's language, and are fetched once per kind.
+
+First among them is **Breaks a rule**, when there are rules to break:
+choosing it lists the site's rules (`GET /site`, unless `SITE_RULES` is
+off) and those of the group or event the thing is in, or is. The rule's
+title and whose it is go with the report (`rule`, `rule_profile_id`, 0 for
+the site's). A case names the rule and whose it is, and "Breaks a rule" is
+one of the reasons to filter by.
+
+A group's or an event's administrators find the reports against its rules
+in the **Reports** tab of its settings (`actors/Settings/Reports.jsx`,
+`GET /abuse-reports/profiles/:id/cases`): what was reported, the rule and
+the reporter's words, never who reported, and never a report on the group
+itself or on what the viewer wrote. **View** goes to the post, where
+deleting it closes its report.
 
 The Reports tab lists cases, filtered by status and by reason with two select
 lists, and adds more with a "Show more" button. It opens one case at a time. It records an
@@ -1276,6 +1314,16 @@ draws nothing (`utils/federation.js#isAbsent`).
   fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
   date by the switch in settings). Nothing is said to anybody else, or
   about any other kind of post: only public notes go out.
+- **A thread written in one go** (roadmap row 101): under a note's words,
+  "Add to thread" opens a box for the next note, up to ten in all
+  (`Composer/ThreadParts.jsx`, `THREAD_PARTS_MAX`). Post sends them together
+  (`api.replies.addThread`, `POST /notes/:owner_id/thread`): the first takes
+  the post's audience, who may reply and quote, its locations and its card;
+  the rest are replies to the one before. Only for words alone: adding
+  photos or a video hides it. The notes after the first are not kept as a
+  draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
+  `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
+  are shown as any replies are, each under the one before.
 - **What other networks will show** of a public post on the viewer's own
   profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
   past 300 characters, when their Bluesky account is connected, that

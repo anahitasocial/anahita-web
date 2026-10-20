@@ -14,7 +14,7 @@ const DialogConfirm = (props) => {
     title = i18n.t('prompts:confirm.title'),
     message = i18n.t('prompts:confirm.message'),
     confirm = i18n.t('actions:confirm'),
-    dismiss = i18n.t('commons:dismiss'),
+    dismiss = i18n.t('actions:cancel'),
   } = props;
 
   const [open, setOpen] = useState(false);
@@ -57,12 +57,10 @@ const DialogConfirm = (props) => {
         <DialogActions>
           <Button
             onClick={handleClose}
-            fullWidth
           >
             {dismiss}
           </Button>
           <Button
-            fullWidth
             color="secondary"
             variant="contained"
             onClick={handleConfirm}

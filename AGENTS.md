@@ -38,9 +38,33 @@ UI:
 
 ## The interface
 
-- Buttons in forms and dialogs are full width and side by side in one row,
-  never stacked: Cancel on the left, the main action on the right
-  (`<Stack direction="row" spacing={1}>`, as in `ReplyForm.jsx`).
+The tone, for everything people see: calm and restrained, as if Jony Ive
+had designed it. Fewer things on the screen, each where it is expected;
+quiet type, small inside cards; one clear main action, short labels, and
+the explanation in plain words beside them. Nothing shouts, wraps, overlaps
+or repeats. When in doubt, take something away. The rules below are this
+tone made specific; where they are silent, follow it.
+
+- A button's label is short, three words at most, and never wraps:
+  "Close", not "Record what was done". What a choice means goes in a line of
+  text beside the buttons, not in the label. Backing out is always "Cancel".
+- Buttons in dialogs and cards are normal size, aligned right, never
+  stacked: Cancel first, then the main action, the only contained one. A
+  dialog's padding is in the theme (`MuiDialogActions`); a card's row takes
+  `sx={{ justifyContent: 'flex-end' }}`. Full width only where a button is
+  the whole of a page or a step (Sign in, Continue, onboarding), for a row
+  of equal answers (Going, Maybe, Not going; Accept, Decline), for the
+  actions on a profile or a post, and for "Show more" at a list's foot.
+- Calm, not busy: one flat list, never indented lists under headings inside
+  it. A choice with many options under it opens a select right under the
+  choice (`ReportDialog.jsx`, "Which rule").
+- A list of more than three items is numbered, so that one can be pointed
+  to ("rule 4"); three or fewer are not (`utils/lists.js`).
+- Nothing overlaps, and nothing is said twice. A status chip sits beside a
+  title that wraps (`minWidth: 0` on the text), and a title made from a
+  post's opening is not followed by the same text.
+- Type stays small inside cards: `subtitle1` for a card's title, `body2` for
+  what explains it; `h6` only for a section's heading.
 - Spacing (margins, paddings, gaps) in whole 8-pixel steps.
 - Menu items carry an icon before their label (`MenuItemLabel.jsx`).
 - Infinite scroll, not "Show more", inside dialogs too

@@ -20,11 +20,13 @@ import PhotoFilesEditor from '../../components/PhotoFilesEditor';
 import useLinkPreview from '../media/Composer/useLinkPreview';
 import useTextareaHashtags from '../media/Composer/useHashtagSuggestions';
 import HashtagSuggestions from '../../components/HashtagSuggestions';
+import ThreadParts from '../media/Composer/ThreadParts';
 import linkPreviews from '../../utils/linkPreviews';
 import photoFiles from '../../utils/photoFiles';
 import videos from '../../utils/videos';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
+import LIMITS from '../../constants/limits';
 
 const { CONTENT } = MEDIUM.FIELDS;
 
@@ -62,6 +64,9 @@ const ReplyForm = ({
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
+  // A thread written in one go, under a new reply: the notes after the
+  // first (roadmap row 101).
+  const [moreParts, setMoreParts] = useState([]);
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
   const picker = useRef(null);
@@ -75,6 +80,10 @@ const ReplyForm = ({
   // Something to send: words, pictures that are all stored, or a video.
   const hasSomething = Boolean(text) || photosReady || Boolean(video);
   const isHeldBack = (hasPhotos && !photosReady) || isSending;
+  // Of words alone, and only for a new reply.
+  const canThread = attachments && !hasPhotos && !video && !isAddingPhotos;
+  const threadParts = canThread ?
+    moreParts.map((each) => { return each.trim(); }).filter(Boolean) : [];
 
   const known = useMemo(() => {
     return linkPreview ?
@@ -95,6 +104,8 @@ const ReplyForm = ({
     let attached = {};
     if (photosReady) {
       attached = { uploads: photoFiles.toRequest(photoItems) };
+    } else if (threadParts.length > 0 && text) {
+      attached = { thread: threadParts };
     } else if (video) {
       attached = { video };
     }
@@ -107,6 +118,7 @@ const ReplyForm = ({
       card.reset();
       setBody('');
       setPhotoItems([]);
+      setMoreParts([]);
       setIsAddingPhotos(false);
       setVideo(null);
     }).catch(() => {
@@ -154,6 +166,16 @@ const ReplyForm = ({
         <LinkPreviewCard
           preview={card.preview}
           onRemove={isSending ? null : card.remove}
+        />}
+      {canThread &&
+        <ThreadParts
+          parts={moreParts}
+          onChange={setMoreParts}
+          canAdd={Boolean(text) && !moreParts.some((each) => { return !each.trim(); })}
+          max={LIMITS.THREAD_PARTS_MAX}
+          disabled={isSending}
+          direction={direction}
+          outlined
         />}
       {attachments && isAddingPhotos && viewer && viewer.id &&
         <Box sx={{ mt: 1 }}>
@@ -262,12 +284,14 @@ const ReplyForm = ({
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {hint}
         </Typography>}
-      {/* Buttons the width of the box, as in the composer and the edit
-          forms: one for sending, and beside it one for backing out where
-          there is something to back out of. */}
-      <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+      {/* Normal size, aligned right: one for sending, and before it one
+          for backing out where there is something to back out of. */}
+      <Box sx={{
+        display: 'flex', gap: 1, mt: 1, justifyContent: 'flex-end',
+      }}
+      >
         {onCancel &&
-          <Button onClick={onCancel} disabled={isSending} fullWidth>
+          <Button onClick={onCancel} disabled={isSending}>
             {i18n.t('actions:cancel')}
           </Button>}
         <Button
@@ -275,7 +299,7 @@ const ReplyForm = ({
           variant="contained"
           color="primary"
           disabled={!hasSomething || isHeldBack}
-          fullWidth
+          sx={{ minWidth: 88 }}
         >
           {!isSending && submitLabel}
           {isSending && <CircularProgress size={20} />}
@@ -304,7 +328,8 @@ ReplyForm.propTypes = {
   direction: PropTypes.oneOf(['auto', 'rtl']),
   // Whether pictures or a video can be added: for a new reply, not for
   // changing one. Sent as a third argument to onSubmit: { uploads } or
-  // { video }.
+  // { video }. A new reply can also be a thread written in one go:
+  // { thread }, the words of the notes after the first.
   attachments: PropTypes.bool,
 };
 

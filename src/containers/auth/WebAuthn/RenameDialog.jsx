@@ -106,7 +106,6 @@ const RenameDialog = ({
         <Button
           onClick={handleCancel}
           disabled={isBusy}
-          fullWidth
         >
           {t('actions:cancel')}
         </Button>
@@ -116,7 +115,6 @@ const RenameDialog = ({
           onClick={submit}
           disabled={!canSubmit}
           startIcon={isBusy ? <CircularProgress size={16} color="inherit" /> : null}
-          fullWidth
         >
           {t('actions:save')}
         </Button>

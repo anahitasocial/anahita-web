@@ -144,15 +144,14 @@ const AccountTypeDialog = ({
           </FormHelperText>
         </DialogContent>
         <DialogActions sx={{ px: 3, pb: 2 }}>
-          <Stack direction="row" spacing={1} sx={{ width: '100%' }}>
-            <Button onClick={onClose} fullWidth disabled={submitting}>
+          <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
+            <Button onClick={onClose} disabled={submitting}>
               {i18n.t('people:accountType.cancel')}
             </Button>
             <Button
               onClick={save}
               color="primary"
               variant="contained"
-              fullWidth
               disabled={submitting || unchanged}
             >
               {i18n.t('people:accountType.save')}

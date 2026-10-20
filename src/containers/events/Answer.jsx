@@ -9,6 +9,7 @@ import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
 import events from '../../utils/events';
+import useRulesFirst from '../rules/useRulesFirst';
 
 // Answering an event from outside its page: Maybe, and Going.
 //
@@ -24,9 +25,12 @@ const EventAnswer = ({
   const [waiting, setWaiting] = useState(false);
   const event = actor.event || {};
 
-  const answer = (rsvp) => {
+  // The event's rules, ticked first (roadmap row 102, part 5b).
+  const rules = useRulesFirst(actor);
+
+  const send = (rsvp) => {
     setWaiting(true);
-    api.eventDetails.rsvp(actor, rsvp).then(() => {
+    return api.eventDetails.rsvp(actor, rsvp).then(() => {
       if (onAnswered) {
         onAnswered(rsvp);
       }
@@ -42,6 +46,10 @@ const EventAnswer = ({
     }).finally(() => {
       setWaiting(false);
     });
+  };
+
+  const answer = (rsvp) => {
+    rules.run(() => { return send(rsvp); });
   };
 
   if (!events.takesAnswers(event)) {
@@ -72,6 +80,7 @@ const EventAnswer = ({
       >
         {i18n.t('events:event.rsvp.going')}
       </Button>
+      {rules.dialog}
     </Stack>
   );
 };

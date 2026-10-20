@@ -9,6 +9,7 @@ import Typography from '@mui/material/Typography';
 import actions from '../../actions';
 import api from '../../api';
 import i18n from '../../languages';
+import useRulesFirst from '../rules/useRulesFirst';
 
 // Answering an invitation to follow a group: Decline, and Accept.
 //
@@ -24,14 +25,18 @@ const ControlsInviteAnswer = ({
   // '', 'accepted', 'declined' or 'gone'.
   const [answer, setAnswer] = useState('');
 
-  const handle = (accept) => {
+  // Accepting is joining: a group's or an event's rules, ticked first
+  // (roadmap row 102, part 5b).
+  const rules = useRulesFirst(actor);
+
+  const send = (accept) => {
     setWaiting(true);
 
     const call = accept ?
       api.socialgraph.acceptInvite({ actor }) :
       api.socialgraph.declineInvite({ actor });
 
-    call.then(() => {
+    return call.then(() => {
       setAnswer(accept ? 'accepted' : 'declined');
       if (onAnswered) {
         onAnswered(accept);
@@ -45,6 +50,14 @@ const ControlsInviteAnswer = ({
     }).finally(() => {
       setWaiting(false);
     });
+  };
+
+  const handle = (accept) => {
+    if (accept) {
+      rules.run(() => { return send(true); });
+    } else {
+      send(false);
+    }
   };
 
   if (answer) {
@@ -79,6 +92,7 @@ const ControlsInviteAnswer = ({
       >
         {i18n.t('socialgraph:invite.accept')}
       </Button>
+      {rules.dialog}
     </Stack>
   );
 };

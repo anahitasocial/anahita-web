@@ -2,6 +2,12 @@
 // for writing at length.
 export default {
   newPost: 'Nova publicação',
+  thread: {
+    add: 'Adicionar ao fio',
+    placeholder: 'Continue escrevendo…',
+    part: 'Nota {{number}} do fio',
+    remove: 'Remover do fio',
+  },
   close: 'Fechar',
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Texto longo',
@@ -53,7 +59,7 @@ export default {
     upload: 'Enviar',
     uploadNote: 'O que você envia aqui fica na sua biblioteca e só neste texto: não no seu feed nem no seu perfil.',
     insert: 'Inserir',
-    chooseVideo: 'Escolha um GIF ou um vídeo',
+    chooseVideo: 'GIF ou vídeo',
     preparing: 'Preparando seu vídeo. Ele entra assim que estiver pronto.',
     none: {
       photos: 'Nenhuma foto ainda.',

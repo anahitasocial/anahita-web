@@ -31,6 +31,8 @@ export default shape({
   avatarUrls: ImageUrls,
   hasBio: bool,
   tosAgreement: Agreement,
+  // The site's rules, and the version agreed to (roadmap row 102).
+  rulesAgreement: Agreement,
   privacyAgreement: Agreement,
   // When the viewer went through onboarding, or null.
   onboardedAt: string,

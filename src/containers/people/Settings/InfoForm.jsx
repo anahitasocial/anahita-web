@@ -82,11 +82,10 @@ const PersonInfo = ({
       {/* Cancel then Save, both full width — the same CardActions row every
           other card in this section uses. Save was a hardcoded English
           string; actions:save is the key the rest of the app uses for it. */}
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           onClick={handleOnCancel}
           disabled={isFetching}
-          fullWidth
         >
           {i18n.t('actions:cancel')}
         </Button>
@@ -95,7 +94,6 @@ const PersonInfo = ({
           variant="contained"
           color="primary"
           disabled={isFetching || !enableSubmit}
-          fullWidth
         >
           {i18n.t('actions:save')}
         </Button>

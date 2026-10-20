@@ -268,7 +268,7 @@ const BlockedDialog = ({
           </InfiniteScroll>}
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} fullWidth>
+        <Button onClick={onClose}>
           {i18n.t('commons:close')}
         </Button>
       </DialogActions>

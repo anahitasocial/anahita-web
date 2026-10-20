@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux';
 import { Navigate, useLocation } from 'react-router-dom';
 
 import agreementsUtil from '../utils/agreements';
+import { useRules } from '../containers/site/useSite';
 import onboardingUtil from '../utils/onboarding';
 import isReachable from './reachable';
 
@@ -24,6 +25,7 @@ const OnboardingGate = ({ children }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
   const isAuthenticated = useSelector((state) => { return state.session.isAuthenticated; });
   const isResolved = useSelector((state) => { return state.session.isResolved; });
+  const rules = useRules();
 
   // Only on the session as READ. The cached viewer from before somebody
   // finished onboarding has no onboardedAt, and would send them back for one
@@ -32,7 +34,9 @@ const OnboardingGate = ({ children }) => {
     return children;
   }
 
-  if (agreementsUtil.hasOutdatedTerms(viewer)) {
+  // The agreements and the site's rules come first; and nothing is decided
+  // until the site has said what its rules are.
+  if (agreementsUtil.hasOutdatedTerms(viewer) || !rules.known || rules.outdated) {
     return children;
   }
 

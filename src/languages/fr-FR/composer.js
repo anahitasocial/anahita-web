@@ -1,5 +1,11 @@
 export default {
   newPost: 'Nouvelle publication',
+  thread: {
+    add: 'Ajouter au fil',
+    placeholder: 'Ajoutez la suite…',
+    part: 'Note {{number}} du fil',
+    remove: 'Retirer du fil',
+  },
   close: 'Fermer',
   longContent: 'Contenu long',
   photo: 'Photo',
@@ -37,7 +43,7 @@ export default {
     upload: 'Téléverser',
     uploadNote: 'Mis ici, il est dans votre bibliothèque et dans ce texte seulement : ni dans votre fil ni sur votre profil.',
     insert: 'Insérer',
-    chooseVideo: 'Choisir un GIF ou une vidéo',
+    chooseVideo: 'GIF ou vidéo',
     preparing: 'Préparation de votre vidéo. Elle est insérée dès qu’elle est prête.',
     none: {
       photos: 'Pas encore de photos.',

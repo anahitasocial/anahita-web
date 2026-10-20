@@ -166,15 +166,13 @@ const OAuthClientMenu = ({
             </DialogContent>
             <DialogActions>
               <Button
-                fullWidth
                 onClick={() => {
                   setConfirming(null);
                 }}
               >
-                {i18n.t('commons:dismiss')}
+                {i18n.t('actions:cancel')}
               </Button>
               <Button
-                fullWidth
                 variant="contained"
                 color="primary"
                 onClick={() => {

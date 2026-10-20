@@ -94,12 +94,11 @@ const ActorFormsInfo = ({
           this form from a read view and needs a way back; actors/Add renders
           it as the whole page for creating an actor, where there is nothing
           to cancel back to. */}
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         {handleOnCancel &&
           <Button
             onClick={handleOnCancel}
             disabled={isFetching}
-            fullWidth
           >
             {i18n.t('actions:cancel')}
           </Button>}
@@ -108,7 +107,6 @@ const ActorFormsInfo = ({
           variant="contained"
           color="primary"
           disabled={isFetching || !enableSubmit}
-          fullWidth
         >
           {actor.id ? i18n.t('actions:update') : i18n.t('actions:create')}
         </Button>

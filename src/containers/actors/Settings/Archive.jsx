@@ -151,13 +151,12 @@ const ActorsSettingsArchive = (props) => {
           fullWidth
         />
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           onClick={submit}
           color="secondary"
           variant="contained"
           disabled={!enabled}
-          fullWidth
         >
           {copy('action')}
         </Button>

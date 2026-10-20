@@ -159,9 +159,8 @@ const ReplyAccessDialog = ({
           </Typography>
           {/* Side by side, each half the width: Cancel, then the one
               that does it. */}
-          <Stack direction="row" spacing={1}>
+          <Stack sx={{ justifyContent: 'flex-end' }} direction="row" spacing={1}>
             <Button
-              fullWidth
               disabled={saving}
               onClick={onClose}
             >
@@ -170,7 +169,6 @@ const ReplyAccessDialog = ({
             <Button
               variant="contained"
               color="primary"
-              fullWidth
               disabled={saving}
               onClick={() => {
                 // Who can quote is only sent when it is not what the post

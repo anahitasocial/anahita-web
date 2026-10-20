@@ -46,6 +46,10 @@ const body = (item) => {
   if (!target || !target.content || isActor(target)) {
     return '';
   }
+  // A note has no title, so its opening is the title already.
+  if (!target.name && !target.title) {
+    return '';
+  }
 
   return excerpt(target.content);
 };
@@ -61,9 +65,32 @@ const url = (item) => {
   return getURL(target);
 };
 
+// What a reason given is called. "Breaks a rule" is not on the
+// installation's list, so the server has no words for it (roadmap row 102,
+// part 6).
+const reasonLabel = (given) => {
+  return given.key === 'rule' ? i18n.t('abuseReports:dialog.rule') : given.label;
+};
+
+// One report's reason: with a rule, which, and whose.
+const reasonOf = (report) => {
+  if (report.reasonKey !== 'rule') {
+    return report.reasonLabel;
+  }
+  if (report.ruleProfileId) {
+    return i18n.t('abuseReports:case.profileRule', {
+      name: (report.ruleProfile && report.ruleProfile.name) || `#${report.ruleProfileId}`,
+      rule: report.rule,
+    });
+  }
+  return i18n.t('abuseReports:case.siteRule', { rule: report.rule });
+};
+
 export default {
   kind,
   title,
   body,
   url,
+  reasonLabel,
+  reasonOf,
 };

@@ -76,14 +76,13 @@ const AccountType = ({
           </Typography>}
       </CardContent>
       {choices.length > 0 &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             onClick={() => {
               setOpen(true);
             }}
             color="primary"
             variant="outlined"
-            fullWidth
           >
             {i18n.t('people:accountType.action')}
           </Button>

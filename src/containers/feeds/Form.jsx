@@ -704,18 +704,16 @@ const CustomFeedForm = ({
     </>
   );
 
-  // Side by side, each half the width: Cancel, then the one that saves.
+  // Normal size, aligned right: Cancel, then the one that saves.
   const buttons = (
     <>
       <Button
-        fullWidth
         disabled={isSaving}
         onClick={onClose}
       >
         {i18n.t('customFeeds:form.cancel')}
       </Button>
       <Button
-        fullWidth
         type="submit"
         form={FORM}
         variant="contained"
@@ -738,7 +736,7 @@ const CustomFeedForm = ({
           <div>
             {fields}
           </div>
-          <Stack direction="row" spacing={1}>
+          <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
             {buttons}
           </Stack>
         </Stack>

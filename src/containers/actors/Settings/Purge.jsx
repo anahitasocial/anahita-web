@@ -179,7 +179,7 @@ const ActorsSettingsPurge = (props) => {
             fullWidth
           />}
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         {/* Proof first, then the request: every purge is refused without
             one, so sending it first would only be a refused request. */}
         <Button
@@ -189,7 +189,6 @@ const ActorsSettingsPurge = (props) => {
           color="secondary"
           variant="contained"
           disabled={!enabled}
-          fullWidth
         >
           {started || submitting ? i18n.t('accounts:purge.working') : copy('action')}
         </Button>

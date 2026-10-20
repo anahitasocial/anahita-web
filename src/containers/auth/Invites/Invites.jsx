@@ -199,14 +199,13 @@ const Invites = ({
         </CardContent>}
 
       {canAdd &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             color="primary"
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={onAdd}
             disabled={remaining === 0}
-            fullWidth
           >
             {i18n.t('invites:actions.add')}
           </Button>
@@ -240,15 +239,13 @@ const Invites = ({
             </DialogContent>
             <DialogActions>
               <Button
-                fullWidth
                 onClick={() => {
                   setRevoking(null);
                 }}
               >
-                {i18n.t('commons:dismiss')}
+                {i18n.t('actions:cancel')}
               </Button>
               <Button
-                fullWidth
                 variant="contained"
                 color="primary"
                 onClick={() => {

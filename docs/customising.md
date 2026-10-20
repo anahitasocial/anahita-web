@@ -150,6 +150,10 @@ use the app again. This applies to existing members and new ones alike.
   changed, or people are asked to accept a document they have already
   accepted.
 
+The site's rules, which everybody ticks one by one on the same page, are not
+the web app's: they are in the services' `site.json`, with their version, and
+changed there ([Rules and promises](https://github.com/purplerat/anahita-services/blob/main/docs/configuration.md#rules-and-promises)).
+
 ## Where the code is
 
 | What | Where |

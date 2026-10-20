@@ -242,11 +242,10 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
             />
           </>}
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         {works ?
           <>
             <Button
-              fullWidth
               variant="outlined"
               color="error"
               disabled={isSaving}
@@ -256,7 +255,6 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
             </Button>
             {!profile &&
               <Button
-                fullWidth
                 variant="contained"
                 color="secondary"
                 disabled={isSaving || isImported}
@@ -268,7 +266,6 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
           <>
             {settings.connected &&
               <Button
-                fullWidth
                 variant="outlined"
                 color="error"
                 disabled={isSaving}
@@ -278,7 +275,6 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
               </Button>}
             <Button
               type="submit"
-              fullWidth
               variant="contained"
               color="secondary"
               disabled={isSaving || !handle.trim() || !password.trim()}
@@ -339,11 +335,10 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
             </>}
         </DialogContent>
         <DialogActions>
-          <Button fullWidth variant="outlined" onClick={() => { setIsChoosing(false); }}>
+          <Button variant="outlined" onClick={() => { setIsChoosing(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
           <Button
-            fullWidth
             variant="contained"
             color="secondary"
             disabled={!preview || !howMany}
@@ -366,10 +361,10 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button fullWidth variant="outlined" onClick={() => { setIsLeaving(false); }}>
+          <Button variant="outlined" onClick={() => { setIsLeaving(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
-          <Button fullWidth variant="contained" color="error" onClick={handleDisconnect}>
+          <Button variant="contained" color="error" onClick={handleDisconnect}>
             {i18n.t('federation:bluesky.disconnect')}
           </Button>
         </DialogActions>

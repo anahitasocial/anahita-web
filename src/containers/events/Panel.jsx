@@ -23,6 +23,7 @@ import api from '../../api';
 import i18n from '../../languages';
 import events from '../../utils/events';
 import utils from '../../utils';
+import useRulesFirst from '../rules/useRulesFirst';
 
 const { getActorName, getURL } = utils.node;
 
@@ -42,6 +43,8 @@ const EventPanel = ({
 }) => {
   const { event } = actor;
   const [waiting, setWaiting] = useState(false);
+  // The event's rules, ticked before going (roadmap row 102, part 5b).
+  const rules = useRulesFirst(actor);
   const [showAttendees, setShowAttendees] = useState(false);
   // Where it is: the first place tagged on it. The rest, and the map, are
   // under its Locations tab.
@@ -69,12 +72,12 @@ const EventPanel = ({
 
   const takesAnswers = events.takesAnswers(event);
 
-  const answer = (rsvp) => {
+  const send = (rsvp) => {
     setWaiting(true);
 
     const call = rsvp ? api.eventDetails.rsvp(actor, rsvp) : api.eventDetails.unrsvp(actor);
 
-    call.then(() => {
+    return call.then(() => {
       onChanged();
     }).catch((failure) => {
       const reason = failure.response && failure.response.data && failure.response.data.error;
@@ -90,6 +93,16 @@ const EventPanel = ({
     }).finally(() => {
       setWaiting(false);
     });
+  };
+
+  // Going or maybe: the event's rules, ticked first (roadmap row 102,
+  // part 5b). Not to stop going.
+  const answer = (rsvp) => {
+    if (rsvp) {
+      rules.run(() => { return send(rsvp); });
+    } else {
+      send(rsvp);
+    }
   };
 
   const handleCalendar = () => {
@@ -224,6 +237,7 @@ const EventPanel = ({
           setShowAttendees(false);
         }}
       />
+      {rules.dialog}
     </Card>
   );
 };

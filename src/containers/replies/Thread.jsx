@@ -115,6 +115,31 @@ const RepliesThread = ({
       return Promise.resolve();
     }
 
+    // A thread written in one go: its notes made together, in order, each
+    // answering the one before (roadmap row 101).
+    if (attached.thread) {
+      const parts = [body, ...attached.thread].map((content, at) => {
+        return {
+          content,
+          language,
+          ...(at === 0 && card.linkPreviewUrl ? { linkPreviewUrl: card.linkPreviewUrl } : {}),
+        };
+      });
+      return api.replies.addReplyThread(parent, parts).then((result) => {
+        setReplies((current) => {
+          return result.data.parts.reduce((list, part) => {
+            return thread.add(list, part);
+          }, current);
+        });
+      }).catch((error) => {
+        const status = error && error.response && error.response.status;
+        alertError(i18n.t(status === 403 ?
+          'replies:prompts.notAllowed' :
+          'replies:prompts.notAdded'));
+        throw error;
+      });
+    }
+
     const sent = attached.uploads ?
       api.replies.addWithPictures(parent, { content: body, language, uploads: attached.uploads }) :
       api.replies.add(parent, { content: body, card, language });
@@ -396,7 +421,6 @@ const RepliesThread = ({
         </DialogContent>
         <DialogActions>
           <Button
-            fullWidth
             onClick={() => {
               setAsking(null);
             }}
@@ -404,7 +428,6 @@ const RepliesThread = ({
             {i18n.t('actions:cancel')}
           </Button>
           <Button
-            fullWidth
             variant="contained"
             color="primary"
             onClick={() => {

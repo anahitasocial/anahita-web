@@ -152,18 +152,16 @@ const PersonAddForm = (props) => {
             type card in Administration (people/Settings/AccountType.jsx),
             never their own, after proving who they are, and it is recorded. */}
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         {dismissPath &&
         <Button
           component={Link}
           href={dismissPath}
           to={dismissPath}
-          fullWidth
         >
           {i18n.t('actions:cancel')}
         </Button>}
         <Button
-          fullWidth
           type="submit"
           variant="contained"
           color="primary"

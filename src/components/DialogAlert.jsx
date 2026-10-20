@@ -34,7 +34,6 @@ const DialogAlert = ({
       <DialogActions>
         <Button
           onClick={handleDismiss}
-          fullWidth
         >
           {dismiss}
         </Button>
@@ -42,7 +41,6 @@ const DialogAlert = ({
           onClick={handleConfirm}
           color="primary"
           autoFocus
-          fullWidth
           variant="contained"
         >
           {confirm}

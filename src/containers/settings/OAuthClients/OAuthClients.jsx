@@ -198,13 +198,12 @@ const OAuthClients = ({
         </List>}
 
       {canAdd &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             color="primary"
             variant="outlined"
             startIcon={<AddIcon />}
             onClick={onAdd}
-            fullWidth
           >
             {i18n.t('settings:oauthClients.actions.add')}
           </Button>

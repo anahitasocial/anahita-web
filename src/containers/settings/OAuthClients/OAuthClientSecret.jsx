@@ -125,13 +125,12 @@ const OAuthClientSecret = ({
           </DialogContentText>}
       </DialogContent>
       <DialogActions>
-        <Button fullWidth onClick={handleCopy}>
+        <Button onClick={handleCopy}>
           {copied ?
             i18n.t('settings:oauthClients.secret.copied') :
             i18n.t('settings:oauthClients.secret.copy')}
         </Button>
         <Button
-          fullWidth
           variant="contained"
           color="primary"
           onClick={onClose}

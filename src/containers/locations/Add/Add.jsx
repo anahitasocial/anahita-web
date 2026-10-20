@@ -166,7 +166,6 @@ const LocationsSelectorAdd = (props) => {
           color="primary"
           disabled={isFetching}
           variant="contained"
-          fullWidth
         >
           {i18n.t('actions:add')}
         </Button>

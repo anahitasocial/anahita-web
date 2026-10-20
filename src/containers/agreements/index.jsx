@@ -80,7 +80,7 @@ const Agreements = ({
   };
 
   return (
-    <Container maxWidth="md">
+    <Container maxWidth="md" sx={{ py: 3 }}>
       <Stack spacing={2}>
         <div>
           <Typography variant="h5" gutterBottom>

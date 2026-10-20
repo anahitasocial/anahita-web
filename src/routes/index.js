@@ -25,6 +25,7 @@ import Blogs from '../containers/blogs';
 import SupportPage from '../containers/support';
 import LegalPage from '../containers/legal';
 import AgreementsPage from '../containers/agreements';
+import RulesPage from '../containers/rules';
 import AgreementsGate from './AgreementsGate';
 import OnboardingGate from './OnboardingGate';
 import MembersOnlyGate from './MembersOnlyGate';
@@ -496,6 +497,10 @@ const AppRoutes = () => {
                 </AuthenticatedRoute>
           }
             />
+            {/* The site's rules (roadmap row 102): where somebody behind on them
+            is sent, after the agreements, to tick each; for anybody else, the
+            rules to read. */}
+            <Route path="/rules" element={<RulesPage />} />
             {/* Where somebody with an incomplete profile is sent, once. */}
             <Route
               path="/onboarding"

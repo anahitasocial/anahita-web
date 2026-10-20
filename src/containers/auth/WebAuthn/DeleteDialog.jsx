@@ -53,7 +53,6 @@ const DeleteDialog = ({
         <Button
           onClick={handleCancel}
           disabled={isBusy}
-          fullWidth
         >
           {t('actions:cancel')}
         </Button>
@@ -62,7 +61,6 @@ const DeleteDialog = ({
           variant="contained"
           onClick={handleConfirm}
           disabled={isBusy}
-          fullWidth
         >
           {t('actions:remove')}
         </Button>
