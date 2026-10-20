@@ -75,6 +75,26 @@ export default {
         admins: 'Administrateurs',
       },
     },
+    // Words of a row's own, for a choice the shared words say wrongly
+    // there: nobody may mention or tag you (roadmap row 103).
+    entities: {
+      mention: {
+        choices: { admins: 'Personne' },
+        descriptions: { admins: 'Personne d’autre que vous.' },
+      },
+      tag: {
+        choices: {
+          registered: 'Toute personne connectée',
+          approve: 'Approuver chaque fois',
+          admins: 'Personne',
+        },
+        descriptions: {
+          registered: 'Toute personne ayant un compte ici. Vous êtes identifié aussitôt.',
+          approve: 'On vous le demande chaque fois. Personne ne voit l’identification avant que vous l’acceptiez.',
+          admins: 'Personne d’autre que vous.',
+        },
+      },
+    },
     descriptions: {
       person: {
         registered: 'Toute personne ayant un compte ici.',
