@@ -99,7 +99,8 @@ Four components guard routes (`src/routes/`):
   (`containers/moderation/useRemoveAsSpam.jsx`, asked once more). A group's
   and an event's rules are written in a Rules tab of its settings
   (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
-  suggestions or written) and listed in its About card
+  suggestions or written; the site's own open in a dialog from there,
+  `rules/SiteRulesDialog.jsx`) and listed in its About card
   (`actors/Read/useRules.js`). Every list of rules, here, on `/rules`, in
   the checklists and on the server's sign-up pages, is numbered when it has
   more than three (`utils/lists.js`). Following one, asking to, answering an event
