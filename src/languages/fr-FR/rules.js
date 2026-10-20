@@ -28,4 +28,13 @@ export default {
   about: {
     title: 'Règles',
   },
+  // A group's or an event's reports against its rules (part 6b).
+  reports: {
+    intro: "Les signalements contre vos règles, les plus récents d'abord. Leurs auteurs ne sont jamais affichés. Agissez sur une publication depuis sa propre page : la supprimer clôt son signalement. Les administrateurs du site voient aussi chaque signalement.",
+    none: "Rien n'a été signalé contre vos règles.",
+    loadError: 'Impossible de charger les signalements. Veuillez réessayer.',
+    broke: 'Enfreint « {{rule}} »',
+    view: 'Voir',
+    gone: "Ceci n'existe plus.",
+  },
 };

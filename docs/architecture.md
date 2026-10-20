@@ -315,6 +315,13 @@ title and whose it is go with the report (`rule`, `rule_profile_id`, 0 for
 the site's). A case names the rule and whose it is, and "Breaks a rule" is
 one of the reasons to filter by.
 
+A group's or an event's administrators find the reports against its rules
+in the **Reports** tab of its settings (`actors/Settings/Reports.jsx`,
+`GET /abuse-reports/profiles/:id/cases`): what was reported, the rule and
+the reporter's words, never who reported, and never a report on the group
+itself or on what the viewer wrote. **View** goes to the post, where
+deleting it closes its report.
+
 The Reports tab lists cases, filtered by status and by reason with two select
 lists, and adds more with a "Show more" button. It opens one case at a time. It records an
 administrator's decision; it does not delete or disable anything. "View"

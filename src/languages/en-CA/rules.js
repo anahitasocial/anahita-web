@@ -29,4 +29,13 @@ export default {
   about: {
     title: 'Rules',
   },
+  // A group's or an event's reports against its rules (part 6b).
+  reports: {
+    intro: "Reports against your rules, newest first. Who made them is never shown. Act on a post on its own page: deleting it closes its report. The site's administrators see every report too.",
+    none: 'Nothing has been reported against your rules.',
+    loadError: 'Could not load the reports. Please try again.',
+    broke: 'Breaks “{{rule}}”',
+    view: 'View',
+    gone: 'This no longer exists.',
+  },
 };

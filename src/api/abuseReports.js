@@ -81,7 +81,16 @@ const reopen = (id) => {
   return axios.post(`/abuse-reports/cases/${id}/reopen`);
 };
 
+// A group's or an event's own reports, for its administrators: the reports
+// against its rules, with nobody's name (roadmap row 102, part 6b).
+const browseProfileCases = (profileId, { limit = 20, offset = 0 } = {}) => {
+  return axios.get(`/abuse-reports/profiles/${profileId}/cases`, {
+    params: { limit, start: offset },
+  });
+};
+
 export default {
+  browseProfileCases,
   reasons,
   add,
   browseCases,

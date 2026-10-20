@@ -28,4 +28,13 @@ export default {
   about: {
     title: 'Regras',
   },
+  // A group's or an event's reports against its rules (part 6b).
+  reports: {
+    intro: 'As denúncias contra suas regras, as mais recentes primeiro. Quem as fez nunca é mostrado. Aja sobre uma publicação na própria página dela: excluí-la encerra a denúncia. Os administradores do site também veem cada denúncia.',
+    none: 'Nada foi denunciado contra suas regras.',
+    loadError: 'Não foi possível carregar as denúncias. Tente de novo.',
+    broke: 'Quebra “{{rule}}”',
+    view: 'Ver',
+    gone: 'Isto não existe mais.',
+  },
 };

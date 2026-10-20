@@ -28,4 +28,13 @@ export default {
   about: {
     title: 'Reglas',
   },
+  // A group's or an event's reports against its rules (part 6b).
+  reports: {
+    intro: 'Los reportes contra tus reglas, los más recientes primero. Nunca se muestra quién los hizo. Actúa sobre una publicación en su propia página: eliminarla cierra su reporte. Los administradores del sitio también ven cada reporte.',
+    none: 'No se ha reportado nada contra tus reglas.',
+    loadError: 'No se pudieron cargar los reportes. Inténtalo de nuevo.',
+    broke: 'Rompe “{{rule}}”',
+    view: 'Ver',
+    gone: 'Esto ya no existe.',
+  },
 };

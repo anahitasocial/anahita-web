@@ -28,4 +28,13 @@ export default {
   about: {
     title: 'Regeln',
   },
+  // A group's or an event's reports against its rules (part 6b).
+  reports: {
+    intro: 'Meldungen gegen eure Regeln, die neuesten zuerst. Wer sie gemacht hat, wird nie gezeigt. Kümmere dich auf der Seite des Beitrags darum: Ihn zu löschen schließt seine Meldung. Die Administratoren der Seite sehen jede Meldung auch.',
+    none: 'Gegen eure Regeln wurde nichts gemeldet.',
+    loadError: 'Die Meldungen konnten nicht geladen werden. Bitte versuche es erneut.',
+    broke: 'Verstößt gegen „{{rule}}“',
+    view: 'Ansehen',
+    gone: 'Das gibt es nicht mehr.',
+  },
 };

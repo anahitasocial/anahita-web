@@ -12,6 +12,7 @@ export default {
     features: 'Funciones',
     permissions: 'Permisos',
     rules: 'Reglas',
+    reports: 'Reportes',
     access: 'Privacidad',
     // Deletion copy, namespace-specific. The shared actor:delete strings told
     // event administrators to "sign in to restore", which an event cannot do,

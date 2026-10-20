@@ -11,6 +11,7 @@ export default {
     features: 'Funktionen',
     permissions: 'Berechtigungen',
     rules: 'Regeln',
+    reports: 'Meldungen',
     access: 'Privatsphäre',
     // Deletion copy, namespace-specific. The shared actor:delete strings told
     // group administrators to "sign in to restore", which a group cannot do,
