@@ -732,6 +732,18 @@ installation's export service (`/exports`; the services'
 - **Where there is no export service**, the card says the download is not
   available here (`utils/exports.js#isAbsent`).
 
+### People in a photo or a video
+
+Who is in a photo or a video (roadmap row 103) shows on its page, right
+under the picture or the player, and in the theatre above its words:
+"With Worf and Dax", each a link, joined as the reader's language joins a
+list (`containers/media/PeopleInPost.jsx`, `api/peopleTags.js`). A tag
+waiting for somebody shows only to them and the post's author, marked as
+waiting; the person tagged accepts or declines it there, or takes
+themselves out later with **Remove me**. Not on cards in a feed, which would
+ask the server once for every card. Who may tag whom is anahita-services'
+`docs/permissions.md`.
+
 ### Locations of a new post
 
 The pin among a composer's small buttons, **Add location**, in the short box

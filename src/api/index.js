@@ -17,6 +17,7 @@ import agreements from './agreements';
 import site from './site';
 import spam from './spam';
 import rules from './rules';
+import peopleTags from './peopleTags';
 import authLogs from './authLogs';
 import avatar from './avatar';
 import cover from './cover';
@@ -135,6 +136,7 @@ const apis = {
   site,
   spam,
   rules,
+  peopleTags,
   cover,
   // What only an event has. The `events` namespace below is the event as
   // an actor, like `groups`.
