@@ -979,8 +979,9 @@ are about, what to leave out. The server's side is in the services'
 
 - **Home tabs.** The first tab is Following, the feed there always was
   (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
-  in the viewer's order. The open tab is in the address as `?feed=<id>`. The
-  button at the end of the tabs leads to `/feeds`.
+  in the viewer's order. The open tab is in the address as `?feed=<id>`.
+  The way to `/feeds` is "Feeds" in the left menu; the tabs have no button
+  of their own for it, which looked like a setting (the user, 2026-10-19).
 - **One column or several.** On a wide screen a pair of buttons at the end
   of the tabs lays the open feed out one post under another or in columns
   (`components/BreakpointMasonry`), when it takes the width of the page. The
@@ -1001,8 +1002,8 @@ are about, what to leave out. The server's side is in the services'
   (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
   (`onChange`).
-- **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
-  the end of the tabs and from "Feeds" in the menu): the viewer's
+- **The list page** (`containers/feeds/Manage.jsx`, reached from "Feeds" in
+  the menu): the viewer's
   feeds and the ones of other people's they keep.
 - **Rows of one height.** A feed's row in the list is its name, who can
   see it and when it was made, and one line cut short: what it is for, or

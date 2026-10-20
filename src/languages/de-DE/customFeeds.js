@@ -7,7 +7,6 @@ export default {
   },
   home: {
     following: 'Gefolgt',
-    manage: 'Feeds',
     view: 'Ansicht',
     viewStream: 'Eine Spalte',
     viewColumns: 'Spalten',
