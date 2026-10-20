@@ -20,6 +20,7 @@ export default {
     posts_other: '{{count}} posts',
   },
   close: 'Close',
+  backToTop: 'Back to top',
   dismiss: 'Dismiss',
   enabled: 'Enabled',
   disabled: 'Disabled',

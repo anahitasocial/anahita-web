@@ -18,6 +18,7 @@ export default {
     posts_other: '{{count}} publications',
   },
   close: 'Fermer',
+  backToTop: 'Retour en haut',
   dismiss: 'Masquer',
   enabled: 'Activé',
   disabled: 'Désactivé',

@@ -20,6 +20,7 @@ export default {
     posts_other: '{{count}} Beiträge',
   },
   close: 'Schließen',
+  backToTop: 'Nach oben',
   dismiss: 'Ausblenden',
   enabled: 'Aktiviert',
   disabled: 'Deaktiviert',

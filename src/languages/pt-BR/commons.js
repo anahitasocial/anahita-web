@@ -20,6 +20,7 @@ export default {
     posts_other: '{{count}} publicações',
   },
   close: 'Fechar',
+  backToTop: 'Voltar ao topo',
   dismiss: 'Dispensar',
   enabled: 'Ativado',
   disabled: 'Desativado',

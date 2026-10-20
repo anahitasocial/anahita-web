@@ -1005,6 +1005,9 @@ are about, what to leave out. The server's side is in the services'
   in the viewer's order. The open tab is in the address as `?feed=<id>`.
   The way to `/feeds` is "Feeds" in the left menu; the tabs have no button
   of their own for it, which looked like a setting (the user, 2026-10-19).
+- **Back to the top.** Once somebody has scrolled about a screen down Home
+  or a profile, an arrow fades in at the bottom left, across from the +
+  button, and takes them back up (`components/BackToTop.jsx`).
 - **One column or several.** On a wide screen a pair of buttons at the end
   of the tabs lays the open feed out one post under another or in columns
   (`components/BreakpointMasonry`), when it takes the width of the page. The
@@ -1507,12 +1510,12 @@ draws nothing (`utils/federation.js#isAbsent`).
   link sent to somebody open it as it was. What is as it comes is left
   out. Changing the tab, the order or the distance replaces the address
   rather than adding to the history.
-- **Each tab says how many it finds,** in grey after its name and short
-  however large (`utils/shortCount.js`: 515, 1.2K, 48K, 3.1M, as the
-  reader's language writes them). One request for each tab, asking for a
 - **The tabs are All, Posts, Profiles and Feeds.** Posts is every kind of
   post, notes and articles among them, not only pictures and videos, so it
   is not called Media (the user, 2026-10-20); its `scope` stays `media`.
+- **Each tab says how many it finds,** in grey after its name and short
+  however large (`utils/shortCount.js`: 515, 1.2K, 48K, 3.1M, as the
+  reader's language writes them). One request for each tab, asking for a
   single result and reading the total (`search/Browse/useScopeCounts.js`),
   again when the words or the distance change but not the order. **A tab
   that finds nothing is not drawn,** except All and the open one.

@@ -22,6 +22,7 @@ import CustomFeedIcon from '../../components/CustomFeedIcon';
 import PageColumn from '../../components/PageColumn';
 import actions from '../../actions';
 import i18n from '../../languages';
+import BackToTop from '../../components/BackToTop';
 
 import PersonType from '../../proptypes/Person';
 
@@ -176,6 +177,7 @@ const FeedsPage = ({
           /> :
           <FeedBrowse columns={columns} />}
       </PageColumn>
+      <BackToTop />
     </>
   );
 };
