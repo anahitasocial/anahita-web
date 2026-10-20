@@ -32,7 +32,7 @@ const TOTPRecoveryCodes = ({
 
   return (
     <>
-      <Typography variant="h5" className={classes.textBlock}>
+      <Typography variant="subtitle1" component="h3" className={classes.textBlock} sx={{ fontWeight: 500 }}>
         {i18n.t('auth:totp.recoveryCodes.cTitle')}
       </Typography>
       <Typography variant="body2" className={classes.textBlock}>

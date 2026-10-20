@@ -163,7 +163,7 @@ const ActorsSettingsAccess = (props) => {
           title={i18n.t('actor:access.title')}
           subheader={i18n.t('actor:access.cDescription')}
           slotProps={{
-            title: { variant: 'h5' },
+            title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
           }}
         />
         <Divider />

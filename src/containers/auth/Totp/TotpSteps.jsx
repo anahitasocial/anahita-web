@@ -176,7 +176,7 @@ const TotpSteps = ({
       {activeStep === STEPS.ENABLED &&
         <>
           <CardContent>
-            <Typography variant="h5" align="center">
+            <Typography variant="subtitle1" align="center" sx={{ fontWeight: 500 }}>
               {i18n.t('auth:totp.enable.cDesc')}
             </Typography>
           </CardContent>

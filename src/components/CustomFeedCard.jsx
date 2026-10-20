@@ -55,7 +55,7 @@ const CustomFeedCard = ({
         }
         action={headerAction}
         slotProps={{
-          title: { variant: 'h6', sx: { fontSize: 16 } },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <CardContent>

@@ -265,7 +265,7 @@ const ReportsCase = ({
           <CardHeader
             title={i18n.t('abuseReports:case.decision')}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           {!isOpen &&
@@ -338,7 +338,7 @@ const ReportsCase = ({
             title={i18n.t('abuseReports:case.reports')}
             subheader={i18n.t('abuseReports:list.reports', { count: item.reportCount })}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           <Divider />
@@ -384,7 +384,7 @@ const ReportsCase = ({
           <CardHeader
             title={i18n.t('abuseReports:case.previous')}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           <Divider />

@@ -102,10 +102,9 @@ const LocationsGadget = ({
         <CardHeader
           title={
             <Typography
-              variant="h3"
-              style={{
-                fontSize: 24,
-              }}
+              variant="subtitle1"
+              component="h3"
+              sx={{ fontWeight: 500 }}
             >
               {i18n.t('locations:cTitle')}
             </Typography>

@@ -47,7 +47,7 @@ const UsernameEdit = ({
         }
         title={i18n.t('username:title')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <Divider />

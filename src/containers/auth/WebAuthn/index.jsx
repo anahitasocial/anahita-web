@@ -206,7 +206,7 @@ const WebAuthn = () => {
         title={t('auth:webauthn.cTitle')}
         subheader={t('auth:webauthn.cDesc')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
 

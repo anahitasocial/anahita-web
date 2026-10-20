@@ -47,7 +47,7 @@ const PasswordEdit = ({
         title={i18n.t('password:cTitle')}
         subheader={i18n.t('password:cDesc')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <Divider />
