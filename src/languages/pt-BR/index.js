@@ -21,6 +21,7 @@ import home from './home';
 import about from './about';
 import abuseReports from './abuseReports';
 import rules from './rules';
+import peopleTags from './peopleTags';
 import accounts from './accounts';
 import admin from './admin';
 import settings from './settings';
@@ -74,6 +75,7 @@ export default {
   about,
   abuseReports,
   rules,
+  peopleTags,
   accounts,
   admin,
   settings,

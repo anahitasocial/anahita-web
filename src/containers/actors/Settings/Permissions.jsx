@@ -129,8 +129,13 @@ const ActorsSettingsPermissions = (props) => {
                   { defaultValue: row.entity },
                 );
                 const value = (values[group.service] || {})[row.entity] || row.access;
+                // A row may have words of its own for a choice ("Nobody" may
+                // mention you), and the rest are the shared ones.
                 const label = (choice) => {
-                  return i18n.t(`actor:permissions.choices.${choiceLabels}.${choice}`, {
+                  return i18n.t([
+                    `actor:permissions.entities.${row.entity}.choices.${choice}`,
+                    `actor:permissions.choices.${choiceLabels}.${choice}`,
+                  ], {
                     defaultValue: choice,
                   });
                 };
@@ -192,13 +197,15 @@ const ActorsSettingsPermissions = (props) => {
                       >
                         {row.choices.map((choice) => {
                           return (
-                            <MenuItem key={choice} value={choice}>
+                            // A description wraps rather than being cut off
+                            // on a phone.
+                            <MenuItem key={choice} value={choice} sx={{ whiteSpace: 'normal' }}>
                               <ListItemText
                                 primary={label(choice)}
-                                secondary={i18n.t(
+                                secondary={i18n.t([
+                                  `actor:permissions.entities.${row.entity}.descriptions.${choice}`,
                                   `actor:permissions.descriptions.${choiceLabels}.${choice}`,
-                                  { defaultValue: '' },
-                                )}
+                                ], { defaultValue: '' })}
                               />
                             </MenuItem>
                           );

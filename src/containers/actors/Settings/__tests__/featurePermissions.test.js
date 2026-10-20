@@ -67,9 +67,10 @@ describe('getPermissionGroups', () => {
   });
 
   // Nobody is invited to follow a person, and nobody is added to anything
-  // without saying yes; the one row under the social graph on a person is
-  // who may mention them, offered at its default where none was saved.
-  it('offers who can mention a person under the social graph', () => {
+  // without saying yes; the rows under the social graph on a person are who
+  // may mention them and who may tag them, each offered at its default where
+  // none was saved.
+  it('offers who can mention and who can tag a person under the social graph', () => {
     const groups = getPermissionGroups(FEATURES, { isPerson: true, access: 'public' });
 
     expect(groups.map((g) => {
@@ -79,6 +80,11 @@ describe('getPermissionGroups', () => {
       entity: 'mention',
       access: 'registered',
       choices: ['registered', 'followers', 'leaders', 'mutuals', 'admins'],
+      lock: null,
+    }, {
+      entity: 'tag',
+      access: 'approve',
+      choices: ['registered', 'approve', 'admins'],
       lock: null,
     }]);
   });
@@ -207,6 +213,22 @@ it('keeps a stored value that is no longer offered', () => {
 });
 
 describe('toFeatures', () => {
+  // A choice made on a row that was never stored is sent too: it used to
+  // be lost on saving, for who may mention somebody (roadmap row 103).
+  it('sends who may mention and who may tag, chosen though never stored', () => {
+    const features = toFeatures(FEATURES, {
+      'socialgraph-service': { mention: 'mutuals', tag: 'admins' },
+    });
+    const socialgraph = features.find((f) => {
+      return f.service === 'socialgraph-service';
+    });
+
+    expect(socialgraph.addPermissions).toEqual(expect.arrayContaining([
+      { entity: 'mention', access: 'mutuals' },
+      { entity: 'tag', access: 'admins' },
+    ]));
+  });
+
   it('folds edits into the full list and keeps the rest as they were', () => {
     const values = toValues(FEATURES);
     values['text-service'].note = 'admins';

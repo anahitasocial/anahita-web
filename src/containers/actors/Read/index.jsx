@@ -345,12 +345,20 @@ const ActorsRead = (props) => {
           filter="reposts"
           key={`feed-reposts-${actor.id}`}
         />}
-          // Not for somebody on another server: where they are is theirs
-          // to say, and their server says nothing of it.
-        locations={actor.id && !utils.federation.isRemote(actor) &&
+        tagged={actor.id &&
+        <FeedActorBrowse
+          actor={actor}
+          filter="tagged"
+          key={`feed-tagged-${actor.id}`}
+        />}
+          // A profile from another server too (the user, 2026-10-19): the
+          // site's administrators may say where an organisation there is,
+          // as they may for any profile here. Nobody else sees an empty card.
+        locations={actor.id &&
         <LocationsGadget
           node={actor}
           viewer={viewer}
+          hideWhenEmpty={utils.federation.isRemote(actor)}
         />}
       />}
     </>

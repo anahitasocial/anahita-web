@@ -7,7 +7,6 @@ export default {
   },
   home: {
     following: 'Abonnements',
-    manage: 'Fils',
     view: 'Disposition',
     viewStream: 'Une colonne',
     viewColumns: 'Colonnes',

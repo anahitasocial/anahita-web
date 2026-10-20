@@ -17,6 +17,7 @@ export default {
       follower: 'Who can add a follower?',
       invite: 'Who can invite people to follow?',
       mention: 'Who can mention you?',
+      tag: 'Who can tag you in photos and videos?',
     },
   },
   text: {

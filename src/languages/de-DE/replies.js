@@ -78,10 +78,12 @@ export default {
     posts: 'Beiträge',
     replies: 'Antworten',
     reposts: 'Reposts',
+    tagged: 'Markiert',
   },
   none: {
     replies: 'Keine Antworten zum Anzeigen.',
     reposts: 'Keine Reposts zum Anzeigen.',
+    tagged: 'Noch keine Fotos oder Videos mit dieser Person.',
   },
   // What a reply is a reply to, where it is shown away from its thread.
   context: {

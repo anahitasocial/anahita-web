@@ -35,6 +35,7 @@ import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
+import PeopleInPost from '../PeopleInPost';
 
 const {
   getAuthor,
@@ -152,6 +153,8 @@ const MediumReadDefault = ({
         <CardContent>
           <Progress />
         </CardContent>}
+        {/* Who is in it, right under the picture (roadmap row 103). */}
+        {!medium.video && <PeopleInPost medium={medium} />}
         <CardHeader
           avatar={
             <ActorAvatar
@@ -179,6 +182,7 @@ const MediumReadDefault = ({
         {!editing &&
         <>
           {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
+          {medium.video && <PeopleInPost medium={medium} />}
           {/* The card is the <article>; this is its text. One article,
               with an h1 and a byline, is what reading views (Safari's
               Reader, Firefox's) look for: an article within an article

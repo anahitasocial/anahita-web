@@ -37,6 +37,8 @@ const FILTER = {
   POSTS: 'posts',
   REPLIES: 'replies',
   REPOSTS: 'reposts',
+  // The photos and videos a person is in (roadmap row 103).
+  TAGGED: 'tagged',
 };
 
 // One of a profile's three lists, chosen by `filter`:
@@ -299,7 +301,7 @@ const FeedActorBrowse = ({
 
 FeedActorBrowse.propTypes = {
   actor: ActorType,
-  filter: PropTypes.oneOf(['posts', 'replies', 'reposts']),
+  filter: PropTypes.oneOf(['posts', 'replies', 'reposts', 'tagged']),
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
   prependList: PropTypes.func.isRequired,

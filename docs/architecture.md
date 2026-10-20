@@ -99,7 +99,8 @@ Four components guard routes (`src/routes/`):
   (`containers/moderation/useRemoveAsSpam.jsx`, asked once more). A group's
   and an event's rules are written in a Rules tab of its settings
   (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
-  suggestions or written) and listed in its About card
+  suggestions or written; the site's own open in a dialog from there,
+  `rules/SiteRulesDialog.jsx`) and listed in its About card
   (`actors/Read/useRules.js`). Every list of rules, here, on `/rules`, in
   the checklists and on the server's sign-up pages, is numbered when it has
   more than three (`utils/lists.js`). Following one, asking to, answering an event
@@ -545,13 +546,15 @@ replies, made directly to the post.
   from `root.owner`. A reply is owned by whoever wrote it, so its own owner
   does not say. A post shows the profile it is on the same way when that is
   not its author's own.
-- **A person's profile has three lists**: Posts, Replies and Reposts. Only
-  people reply and repost, so a group has Posts alone. They are the first
-  tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
-  asked for with a different `filter` (`containers/feed/Actor`); they share
-  one place in the store, so each is keyed and read when its tab is opened.
-  Posts are one column beside the profile's details; Replies and Reposts
-  fill the page in the same masonry as the lists of notes, articles and
+- **A person's profile has four lists**: Posts, Tagged, Replies and
+  Reposts. Tagged is the photos and videos they are in, their tag approved,
+  whoever posted them (roadmap row 103). Only people reply, repost and are
+  tagged, so a group has Posts alone. They are the first tabs of
+  `containers/actors/Read/Body.jsx`. All four are the profile's feed asked
+  for with a different `filter` (`containers/feed/Actor`); they share one
+  place in the store, so each is keyed and read when its tab is opened.
+  Posts are one column beside the profile's details; the others fill the
+  page in the same masonry as the lists of notes, articles and
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
   is drawn as itself, not inside a card for whoever reposted it.
   The tab is in the address. Reposts are not among the posts unless the
@@ -730,6 +733,25 @@ installation's export service (`/exports`; the services'
   (`utils/exports.js#canAsk`).
 - **Where there is no export service**, the card says the download is not
   available here (`utils/exports.js#isAbsent`).
+
+### People in a photo or a video
+
+Who is in a photo or a video (roadmap row 103) shows on its page, right
+under the picture or the player, and in the theatre above its words:
+"With Worf and Dax", each a link, joined as the reader's language joins a
+list (`containers/media/PeopleInPost.jsx`, `api/peopleTags.js`). A tag
+waiting for somebody shows only to them and the post's author, marked as
+waiting; the person tagged accepts or declines it there, or takes
+themselves out later with **Remove me**. Not on cards in a feed, which would
+ask the server once for every card. Who may tag whom is anahita-services'
+`docs/permissions.md`.
+
+Its author tags people with **Tag people**: in the composer, among its small
+buttons once there are photos, the people chosen shown as chips and tagged
+as soon as the post is made; and from a photo's or a video's menu, which
+adds and takes off (`containers/media/TagPeopleDialog.jsx`). Each person
+decides: tagged at once, asked first, or not at all, and the author is told
+who is asked and who cannot be. People are found by name or by handle.
 
 ### Locations of a new post
 
@@ -960,7 +982,8 @@ emailed.
   its line whole (`reducers/notifications.js`).
 - **Actions** under a notification (`Browse/Actions.jsx`), as the server
   says they are still to be done (`actions`): Decline and Accept a request
-  to follow, **+ Follow** whoever followed, and Reply, which opens the reply
+  to follow, or a request to be tagged in a photo or a video (`answer_tag`,
+  roadmap row 103), **+ Follow** whoever followed, and Reply, which opens the reply
   form under it and answers the reply itself, or the post. Using one reads
   the notification.
 - **Mark all read**, in the page's header (the icon alone on a phone),
@@ -979,8 +1002,9 @@ are about, what to leave out. The server's side is in the services'
 
 - **Home tabs.** The first tab is Following, the feed there always was
   (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
-  in the viewer's order. The open tab is in the address as `?feed=<id>`. The
-  button at the end of the tabs leads to `/feeds`.
+  in the viewer's order. The open tab is in the address as `?feed=<id>`.
+  The way to `/feeds` is "Feeds" in the left menu; the tabs have no button
+  of their own for it, which looked like a setting (the user, 2026-10-19).
 - **One column or several.** On a wide screen a pair of buttons at the end
   of the tabs lays the open feed out one post under another or in columns
   (`components/BreakpointMasonry`), when it takes the width of the page. The
@@ -1001,8 +1025,8 @@ are about, what to leave out. The server's side is in the services'
   (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
   (`onChange`).
-- **The list page** (`containers/feeds/Manage.jsx`, reached from the button at
-  the end of the tabs and from "Feeds" in the menu): the viewer's
+- **The list page** (`containers/feeds/Manage.jsx`, reached from "Feeds" in
+  the menu): the viewer's
   feeds and the ones of other people's they keep.
 - **Rows of one height.** A feed's row in the list is its name, who can
   see it and when it was made, and one line cut short: what it is for, or
@@ -1351,8 +1375,10 @@ draws nothing (`utils/federation.js#isAbsent`).
   and videos are not taken in from other servers, so those lists would be
   empty for ever and say the person has none; each comes back when it is
   taken in. Their replies and reposts are in what was posted, not in lists
-  of their own. Nor is there the box of locations: where
-  somebody is is theirs to say, and their server says nothing of it.
+  of their own. Its box of locations is the site's administrators' to fill,
+  as it is for any profile here, to say where an organisation on another
+  server is (`locations/Gadget`, `hideWhenEmpty`); nobody else sees it
+  while it is empty.
 - **The servers the site refuses** are in Site settings, under Fediverse
   (`settings/Fediverse.jsx`), for super administrators as every tab there
   is: the list with why, and a button to stop refusing one. The list is

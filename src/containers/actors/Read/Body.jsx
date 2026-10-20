@@ -37,6 +37,7 @@ const ActorBody = ({
   feed = null,
   replies = null,
   reposts = null,
+  tagged = null,
   events = null,
   onTabChange = null,
   locations = null,
@@ -58,7 +59,9 @@ const ActorBody = ({
     if (tab !== 'feed' || !hasOwnWords) {
       return [tab];
     }
-    return ['feed', 'replies', 'reposts'];
+    // What they posted, then the photos and videos they are in (roadmap
+    // row 103), then their replies and reposts.
+    return ['feed', 'tagged', 'replies', 'reposts'];
   });
   // A group has the events it hosts, after what it has posted.
   const featureTabs = events ? [...ownTabs, 'events'] : ownTabs;
@@ -87,7 +90,7 @@ const ActorBody = ({
     if (tab === 'feed') {
       return i18n.t('replies:tabs.posts');
     }
-    if (tab === 'replies' || tab === 'reposts') {
+    if (tab === 'replies' || tab === 'reposts' || tab === 'tagged') {
       return i18n.t(`replies:tabs.${tab}`);
     }
     return i18n.t(`${tab}:mTitle`);
@@ -163,6 +166,7 @@ const ActorBody = ({
       {/* The whole width, like the lists of notes, articles and photos. */}
       {value === 'replies' && replies}
       {value === 'reposts' && reposts}
+      {value === 'tagged' && tagged}
       {value === 'events' && events}
 
       {tabPanels[value] && tabPanels[value]}
@@ -180,6 +184,8 @@ ActorBody.propTypes = {
   // The profile's other two lists.
   replies: PropTypes.node,
   reposts: PropTypes.node,
+  // On a person: the photos and videos they are in.
+  tagged: PropTypes.node,
   // On a group: the events it hosts.
   events: PropTypes.node,
   // Called with the tab chosen, '' for the first one.

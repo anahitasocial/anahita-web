@@ -43,6 +43,7 @@ import i18n from '../../../../languages';
 import utils from '../../../../utils';
 import photoFiles from '../../../../utils/photoFiles';
 import styles from './styles';
+import PeopleInPost from '../../PeopleInPost';
 
 const {
   getAuthor,
@@ -554,6 +555,9 @@ const MediumStepperLightboxDefault = ({
                 {editing && form}
                 {!editing &&
                   <>
+                    {/* Who is in it (roadmap row 103), above the words, as
+                        under the picture on its page. */}
+                    <PeopleInPost medium={medium} />
                     <CardContent component="article">
                       {medium.title &&
                         <Typography

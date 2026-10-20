@@ -15,6 +15,11 @@ const KINDS = [
   'voteup',
   'actor_mention',
   'actor_mention_reply',
+  // Somebody in a photo or a video (roadmap row 103): asked, tagged at
+  // once, and the author told of a yes.
+  'actor_tag_request',
+  'actor_tag',
+  'actor_tag_accept',
   'actor_follow',
   'actor_follow_request',
   'actor_follow_request_accept',

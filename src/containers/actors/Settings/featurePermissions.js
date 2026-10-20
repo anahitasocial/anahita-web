@@ -21,6 +21,10 @@ const CHOICES = {
     like: ['registered', 'followers', 'leaders', 'mutuals', 'admins'],
     // Who may mention the person (permissions.CanMention): as for likes.
     mention: ['registered', 'followers', 'leaders', 'mutuals', 'admins'],
+    // Who may tag the person in a photo or a video (permissions.TagDecision,
+    // roadmap row 103): anybody signed in at once, each approved first, or
+    // nobody.
+    tag: ['registered', 'approve', 'admins'],
     content: ['followers', 'leaders', 'mutuals', 'admins'],
   },
   group: {
@@ -44,6 +48,16 @@ const INVITE_DEFAULT = 'admins';
 // what the server takes a missing one to mean.
 const MENTION = 'mention';
 const MENTION_DEFAULT = 'registered';
+// Who may tag a person, for people only, offered the same way; approval
+// first is what the server takes a missing one to mean.
+const TAG = 'tag';
+const TAG_DEFAULT = 'approve';
+// What a person is offered under socialgraph-service whether or not they
+// ever stored it, at what the server takes a missing one to mean.
+const PERSON_SOCIAL = [
+  { entity: MENTION, access: MENTION_DEFAULT },
+  { entity: TAG, access: TAG_DEFAULT },
+];
 const SOCIALGRAPH = 'socialgraph-service';
 const COMMENT = 'comment';
 
@@ -99,15 +113,16 @@ export const getPermissionGroups = (features = [], { isPerson, access }) => {
       const hasInvite = stored.some((permission) => {
         return permission.entity === INVITE;
       });
-      const hasMention = stored.some((permission) => {
-        return permission.entity === MENTION;
-      });
       let offered = stored;
       if (!isPerson && feature.service === SOCIALGRAPH && !hasInvite) {
         offered = [...stored, { entity: INVITE, access: INVITE_DEFAULT }];
       }
-      if (isPerson && feature.service === SOCIALGRAPH && !hasMention) {
-        offered = [...stored, { entity: MENTION, access: MENTION_DEFAULT }];
+      if (isPerson && feature.service === SOCIALGRAPH) {
+        PERSON_SOCIAL.forEach((missing) => {
+          if (!offered.some((permission) => { return permission.entity === missing.entity; })) {
+            offered = [...offered, missing];
+          }
+        });
       }
 
       const rows = offered
@@ -167,12 +182,17 @@ export const toFeatures = (features = [], values = {}) => {
       };
     });
 
-    // Who can invite, chosen on a group that had never stored it.
-    const storesInvite = addPermissions.some((permission) => {
-      return permission.entity === INVITE;
-    });
-    if (feature.service === SOCIALGRAPH && edited[INVITE] && !storesInvite) {
-      addPermissions.push({ entity: INVITE, access: edited[INVITE] });
+    // Who can invite, who can mention or who can tag, chosen by somebody
+    // who had never stored it: sent too, or the choice was lost on saving.
+    if (feature.service === SOCIALGRAPH) {
+      [INVITE, MENTION, TAG].forEach((entity) => {
+        const stores = addPermissions.some((permission) => {
+          return permission.entity === entity;
+        });
+        if (edited[entity] && !stores) {
+          addPermissions.push({ entity, access: edited[entity] });
+        }
+      });
     }
 
     return {

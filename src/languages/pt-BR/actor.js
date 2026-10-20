@@ -86,6 +86,26 @@ export default {
     },
     // Shown under each choice in the open list — "Following" and "Mutuals"
     // are the site's words, not everybody's.
+    // Words of a row's own, for a choice the shared words say wrongly
+    // there: nobody may mention or tag you (roadmap row 103).
+    entities: {
+      mention: {
+        choices: { admins: 'Ninguém' },
+        descriptions: { admins: 'Ninguém além de você.' },
+      },
+      tag: {
+        choices: {
+          registered: 'Qualquer pessoa conectada',
+          approve: 'Aprovar cada vez',
+          admins: 'Ninguém',
+        },
+        descriptions: {
+          registered: 'Qualquer pessoa com conta aqui. Você é marcado na hora.',
+          approve: 'Você é consultado toda vez. Ninguém vê a marcação até você aceitar.',
+          admins: 'Ninguém além de você.',
+        },
+      },
+    },
     descriptions: {
       person: {
         registered: 'Qualquer pessoa com conta aqui.',

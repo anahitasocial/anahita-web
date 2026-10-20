@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link as RouterLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -9,7 +8,6 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -24,6 +22,7 @@ import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
 import ActorType from '../../../proptypes/Actor';
+import SiteRulesDialog from '../../rules/SiteRulesDialog';
 
 // At most ten, so that every one is read (the user, 2026-10-19), and the
 // lengths the server takes.
@@ -46,6 +45,8 @@ const ActorsSettingsRules = ({
   alertError,
 }) => {
   const site = useSite();
+  // The site's rules, in a dialog, without leaving the tab.
+  const [showSiteRules, setShowSiteRules] = useState(false);
   const [saved, setSaved] = useState(null);
   const [items, setItems] = useState([]);
   const [isSaving, setIsSaving] = useState(false);
@@ -218,10 +219,20 @@ const ActorsSettingsRules = ({
         <Typography variant="body2" color="textSecondary" sx={{ mt: 2 }}>
           {i18n.t('rules:editor.siteRules')}
           {' '}
-          <Link component={RouterLink} to="/rules">
+          <Button
+            size="small"
+            onClick={() => { setShowSiteRules(true); }}
+            sx={{
+              p: 0, minWidth: 0, textTransform: 'none', verticalAlign: 'baseline', fontSize: 'inherit',
+            }}
+          >
             {i18n.t('rules:editor.siteRulesLink')}
-          </Link>
+          </Button>
         </Typography>
+        <SiteRulesDialog
+          open={showSiteRules}
+          onClose={() => { setShowSiteRules(false); }}
+        />
       </CardContent>
       <CardActions sx={{ px: 2, pb: 2 }}>
         <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>

@@ -7,7 +7,6 @@ export default {
   },
   home: {
     following: 'Seguidos',
-    manage: 'Feeds',
     view: 'Diseño',
     viewStream: 'Una columna',
     viewColumns: 'Columnas',

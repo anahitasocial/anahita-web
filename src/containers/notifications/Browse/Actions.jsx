@@ -52,6 +52,21 @@ const NotificationActions = ({
       });
   };
 
+  // Being tagged in a photo or a video (roadmap row 103): in it, or not.
+  const answerTag = (accept) => {
+    const post = { id: item.object && item.object.id };
+    setWaiting(true);
+    (accept ? api.peopleTags.approve(viewer, post) : api.peopleTags.remove(viewer, post))
+      .then(() => {
+        setAnswered(accept ? 'accepted' : 'declined');
+        onActed(item);
+      }).catch(() => {
+        alertError(i18n.t('notifications:answerFailed'));
+      }).finally(() => {
+        setWaiting(false);
+      });
+  };
+
   // A reply answers the reply; a mention or a quote, the post.
   const reply = (body, card = {}) => {
     const parent = { id: item.commentId || (item.object && item.object.id) };
@@ -90,6 +105,30 @@ const NotificationActions = ({
             disabled={waiting}
             onClick={() => {
               answer(true);
+            }}
+          >
+            {i18n.t('notifications:accept')}
+          </Button>
+        </Stack>)}
+      {can.includes('answer_tag') && (answered ?
+        <Typography variant="body2" color="textSecondary" component="span">
+          {i18n.t(`notifications:${answered}`)}
+        </Typography> :
+        <Stack direction="row" spacing={1} sx={{ maxWidth: 320 }}>
+          <Button
+            variant="outlined"
+            disabled={waiting}
+            onClick={() => {
+              answerTag(false);
+            }}
+          >
+            {i18n.t('notifications:decline')}
+          </Button>
+          <Button
+            variant="contained"
+            disabled={waiting}
+            onClick={() => {
+              answerTag(true);
             }}
           >
             {i18n.t('notifications:accept')}

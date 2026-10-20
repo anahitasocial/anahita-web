@@ -87,6 +87,26 @@ export default {
     },
     // Shown under each choice in the open list — "Following" and "Mutuals"
     // are the site's words, not everybody's.
+    // Words of a row's own, for a choice the shared words say wrongly
+    // there: nobody may mention or tag you (roadmap row 103).
+    entities: {
+      mention: {
+        choices: { admins: 'Nobody' },
+        descriptions: { admins: 'Nobody but you.' },
+      },
+      tag: {
+        choices: {
+          registered: 'Anyone signed in',
+          approve: 'Approve each first',
+          admins: 'Nobody',
+        },
+        descriptions: {
+          registered: 'Anyone with an account here. You are tagged at once.',
+          approve: 'You are asked each time. Nobody sees the tag until you accept it.',
+          admins: 'Nobody but you.',
+        },
+      },
+    },
     descriptions: {
       person: {
         registered: 'Anyone with an account here.',
