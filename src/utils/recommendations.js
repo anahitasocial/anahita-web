@@ -86,6 +86,11 @@ const reasonText = (suggestion, related, t, kind = 'person') => {
     }
     case 'follows_you':
       return t('recommendations:reasons.followsYou');
+    // Never who, nor which photo (roadmap row 104).
+    case 'pictured_with_you':
+      return t('recommendations:reasons.picturedWithYou');
+    case 'pictured_with_leaders':
+      return t('recommendations:reasons.picturedWithLeaders');
     case 'inviter':
       return t('recommendations:reasons.inviter');
     case 'you_engaged':
