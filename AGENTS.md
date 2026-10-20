@@ -48,6 +48,8 @@ UI:
 - Calm, not busy: one flat list, never indented lists under headings inside
   it. A choice with many options under it opens a select right under the
   choice (`ReportDialog.jsx`, "Which rule").
+- A list of more than three items is numbered, so that one can be pointed
+  to ("rule 4"); three or fewer are not (`utils/lists.js`).
 - Nothing overlaps, and nothing is said twice. A status chip sits beside a
   title that wraps (`minWidth: 0` on the text), and a title made from a
   post's opening is not followed by the same text.

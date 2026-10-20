@@ -23,6 +23,7 @@ import WebsiteIcon from '@mui/icons-material/Web';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import FediverseIcon from '@mui/icons-material/Hub';
 
+import { listProps } from '../../../utils/lists';
 import i18n from '../../../languages';
 import EntityBody from '../../../components/NodeBody';
 import AnahitaMap from '../../../components/Map';
@@ -212,7 +213,7 @@ const ActorBodyAbout = (props) => {
               <RulesIcon fontSize="small" color="action" />
               {i18n.t('rules:about.title')}
             </Typography>
-            <Box component="ol" sx={{ m: 0, pl: 3 }}>
+            <Box {...listProps(ruleItems)}>
               {ruleItems.map((rule, index) => {
                 return (
                   // eslint-disable-next-line react/no-array-index-key

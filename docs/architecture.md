@@ -100,7 +100,9 @@ Four components guard routes (`src/routes/`):
   and an event's rules are written in a Rules tab of its settings
   (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
   suggestions or written) and listed in its About card
-  (`actors/Read/useRules.js`). Following one, asking to, answering an event
+  (`actors/Read/useRules.js`). Every list of rules, here, on `/rules`, in
+  the checklists and on the server's sign-up pages, is numbered when it has
+  more than three (`utils/lists.js`). Following one, asking to, answering an event
   or accepting an invitation first asks for its rules, ticked one at a time
   in a dialog (`containers/rules/useRulesFirst.jsx`, `components/RulesChecklist.jsx`,
   which `/rules` uses too), unless the viewer agreed to the version they are

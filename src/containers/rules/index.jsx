@@ -13,6 +13,7 @@ import RulesChecklist from '../../components/RulesChecklist';
 import { textIn, useRules } from '../site/useSite';
 import actions from '../../actions';
 import api from '../../api';
+import { listProps } from '../../utils/lists';
 import i18n from '../../languages';
 
 // One rule: its title, and a line more if it has one.
@@ -93,7 +94,7 @@ const Rules = ({
             onAgree={agree}
             sending={sending}
           /> :
-          <Stack spacing={2} component="ol" sx={{ pl: 3, m: 0 }}>
+          <Stack spacing={2} {...listProps(items)}>
             {items.map((item, index) => {
               return (
                 // eslint-disable-next-line react/no-array-index-key

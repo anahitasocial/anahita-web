@@ -10,6 +10,8 @@ import Typography from '@mui/material/Typography';
 import Zoom from '@mui/material/Zoom';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import { isNumbered } from '../utils/lists';
+
 // How long after a tick the next rule comes forward.
 const PAUSE = 600;
 
@@ -48,6 +50,8 @@ const RulesChecklist = ({
     };
   }, [ticked, shown, items.length]);
 
+  const numbered = isNumbered(items);
+
   return (
     <Stack spacing={2}>
       {items.slice(0, shown).map((item, index) => {
@@ -85,6 +89,7 @@ const RulesChecklist = ({
                 label={
                   <span>
                     <Typography component="span" variant="subtitle1" sx={{ display: 'block' }}>
+                      {numbered && `${index + 1}. `}
                       {item.title}
                     </Typography>
                     {item.body &&
