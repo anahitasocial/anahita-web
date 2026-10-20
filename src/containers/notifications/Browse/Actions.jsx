@@ -77,7 +77,6 @@ const NotificationActions = ({
         // Side by side, the one that turns it down on the left.
         <Stack direction="row" spacing={1} sx={{ maxWidth: 320 }}>
           <Button
-            fullWidth
             variant="outlined"
             disabled={waiting}
             onClick={() => {
@@ -87,7 +86,6 @@ const NotificationActions = ({
             {i18n.t('notifications:decline')}
           </Button>
           <Button
-            fullWidth
             variant="contained"
             disabled={waiting}
             onClick={() => {

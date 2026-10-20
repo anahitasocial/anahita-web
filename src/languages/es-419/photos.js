@@ -24,7 +24,7 @@ export default {
     described: 'Cambiar la descripción',
     describeTitle: 'Describe esta foto',
     altLabel: 'Texto alternativo',
-    askAlt: 'Añadir un texto alternativo',
+    askAlt: 'Añadir texto alternativo',
     askAltWhy: 'Se lee en voz alta a las personas que no pueden ver la foto, y se muestra cuando una foto no carga.',
     altWhy: 'Se lee en voz alta a las personas que no pueden ver la foto. No es el pie de foto: di qué hay en la imagen.',
     altHelp: 'Por ejemplo: un banano enano junto a una ventana, al lado de un sillón gris.',

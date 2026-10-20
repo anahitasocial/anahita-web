@@ -270,14 +270,13 @@ const SettingsFediverse = ({
 
             {/* Last, so the list ends on its own line and not on the
                 edge of the card. */}
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
                 color="secondary"
                 variant="contained"
                 onClick={() => {
                   setOpen(true);
                 }}
-                fullWidth
               >
                 {i18n.t('settings:fediverse.open')}
               </Button>
@@ -328,7 +327,7 @@ const SettingsFediverse = ({
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={close} variant="outlined" fullWidth>
+            <Button onClick={close} variant="outlined">
               {i18n.t('settings:fediverse.cancel')}
             </Button>
             <Button
@@ -336,7 +335,6 @@ const SettingsFediverse = ({
               color="secondary"
               variant="contained"
               disabled={!domain.trim() || submitting}
-              fullWidth
             >
               {i18n.t('settings:fediverse.add')}
             </Button>

@@ -73,7 +73,6 @@ const EventCancelSetting = ({
           dismiss={i18n.t('events:event.cancel.keep')}
         >
           <Button
-            fullWidth
             color="secondary"
             variant="contained"
             disabled={waiting}

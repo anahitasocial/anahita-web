@@ -59,7 +59,7 @@ export default {
     upload: 'Enviar',
     uploadNote: 'O que você envia aqui fica na sua biblioteca e só neste texto: não no seu feed nem no seu perfil.',
     insert: 'Inserir',
-    chooseVideo: 'Escolha um GIF ou um vídeo',
+    chooseVideo: 'GIF ou vídeo',
     preparing: 'Preparando seu vídeo. Ele entra assim que estiver pronto.',
     none: {
       photos: 'Nenhuma foto ainda.',

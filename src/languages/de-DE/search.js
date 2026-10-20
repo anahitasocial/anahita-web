@@ -18,7 +18,7 @@ export default {
   recent: {
     title: 'Letzte Suchen',
     forget: '„{{ term }}“ vergessen',
-    clear: 'Letzte Suchen löschen',
+    clear: 'Löschen',
   },
   distance: {
     unavailable: 'Dieser Browser kann nicht sagen, wo du bist, daher ist diese Suche nicht nach Entfernung begrenzt.',

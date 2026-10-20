@@ -52,12 +52,11 @@ const PasswordEdit = ({
       />
       <Divider />
       {!isEditing &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             onClick={onOpen}
             color="primary"
             variant="outlined"
-            fullWidth
           >
             {i18n.t('password:submit')}
           </Button>
@@ -99,11 +98,10 @@ const PasswordEdit = ({
             />
           </CardContent>
 
-          <CardActions>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
               onClick={onCancel}
               disabled={submitting}
-              fullWidth
             >
               {i18n.t('actions:cancel')}
             </Button>
@@ -113,7 +111,6 @@ const PasswordEdit = ({
               variant="contained"
               disabled={submitting}
               startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
-              fullWidth
             >
               {submitting ? i18n.t('password:submitting') : i18n.t('password:update')}
             </Button>

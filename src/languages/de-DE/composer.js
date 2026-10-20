@@ -59,7 +59,7 @@ export default {
     upload: 'Hochladen',
     uploadNote: 'Was du hier hochlädst, ist nur in deiner Mediathek und in diesem Text: nicht in deinem Feed und nicht auf deinem Profil.',
     insert: 'Einfügen',
-    chooseVideo: 'GIF oder Video auswählen',
+    chooseVideo: 'GIF oder Video',
     preparing: 'Dein Video wird vorbereitet. Es wird eingefügt, sobald es fertig ist.',
     none: {
       photos: 'Noch keine Fotos.',

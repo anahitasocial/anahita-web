@@ -627,9 +627,8 @@ const LongEditor = ({
             size="small"
             slotProps={{ inputLabel: { shrink: true }, htmlInput: { dir: 'ltr' } }}
           />
-          <Stack direction="row" spacing={1} sx={{ mt: 2 }}>
+          <Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'flex-end' }}>
             <Button
-              fullWidth
               onClick={() => {
                 setLinkAddress('');
                 chain().extendMarkRange('link').unsetLink().run();
@@ -638,7 +637,7 @@ const LongEditor = ({
             >
               {i18n.t('composer:editor.unlink')}
             </Button>
-            <Button type="submit" variant="contained" fullWidth>
+            <Button type="submit" variant="contained">
               {i18n.t('composer:editor.apply')}
             </Button>
           </Stack>

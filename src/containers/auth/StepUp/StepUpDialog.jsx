@@ -160,7 +160,7 @@ const StepUpDialog = ({
             bunching to the right — which is what made this dialog look
             unlike the cards that open it. */}
         <DialogActions>
-          <Button onClick={onCancel} disabled={submitting} fullWidth>
+          <Button onClick={onCancel} disabled={submitting}>
             {i18n.t('actions:cancel')}
           </Button>
           {showForm &&
@@ -170,7 +170,6 @@ const StepUpDialog = ({
               variant="contained"
               disabled={submitting}
               startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
-              fullWidth
             >
               {i18n.t('auth:reauth.submit')}
             </Button>}

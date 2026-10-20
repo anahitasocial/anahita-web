@@ -72,12 +72,11 @@ const UsernameEdit = ({
         </CardContent>}
 
       {!isEditing &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             onClick={onOpen}
             color="primary"
             variant="outlined"
-            fullWidth
           >
             {i18n.t('username:change')}
           </Button>
@@ -122,11 +121,10 @@ const UsernameEdit = ({
               />
             </CardContent>
 
-            <CardActions>
+            <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
                 onClick={onCancel}
                 disabled={submitting}
-                fullWidth
               >
                 {i18n.t('actions:cancel')}
               </Button>
@@ -136,7 +134,6 @@ const UsernameEdit = ({
                 variant="contained"
                 disabled={submitting}
                 startIcon={submitting ? <CircularProgress size={16} color="inherit" /> : null}
-                fullWidth
               >
                 {submitting ? i18n.t('username:submitting') : i18n.t('username:submit')}
               </Button>

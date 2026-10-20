@@ -38,13 +38,23 @@ UI:
 
 ## The interface
 
-- A button's label is one or two words and never wraps: "Close", not
-  "Record what was done". What a choice means goes in a line of text beside
-  the buttons, not in the label.
+The tone, for everything people see: calm and restrained, as if Jony Ive
+had designed it. Fewer things on the screen, each where it is expected;
+quiet type, small inside cards; one clear main action, short labels, and
+the explanation in plain words beside them. Nothing shouts, wraps, overlaps
+or repeats. When in doubt, take something away. The rules below are this
+tone made specific; where they are silent, follow it.
+
+- A button's label is short, three words at most, and never wraps:
+  "Close", not "Record what was done". What a choice means goes in a line of
+  text beside the buttons, not in the label. Backing out is always "Cancel".
 - Buttons in dialogs and cards are normal size, aligned right, never
-  stacked: Cancel first, then the main action, the only contained one
-  (`<DialogActions sx={{ px: 3, pb: 2 }}>`, as in `ResolveDialog.jsx`).
-  Full width only for a lone button that is the whole of a form.
+  stacked: Cancel first, then the main action, the only contained one. A
+  dialog's padding is in the theme (`MuiDialogActions`); a card's row takes
+  `sx={{ justifyContent: 'flex-end' }}`. Full width only where a button is
+  the whole of a page or a step (Sign in, Continue, onboarding), for a row
+  of equal answers (Going, Maybe, Not going; Accept, Decline), for the
+  actions on a profile or a post, and for "Show more" at a list's foot.
 - Calm, not busy: one flat list, never indented lists under headings inside
   it. A choice with many options under it opens a select right under the
   choice (`ReportDialog.jsx`, "Which rule").

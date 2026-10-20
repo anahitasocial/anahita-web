@@ -12,7 +12,7 @@ export default {
     private: 'Este perfil é privado. Os seguidores podem vê-lo.',
     request: 'Pedir para seguir',
     requested: 'Pedido enviado',
-    withdraw: 'Cancelar o pedido',
+    withdraw: 'Cancelar pedido',
     failed: 'Não foi possível fazer isso.',
   },
   featured: {
@@ -29,7 +29,7 @@ export default {
     // red button. These strings are the disclosure.
     prompts: {
       challenge: 'Digite {{ alias }} para confirmar',
-      inProgress: 'Excluindo ...',
+      inProgress: 'Excluindo…',
     },
     errors: {
       generic: 'Não foi possível excluir este perfil. Tente de novo.',

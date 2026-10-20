@@ -187,7 +187,6 @@ const LocationsRead = ({
             actions={[
               <Button
                 onClick={handleCancel}
-                fullWidth
                 key="location-action-cancel"
               >
                 {i18n.t('actions:cancel')}
@@ -196,7 +195,6 @@ const LocationsRead = ({
                 type="submit"
                 color="primary"
                 variant="contained"
-                fullWidth
                 key="location-action-update"
               >
                 {i18n.t('actions:update')}

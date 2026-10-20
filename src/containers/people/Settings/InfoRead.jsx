@@ -81,12 +81,11 @@ const InfoRead = ({
           {i18n.t('people:person.joinedDate', { date: joinedDate })}
         </Typography>}
 
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           onClick={onEdit}
           color="primary"
           variant="outlined"
-          fullWidth
         >
           {i18n.t('actions:edit')}
         </Button>

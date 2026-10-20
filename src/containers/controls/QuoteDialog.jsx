@@ -112,9 +112,8 @@ const QuoteDialog = ({
           <QuoteEmbed quote={{ post }} />
           {/* Side by side, each half the width: Cancel, then the one
               that does it. */}
-          <Stack direction="row" spacing={1}>
+          <Stack sx={{ justifyContent: 'flex-end' }} direction="row" spacing={1}>
             <Button
-              fullWidth
               disabled={isSending}
               onClick={onClose}
             >
@@ -123,7 +122,6 @@ const QuoteDialog = ({
             <Button
               variant="contained"
               color="primary"
-              fullWidth
               disabled={isSending || text.length === 0}
               onClick={handleSend}
             >

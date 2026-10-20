@@ -215,7 +215,7 @@ const ActorsSettingsPermissions = (props) => {
         {/* Side by side, each button taking an equal share of the row:
             the secondary "restore defaults" action first, the primary
             submit action last. */}
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           {/* No confirmation, as on the Access card: every value is on
               screen and restoring is undone by setting them again. */}
           <Button
@@ -223,7 +223,6 @@ const ActorsSettingsPermissions = (props) => {
               return save([]);
             }}
             disabled={waiting}
-            fullWidth
           >
             {i18n.t('actor:permissions.restoreDefaults')}
           </Button>
@@ -232,7 +231,6 @@ const ActorsSettingsPermissions = (props) => {
             variant="contained"
             color="primary"
             disabled={waiting || groups.length === 0}
-            fullWidth
           >
             {i18n.t('actions:update')}
           </Button>

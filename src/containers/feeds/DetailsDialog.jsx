@@ -141,12 +141,11 @@ const CustomFeedDetailsDialog = ({ feedId, onClose }) => {
         </>}
       {/* Side by side, each half the width: Close, then on to the feed. */}
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={onClose}>
+        <Button onClick={onClose}>
           {i18n.t('customFeeds:details.close')}
         </Button>
         {feed &&
           <Button
-            fullWidth
             variant="contained"
             component={RouterLink}
             to={customFeeds.whereToRead(feed)}

@@ -63,12 +63,11 @@ const TotpCard = ({
       </CardContent>
 
       {!loading && !enabled &&
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             onClick={onEnable}
             color="primary"
             variant="outlined"
-            fullWidth
           >
             {i18n.t('auth:totp.enable.action')}
           </Button>
@@ -89,7 +88,6 @@ const TotpCard = ({
               color="secondary"
               variant="outlined"
               disabled={submitting}
-              fullWidth
             >
               {i18n.t('auth:totp.enable.disable')}
             </Button>

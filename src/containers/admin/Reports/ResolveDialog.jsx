@@ -86,7 +86,7 @@ const ResolveDialog = ({
           minRows={2}
         />
       </DialogContent>
-      <DialogActions sx={{ px: 3, pb: 2 }}>
+      <DialogActions>
         <Button onClick={onClose} disabled={submitting}>
           {i18n.t('actions:cancel')}
         </Button>

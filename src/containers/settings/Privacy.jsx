@@ -239,13 +239,12 @@ const SettingsPrivacy = ({
                 </>}
             </CardContent>
             {total > 0 &&
-              <CardActions>
+              <CardActions sx={{ justifyContent: 'flex-end' }}>
                 <Button
                   color="secondary"
                   variant="contained"
                   disabled={!confirmed || submitting}
                   onClick={convert}
-                  fullWidth
                 >
                   {submitting ?
                     i18n.t('settings:privacy.convert.working') :

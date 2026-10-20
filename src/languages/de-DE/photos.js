@@ -24,7 +24,7 @@ export default {
     described: 'Beschreibung ändern',
     describeTitle: 'Dieses Foto beschreiben',
     altLabel: 'Bildbeschreibung',
-    askAlt: 'Bildbeschreibung hinzufügen',
+    askAlt: 'Bildbeschreibung',
     askAltWhy: 'Sie wird Menschen vorgelesen, die das Foto nicht sehen können, und angezeigt, wenn ein Foto nicht lädt.',
     altWhy: 'Wird Menschen vorgelesen, die das Foto nicht sehen können. Das ist nicht die Bildunterschrift: Beschreib, was auf dem Bild ist.',
     altHelp: 'Zum Beispiel: eine Zwergbanane an einem Fenster, neben einem grauen Sessel.',

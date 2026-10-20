@@ -101,13 +101,12 @@ const ActorsSettingsDisable = (props) => {
           {copy('reversible')}
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           onClick={submit}
           color={isEnabled ? 'secondary' : 'primary'}
           variant="contained"
           disabled={submitting}
-          fullWidth
         >
           {copy(isEnabled ? 'action' : 'actionEnable')}
         </Button>

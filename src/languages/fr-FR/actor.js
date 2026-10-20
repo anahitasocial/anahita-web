@@ -12,7 +12,7 @@ export default {
     private: 'Ce profil est privé. Ses abonnés peuvent le voir.',
     request: 'Demander à suivre',
     requested: 'Demande envoyée',
-    withdraw: 'Retirer la demande',
+    withdraw: 'Retirer',
     failed: 'Cette action n\'a pas pu être effectuée.',
   },
   featured: {
@@ -26,7 +26,7 @@ export default {
   delete: {
     prompts: {
       challenge: 'Tapez {{ alias }} pour confirmer',
-      inProgress: 'Suppression en cours ...',
+      inProgress: 'Suppression…',
     },
     errors: {
       generic: 'Impossible de supprimer ce profil. Veuillez réessayer.',

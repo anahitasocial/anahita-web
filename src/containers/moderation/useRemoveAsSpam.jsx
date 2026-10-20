@@ -93,10 +93,10 @@ const useRemoveAsSpam = (viewer, actor, onRemoved = null) => {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button fullWidth disabled={sending} onClick={() => { setIsOpen(false); }}>
+          <Button disabled={sending} onClick={() => { setIsOpen(false); }}>
             {i18n.t('actions:cancel')}
           </Button>
-          <Button fullWidth color="error" variant="contained" disabled={sending} onClick={remove}>
+          <Button color="error" variant="contained" disabled={sending} onClick={remove}>
             {i18n.t('abuseReports:spam.confirm')}
           </Button>
         </DialogActions>

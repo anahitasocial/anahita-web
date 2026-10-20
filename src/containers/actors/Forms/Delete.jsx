@@ -88,13 +88,12 @@ const ActorDeleteForm = (props) => {
             {copy('reversible', { count: grace })}
           </Typography>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
             onClick={handleOnRestore}
             color="primary"
             variant="contained"
             disabled={isFetching}
-            fullWidth
           >
             {copy('restore')}
           </Button>
@@ -264,13 +263,12 @@ const ActorDeleteForm = (props) => {
           }}
         />
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
           type="submit"
           variant="contained"
           color="secondary"
           disabled={isFetching || !enableDelete}
-          fullWidth
         >
           {isFetching ? i18n.t('actor:delete.prompts.inProgress') : i18n.t('actions:delete')}
         </Button>

@@ -196,7 +196,7 @@ const ShareDialog = ({
         </List>
       </DialogContent>
       <DialogActions sx={{ p: 2 }}>
-        <Button fullWidth onClick={close}>
+        <Button onClick={close}>
           {i18n.t('share:close')}
         </Button>
       </DialogActions>

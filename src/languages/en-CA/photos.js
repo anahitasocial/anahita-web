@@ -24,7 +24,7 @@ export default {
     described: 'Change the description',
     describeTitle: 'Describe this photo',
     altLabel: 'Alt description',
-    askAlt: 'Add an alt description',
+    askAlt: 'Add alt text',
     askAltWhy: 'It is read out to people who cannot see the photo, and shown when a photo does not load.',
     altWhy: 'Read out to people who cannot see the photo. This is not the caption: say what is in the picture.',
     altHelp: 'For example: a dwarf banana tree by a window, beside a grey armchair.',

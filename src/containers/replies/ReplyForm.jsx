@@ -284,12 +284,14 @@ const ReplyForm = ({
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {hint}
         </Typography>}
-      {/* Buttons the width of the box, as in the composer and the edit
-          forms: one for sending, and beside it one for backing out where
-          there is something to back out of. */}
-      <Box sx={{ display: 'flex', gap: 1, mt: 1 }}>
+      {/* Normal size, aligned right: one for sending, and before it one
+          for backing out where there is something to back out of. */}
+      <Box sx={{
+        display: 'flex', gap: 1, mt: 1, justifyContent: 'flex-end',
+      }}
+      >
         {onCancel &&
-          <Button onClick={onCancel} disabled={isSending} fullWidth>
+          <Button onClick={onCancel} disabled={isSending}>
             {i18n.t('actions:cancel')}
           </Button>}
         <Button
@@ -297,7 +299,7 @@ const ReplyForm = ({
           variant="contained"
           color="primary"
           disabled={!hasSomething || isHeldBack}
-          fullWidth
+          sx={{ minWidth: 88 }}
         >
           {!isSending && submitLabel}
           {isSending && <CircularProgress size={20} />}

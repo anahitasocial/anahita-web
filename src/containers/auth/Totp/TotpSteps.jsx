@@ -95,15 +95,14 @@ const TotpSteps = ({
           </CardContent>
           {/* A way out. Enable 2FA opened this wizard, and without a cancel
               the only exits were finishing it or leaving the page. */}
-          <CardActions>
-            <Button onClick={handleDone} fullWidth>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
+            <Button onClick={handleDone}>
               {i18n.t('actions:cancel')}
             </Button>
             <Button
               type="submit"
               color="primary"
               variant="contained"
-              fullWidth
             >
               {i18n.t('actions:continue')}
             </Button>
@@ -121,15 +120,14 @@ const TotpSteps = ({
           {/* A secret exists by this point but 2FA is not enabled, and the
               next enrolment overwrites it — so backing out here costs
               nothing and stranding somebody on a QR code would. */}
-          <CardActions>
-            <Button onClick={handleDone} fullWidth>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
+            <Button onClick={handleDone}>
               {i18n.t('actions:cancel')}
             </Button>
             <Button
               type="submit"
               color="primary"
               variant="contained"
-              fullWidth
             >
               {i18n.t('actions:continue')}
             </Button>
@@ -144,12 +142,11 @@ const TotpSteps = ({
                 {enableError}
               </Typography>}
           </CardContent>
-          <CardActions>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
               startIcon={<CopyIcon />}
               type="submit"
               variant="outlined"
-              fullWidth
               onClick={handleCopyRecoveryCodes}
               color={codesCopySuccess ? 'secondary' : 'inherit'}
             >
@@ -158,18 +155,16 @@ const TotpSteps = ({
             <Button
               startIcon={<DownloadIcon />}
               variant="outlined"
-              fullWidth
               onClick={handleDownloadRecoveryCodes}
             >
               {i18n.t('actions:download')}
             </Button>
           </CardActions>
-          <CardActions>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
               type="submit"
               color="primary"
               variant="contained"
-              fullWidth
               onClick={handleEnableTOTP}
             >
               {i18n.t('auth:totp.recoveryCodes.prompts.enableTotp')}
@@ -188,10 +183,9 @@ const TotpSteps = ({
               leaving it meant leaving; now it is one card in the Security
               section and navigating away would abandon the page the person
               was working on. */}
-          <CardActions>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
               onClick={handleDone}
-              fullWidth
               color="primary"
               variant="contained"
             >

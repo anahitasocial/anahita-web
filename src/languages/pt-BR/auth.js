@@ -120,7 +120,7 @@ export default {
       prompts: {
         copySuccess: 'Copiado!',
         copyCodes: 'Copiar códigos',
-        enableTotp: 'Guardei meus códigos de recuperação',
+        enableTotp: 'Já guardei',
       },
     },
     enable: {
@@ -159,7 +159,7 @@ export default {
     cTitle: 'Confirme que é você',
     label: 'Para sua segurança, confirme sua identidade antes de mudar isto.',
     usePasskey: 'Usar uma chave de acesso',
-    usePassword: 'Usar sua senha',
+    usePassword: 'Usar senha',
     submit: 'Confirmar',
     fields: {
       currentPassword: 'Senha atual',

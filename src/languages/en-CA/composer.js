@@ -61,7 +61,7 @@ export default {
     upload: 'Upload',
     uploadNote: 'Put up here, it is in your library and in this writing only: not in your feed or on your profile.',
     insert: 'Insert',
-    chooseVideo: 'Choose a GIF or a video',
+    chooseVideo: 'GIF or video',
     preparing: 'Preparing your video. It goes in as soon as it is ready.',
     none: {
       photos: 'No photos yet.',

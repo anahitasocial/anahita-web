@@ -144,9 +144,8 @@ const RevokePasskeys = ({
         </Typography>
       </CardContent>
 
-      <CardActions>
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
-          fullWidth
           variant="outlined"
           className={hasPasskeys ? classes.destructive : ''}
           disabled={!hasPasskeys}
@@ -178,15 +177,13 @@ const RevokePasskeys = ({
         </DialogContent>
         <DialogActions>
           <Button
-            fullWidth
             onClick={() => {
               setConfirming(false);
             }}
           >
-            {i18n.t('commons:dismiss')}
+            {i18n.t('actions:cancel')}
           </Button>
           <Button
-            fullWidth
             variant="contained"
             color="primary"
             onClick={() => {
