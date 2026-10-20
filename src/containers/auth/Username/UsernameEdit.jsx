@@ -47,7 +47,7 @@ const UsernameEdit = ({
         }
         title={i18n.t('username:title')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <Divider />
@@ -123,12 +123,14 @@ const UsernameEdit = ({
 
             <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
+                fullWidth
                 onClick={onCancel}
                 disabled={submitting}
               >
                 {i18n.t('actions:cancel')}
               </Button>
               <Button
+                fullWidth
                 type="submit"
                 color="primary"
                 variant="contained"

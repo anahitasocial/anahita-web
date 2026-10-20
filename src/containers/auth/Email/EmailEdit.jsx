@@ -57,7 +57,7 @@ const EmailEdit = ({
         }
         title={i18n.t('email:title')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <Divider />
@@ -128,12 +128,14 @@ const EmailEdit = ({
 
             <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
+                fullWidth
                 onClick={onCancel}
                 disabled={confirming}
               >
                 {i18n.t('actions:cancel')}
               </Button>
               <Button
+                fullWidth
                 type="submit"
                 color="primary"
                 variant="contained"
@@ -183,12 +185,14 @@ const EmailEdit = ({
 
             <CardActions sx={{ justifyContent: 'flex-end' }}>
               <Button
+                fullWidth
                 onClick={onCancel}
                 disabled={submitting}
               >
                 {i18n.t('actions:cancel')}
               </Button>
               <Button
+                fullWidth
                 type="submit"
                 color="primary"
                 variant="contained"

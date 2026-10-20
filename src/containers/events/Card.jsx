@@ -59,7 +59,7 @@ const EventCard = ({
           i18n.t('events:event.form.hostedBy', { name: getActorName(event.host) }) :
           null}
         slotProps={{
-          title: { variant: 'h6' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       {note &&

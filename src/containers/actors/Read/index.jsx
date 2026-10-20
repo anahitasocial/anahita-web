@@ -27,6 +27,7 @@ import EventPanel from '../../events/Panel';
 import EventWhen from '../../events/When';
 import EventsHosted from '../../events/Hosted';
 import LimitedActorCard from '../../../components/LimitedActorCard';
+import BackToTop from '../../../components/BackToTop';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
 import Progress from '../../../components/Progress';
@@ -361,6 +362,7 @@ const ActorsRead = (props) => {
           hideWhenEmpty={utils.federation.isRemote(actor)}
         />}
       />}
+      <BackToTop />
     </>
   );
 };

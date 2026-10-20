@@ -327,10 +327,11 @@ const SettingsFediverse = ({
             />
           </DialogContent>
           <DialogActions>
-            <Button onClick={close} variant="outlined">
+            <Button fullWidth onClick={close} variant="outlined">
               {i18n.t('settings:fediverse.cancel')}
             </Button>
             <Button
+              fullWidth
               type="submit"
               color="secondary"
               variant="contained"

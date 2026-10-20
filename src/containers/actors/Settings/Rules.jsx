@@ -237,12 +237,14 @@ const ActorsSettingsRules = ({
       <CardActions sx={{ px: 2, pb: 2 }}>
         <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             disabled={isSaving || unchanged}
             onClick={() => { setItems(saved); }}
           >
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             disabled={isSaving || unchanged}
             onClick={save}

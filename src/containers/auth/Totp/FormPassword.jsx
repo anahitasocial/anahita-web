@@ -16,7 +16,7 @@ const TOTPFormPassword = ({
 }) => {
   return (
     <>
-      <Typography variant="h5" color="primary">
+      <Typography variant="subtitle1" component="h3" sx={{ fontWeight: 500 }}>
         {i18n.t('auth:totp.password.title')}
       </Typography>
       <PasswordField

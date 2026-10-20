@@ -146,12 +146,14 @@ const MediumFormEdit = (props) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           disabled={isFetching}
           onClick={handleCancel}
         >
           {i18n.t('actions:cancel')}
         </Button>
         <Button
+          fullWidth
           type="submit"
           variant="contained"
           color="primary"

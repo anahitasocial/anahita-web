@@ -239,6 +239,7 @@ const Invites = ({
             </DialogContent>
             <DialogActions>
               <Button
+                fullWidth
                 onClick={() => {
                   setRevoking(null);
                 }}
@@ -246,6 +247,7 @@ const Invites = ({
                 {i18n.t('actions:cancel')}
               </Button>
               <Button
+                fullWidth
                 variant="contained"
                 color="primary"
                 onClick={() => {

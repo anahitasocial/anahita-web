@@ -270,7 +270,9 @@ const CustomFeedsManage = ({
             </Stack>
           }
           slotProps={{
-            title: { variant: 'h6', component: 'h3', noWrap: true },
+            title: {
+              variant: 'subtitle1', component: 'h3', noWrap: true, sx: { fontWeight: 500 },
+            },
             // Lets the lines be cut short instead of pushing the buttons
             // off the card.
             content: { sx: { minWidth: 0 } },

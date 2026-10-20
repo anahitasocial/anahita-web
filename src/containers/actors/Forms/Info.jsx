@@ -97,12 +97,14 @@ const ActorFormsInfo = ({
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         {handleOnCancel &&
           <Button
+            fullWidth
             onClick={handleOnCancel}
             disabled={isFetching}
           >
             {i18n.t('actions:cancel')}
           </Button>}
         <Button
+          fullWidth
           type="submit"
           variant="contained"
           color="primary"

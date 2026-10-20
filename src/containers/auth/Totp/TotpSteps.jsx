@@ -96,10 +96,11 @@ const TotpSteps = ({
           {/* A way out. Enable 2FA opened this wizard, and without a cancel
               the only exits were finishing it or leaving the page. */}
           <CardActions sx={{ justifyContent: 'flex-end' }}>
-            <Button onClick={handleDone}>
+            <Button fullWidth onClick={handleDone}>
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               type="submit"
               color="primary"
               variant="contained"
@@ -121,10 +122,11 @@ const TotpSteps = ({
               next enrolment overwrites it — so backing out here costs
               nothing and stranding somebody on a QR code would. */}
           <CardActions sx={{ justifyContent: 'flex-end' }}>
-            <Button onClick={handleDone}>
+            <Button fullWidth onClick={handleDone}>
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               type="submit"
               color="primary"
               variant="contained"
@@ -174,7 +176,7 @@ const TotpSteps = ({
       {activeStep === STEPS.ENABLED &&
         <>
           <CardContent>
-            <Typography variant="h5" align="center">
+            <Typography variant="subtitle1" align="center" sx={{ fontWeight: 500 }}>
               {i18n.t('auth:totp.enable.cDesc')}
             </Typography>
           </CardContent>

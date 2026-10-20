@@ -104,12 +104,14 @@ const RenameDialog = ({
       </DialogContent>
       <DialogActions>
         <Button
+          fullWidth
           onClick={handleCancel}
           disabled={isBusy}
         >
           {t('actions:cancel')}
         </Button>
         <Button
+          fullWidth
           color="primary"
           variant="contained"
           onClick={submit}

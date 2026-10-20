@@ -47,7 +47,7 @@ const TotpCard = ({
           ? i18n.t('auth:totp.enable.on')
           : i18n.t('auth:totp.enable.off')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <Divider />

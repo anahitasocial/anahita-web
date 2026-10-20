@@ -48,12 +48,14 @@ tone made specific; where they are silent, follow it.
 - A button's label is short, three words at most, and never wraps:
   "Close", not "Record what was done". What a choice means goes in a line of
   text beside the buttons, not in the label. Backing out is always "Cancel".
-- Buttons in dialogs and cards are normal size, aligned right, never
-  stacked: Cancel first, then the main action, the only contained one. A
-  dialog's padding is in the theme (`MuiDialogActions`); a card's row takes
-  `sx={{ justifyContent: 'flex-end' }}`. Full width only where a button is
-  the whole of a page or a step (Sign in, Continue, onboarding), for a row
-  of equal answers (Going, Maybe, Not going; Accept, Decline), for the
+- Buttons in a card's or a dialog's action row, when one backs out
+  (Cancel, Dismiss, Decline) beside the main action, are full width and
+  side by side, never stacked: the one that backs out first, then the main
+  action, the only contained one (the user, 2026-10-20). A button alone
+  there is normal size, aligned right (`sx={{ justifyContent: 'flex-end' }}`
+  on a card's row). A dialog's padding is in the theme (`MuiDialogActions`).
+  Full width alone only where a button is the whole of a page or a step
+  (Sign in, Continue, onboarding), for a row of equal answers, for the
   actions on a profile or a post, and for "Show more" at a list's foot.
 - Calm, not busy: one flat list, never indented lists under headings inside
   it. A choice with many options under it opens a select right under the

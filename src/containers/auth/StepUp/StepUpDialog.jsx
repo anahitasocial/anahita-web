@@ -160,11 +160,12 @@ const StepUpDialog = ({
             bunching to the right — which is what made this dialog look
             unlike the cards that open it. */}
         <DialogActions>
-          <Button onClick={onCancel} disabled={submitting}>
+          <Button fullWidth onClick={onCancel} disabled={submitting}>
             {i18n.t('actions:cancel')}
           </Button>
           {showForm &&
             <Button
+              fullWidth
               type="submit"
               color="primary"
               variant="contained"

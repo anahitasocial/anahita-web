@@ -90,7 +90,7 @@ const Metadata = ({ person }) => {
           </Avatar>
         }
         title={
-          <Typography variant="h5">
+          <Typography variant="subtitle1" component="h3" sx={{ fontWeight: 500 }}>
             {i18n.t('people:metadata.cTitle')}
           </Typography>
         }

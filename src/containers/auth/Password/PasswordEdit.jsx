@@ -47,7 +47,7 @@ const PasswordEdit = ({
         title={i18n.t('password:cTitle')}
         subheader={i18n.t('password:cDesc')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <Divider />
@@ -100,12 +100,14 @@ const PasswordEdit = ({
 
           <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
+              fullWidth
               onClick={onCancel}
               disabled={submitting}
             >
               {i18n.t('actions:cancel')}
             </Button>
             <Button
+              fullWidth
               type="submit"
               color="primary"
               variant="contained"

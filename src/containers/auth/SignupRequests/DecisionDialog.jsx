@@ -78,10 +78,11 @@ const DecisionDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={submitting}>
+        <Button fullWidth onClick={onClose} disabled={submitting}>
           {i18n.t('actions:cancel')}
         </Button>
         <Button
+          fullWidth
           color="primary"
           variant="contained"
           disabled={submitting}

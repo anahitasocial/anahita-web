@@ -143,7 +143,7 @@ const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
     <Card component="section" sx={{ mb: 2 }}>
       <CardHeader
         title={i18n.t('recommendations:whoToFollow')}
-        slotProps={{ title: { variant: 'h6', component: 'h2' } }}
+        slotProps={{ title: { variant: 'subtitle1', component: 'h2', sx: { fontWeight: 500 } } }}
         action={
           <Tooltip title={i18n.t('recommendations:hide', { count: recommendations.HIDE_DAYS })}>
             <IconButton

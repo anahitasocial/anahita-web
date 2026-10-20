@@ -83,7 +83,7 @@ const AuthLogsCard = ({
         }
         title={i18n.t('auth:authLogs.cTitle')}
         slotProps={{
-          title: { variant: 'h5' },
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
       />
       <List>

@@ -112,7 +112,7 @@ const RevokeTotp = ({
           </Avatar>
         }
         title={
-          <Typography variant="h5">
+          <Typography variant="subtitle1" component="h3" sx={{ fontWeight: 500 }}>
             {i18n.t('people:revokeTotp.cTitle')}
           </Typography>
         }
@@ -175,6 +175,7 @@ const RevokeTotp = ({
         </DialogContent>
         <DialogActions>
           <Button
+            fullWidth
             onClick={() => {
               setConfirming(false);
             }}
@@ -182,6 +183,7 @@ const RevokeTotp = ({
             {i18n.t('actions:cancel')}
           </Button>
           <Button
+            fullWidth
             variant="contained"
             color="primary"
             onClick={() => {

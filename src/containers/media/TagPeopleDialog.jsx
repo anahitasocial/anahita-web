@@ -181,10 +181,10 @@ const TagPeopleDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={sending}>
+        <Button fullWidth onClick={onClose} disabled={sending}>
           {i18n.t('actions:cancel')}
         </Button>
-        <Button variant="contained" onClick={save} disabled={sending}>
+        <Button fullWidth variant="contained" onClick={save} disabled={sending}>
           {i18n.t('actions:save')}
         </Button>
       </DialogActions>

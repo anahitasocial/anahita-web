@@ -155,6 +155,7 @@ const PersonAddForm = (props) => {
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         {dismissPath &&
         <Button
+          fullWidth
           component={Link}
           href={dismissPath}
           to={dismissPath}
@@ -162,6 +163,7 @@ const PersonAddForm = (props) => {
           {i18n.t('actions:cancel')}
         </Button>}
         <Button
+          fullWidth
           type="submit"
           variant="contained"
           color="primary"

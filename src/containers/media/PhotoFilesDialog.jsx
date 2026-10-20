@@ -88,10 +88,11 @@ const PhotoFilesDialog = ({
         />
       </DialogContent>
       <DialogActions>
-        <Button onClick={onClose} disabled={isSaving}>
+        <Button fullWidth onClick={onClose} disabled={isSaving}>
           {i18n.t('actions:cancel')}
         </Button>
         <Button
+          fullWidth
           onClick={handleSave}
           variant="contained"
           color="primary"

@@ -265,7 +265,7 @@ const ReportsCase = ({
           <CardHeader
             title={i18n.t('abuseReports:case.decision')}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           {!isOpen &&
@@ -302,6 +302,7 @@ const ReportsCase = ({
             {isOpen &&
               <>
                 <Button
+                  fullWidth
                   disabled={submitting}
                   onClick={() => {
                     setResolving('dismissed');
@@ -310,6 +311,7 @@ const ReportsCase = ({
                   {i18n.t('abuseReports:resolve.dismiss')}
                 </Button>
                 <Button
+                  fullWidth
                   color="primary"
                   variant="contained"
                   disabled={submitting}
@@ -336,7 +338,7 @@ const ReportsCase = ({
             title={i18n.t('abuseReports:case.reports')}
             subheader={i18n.t('abuseReports:list.reports', { count: item.reportCount })}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           <Divider />
@@ -382,7 +384,7 @@ const ReportsCase = ({
           <CardHeader
             title={i18n.t('abuseReports:case.previous')}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           <Divider />

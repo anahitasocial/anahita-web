@@ -56,11 +56,13 @@ const DialogConfirm = (props) => {
         </DialogContent>
         <DialogActions>
           <Button
+            fullWidth
             onClick={handleClose}
           >
             {dismiss}
           </Button>
           <Button
+            fullWidth
             color="secondary"
             variant="contained"
             onClick={handleConfirm}
