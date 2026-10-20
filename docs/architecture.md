@@ -546,13 +546,15 @@ replies, made directly to the post.
   from `root.owner`. A reply is owned by whoever wrote it, so its own owner
   does not say. A post shows the profile it is on the same way when that is
   not its author's own.
-- **A person's profile has three lists**: Posts, Replies and Reposts. Only
-  people reply and repost, so a group has Posts alone. They are the first
-  tabs of `containers/actors/Read/Body.jsx`. All three are the profile's feed
-  asked for with a different `filter` (`containers/feed/Actor`); they share
-  one place in the store, so each is keyed and read when its tab is opened.
-  Posts are one column beside the profile's details; Replies and Reposts
-  fill the page in the same masonry as the lists of notes, articles and
+- **A person's profile has four lists**: Posts, Tagged, Replies and
+  Reposts. Tagged is the photos and videos they are in, their tag approved,
+  whoever posted them (roadmap row 103). Only people reply, repost and are
+  tagged, so a group has Posts alone. They are the first tabs of
+  `containers/actors/Read/Body.jsx`. All four are the profile's feed asked
+  for with a different `filter` (`containers/feed/Actor`); they share one
+  place in the store, so each is keyed and read when its tab is opened.
+  Posts are one column beside the profile's details; the others fill the
+  page in the same masonry as the lists of notes, articles and
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
   is drawn as itself, not inside a card for whoever reposted it.
   The tab is in the address. Reposts are not among the posts unless the

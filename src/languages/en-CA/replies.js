@@ -78,10 +78,12 @@ export default {
     posts: 'Posts',
     replies: 'Replies',
     reposts: 'Reposts',
+    tagged: 'Tagged',
   },
   none: {
     replies: 'No replies to show.',
     reposts: 'No reposts to show.',
+    tagged: 'No photos or videos with them yet.',
   },
   // What a reply is a reply to, where it is shown away from its thread.
   context: {
