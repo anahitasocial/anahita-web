@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 
 import api from '../../../api';
+import utils from '../../../utils';
 import i18n from '../../../languages';
 import { Medium as MEDIUM } from '../../../constants';
 import permissions from '../../../permissions/node';
@@ -29,6 +30,7 @@ const LocationsGadget = ({
   node,
   viewer,
   cardProps = {},
+  hideWhenEmpty = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [locations, setLocations] = useState([]);
@@ -67,8 +69,11 @@ const LocationsGadget = ({
     setIsOpen(false);
   };
 
-  const canDelete = permissions.canEdit(viewer, node);
   const canAdd = permissions.canAdd(viewer, node);
+  // Nobody here edits a profile from another server, but whoever may tie it
+  // to a place may untie it again.
+  const canDelete = permissions.canEdit(viewer, node) ||
+    (utils.federation.isRemote(node) && canAdd);
   // Tied to as many places as a post may be: the button gives way to why.
   const isFull = locations.length >= MEDIUM.MAX_LOCATIONS;
 
@@ -76,6 +81,10 @@ const LocationsGadget = ({
     return (
       <Progress />
     );
+  }
+
+  if (hideWhenEmpty && locations.length === 0 && !canAdd) {
+    return null;
   }
 
   return (
@@ -151,6 +160,9 @@ LocationsGadget.propTypes = {
   node: NodeType.isRequired,
   viewer: PersonType.isRequired,
   cardProps: PropTypes.objectOf(PropTypes.any),
+  // Draw nothing when it has no locations and the viewer cannot add one:
+  // a profile from another server.
+  hideWhenEmpty: PropTypes.bool,
 };
 
 export default LocationsGadget;

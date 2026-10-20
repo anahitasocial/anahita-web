@@ -1351,8 +1351,10 @@ draws nothing (`utils/federation.js#isAbsent`).
   and videos are not taken in from other servers, so those lists would be
   empty for ever and say the person has none; each comes back when it is
   taken in. Their replies and reposts are in what was posted, not in lists
-  of their own. Nor is there the box of locations: where
-  somebody is is theirs to say, and their server says nothing of it.
+  of their own. Its box of locations is the site's administrators' to fill,
+  as it is for any profile here, to say where an organisation on another
+  server is (`locations/Gadget`, `hideWhenEmpty`); nobody else sees it
+  while it is empty.
 - **The servers the site refuses** are in Site settings, under Fediverse
   (`settings/Fediverse.jsx`), for super administrators as every tab there
   is: the list with why, and a button to stop refusing one. The list is
