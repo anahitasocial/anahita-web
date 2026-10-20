@@ -12,10 +12,24 @@ const reasons = (type, lang) => {
 };
 
 // Report a node. 201 reported, 200 the viewer's earlier report was
-// updated, 400 the reason does not fit or needs an explanation, 404 no
+// updated, 400 the reason or the rule does not fit or needs an explanation, 404 no
 // such node the viewer can see, 429 too many reports.
-const add = ({ targetId, reasonKey, details = '' }) => {
-  return axios.post('/abuse-reports', { targetId, reasonKey, details });
+// With reasonKey 'rule', the rule broken by its title, and whose rule it is:
+// 0 for the site's, or the group's or event's id.
+const add = ({
+  targetId,
+  reasonKey,
+  details = '',
+  rule = '',
+  ruleProfileId = 0,
+}) => {
+  return axios.post('/abuse-reports', {
+    targetId,
+    reasonKey,
+    details,
+    rule,
+    ruleProfileId,
+  });
 };
 
 // --- administrators ---

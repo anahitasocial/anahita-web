@@ -211,9 +211,20 @@ const ReportsCase = ({
                   </>}
               </>
             }
-            action={<Chip label={statusLabel} color={isOpen ? 'primary' : 'default'} />}
+            action={
+              <Chip
+                size="small"
+                label={statusLabel}
+                color={isOpen ? 'primary' : 'default'}
+              />
+            }
+            // The text wraps beside the status, never under it.
+            sx={{
+              '& .MuiCardHeader-content': { minWidth: 0, overflowWrap: 'anywhere' },
+              '& .MuiCardHeader-action': { alignSelf: 'flex-start', m: 0, ml: 2 },
+            }}
             slotProps={{
-              title: { variant: 'h6' },
+              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
             }}
           />
           {(body || item.targetGone) &&
@@ -280,11 +291,17 @@ const ReportsCase = ({
                   {`${i18n.t('abuseReports:case.note')}: ${item.decisionNote}`}
                 </Typography>}
             </CardContent>}
-          <CardActions>
+          {/* What each choice means, beside two short buttons. */}
+          {isOpen &&
+            <CardContent sx={{ pt: 0 }}>
+              <Typography variant="body2" color="textSecondary">
+                {i18n.t('abuseReports:resolve.hint')}
+              </Typography>
+            </CardContent>}
+          <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
             {isOpen &&
               <>
                 <Button
-                  fullWidth
                   disabled={submitting}
                   onClick={() => {
                     setResolving('dismissed');
@@ -293,7 +310,6 @@ const ReportsCase = ({
                   {i18n.t('abuseReports:resolve.dismiss')}
                 </Button>
                 <Button
-                  fullWidth
                   color="primary"
                   variant="contained"
                   disabled={submitting}
@@ -334,10 +350,10 @@ const ReportsCase = ({
                       <Typography variant="subtitle2">
                         {report.reporter ?
                           <Link component={RouterLink} to={getURL(report.reporter)}>
-                            {report.reporter.name}
+                            {report.reporter.name || `@${report.reporter.alias}`}
                           </Link> :
                           `#${report.reporterId}`}
-                        {` · ${report.reasonLabel}`}
+                        {` · ${target.reasonOf(report)}`}
                       </Typography>
                     }
                     secondary={

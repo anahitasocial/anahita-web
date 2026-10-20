@@ -306,6 +306,13 @@ beside the menu, not inside it, because choosing the item closes the menu.
 The reasons it lists come from the server, for the kind of thing being
 reported and in the app's language, and are fetched once per kind.
 
+First among them is **Breaks a rule**, when there are rules to break:
+choosing it lists the site's rules (`GET /site`, unless `SITE_RULES` is
+off) and those of the group or event the thing is in, or is. The rule's
+title and whose it is go with the report (`rule`, `rule_profile_id`, 0 for
+the site's). A case names the rule and whose it is, and "Breaks a rule" is
+one of the reasons to filter by.
+
 The Reports tab lists cases, filtered by status and by reason with two select
 lists, and adds more with a "Show more" button. It opens one case at a time. It records an
 administrator's decision; it does not delete or disable anything. "View"

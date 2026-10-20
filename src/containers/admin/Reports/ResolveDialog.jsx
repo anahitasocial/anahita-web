@@ -86,12 +86,11 @@ const ResolveDialog = ({
           minRows={2}
         />
       </DialogContent>
-      <DialogActions>
-        <Button fullWidth onClick={onClose} disabled={submitting}>
+      <DialogActions sx={{ px: 3, pb: 2 }}>
+        <Button onClick={onClose} disabled={submitting}>
           {i18n.t('actions:cancel')}
         </Button>
         <Button
-          fullWidth
           color="primary"
           variant="contained"
           disabled={submitting}

@@ -38,9 +38,21 @@ UI:
 
 ## The interface
 
-- Buttons in forms and dialogs are full width and side by side in one row,
-  never stacked: Cancel on the left, the main action on the right
-  (`<Stack direction="row" spacing={1}>`, as in `ReplyForm.jsx`).
+- A button's label is one or two words and never wraps: "Close", not
+  "Record what was done". What a choice means goes in a line of text beside
+  the buttons, not in the label.
+- Buttons in dialogs and cards are normal size, aligned right, never
+  stacked: Cancel first, then the main action, the only contained one
+  (`<DialogActions sx={{ px: 3, pb: 2 }}>`, as in `ResolveDialog.jsx`).
+  Full width only for a lone button that is the whole of a form.
+- Calm, not busy: one flat list, never indented lists under headings inside
+  it. A choice with many options under it opens a select right under the
+  choice (`ReportDialog.jsx`, "Which rule").
+- Nothing overlaps, and nothing is said twice. A status chip sits beside a
+  title that wraps (`minWidth: 0` on the text), and a title made from a
+  post's opening is not followed by the same text.
+- Type stays small inside cards: `subtitle1` for a card's title, `body2` for
+  what explains it; `h6` only for a section's heading.
 - Spacing (margins, paddings, gaps) in whole 8-pixel steps.
 - Menu items carry an icon before their label (`MenuItemLabel.jsx`).
 - Infinite scroll, not "Show more", inside dialogs too
