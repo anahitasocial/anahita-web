@@ -13,7 +13,7 @@ import { Search as SEARCH } from '../../../constants';
 const { SCOPE } = SEARCH;
 
 // The tabs below All, each of which may find what the open one did not.
-const NARROW = [SCOPE.MEDIA, SCOPE.ACTORS, SCOPE.FEEDS];
+const NARROW = [SCOPE.POSTS, SCOPE.MEDIA, SCOPE.ACTORS, SCOPE.FEEDS];
 
 // A search that found nothing under its tab says so, and offers the other
 // tabs that would have something, with how much: the counts the tabs show

@@ -1510,9 +1510,10 @@ draws nothing (`utils/federation.js#isAbsent`).
   link sent to somebody open it as it was. What is as it comes is left
   out. Changing the tab, the order or the distance replaces the address
   rather than adding to the history.
-- **The tabs are All, Posts, Profiles and Feeds.** Posts is every kind of
-  post, notes and articles among them, not only pictures and videos, so it
-  is not called Media (the user, 2026-10-20); its `scope` stays `media`.
+- **The tabs are All, Posts, Media, Profiles and Feeds** (`scope` `all`,
+  `posts`, `media`, `actors`, `feeds`). Posts is every kind of post; Media
+  is photos and videos alone, as other networks mean it (the user,
+  2026-10-20).
 - **Each tab says how many it finds,** in grey after its name and short
   however large (`utils/shortCount.js`: 515, 1.2K, 48K, 3.1M, as the
   reader's language writes them). One request for each tab, asking for a

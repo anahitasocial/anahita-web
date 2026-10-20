@@ -357,6 +357,11 @@ const Search = ({ viewerId }) => {
             label={tabLabel(SCOPE.ALL)}
             value={SCOPE.ALL}
           />
+          {shown(SCOPE.POSTS) &&
+            <Tab
+              label={tabLabel(SCOPE.POSTS)}
+              value={SCOPE.POSTS}
+            />}
           {shown(SCOPE.MEDIA) &&
             <Tab
               label={tabLabel(SCOPE.MEDIA)}
