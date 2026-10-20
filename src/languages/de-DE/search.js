@@ -8,7 +8,7 @@ export default {
   },
   filterNodeTypes: {
     all: 'Alle',
-    media: 'Medien',
+    media: 'Beiträge',
     actors: 'Profile',
     feeds: 'Feeds',
   },
