@@ -12,7 +12,7 @@ import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
-import SuggestionsIcon from '@mui/icons-material/AutoAwesome';
+import RecommendationsIcon from '@mui/icons-material/Explore';
 import TuneIcon from '@mui/icons-material/TuneOutlined';
 import PreferencesIcon from '@mui/icons-material/SettingsOutlined';
 
@@ -150,7 +150,7 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
       </Helmet>
       <Box sx={{ mb: 2 }}>
         <BrowseHeader
-          icon={<SuggestionsIcon />}
+          icon={<RecommendationsIcon />}
           title={i18n.t('recommendations:cTitle')}
           subheader={i18n.t('recommendations:subheader')}
         />
