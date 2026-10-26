@@ -211,7 +211,7 @@ const MediumReadDefault = ({
             </EntityBody>}
             {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
               <Citations text={medium.content} cards={medium.linkPreviews || []} />}
-            {linkPreviews.isShown(medium.linkPreview, medium.content) &&
+            {linkPreviews.isShown(medium.linkPreview) &&
               <LinkPreviewCard preview={medium.linkPreview} />}
             {quote}
             <SignInPrompt show={Boolean(medium.truncated)} />

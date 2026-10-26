@@ -222,7 +222,7 @@ const MediumCard = ({
           <ReadMore contentFilter lang={medium.language} to={url}>
             {medium.content}
           </ReadMore>}
-        {linkPreviews.isShown(medium.linkPreview, medium.content) &&
+        {linkPreviews.isShown(medium.linkPreview) &&
           <LinkPreviewCard preview={medium.linkPreview} />}
         <QuoteEmbed quote={medium.quote} />
         <SignInPrompt show={Boolean(medium.truncated)} />

@@ -3,10 +3,6 @@
 
 const LINK = /https?:\/\/[^\s<>"')\]]+/i;
 
-// What components/Player.jsx plays in place. A note with one of these has
-// the player, and no card as well.
-const PLAYED = /(youtu|vimeo|soundcloud|dailymotion|mixcloud|twitch)/i;
-
 // The first link in a text, as it was typed, or ''. What follows a link in
 // a sentence, a full stop or a comma, is not part of it. The server finds
 // it the same way: anahita-libs/linkpreviews#FirstURL.
@@ -15,21 +11,16 @@ const firstURL = (text = '') => {
   return found ? found[0].replace(/[.,;:!?]+$/, '') : '';
 };
 
-const isPlayed = (text = '') => {
-  return PLAYED.test(firstURL(text));
-};
-
-// The link a card may be asked for, or '' when the text has none or has
-// one that is played instead.
+// The link a card may be asked for, or '' when the text has none. A
+// YouTube or Vimeo link is one like any other: nothing plays another site's
+// videos here, so its card is what leads to it.
 const urlToPreview = (text = '') => {
-  const url = firstURL(text);
-  return url && !PLAYED.test(url) ? url : '';
+  return firstURL(text);
 };
 
-// Whether a note's card is drawn: it has one, and its text is not headed
-// by a player.
-const isShown = (preview, text = '') => {
-  return Boolean(preview && preview.url && preview.title) && !isPlayed(text);
+// Whether a note's card is drawn: it has one, with a title.
+const isShown = (preview) => {
+  return Boolean(preview && preview.url && preview.title);
 };
 
 // The picture is this installation's own copy, sent as a path under the
@@ -62,7 +53,6 @@ const siteOf = (preview) => {
 
 export default {
   firstURL,
-  isPlayed,
   urlToPreview,
   isShown,
   imageOf,

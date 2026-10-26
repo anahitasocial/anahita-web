@@ -171,7 +171,7 @@ const FeedCardDefault = ({
           <ReadMore contentFilter to={url}>
             {content}
           </ReadMore>}
-        {linkPreviews.isShown(node.linkPreview, content) &&
+        {linkPreviews.isShown(node.linkPreview) &&
           <LinkPreviewCard preview={node.linkPreview} />}
         <QuoteEmbed quote={node.quote} />
       </CardContent>

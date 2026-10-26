@@ -73,12 +73,12 @@ usual case.
 
 ### Third parties the app talks to
 
-With the defaults, the browser contacts two services besides your own API:
-
-- **OpenStreetMap's tile server**, whenever a map is shown. Point
-  `REACT_APP_MAP_TILE_URL` at your own tiles to avoid it.
-- **Video and audio hosts** (YouTube, Vimeo and the like), only when a post
-  embeds something from one of them.
+With the defaults, the browser contacts one service besides your own API:
+**OpenStreetMap's tile server**, whenever a map is shown. Point
+`REACT_APP_MAP_TILE_URL` at your own tiles to avoid it. A link to YouTube,
+Vimeo or any other site is shown as its card, whose picture is this
+installation's own copy; nothing from that site is loaded until somebody
+follows the link.
 
 Analytics is off unless you configure it, and all three supported services can
 be self-hosted. The app loads no fonts or scripts from a CDN.

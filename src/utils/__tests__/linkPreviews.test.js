@@ -12,13 +12,14 @@ describe('the card a note carries for a link', () => {
     expect(previews.firstURL(undefined)).toBe('');
   });
 
-  it('is not asked for where a player is shown', () => {
-    expect(previews.urlToPreview('Watch https://www.youtube.com/watch?v=abc')).toBe('');
+  it('is asked for and shown for a video site like any other', () => {
+    expect(previews.urlToPreview('Watch https://www.youtube.com/watch?v=abc')).toBe('https://www.youtube.com/watch?v=abc');
     expect(previews.urlToPreview('Read https://example.org/heap')).toBe('https://example.org/heap');
-    expect(previews.isShown({ url: 'https://example.org/', title: 'A' }, 'https://vimeo.com/1')).toBe(false);
-    expect(previews.isShown({ url: 'https://example.org/', title: 'A' }, 'https://example.org/')).toBe(true);
-    expect(previews.isShown(undefined, 'https://example.org/')).toBe(false);
-    expect(previews.isShown({ url: 'https://example.org/' }, '')).toBe(false);
+    expect(previews.urlToPreview('nothing here')).toBe('');
+    expect(previews.isShown({ url: 'https://vimeo.com/1', title: 'A' })).toBe(true);
+    expect(previews.isShown({ url: 'https://example.org/', title: 'A' })).toBe(true);
+    expect(previews.isShown(undefined)).toBe(false);
+    expect(previews.isShown({ url: 'https://example.org/' })).toBe(false);
   });
 
   it('reads its picture from this installation', () => {

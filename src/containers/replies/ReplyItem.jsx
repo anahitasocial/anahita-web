@@ -202,7 +202,7 @@ const ReplyItem = ({
             <EntityBody contentFilter size="body2" lang={reply.language}>
               {reply.content || ''}
             </EntityBody>}
-          {!isEditing && linkPreviews.isShown(reply.linkPreview, reply.content) &&
+          {!isEditing && linkPreviews.isShown(reply.linkPreview) &&
             <LinkPreviewCard preview={reply.linkPreview} />}
           {isEditing &&
             <ReplyForm
