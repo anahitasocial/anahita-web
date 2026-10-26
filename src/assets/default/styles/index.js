@@ -16,8 +16,14 @@ const global = (params) => {
     },
     palette: {
       mode: prefersDarkMode ? 'dark' : 'light',
+      // Anahita's colours, shared with www.anahita.io: ink, which matches
+      // the black-and-white logo and turns near-white in dark mode, and
+      // signal red, an accent used sparingly (red also means an error).
       primary: {
-        main: prefersDarkMode ? '#90caf9' : '#098ED1',
+        main: prefersDarkMode ? '#E6E8EB' : '#1F2328',
+      },
+      secondary: {
+        main: prefersDarkMode ? '#E57575' : '#D62828',
       },
       error: red,
     },
