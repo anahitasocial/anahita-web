@@ -38,7 +38,7 @@ A theme exports, from its `index.js`:
 
 | Part | Directory | What it controls |
 | --- | --- | --- |
-| `logo` | `media/logo` | The logo in the menu, in a version for light mode and one for dark |
+| `logo` | `media/logo` | The logo in the menu: `color` for light mode and `white` for dark, which may be the same file. The default theme's is Anahita's mark, an SVG for both |
 | `opengraph` | `media/og` | An image for link previews. Exported, but nothing in the app uses it yet |
 | `Home` | `home/` | The home page signed-out visitors see |
 | `navs` | `navs/` | The left menu |

@@ -1,4 +1,4 @@
-![Anahita social networking platform and framework](docs/images/anahita-logo.png)
+![Anahita social networking platform and framework](docs/images/anahita-logo.svg)
 
 # Anahita Web
 
