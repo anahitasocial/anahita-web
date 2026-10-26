@@ -21,9 +21,10 @@ const useStyles = makeStyles()((theme) => {
     root: {
       position: 'relative',
       borderRadius: theme.shape.borderRadius,
-      backgroundColor: theme.alpha(theme.palette.common.white, 0.15),
+      // A soft field on the light top bar, and on the dark one.
+      backgroundColor: theme.palette.action.hover,
       '&:hover': {
-        backgroundColor: theme.alpha(theme.palette.common.white, 0.25),
+        backgroundColor: theme.palette.action.selected,
       },
       marginRight: theme.spacing(2),
       marginLeft: 0,

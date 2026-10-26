@@ -40,8 +40,11 @@ const v4Look = (prefersDarkMode) => {
           },
         },
       },
+      // Choices that are on are ink, not red: red is Anahita's accent, and
+      // also means an error, so a list of switches in red would read as a
+      // list of warnings.
       MuiCheckbox: {
-        defaultProps: { color: 'secondary' },
+        defaultProps: { color: 'primary' },
       },
       // A dialog's buttons line up with its text, and sit off its bottom
       // edge (AGENTS.md, "The interface").
@@ -75,13 +78,13 @@ const v4Look = (prefersDarkMode) => {
         styleOverrides: { root: { backgroundImage: 'unset' } },
       },
       MuiRadio: {
-        defaultProps: { color: 'secondary' },
+        defaultProps: { color: 'primary' },
       },
       MuiStepper: {
         styleOverrides: { root: { padding: 24 } },
       },
       MuiSwitch: {
-        defaultProps: { color: 'secondary' },
+        defaultProps: { color: 'primary' },
       },
       MuiTab: {
         styleOverrides: {
