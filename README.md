@@ -140,9 +140,12 @@ Rastin Mehr; not a term of the licence, which is unchanged.
 
 [MIT](LICENSE)
 
+Copyright © 2008–2026 Rastin Mehr Design Studio Inc. (rmd studio). Anahita is a
+registered trademark of Rastin Mehr Design Studio Inc. in Canada.
+
 ## Credits
 
-Anahita is developed and maintained by [rmdStudio Inc.](http://www.rmdstudio.com),
+Anahita is developed and maintained by [rmd studio](https://www.rmdstudio.com),
 a software development company in Vancouver, Canada.
 
 This project was bootstrapped with
