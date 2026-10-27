@@ -134,11 +134,13 @@ they set their first password:
 - Abuse the system through spam, malware, financial scams, or data harvesting.
 
 It is a pledge to the people who will trust you, from Anahita's creator,
-Rastin Mehr; not a term of the licence, which is unchanged.
+Rastin Mehr; not a term of the licence.
 
 ## Licence
 
-[MIT](LICENSE)
+[MIT](LICENSE). The services it talks to, anahita-services, are under the
+GNU AGPL-3.0, and the definitions of the calls between them under Apache 2.0:
+see its [Licensing](https://github.com/anahitasocial/anahita-services/blob/main/docs/licensing.md).
 
 Copyright © 2008–2026 Rastin Mehr Design Studio Inc. (rmd studio). Anahita is a
 registered trademark of Rastin Mehr Design Studio Inc. in Canada.
