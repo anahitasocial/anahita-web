@@ -8,10 +8,8 @@ To set up a whole site, make it your own, keep it running or build on it,
 begin with the four ways in that the services' docs give:
 [Where to begin](https://github.com/anahitasocial/anahita-services/blob/main/docs/README.md#where-to-begin).
 
-Asking an AI agent about the web app? Add
-[anahita-mcp](https://github.com/anahitasocial/anahita-mcp) to it, an MCP
-server that runs on your computer and reads these docs, the services' and
-the API reference, read-only.
+Asking an AI agent about the web app? Add Anahita's MCP server to it: see
+[Anahita MCP](https://github.com/anahitasocial/anahita-services/blob/main/docs/ai-agents.md).
 
 ## Contents
 

@@ -12,17 +12,17 @@ Running the app locally and working on it.
 - [Developing](#developing)
 - [Tests](#tests)
 - [Linting](#linting)
+- [With an AI agent](#with-an-ai-agent)
 
 ## Requirements
 
 - [Node.js](https://nodejs.org/), a current LTS release
 - [Yarn](https://yarnpkg.com/)
-- anahita-services running locally. See its getting started guide. Its nginx
-  gateway answers at `http://localhost`, and allows `http://localhost:3000`,
-  where this app runs, for CORS.
-
-  anahita-services will be released later in 2026. Until then it is available
-  only to the Anahita team.
+- [anahita-services](https://github.com/anahitasocial/anahita-services)
+  running locally: see its
+  [getting started](https://github.com/anahitasocial/anahita-services/blob/main/docs/getting-started.md).
+  Its nginx gateway answers at `http://localhost`, and allows
+  `http://localhost:3000`, where this app runs, for CORS.
 
 ## Installing
 
@@ -96,3 +96,16 @@ npx eslint src
 ```
 
 `yarn start` shows lint problems in the browser and the terminal as you work.
+
+## With an AI agent
+
+Anahita's MCP server puts these docs and the API reference in the AI agent
+you use, so that it answers from them, not from memory. In Claude Code,
+either:
+
+```sh
+claude mcp add --transport http anahita https://mcp.anahita.io/mcp   # hosted
+claude mcp add anahita -- npx -y anahita-mcp                          # on your computer
+```
+
+Claude Desktop, Gemini, Cursor, VS Code and the rest: [Anahita MCP](https://github.com/anahitasocial/anahita-services/blob/main/docs/ai-agents.md).
