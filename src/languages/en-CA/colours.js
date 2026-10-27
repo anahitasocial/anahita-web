@@ -2,6 +2,5 @@
 export default {
   title: 'Colours',
   open: 'Colours',
-  reset: 'Default',
-  explain: 'Tried in this browser alone, and kept here until you change them.',
+  reset: 'Reset',
 };

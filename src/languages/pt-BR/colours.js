@@ -2,6 +2,5 @@
 export default {
   title: 'Cores',
   open: 'Cores',
-  reset: 'Padrão',
-  explain: 'Testadas só neste navegador, e guardadas aqui até você trocá-las.',
+  reset: 'Redefinir',
 };

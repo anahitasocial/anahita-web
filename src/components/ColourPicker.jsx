@@ -1,17 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
 import ButtonBase from '@mui/material/ButtonBase';
 import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
-import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import ListSubheader from '@mui/material/ListSubheader';
+import Paper from '@mui/material/Paper';
+import Popper from '@mui/material/Popper';
+import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 
 import palettes from '../styles/palettes';
@@ -28,6 +27,11 @@ const groups = palettes.reduce((all, palette) => {
   }
   return all;
 }, []);
+
+// The palette the site is in when none is chosen: Anahita's own colours,
+// shown as chosen until another is.
+const DEFAULT_ID = 'ink-signal-red';
+const fallback = palettes.find((palette) => { return palette.id === DEFAULT_ID; });
 
 const KEY = 'anahita-palette';
 
@@ -81,40 +85,52 @@ Swatch.propTypes = {
   size: PropTypes.number,
 };
 
-// On a phone: a sheet across the bottom, a third of the screen, so that the
-// page above it shows what each palette does. Each group is a row of
-// swatches, scrolled sideways, and the chosen one's name is at the top.
-const Sheet = ({ current = undefined, choose, onClose }) => {
+// The palettes as rows of swatches, one row for each group, and the chosen
+// one's name at the top. On a phone, the sheet across the bottom, as tall as
+// its three rows, so that the page above it shows what each palette does; on a
+// wider screen, a small card beside the left menu, where each swatch says
+// its name when pointed at.
+const Palettes = ({
+  current = undefined, choose, onClose, phone,
+}) => {
+  const size = phone ? 40 : 32;
   return (
-    <Box sx={{ height: '34vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={phone ?
+      { maxHeight: '50vh', display: 'flex', flexDirection: 'column' } :
+      { width: 304 }}
+    >
       <Box sx={{
         display: 'flex', alignItems: 'center', gap: 1, pl: 2, pr: 1, pt: 1,
       }}
       >
         <Typography variant="subtitle1" noWrap sx={{ flexGrow: 1, minWidth: 0, fontWeight: 500 }}>
-          {current ? current.name : i18n.t('colours:title')}
+          {(current || fallback).name}
         </Typography>
-        <Button size="small" onClick={() => { choose(undefined); }} disabled={!current}>
-          {i18n.t('colours:reset')}
-        </Button>
         <IconButton aria-label={i18n.t('actions:close')} onClick={onClose}>
           <CloseIcon fontSize="small" />
         </IconButton>
       </Box>
-      <Box sx={{ overflowY: 'auto', px: 2, pb: 2 }}>
+      <Box sx={{ overflowY: phone ? 'auto' : 'visible', px: 2 }}>
         {groups.map((group) => {
           return (
             <Box key={group.name} sx={{ mt: 1 }}>
-              <Typography variant="overline" color="text.secondary" component="p">
+              <Typography variant="overline" color="text.secondary" component="p" sx={{ lineHeight: 2 }}>
                 {group.name}
               </Typography>
               <Box sx={{
-                display: 'flex', gap: 2, overflowX: 'auto', py: 1, px: 0.5,
+                display: 'flex',
+                gap: 2,
+                // Across the card on a wider screen; scrolled sideways on a
+                // phone. Room all round for the ring of the chosen one.
+                justifyContent: phone ? 'flex-start' : 'space-between',
+                overflowX: phone ? 'auto' : 'visible',
+                py: 1,
+                px: 1,
               }}
               >
                 {group.palettes.map((palette) => {
-                  const selected = Boolean(current && current.id === palette.id);
-                  return (
+                  const selected = (current || fallback).id === palette.id;
+                  const swatch = (
                     <ButtonBase
                       key={palette.id}
                       aria-label={palette.name}
@@ -128,8 +144,13 @@ const Sheet = ({ current = undefined, choose, onClose }) => {
                         outlineOffset: 3,
                       }}
                     >
-                      <Swatch palette={palette} size={40} />
+                      <Swatch palette={palette} size={size} />
                     </ButtonBase>
+                  );
+                  return phone ? swatch : (
+                    <Tooltip key={palette.id} title={palette.name} placement="top">
+                      {swatch}
+                    </Tooltip>
                   );
                 })}
               </Box>
@@ -137,122 +158,104 @@ const Sheet = ({ current = undefined, choose, onClose }) => {
           );
         })}
       </Box>
-    </Box>
-  );
-};
-
-Sheet.propTypes = {
-  current: PropTypes.object,
-  choose: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-};
-
-// On a wider screen: a panel at the right, the palettes listed under their
-// groups.
-const Panel = ({ current = undefined, choose, onClose }) => {
-  return (
-    <Box sx={{
-      width: 360, maxWidth: '100vw', px: 2, pt: 2, pb: 2, overflowY: 'auto',
-    }}
-    >
       <Box sx={{
-        display: 'flex', alignItems: 'center', gap: 1, pl: 1,
+        display: 'flex', justifyContent: 'flex-end', px: 1, py: 1,
       }}
       >
-        <Typography variant="subtitle1" sx={{ flexGrow: 1, fontWeight: 500 }}>
-          {i18n.t('colours:title')}
-        </Typography>
         <Button size="small" onClick={() => { choose(undefined); }} disabled={!current}>
           {i18n.t('colours:reset')}
         </Button>
-        <IconButton aria-label={i18n.t('actions:close')} onClick={onClose}>
-          <CloseIcon fontSize="small" />
-        </IconButton>
       </Box>
-      <Typography variant="body2" color="text.secondary" sx={{ px: 1, mb: 2 }}>
-        {i18n.t('colours:explain')}
-      </Typography>
-      {groups.map((group) => {
-        return (
-          <List
-            key={group.name}
-            dense
-            subheader={(
-              <ListSubheader
-                disableSticky
-                sx={{
-                  px: 1,
-                  pt: 2,
-                  bgcolor: 'transparent',
-                  lineHeight: '24px',
-                  typography: 'overline',
-                  color: 'text.secondary',
-                }}
-              >
-                {group.name}
-              </ListSubheader>
-            )}
-          >
-            {group.palettes.map((palette) => {
-              const selected = Boolean(current && current.id === palette.id);
-              return (
-                <ListItemButton
-                  key={palette.id}
-                  selected={selected}
-                  onClick={() => { choose(palette); }}
-                  sx={{
-                    gap: 1.5, borderRadius: 2, px: 1, py: 1,
-                  }}
-                >
-                  <Swatch palette={palette} />
-                  <ListItemText
-                    primary={palette.name}
-                    slotProps={{ primary: { noWrap: true } }}
-                    sx={{ minWidth: 0, my: 0 }}
-                  />
-                  {selected && <CheckIcon fontSize="small" color="primary" />}
-                </ListItemButton>
-              );
-            })}
-          </List>
-        );
-      })}
     </Box>
   );
 };
 
-Panel.propTypes = Sheet.propTypes;
+Palettes.propTypes = {
+  current: PropTypes.object,
+  choose: PropTypes.func.isRequired,
+  onClose: PropTypes.func.isRequired,
+  phone: PropTypes.bool.isRequired,
+};
 
 // Anahita's colours tried again, on the dev server only
 // (docs/plans/colours.md): Colours in the left menu opens the palettes, and
 // the one chosen is the app's colours at once, in light mode and dark, kept
-// in this browser. It does not dim or hold the page: the page can be
-// scrolled and used with it open, to see what a palette does.
+// in this browser. It does not dim or hold the page, which can be scrolled
+// with it open; a click or a tap outside it closes it.
 const ColourPicker = ({
-  current = undefined, onChoose, open, onClose,
+  current = undefined, onChoose, open, anchorEl = null, onClose,
 }) => {
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choose = (palette) => {
     save(palette && palette.id);
     onChoose(palette);
   };
-  const Body = phone ? Sheet : Panel;
+  // Outside clicks close it from just after it opens: the click that opened
+  // it is still on its way to the page when it opens, and would close it.
+  const [listening, setListening] = useState(false);
+  useEffect(() => {
+    if (!open) {
+      setListening(false);
+      return undefined;
+    }
+    const timer = setTimeout(() => { setListening(true); }, 0);
+    return () => { clearTimeout(timer); };
+  }, [open]);
 
+  // A click or a tap outside closes it.
+  const body = (
+    <ClickAwayListener onClickAway={listening ? onClose : () => {}}>
+      <Box sx={{ display: 'contents' }}>
+        <Palettes current={current} choose={choose} onClose={onClose} phone={phone} />
+      </Box>
+    </ClickAwayListener>
+  );
+
+  // On a phone, a sheet across the bottom; its contents stay as it slides
+  // away.
+  if (phone) {
+    return (
+      <Drawer
+        anchor="bottom"
+        variant="persistent"
+        open={open}
+        slotProps={{
+          paper: {
+            sx: { borderTopLeftRadius: 16, borderTopRightRadius: 16, boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.12)' },
+          },
+        }}
+      >
+        {body}
+      </Drawer>
+    );
+  }
+
+  // On a wider screen, a small card opening up from the Colours item.
   return (
-    <Drawer
-      anchor={phone ? 'bottom' : 'right'}
-      variant="persistent"
+    <Popper
       open={open}
-      slotProps={{
-        paper: {
-          sx: phone ?
-            { borderTopLeftRadius: 16, borderTopRightRadius: 16, boxShadow: '0 -4px 16px rgba(0, 0, 0, 0.12)' } :
-            { boxShadow: '-4px 0 16px rgba(0, 0, 0, 0.08)' },
-        },
-      }}
+      anchorEl={anchorEl}
+      // Up from the Colours item, near the foot of the menu, as a menu opens
+      // there; down instead where there is no room above.
+      placement="top-start"
+      modifiers={[
+        { name: 'offset', options: { offset: [8, 4] } },
+        { name: 'flip', options: { fallbackPlacements: ['bottom-start', 'right-end'] } },
+      ]}
+      sx={{ zIndex: (theme) => { return theme.zIndex.modal; } }}
     >
-      <Body current={current} choose={choose} onClose={onClose} />
-    </Drawer>
+      <Paper
+        elevation={0}
+        sx={{
+          borderRadius: 3,
+          border: 1,
+          borderColor: 'divider',
+          boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
+        }}
+      >
+        {body}
+      </Paper>
+    </Popper>
   );
 };
 
@@ -260,6 +263,8 @@ ColourPicker.propTypes = {
   current: PropTypes.object,
   onChoose: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
+  // The Colours item it opens beside, on a wider screen.
+  anchorEl: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };
 

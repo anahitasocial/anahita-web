@@ -4,8 +4,12 @@
 row 91), for the website and this app alike. The candidates are kept here to
 be tried again in the app.*
 
-**Status:** chosen: Ink + signal red. In `src/assets/default/styles/index.js`
-here, and `src/theme.js` in anahita.io.
+**Status:** chosen: **Ink + signal red**, on 2026-10-25, and again on
+2026-10-26 after the classic Anahita blue (`#098ED1`, this app's colour from
+2019) and Bauhaus blue + yellow were tried as the default the same evening.
+In `src/assets/default/styles/index.js` here, and `src/theme.js` in
+anahita.io. The colour picker below stays in this app, on the dev server;
+www.anahita.io's was taken out the same day.
 
 ## The choice
 
@@ -84,13 +88,13 @@ palettes grouped by style, and kept it because it may stay: a quiet button
 at the bottom of the page, on the dev server only (`process.env.NODE_ENV ===
 'development'`), opens them; the one chosen is the theme's primary and
 secondary at once, in light mode and dark, kept in the browser
-(`localStorage`, `anahita-palette`). Here in `src/components/ColourPicker.jsx`
-and `src/styles/palettes.js`; on the website in `src/components/ColourPicker.jsx`,
-`src/components/SiteTheme.jsx` and `src/data/palettes.js`, where the hero's
-gradient is the secondary colour.
+(`localStorage`, `anahita-palette`); Reset returns to ink + signal red, shown as chosen. Here in `src/components/ColourPicker.jsx`
+and `src/styles/palettes.js`. The website had one too for a few hours on
+2026-10-26, taken out at the user's word.
 
-Five in each group, the furthest apart; Pride was taken out, since two colours
-cannot say a flag. Dark mode's colours are worked out from light mode's as
+Five in each group, the furthest apart. Pride was taken out, since two colours
+cannot say a flag, and Space Age, at the user's word; Charcoal + rose gold
+took the place of Sapphire + silver in Art Deco. Dark mode's colours are worked out from light mode's as
 above.
 
 | Group | Palette | Light | Dark |
@@ -105,14 +109,9 @@ above.
 | Mid-Century | Walnut + mustard | `#6B4226`, `#D4A017` | `#CB926C`, `#D4A017` |
 | Mid-Century | Eames orange + charcoal | `#C2410C`, `#37474F` | `#F47D4D`, `#7C96A3` |
 | Mid-Century | Forest + terracotta | `#2F5D50`, `#C8553D` | `#5CAD96`, `#D47A67` |
-| Space Age | Midnight + tangerine | `#1E2A4A`, `#F97316` | `#8C9FD1`, `#F97316` |
-| Space Age | Ultramarine + mint | `#3F3FCF`, `#10B981` | `#9797E5`, `#10B981` |
-| Space Age | Graphite + electric lime | `#2B2D42`, `#84CC16` | `#9A9DBD`, `#84CC16` |
-| Space Age | Orbit violet + cyan | `#5B21B6`, `#06B6D4` | `#B28DEA`, `#06B6D4` |
-| Space Age | Nebula magenta + teal | `#A21CAF`, `#0D9488` | `#DF76E9`, `#0EA497` |
 | Art Deco | Gatsby black + gold | `#1A1A1A`, `#B8860B` | `#9F9F9F`, `#BD8A0B` |
 | Art Deco | Emerald + gold | `#0B5D4B`, `#C5A253` | `#15B491`, `#C5A253` |
-| Art Deco | Sapphire + silver | `#1F3A93`, `#8E9196` | `#879DE6`, `#8F9297` |
+| Art Deco | Charcoal + rose gold | `#2E2E33`, `#B76E79` | `#9F9FA8`, `#C0818A` |
 | Art Deco | Oxblood + champagne | `#6E1E2B`, `#D8B76A` | `#DE8593`, `#D8B76A` |
 | Art Deco | Peacock + copper | `#0F5257`, `#B87333` | `#20B0BB`, `#CA8240` |
 

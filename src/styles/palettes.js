@@ -3,7 +3,6 @@
 // docs/plans/colours.md). Each is a primary and a secondary, for light mode
 // and dark. Dark mode's are light mode's, lightened until they read on the
 // dark page; every primary takes white text at 4.5 to 1 or more.
-// The same list is in anahita.io's src/data/palettes.js.
 const palettes = [
   // Bauhaus
   {
@@ -77,42 +76,6 @@ const palettes = [
     light: { primary: '#2F5D50', secondary: '#C8553D' },
     dark: { primary: '#5CAD96', secondary: '#D47A67' },
   },
-  // Space Age
-  {
-    id: 'midnight-tangerine',
-    group: 'Space Age',
-    name: 'Midnight + tangerine',
-    light: { primary: '#1E2A4A', secondary: '#F97316' },
-    dark: { primary: '#8C9FD1', secondary: '#F97316' },
-  },
-  {
-    id: 'ultramarine-mint',
-    group: 'Space Age',
-    name: 'Ultramarine + mint',
-    light: { primary: '#3F3FCF', secondary: '#10B981' },
-    dark: { primary: '#9797E5', secondary: '#10B981' },
-  },
-  {
-    id: 'graphite-electric-lime',
-    group: 'Space Age',
-    name: 'Graphite + electric lime',
-    light: { primary: '#2B2D42', secondary: '#84CC16' },
-    dark: { primary: '#9A9DBD', secondary: '#84CC16' },
-  },
-  {
-    id: 'orbit-violet-cyan',
-    group: 'Space Age',
-    name: 'Orbit violet + cyan',
-    light: { primary: '#5B21B6', secondary: '#06B6D4' },
-    dark: { primary: '#B28DEA', secondary: '#06B6D4' },
-  },
-  {
-    id: 'nebula-magenta-teal',
-    group: 'Space Age',
-    name: 'Nebula magenta + teal',
-    light: { primary: '#A21CAF', secondary: '#0D9488' },
-    dark: { primary: '#DF76E9', secondary: '#0EA497' },
-  },
   // Art Deco
   {
     id: 'gatsby-black-gold',
@@ -129,11 +92,11 @@ const palettes = [
     dark: { primary: '#15B491', secondary: '#C5A253' },
   },
   {
-    id: 'sapphire-silver',
+    id: 'charcoal-rose-gold',
     group: 'Art Deco',
-    name: 'Sapphire + silver',
-    light: { primary: '#1F3A93', secondary: '#8E9196' },
-    dark: { primary: '#879DE6', secondary: '#8F9297' },
+    name: 'Charcoal + rose gold',
+    light: { primary: '#2E2E33', secondary: '#B76E79' },
+    dark: { primary: '#9F9FA8', secondary: '#C0818A' },
   },
   {
     id: 'oxblood-champagne',

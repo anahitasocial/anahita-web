@@ -324,8 +324,8 @@ const LeftMenu = ({
         <ListItemButton
           // The menu closes, on a phone, so that the page is what is seen
           // above the colours.
-          onClick={() => {
-            openColours();
+          onClick={(event) => {
+            openColours(event.currentTarget);
             if (onCloseMenu) {
               onCloseMenu();
             }

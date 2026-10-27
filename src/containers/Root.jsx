@@ -18,8 +18,10 @@ const Root = ({ store }) => {
   const [palette, setPalette] = React.useState(() => {
     return picking ? savedPalette() : undefined;
   });
-  const [picker, setPicker] = React.useState(false);
-  const openPicker = React.useCallback(() => { setPicker(true); }, []);
+  // Where the picker opens from: the Colours item, which its popup opens
+  // beside on a wider screen; null while it is closed.
+  const [picker, setPicker] = React.useState(null);
+  const openPicker = React.useCallback((from) => { setPicker(from || document.body); }, []);
 
   const theme = React.useMemo(
     () => {
@@ -41,8 +43,9 @@ const Root = ({ store }) => {
             <ColourPicker
               current={palette}
               onChoose={setPalette}
-              open={picker}
-              onClose={() => { setPicker(false); }}
+              open={Boolean(picker)}
+              anchorEl={picker}
+              onClose={() => { setPicker(null); }}
             />
           )}
         </HelmetProvider>
