@@ -1,11 +1,12 @@
-<img src="docs/images/anahita-logo.svg" alt="Anahita social networking platform and framework" width="33%">
+<img src="docs/images/anahita-logo.svg" alt="Anahita" width="33%">
 
 # Anahita Web
 
-The web app for [Anahita](https://www.anahita.io), an open source social
-networking platform and framework. It is a single-page app built with React 19,
-Material UI 9 and Redux. It is a client of **anahita-services**, the Go
-microservices back end, and talks to it only through its HTTP API.
+The web app for [Anahita](https://www.anahita.io), open-source social
+software for communities that own their data. It is a single-page app built
+with React 19, Material UI 9 and Redux. It is a client of
+[anahita-services](https://github.com/anahitasocial/anahita-services), the Go microservices back end, and talks to it only
+through its HTTP API.
 
 Changing the code, as a person or with an agent: begin with
 [AGENTS.md](AGENTS.md), the project's working rules.
@@ -15,10 +16,6 @@ notes, articles, topics, photos and videos, reply, like, repost and quote,
 build their own feeds, and run their account. They follow and answer
 people on Mastodon and Bluesky from the same place. Site administrators
 use it to run the installation.
-
-> **anahita-services is not public yet.** The back end will be released later
-> in 2026. Until then this app has no server to run against outside the
-> Anahita team.
 
 ## Part of the fediverse
 
@@ -73,13 +70,15 @@ the blocks apply to all three.
 As far as we know, Anahita is the first social platform built in Canada to
 take part in both networks at once. We would be glad to hear of another.
 
-The operator's side of this is in anahita-services (`docs/federation.md`).
+The operator's side of this is in anahita-services'
+[Federation](https://github.com/anahitasocial/anahita-services/blob/main/docs/federation.md).
 What the web app does with it is in [Architecture](docs/architecture.md).
 
 ## Quick start
 
 You need [Node.js](https://nodejs.org/) (a current LTS release),
-[Yarn](https://yarnpkg.com/), and anahita-services running locally.
+[Yarn](https://yarnpkg.com/), and anahita-services running locally: see its
+[Getting started](https://github.com/anahitasocial/anahita-services/blob/main/docs/getting-started.md).
 
 ```sh
 yarn install
@@ -92,7 +91,8 @@ The app opens at `http://localhost:3000`. See
 
 ## Documentation
 
-The documentation is in [`docs/`](docs/README.md):
+The documentation is in [`docs/`](docs/README.md), and on
+[www.anahita.io/docs/](https://www.anahita.io/docs/) with anahita-services':
 
 1. [Getting started](docs/getting-started.md): running the app and developing
    it
@@ -105,7 +105,8 @@ The documentation is in [`docs/`](docs/README.md):
 ## How it fits together
 
 - **The API** is anahita-services, behind its nginx gateway. Every request goes
-  to `REACT_APP_API_BASE_URL`.
+  to `REACT_APP_API_BASE_URL`. Every route is in its
+  [API reference](https://www.anahita.io/api/).
 - **Signing in and signing up happen on the server.** The app sends people to
   auth-service's pages using OAuth 2.0 with PKCE, and comes back to
   `/oauth/callback`. Tokens stay on the server behind a session cookie; the app
