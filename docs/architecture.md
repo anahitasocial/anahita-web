@@ -1321,11 +1321,13 @@ profile, and is told by a notification.
 about the installation and not about Anahita: its name and description as
 its operator set them (NodeInfo's `nodeName` and `nodeDescription`, the
 build's until that has answered), how many people and posts are on it,
-whether it is part of the fediverse, and the two ways in, Sign in and, where
-NodeInfo says profiles can be made, Create a profile. Under that, three
-cards on what can be done here, and links to what may be looked at without a
-profile: people, groups, hashtags and About. That it runs on Anahita is one
-line at the foot. A members-only installation never draws it
+whether it is part of the fediverse and Bluesky, and the two ways in, Sign in
+and, where NodeInfo says profiles can be made, Join. It is one column, no
+wider than 960 pixels, on the page's own background: no box, cards or
+shadows. Under a hairline, what can be done here, three or four short items
+side by side (a fourth on an installation that federates); then tiles,
+two by two, for what may be looked at without a profile: people, groups,
+hashtags and About. That it runs on Anahita is one line at the foot. A members-only installation never draws it
 (`routes/MembersOnlyGate.jsx`).
 
 ### The fediverse

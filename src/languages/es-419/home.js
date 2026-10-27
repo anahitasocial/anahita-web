@@ -4,7 +4,7 @@ export default {
   // The home page of somebody who is not signed in.
   guest: {
     signIn: 'Iniciar sesión',
-    join: 'Crear un perfil',
+    join: 'Unirse',
     people: '{{ formatted }} persona',
     people_other: '{{ formatted }} personas',
     posts: '{{ formatted }} publicación',

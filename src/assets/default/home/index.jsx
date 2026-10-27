@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
+import ButtonBase from '@mui/material/ButtonBase';
 import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+
+import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 import FollowIcon from '@mui/icons-material/Diversity3Outlined';
 import FeedsIcon from '@mui/icons-material/TuneOutlined';
@@ -58,7 +57,8 @@ const PLACES = [
   { key: 'about', to: '/about', Icon: AboutIcon },
 ];
 
-// The home page of somebody who is not signed in.
+// The home page of somebody who is not signed in: calm, with room around
+// each part, in one column that is never wider than it is read.
 //
 // It is about this installation and not about Anahita: its name, what its
 // operator says it is, how many are on it, and the ways in. Then what can
@@ -98,7 +98,15 @@ const Home = ({
     REASONS;
 
   return (
-    <Box>
+    <Box
+      sx={{
+        maxWidth: 960,
+        mx: 'auto',
+        px: { xs: 2, md: 3 },
+        pt: { xs: 6, md: 12 },
+        pb: 4,
+      }}
+    >
       <HeaderMeta />
       <Hero
         name={name}
@@ -110,67 +118,88 @@ const Home = ({
         canJoin={Boolean(openRegistrations)}
       />
 
-      <Grid container spacing={2} sx={{ mt: 2 }}>
+      {/* What can be done here: side by side under a hairline, each a small
+      icon, a title and a line, with no card around it. */}
+      <Grid
+        container
+        component="section"
+        columnSpacing={4}
+        rowSpacing={5}
+        sx={{
+          mt: { xs: 8, md: 12 },
+          pt: { xs: 5, md: 6 },
+          borderTop: 1,
+          borderColor: 'divider',
+        }}
+      >
         {reasons.map(({ key, Icon, icons = [Icon] }) => {
           return (
             <Grid
               key={key}
-              size={{ xs: 12, sm: reasons.length === 4 ? 6 : 12, md: 12 / reasons.length }}
+              size={{ xs: 12, sm: 6, md: 12 / reasons.length }}
             >
-              <Card sx={{ height: '100%' }}>
-                <CardContent>
-                  <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-                    {icons.map((Each) => {
-                      return (
-                        <Avatar key={Each.muiName || Each.name} sx={{ bgcolor: 'primary.main' }}>
-                          <Each />
-                        </Avatar>
-                      );
-                    })}
-                  </Stack>
-                  <Typography variant="h6" component="h3" gutterBottom>
-                    {i18n.t(`home:guest.reasons.${key}.title`)}
-                  </Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    {i18n.t(`home:guest.reasons.${key}.body`)}
-                  </Typography>
-                </CardContent>
-              </Card>
+              <Stack direction="row" spacing={1} sx={{ color: 'primary.main', mb: 2 }}>
+                {icons.map((Each, index) => {
+                  // eslint-disable-next-line react/no-array-index-key
+                  return <Each key={index} />;
+                })}
+              </Stack>
+              <Typography variant="subtitle1" component="h2" sx={{ fontWeight: 500 }}>
+                {i18n.t(`home:guest.reasons.${key}.title`)}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" sx={{ mt: 1 }}>
+                {i18n.t(`home:guest.reasons.${key}.body`)}
+              </Typography>
             </Grid>
           );
         })}
       </Grid>
 
-      <Box sx={{ mt: 6, textAlign: 'center' }}>
-        <Typography variant="h6" component="h3" gutterBottom>
+      {/* What may be looked at without a profile: quiet tiles, each where
+      it leads and a chevron. */}
+      <Box component="section" sx={{ mt: { xs: 8, md: 12 } }}>
+        <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
           {i18n.t('home:guest.lookAround')}
         </Typography>
-        <Stack
-          direction="row"
-          spacing={1}
-          useFlexGap
-          sx={{ justifyContent: 'center', flexWrap: 'wrap' }}
-        >
+        <Grid container spacing={2}>
           {PLACES.map(({ key, to, Icon }) => {
             return (
-              <Button
-                key={key}
-                component={RouterLink}
-                to={to}
-                startIcon={<Icon />}
-              >
-                {i18n.t(`home:guest.places.${key}`)}
-              </Button>
+              <Grid key={key} size={{ xs: 12, sm: 6 }}>
+                <ButtonBase
+                  component={RouterLink}
+                  to={to}
+                  sx={{
+                    width: '100%',
+                    justifyContent: 'flex-start',
+                    gap: 2,
+                    px: 2,
+                    py: 2,
+                    border: 1,
+                    borderColor: 'divider',
+                    borderRadius: 3,
+                    color: 'text.primary',
+                    transition: 'border-color 150ms',
+                    '&:hover': { borderColor: 'text.secondary' },
+                    '&:focus-visible': { outline: 2, outlineColor: 'primary.main', outlineOffset: 2 },
+                  }}
+                >
+                  <Icon sx={{ color: 'text.secondary' }} />
+                  <Typography variant="body1" component="span" noWrap sx={{ flexGrow: 1, textAlign: 'left' }}>
+                    {i18n.t(`home:guest.places.${key}`)}
+                  </Typography>
+                  <ChevronRightIcon sx={{ color: 'text.secondary' }} />
+                </ButtonBase>
+              </Grid>
             );
           })}
-        </Stack>
+        </Grid>
       </Box>
 
       <Typography
         variant="body2"
         color="textSecondary"
         align="center"
-        sx={{ mt: 6, mb: 2 }}
+        sx={{ mt: { xs: 8, md: 12 } }}
       >
         {i18n.t('home:guest.runsOn')}
         {' '}

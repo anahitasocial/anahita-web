@@ -1,13 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { alpha } from '@mui/material/styles';
 
 import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import PostsIcon from '@mui/icons-material/ForumOutlined';
@@ -18,8 +15,36 @@ import api from '../../../api';
 import i18n from '../../../languages';
 import appLogo from '../media/logo';
 
+// One fact about the site in the line under the buttons: a small icon and
+// a few words, in the colour of what explains.
+const Fact = ({ Icon, children }) => {
+  return (
+    <Box
+      component="li"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1,
+        color: 'text.secondary',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      <Icon sx={{ fontSize: 18 }} />
+      <Typography variant="body2" component="span">
+        {children}
+      </Typography>
+    </Box>
+  );
+};
+
+Fact.propTypes = {
+  Icon: PropTypes.elementType.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
 // The top of the page somebody sees before they sign in: what this site is
-// called, what it says of itself, and the two ways in.
+// called, what it says of itself, and the two ways in. Nothing behind it:
+// the page's own background, and room.
 //
 // All of it is the installation's own, from NodeInfo: its name and
 // description as its operator set them, how many people are on it, and
@@ -35,37 +60,28 @@ const HomeHero = ({
   canJoin = false,
 }) => {
   const { color: logo } = appLogo;
+  const format = (n) => {
+    return n.toLocaleString(i18n.language);
+  };
 
   return (
-    <Box
-      sx={(theme) => {
-        return {
-          borderRadius: 4,
-          px: 2,
-          py: { xs: 6, md: 10 },
-          textAlign: 'center',
-          background: `linear-gradient(160deg, ${alpha(theme.palette.primary.main, 0.16)} 0%, ${alpha(theme.palette.secondary.main, 0.10)} 100%)`,
-        };
-      }}
-    >
-      <Avatar
+    <Box component="section" sx={{ textAlign: 'center' }}>
+      <Box
+        component="img"
         src={logo}
         alt=""
         sx={{
-          width: 120,
-          height: 120,
-          mx: 'auto',
-          mb: 3,
-          border: '2px solid',
-          borderColor: 'background.paper',
-          boxShadow: 3,
+          display: 'block', width: 72, height: 72, mx: 'auto',
         }}
       />
       <Typography
         variant="h1"
         sx={{
+          mt: 3,
           fontSize: { xs: 40, md: 56 },
-          fontWeight: 600,
+          fontWeight: 500,
+          letterSpacing: '-0.02em',
+          lineHeight: 1.1,
           overflowWrap: 'anywhere',
         }}
       >
@@ -73,12 +89,13 @@ const HomeHero = ({
       </Typography>
       {description &&
         <Typography
-          variant="h2"
+          variant="body1"
           color="textSecondary"
+          component="p"
           sx={{
-            fontSize: { xs: 18, md: 22 },
-            fontWeight: 400,
-            maxWidth: 640,
+            fontSize: { xs: 18, md: 20 },
+            lineHeight: 1.5,
+            maxWidth: 560,
             mx: 'auto',
             mt: 2,
           }}
@@ -90,12 +107,14 @@ const HomeHero = ({
       <Stack
         direction="row"
         spacing={2}
-        sx={{ maxWidth: 440, mx: 'auto', mt: 4 }}
+        sx={{ maxWidth: 400, mx: 'auto', mt: 5 }}
       >
         <Button
           variant="contained"
           size="large"
           fullWidth
+          disableElevation
+          sx={{ whiteSpace: 'nowrap' }}
           onClick={() => {
             return api.session.login();
           }}
@@ -107,6 +126,7 @@ const HomeHero = ({
             variant="outlined"
             size="large"
             fullWidth
+            sx={{ whiteSpace: 'nowrap' }}
             onClick={() => {
               return api.session.signup();
             }}
@@ -116,37 +136,37 @@ const HomeHero = ({
       </Stack>
 
       {(people > 0 || posts > 0 || federated || onBluesky) &&
-        <Stack
-          direction="row"
-          spacing={1}
-          useFlexGap
-          sx={{ justifyContent: 'center', flexWrap: 'wrap', mt: 4 }}
+        <Box
+          component="ul"
+          sx={{
+            listStyle: 'none',
+            p: 0,
+            m: 0,
+            mt: 4,
+            display: 'flex',
+            flexWrap: 'wrap',
+            justifyContent: 'center',
+            columnGap: 3,
+            rowGap: 1,
+          }}
         >
           {people > 0 &&
-            <Chip
-              icon={<PeopleIcon />}
-              label={i18n.t('home:guest.people', { count: people, formatted: people.toLocaleString(i18n.language) })}
-              variant="outlined"
-            />}
+            <Fact Icon={PeopleIcon}>
+              {i18n.t('home:guest.people', { count: people, formatted: format(people) })}
+            </Fact>}
           {posts > 0 &&
-            <Chip
-              icon={<PostsIcon />}
-              label={i18n.t('home:guest.posts', { count: posts, formatted: posts.toLocaleString(i18n.language) })}
-              variant="outlined"
-            />}
+            <Fact Icon={PostsIcon}>
+              {i18n.t('home:guest.posts', { count: posts, formatted: format(posts) })}
+            </Fact>}
           {federated &&
-            <Chip
-              icon={<FediverseIcon />}
-              label={i18n.t('home:guest.federated')}
-              variant="outlined"
-            />}
+            <Fact Icon={FediverseIcon}>
+              {i18n.t('home:guest.federated')}
+            </Fact>}
           {onBluesky &&
-            <Chip
-              icon={<BlueskyIcon />}
-              label={i18n.t('home:guest.bluesky')}
-              variant="outlined"
-            />}
-        </Stack>}
+            <Fact Icon={BlueskyIcon}>
+              {i18n.t('home:guest.bluesky')}
+            </Fact>}
+        </Box>}
     </Box>
   );
 };
