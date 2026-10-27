@@ -4,8 +4,12 @@
 row 91), for the website and this app alike. The candidates are kept here to
 be tried again in the app.*
 
-**Status:** chosen: Ink + signal red. In `src/assets/default/styles/index.js`
-here, and `src/theme.js` in anahita.io.
+**Status:** chosen: **Ink + signal red**, on 2026-10-25, and again on
+2026-10-26 after the classic Anahita blue (`#098ED1`, this app's colour from
+2019) and Bauhaus blue + yellow were tried as the default the same evening.
+In `src/assets/default/styles/index.js` here, and `src/theme.js` in
+anahita.io. The colour picker below stays in this app, on the dev server;
+www.anahita.io's was taken out the same day.
 
 ## The choice
 
@@ -22,8 +26,9 @@ here, and `src/theme.js` in anahita.io.
    reads as a page of warnings.
 3. **Links** are close to the text's colour with an ink primary, so they keep
    their underline.
-4. **The top bar** is the page's own colour, with a fine line beneath it, as
-   on the website.
+4. **The top bar** was the page's own colour, with a fine line beneath it,
+   as on the website, until 2026-10-26, when the user had it back in the
+   primary colour, which shows each palette of the picker better.
 
 ## What makes a pair usable
 
@@ -75,6 +80,40 @@ source, accessible, with links naturally distinct.
 | 22 | Deep water + pomegranate | `#0E6B7A`, `#B3364A` | `#5BB8C6`, `#F28B9B` |
 | 23 | Lapis + gold | `#26619C`, `#A87A1E` | `#8AB4E8`, `#E8C170` |
 | 24 | Persian blue + turquoise | `#1C39BB`, `#00897B` | `#9AA8F5`, `#4DB6AC` |
+
+## The colour picker (2026-10-26)
+
+The user asked for the picker back, in this app and on www.anahita.io, with
+palettes grouped by style, and kept it because it may stay: a quiet button
+at the bottom of the page, on the dev server only (`process.env.NODE_ENV ===
+'development'`), opens them; the one chosen is the theme's primary and
+secondary at once, in light mode and dark, kept in the browser
+(`localStorage`, `anahita-palette`); Reset returns to ink + signal red, shown as chosen. Here in `src/components/ColourPicker.jsx`
+and `src/styles/palettes.js`. The website had one too for a few hours on
+2026-10-26, taken out at the user's word.
+
+Five in each group, the furthest apart. Pride was taken out, since two colours
+cannot say a flag, and Space Age, at the user's word; Charcoal + rose gold
+took the place of Sapphire + silver in Art Deco. Dark mode's colours are worked out from light mode's as
+above.
+
+| Group | Palette | Light | Dark |
+| --- | --- | --- | --- |
+| Bauhaus | Ink + signal red | `#1F2328`, `#D62828` | `#E6E8EB`, `#E57575` |
+| Bauhaus | Bauhaus blue + yellow | `#1E4FA0`, `#E0A100` | `#759FE5`, `#E0A100` |
+| Bauhaus | Bauhaus red + blue | `#C8102E`, `#1B4F9C` | `#F4788C`, `#5E93E3` |
+| Bauhaus | Slate + vermilion | `#37474F`, `#E34234` | `#8BA2AE`, `#E96C61` |
+| Bauhaus | Graphite + yellow | `#2B2B2B`, `#E8B10C` | `#9F9F9F`, `#E8B10C` |
+| Mid-Century | Atomic teal + burnt orange | `#00707A`, `#D9622B` | `#00AFBF`, `#DE7545` |
+| Mid-Century | Avocado + harvest gold | `#556B1F`, `#C9A227` | `#89AC32`, `#C9A227` |
+| Mid-Century | Walnut + mustard | `#6B4226`, `#D4A017` | `#CB926C`, `#D4A017` |
+| Mid-Century | Eames orange + charcoal | `#C2410C`, `#37474F` | `#F47D4D`, `#7C96A3` |
+| Mid-Century | Forest + terracotta | `#2F5D50`, `#C8553D` | `#5CAD96`, `#D47A67` |
+| Art Deco | Gatsby black + gold | `#1A1A1A`, `#B8860B` | `#9F9F9F`, `#BD8A0B` |
+| Art Deco | Emerald + gold | `#0B5D4B`, `#C5A253` | `#15B491`, `#C5A253` |
+| Art Deco | Charcoal + rose gold | `#2E2E33`, `#B76E79` | `#9F9FA8`, `#C0818A` |
+| Art Deco | Oxblood + champagne | `#6E1E2B`, `#D8B76A` | `#DE8593`, `#D8B76A` |
+| Art Deco | Peacock + copper | `#0F5257`, `#B87333` | `#20B0BB`, `#CA8240` |
 
 ## Trying them again in the app
 

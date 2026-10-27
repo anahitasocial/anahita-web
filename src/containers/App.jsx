@@ -40,13 +40,9 @@ const useStyles = makeStyles()((theme) => {
     root: {
       display: 'flex',
     },
-    // The top bar is the page's own colour, a little see-through over what
-    // scrolls under it, with a fine line beneath, as www.anahita.io's is.
+    // The top bar in the primary colour (the user, 2026-10-26: better than
+    // the page's own colour, with the palettes of the colour picker).
     appBar: {
-      backgroundColor: theme.alpha(theme.palette.background.default, 0.8),
-      backdropFilter: 'blur(8px)',
-      color: theme.palette.text.primary,
-      borderBottom: `1px solid ${theme.palette.divider}`,
       [theme.breakpoints.up('lg')]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
@@ -172,6 +168,7 @@ const App = ({
         <Divider />
         <LeftMenu
           onLogoutClick={handleLogout}
+          onCloseMenu={() => { setOpen(false); }}
           viewer={viewer}
           isAuthenticated={isAuthenticated}
           nodeInfo={nodeInfo}
@@ -192,7 +189,7 @@ const App = ({
     <div className={classes.root}>
       <CssBaseline />
       <Alerts />
-      <AppBar position="fixed" color="inherit" elevation={0} className={classes.appBar}>
+      <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton
             color="inherit"
