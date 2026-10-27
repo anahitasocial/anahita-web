@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -44,11 +43,7 @@ const NotificationButton = ({ count, setUnread, resetUnread }) => {
   const label = count > 0 ?
     i18n.t('notifications:bell', { count }) :
     i18n.t('notifications:cTitle');
-  const bell = (
-    <Avatar color="inherit">
-      <Bell count={count} />
-    </Avatar>
-  );
+  const bell = <Bell count={count} />;
 
   if (phone) {
     return (
