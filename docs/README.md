@@ -6,7 +6,7 @@ documented in anahita-services, which will be released later in 2026.
 
 To set up a whole site, make it your own, keep it running or build on it,
 begin with the four ways in that the services' docs give:
-[Where to begin](https://github.com/purplerat/anahita-services/blob/main/docs/README.md#where-to-begin).
+[Where to begin](https://github.com/anahitasocial/anahita-services/blob/main/docs/README.md#where-to-begin).
 
 ## Contents
 

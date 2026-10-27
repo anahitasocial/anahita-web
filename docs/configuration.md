@@ -107,7 +107,7 @@ server's NodeInfo document (`/.well-known/nodeinfo`):
 
 The two privacy settings, what each does to visitors and how to check them are
 described in anahita-services under
-[Privacy](https://github.com/purplerat/anahita-services/blob/main/docs/privacy.md).
+[Privacy](https://github.com/anahitasocial/anahita-services/blob/main/docs/privacy.md).
 
 Some older variables are no longer read:
 

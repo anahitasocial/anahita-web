@@ -164,7 +164,7 @@ history. The main paths:
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
 | `/websites`, `/websites/:id`, `/websites/:id/settings` | Websites, a website (a site's feed as a profile), and its settings: Info, Admins, Blocked, On your site, Danger zone. Its page is at `/@alias` like any profile |
-| `/websites/connect` | Connecting a website: its address, the proof of its domain, then its name and handle. For those the installation's `websitesFrom` allows. See [Websites](https://github.com/purplerat/anahita-services/blob/main/docs/websites.md) in anahita-services |
+| `/websites/connect` | Connecting a website: its address, the proof of its domain, then its name and handle. For those the installation's `websitesFrom` allows. See [Websites](https://github.com/anahitasocial/anahita-services/blob/main/docs/websites.md) in anahita-services |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
@@ -181,7 +181,7 @@ history. The main paths:
 ### A members-only site
 
 Everything about who can see what, on the server and here, is in one place:
-[Privacy](https://github.com/purplerat/anahita-services/blob/main/docs/privacy.md)
+[Privacy](https://github.com/anahitasocial/anahita-services/blob/main/docs/privacy.md)
 in anahita-services. What follows is the app's part of it.
 
 An installation can serve nothing to people who are not signed in

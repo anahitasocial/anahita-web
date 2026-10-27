@@ -9,7 +9,7 @@ only (the user, 2026-10-15: they may change any post, but not from feeds and
 lists). Events have it as groups do.
 
 Decided by the user on 2026-10-15, while finishing item 44
-([hiding-replies-across-servers.md](https://github.com/purplerat/anahita-services/blob/main/docs/plans/done/hiding-replies-across-servers.md)):
+([hiding-replies-across-servers.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/done/hiding-replies-across-servers.md)):
 a person's block does not reach the groups they administer, because that
 "will really complicate things". A group blocks somebody in its own right,
 and one of its administrators does it.
