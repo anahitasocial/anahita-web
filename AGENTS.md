@@ -131,6 +131,8 @@ The same in anahita-services' AGENTS.md.
   already.
 - Action labels name no entity: "Delete", "Edit", "View", not "Delete
   reply", unless two actions in one menu would otherwise read the same.
+- Releases are **Embryo** (the main branch) and **Birth** (a tagged
+  release), not alpha and beta.
 
 ## Docs
 

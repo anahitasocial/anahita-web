@@ -8,6 +8,10 @@ To set up a whole site, make it your own, keep it running or build on it,
 begin with the four ways in that the services' docs give:
 [Where to begin](https://github.com/anahitasocial/anahita-services/blob/main/docs/README.md#where-to-begin).
 
+Its releases are named as the services' are: `main` is always the
+**Embryo**, and a tagged version is a **Birth** release; see
+[Releases](https://github.com/anahitasocial/anahita-services/blob/main/docs/releases.md).
+
 Asking an AI agent about the web app? Add Anahita's MCP server to it: see
 [Anahita MCP](https://github.com/anahitasocial/anahita-services/blob/main/docs/ai-agents.md).
 
