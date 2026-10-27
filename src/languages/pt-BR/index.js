@@ -9,6 +9,7 @@ import social from './social';
 import feed from './feed';
 import customFeeds from './customFeeds';
 import share from './share';
+import colours from './colours';
 import linkPreviews from './linkPreviews';
 import federation from './federation';
 import recommendations from './recommendations';
@@ -63,6 +64,7 @@ export default {
   feed,
   customFeeds,
   share,
+  colours,
   linkPreviews,
   federation,
   recommendations,

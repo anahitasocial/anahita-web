@@ -4,7 +4,11 @@ const global = (params) => {
       red,
     },
     prefersDarkMode,
+    palette,
   } = params;
+  // A palette from the colour picker, on the dev server, in place of
+  // Anahita's own.
+  const chosen = palette && palette[prefersDarkMode ? 'dark' : 'light'];
 
   return {
     typography: {
@@ -20,10 +24,10 @@ const global = (params) => {
       // the black-and-white logo and turns near-white in dark mode, and
       // signal red, an accent used sparingly (red also means an error).
       primary: {
-        main: prefersDarkMode ? '#E6E8EB' : '#1F2328',
+        main: (chosen && chosen.primary) || (prefersDarkMode ? '#E6E8EB' : '#1F2328'),
       },
       secondary: {
-        main: prefersDarkMode ? '#E57575' : '#D62828',
+        main: (chosen && chosen.secondary) || (prefersDarkMode ? '#E57575' : '#D62828'),
       },
       error: red,
     },

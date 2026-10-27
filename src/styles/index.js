@@ -113,12 +113,13 @@ const v4Look = (prefersDarkMode) => {
   };
 };
 
-export default (prefersDarkMode) => {
+export default (prefersDarkMode, palette) => {
   const style = styles.global({
     colors: {
       red,
     },
     prefersDarkMode,
+    palette,
   });
   const base = v4Look(prefersDarkMode);
   const components = { ...base.components };

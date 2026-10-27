@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 
 import Badge from '@mui/material/Badge';
@@ -30,6 +30,7 @@ import AdminIcon from '@mui/icons-material/AdminPanelSettings';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InvitesIcon from '@mui/icons-material/MailOutlined';
 import LegalIcon from '@mui/icons-material/MenuBook';
+import PaletteIcon from '@mui/icons-material/PaletteOutlined';
 import SupportIcon from '@mui/icons-material/ContactSupport';
 import AboutIcon from '@mui/icons-material/Info';
 
@@ -43,17 +44,20 @@ import adminTabs from '../../../containers/admin/tabs';
 import usePinnedFeeds from '../../../containers/feeds/usePinnedFeeds';
 import useHasSuggestions from '../../../containers/recommendations/useHasSuggestions';
 import CustomFeedIcon from '../../../components/CustomFeedIcon';
+import { ColourPickerContext } from '../../../components/ColourPicker';
 
 const LeftMenu = ({
   isAuthenticated,
   viewer,
   nodeInfo = null,
   onLogoutClick = null,
+  onCloseMenu = null,
   adminWaiting = 0,
   isShutOut = false,
 }) => {
   const location = useLocation();
   const { pathname = '/', search = '' } = location;
+  const openColours = useContext(ColourPickerContext);
 
   // The custom feeds the viewer keeps on their home page, listed under
   // Home. Each opens Home on that feed, which is in the address.
@@ -315,6 +319,23 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('legal:mTitle')} />
       </ListItemButton>
+      {/* The colour picker, on the dev server alone (components/ColourPicker). */}
+      {openColours &&
+        <ListItemButton
+          // The menu closes, on a phone, so that the page is what is seen
+          // above the colours.
+          onClick={() => {
+            openColours();
+            if (onCloseMenu) {
+              onCloseMenu();
+            }
+          }}
+        >
+          <ListItemIcon>
+            <PaletteIcon />
+          </ListItemIcon>
+          <ListItemText primary={i18n.t('colours:title')} />
+        </ListItemButton>}
       {isAuthenticated &&
         <ListItemButton
           component="a"
@@ -331,6 +352,8 @@ const LeftMenu = ({
 
 LeftMenu.propTypes = {
   onLogoutClick: PropTypes.func,
+  // Closes the menu where it is a drawer, on a phone.
+  onCloseMenu: PropTypes.func,
   viewer: PersonType.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   nodeInfo: NodeInfoType,
