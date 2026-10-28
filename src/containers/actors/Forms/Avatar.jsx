@@ -7,6 +7,9 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
+import UploadIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
+import MenuItemLabel from '../../../components/MenuItemLabel';
 import NodeType from '../../../proptypes/Node';
 import utils from '../../../utils';
 import i18n from '../../../languages';
@@ -117,22 +120,27 @@ const ActorAvatarForm = ({
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem>
-          <label htmlFor="selectAvatarFile">
-            <input
-              accept="image/*"
-              className={classes.input}
-              id="selectAvatarFile"
-              type="file"
-              disabled={!canEdit || isFetching}
-              onChange={handleFieldChange}
-            />
+        {/* The whole row is the file's label, so that all of it opens the
+        picker; Delete only when there is a picture to delete. */}
+        <MenuItem component="label" htmlFor="selectAvatarFile">
+          <input
+            accept="image/*"
+            className={classes.input}
+            id="selectAvatarFile"
+            type="file"
+            disabled={!canEdit || isFetching}
+            onChange={handleFieldChange}
+          />
+          <MenuItemLabel icon={<UploadIcon fontSize="small" />}>
             {i18n.t('actions:update')}
-          </label>
+          </MenuItemLabel>
         </MenuItem>
-        <MenuItem onClick={handleDelete}>
-          {i18n.t('actions:delete')}
-        </MenuItem>
+        {avatar &&
+          <MenuItem onClick={handleDelete}>
+            <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
+              {i18n.t('actions:delete')}
+            </MenuItemLabel>
+          </MenuItem>}
       </Menu>
     </>
   );

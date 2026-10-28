@@ -8,7 +8,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import CardMedia from '@mui/material/CardMedia';
 import Fade from '@mui/material/Fade';
 import Typography from '@mui/material/Typography';
+import UploadIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
+import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 
+import MenuItemLabel from './MenuItemLabel';
 import NodeType from '../proptypes/Node';
 import i18n from '../languages';
 import utils from '../utils';
@@ -89,28 +92,37 @@ const CoverForm = ({
           </Typography>}
         {isFetching && <CircularProgress className={classes.progress} />}
       </ButtonBase>
+      {/* In the middle of the cover, where it was pressed, and not at its
+      far left, where the picture is and the menu read as the picture's. The
+      whole row is the file's label, so that all of it opens the picker;
+      Delete only when there is a cover to delete. */}
       <Menu
         id="cover-add-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        anchorOrigin={{ vertical: 'center', horizontal: 'center' }}
+        transformOrigin={{ vertical: 'center', horizontal: 'center' }}
       >
-        <MenuItem>
-          <label htmlFor="selectCoverFile">
-            <input
-              accept="image/*"
-              className={classes.input}
-              id="selectCoverFile"
-              type="file"
-              disabled={!canEdit || isFetching}
-              onChange={handleFieldChange}
-            />
+        <MenuItem component="label" htmlFor="selectCoverFile">
+          <input
+            accept="image/*"
+            className={classes.input}
+            id="selectCoverFile"
+            type="file"
+            disabled={!canEdit || isFetching}
+            onChange={handleFieldChange}
+          />
+          <MenuItemLabel icon={<UploadIcon fontSize="small" />}>
             {i18n.t('actions:update')}
-          </label>
+          </MenuItemLabel>
         </MenuItem>
-        <MenuItem onClick={handleDelete}>
-          {i18n.t('actions:delete')}
-        </MenuItem>
+        {cover &&
+          <MenuItem onClick={handleDelete}>
+            <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
+              {i18n.t('actions:delete')}
+            </MenuItemLabel>
+          </MenuItem>}
       </Menu>
     </>
   );
