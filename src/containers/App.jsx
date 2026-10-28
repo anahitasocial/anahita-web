@@ -22,6 +22,7 @@ import ViewerType from '../proptypes/Viewer';
 import NodeInfoType from '../proptypes/NodeInfo';
 import assets from '../assets';
 import Alerts from './Alerts';
+import CookieNotice from '../components/CookieNotice';
 import MenuLogo from '../components/Logo';
 import actions from '../actions';
 import NotificationButton from './notifications/Button';
@@ -189,6 +190,7 @@ const App = ({
     <div className={classes.root}>
       <CssBaseline />
       <Alerts />
+      <CookieNotice />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           <IconButton

@@ -82,6 +82,12 @@ Four components guard routes (`src/routes/`):
 - **`AuthenticatedRoute`** sends signed-out visitors to `/auth`. It waits for
   the session check to finish first, so a signed-in person is not bounced on
   every reload.
+- **`CookieNotice`** (`components/CookieNotice.jsx`, drawn by `App`) says once,
+  at the foot of the screen, that the site's cookies are only for signing in,
+  and that without them nobody can; OK is its one button, since there is
+  nothing to decline (the user, 2026-10-28). Its reading is kept in the
+  browser (`localStorage`, `anahita-cookie-notice`), and it links to the
+  Privacy Policy, whose Cookies section says the same.
 - **`AgreementsGate`** wraps the whole route table. It sends a signed-in person
   to `/agreements` when the Terms of Service or Privacy Policy has a newer
   version than the one they accepted; after that, to `/rules` when the
