@@ -78,6 +78,13 @@ const siteHandle = (alias) => {
   return `@${alias}@${domain}`;
 };
 
+// The handle in a WebFinger answer's subject, acct:ana@example.org, as it
+// is written: @ana@example.org. '' for anything else.
+const handleOfSubject = (subject) => {
+  const match = /^acct:([^@\s]+@[^@\s]+)$/.exec(subject || '');
+  return match ? `@${match[1]}` : '';
+};
+
 // How somebody's handle is written under their name. Somebody here is
 // @ana; somebody elsewhere is @alice@mastodon.example, whole, since the
 // server is the half of it that says who they are. `slug` is what makes a
@@ -186,6 +193,7 @@ export default {
   handleOf,
   displayHandle,
   siteHandle,
+  handleOfSubject,
   pageOf,
   lookupKind,
   isLookup,

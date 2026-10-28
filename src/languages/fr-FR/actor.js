@@ -5,6 +5,17 @@ export default {
   name: 'Nom',
   alias: 'Alias',
   website: 'Site web',
+  // The About card's handle on the fediverse, copied when pressed.
+  fediverse: {
+    title: 'Fédivers',
+    copy: 'Copier',
+    copied: 'Copié',
+  },
+  // When a profile joined, or was made: "Joined" over "October 2026".
+  since: {
+    joined: 'Inscrit·e',
+    created: 'Créé',
+  },
   body: 'Description',
   unknown: 'Inconnu',
   // Un profil que l'on ne peut pas voir, mais auquel on peut demander.

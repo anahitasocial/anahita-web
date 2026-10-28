@@ -1158,6 +1158,19 @@ desktop, left aligned:
 
 What the profile says of itself is in its About card, not here.
 
+### The About card
+
+What the profile says of itself, then one list (`actors/Read/About.jsx`):
+
+| Row | Shown for |
+| --- | --- |
+| Website, or the network somebody from elsewhere is on | A profile with a website; a website's is its verified domain |
+| Fediverse, the handle whole, `@ana@banu.io`, copied when pressed | A person or a website here that is on the fediverse. Whether they are is asked of WebFinger, as another server would ask (`actors/Read/useFediverseHandle.js`): it answers for those who turned federation on and for nobody else, so nothing in the profile says it |
+| Joined, or Created for a group or a website, as month and year | Every profile here but an event, whose own date is what matters; not somebody from elsewhere, who joined their own server |
+| Where, with the maps it opens in | An event with an address |
+
+Then its rules, and an event's map.
+
 ### Followers, following and what is in common
 
 Under a profile's name are its counts. Pressing one opens a

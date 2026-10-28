@@ -5,6 +5,17 @@ export default {
   name: 'Nome',
   alias: 'Nome de usuário',
   website: 'Site',
+  // The About card's handle on the fediverse, copied when pressed.
+  fediverse: {
+    title: 'Fediverso',
+    copy: 'Copiar',
+    copied: 'Copiado',
+  },
+  // When a profile joined, or was made: "Joined" over "October 2026".
+  since: {
+    joined: 'Entrou',
+    created: 'Criado',
+  },
   body: 'Descrição',
   unknown: 'Desconhecido',
   // A profile the viewer may not see, which lets people ask to follow it.

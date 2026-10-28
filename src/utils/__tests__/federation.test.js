@@ -102,3 +102,15 @@ describe('people and posts from other servers', () => {
     expect(federation.reasonOf(undefined)).toBe('');
   });
 });
+
+describe('the handle in a WebFinger answer', () => {
+  it('is written as a handle', () => {
+    expect(federation.handleOfSubject('acct:ana@banu.io')).toBe('@ana@banu.io');
+  });
+
+  it('is nothing for anything else', () => {
+    expect(federation.handleOfSubject('https://banu.io/@ana')).toBe('');
+    expect(federation.handleOfSubject('acct:ana')).toBe('');
+    expect(federation.handleOfSubject(undefined)).toBe('');
+  });
+});

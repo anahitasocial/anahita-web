@@ -15,6 +15,9 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import RulesIcon from '@mui/icons-material/Rule';
+import CalendarIcon from '@mui/icons-material/CalendarTodayOutlined';
+import CopyIcon from '@mui/icons-material/ContentCopy';
+import DoneIcon from '@mui/icons-material/Done';
 
 import MapIcon from '@mui/icons-material/MapOutlined';
 import OpenIcon from '@mui/icons-material/ExpandMore';
@@ -32,6 +35,7 @@ import BlueskyIcon from '../../../components/BlueskyIcon';
 import federation from '../../../utils/federation';
 import events from '../../../utils/events';
 import ActorType from '../../../proptypes/Actor';
+import useFediverseHandle from './useFediverseHandle';
 
 // The host of an address, without its "www.": example.com.
 const hostOf = (address) => {
@@ -40,6 +44,16 @@ const hostOf = (address) => {
   } catch (e) {
     return address;
   }
+};
+
+// When it was made, as month and year in the reader's own language:
+// "October 2026". How long somebody has been here, not the day.
+const monthYear = (value) => {
+  const date = new Date(value);
+  if (!value || Number.isNaN(date.getTime())) {
+    return '';
+  }
+  return date.toLocaleDateString(i18n.language, { month: 'long', year: 'numeric' });
 };
 
 const ActorBodyAbout = (props) => {
@@ -76,6 +90,26 @@ const ActorBodyAbout = (props) => {
   const isWebsite = (actor.type || '').includes('.website.');
   const siteShown = isWebsite ? hostOf(websiteUrl) : websiteUrl;
 
+  // Its handle on the fediverse, copied when pressed, for somebody on
+  // Mastodon to follow it by: a person's or a website's that is on it.
+  const fediverseHandle = useFediverseHandle(actor);
+  const [copied, setCopied] = useState(false);
+  const canCopy = Boolean(navigator.clipboard && navigator.clipboard.writeText);
+  const copyHandle = () => {
+    navigator.clipboard.writeText(fediverseHandle).then(() => {
+      setCopied(true);
+    }).catch(() => {
+      setCopied(false);
+    });
+  };
+
+  // When it joined, or was made: a person, a group or a website here. An
+  // event's own date is what matters of it, and somebody from elsewhere
+  // joined their own server, not this one.
+  const isPerson = (actor.type || '').includes('.person-service.person.');
+  const since = !remote && !events.isEvent(actor) ? monthYear(actor.createdAt) : '';
+  const hasList = Boolean(address || event.hasAddress || websiteUrl || fediverseHandle || since);
+
   return (
     <Card component="section">
       <CardHeader
@@ -99,8 +133,8 @@ const ActorBodyAbout = (props) => {
           right under its address. Pressing where it is offers the maps it
           can be opened in. */}
       {/* A line between what they say of themselves and the list. */}
-      {body && (address || event.hasAddress || websiteUrl) && <Divider />}
-      {(address || event.hasAddress || websiteUrl) &&
+      {body && hasList && <Divider />}
+      {hasList &&
         <List>
           {websiteUrl &&
             <ListItemButton
@@ -147,6 +181,35 @@ const ActorBodyAbout = (props) => {
                   }
                 />}
             </ListItemButton>}
+          {fediverseHandle &&
+            <ListItemButton
+              onClick={canCopy ? copyHandle : undefined}
+              disabled={!canCopy}
+              aria-label={`${i18n.t('actor:fediverse.copy')} ${fediverseHandle}`}
+              sx={{ '&.Mui-disabled': { opacity: 1 } }}
+            >
+              <ListItemIcon>
+                <FediverseIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('actor:fediverse.title')}
+                secondary={fediverseHandle}
+                slotProps={{ secondary: { sx: { overflowWrap: 'anywhere' } } }}
+              />
+              {canCopy && (copied ?
+                <DoneIcon color="action" titleAccess={i18n.t('actor:fediverse.copied')} /> :
+                <CopyIcon color="action" fontSize="small" />)}
+            </ListItemButton>}
+          {since &&
+            <ListItem>
+              <ListItemIcon>
+                <CalendarIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t(isPerson ? 'actor:since.joined' : 'actor:since.created')}
+                secondary={since}
+              />
+            </ListItem>}
           {address &&
             <ListItemButton
               aria-haspopup="menu"
@@ -200,7 +263,7 @@ const ActorBodyAbout = (props) => {
         </Menu>}
       {ruleItems.length > 0 &&
         <>
-          {(body || address || event.hasAddress || websiteUrl) && <Divider />}
+          {(body || hasList) && <Divider />}
           <CardContent>
             <Typography
               variant="subtitle1"
