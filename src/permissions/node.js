@@ -41,16 +41,31 @@ const canEdit = (viewer, node) => {
   return false;
 };
 
+// Whether the viewer may tie a location to a profile or a post, as
+// location-service decides it: administrators; the post's author or owner;
+// a person on their own profile, which has neither but itself; and whoever
+// looks after a group, a website or an event.
 const canAdd = (viewer, node = null) => {
   if (isSuperAdmin(viewer) || isAdmin(viewer)) {
     return true;
   }
 
-  if (node && node.owner && viewer.id === node.owner.id) {
+  if (!node || !viewer || !viewer.id) {
+    return false;
+  }
+
+  if (node.id === viewer.id) {
     return true;
   }
 
-  return false;
+  const own = (who) => {
+    return Boolean(who) && who.id === viewer.id;
+  };
+  if (own(node.owner) || own(node.author)) {
+    return true;
+  }
+
+  return Boolean(node.authorized && node.authorized.administration);
 };
 
 const canDelete = (viewer, node) => {
