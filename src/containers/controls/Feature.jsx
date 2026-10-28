@@ -17,13 +17,15 @@ import utils from '../../utils';
 // Features an actor, or stops featuring it, for onboarding.
 //
 // A menu item only: it lives in the profile's menu beside Settings, for super
-// administrators. The state is the actor's own featuredAt, kept locally after
-// a change so the label flips without re-reading the profile.
+// administrators. Whether the actor is featured is the menu's to keep
+// (actors/Read/Controls), since this item goes when the menu closes: kept
+// here, the label would go back to the profile as it was read.
 const ControlsFeature = React.forwardRef(({
   actor,
+  featured,
+  onFeatured,
   alertError,
 }, ref) => {
-  const [featured, setFeatured] = useState(Boolean(actor.featuredAt));
   const [waiting, setWaiting] = useState(false);
 
   const namespace = utils.node.getNamespace(actor);
@@ -33,7 +35,7 @@ const ControlsFeature = React.forwardRef(({
     setWaiting(true);
 
     featuredApi.edit(actor, !featured)
-      .then(() => { setFeatured(!featured); })
+      .then(() => { onFeatured(!featured); })
       .catch((error) => {
         const status = error.response && error.response.status;
         alertError(status === 409
@@ -60,6 +62,8 @@ const ControlsFeature = React.forwardRef(({
 
 ControlsFeature.propTypes = {
   actor: ActorType.isRequired,
+  featured: PropTypes.bool.isRequired,
+  onFeatured: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
 };
 

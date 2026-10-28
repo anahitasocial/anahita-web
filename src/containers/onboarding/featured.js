@@ -3,8 +3,8 @@ import { Onboarding as ONBOARDING } from '../../constants';
 
 const { STEPS } = ONBOARDING;
 
-// The featured accounts step's list: the inviter first, then the people and
-// groups the installation features.
+// The featured accounts step's list: the inviter first, then the people,
+// groups and websites the installation features.
 //
 // Each source can fail on its own and counts as empty when it does. Blocks and
 // disabled accounts are the server's business — browse leaves them out, and
@@ -18,12 +18,13 @@ const mergeFeatured = ({
   inviter = null,
   people = [],
   groups = [],
+  websites = [],
   viewer,
 }) => {
   const seen = new Set([viewer && viewer.id]);
   const list = [];
 
-  [inviter, ...people, ...groups].forEach((actor) => {
+  [inviter, ...people, ...groups, ...websites].forEach((actor) => {
     if (!actor || !actor.id || seen.has(actor.id)) {
       return;
     }
@@ -61,13 +62,15 @@ const loadFeatured = (viewer) => {
     readInviter(),
     browseFeatured('people'),
     browseFeatured('groups'),
-  ]).then(([inviter, people, groups]) => {
+    browseFeatured('websites'),
+  ]).then(([inviter, people, groups, websites]) => {
     return {
       inviterId: (settledValue(inviter, null) || {}).id || null,
       actors: mergeFeatured({
         inviter: settledValue(inviter, null),
         people: settledValue(people, []),
         groups: settledValue(groups, []),
+        websites: settledValue(websites, []),
         viewer,
       }),
     };

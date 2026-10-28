@@ -34,6 +34,7 @@ export default {
     inviter: 'Invited you',
     person: 'Person',
     group: 'Group',
+    website: 'Website',
     following: 'Following',
   },
   actions: {

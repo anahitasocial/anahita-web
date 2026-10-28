@@ -17,7 +17,7 @@ import ViewerType from '../../../proptypes/Viewer';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 
-const { getActorName, isPerson } = utils.node;
+const { getActorName, getNamespace, isPerson } = utils.node;
 
 // The accounts the installation features, with whoever invited this person
 // first.
@@ -86,8 +86,12 @@ const OnboardingFeatured = ({
       return i18n.t('onboarding:featured.inviter');
     }
 
-    return isPerson(actor)
-      ? i18n.t('onboarding:featured.person')
+    if (isPerson(actor)) {
+      return i18n.t('onboarding:featured.person');
+    }
+
+    return getNamespace(actor) === 'websites'
+      ? i18n.t('onboarding:featured.website')
       : i18n.t('onboarding:featured.group');
   };
 

@@ -29,6 +29,7 @@ const ActorsReadControls = ({
   onChanged = null,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [featured, setFeatured] = useState(Boolean(actor.featuredAt));
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -94,6 +95,8 @@ const ActorsReadControls = ({
         {showFeature &&
           <ControlFeature
             actor={actor}
+            featured={featured}
+            onFeatured={setFeatured}
             key="actor-featured"
           />}
         {showEdit &&

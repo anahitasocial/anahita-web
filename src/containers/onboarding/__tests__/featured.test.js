@@ -10,6 +10,17 @@ const { mergeFeatured } = featured;
 const viewer = { id: 1 };
 
 describe('mergeFeatured', () => {
+  it('puts websites after people and groups', () => {
+    const list = mergeFeatured({
+      people: [{ id: 2 }],
+      groups: [{ id: 3 }],
+      websites: [{ id: 4 }],
+      viewer,
+    });
+
+    expect(list.map((a) => { return a.id; })).toEqual([2, 3, 4]);
+  });
+
   it('puts the inviter first', () => {
     const list = mergeFeatured({
       inviter: { id: 9 },
