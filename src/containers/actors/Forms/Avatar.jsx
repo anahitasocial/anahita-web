@@ -77,6 +77,18 @@ const ActorAvatarForm = ({
     },
   } : undefined;
 
+  // With no picture, the circle is filled in grey, a shade off the card in
+  // light mode and dark, so that it is plainly a picture's place and not a
+  // gap with two letters floating in it.
+  const emptyLook = !prominent && !avatar && !isFetching ? {
+    '&&': {
+      backgroundColor: (theme) => {
+        return theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.grey[300];
+      },
+      color: 'text.secondary',
+    },
+  } : undefined;
+
   return (
     <>
       <IconButton
@@ -90,7 +102,7 @@ const ActorAvatarForm = ({
         <Avatar
           aria-label={getActorName(node)}
           className={clsx(classes[`${size}Avatar`], classes.avatar)}
-          sx={prominentLook}
+          sx={prominentLook || emptyLook}
           alt={getActorName(node)}
           src={isFetching ? '' : avatar}
         >

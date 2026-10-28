@@ -58,7 +58,6 @@ const ActorHeader = ({
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'space-between',
-            flexWrap: 'wrap',
             gap: 1,
             // Over the cover's lower edge, or with room above it when there
             // is no cover.
@@ -82,11 +81,22 @@ const ActorHeader = ({
           >
             {avatar}
           </Box>
+          {/* The buttons, clear of the cover: below its lower edge by a
+          step at least, where on a phone the picture is too short to hold
+          them there. They wrap among themselves, to the right, so that the
+          room above them stays. */}
           <Stack
             direction="row"
             spacing={1}
+            useFlexGap
             sx={{
-              alignItems: 'center', flexWrap: 'wrap', rowGap: 1, pb: 0.5,
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              flexWrap: 'wrap',
+              rowGap: 1,
+              minWidth: 0,
+              pb: 0.5,
+              mt: hasCover ? { xs: 7, sm: 9 } : 0,
             }}
           >
             {followAction}
