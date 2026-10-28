@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Version 1.0.0**
+**Version 1.0.1**
 
 > **This is boilerplate.** It ships with Anahita as a starting point so a new
 > installation has something coherent on this page from day one. It is not
@@ -114,8 +114,8 @@ These terms are governed by the laws of **[jurisdiction]**, and the courts of
 
 ## The software
 
-Anahita, the software this site runs on, is open source. The server code is
-available under the GPLv3 and the JavaScript under the MIT licence. Those
+Anahita, the software this site runs on, is open source: its services under
+the GNU AGPL-3.0 and its web app under the MIT licence. Those
 licences cover the *software*; this document covers *this service*. Running
 your own copy is governed by the licences, not by these terms.
 

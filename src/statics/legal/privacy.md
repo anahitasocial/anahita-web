@@ -1,6 +1,6 @@
 # Privacy Policy
 
-**Version 1.0.0**
+**Version 1.0.1**
 
 > **This is boilerplate.** It ships with Anahita as a starting point so a new
 > installation has something coherent on this page from day one. It is not
@@ -40,7 +40,8 @@ your security settings and end any session from there.
 biography, pronouns, a link. All of it is optional, and what you put on a
 public profile is public.
 
-**What you post:** your posts, comments, messages, and who you follow.
+**What you post:** your posts, replies, photos and videos, and who and what
+you follow.
 
 **Technical logs:** ordinary web-server records of requests, kept for a short
 period for security and debugging.

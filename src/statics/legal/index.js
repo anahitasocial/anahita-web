@@ -26,11 +26,11 @@ export default {
   tos: {
     title: 'Terms of Service',
     file: tosFile,
-    version: '1.0.0',
+    version: '1.0.1',
   },
   privacy: {
     title: 'Privacy Policy',
     file: privacyFile,
-    version: '1.0.0',
+    version: '1.0.1',
   },
 };
