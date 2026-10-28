@@ -13,7 +13,6 @@ import FediverseIcon from '@mui/icons-material/Hub';
 import BlueskyIcon from '../../../components/BlueskyIcon';
 import api from '../../../api';
 import i18n from '../../../languages';
-import appLogo from '../media/logo';
 
 // One fact about the site in the line under the buttons: a small icon and
 // a few words, in the colour of what explains.
@@ -46,11 +45,12 @@ Fact.propTypes = {
 // called, what it says of itself, and the two ways in. Nothing behind it:
 // the page's own background, and room.
 //
-// All of it is the installation's own, from NodeInfo: its name and
+// All of it is the installation's own, from NodeInfo: its logo, name and
 // description as its operator set them, how many people are on it, and
 // whether a profile can be made at all. The build's name and description
 // stand in until that answer has arrived, or where it never does.
 const HomeHero = ({
+  logo = '',
   name,
   description,
   people = 0,
@@ -59,21 +59,21 @@ const HomeHero = ({
   onBluesky = false,
   canJoin = false,
 }) => {
-  const { color: logo } = appLogo;
   const format = (n) => {
     return n.toLocaleString(i18n.language);
   };
 
   return (
     <Box component="section" sx={{ textAlign: 'center' }}>
-      <Box
-        component="img"
-        src={logo}
-        alt=""
-        sx={{
-          display: 'block', width: 72, height: 72, mx: 'auto',
-        }}
-      />
+      {logo &&
+        <Box
+          component="img"
+          src={logo}
+          alt=""
+          sx={{
+            display: 'block', width: 72, height: 72, mx: 'auto',
+          }}
+        />}
       <Typography
         variant="h1"
         sx={{
@@ -172,6 +172,8 @@ const HomeHero = ({
 };
 
 HomeHero.propTypes = {
+  // The site's logo, from the server or the active theme (utils/siteLogo).
+  logo: PropTypes.string,
   name: PropTypes.string.isRequired,
   description: PropTypes.string,
   people: PropTypes.number,

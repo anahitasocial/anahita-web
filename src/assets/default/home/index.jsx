@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
@@ -9,6 +9,9 @@ import Grid from '@mui/material/Grid';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import ReactMarkdown from 'react-markdown';
+import gfm from 'remark-gfm';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -24,6 +27,7 @@ import AboutIcon from '@mui/icons-material/InfoOutlined';
 import BlueskyIcon from '../../../components/BlueskyIcon';
 import HeaderMeta from '../../../components/HeaderMeta';
 import i18n from '../../../languages';
+import siteLogo from '../../../utils/siteLogo';
 import Hero from './Hero';
 
 // What there is to do here, said in three cards. Each is true of any
@@ -57,67 +61,11 @@ const PLACES = [
   { key: 'about', to: '/about', Icon: AboutIcon },
 ];
 
-// The home page of somebody who is not signed in: calm, with room around
-// each part, in one column that is never wider than it is read.
-//
-// It is about this installation and not about Anahita: its name, what its
-// operator says it is, how many are on it, and the ways in. Then what can
-// be done on it, and what may be looked at without a profile. That it runs
-// on Anahita is one line at the foot.
-//
-// A members-only installation never draws this: routes/MembersOnlyGate
-// answers for every page there.
-const Home = ({
-  nodeInfo = null,
-}) => {
-  const {
-    usage = {},
-    metadata = {},
-    protocols = [],
-    openRegistrations = false,
-  } = nodeInfo || {};
-
-  const name = metadata.nodeName || process.env.REACT_APP_NAME || '';
-  const description = metadata.nodeDescription || process.env.REACT_APP_DESCRIPTION || '';
-
-  // What the installation says it is part of. An older server says only
-  // `protocols`.
-  const networks = Array.isArray(metadata.networks) ? metadata.networks : (protocols || []);
-  const partOf = networksKey(networks);
-
-  // A fourth card, on an installation that is part of other networks:
-  // which, by the names people know them by, and by what they speak.
-  // The hub stands for the fediverse, and the butterfly for Bluesky: one,
-  // the other, or both side by side.
-  const networkIcons = [
-    networks.includes('activitypub') && NetworksIcon,
-    networks.includes('atproto') && BlueskyIcon,
-  ].filter(Boolean);
-  const reasons = partOf ?
-    [...REASONS, { key: `networks.${partOf}`, icons: networkIcons }] :
-    REASONS;
-
+// Anahita's own parts of the home page, for a theme with none of its own:
+// what can be done here, and what may be looked at without a profile.
+const AnahitasOwn = ({ reasons }) => {
   return (
-    <Box
-      sx={{
-        maxWidth: 960,
-        mx: 'auto',
-        px: { xs: 2, md: 3 },
-        pt: { xs: 6, md: 12 },
-        pb: 4,
-      }}
-    >
-      <HeaderMeta />
-      <Hero
-        name={name}
-        description={description}
-        people={Number((usage.users || {}).total) || 0}
-        posts={Number(usage.localPosts) || 0}
-        federated={networks.includes('activitypub')}
-        onBluesky={networks.includes('atproto')}
-        canJoin={Boolean(openRegistrations)}
-      />
-
+    <>
       {/* What can be done here: side by side under a hairline, each a small
       icon, a title and a line, with no card around it. */}
       <Grid
@@ -194,6 +142,130 @@ const Home = ({
           })}
         </Grid>
       </Box>
+    </>
+  );
+};
+
+AnahitasOwn.propTypes = {
+  reasons: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+  })).isRequired,
+};
+
+// The home page of somebody who is not signed in: calm, with room around
+// each part, in one column that is never wider than it is read.
+//
+// It is about this installation and not about Anahita: its name, what its
+// operator says it is, how many are on it, and the ways in. Then what can
+// be done on it, and what may be looked at without a profile. That it runs
+// on Anahita is one line at the foot.
+//
+// A theme with a home page of its own in Markdown (`pages/home.md`) has it
+// here in place of those parts, under the same name, description and ways
+// in: a site says what it is for in its own words, and keeps the rest.
+//
+// A members-only installation never draws this: routes/MembersOnlyGate
+// answers for every page there.
+const Home = ({
+  nodeInfo = null,
+  themeLogo = null,
+  homeMarkdown = null,
+}) => {
+  const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
+  const [ownPage, setOwnPage] = useState('');
+
+  useEffect(() => {
+    if (!homeMarkdown) {
+      return undefined;
+    }
+    let current = true;
+    fetch(homeMarkdown).then((response) => {
+      return response.text();
+    }).then((text) => {
+      if (current) {
+        setOwnPage(text);
+      }
+    }).catch(() => {
+      // Anahita's own parts stay in its place.
+    });
+    return () => {
+      current = false;
+    };
+  }, [homeMarkdown]);
+
+  const {
+    usage = {},
+    metadata = {},
+    protocols = [],
+    openRegistrations = false,
+  } = nodeInfo || {};
+
+  const name = metadata.nodeName || process.env.REACT_APP_NAME || '';
+  const description = metadata.nodeDescription || process.env.REACT_APP_DESCRIPTION || '';
+
+  // What the installation says it is part of. An older server says only
+  // `protocols`.
+  const networks = Array.isArray(metadata.networks) ? metadata.networks : (protocols || []);
+  const partOf = networksKey(networks);
+
+  // A fourth card, on an installation that is part of other networks:
+  // which, by the names people know them by, and by what they speak.
+  // The hub stands for the fediverse, and the butterfly for Bluesky: one,
+  // the other, or both side by side.
+  const networkIcons = [
+    networks.includes('activitypub') && NetworksIcon,
+    networks.includes('atproto') && BlueskyIcon,
+  ].filter(Boolean);
+  const reasons = partOf ?
+    [...REASONS, { key: `networks.${partOf}`, icons: networkIcons }] :
+    REASONS;
+
+  return (
+    <Box
+      sx={{
+        maxWidth: 960,
+        mx: 'auto',
+        px: { xs: 2, md: 3 },
+        pt: { xs: 6, md: 12 },
+        pb: 4,
+      }}
+    >
+      <HeaderMeta />
+      <Hero
+        logo={siteLogo(nodeInfo, themeLogo, prefersDarkMode)}
+        name={name}
+        description={description}
+        people={Number((usage.users || {}).total) || 0}
+        posts={Number(usage.localPosts) || 0}
+        federated={networks.includes('activitypub')}
+        onBluesky={networks.includes('atproto')}
+        canJoin={Boolean(openRegistrations)}
+      />
+
+      {ownPage ?
+        <Box
+          component="section"
+          sx={{
+            mt: { xs: 8, md: 12 },
+            pt: { xs: 5, md: 6 },
+            borderTop: 1,
+            borderColor: 'divider',
+            maxWidth: 680,
+            mx: 'auto',
+            '& h1, & h2': { typography: 'h6', mt: 4, mb: 1 },
+            '& h3': {
+              typography: 'subtitle1', fontWeight: 500, mt: 3, mb: 1,
+            },
+            '& p, & li': { typography: 'body1', color: 'text.secondary' },
+            '& a': { color: 'primary.main' },
+            '& img': { maxWidth: '100%', borderRadius: 2 },
+          }}
+        >
+          <ReactMarkdown remarkPlugins={[gfm]}>
+            {ownPage}
+          </ReactMarkdown>
+        </Box> :
+        <AnahitasOwn reasons={reasons} />}
 
       <Typography
         variant="body2"
@@ -215,6 +287,13 @@ const Home = ({
 Home.propTypes = {
   // The installation's own account of itself. Empty until it has answered.
   nodeInfo: PropTypes.object,
+  // The active theme's logo, { color, white }, and its own home page in
+  // Markdown, if it has one (containers/home).
+  themeLogo: PropTypes.shape({
+    color: PropTypes.string,
+    white: PropTypes.string,
+  }),
+  homeMarkdown: PropTypes.string,
 };
 
 const mapStateToProps = (state) => {

@@ -7,17 +7,27 @@ documents.
 
 ## Contents
 
-- [Name and description](#name-and-description)
+- [Name, description and logo](#name-description-and-logo)
 - [Themes](#themes)
 - [Languages](#languages)
 - [Terms of Service and Privacy Policy](#terms-of-service-and-privacy-policy)
 - [Where the code is](#where-the-code-is)
 
-## Name and description
+## Name, description and logo
 
-`REACT_APP_NAME` and `REACT_APP_DESCRIPTION` set the installation's name and
-one-line description. They are used throughout the app and in the page title
-and meta tags in `public/index.html`. See [Configuration](configuration.md).
+The three are the server's settings, in anahita-services' `config.env`,
+which the app reads from NodeInfo when it loads: a site changes them with no
+code and no rebuild.
+
+| Shown | Set by, on the server | Without it |
+| --- | --- | --- |
+| The name, on the home page and in the menu | `ANAHITA_INSTANCE_NAME`, or `SITE_NAME` | `REACT_APP_NAME` |
+| The description, on the home page | `ANAHITA_INSTANCE_DESCRIPTION` | `REACT_APP_DESCRIPTION` |
+| The logo, on the home page and in the menu | `SITE_LOGO_URL`, which is also the logo of the sign-in pages and of every email: a full address, to a PNG | The theme's `media/logo` |
+
+`REACT_APP_NAME` and `REACT_APP_DESCRIPTION` are the build's own: shown until
+the server has answered, and used in the page title and meta tags in
+`public/index.html`. See [Configuration](configuration.md).
 
 ## Themes
 
@@ -38,16 +48,47 @@ A theme exports, from its `index.js`:
 
 | Part | Directory | What it controls |
 | --- | --- | --- |
-| `logo` | `media/logo` | The logo in the menu: `color` for light mode and `white` for dark, which may be the same file. The default theme's is Anahita's mark, an SVG for both |
+| `logo` | `media/logo` | The logo in the menu and on the home page, when the server gives none (`SITE_LOGO_URL`): `color` for light mode and `white` for dark, which may be the same file. The default theme's is Anahita's mark, an SVG for both |
 | `opengraph` | `media/og` | An image for link previews. Exported, but nothing in the app uses it yet |
-| `Home` | `home/` | The home page signed-out visitors see |
+| `Home` | `home/` | The home page signed-out visitors see. The default's, under the name, description and ways in, shows a theme's `pages/home.md` if it has one, in place of Anahita's own parts |
 | `navs` | `navs/` | The left menu |
 | `styles` | `styles/` | The Material UI theme: fonts and colours, for light and dark mode |
-| `pages` | `pages/` | Markdown pages for the site, such as `contact.md` and `join.md` |
+| `pages` | `pages/` | Markdown pages for the site, such as `contact.md` and `join.md` at `/pages/:alias`, and `home.md`, the home page's own words |
 
 A theme is compiled into the bundle, so changing one means rebuilding. Keep
 the parts' names and exports as they are in the default theme; the app imports
 them by those names.
+
+### A home page of your own
+
+The home page somebody not signed in sees has the site's logo, name and
+description, the ways in, and how many are on it; then Anahita's own parts,
+what can be done here and what may be looked at. To say what your site is
+for in its own words instead, give your theme a `pages/home.md`, and name it
+in `pages/index.js`:
+
+```js
+import contact from './contact.md';
+import join from './join.md';
+import home from './home.md';
+
+export default { contact, join, home };
+```
+
+It takes the place of Anahita's own parts, under the rest, which stays. A
+theme can take everything else from the default one and change only what is
+its own:
+
+```js
+import base from '../default';
+import logo from './media/logo';
+import pages from './pages';
+
+export default { ...base, logo, pages };
+```
+
+For a home page that is altogether different, a theme's `Home` can be a
+component of its own: fork the repository and change it as you like.
 
 `styles/index.js` exports `global({ colors, prefersDarkMode })`, which returns
 [Material UI theme options](https://mui.com/material-ui/customization/theming/)
@@ -162,6 +203,8 @@ changed there ([Rules and promises](https://github.com/anahitasocial/anahita-ser
 | The default theme | `src/assets/default/` |
 | Applying a theme's styles over the app's defaults | `src/styles/index.js` (`createTheme`) |
 | A theme's Markdown pages, at `/pages/:alias` | `src/assets/default/pages/`, `src/containers/page/index.jsx` |
+| The home page, and a theme's `home.md` in it | `src/assets/default/home/index.jsx`, given the active theme's logo and page by `src/containers/home/index.js` |
+| Which logo is shown: the server's or the theme's | `src/utils/siteLogo.js`, tested in `src/utils/__tests__/siteLogo.test.js`; used by `src/components/Logo.jsx` and the home page |
 | The page title and meta tags | `src/components/HeaderMeta.jsx` |
 | The languages, and the one in use | `src/languages/index.js`, `src/languages/en-CA/`, `en-US/`, `fr-FR/`, `fr-CA/` |
 | Choosing the language from the browser's | `src/languages/choose.js`, tested in `src/languages/__tests__/languages.test.js` |

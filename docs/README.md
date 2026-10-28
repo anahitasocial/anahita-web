@@ -39,7 +39,7 @@ Asking an AI agent about the web app? Add Anahita's MCP server to it: see
    - [Translations](architecture.md#translations)
    - [Styling](architecture.md#styling)
 4. [Customising](customising.md): making an installation your own
-   - [Name and description](customising.md#name-and-description)
+   - [Name, description and logo](customising.md#name-description-and-logo)
    - [Themes](customising.md#themes)
    - [Languages](customising.md#languages)
    - [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy)

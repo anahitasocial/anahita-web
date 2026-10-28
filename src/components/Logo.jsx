@@ -1,14 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { makeStyles } from 'tss-react/mui';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import assets from '../assets';
-
-const {
-  white: darkThemeLogo,
-  color: lightThemeLogo,
-} = assets.logo;
+import siteLogo from '../utils/siteLogo';
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -23,10 +21,12 @@ const useStyles = makeStyles()((theme) => {
   };
 });
 
-const Logo = () => {
+// The site's logo at the top of the menu: the server's (SITE_LOGO_URL) when
+// it gives one, else the active theme's.
+const Logo = ({ nodeInfo = null }) => {
   const { classes } = useStyles();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const src = prefersDarkMode ? darkThemeLogo : lightThemeLogo;
+  const src = siteLogo(nodeInfo, assets.logo, prefersDarkMode);
 
   return (
     <IconButton href="/" size="small">
@@ -39,4 +39,14 @@ const Logo = () => {
   );
 };
 
-export default Logo;
+Logo.propTypes = {
+  nodeInfo: PropTypes.object,
+};
+
+const mapStateToProps = (state) => {
+  return {
+    nodeInfo: state.app.nodeInfo,
+  };
+};
+
+export default connect(mapStateToProps)(Logo);
