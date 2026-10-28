@@ -104,6 +104,12 @@ each. Options you return are applied over the app's defaults; to change how a
 component looks everywhere, add it under `components`, for example
 `components: { MuiButton: { defaultProps: { disableElevation: true } } }`.
 
+The theme's colours are everybody's until they choose others: somebody
+signed in can pick one of fifteen palettes under Colours in the left menu,
+kept in their browser, and Reset goes back to the theme's. A palette chosen
+replaces the theme's `primary` and `secondary` only
+([Anahita's colours](plans/colours.md#the-colour-picker-2026-10-26)).
+
 ## Languages
 
 The app is in seven languages. Five are bases, with every string; two are

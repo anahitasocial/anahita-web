@@ -8,8 +8,8 @@ be tried again in the app.*
 2026-10-26 after the classic Anahita blue (`#098ED1`, this app's colour from
 2019) and Bauhaus blue + yellow were tried as the default the same evening.
 In `src/assets/default/styles/index.js` here, and `src/theme.js` in
-anahita.io. The colour picker below stays in this app, on the dev server;
-www.anahita.io's was taken out the same day.
+anahita.io. The colour picker below stays in this app, for everybody signed
+in since 2026-10-27; www.anahita.io's was taken out the same day.
 
 ## The choice
 
@@ -84,13 +84,21 @@ source, accessible, with links naturally distinct.
 ## The colour picker (2026-10-26)
 
 The user asked for the picker back, in this app and on www.anahita.io, with
-palettes grouped by style, and kept it because it may stay: a quiet button
-at the bottom of the page, on the dev server only (`process.env.NODE_ENV ===
-'development'`), opens them; the one chosen is the theme's primary and
-secondary at once, in light mode and dark, kept in the browser
-(`localStorage`, `anahita-palette`); Reset returns to ink + signal red, shown as chosen. Here in `src/components/ColourPicker.jsx`
-and `src/styles/palettes.js`. The website had one too for a few hours on
-2026-10-26, taken out at the user's word.
+palettes grouped by style; the website had one for a few hours on
+2026-10-26, taken out at the user's word. In this app it was on the dev
+server only until 2026-10-27, when the user asked for it for everybody
+signed in, so that somebody can have colours of their own whatever the site
+is set to.
+
+| | |
+| --- | --- |
+| Who | Somebody signed in: Colours in the left menu opens it. Signed out, everybody sees the site's colours |
+| What it offers | The fifteen palettes below, five in each group |
+| Before anything is chosen | "This site's colours", with no swatch marked: the theme's own, which may be none of the fifteen |
+| A choice | The primary and secondary at once, in light mode and dark, over the theme's own (`src/styles/index.js`), so that it holds on a site with a theme of its own too |
+| Kept | In the browser (`localStorage`, `anahita-palette`), not on the server: another browser has the site's colours until chosen there too. It stays after signing out, for the next time |
+| Reset | Back to the site's colours |
+| The code | `src/components/ColourPicker.jsx`, `src/styles/palettes.js`, and `src/containers/Root.jsx`, which offers it |
 
 Five in each group, the furthest apart. Pride was taken out, since two colours
 cannot say a flag, and Space Age, at the user's word; Charcoal + rose gold

@@ -1,8 +1,9 @@
-// The palettes the colour picker offers (components/ColourPicker.jsx), on the
-// dev server only, while Anahita's colours are tried again (anahita-web's
-// docs/plans/colours.md). Each is a primary and a secondary, for light mode
-// and dark. Dark mode's are light mode's, lightened until they read on the
-// dark page; every primary takes white text at 4.5 to 1 or more.
+// The palettes the colour picker offers (components/ColourPicker.jsx) to
+// somebody signed in, for colours of their own: fifteen, five in each of
+// Bauhaus, Mid-Century and Art Deco (docs/plans/colours.md). Each is a
+// primary and a secondary, for light mode and dark. Dark mode's are light
+// mode's, lightened until they read on the dark page; every primary takes
+// white text at 4.5 to 1 or more.
 const palettes = [
   // Bauhaus
   {

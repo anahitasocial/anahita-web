@@ -113,6 +113,16 @@ const v4Look = (prefersDarkMode) => {
   };
 };
 
+// A palette somebody chose for themselves (components/ColourPicker), over
+// the theme's own colours, so that it is theirs on any site, whatever its
+// theme says.
+const ofChosen = (palette, prefersDarkMode) => {
+  const chosen = palette && palette[prefersDarkMode ? 'dark' : 'light'];
+  return chosen ?
+    { primary: { main: chosen.primary }, secondary: { main: chosen.secondary } } :
+    {};
+};
+
 export default (prefersDarkMode, palette) => {
   const style = styles.global({
     colors: {
@@ -130,7 +140,7 @@ export default (prefersDarkMode, palette) => {
   return createTheme({
     ...base,
     ...style,
-    palette: { ...base.palette, ...style.palette },
+    palette: { ...base.palette, ...style.palette, ...ofChosen(palette, prefersDarkMode) },
     components,
   });
 };

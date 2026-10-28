@@ -1,7 +1,7 @@
 import React from 'react';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import PropTypes from 'prop-types';
-import { Provider } from 'react-redux';
+import { Provider, useSelector } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from '@mui/material/styles';
 import App from './App';
@@ -9,15 +9,15 @@ import Routes from '../routes';
 import styles from '../styles';
 import ColourPicker, { ColourPickerContext, savedPalette } from '../components/ColourPicker';
 
-// The colour picker is for the dev server alone, while the colours are
-// tried again (docs/plans/colours.md).
-const picking = process.env.NODE_ENV === 'development';
-
-const Root = ({ store }) => {
+// The app in its colours: the site's, or for somebody signed in, the ones
+// they chose for themselves in this browser (components/ColourPicker). Signed
+// out, everybody sees the site's; the choice stays in the browser for the
+// next time they sign in.
+const Themed = ({ store }) => {
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
-  const [palette, setPalette] = React.useState(() => {
-    return picking ? savedPalette() : undefined;
-  });
+  const picking = useSelector((state) => { return state.session.isAuthenticated; });
+  const [chosen, setChosen] = React.useState(savedPalette);
+  const palette = picking ? chosen : undefined;
   // Where the picker opens from: the Colours item, which its popup opens
   // beside on a wider screen; null while it is closed.
   const [picker, setPicker] = React.useState(null);
@@ -31,25 +31,35 @@ const Root = ({ store }) => {
   );
 
   return (
+    <ThemeProvider theme={theme}>
+      <HelmetProvider>
+        <ColourPickerContext.Provider value={picking ? openPicker : null}>
+          <App>
+            <Routes store={store} />
+          </App>
+        </ColourPickerContext.Provider>
+        {picking && (
+        <ColourPicker
+          current={palette}
+          onChoose={setChosen}
+          open={Boolean(picker)}
+          anchorEl={picker}
+          onClose={() => { setPicker(null); }}
+        />
+        )}
+      </HelmetProvider>
+    </ThemeProvider>
+  );
+};
+
+Themed.propTypes = {
+  store: PropTypes.object.isRequired,
+};
+
+const Root = ({ store }) => {
+  return (
     <Provider store={store}>
-      <ThemeProvider theme={theme}>
-        <HelmetProvider>
-          <ColourPickerContext.Provider value={picking ? openPicker : null}>
-            <App>
-              <Routes store={store} />
-            </App>
-          </ColourPickerContext.Provider>
-          {picking && (
-            <ColourPicker
-              current={palette}
-              onChoose={setPalette}
-              open={Boolean(picker)}
-              anchorEl={picker}
-              onClose={() => { setPicker(null); }}
-            />
-          )}
-        </HelmetProvider>
-      </ThemeProvider>
+      <Themed store={store} />
     </Provider>
   );
 };

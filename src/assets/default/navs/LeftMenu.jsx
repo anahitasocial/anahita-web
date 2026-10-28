@@ -319,7 +319,7 @@ const LeftMenu = ({
         </ListItemIcon>
         <ListItemText primary={i18n.t('legal:mTitle')} />
       </ListItemButton>
-      {/* The colour picker, on the dev server alone (components/ColourPicker). */}
+      {/* Colours of one's own, for somebody signed in (components/ColourPicker). */}
       {openColours &&
         <ListItemButton
           // The menu closes, on a phone, so that the page is what is seen

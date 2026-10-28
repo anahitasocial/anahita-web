@@ -28,14 +28,9 @@ const groups = palettes.reduce((all, palette) => {
   return all;
 }, []);
 
-// The palette the site is in when none is chosen: Anahita's own colours,
-// shown as chosen until another is.
-const DEFAULT_ID = 'ink-signal-red';
-const fallback = palettes.find((palette) => { return palette.id === DEFAULT_ID; });
-
 const KEY = 'anahita-palette';
 
-// The palette chosen in this browser, or undefined for Anahita's own.
+// The palette chosen in this browser, or undefined for the site's own.
 export const savedPalette = () => {
   try {
     const id = window.localStorage.getItem(KEY);
@@ -57,8 +52,8 @@ const save = (id) => {
   }
 };
 
-// How the left menu opens the colour picker: a function where the picker is
-// on (the dev server), null elsewhere, so that the menu has no item for it.
+// How the left menu opens the colour picker: a function for somebody signed
+// in, null otherwise, so that the menu has no item for it.
 export const ColourPickerContext = React.createContext(null);
 
 // A palette's two colours in one circle, split on the diagonal.
@@ -86,10 +81,11 @@ Swatch.propTypes = {
 };
 
 // The palettes as rows of swatches, one row for each group, and the chosen
-// one's name at the top. On a phone, the sheet across the bottom, as tall as
-// its three rows, so that the page above it shows what each palette does; on a
-// wider screen, a small card beside the left menu, where each swatch says
-// its name when pointed at.
+// one's name at the top, or "This site's colours" while none is: then no
+// swatch is marked, since the site's own may be none of them. On a phone,
+// the sheet across the bottom, as tall as its three rows, so that the page
+// above it shows what each palette does; on a wider screen, a small card
+// beside the left menu, where each swatch says its name when pointed at.
 const Palettes = ({
   current = undefined, choose, onClose, phone,
 }) => {
@@ -104,7 +100,7 @@ const Palettes = ({
       }}
       >
         <Typography variant="subtitle1" noWrap sx={{ flexGrow: 1, minWidth: 0, fontWeight: 500 }}>
-          {(current || fallback).name}
+          {current ? current.name : i18n.t('colours:site')}
         </Typography>
         <IconButton aria-label={i18n.t('actions:close')} onClick={onClose}>
           <CloseIcon fontSize="small" />
@@ -129,7 +125,7 @@ const Palettes = ({
               }}
               >
                 {group.palettes.map((palette) => {
-                  const selected = (current || fallback).id === palette.id;
+                  const selected = Boolean(current) && current.id === palette.id;
                   const swatch = (
                     <ButtonBase
                       key={palette.id}
@@ -177,10 +173,10 @@ Palettes.propTypes = {
   phone: PropTypes.bool.isRequired,
 };
 
-// Anahita's colours tried again, on the dev server only
-// (docs/plans/colours.md): Colours in the left menu opens the palettes, and
-// the one chosen is the app's colours at once, in light mode and dark, kept
-// in this browser. It does not dim or hold the page, which can be scrolled
+// Colours of one's own, for somebody signed in: Colours in the left menu
+// opens the palettes (docs/plans/colours.md), and the one chosen is the
+// app's colours at once, in light mode and dark, kept in this browser.
+// Reset goes back to the site's own. It does not dim or hold the page, which can be scrolled
 // with it open; a click or a tap outside it closes it.
 const ColourPicker = ({
   current = undefined, onChoose, open, anchorEl = null, onClose,
