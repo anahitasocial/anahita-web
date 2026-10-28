@@ -11,8 +11,20 @@ const edit = (namespace) => {
   };
 };
 
+// The ones the installation features, for onboarding: the ordinary list told
+// featured, but for events, which have no list of every one, and so one of
+// their own (GET /events/featured).
+const browse = (namespace) => {
+  return (params = {}) => {
+    return namespace === 'events'
+      ? axios.get('/events/featured', { params })
+      : axios.get(`/${namespace}/`, { params: { ...params, featured: true } });
+  };
+};
+
 export default (namespace) => {
   return {
     edit: edit(namespace),
+    browse: browse(namespace),
   };
 };

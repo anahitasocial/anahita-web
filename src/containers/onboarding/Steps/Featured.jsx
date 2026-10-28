@@ -90,9 +90,8 @@ const OnboardingFeatured = ({
       return i18n.t('onboarding:featured.person');
     }
 
-    return getNamespace(actor) === 'websites'
-      ? i18n.t('onboarding:featured.website')
-      : i18n.t('onboarding:featured.group');
+    const kinds = { websites: 'website', events: 'event' };
+    return i18n.t(`onboarding:featured.${kinds[getNamespace(actor)] || 'group'}`);
   };
 
   return (

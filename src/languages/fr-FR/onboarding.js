@@ -35,6 +35,7 @@ export default {
     person: 'Personne',
     group: 'Groupe',
     website: 'Site web',
+    event: 'Événement',
     following: 'Suivi',
   },
   actions: {

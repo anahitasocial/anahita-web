@@ -1,10 +1,12 @@
+import { singularize } from 'inflection';
+
 import api from '../../api';
 import { Onboarding as ONBOARDING } from '../../constants';
 
 const { STEPS } = ONBOARDING;
 
 // The featured accounts step's list: the inviter first, then the people,
-// groups and websites the installation features.
+// groups, websites and events the installation features.
 //
 // Each source can fail on its own and counts as empty when it does. Blocks and
 // disabled accounts are the server's business — browse leaves them out, and
@@ -19,12 +21,13 @@ const mergeFeatured = ({
   people = [],
   groups = [],
   websites = [],
+  events = [],
   viewer,
 }) => {
   const seen = new Set([viewer && viewer.id]);
   const list = [];
 
-  [inviter, ...people, ...groups, ...websites].forEach((actor) => {
+  [inviter, ...people, ...groups, ...websites, ...events].forEach((actor) => {
     if (!actor || !actor.id || seen.has(actor.id)) {
       return;
     }
@@ -52,7 +55,7 @@ const readInviter = () => {
 };
 
 const browseFeatured = (namespace) => {
-  return api[namespace].browse({ featured: true, limit: LIMIT })
+  return api[namespace][singularize(namespace)].featured.browse({ limit: LIMIT })
     .then(({ data }) => { return (data && data.data) || []; });
 };
 
@@ -63,7 +66,8 @@ const loadFeatured = (viewer) => {
     browseFeatured('people'),
     browseFeatured('groups'),
     browseFeatured('websites'),
-  ]).then(([inviter, people, groups, websites]) => {
+    browseFeatured('events'),
+  ]).then(([inviter, people, groups, websites, events]) => {
     return {
       inviterId: (settledValue(inviter, null) || {}).id || null,
       actors: mergeFeatured({
@@ -71,6 +75,7 @@ const loadFeatured = (viewer) => {
         people: settledValue(people, []),
         groups: settledValue(groups, []),
         websites: settledValue(websites, []),
+        events: settledValue(events, []),
         viewer,
       }),
     };
