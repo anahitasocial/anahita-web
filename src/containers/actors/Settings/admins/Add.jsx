@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import axios from 'axios';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -13,7 +12,7 @@ import ActorAvatar from '../../../../components/ActorAvatar';
 import ActorType from '../../../../proptypes/Actor';
 import PersonType from '../../../../proptypes/Person';
 import actions from '../../../../actions';
-import api from '../../../../utils/api';
+import api from '../../../../api';
 import utils from '../../../../utils';
 import i18n from '../../../../languages';
 
@@ -32,9 +31,10 @@ const ActorsSettingsAdminsAdd = (props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isFetching, setIsFetching] = useState(false);
 
+  // Who may be made one: the people the viewer follows who follow them
+  // back, by name. Only people here: somebody from another server cannot
+  // look after a profile on this one, and the server would refuse them.
   const fetchList = (q) => {
-    const path = api.socialgraph.mutuals(viewer.id);
-
     if (q.length === 0) {
       setOptions([]);
       return;
@@ -42,19 +42,23 @@ const ActorsSettingsAdminsAdd = (props) => {
 
     setIsFetching(true);
 
-    axios.get(path, {
-      params: {
-        q,
-      },
+    api.socialgraph.browse({
+      filter: 'mutuals',
+      actor: viewer,
+      q,
+      limit: 20,
     })
-      .then((response) => {
-        const { data } = response;
-        return setOptions(api.snakeToCamel(data));
+      .then(({ data }) => {
+        const people = (data && data.data) || [];
+        return setOptions(people.filter((person) => {
+          return utils.node.isPerson(person) && !utils.federation.isRemote(person);
+        }));
       })
-      .catch((err) => {
-        return console.error(err);
-      }).finally(() => {
-        return setIsFetching(false);
+      .catch(() => {
+        setOptions([]);
+      })
+      .then(() => {
+        setIsFetching(false);
       });
   };
 
@@ -72,10 +76,17 @@ const ActorsSettingsAdminsAdd = (props) => {
         addAdmin({ actor, admin });
       }}
       isOptionEqualToValue={(option, value) => {
-        return option.name === value.name;
+        return option.id === value.id;
       }}
+      // By name, or by handle for somebody who has not given one.
       getOptionLabel={(option) => {
-        return option.name;
+        return getActorName(option) || '';
+      }}
+      // The server has searched already, by name and handle; filtering
+      // again here by the label alone would drop whoever matched on the
+      // handle.
+      filterOptions={(found) => {
+        return found;
       }}
       onInputChange={(event, q) => {
         fetchList(q);
