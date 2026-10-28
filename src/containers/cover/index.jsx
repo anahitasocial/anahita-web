@@ -41,7 +41,8 @@ const Cover = (props) => {
         setIsLoading(false); // Image loaded successfully
       };
 
-      image.onError = () => {
+      // `onerror`, as the browser names it: see actors/Read/Avatar.js.
+      image.onerror = () => {
         setIsLoading(false); // Error loading image
       };
     }

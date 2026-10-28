@@ -39,8 +39,11 @@ const ActorsAvatar = (props) => {
         setIsLoading(false); // Image loaded successfully
       };
 
-      image.onError = () => {
-        setIsLoading(false); // Error loading image
+      // `onerror`, as the browser names it. Spelt `onError` it was never
+      // called, so an avatar whose file was missing left the spinner
+      // turning, and the button to upload another disabled, for good.
+      image.onerror = () => {
+        setIsLoading(false);
       };
     }
   }, [avatar]);
