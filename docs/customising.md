@@ -49,11 +49,17 @@ A theme exports, from its `index.js`:
 | Part | Directory | What it controls |
 | --- | --- | --- |
 | `logo` | `media/logo` | The logo in the menu and on the home page, when the server gives none (`SITE_LOGO_URL`): `color` for light mode and `white` for dark, which may be the same file. The default theme's is Anahita's mark, an SVG for both |
-| `opengraph` | `media/og` | An image for link previews. Exported, but nothing in the app uses it yet |
+| `opengraph` | `media/og` | An image for link previews. Exported, but nothing in the app uses it yet: the picture a shared link shows is `public/statics/media/ogimage.jpg` (below) |
 | `Home` | `home/` | The home page signed-out visitors see. The default's, under the name, description and ways in, shows a theme's `pages/home.md` if it has one, in place of Anahita's own parts |
 | `navs` | `navs/` | The left menu |
 | `styles` | `styles/` | The Material UI theme: fonts and colours, for light and dark mode |
 | `pages` | `pages/` | Markdown pages for the site, such as `contact.md` and `join.md` at `/pages/:alias`, and `home.md`, the home page's own words |
+
+**The picture of a shared link** is `public/statics/media/ogimage.jpg`, 1200
+by 630 pixels: Anahita's logo, its name and "Connect your people, here and
+everywhere." Every page without a picture of its own shows it, in
+`public/index.html` and from web-shell. A site with its own puts its picture
+there in its build, at the same name.
 
 A theme is compiled into the bundle, so changing one means rebuilding. Keep
 the parts' names and exports as they are in the default theme; the app imports
