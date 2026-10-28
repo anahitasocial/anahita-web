@@ -1,10 +1,5 @@
-import _ from 'lodash';
 import utils from '../utils';
 import meetsRoleLevel from './roleLevel';
-
-const {
-  isRegistered,
-} = utils.node;
 
 // Whether the viewer may create an actor — a group, today.
 //
@@ -73,17 +68,6 @@ const canFeature = (actor, viewer) => {
   return utils.node.isSuperAdmin(viewer) && Boolean(actor && actor.id);
 };
 
-const canViewCommands = (actor, exclude = []) => {
-  if (utils.node.isPerson(actor) && !isRegistered(actor)) {
-    return false;
-  }
-
-  return _.difference(
-    actor.commands,
-    exclude,
-  ).length > 0;
-};
-
 export default {
   canAdd,
   canAddEvent,
@@ -94,5 +78,4 @@ export default {
   canFollow,
   canBlock,
   canFeature,
-  canViewCommands,
 };
