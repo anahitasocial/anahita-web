@@ -92,10 +92,17 @@ const useStyles = makeStyles()((theme) => {
       display: 'block',
       width: '100%',
       height: '100%',
-      // The whole photo, with the frame showing beside one of a different
-      // shape, and nothing cut off.
-      objectFit: 'contain',
+      // Full bleed: the photo fills the frame, a little cut off at the
+      // edges where its shape is not the frame's, as in any feed of photos;
+      // empty bands beside it looked poor (the user, 2026-10-28). The whole
+      // photo is in the viewer it opens.
+      objectFit: 'cover',
       userSelect: 'none',
+    },
+    // In an article, where the frame is the photo's own shape: any other
+    // photo of the post is shown whole within it.
+    whole: {
+      objectFit: 'contain',
     },
     nav: {
       position: 'absolute',
@@ -323,7 +330,7 @@ const PhotoSlides = ({
                       index={at}
                       size={size}
                       onMeasure={natural && at === 0 && !ownRatio(medium) ? setMeasured : null}
-                      imageClassName={classes.image}
+                      imageClassName={clsx(classes.image, natural && classes.whole)}
                     />
                   </ButtonBase>}
                 {!onOpen &&
@@ -332,7 +339,7 @@ const PhotoSlides = ({
                     index={at}
                     size={size}
                     onMeasure={natural && at === 0 && !ownRatio(medium) ? setMeasured : null}
-                    imageClassName={classes.image}
+                    imageClassName={clsx(classes.image, natural && classes.whole)}
                   />}
               </div>
             );

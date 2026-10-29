@@ -457,7 +457,10 @@ phone a photo follows the finger and carries on with the flick. Where there
 is a mouse there are arrows, and the left and right keys work on the focused
 post. Photos after the first load when they are about to come into view. The
 frame takes the first photo's shape, kept between 4 by 5 and about 2 by 1,
-and a photo of another shape is shown whole inside it.
+and every photo fills it, full bleed, cut a little at the edges where its
+shape is not the frame's; the whole photo is in the lightbox it opens. In an
+article, where the frame is the first photo's own shape, a photo of another
+shape is shown whole inside it.
 
 The lightbox shows a post's images as the same kind of row, swiped the same
 way. It goes through a post's images before it goes on to the next post: the
