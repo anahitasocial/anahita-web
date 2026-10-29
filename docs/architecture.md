@@ -570,8 +570,10 @@ replies, made directly to the post.
   place in the store, so each is keyed and read when its tab is opened.
   Posts are one column beside the profile's details: About, then the
   profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`;
-  nine beside the posts, three in a row where the column is the page's width,
-  each opening its post, and See all opening the Photos tab), then
+  nine in a grid beside the posts and, where the column is the page's
+  width, the same nine as slides swiped through as a post's photos are
+  (`components/PhotoSlides.jsx`); each opens its post, and See all opens the
+  Photos tab), then
   administrators and Locations. The others fill the
   page in the same masonry as the lists of notes, articles and
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
