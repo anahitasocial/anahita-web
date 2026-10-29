@@ -172,7 +172,7 @@ history. The main paths:
 | `/websites`, `/websites/:id`, `/websites/:id/settings` | Websites, a website (a site's feed as a profile), and its settings: Info, Admins, Blocked, On your site, Danger zone. Its page is at `/@alias` like any profile |
 | `/websites/connect` | Connecting a website: its address, the proof of its domain, then its name and handle. For those the installation's `websitesFrom` allows. See [Websites](https://github.com/anahitasocial/anahita-services/blob/main/docs/websites.md) in anahita-services |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
-| `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The old `/tags/:alias` sends to `/hashtags/:alias` |
+| `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The Hashtags page has Trending and All; the hashtags one follows are the ones in one's custom feeds, read there, not listed here (`containers/hashtags`). The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |

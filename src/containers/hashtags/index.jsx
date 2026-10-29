@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 import { makeStyles } from 'tss-react/mui';
 import AppBar from '@mui/material/AppBar';
@@ -24,7 +23,6 @@ import api from '../../api';
 import i18n from '../../languages';
 
 const TRENDING = 'trending';
-const FOLLOWING = 'following';
 const ALL = 'all';
 
 const useStyles = makeStyles()({
@@ -76,17 +74,15 @@ const row = (hashtag) => {
 };
 
 // The Hashtags page (the user, 2026-10-17): what is trending, with how many
-// profiles used each and over what span of time; the ones somebody
-// follows; and all of them, A to Z, to search. Popular and Recent were
-// dropped: an all-time count that never changes, and the newest hashtags,
-// which are mostly one-offs.
+// profiles used each and over what span of time; and all of them, A to Z,
+// to search. Popular and Recent were dropped: an all-time count that never
+// changes, and the newest hashtags, which are mostly one-offs. Following
+// was dropped on 2026-10-29: hashtags one wants to read are put in a custom
+// feed, which is what feeds are for.
 const Hashtags = () => {
   const { classes } = useStyles();
   const [searchParams, setSearchParams] = useSearchParams();
-  const viewer = useSelector((state) => { return state.session.viewer; });
-  const signedIn = Boolean(viewer && viewer.id > 0);
-
-  const tabs = signedIn ? [TRENDING, FOLLOWING, ALL] : [TRENDING, ALL];
+  const tabs = [TRENDING, ALL];
   const requested = searchParams.get('sort') || TRENDING;
   const tab = tabs.includes(requested) ? requested : TRENDING;
 
@@ -177,15 +173,6 @@ const Hashtags = () => {
           }}
           renderItem={row}
           header={trendingHeader}
-        />}
-      {tab === FOLLOWING &&
-        <PagedList
-          reloadKey={FOLLOWING}
-          load={({ start, limit }) => {
-            return api.hashtags.following({ start, limit });
-          }}
-          renderItem={row}
-          empty={i18n.t('hashtags:lists.noneFollowing')}
         />}
       {tab === ALL &&
         <PagedList
