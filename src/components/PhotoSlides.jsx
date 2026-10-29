@@ -13,6 +13,7 @@ import ButtonBase from '@mui/material/ButtonBase';
 import IconButton from '@mui/material/IconButton';
 import MobileStepper from '@mui/material/MobileStepper';
 
+import AlbumIcon from '@mui/icons-material/CollectionsOutlined';
 import NextIcon from '@mui/icons-material/NavigateNext';
 import PrevIcon from '@mui/icons-material/NavigateBefore';
 
@@ -77,6 +78,7 @@ const useStyles = makeStyles()((theme) => {
       backgroundColor: 'transparent',
     },
     slide: {
+      position: 'relative',
       flex: '0 0 100%',
       minWidth: 0,
       scrollSnapAlign: 'center',
@@ -124,6 +126,21 @@ const useStyles = makeStyles()((theme) => {
     },
     next: {
       right: theme.spacing(1),
+    },
+    // A slide that is a post of several photos, where the slides are
+    // posts and not one post's photos (a profile's Photos card).
+    album: {
+      position: 'absolute',
+      top: theme.spacing(1),
+      left: theme.spacing(1),
+      // On the count's backing, so it reads on a light photo too.
+      boxSizing: 'content-box',
+      fontSize: 14,
+      padding: 4,
+      borderRadius: 12,
+      color: theme.palette.common.white,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      pointerEvents: 'none',
     },
     count: {
       position: 'absolute',
@@ -208,6 +225,7 @@ const PhotoSlides = ({
   size = 'medium',
   onOpen = null,
   natural = false,
+  albumAt = null,
 }) => {
   const { classes } = useStyles();
   // The first photo's shape as it loads, where the server does not know it.
@@ -341,6 +359,11 @@ const PhotoSlides = ({
                     onMeasure={natural && at === 0 && !ownRatio(medium) ? setMeasured : null}
                     imageClassName={clsx(classes.image, natural && classes.whole)}
                   />}
+                {albumAt && albumAt(at) &&
+                  <AlbumIcon
+                    className={classes.album}
+                    titleAccess={i18n.t('photos:slides.album')}
+                  />}
               </div>
             );
           })}
@@ -400,6 +423,11 @@ PhotoSlides.propTypes = {
   // between 4 by 5 and 2 by 1 as in a column of posts: a picture shown
   // within an article, filling its width.
   natural: PropTypes.bool,
+  // Where each slide is a post of its own (a profile's Photos card): told
+  // a slide's place, says whether its post holds several photos, which an
+  // icon on it then shows. A post's own slides need none: "2 of 4" and the
+  // dots say so.
+  albumAt: PropTypes.func,
 };
 
 // One photo of a post at a wanted size, stepping down to a smaller one if

@@ -66,6 +66,8 @@ export default {
     position: '{{index}} of {{total}}',
     next: 'Next photo',
     previous: 'Previous photo',
+    // A slide on a profile whose post holds more photos.
+    album: 'Several photos',
   },
   settings: {
     photo: {

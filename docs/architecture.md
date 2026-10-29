@@ -575,7 +575,8 @@ replies, made directly to the post.
   profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`:
   up to ten, as slides swiped through as a post's photos are,
   `components/PhotoSlides.jsx`, at every width, so no grid is left half
-  full; each opens its post, and See all opens the Photos tab), then
+  full; each opens its post, a stack icon at its top left where that post
+  holds several photos, and See all opens the Photos tab), then
   administrators and Locations. The others fill the
   page in the same masonry as the lists of notes, articles and
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post

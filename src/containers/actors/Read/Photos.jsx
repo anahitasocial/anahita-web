@@ -70,6 +70,7 @@ const ActorPhotos = ({ actor, onSeeAll }) => {
         onOpen={(at) => {
           navigate(getURL(photos[at]));
         }}
+        albumAt={(at) => { return photoFiles.hasSeveral(photos[at]); }}
       />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button onClick={onSeeAll}>
