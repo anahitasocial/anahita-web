@@ -49,20 +49,22 @@ const ActorBody = ({
   // A group's or an event's rules, for its About card (roadmap row 102).
   const rules = useActorRules(actor);
   const hasRules = Boolean(rules && rules.items && rules.items.length > 0);
-  // The profile's own lists come first: what was posted on it and, for a
-  // person, what they replied and what they reposted. Only people reply
-  // and repost, so a group or any other kind of actor has the first alone.
-  // Nor somebody on another server: their replies and reposts are not
-  // taken in from there.
+  // What a person posted and reposted, what they chose to put out, comes
+  // first; then the lists of each kind (notes, articles, photos); then
+  // their replies, and the photos and videos they are in (roadmap row
+  // 103), which are other people's posts (the user, 2026-10-28). Only
+  // people reply, repost and are tagged, so a group or any other kind of
+  // actor has Posts alone. Nor somebody on another server: their replies
+  // and reposts are not taken in from there.
   const hasOwnWords = utils.node.isPerson(actor) && !utils.federation.isRemote(actor);
-  const ownTabs = getActorFeatureTabs(actor).flatMap((tab) => {
-    if (tab !== 'feed' || !hasOwnWords) {
-      return [tab];
-    }
-    // What they posted, then the photos and videos they are in (roadmap
-    // row 103), then their replies and reposts.
-    return ['feed', 'tagged', 'replies', 'reposts'];
-  });
+  const featureList = getActorFeatureTabs(actor);
+  const ownTabs = hasOwnWords && featureList.includes('feed') ?
+    [
+      ...featureList.flatMap((tab) => { return tab === 'feed' ? ['feed', 'reposts'] : [tab]; }),
+      'replies',
+      'tagged',
+    ] :
+    featureList;
   // A group has the events it hosts, after what it has posted.
   const featureTabs = events ? [...ownTabs, 'events'] : ownTabs;
   const defaultTab = featureTabs[0] || 'feed';

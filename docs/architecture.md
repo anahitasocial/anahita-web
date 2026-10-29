@@ -559,11 +559,13 @@ replies, made directly to the post.
   from `root.owner`. A reply is owned by whoever wrote it, so its own owner
   does not say. A post shows the profile it is on the same way when that is
   not its author's own.
-- **A person's profile has four lists**: Posts, Tagged, Replies and
-  Reposts. Tagged is the photos and videos they are in, their tag approved,
+- **A person's profile has four lists**: Posts, Reposts, Replies and
+  Tagged. Tagged is the photos and videos they are in, their tag approved,
   whoever posted them (roadmap row 103). Only people reply, repost and are
-  tagged, so a group has Posts alone. They are the first tabs of
-  `containers/actors/Read/Body.jsx`. All four are the profile's feed asked
+  tagged, so a group has Posts alone. In the tabs of
+  `containers/actors/Read/Body.jsx`, Posts and Reposts come first, what the
+  person chose to put out; then Notes, Articles, Photos and the rest; then
+  Replies and Tagged. All four are the profile's feed asked
   for with a different `filter` (`containers/feed/Actor`); they share one
   place in the store, so each is keyed and read when its tab is opened.
   Posts are one column beside the profile's details; the others fill the
