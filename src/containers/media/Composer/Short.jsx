@@ -9,22 +9,26 @@ import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import BackIcon from '@mui/icons-material/ArrowBack';
+import ChevronIcon from '@mui/icons-material/ChevronRight';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import TagPeopleIcon from '@mui/icons-material/PersonAddOutlined';
-import PersonIcon from '@mui/icons-material/PersonOutlined';
 import Chip from '@mui/material/Chip';
 
 import actions from '../../../actions';
 import api from '../../../api';
 import ActorAvatar from '../../../components/ActorAvatar';
+import DetailRow from '../../../components/DetailRow';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
@@ -64,6 +68,13 @@ const { isPerson } = utils.node;
 // the middle of the screen on a desktop and filling it on a phone, where the
 // keyboard needs the room; nothing in it changes height as somebody types.
 // What is written is kept as a draft until it is posted (useDraft).
+//
+// Two steps (roadmap row 114): the post itself, its words and its photos,
+// GIF or video, with one line under them saying who can see it, its
+// language and who may reply; and its Details, each choice a row, its
+// location and who is in it among them, each with the room it needs.
+// Back returns to the words with everything kept, and Post is on both, so
+// a few words are still posted with one tap.
 //
 // `kinds` is what this profile takes, of note, photo and video. A video
 // posted from it is the app's to send (Video/SharedVideoUpload), and the
@@ -113,6 +124,17 @@ const ShortComposer = ({
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
   const [handedOver, setHandedOver] = useState(0);
+  // 'write', the post itself, or 'details', what goes with it.
+  const [step, setStep] = useState('write');
+  const onDetails = step === 'details';
+  // The dialog's height as Details opens, kept so that it does not jump
+  // from one step to the other on a wider screen.
+  const form = React.useRef(null);
+  const [held, setHeld] = useState(0);
+  const toDetails = () => {
+    setHeld(form.current ? form.current.offsetHeight : 0);
+    setStep('details');
+  };
   // The app's, so that it goes on being sent from page to page.
   const upload = useSharedVideoUpload();
 
@@ -195,6 +217,7 @@ const ShortComposer = ({
     setIncoming(null);
     setVideo(null);
     setVideoProblem('');
+    setStep('write');
     choices.posted();
     linkPreview.reset();
     onClose();
@@ -341,10 +364,12 @@ const ShortComposer = ({
     }
   }, [photoItems.length]);
 
-  // Opened: the locations offered are read again.
+  // Opened: the locations offered are read again, and it opens on the
+  // words.
   useEffect(() => {
     if (isOpen) {
       postLocations.reload();
+      setStep('write');
     }
   }, [isOpen]);
 
@@ -371,7 +396,68 @@ const ShortComposer = ({
     />
   );
 
-  const options = choices.render({ busy, withDownload: hasPhotos || Boolean(video) });
+  // What goes with the post, each a row (roadmap row 114). Who can see it
+  // and whether it goes to other servers is said under them.
+  const details = (
+    <>
+      <List disablePadding>
+        {choices.rows({ busy, withDownload: hasPhotos || Boolean(video) })}
+        {/* What is chosen in chips under each row, where each can be
+            taken off: said once, not in the row as well. */}
+        {!video && postLocations.button({
+          disabled: busy,
+          photoPoint: hasPhotos ? photoPoint : null,
+          row: true,
+        })}
+        {!video &&
+          <Box sx={{ pl: 7, pr: 2 }}>
+            {postLocations.chips({ disabled: busy, goesOut })}
+          </Box>}
+        {hasPhotos &&
+          <DetailRow
+            icon={<TagPeopleIcon />}
+            label={i18n.t('peopleTags:menu')}
+            aria-haspopup="dialog"
+            disabled={busy}
+            onClick={() => { setIsTagging(true); }}
+          />}
+        {hasPhotos && people.length > 0 &&
+          <Stack
+            direction="row"
+            spacing={1}
+            useFlexGap
+            sx={{
+              alignItems: 'center', flexWrap: 'wrap', pl: 7, pr: 2,
+            }}
+          >
+            {people.map((person) => {
+              return (
+                <Chip
+                  key={`tagged-${person.id}`}
+                  size="small"
+                  label={utils.node.getActorName(person)}
+                  onDelete={busy ? undefined : () => {
+                    setPeople(people.filter((each) => { return each.id !== person.id; }));
+                  }}
+                />
+              );
+            })}
+          </Stack>}
+      </List>
+      <Box sx={{ px: 2 }}>
+        {staysHere &&
+          <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+            {i18n.t('federation:composer.staysHere')}
+          </Typography>}
+      </Box>
+    </>
+  );
+
+  // Under the words: the choices in one line, which opens Details.
+  const summaryLine = choices.summary() +
+    (postLocations.locations.length > 0 ?
+      ` · ${postLocations.locations.map((location) => { return location.name; }).join(', ')}` :
+      '');
 
   // What is written goes along to the extended composer, and is its draft
   // from then on.
@@ -481,7 +567,6 @@ const ShortComposer = ({
           direction={choices.direction}
           goesToBluesky={goesToBluesky}
         />}
-      {!video && postLocations.chips({ disabled: busy, goesOut })}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>
           <PhotoFilesEditor
@@ -504,27 +589,6 @@ const ShortComposer = ({
             }}
           />
         </Box>}
-      {hasPhotos && people.length > 0 &&
-        <Stack
-          direction="row"
-          spacing={1}
-          useFlexGap
-          sx={{ alignItems: 'center', flexWrap: 'wrap', mt: 1 }}
-        >
-          <PersonIcon fontSize="small" color="action" />
-          {people.map((person) => {
-            return (
-              <Chip
-                key={`tagged-${person.id}`}
-                size="small"
-                label={utils.node.getActorName(person)}
-                onDelete={busy ? undefined : () => {
-                  setPeople(people.filter((each) => { return each.id !== person.id; }));
-                }}
-              />
-            );
-          })}
-        </Stack>}
       {video &&
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mt: 1 }}>
           <VideoIcon fontSize="small" color="action" />
@@ -566,10 +630,6 @@ const ShortComposer = ({
       {!canWords && text && !hasPhotos && !video &&
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {i18n.t('composer:needsPicture')}
-        </Typography>}
-      {staysHere &&
-        <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
-          {i18n.t('federation:composer.staysHere')}
         </Typography>}
       {morePictures &&
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
@@ -617,31 +677,57 @@ const ShortComposer = ({
     >
       <Box
         component="form"
+        ref={form}
         onSubmit={handleSubmit}
         noValidate
-        sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '100%',
+          minHeight: onDetails && !phone ? held : undefined,
+        }}
       >
-        {/* Close, Long content and Post at the top, where a thumb
-              finds them above the keyboard. */}
+        {/* Close, Long post and Post at the top, where a thumb finds
+              them above the keyboard; on Details, Back in place of Close. */}
         <Toolbar sx={{ gap: 1, px: 1 }}>
-          <IconButton
-            edge="start"
-            aria-label={i18n.t('composer:close')}
-            disabled={isSending}
-            onClick={() => {
-              onClose();
-            }}
-          >
-            <CloseIcon />
-          </IconButton>
+          {onDetails ?
+            <IconButton
+              edge="start"
+              aria-label={i18n.t('composer:details.back')}
+              onClick={() => {
+                setStep('write');
+              }}
+            >
+              <BackIcon />
+            </IconButton> :
+            <IconButton
+              edge="start"
+              aria-label={i18n.t('composer:close')}
+              disabled={isSending}
+              onClick={() => {
+                onClose();
+              }}
+            >
+              <CloseIcon />
+            </IconButton>}
           <Typography variant="h6" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>
-            {i18n.t('composer:newPost')}
+            {i18n.t(onDetails ? 'composer:details.title' : 'composer:newPost')}
           </Typography>
-          {expandButton(true)}
+          {!onDetails && expandButton(true)}
           {postButton(false)}
         </Toolbar>
         <Divider />
-        <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
+        {onDetails &&
+          <Box sx={{ flexGrow: 1, overflowY: 'auto', pb: 2 }}>
+            {details}
+          </Box>}
+        {/* Kept while Details is open, hidden, so that the photos being
+            sent go on being sent. */}
+        <Box
+          sx={{
+            flexGrow: 1, overflowY: 'auto', p: 2, display: onDetails ? 'none' : 'block',
+          }}
+        >
           {/* The words have the width on a phone: who is posting is the
               viewer, and their picture beside the box took a fifth of the
               screen (roadmap row 112). */}
@@ -654,40 +740,44 @@ const ShortComposer = ({
           {preparing}
           {uploadsList}
         </Box>
-        <Divider />
-        {/* At the bottom, above the keyboard and within a thumb's reach:
-              who can see it, its language and who may reply, then what can
-              be added, each in a row of its own, so that neither is cut
-              off (roadmap row 112). */}
-        <Stack
-          direction="row"
-          spacing={0.5}
-          sx={{
-            alignItems: 'center', px: 1, pt: 1, overflowX: 'auto',
-          }}
-        >
-          {options}
-        </Stack>
-        <Stack
-          direction="row"
-          spacing={0.5}
-          sx={{
-            alignItems: 'center', px: 1, pb: 1, overflowX: 'auto',
-          }}
-        >
-          {attachButtons}
-          {!video && !busy && postLocations.button({ photoPoint: hasPhotos ? photoPoint : null })}
-          {hasPhotos && !busy &&
-            <Tooltip title={i18n.t('peopleTags:menu')}>
-              <IconButton
-                size="small"
-                aria-label={i18n.t('peopleTags:menu')}
-                onClick={() => { setIsTagging(true); }}
+        {!onDetails &&
+          <>
+            <Divider />
+            {/* At the bottom, above the keyboard and within a thumb's
+                reach: who can see it, its language and who may reply in one
+                line, which opens Details; then what can be added. */}
+            <ListItemButton
+              onClick={toDetails}
+              disabled={busy}
+              aria-label={`${i18n.t('composer:details.open')}: ${summaryLine}`}
+              // Its own height, not the column's: a list button grows.
+              sx={{
+                flexGrow: 0, px: 2, py: 1, gap: 1,
+              }}
+            >
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                noWrap
+                sx={{ flexGrow: 1, minWidth: 0 }}
               >
-                <TagPeopleIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>}
-        </Stack>
+                {summaryLine}
+              </Typography>
+              <Typography variant="body2" sx={{ flexShrink: 0 }}>
+                {i18n.t('composer:details.open')}
+              </Typography>
+              <ChevronIcon fontSize="small" color="action" />
+            </ListItemButton>
+            <Stack
+              direction="row"
+              spacing={0.5}
+              sx={{
+                alignItems: 'center', px: 1, pb: 1, overflowX: 'auto',
+              }}
+            >
+              {attachButtons}
+            </Stack>
+          </>}
       </Box>
       {rules.dialog}
       <TagPeoplePicker

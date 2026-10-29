@@ -121,4 +121,22 @@ export default {
     addTitle: 'Add location',
     goesOut: 'Goes with the post to other servers on the fediverse.',
   },
+  // The post's second step on a phone and in the dialog: who can see it,
+  // its language, who may reply, its location and who is in it, each a row
+  // (roadmap row 114). replyLine is how the line under the words says who
+  // may reply.
+  details: {
+    title: 'Details',
+    open: 'Details',
+    back: 'Back',
+    audience: 'Who can see it',
+    language: 'Language',
+    replies: 'Who can reply',
+    location: 'Location',
+    replyLine: {
+      anyone: 'Anyone can reply',
+      nobody: 'No replies',
+      some: 'Some can reply',
+    },
+  },
 };

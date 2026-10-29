@@ -8,6 +8,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import LanguageIcon from '@mui/icons-material/Translate';
 
+import DetailRow from './DetailRow';
 import i18n from '../languages';
 import postLanguage from '../utils/postLanguage';
 
@@ -25,6 +26,7 @@ const LanguageButton = ({
   value,
   onChange,
   disabled = false,
+  row = false,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -33,8 +35,23 @@ const LanguageButton = ({
     return postLanguage.nameOf(code, uiLanguage);
   };
 
+  const open = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
   return (
     <>
+      {row &&
+        <DetailRow
+          icon={<LanguageIcon />}
+          label={i18n.t('composer:details.language')}
+          value={nameOf(value)}
+          aria-haspopup="menu"
+          aria-expanded={anchorEl ? 'true' : undefined}
+          disabled={disabled}
+          onClick={open}
+        />}
+      {!row &&
       <Button
         size="small"
         color="inherit"
@@ -44,13 +61,11 @@ const LanguageButton = ({
         aria-label={i18n.t('media:language.label', { name: nameOf(value) })}
         title={i18n.t('media:language.label', { name: nameOf(value) })}
         disabled={disabled}
-        onClick={(event) => {
-          setAnchorEl(event.currentTarget);
-        }}
+        onClick={open}
         sx={{ flexShrink: 0, whiteSpace: 'nowrap', minWidth: 0 }}
       >
         {value.toUpperCase()}
-      </Button>
+      </Button>}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -90,6 +105,8 @@ LanguageButton.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  // A row of a post's Details page, with the language's name.
+  row: PropTypes.bool,
 };
 
 export default LanguageButton;

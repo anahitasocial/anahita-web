@@ -118,14 +118,16 @@ const usePostLocations = (actorId) => {
     ids,
     tag,
     // `photoPoint`, where a photo of the post was taken, is offered for
-    // suggesting locations near it (part 5).
-    button: ({ disabled = false, photoPoint = null } = {}) => {
+    // suggesting locations near it (part 5). `row`: the Location row of a
+    // post's Details page (roadmap row 114).
+    button: ({ disabled = false, photoPoint = null, row = false } = {}) => {
       return (
         <LocationPicker
           chosen={locations}
           onPick={add}
           disabled={disabled}
           photoPoint={photoPoint}
+          row={row}
         />
       );
     },

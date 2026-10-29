@@ -19,6 +19,7 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import AddIcon from '@mui/icons-material/Add';
+import BackIcon from '@mui/icons-material/ArrowBack';
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
 import LocationIcon from '@mui/icons-material/LocationOnOutlined';
@@ -26,6 +27,7 @@ import NearMeIcon from '@mui/icons-material/MyLocation';
 import PhotoIcon from '@mui/icons-material/PhotoOutlined';
 
 import AddLocation from '../../locations/Add/Add';
+import DetailRow from '../../../components/DetailRow';
 import api from '../../../api';
 import permissions from '../../../permissions';
 import i18n from '../../../languages';
@@ -50,6 +52,7 @@ const LocationPicker = ({
   onPick,
   disabled = false,
   photoPoint = null,
+  row = false,
 }) => {
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const canAdd = useSelector((state) => {
@@ -199,8 +202,132 @@ const LocationPicker = ({
       i18n.t('locations:add.noneNearby');
   }
 
+  const panel = (
+    <>
+      <Box sx={{ p: 2, pb: 1 }}>
+        {full ?
+          <Typography variant="body2" color="textSecondary">
+            {i18n.t('locations:add.full', { count: max })}
+          </Typography> :
+          <>
+            <TextField
+              value={q}
+              onChange={(event) => {
+                setQ(event.target.value);
+              }}
+              onKeyDown={onKeyDown}
+              placeholder={i18n.t('locations:add.search')}
+              size="small"
+              fullWidth
+              autoFocus
+              slotProps={{
+                htmlInput: {
+                  'aria-label': i18n.t('locations:add.search'),
+                },
+              }}
+            />
+            <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 1 }}>
+              <Chip
+                icon={<NearMeIcon />}
+                label={i18n.t('composer:locations.nearMe')}
+                size="small"
+                color={nearFrom === 'me' ? 'primary' : 'default'}
+                variant={nearFrom === 'me' ? 'filled' : 'outlined'}
+                onClick={askNear}
+                disabled={asking}
+              />
+              {nearFrom === 'photo' &&
+                <Chip
+                  icon={<PhotoIcon />}
+                  label={i18n.t('composer:locations.nearPhoto')}
+                  size="small"
+                  color="primary"
+                  onDelete={() => {
+                    setNear(null);
+                    setNearFrom('');
+                  }}
+                />}
+            </Stack>
+          </>}
+      </Box>
+      {!full &&
+        <>
+          {isFetching && <LinearProgress />}
+          {hint &&
+            <Typography variant="body2" color="textSecondary" sx={{ px: 2, pb: 1 }}>
+              {hint}
+            </Typography>}
+          {photoPoint && !nearFrom &&
+            <List dense sx={{ pt: 0 }}>
+              <ListItemButton
+                onClick={() => {
+                  setNearFrom('photo');
+                  setNear(photoPoint);
+                }}
+              >
+                <ListItemIcon sx={{ minWidth: 40 }}>
+                  <PhotoIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary={i18n.t('composer:locations.photoSuggest')} />
+              </ListItemButton>
+            </List>}
+          {rows > 0 &&
+            <List dense sx={{ pt: 0 }}>
+              {results.map((location, index) => {
+                const already = isChosen(location);
+                return (
+                  <ListItemButton
+                    key={location.id}
+                    selected={index === active}
+                    disabled={already}
+                    onClick={() => {
+                      pick(location);
+                    }}
+                  >
+                    <ListItemIcon sx={{ minWidth: 40 }}>
+                      {already ? <CheckIcon fontSize="small" /> : <LocationIcon fontSize="small" />}
+                    </ListItemIcon>
+                    <ListItemText
+                      primary={location.name}
+                      secondary={location.city || null}
+                    />
+                  </ListItemButton>
+                );
+              })}
+              {offerAdd &&
+                <ListItemButton
+                  selected={active === results.length}
+                  onClick={() => {
+                    setAdding(true);
+                    setOpen(false);
+                  }}
+                >
+                  <ListItemIcon sx={{ minWidth: 40 }}>
+                    <AddIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={i18n.t('composer:locations.addNew', { name: keyword })} />
+                </ListItemButton>}
+            </List>}
+        </>}
+    </>
+  );
+
   return (
     <>
+      {row &&
+        <DetailRow
+          ref={buttonRef}
+          icon={<LocationIcon />}
+          // What is chosen is in chips under the row, where each can be
+          // taken off.
+          label={i18n.t('composer:details.location')}
+          aria-haspopup="dialog"
+          disabled={disabled}
+          onClick={() => {
+            setOpen(true);
+          }}
+        />}
+      {!row &&
       <Tooltip title={i18n.t('composer:locations.add')}>
         <span>
           <IconButton
@@ -214,125 +341,48 @@ const LocationPicker = ({
             <LocationIcon />
           </IconButton>
         </span>
-      </Tooltip>
-      <Popover
-        open={open}
-        anchorEl={buttonRef.current}
-        onClose={close}
-        anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-        transformOrigin={{ vertical: 'bottom', horizontal: 'left' }}
-        slotProps={{
-          paper: {
-            sx: { width: phone ? 'calc(100vw - 32px)' : 360, maxWidth: 360 },
-          },
-        }}
-      >
-        <Box sx={{ p: 2, pb: 1 }}>
-          {full ?
-            <Typography variant="body2" color="textSecondary">
-              {i18n.t('locations:add.full', { count: max })}
-            </Typography> :
-            <>
-              <TextField
-                value={q}
-                onChange={(event) => {
-                  setQ(event.target.value);
-                }}
-                onKeyDown={onKeyDown}
-                placeholder={i18n.t('locations:add.search')}
-                size="small"
-                fullWidth
-                autoFocus
-                slotProps={{
-                  htmlInput: {
-                    'aria-label': i18n.t('locations:add.search'),
-                  },
-                }}
-              />
-              <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, mt: 1 }}>
-                <Chip
-                  icon={<NearMeIcon />}
-                  label={i18n.t('composer:locations.nearMe')}
-                  size="small"
-                  color={nearFrom === 'me' ? 'primary' : 'default'}
-                  variant={nearFrom === 'me' ? 'filled' : 'outlined'}
-                  onClick={askNear}
-                  disabled={asking}
-                />
-                {nearFrom === 'photo' &&
-                  <Chip
-                    icon={<PhotoIcon />}
-                    label={i18n.t('composer:locations.nearPhoto')}
-                    size="small"
-                    color="primary"
-                    onDelete={() => {
-                      setNear(null);
-                      setNearFrom('');
-                    }}
-                  />}
-              </Stack>
-            </>}
-        </Box>
-        {!full &&
-          <>
-            {isFetching && <LinearProgress />}
-            {hint &&
-              <Typography variant="body2" color="textSecondary" sx={{ px: 2, pb: 1 }}>
-                {hint}
-              </Typography>}
-            {photoPoint && !nearFrom &&
-              <List dense sx={{ pt: 0 }}>
-                <ListItemButton
-                  onClick={() => {
-                    setNearFrom('photo');
-                    setNear(photoPoint);
-                  }}
-                >
-                  <ListItemIcon sx={{ minWidth: 40 }}>
-                    <PhotoIcon fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary={i18n.t('composer:locations.photoSuggest')} />
-                </ListItemButton>
-              </List>}
-            {rows > 0 &&
-              <List dense sx={{ pt: 0 }}>
-                {results.map((location, index) => {
-                  const already = isChosen(location);
-                  return (
-                    <ListItemButton
-                      key={location.id}
-                      selected={index === active}
-                      disabled={already}
-                      onClick={() => {
-                        pick(location);
-                      }}
-                    >
-                      <ListItemIcon sx={{ minWidth: 40 }}>
-                        {already ? <CheckIcon fontSize="small" /> : <LocationIcon fontSize="small" />}
-                      </ListItemIcon>
-                      <ListItemText
-                        primary={location.name}
-                        secondary={location.city || null}
-                      />
-                    </ListItemButton>
-                  );
-                })}
-                {offerAdd &&
-                  <ListItemButton
-                    selected={active === results.length}
-                    onClick={() => {
-                      setAdding(true);
-                      setOpen(false);
-                    }}
-                  >
-                    <ListItemIcon sx={{ minWidth: 40 }}>
-                      <AddIcon fontSize="small" />
-                    </ListItemIcon>
-                    <ListItemText primary={i18n.t('composer:locations.addNew', { name: keyword })} />
-                  </ListItemButton>}
-              </List>}
-          </>}
-      </Popover>
+      </Tooltip>}
+      {/* On a phone, from the Details page, a page of its own, with the
+          whole screen for the search and its results (roadmap row 114);
+          back returns to Details. Elsewhere, a popover by its button. */}
+      {row && phone ?
+        <Dialog
+          open={open}
+          onClose={close}
+          fullScreen
+          aria-labelledby="composer-location-pick-title"
+        >
+          <DialogTitle
+            id="composer-location-pick-title"
+            sx={{
+              display: 'flex', alignItems: 'center', gap: 1, px: 1,
+            }}
+          >
+            <IconButton onClick={close} aria-label={i18n.t('composer:details.back')}>
+              <BackIcon />
+            </IconButton>
+            {i18n.t('composer:locations.add')}
+          </DialogTitle>
+          {panel}
+        </Dialog> :
+        <Popover
+          open={open}
+          anchorEl={buttonRef.current}
+          onClose={close}
+          anchorOrigin={row ?
+            { vertical: 'bottom', horizontal: 'left' } :
+            { vertical: 'top', horizontal: 'left' }}
+          transformOrigin={row ?
+            { vertical: 'top', horizontal: 'left' } :
+            { vertical: 'bottom', horizontal: 'left' }}
+          slotProps={{
+            paper: {
+              sx: { width: phone ? 'calc(100vw - 32px)' : 360, maxWidth: 360 },
+            },
+          }}
+        >
+          {panel}
+        </Popover>}
       {/* A new location, with the name searched for; it comes back here
           to be chosen. The same form as the Add locations dialog. */}
       <Dialog
@@ -393,6 +443,8 @@ LocationPicker.propTypes = {
     latitude: PropTypes.number,
     longitude: PropTypes.number,
   }),
+  // A row of a post's Details page, in place of the pin.
+  row: PropTypes.bool,
 };
 
 export default LocationPicker;

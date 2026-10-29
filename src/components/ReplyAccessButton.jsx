@@ -5,6 +5,7 @@ import Button from '@mui/material/Button';
 import ReplyIcon from '@mui/icons-material/ForumOutlined';
 
 import ReplyAccessDialog from './ReplyAccessDialog';
+import DetailRow from './DetailRow';
 import i18n from '../languages';
 import replyAccess from '../utils/replyAccess';
 
@@ -20,6 +21,7 @@ const ReplyAccessButton = ({
   defaultQuotePolicy = '',
   onQuotePolicyChange = null,
   disabled = false,
+  row = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -29,6 +31,18 @@ const ReplyAccessButton = ({
 
   return (
     <>
+      {row &&
+        <DetailRow
+          icon={<ReplyIcon />}
+          label={i18n.t('composer:details.replies')}
+          value={i18n.t(replyAccess.labelKey(value))}
+          aria-haspopup="dialog"
+          disabled={disabled}
+          onClick={() => {
+            setIsOpen(true);
+          }}
+        />}
+      {!row &&
       <Button
         size="small"
         color="inherit"
@@ -43,7 +57,7 @@ const ReplyAccessButton = ({
         sx={{ flexShrink: 0, whiteSpace: 'nowrap', minWidth: 0 }}
       >
         {i18n.t(replyAccess.labelKey(value))}
-      </Button>
+      </Button>}
       <ReplyAccessDialog
         open={isOpen}
         value={value}
@@ -72,6 +86,8 @@ ReplyAccessButton.propTypes = {
   defaultQuotePolicy: PropTypes.string,
   onQuotePolicyChange: PropTypes.func,
   disabled: PropTypes.bool,
+  // A row of a post's Details page, in place of the small button.
+  row: PropTypes.bool,
 };
 
 export default ReplyAccessButton;

@@ -94,4 +94,22 @@ export default {
     addTitle: 'Ajouter un lieu',
     goesOut: 'Part avec la publication vers les autres serveurs du fédivers.',
   },
+  // The post's second step on a phone and in the dialog: who can see it,
+  // its language, who may reply, its location and who is in it, each a row
+  // (roadmap row 114). replyLine is how the line under the words says who
+  // may reply.
+  details: {
+    title: 'Détails',
+    open: 'Détails',
+    back: 'Retour',
+    audience: 'Qui peut la voir',
+    language: 'Langue',
+    replies: 'Qui peut répondre',
+    location: 'Lieu',
+    replyLine: {
+      anyone: 'Tout le monde peut répondre',
+      nobody: 'Pas de réponses',
+      some: 'Réponses limitées',
+    },
+  },
 };

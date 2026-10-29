@@ -15,6 +15,7 @@ import MutualsIcon from '@mui/icons-material/SyncAlt';
 import AdminsIcon from '@mui/icons-material/SupervisorAccount';
 import MyselfIcon from '@mui/icons-material/Lock';
 
+import DetailRow from './DetailRow';
 import audience from '../utils/audience';
 import i18n from '../languages';
 import ActorType from '../proptypes/Actor';
@@ -53,6 +54,7 @@ const AudienceButton = ({
   value,
   onChange,
   disabled = false,
+  row = false,
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -77,8 +79,23 @@ const AudienceButton = ({
 
   const Icon = ICONS[value] || PublicIcon;
 
+  const open = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
   return (
     <>
+      {row &&
+        <DetailRow
+          icon={<Icon />}
+          label={i18n.t('composer:details.audience')}
+          value={nameOf(value)}
+          aria-haspopup="menu"
+          aria-expanded={anchorEl ? 'true' : undefined}
+          disabled={disabled}
+          onClick={open}
+        />}
+      {!row &&
       <Button
         size="small"
         color="inherit"
@@ -88,14 +105,12 @@ const AudienceButton = ({
         aria-label={i18n.t('access:audience.label', { name: nameOf(value) })}
         title={describe(value)}
         disabled={disabled}
-        onClick={(event) => {
-          setAnchorEl(event.currentTarget);
-        }}
+        onClick={open}
         // Stays one line beside a full-width Post button.
         sx={{ flexShrink: 0, whiteSpace: 'nowrap', textTransform: 'none' }}
       >
         {nameOf(value)}
-      </Button>
+      </Button>}
       <Menu
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
@@ -149,6 +164,8 @@ AudienceButton.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  // A row of a post's Details page, in place of the small button.
+  row: PropTypes.bool,
 };
 
 export default AudienceButton;

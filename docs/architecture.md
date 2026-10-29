@@ -600,7 +600,18 @@ a profile the viewer may post to, and nowhere else. The page says where it
 posts while it is open (`reducers/composeTarget.js`): from home to the
 viewer's own profile, from a profile to that one. It opens the short
 composer, "New post" (`Composer/Short.jsx`), whose Long post opens the
-long one (`Composer/Long.jsx`); a profile that takes only long writing opens
+long one (`Composer/Long.jsx`). The short composer is two steps in one
+dialog (roadmap row 114): the post itself, its words and its photos, GIF or
+video, with one line under them saying who can see it, its language and
+who may reply ("Public · English · Anyone can reply"); and **Details**,
+opened from that line, where each choice is a row
+(`components/DetailRow.jsx`, the `row` form of the audience, language,
+reply and download buttons): who can see it, the language, who can reply,
+whether photos may be downloaded, the location and who is tagged, what is
+chosen in chips under its row. Back returns to the words with everything
+kept, the words step staying mounted so that photos go on being sent, and
+Post is on both steps, so that a few words are still one tap; the dialog
+keeps its height from one step to the other. A profile that takes only long writing opens
 that at once. A video posted from it is the app's to send, not the
 composer's (`Composer/Video/SharedVideoUpload.jsx`, round the whole app in
 `containers/Root.jsx`), so it goes on from page to page and the composer
@@ -791,20 +802,22 @@ who is asked and who cannot be. People are found by name or by handle.
 
 ### Locations of a new post
 
-The pin among a composer's small buttons, **Add location**, in the short box
-and the extended composer, tags a new post with up to five locations
+**Location** on the short composer's Details, and the pin among the
+extended composer's small buttons, **Add location**, tag a new post with up to five locations
 (`containers/media/Composer/usePostLocations.jsx`, `LocationPicker.jsx`; roadmap
 row 82, part 3). Not replies, which belong to their thread, and not a video,
 whose post is made only once its upload is ready.
 
-- **Choosing:** a popover with a search as one types, the arrow keys and
+- **Choosing:** a popover with a search as one types (on a phone, from
+  Details, a page of its own with the whole screen, and back to Details), the arrow keys and
   Enter, and a **Near me** chip that asks the browser for one position only
   when it is tapped, to put the nearest first; it is used for that search and
   kept nowhere.
 - **A new one:** the last line, **Add "…" as a new location**, for those who
   may add one (`LOCATIONS_FROM`), opens the Add locations form with the name
   filled in, and what it makes is chosen.
-- **Shown** as chips under the text, removed with their ✕.
+- **Shown** as chips, under the Location row on Details and under the text
+  in the extended composer, removed with their ✕.
 - **From a photo's position:** when a photo with a GPS position is picked
   for a post, the browser reads it (`utils/photoPosition.js`, with
   `exifr`, loaded only then, reading only the start of the file), and the

@@ -21,6 +21,7 @@ const ComposerAudience = ({
   value,
   onChange,
   disabled = false,
+  row = false,
 }) => {
   return (
     <AudienceButton
@@ -30,6 +31,7 @@ const ComposerAudience = ({
       value={value}
       onChange={onChange}
       disabled={disabled}
+      row={row}
     />
   );
 };
@@ -40,6 +42,7 @@ ComposerAudience.propTypes = {
   value: PropTypes.string.isRequired,
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool,
+  row: PropTypes.bool,
 };
 
 export default ComposerAudience;

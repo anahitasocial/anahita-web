@@ -6,6 +6,7 @@ import ReplyAccessButton from '../../../components/ReplyAccessButton';
 import ComposerAudience from './Audience';
 
 import audience from '../../../utils/audience';
+import i18n from '../../../languages';
 import postLanguage from '../../../utils/postLanguage';
 import replyAccess from '../../../utils/replyAccess';
 
@@ -59,6 +60,48 @@ const usePostChoices = (actor, viewer) => {
       audience.remember(actor, viewer, access);
       setWhoReplies(replyAccess.ANYONE);
       setWhoQuotes('');
+    },
+    // In one line, under the words of the short composer, where its
+    // Details open: "Public · English · Anyone can reply" (roadmap row 114).
+    summary: () => {
+      const reply = replyAccess.labelKey(whoReplies).split('.').pop();
+      return [
+        i18n.t(`access:audience.names.${access}`),
+        postLanguage.nameOf(language, i18n.language || 'en'),
+        i18n.t(`composer:details.replyLine.${reply}`),
+      ].join(' · ');
+    },
+    // The same choices as rows, one beneath another, on the Details page.
+    rows: ({ busy = false, withDownload = false } = {}) => {
+      return (
+        <>
+          <ComposerAudience
+            actor={actor}
+            viewer={viewer}
+            value={access}
+            onChange={setAccess}
+            disabled={busy}
+            row
+          />
+          <LanguageButton value={language} onChange={setLanguage} disabled={busy} row />
+          <ReplyAccessButton
+            value={whoReplies}
+            onChange={setWhoReplies}
+            quotePolicy={whoQuotes}
+            defaultQuotePolicy={viewer.quotePolicy}
+            onQuotePolicyChange={setWhoQuotes}
+            disabled={busy}
+            row
+          />
+          {withDownload &&
+            <DownloadOptionButton
+              value={allowDownload}
+              onChange={setAllowDownload}
+              disabled={busy}
+              row
+            />}
+        </>
+      );
     },
     // The buttons, beside each other.
     render: ({ busy = false, withDownload = false } = {}) => {
