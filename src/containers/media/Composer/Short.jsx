@@ -35,7 +35,7 @@ import useLinkPreview from './useLinkPreview';
 import useTextareaHashtags from './useHashtagSuggestions';
 import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import useOnFediverse, { useOnBluesky } from './useOnFediverse';
-import useVideoUpload from './Video/useVideoUpload';
+import useVideoUpload, { progressOf } from './Video/useVideoUpload';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
 import photoPosition from '../../../utils/photoPosition';
@@ -102,6 +102,8 @@ const ShortComposer = ({
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
+  // Photos picked with the photo button, handed to the editor to take.
+  const [incoming, setIncoming] = useState(null);
   // Who is in the photos, tagged once the post is made (roadmap row 103).
   const [people, setPeople] = useState([]);
   const [isTagging, setIsTagging] = useState(false);
@@ -198,6 +200,7 @@ const ShortComposer = ({
     setMoreParts([]);
     setPhotoPoint(null);
     setIsAddingPhotos(false);
+    setIncoming(null);
     setVideo(null);
     setVideoProblem('');
     choices.posted();
@@ -335,6 +338,17 @@ const ShortComposer = ({
     }
   };
 
+  // The last photo taken out: the place for them closes, as it opened.
+  const hadPhotos = React.useRef(false);
+  useEffect(() => {
+    if (photoItems.length > 0) {
+      hadPhotos.current = true;
+    } else if (hadPhotos.current) {
+      hadPhotos.current = false;
+      setIsAddingPhotos(false);
+    }
+  }, [photoItems.length]);
+
   // Opened: the locations offered are read again.
   useEffect(() => {
     if (isOpen) {
@@ -355,17 +369,17 @@ const ShortComposer = ({
     i18n.t('notes:composer.bodyPlaceholder');
 
   // Photos, or a GIF or a video: one or the other, as in a reply. Photo
-  // opens the place to drop them and, while it is empty, closes it again. Hidden
-  // while posting rather than disabled: a tooltip on a disabled button is
-  // never seen.
+  // opens the system's picker at once, and what is picked shows straight
+  // away, being sent. Hidden while posting rather than disabled: a tooltip
+  // on a disabled button is never seen.
   const attachButtons = (
     <AttachButtons
       phone={phone}
       photos={canPhotos && !busy && !video && !hasPhotos}
       video={canVideo && !busy && !hasPhotos && !video}
-      photosOpen={isAddingPhotos}
-      onPhotos={() => {
-        setIsAddingPhotos(!isAddingPhotos);
+      onPhotos={(files) => {
+        setIsAddingPhotos(true);
+        setIncoming({ files });
       }}
       onVideo={takeVideo}
     />
@@ -382,9 +396,8 @@ const ShortComposer = ({
   };
 
   // Hidden rather than disabled while posting: a tooltip on a disabled
-  // button is never seen. The icon alone beside the closed box and on a
-  // phone, named Long content; with those words beside it in the open box
-  // on a desktop.
+  // button is never seen. Its words, Long post, beside the icon on a phone
+  // too: the icon alone said nothing of where it led.
   const expandButton = (withWords) => {
     if (!onExpand || busy) {
       return null;
@@ -444,7 +457,9 @@ const ShortComposer = ({
         disabled={busy}
         variant="standard"
         multiline
-        minRows={6}
+        // Room to write in, until a photo or a video is the post's: then
+        // two lines, so that it sits close under the words.
+        minRows={hasPhotos || video ? 2 : 6}
         fullWidth
         inputRef={hashtags.inputRef}
         slotProps={{
@@ -491,6 +506,7 @@ const ShortComposer = ({
             disabled={busy}
             videoMimetypes={canVideo ? videos.TYPES : []}
             onVideo={takeVideo}
+            incoming={incoming}
             onPicked={(files) => {
               if (!photoPoint) {
                 photoPosition.read(files).then((point) => {
@@ -501,15 +517,6 @@ const ShortComposer = ({
               }
             }}
           />
-          {!hasPhotos &&
-            <Button
-              size="small"
-              onClick={() => {
-                setIsAddingPhotos(false);
-              }}
-            >
-              {i18n.t('replies:attachments.noPhotos')}
-            </Button>}
         </Box>}
       {hasPhotos && people.length > 0 &&
         <Stack
@@ -557,6 +564,9 @@ const ShortComposer = ({
             aria-label={i18n.t('videos:upload.uploading', { percent: upload.percent })}
           />
           <Typography variant="body2" color="textSecondary">
+            {progressOf(upload)}
+          </Typography>
+          <Typography variant="caption" color="textSecondary">
             {i18n.t('videos:upload.keepOpen')}
           </Typography>
           <Button onClick={upload.cancel} size="small" sx={{ alignSelf: 'flex-start' }}>
@@ -639,13 +649,16 @@ const ShortComposer = ({
           <Typography variant="h6" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>
             {i18n.t('composer:newPost')}
           </Typography>
-          {expandButton(!phone)}
+          {expandButton(true)}
           {postButton(false)}
         </Toolbar>
         <Divider />
         <Box sx={{ flexGrow: 1, overflowY: 'auto', p: 2 }}>
+          {/* The words have the width on a phone: who is posting is the
+              viewer, and their picture beside the box took a fifth of the
+              screen (roadmap row 112). */}
           <Stack direction="row" spacing={2}>
-            <ActorAvatar actor={viewer} />
+            {!phone && <ActorAvatar actor={viewer} />}
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
               {content}
             </Box>
@@ -654,13 +667,24 @@ const ShortComposer = ({
           {uploadsList}
         </Box>
         <Divider />
-        {/* Attachments and choices in one row at the bottom, within a
-              thumb's reach; it scrolls sideways rather than wrapping. */}
+        {/* At the bottom, above the keyboard and within a thumb's reach:
+              who can see it, its language and who may reply, then what can
+              be added, each in a row of its own, so that neither is cut
+              off (roadmap row 112). */}
         <Stack
           direction="row"
           spacing={0.5}
           sx={{
-            alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
+            alignItems: 'center', px: 1, pt: 1, overflowX: 'auto',
+          }}
+        >
+          {options}
+        </Stack>
+        <Stack
+          direction="row"
+          spacing={0.5}
+          sx={{
+            alignItems: 'center', px: 1, pb: 1, overflowX: 'auto',
           }}
         >
           {attachButtons}
@@ -675,7 +699,6 @@ const ShortComposer = ({
                 <TagPeopleIcon fontSize="small" />
               </IconButton>
             </Tooltip>}
-          {options}
         </Stack>
       </Box>
       {rules.dialog}

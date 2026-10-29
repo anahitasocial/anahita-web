@@ -9,7 +9,6 @@ export default {
     addPhotos: 'Agregar imágenes',
     addVideo: 'Agregar un GIF o un video',
     removeVideo: 'Quitar el video',
-    noPhotos: 'Sin imágenes',
     preparing: 'Preparando tu respuesta. Aparecerá en el hilo cuando esté lista, y puedes salir de esta página.',
   },
   count_one: '{{count}} respuesta',

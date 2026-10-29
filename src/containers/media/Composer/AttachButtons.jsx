@@ -10,6 +10,7 @@ import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import videos from '../../../utils/videos';
 import i18n from '../../../languages';
+import { PHOTO_TYPES } from '../../../utils/preparePhoto';
 
 // A GIF is played as a video: an animation, silent, on a loop. Each button
 // opens the system's file window on its own kind of file.
@@ -24,10 +25,10 @@ const AttachButtons = ({
   phone,
   photos = false,
   video = false,
-  photosOpen = false,
   onPhotos,
   onVideo,
 }) => {
+  const photoPicker = useRef(null);
   const gifPicker = useRef(null);
   const videoPicker = useRef(null);
 
@@ -62,6 +63,17 @@ const AttachButtons = ({
     );
   };
 
+  // Photos open the system's picker at once, for several: one tap, not a
+  // place to drop them first (roadmap row 112).
+  const choosePhotos = (event) => {
+    const chosen = Array.from((event.target.files) || []);
+    // eslint-disable-next-line no-param-reassign
+    event.target.value = '';
+    if (chosen.length > 0) {
+      onPhotos(chosen);
+    }
+  };
+
   const choose = (event) => {
     const chosen = event.target.files && event.target.files[0];
     // The same file can be chosen again after it is taken off.
@@ -79,8 +91,9 @@ const AttachButtons = ({
           i18n.t('composer:photo'),
           i18n.t('replies:attachments.addPhotos'),
           <PhotoIcon />,
-          onPhotos,
-          photosOpen,
+          () => {
+            photoPicker.current.click();
+          },
         )}
       {video &&
         button(
@@ -100,6 +113,14 @@ const AttachButtons = ({
             videoPicker.current.click();
           },
         )}
+      <input
+        ref={photoPicker}
+        type="file"
+        accept={PHOTO_TYPES.join(',')}
+        multiple
+        hidden
+        onChange={choosePhotos}
+      />
       <input ref={gifPicker} type="file" accept={ANIMATIONS} hidden onChange={choose} />
       <input ref={videoPicker} type="file" accept={MOVIES} hidden onChange={choose} />
     </>
@@ -110,8 +131,7 @@ AttachButtons.propTypes = {
   phone: PropTypes.bool.isRequired,
   photos: PropTypes.bool,
   video: PropTypes.bool,
-  // Whether the place to drop photos is open, which Photo then closes.
-  photosOpen: PropTypes.bool,
+  // Called with the photos picked.
   onPhotos: PropTypes.func.isRequired,
   // Called with the file picked, a GIF or a video.
   onVideo: PropTypes.func.isRequired,

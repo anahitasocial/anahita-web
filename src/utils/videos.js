@@ -112,6 +112,17 @@ const percent = (sent, size) => {
   return Math.max(0, Math.min(100, Math.round((sent / size) * 100)));
 };
 
+// About how many minutes are left of an upload, from how long the bytes
+// sent so far took; null until there is enough to tell by, the first few
+// seconds and the first one in a hundred.
+const minutesLeft = (sent, size, elapsed) => {
+  if (!(size > 0) || !(sent > 0) || elapsed < 3000 || sent / size < 0.01) {
+    return null;
+  }
+  const seconds = ((size - sent) * elapsed) / sent / 1000;
+  return Math.max(1, Math.ceil(seconds / 60));
+};
+
 // A video's sizes, largest first.
 const filesOf = (video) => {
   const files = (video && Array.isArray(video.files)) ? video.files : [];
@@ -229,6 +240,7 @@ export default {
   problem,
   partsOf,
   percent,
+  minutesLeft,
   filesOf,
   isSlow,
   pick,

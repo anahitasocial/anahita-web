@@ -9,7 +9,6 @@ export default {
     addPhotos: 'Add pictures',
     addVideo: 'Add a GIF or a video',
     removeVideo: 'Remove the video',
-    noPhotos: 'No pictures',
     preparing: 'Preparing your reply. It will be in the thread when it is ready, and you can leave this page.',
   },
   count_one: '{{count}} reply',

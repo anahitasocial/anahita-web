@@ -43,43 +43,52 @@ What was found, on the development stack at 390 by 844 and on banu.io:
 
 ## Decisions
 
-Proposed 2026-10-28; to be settled with the user before the layout is built.
+Proposed 2026-10-28, and left by the user to be designed ("your inner Jony
+Ive"); as built:
 
-- **The text has the width.** No avatar column on a phone; who is posting is
-  in the header, as "New post" beside a small picture, or nowhere.
-- **Attachments in one row above the keyboard:** photo, GIF, video and
-  location, each an icon with its name for screen readers. Kept above the
-  keyboard by the browser's own measure of what is left of the screen
-  (`window.visualViewport`).
-- **The settings in one quiet line above them,** "Public · English · Anyone
-  can reply", which opens a sheet with the three.
-- **One tap to the picker.** The panel goes; what is chosen shows at once as
-  thumbnails, from the phone itself, before anything is sent.
-- **Uploading begins when files are chosen,** while the post is written: each
-  thumbnail with its own progress, an ✕ to take it out, and "Try again" when
-  one fails. Post waits only for what is still on its way, and says so.
-- **Photos made smaller on the phone** before they are sent, to the largest
-  size the site keeps; a video goes as it is.
-- **A video says how far it has got and the time left,** and keeps the screen
-  awake while it is sent (Screen Wake Lock), so that a phone set down does
-  not stop it.
-- **The long composer is "Article",** its drafts behind a labelled button,
-  and its formatting bar scrolls rather than being cut off.
-- **The reply box** follows the same rules.
-- **The cookie notice** moves where it covers nothing a person needs.
+- **The text has the width.** No avatar column on a phone: who is posting
+  is the viewer, or the profile named where it posts.
+- **Two quiet rows at the bottom,** above the keyboard: first who can see,
+  the language and who can reply; under them photo, GIF, video, location and
+  people. Kept above the keyboard by the browser's own measure of what is
+  left of the screen (`window.visualViewport`). Two rows rather than a line
+  that opens a sheet: each choice is one tap, and nothing is cut off.
+- **"Long post"** in words beside Post, on a phone too.
+- **One tap to the picker,** for several photos. What is chosen shows at
+  once, from the phone itself, before anything is sent, and the box for
+  words gets shorter to sit close above it. Taking out the last photo closes
+  the photos; there is no "No pictures" button.
+- **Uploading begins when photos are chosen,** while the post is written:
+  each with its progress, an ✕ to take it out, and "Try again" when one
+  fails. Post waits only for what is still on its way.
+- **Photos are made ready on the phone** before they are sent: no more than
+  2,048 pixels on the longest side (the largest the site keeps), turned
+  upright, and a HEIC made a JPEG. So the pickers ask for HEIC by name, and
+  an iPhone hands its photos over without converting them first; photo-service
+  stays as it is (part 7). A video goes as it is.
+- **A video says how far it has got and about how many minutes are left,**
+  and keeps the screen on while it is sent (Screen Wake Lock, in Safari from
+  16.4), asked for again when the page is back in front.
+- **The long composer** is named for what it is, "Article" or "Topic", where
+  the profile takes only one, and "Long post" above the tabs where it takes
+  both. On a phone, Drafts is a word, not an icon, and Save draft is the
+  first item in its menu; on a desktop both are beside Post. The formatting
+  bar scrolls sideways, the next button showing at the edge.
+- **The reply box** opens the picker in one tap too, the same editor under it.
+- **The cookie notice** is at the top on a phone, clear of the + button.
 
 ## Parts
 
 | Part | What | Where |
 | --- | --- | --- |
-| 1 | The video pickers ask for any video (`video/*`), and the app lets any video type through to the worker, which reads what it is: done 2026-10-28 | web |
+| 1 | The video pickers ask for any video (`video/*`), and the app lets any video type through to the worker, which reads what it is | web |
 | 2 | The cookie notice clear of the + button | web |
-| 3 | The short composer's layout: full width, the attachments row above the keyboard, the settings line and its sheet | web |
-| 4 | One tap to the picker, thumbnails at once, uploads as soon as chosen, each with its progress, removal and retry | web |
-| 5 | Photos made smaller before they are sent | web |
-| 6 | Videos: progress with the time left, the screen kept awake | web |
-| 7 | HEIC photos taken by photo-service, so that photos too can be asked for as any image, and an iPhone hands them over unconverted | services |
-| 8 | The long composer and the reply box, by the same rules | web |
+| 3 | The short composer's layout: full width, the two rows above the keyboard | web |
+| 4 | One tap to the picker, photos shown at once, uploads as soon as chosen, each with its progress, removal and retry | web |
+| 5 | Photos made smaller and turned upright before they are sent (`utils/preparePhoto.js`) | web |
+| 6 | Videos: progress with the minutes left, the screen kept on (`useVideoUpload.js`) | web |
+| 7 | HEIC photos: made JPEG in the browser rather than taken by photo-service, which stays JPEG and PNG | web |
+| 8 | The long composer's header and drafts, and the reply box, by the same rules | web |
 
 Each part is checked at 390 by 844 and 1280 by 900 in headless Chrome, and
 then by the user on an iPhone, which headless Chrome is not: the pickers,
@@ -91,4 +100,5 @@ the keyboard and Safari's handling of a page set aside are only seen there.
 | --- | --- |
 | Plan | written 2026-10-28 |
 | Part 1 | done 2026-10-28 |
-| The layout's decisions | to be settled with the user |
+| Parts 2 to 8 | built 2026-10-28, checked in headless Chrome; to be tried by the user on an iPhone |
+| Not tried on the development stack | a photo or a video being stored, and so the time left: the development bucket is gone (banu.io's `docs/plans/launch.md`, row A7), so each upload there fails, which shows Try again |

@@ -433,12 +433,19 @@ so (`PHOTO_MAX_FILES`). The number comes from the server
 (`metadata.photoMaxFiles` in NodeInfo); the app does not carry it, but for
 four when the server has not said (`utils/photoFiles.js`).
 
-**Making one.** The photo composer (`Composer/Forms/Photo.jsx`) shows
-`components/PhotoFilesEditor.jsx`: pick or drop several images, put them in
-order with the arrows under each, remove one, and describe each with its
-`ALT` button. Each image is uploaded the moment it is picked, in a request of
-its own (`api.photos.upload`), so the Post button waits until all of them are
-stored and the post itself is then a small JSON request naming the uploads.
+**Making one.** Photo, in the short composer and the reply box, opens the
+system's picker at once, for several (`Composer/AttachButtons.jsx`,
+`replies/ReplyForm.jsx`); what is picked goes to
+`components/PhotoFilesEditor.jsx`, which shows each at once, from the device
+itself. There they are put in order with the arrows under each, removed, and
+described with Add alt text; taking out the last one closes it, and more can
+be added or dropped. Each image is made ready in the browser first
+(`utils/preparePhoto.js`): no more than 2,048 pixels on its longest side,
+turned upright, and an iPhone's HEIC made a JPEG, since photo-service takes
+JPEG and PNG only. It is then uploaded at once, in a request of its own
+(`api.photos.upload`), with its progress on it, and "Try again" if it fails.
+The Post button waits until all of them are stored, and the post itself is
+then a small JSON request naming the uploads.
 
 **Showing one.** A post with more than one image is drawn by
 `components/PhotoSlides.jsx` on the post card, in the feed and on the photo's
@@ -581,7 +588,7 @@ tabs after it.
 a profile the viewer may post to, and nowhere else. The page says where it
 posts while it is open (`reducers/composeTarget.js`): from home to the
 viewer's own profile, from a profile to that one. It opens the short
-composer, "New post" (`Composer/Short.jsx`), whose Long content opens the
+composer, "New post" (`Composer/Short.jsx`), whose Long post opens the
 long one (`Composer/Long.jsx`); a profile that takes only long writing opens
 that at once. A ring goes round the button while a video posted from it is
 being prepared. What the viewer posts is at the head of an open feed it
@@ -659,7 +666,11 @@ own, because a video is too big to be sent with the post (the services'
   once if it is not a video or is too large. `useVideoUpload.js` then
   begins the upload, cuts the file into parts and sends them to storage
   three at a time, each tried again when it fails, asking for addresses a
-  few at a time. The page has to stay open for that, and says so. When
+  few at a time. The page has to stay open for that, and says so, with how
+  far it has got and about how many minutes are left
+  (`utils/videos.js#minutesLeft`). While it is sent the screen is kept on
+  where the browser can (Screen Wake Lock), asked for again when the page
+  is back in front, since a phone that sleeps holds the page. When
   everything is sent the server prepares the video, and the page can be
   left: the composer asks after it and says when it is posted, and the +
   button has a ring round it until then.

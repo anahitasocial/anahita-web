@@ -9,7 +9,6 @@ export default {
     addPhotos: 'Adicionar imagens',
     addVideo: 'Adicionar um GIF ou um vídeo',
     removeVideo: 'Remover o vídeo',
-    noPhotos: 'Nenhuma imagem',
     preparing: 'Preparando sua resposta. Ela vai aparecer na conversa quando estiver pronta, e você pode sair desta página.',
   },
   count_one: '{{count}} resposta',

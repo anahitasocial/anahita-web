@@ -13,6 +13,7 @@ import Tooltip from '@mui/material/Tooltip';
 import DraftsIcon from '@mui/icons-material/DraftsOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import NewIcon from '@mui/icons-material/AddOutlined';
+import SaveIcon from '@mui/icons-material/SaveOutlined';
 
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -21,13 +22,18 @@ const NAMESPACES = { article: 'articles', topic: 'topics' };
 
 // One's drafts on this profile, articles and topics still being written,
 // to take up again or to throw away (the user, 2026-10-16). Kept on the
-// server, so they are there on any device; seen by nobody else.
+// server, so they are there on any device; seen by nobody else. On a
+// phone, where the header has no room for both, Save draft is the menu's
+// first item (`onSave`), and Drafts says its name rather than being an icon
+// that says nothing (roadmap row 112).
 const DraftsMenu = ({
   actor,
   kinds,
   phone,
   currentId = 0,
   disabled = false,
+  saving = false,
+  onSave,
   onOpen,
   onNew,
 }) => {
@@ -60,22 +66,14 @@ const DraftsMenu = ({
 
   return (
     <>
-      {phone ?
-        <Tooltip title={label}>
-          <span>
-            <IconButton aria-label={label} onClick={open} disabled={disabled}>
-              <DraftsIcon />
-            </IconButton>
-          </span>
-        </Tooltip> :
-        <Button
-          startIcon={<DraftsIcon />}
-          onClick={open}
-          disabled={disabled}
-          sx={{ color: 'text.secondary' }}
-        >
-          {label}
-        </Button>}
+      <Button
+        startIcon={phone ? undefined : <DraftsIcon />}
+        onClick={open}
+        disabled={disabled}
+        sx={{ color: 'text.secondary', flexShrink: 0 }}
+      >
+        {saving ? <CircularProgress size={20} /> : label}
+      </Button>
       <Menu
         anchorEl={anchor}
         open={Boolean(anchor)}
@@ -84,6 +82,17 @@ const DraftsMenu = ({
         }}
         slotProps={{ paper: { sx: { width: 360, maxWidth: 'calc(100vw - 32px)' } } }}
       >
+        {onSave &&
+          <MenuItem
+            onClick={() => {
+              setAnchor(null);
+              onSave();
+            }}
+          >
+            <SaveIcon fontSize="small" sx={{ mr: 1.5, color: 'text.secondary' }} />
+            {i18n.t('composer:drafts.save')}
+          </MenuItem>}
+        {onSave && <Divider />}
         {currentId > 0 &&
           <MenuItem
             onClick={() => {
@@ -151,6 +160,10 @@ DraftsMenu.propTypes = {
   // The draft being written now, if it is one.
   currentId: PropTypes.number,
   disabled: PropTypes.bool,
+  // A draft is being saved.
+  saving: PropTypes.bool,
+  // Where given, Save draft is in the menu, called by it.
+  onSave: PropTypes.func,
   // Called with the draft to take up again.
   onOpen: PropTypes.func.isRequired,
   // Called to begin a new one.

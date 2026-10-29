@@ -9,7 +9,6 @@ export default {
     addPhotos: 'Bilder hinzufügen',
     addVideo: 'GIF oder Video hinzufügen',
     removeVideo: 'Video entfernen',
-    noPhotos: 'Keine Bilder',
     preparing: 'Deine Antwort wird vorbereitet. Sie erscheint im Thread, sobald sie fertig ist, und du kannst diese Seite verlassen.',
   },
   count_one: '{{count}} Antwort',

@@ -7,7 +7,7 @@ export default {
     remove: 'Retirer du fil',
   },
   close: 'Fermer',
-  longContent: 'Contenu long',
+  longContent: 'Publication longue',
   photo: 'Photo',
   gif: 'GIF',
   addGif: 'Ajouter un GIF',

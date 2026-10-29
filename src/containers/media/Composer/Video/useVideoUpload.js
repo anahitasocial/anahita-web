@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 
 import api from '../../../../api/videos';
 import videos from '../../../../utils/videos';
+import i18n from '../../../../languages';
 
 // How many parts are on their way at once, how many addresses are asked
 // for at a time, and how often a part is tried.
@@ -56,23 +57,74 @@ const wait = (ms) => {
   });
 };
 
+// The screen kept on while a video is sent, where the browser can (Screen
+// Wake Lock): a phone that sleeps holds the page, and the upload with it
+// (roadmap row 112). The browser lets the lock go when the page is set
+// aside, so it is asked for again when the page is back in front.
+const useWakeLock = () => {
+  const lock = useRef(null);
+  const wanted = useRef(false);
+
+  const take = async () => {
+    const { wakeLock } = navigator;
+    if (!wanted.current || !wakeLock || lock.current || document.visibilityState !== 'visible') {
+      return;
+    }
+    try {
+      lock.current = await wakeLock.request('screen');
+      lock.current.addEventListener('release', () => {
+        lock.current = null;
+      });
+    } catch (e) {
+      // Refused, as on low battery: the upload goes on without it.
+    }
+  };
+
+  const release = () => {
+    wanted.current = false;
+    if (lock.current) {
+      lock.current.release().catch(() => {});
+      lock.current = null;
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', take);
+    return () => {
+      document.removeEventListener('visibilitychange', take);
+      release();
+    };
+  }, []);
+
+  return {
+    hold: () => {
+      wanted.current = true;
+      take();
+    },
+    release,
+  };
+};
+
 // Sends one video: begins the upload, sends the file to storage in parts,
 // a few at a time and each tried again when it fails, then hands it over
 // and asks after it until it is a post or has failed.
 //
 // Answers with where it has got to: `phase` ('idle', 'uploading',
-// 'processing', 'ready' or 'failed'), `percent` while uploading, the
+// 'processing', 'ready' or 'failed'), `percent` while uploading and
+// `minutes`, about how many are left (null until it can tell), the
 // `upload` as the server last described it, and `problem`, a key of
 // videos:problems, when it failed.
 const useVideoUpload = () => {
   const [state, setState] = useState({
     phase: 'idle',
     percent: 0,
+    minutes: null,
     upload: null,
     problem: '',
   });
   const controller = useRef(null);
   const alive = useRef(true);
+  const awake = useWakeLock();
 
   useEffect(() => {
     alive.current = true;
@@ -119,11 +171,15 @@ const useVideoUpload = () => {
   const sendParts = async (upload, file, signal) => {
     const parts = videos.partsOf(file.size, upload.partSize);
     const arrived = {};
+    const began = Date.now();
     const report = () => {
       const sent = Object.values(arrived).reduce((sum, bytes) => {
         return sum + bytes;
       }, 0);
-      set({ percent: videos.percent(sent, file.size) });
+      set({
+        percent: videos.percent(sent, file.size),
+        minutes: videos.minutesLeft(sent, file.size, Date.now() - began),
+      });
     };
 
     const sendOne = async (part, url) => {
@@ -179,9 +235,11 @@ const useVideoUpload = () => {
     set({
       phase: 'uploading',
       percent: 0,
+      minutes: null,
       upload: null,
       problem: '',
     });
+    awake.hold();
 
     let upload = null;
     try {
@@ -190,6 +248,7 @@ const useVideoUpload = () => {
       await sendParts(upload, file, signal);
       upload = (await api.complete(upload)).data;
     } catch (error) {
+      awake.release();
       if (signal.aborted) {
         return false;
       }
@@ -201,13 +260,21 @@ const useVideoUpload = () => {
       return false;
     }
 
-    set({ phase: 'processing', percent: 100, upload });
+    // Once handed over, it is prepared on the server, and the phone may sleep.
+    awake.release();
+    set({
+      phase: 'processing',
+      percent: 100,
+      minutes: null,
+      upload,
+    });
     follow(upload);
     return true;
   };
 
   // Gives up what is being sent or prepared.
   const cancel = () => {
+    awake.release();
     if (controller.current) {
       controller.current.abort();
     }
@@ -217,6 +284,7 @@ const useVideoUpload = () => {
     set({
       phase: 'idle',
       percent: 0,
+      minutes: null,
       upload: null,
       problem: '',
     });
@@ -226,6 +294,7 @@ const useVideoUpload = () => {
     set({
       phase: 'idle',
       percent: 0,
+      minutes: null,
       upload: null,
       problem: '',
     });
@@ -239,6 +308,15 @@ const useVideoUpload = () => {
   };
 };
 
-export { failureOf };
+// How far it has got, in words: "42% · about 6 minutes left".
+const progressOf = (upload) => {
+  const { percent, minutes } = upload;
+  if (minutes) {
+    return i18n.t('videos:upload.left', { percent, count: minutes });
+  }
+  return i18n.t('videos:upload.uploading', { percent });
+};
+
+export { failureOf, progressOf };
 
 export default useVideoUpload;

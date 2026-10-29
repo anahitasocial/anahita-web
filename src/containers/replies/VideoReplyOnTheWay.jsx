@@ -7,7 +7,7 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 
-import useVideoUpload from '../media/Composer/Video/useVideoUpload';
+import useVideoUpload, { progressOf } from '../media/Composer/Video/useVideoUpload';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
 import videos from '../../utils/videos';
@@ -61,7 +61,7 @@ const VideoReplyOnTheWay = ({
       {upload.phase === 'uploading' &&
         <>
           <Typography variant="body2">
-            {i18n.t('videos:upload.uploading', { percent: upload.percent })}
+            {progressOf(upload)}
           </Typography>
           <LinearProgress variant="determinate" value={upload.percent} sx={{ mt: 1 }} />
           <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>

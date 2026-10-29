@@ -6,10 +6,18 @@ const { constructFormData } = utils.api;
 // Stores one image for a post that has not been made yet, on the profile it
 // will be posted to. Each image goes in a request of its own, so no request
 // carries more than one however many the post has.
-const upload = (owner, file) => {
+// One image, stored for a profile before the post is made. `onProgress`
+// is told how far it has got, from 0 to 100.
+const upload = (owner, file, onProgress = null) => {
   const data = new FormData();
   data.append('file', file);
-  return axios.post(`/photos/${owner.id}/uploads`, data);
+  return axios.post(`/photos/${owner.id}/uploads`, data, onProgress ? {
+    onUploadProgress: (event) => {
+      if (event.total) {
+        onProgress(Math.round((event.loaded / event.total) * 100));
+      }
+    },
+  } : undefined);
 };
 
 // A new photo post. Made from uploads when it has them, sent as JSON so the

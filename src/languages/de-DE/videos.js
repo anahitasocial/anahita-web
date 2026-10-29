@@ -12,6 +12,8 @@ export default {
   upload: {
     title: 'Deine Videos unterwegs',
     uploading: 'Wird hochgeladen … {{percent}} %',
+    left_one: '{{percent}} % · noch etwa eine Minute',
+    left_other: '{{percent}} % · noch etwa {{count}} Minuten',
     keepOpen: 'Lass diese Seite offen, bis das Hochladen fertig ist.',
     processing: 'Dein Video wird vorbereitet. Es wird veröffentlicht, sobald es fertig ist, und du kannst diese Seite verlassen.',
     ready: 'Dein Video ist veröffentlicht.',

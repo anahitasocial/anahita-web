@@ -73,6 +73,16 @@ describe('a video being sent', () => {
     expect(videos.isInHand({ status: 'ready' })).toBe(false);
     expect(videos.isInHand(undefined)).toBe(false);
   });
+
+  it('says about how long is left, once it can tell', () => {
+    // A quarter in two minutes: six more.
+    expect(videos.minutesLeft(25, 100, 120000)).toBe(6);
+    // Under a minute is still about a minute.
+    expect(videos.minutesLeft(90, 100, 60000)).toBe(1);
+    expect(videos.minutesLeft(10, 100, 1000)).toBeNull();
+    expect(videos.minutesLeft(0, 100, 60000)).toBeNull();
+    expect(videos.minutesLeft(5, 1000, 60000)).toBeNull();
+  });
 });
 
 describe('a video being played', () => {

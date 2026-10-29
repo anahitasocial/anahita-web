@@ -12,6 +12,8 @@ export default {
   upload: {
     title: 'Vos vidéos en cours',
     uploading: 'Téléversement … {{percent}} %',
+    left_one: '{{percent}} % · environ une minute restante',
+    left_other: '{{percent}} % · environ {{count}} minutes restantes',
     keepOpen: 'Gardez cette page ouverte jusqu’à la fin du téléversement.',
     processing: 'Préparation de votre vidéo. Elle sera publiée dès qu’elle sera prête ; vous pouvez quitter cette page.',
     ready: 'Votre vidéo est publiée.',

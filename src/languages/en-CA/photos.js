@@ -8,9 +8,9 @@ export default {
   editor: {
     title: 'Photos in this post',
     edit: 'Edit photos',
-    add: 'Select or drop photos here',
+    add: 'Add photos',
     // Where a post may hold a video instead.
-    addOrVideo: 'Select or drop photos or a video here',
+    addOrVideo: 'Add photos or a video',
     addMore: 'Add another',
     limit: 'Up to {{max}} photos in a post. The first is shown first.',
     first: 'First',
@@ -31,7 +31,8 @@ export default {
     undescribed_one: '1 photo has no alt description yet.',
     undescribed_other: '{{count}} photos have no alt description yet.',
     uploading: 'Uploading',
-    failed: 'This photo could not be uploaded. Remove it and try again.',
+    failed: 'This photo was not uploaded.',
+    retry: 'Try again',
     unsupported: 'Only JPEG and PNG photos can be uploaded.',
     tooLarge: 'This photo is too large. The limit is 10 MB.',
     unreadable: 'This file could not be read as a photo.',

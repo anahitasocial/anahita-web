@@ -8,9 +8,9 @@ export default {
   editor: {
     title: 'Fotos nesta publicação',
     edit: 'Editar fotos',
-    add: 'Selecione ou solte fotos aqui',
+    add: 'Adicionar fotos',
     // Where a post may hold a video instead.
-    addOrVideo: 'Selecione ou solte fotos ou um vídeo aqui',
+    addOrVideo: 'Adicionar fotos ou vídeo',
     addMore: 'Adicionar outra',
     limit: 'Até {{max}} fotos por publicação. A primeira aparece primeiro.',
     first: 'Primeira',
@@ -31,7 +31,8 @@ export default {
     undescribed_one: '1 foto ainda não tem descrição da imagem.',
     undescribed_other: '{{count}} fotos ainda não têm descrição da imagem.',
     uploading: 'Enviando',
-    failed: 'Não foi possível enviar esta foto. Remova e tente de novo.',
+    failed: 'Esta foto não foi enviada.',
+    retry: 'Tentar de novo',
     unsupported: 'Só é possível enviar fotos JPEG e PNG.',
     tooLarge: 'Esta foto é grande demais. O limite é 10 MB.',
     unreadable: 'Não foi possível ler este arquivo como foto.',

@@ -12,6 +12,8 @@ export default {
   upload: {
     title: 'Tus videos en camino',
     uploading: 'Subiendo… {{percent}} %',
+    left_one: '{{percent}} % · falta un minuto aproximadamente',
+    left_other: '{{percent}} % · faltan unos {{count}} minutos',
     keepOpen: 'Mantén esta página abierta hasta que termine la subida.',
     processing: 'Preparando tu video. Se publicará cuando esté listo, y puedes salir de esta página.',
     ready: 'Tu video está publicado.',

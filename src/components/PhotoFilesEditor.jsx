@@ -16,13 +16,14 @@ import AltIcon from '@mui/icons-material/SubtitlesOutlined';
 import EarlierIcon from '@mui/icons-material/ArrowBack';
 import LaterIcon from '@mui/icons-material/ArrowForward';
 import RemoveIcon from '@mui/icons-material/Close';
-import FailedIcon from '@mui/icons-material/ErrorOutlined';
+import RetryIcon from '@mui/icons-material/Refresh';
 import NextIcon from '@mui/icons-material/NavigateNext';
 import PrevIcon from '@mui/icons-material/NavigateBefore';
 
 import api from '../api';
 import i18n from '../languages';
 import photoFiles from '../utils/photoFiles';
+import { PHOTO_TYPES, preparePhoto } from '../utils/preparePhoto';
 
 const { STATUS } = photoFiles;
 
@@ -103,8 +104,19 @@ const useStyles = makeStyles()((theme) => {
       position: 'absolute',
       inset: 0,
       display: 'flex',
+      flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
+      gap: theme.spacing(1),
+    },
+    // Why a photo was not taken, over it, in white on a dark band.
+    failed: {
+      color: theme.palette.common.white,
+      backgroundColor: 'rgba(0, 0, 0, 0.6)',
+      borderRadius: theme.shape.borderRadius,
+      padding: theme.spacing(0.5, 1),
+      maxWidth: '80%',
+      textAlign: 'center',
     },
     // To the photo before and after, where there is a pointer to press
     // them with. A finger swipes.
@@ -190,11 +202,12 @@ const PhotoFilesEditor = ({
   items,
   onChange,
   max = photoFiles.DEFAULT_MAX,
-  supportedMimetypes = ['image/jpeg', 'image/png'],
+  supportedMimetypes = PHOTO_TYPES,
   disabled = false,
   videoMimetypes = [],
   onVideo = null,
   onPicked = null,
+  incoming = null,
 }) => {
   const { classes, cx } = useStyles();
   // Which photo is on show, read from where the row has been scrolled to.
@@ -226,10 +239,58 @@ const PhotoFilesEditor = ({
   // decides it.
   const takesVideo = Boolean(onVideo) && videoMimetypes.length > 0 && items.length === 0;
 
-  const handleDrop = (dropped) => {
-    const files = dropped.filter((file) => {
-      return supportedMimetypes.includes(file.type);
+  // Each picked file as it was picked, by its item's key, to send again
+  // when its upload failed.
+  const originals = useRef({});
+
+  // A photo made ready (utils/preparePhoto: no larger than is kept, upright,
+  // a JPEG or a PNG), then sent, saying how far it has got. Its preview is
+  // the one made ready, which every browser can show, an iPhone's HEIC
+  // included.
+  const send = (key, file) => {
+    onChange((current) => {
+      return photoFiles.update(current, key, { status: STATUS.UPLOADING, progress: 0, error: '' });
     });
+    preparePhoto(file).then((prepared) => {
+      if (prepared !== file) {
+        const previewUrl = URL.createObjectURL(prepared);
+        previews.current.push(previewUrl);
+        onChange((current) => {
+          return photoFiles.update(current, key, { previewUrl });
+        });
+      }
+      return api.photos.upload(owner, prepared, (progress) => {
+        onChange((current) => {
+          return photoFiles.update(current, key, { progress });
+        });
+      });
+    }).then((result) => {
+      delete originals.current[key];
+      onChange((current) => {
+        return photoFiles.update(current, key, {
+          status: STATUS.READY,
+          uploadId: result.data.uploadId,
+        });
+      });
+    }).catch((error) => {
+      onChange((current) => {
+        return photoFiles.update(current, key, {
+          status: STATUS.FAILED,
+          error: failureText(error),
+        });
+      });
+    });
+  };
+
+  // A photo, by what it says it is or, where a browser says nothing of an
+  // iPhone's HEIC, by its name.
+  const isPhoto = (file) => {
+    return supportedMimetypes.includes(file.type) ||
+      (supportedMimetypes.includes('image/heic') && /\.hei[cf]$/i.test(file.name || ''));
+  };
+
+  const handleDrop = (dropped) => {
+    const files = dropped.filter(isPhoto);
     if (files.length === 0) {
       if (takesVideo && dropped.length > 0) {
         onVideo(dropped[0]);
@@ -251,29 +312,24 @@ const PhotoFilesEditor = ({
       previews.current.push(previewUrl);
 
       const item = photoFiles.picked(file, previewUrl);
+      originals.current[item.key] = file;
       onChange((current) => {
         return [...current, item];
       });
 
-      // Uploaded straight away, so by the time the caption is written the
-      // images are already stored.
-      api.photos.upload(owner, file).then((result) => {
-        onChange((current) => {
-          return photoFiles.update(current, item.key, {
-            status: STATUS.READY,
-            uploadId: result.data.uploadId,
-          });
-        });
-      }).catch((error) => {
-        onChange((current) => {
-          return photoFiles.update(current, item.key, {
-            status: STATUS.FAILED,
-            error: failureText(error),
-          });
-        });
-      });
+      // Sent straight away, so by the time the post is written the images
+      // are already stored.
+      send(item.key, file);
     });
   };
+
+  // Files picked outside, by the composer's own photo button, which opens
+  // the system's picker in one tap: taken as if dropped here.
+  useEffect(() => {
+    if (incoming && incoming.files && incoming.files.length > 0) {
+      handleDrop(incoming.files);
+    }
+  }, [incoming]);
 
   const { getRootProps, getInputProps } = useDropzone({
     // react-dropzone takes a map of MIME type to file extensions.
@@ -376,14 +432,32 @@ const PhotoFilesEditor = ({
                     </span>
                     {item.status === STATUS.UPLOADING &&
                       <div className={classes.centre}>
-                        <CircularProgress size={32} aria-label={i18n.t('photos:editor.uploading')} />
+                        <CircularProgress
+                          size={32}
+                          variant={item.progress ? 'determinate' : 'indeterminate'}
+                          value={item.progress || 0}
+                          aria-label={i18n.t('photos:editor.uploading')}
+                        />
                       </div>}
+                    {/* Why it failed, and sending it again where it can be. */}
                     {item.status === STATUS.FAILED &&
-                      <Tooltip title={item.error || i18n.t('photos:editor.failed')}>
-                        <div className={classes.centre} role="alert">
-                          <FailedIcon color="error" aria-label={item.error} />
-                        </div>
-                      </Tooltip>}
+                      <div className={classes.centre} role="alert">
+                        <Typography variant="body2" className={classes.failed}>
+                          {item.error || i18n.t('photos:editor.failed')}
+                        </Typography>
+                        {originals.current[item.key] &&
+                          <Button
+                            size="small"
+                            variant="contained"
+                            startIcon={<RetryIcon />}
+                            onClick={() => {
+                              send(item.key, originals.current[item.key]);
+                            }}
+                            disabled={disabled}
+                          >
+                            {i18n.t('photos:editor.retry')}
+                          </Button>}
+                      </div>}
                     <Tooltip title={i18n.t('photos:editor.remove')}>
                       <IconButton
                         className={cx(classes.over, classes.remove)}
@@ -572,6 +646,8 @@ PhotoFilesEditor.propTypes = {
   onVideo: PropTypes.func,
   // Given the files picked, as they are picked.
   onPicked: PropTypes.func,
+  // Files picked by another button, { files }: a new object each time.
+  incoming: PropTypes.shape({ files: PropTypes.array }),
 };
 
 export default PhotoFilesEditor;

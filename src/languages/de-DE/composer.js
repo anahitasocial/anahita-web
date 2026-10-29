@@ -10,7 +10,7 @@ export default {
   },
   close: 'Schließen',
   // Opens the extended composer from the short box: an article or a topic.
-  longContent: 'Langer Inhalt',
+  longContent: 'Langer Beitrag',
   // What can be added to a post: the words beside each icon where there is
   // room, and the icon's name where it stands alone, on a phone.
   photo: 'Foto',

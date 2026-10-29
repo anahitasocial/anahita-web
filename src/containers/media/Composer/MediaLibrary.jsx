@@ -22,7 +22,7 @@ import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import api from '../../../api';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
-import useVideoUpload from './Video/useVideoUpload';
+import useVideoUpload, { progressOf } from './Video/useVideoUpload';
 import photoFiles from '../../../utils/photoFiles';
 import uploads from '../../../utils/upload';
 import utils from '../../../utils';
@@ -305,9 +305,13 @@ const Upload = ({
           />
           <Typography variant="body2" color="textSecondary">
             {upload.phase === 'uploading' ?
-              i18n.t('videos:upload.keepOpen') :
+              progressOf(upload) :
               i18n.t('composer:library.preparing')}
           </Typography>
+          {upload.phase === 'uploading' &&
+            <Typography variant="caption" color="textSecondary">
+              {i18n.t('videos:upload.keepOpen')}
+            </Typography>}
           {upload.phase === 'uploading' &&
             <Button onClick={upload.cancel} size="small" sx={{ alignSelf: 'flex-start' }}>
               {i18n.t('videos:upload.cancel')}

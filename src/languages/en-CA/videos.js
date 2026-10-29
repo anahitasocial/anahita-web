@@ -12,6 +12,8 @@ export default {
   upload: {
     title: 'Your videos on the way',
     uploading: 'Uploading … {{percent}}%',
+    left_one: '{{percent}}% · about a minute left',
+    left_other: '{{percent}}% · about {{count}} minutes left',
     keepOpen: 'Keep this page open until the upload has finished.',
     processing: 'Preparing your video. It will be posted when it is ready, and you can leave this page.',
     ready: 'Your video is posted.',

@@ -1,4 +1,6 @@
-import React, { useMemo, useRef, useState } from 'react';
+import React, {
+  useEffect, useMemo, useRef, useState,
+} from 'react';
 import PropTypes from 'prop-types';
 import { useSelector } from 'react-redux';
 
@@ -24,6 +26,7 @@ import ThreadParts from '../media/Composer/ThreadParts';
 import linkPreviews from '../../utils/linkPreviews';
 import photoFiles from '../../utils/photoFiles';
 import videos from '../../utils/videos';
+import { PHOTO_TYPES } from '../../utils/preparePhoto';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
 import LIMITS from '../../constants/limits';
@@ -64,12 +67,15 @@ const ReplyForm = ({
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
   const [photoItems, setPhotoItems] = useState([]);
+  // The photos just picked, for the editor to take as if dropped.
+  const [incoming, setIncoming] = useState(null);
   // A thread written in one go, under a new reply: the notes after the
   // first (roadmap row 101).
   const [moreParts, setMoreParts] = useState([]);
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
   const picker = useRef(null);
+  const photoPicker = useRef(null);
   const viewer = useSelector((state) => { return state.session.viewer; });
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
 
@@ -94,6 +100,18 @@ const ReplyForm = ({
   // Hashtags in use offered as one is typed (roadmap row 78).
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const hashtags = useTextareaHashtags({ value: body, onChange: setBody, phone });
+
+  // The photos go when the last is taken out; there is no other button to
+  // close them (roadmap row 112).
+  const hadPhotos = useRef(false);
+  useEffect(() => {
+    if (photoItems.length > 0) {
+      hadPhotos.current = true;
+    } else if (hadPhotos.current) {
+      hadPhotos.current = false;
+      setIsAddingPhotos(false);
+    }
+  }, [photoItems.length]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -120,6 +138,7 @@ const ReplyForm = ({
       setPhotoItems([]);
       setMoreParts([]);
       setIsAddingPhotos(false);
+      setIncoming(null);
       setVideo(null);
     }).catch(() => {
       // The caller has said what went wrong. The text stays.
@@ -182,6 +201,7 @@ const ReplyForm = ({
           <PhotoFilesEditor
             owner={viewer}
             items={photoItems}
+            incoming={incoming}
             onChange={setPhotoItems}
             max={photoFiles.maxFiles(nodeInfo)}
             disabled={isSending}
@@ -225,7 +245,8 @@ const ReplyForm = ({
                 size="small"
                 aria-label={i18n.t('replies:attachments.addPhotos')}
                 onClick={() => {
-                  setIsAddingPhotos(true);
+                  // One tap to the phone's own picker, for several.
+                  photoPicker.current.click();
                 }}
               >
                 <PhotoIcon fontSize="small" />
@@ -244,15 +265,22 @@ const ReplyForm = ({
                 <GifIcon fontSize="small" />
               </IconButton>
             </Tooltip>}
-          {isAddingPhotos && !hasPhotos &&
-            <Button
-              size="small"
-              onClick={() => {
-                setIsAddingPhotos(false);
-              }}
-            >
-              {i18n.t('replies:attachments.noPhotos')}
-            </Button>}
+          <input
+            ref={photoPicker}
+            type="file"
+            accept={PHOTO_TYPES.join(',')}
+            multiple
+            hidden
+            onChange={(event) => {
+              const chosen = Array.from(event.target.files || []);
+              // eslint-disable-next-line no-param-reassign
+              event.target.value = '';
+              if (chosen.length > 0) {
+                setIsAddingPhotos(true);
+                setIncoming({ files: chosen });
+              }
+            }}
+          />
           <input
             ref={picker}
             type="file"

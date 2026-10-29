@@ -8,9 +8,9 @@ export default {
   editor: {
     title: 'Fotos in diesem Beitrag',
     edit: 'Fotos bearbeiten',
-    add: 'Fotos auswählen oder hier ablegen',
+    add: 'Fotos hinzufügen',
     // Where a post may hold a video instead.
-    addOrVideo: 'Fotos oder ein Video auswählen oder hier ablegen',
+    addOrVideo: 'Fotos oder Video',
     addMore: 'Weiteres hinzufügen',
     limit: 'Bis zu {{max}} Fotos pro Beitrag. Das erste wird zuerst gezeigt.',
     first: 'Erstes',
@@ -31,7 +31,8 @@ export default {
     undescribed_one: '1 Foto hat noch keine Bildbeschreibung.',
     undescribed_other: '{{count}} Fotos haben noch keine Bildbeschreibung.',
     uploading: 'Wird hochgeladen',
-    failed: 'Dieses Foto konnte nicht hochgeladen werden. Entferne es und versuch es noch einmal.',
+    failed: 'Dieses Foto wurde nicht hochgeladen.',
+    retry: 'Noch einmal',
     unsupported: 'Nur JPEG- und PNG-Fotos können hochgeladen werden.',
     tooLarge: 'Dieses Foto ist zu groß. Das Limit liegt bei 10 MB.',
     unreadable: 'Diese Datei konnte nicht als Foto gelesen werden.',

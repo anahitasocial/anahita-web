@@ -13,11 +13,9 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
-import SaveIcon from '@mui/icons-material/SaveOutlined';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -354,8 +352,11 @@ const LongComposer = ({
           >
             <CloseIcon />
           </IconButton>
+          {/* What it is, where there are no tabs to say so. */}
           <Typography variant="h6" sx={{ flexGrow: 1 }} noWrap>
-            {i18n.t('composer:longContent')}
+            {kinds.length > 1 ?
+              i18n.t('composer:longContent') :
+              i18n.t(`composer:kinds.${kind}`)}
           </Typography>
           <DraftsMenu
             actor={actor}
@@ -363,6 +364,8 @@ const LongComposer = ({
             phone={phone}
             currentId={draftId}
             disabled={busy}
+            saving={isSaving}
+            onSave={phone ? saveDraft : undefined}
             onOpen={(draft) => {
               setTab(draft.kind);
               setTitle(draft.title || '');
@@ -378,19 +381,8 @@ const LongComposer = ({
               setTried(false);
             }}
           />
-          {/* Its words where there is room; on a phone, the icon. */}
-          {phone ?
-            <Tooltip title={i18n.t('composer:drafts.save')}>
-              <span>
-                <IconButton
-                  aria-label={i18n.t('composer:drafts.save')}
-                  onClick={saveDraft}
-                  disabled={busy}
-                >
-                  {isSaving ? <CircularProgress size={20} /> : <SaveIcon />}
-                </IconButton>
-              </span>
-            </Tooltip> :
+          {/* Beside Drafts where there is room; in its menu on a phone. */}
+          {!phone &&
             <Button
               variant="outlined"
               onClick={saveDraft}
