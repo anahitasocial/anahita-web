@@ -118,22 +118,14 @@ export default {
     addTitle: 'Ort hinzufügen',
     goesOut: 'Geht mit dem Beitrag an andere Server im Fediverse.',
   },
-  // The post's second step on a phone and in the dialog: who can see it,
-  // its language, who may reply, its location and who is in it, each a row
-  // (roadmap row 114). replyLine is how the line under the words says who
-  // may reply.
+  // The short composer's two steps (roadmap row 114): Next, from the post
+  // itself to the choices that go with it, each a row; back returns.
+  next: 'Weiter',
   details: {
-    title: 'Details',
-    open: 'Details',
     back: 'Zurück',
     audience: 'Wer es sehen kann',
     language: 'Sprache',
     replies: 'Wer antworten kann',
     location: 'Ort',
-    replyLine: {
-      anyone: 'Alle können antworten',
-      nobody: 'Keine Antworten',
-      some: 'Antworten begrenzt',
-    },
   },
 };

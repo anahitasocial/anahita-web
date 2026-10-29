@@ -10,7 +10,6 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
@@ -18,7 +17,6 @@ import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import BackIcon from '@mui/icons-material/ArrowBack';
-import ChevronIcon from '@mui/icons-material/ChevronRight';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
@@ -43,6 +41,7 @@ import { progressOf } from './Video/useVideoUpload';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
+import useKeyboardRoom from './useKeyboardRoom';
 import photoPosition from '../../../utils/photoPosition';
 
 import composer from '../../../utils/composer';
@@ -69,12 +68,12 @@ const { isPerson } = utils.node;
 // keyboard needs the room; nothing in it changes height as somebody types.
 // What is written is kept as a draft until it is posted (useDraft).
 //
-// Two steps (roadmap row 114): the post itself, its words and its photos,
-// GIF or video, with one line under them saying who can see it, its
-// language and who may reply; and its Details, each choice a row, its
-// location and who is in it among them, each with the room it needs.
-// Back returns to the words with everything kept, and Post is on both, so
-// a few words are still posted with one tap.
+// Two steps (roadmap row 114), walked through in turn: the post itself, its
+// words and its photos, GIF or video, then Next; and every choice that goes
+// with it, each a row, who can see it, its language, who may reply, its
+// location and who is in it, each with the room it needs, then Post. Laid
+// out rather than hidden behind a link, so that they are used (the user,
+// 2026-10-28). Back returns to the words with everything kept.
 //
 // `kinds` is what this profile takes, of note, photo and video. A video
 // posted from it is the app's to send (Video/SharedVideoUpload), and the
@@ -91,24 +90,8 @@ const ShortComposer = ({
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
-  // The height of what can be seen, which a phone's keyboard takes from:
-  // the full-screen composer keeps its bottom row above the keyboard. iOS
-  // shrinks only this, not the page.
-  const [visible, setVisible] = useState(0);
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!phone || !isOpen || !viewport) {
-      return undefined;
-    }
-    const measure = () => {
-      setVisible(Math.round(viewport.height));
-    };
-    measure();
-    viewport.addEventListener('resize', measure);
-    return () => {
-      viewport.removeEventListener('resize', measure);
-    };
-  }, [phone, isOpen]);
+  // Above the keyboard on a phone, however much it leaves.
+  const room = useKeyboardRoom(phone && isOpen);
   const [body, setBody, clearDraft] = useDraft(actor.id);
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
@@ -244,6 +227,14 @@ const ShortComposer = ({
   const handleSubmit = (event) => {
     if (event) {
       event.preventDefault();
+    }
+    // On the words, Next: on to the choices.
+    if (!onDetails) {
+      // eslint-disable-next-line no-use-before-define
+      if (canGoOn) {
+        toDetails();
+      }
+      return;
     }
     if (!hasSomething || isHeldBack) {
       return;
@@ -453,11 +444,9 @@ const ShortComposer = ({
     </>
   );
 
-  // Under the words: the choices in one line, which opens Details.
-  const summaryLine = choices.summary() +
-    (postLocations.locations.length > 0 ?
-      ` · ${postLocations.locations.map((location) => { return location.name; }).join(', ')}` :
-      '');
+  // On to the choices once there is something to post, photos still being
+  // sent included: Post waits for them, on the next step.
+  const canGoOn = (hasSomething || hasPhotos) && !isSending;
 
   // What is written goes along to the extended composer, and is its draft
   // from then on.
@@ -496,6 +485,18 @@ const ShortComposer = ({
       </Button>
     );
   };
+
+  const nextButton = (
+    <Button
+      type="submit"
+      variant="contained"
+      color="primary"
+      disabled={!canGoOn}
+      sx={{ minWidth: 88 }}
+    >
+      {i18n.t('composer:next')}
+    </Button>
+  );
 
   const postButton = (fullWidth) => {
     return (
@@ -578,6 +579,7 @@ const ShortComposer = ({
             videoMimetypes={canVideo ? videos.TYPES : []}
             onVideo={takeVideo}
             incoming={incoming}
+            onIncomingTaken={() => { setIncoming(null); }}
             onPicked={(files) => {
               if (!photoPoint) {
                 photoPosition.read(files).then((point) => {
@@ -665,7 +667,8 @@ const ShortComposer = ({
       maxWidth="sm"
       open={isOpen}
       slotProps={{
-        paper: { sx: visible ? { height: visible, maxHeight: visible } : {} },
+        container: { sx: room.container },
+        paper: { sx: room.paper },
       }}
       // It may be closed while a video is sent: it goes on being sent,
       // and the + button says how far it has got.
@@ -711,10 +714,10 @@ const ShortComposer = ({
               <CloseIcon />
             </IconButton>}
           <Typography variant="h6" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>
-            {i18n.t(onDetails ? 'composer:details.title' : 'composer:newPost')}
+            {i18n.t('composer:newPost')}
           </Typography>
           {!onDetails && expandButton(true)}
-          {postButton(false)}
+          {onDetails ? postButton(false) : nextButton}
         </Toolbar>
         <Divider />
         {onDetails &&
@@ -743,31 +746,8 @@ const ShortComposer = ({
         {!onDetails &&
           <>
             <Divider />
-            {/* At the bottom, above the keyboard and within a thumb's
-                reach: who can see it, its language and who may reply in one
-                line, which opens Details; then what can be added. */}
-            <ListItemButton
-              onClick={toDetails}
-              disabled={busy}
-              aria-label={`${i18n.t('composer:details.open')}: ${summaryLine}`}
-              // Its own height, not the column's: a list button grows.
-              sx={{
-                flexGrow: 0, px: 2, py: 1, gap: 1,
-              }}
-            >
-              <Typography
-                variant="body2"
-                color="textSecondary"
-                noWrap
-                sx={{ flexGrow: 1, minWidth: 0 }}
-              >
-                {summaryLine}
-              </Typography>
-              <Typography variant="body2" sx={{ flexShrink: 0 }}>
-                {i18n.t('composer:details.open')}
-              </Typography>
-              <ChevronIcon fontSize="small" color="action" />
-            </ListItemButton>
+            {/* What can be added, at the bottom, above the keyboard and
+                within a thumb's reach. */}
             <Stack
               direction="row"
               spacing={0.5}

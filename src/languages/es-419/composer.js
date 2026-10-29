@@ -118,22 +118,14 @@ export default {
     addTitle: 'Agregar lugar',
     goesOut: 'Se envía con la publicación a otros servidores del fediverso.',
   },
-  // The post's second step on a phone and in the dialog: who can see it,
-  // its language, who may reply, its location and who is in it, each a row
-  // (roadmap row 114). replyLine is how the line under the words says who
-  // may reply.
+  // The short composer's two steps (roadmap row 114): Next, from the post
+  // itself to the choices that go with it, each a row; back returns.
+  next: 'Siguiente',
   details: {
-    title: 'Detalles',
-    open: 'Detalles',
     back: 'Atrás',
     audience: 'Quién puede verla',
     language: 'Idioma',
     replies: 'Quién puede responder',
     location: 'Lugar',
-    replyLine: {
-      anyone: 'Cualquiera puede responder',
-      nobody: 'Sin respuestas',
-      some: 'Respuestas limitadas',
-    },
   },
 };

@@ -208,6 +208,7 @@ const PhotoFilesEditor = ({
   onVideo = null,
   onPicked = null,
   incoming = null,
+  onIncomingTaken = null,
 }) => {
   const { classes, cx } = useStyles();
   // Which photo is on show, read from where the row has been scrolled to.
@@ -324,10 +325,15 @@ const PhotoFilesEditor = ({
   };
 
   // Files picked outside, by the composer's own photo button, which opens
-  // the system's picker in one tap: taken as if dropped here.
+  // the system's picker in one tap: taken as if dropped here, then said to
+  // be taken, so that the editor drawn again, when the composer is opened
+  // again, does not take them a second time.
   useEffect(() => {
     if (incoming && incoming.files && incoming.files.length > 0) {
       handleDrop(incoming.files);
+      if (onIncomingTaken) {
+        onIncomingTaken();
+      }
     }
   }, [incoming]);
 
@@ -648,6 +654,8 @@ PhotoFilesEditor.propTypes = {
   onPicked: PropTypes.func,
   // Files picked by another button, { files }: a new object each time.
   incoming: PropTypes.shape({ files: PropTypes.array }),
+  // Told once `incoming` is taken, to let it go.
+  onIncomingTaken: PropTypes.func,
 };
 
 export default PhotoFilesEditor;

@@ -26,6 +26,7 @@ import DraftsMenu from './DraftsMenu';
 import LongEditor from './LazyLongEditor';
 import SuggestedHashtags from './SuggestedHashtags';
 import useDraft from './useDraft';
+import useKeyboardRoom from './useKeyboardRoom';
 import useOnFediverse from './useOnFediverse';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
@@ -129,23 +130,8 @@ const LongComposer = ({
     }
   }, [open]);
 
-  // The height of what can be seen, which a phone's keyboard takes from, as
-  // in the short box: the bottom row stays above the keyboard.
-  const [visible, setVisible] = useState(0);
-  useEffect(() => {
-    const viewport = window.visualViewport;
-    if (!phone || !open || !viewport) {
-      return undefined;
-    }
-    const measure = () => {
-      setVisible(Math.round(viewport.height));
-    };
-    measure();
-    viewport.addEventListener('resize', measure);
-    return () => {
-      viewport.removeEventListener('resize', measure);
-    };
-  }, [phone, open]);
+  // Above the keyboard on a phone, as in the short box.
+  const room = useKeyboardRoom(phone && open);
 
   // The text starts a few lines tall, and grows as somebody writes or as
   // its corner is dragged (LongEditor).
@@ -316,10 +302,7 @@ const LongComposer = ({
 
   // As tall as the screen allows on a desktop, less the dialog's margins;
   // on a phone, what the keyboard leaves.
-  let paper = { height: 'calc(100% - 64px)' };
-  if (phone) {
-    paper = visible ? { height: visible, maxHeight: visible } : {};
-  }
+  const paper = phone ? room.paper : { height: 'calc(100% - 64px)' };
 
   const close = () => {
     if (!busy) {
@@ -334,7 +317,7 @@ const LongComposer = ({
       fullScreen={phone}
       fullWidth
       maxWidth="md"
-      slotProps={{ paper: { sx: paper } }}
+      slotProps={{ container: { sx: phone ? room.container : {} }, paper: { sx: paper } }}
     >
       <Box
         component="form"

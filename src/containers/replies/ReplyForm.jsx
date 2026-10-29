@@ -202,6 +202,7 @@ const ReplyForm = ({
             owner={viewer}
             items={photoItems}
             incoming={incoming}
+            onIncomingTaken={() => { setIncoming(null); }}
             onChange={setPhotoItems}
             max={photoFiles.maxFiles(nodeInfo)}
             disabled={isSending}
