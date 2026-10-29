@@ -569,11 +569,10 @@ replies, made directly to the post.
   for with a different `filter` (`containers/feed/Actor`); they share one
   place in the store, so each is keyed and read when its tab is opened.
   Posts are one column beside the profile's details: About, then the
-  profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`;
-  nine in a grid beside the posts and, where the column is the page's
-  width, the same nine as slides swiped through as a post's photos are
-  (`components/PhotoSlides.jsx`); each opens its post, and See all opens the
-  Photos tab), then
+  profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`:
+  up to ten, as slides swiped through as a post's photos are,
+  `components/PhotoSlides.jsx`, at every width, so no grid is left half
+  full; each opens its post, and See all opens the Photos tab), then
   administrators and Locations. The others fill the
   page in the same masonry as the lists of notes, articles and
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
