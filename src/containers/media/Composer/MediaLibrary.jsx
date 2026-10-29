@@ -320,7 +320,7 @@ const Upload = ({
       <input
         ref={picker}
         type="file"
-        accept={videos.TYPES.join(',')}
+        accept={videos.PICKER}
         hidden
         onChange={chooseVideo}
       />

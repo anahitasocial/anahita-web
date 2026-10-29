@@ -14,9 +14,7 @@ import i18n from '../../../languages';
 // A GIF is played as a video: an animation, silent, on a loop. Each button
 // opens the system's file window on its own kind of file.
 const ANIMATIONS = videos.ANIMATION_TYPES.join(',');
-const MOVIES = videos.TYPES.filter((type) => {
-  return !videos.ANIMATION_TYPES.includes(type);
-}).join(',');
+const { MOVIES } = videos;
 
 // Photo, GIF and Video, the same in the short box and the extended
 // composer: with their words beside them where there is room, the icons

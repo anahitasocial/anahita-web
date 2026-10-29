@@ -13,11 +13,26 @@ const DEFAULT_ANIMATION_MAX_SECONDS = 30;
 const ANIMATION_TYPES = ['image/gif', 'image/png'];
 
 // What a browser may say it is sending. The server's worker decides what
-// the file really is; this is for the file picker and an early refusal.
+// the file really is, from its first bytes: MP4, QuickTime and their kin,
+// and WebM; this is for the file picker and an early refusal.
 const TYPES = ['video/mp4', 'video/quicktime', 'video/webm', ...ANIMATION_TYPES];
+
+// What the file picker is asked for: any video, as it is. An iPhone told a
+// list of types converts a video to one of them before handing it over,
+// which for a long one keeps its picker waiting for minutes; told any video,
+// it hands it over at once (the user, 2026-10-28). The GIFs and PNGs that
+// move are asked for by their own types.
+const MOVIES = 'video/*';
+const PICKER = [MOVIES, ...ANIMATION_TYPES].join(',');
 
 const typeOf = (file) => {
   return String((file && file.type) || '').toLowerCase();
+};
+
+// Whether a file says it is a video: any video/ type, which the worker
+// then reads for itself.
+const isVideoType = (file) => {
+  return typeOf(file).startsWith('video/');
 };
 
 // Whether a file chosen is a GIF or a PNG rather than a video.
@@ -63,7 +78,7 @@ const problem = (file, nodeInfo) => {
   if (!file) {
     return 'none';
   }
-  if (!TYPES.includes(typeOf(file))) {
+  if (!isVideoType(file) && !isAnimation(file)) {
     return 'notAVideo';
   }
   if (isAnimation(file)) {
@@ -202,6 +217,8 @@ const isInHand = (upload) => {
 export default {
   TYPES,
   ANIMATION_TYPES,
+  MOVIES,
+  PICKER,
   isAnimation,
   isLoop,
   isOn,

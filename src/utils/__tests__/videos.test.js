@@ -22,6 +22,10 @@ describe('a video being sent', () => {
     expect(videos.problem({ type: 'video/mp4', size: 1001 }, info)).toBe('tooLarge');
     expect(videos.problem({ type: 'video/mp4', size: 1000 }, info)).toBe('');
     expect(videos.problem({ type: 'VIDEO/QuickTime', size: 5 }, info)).toBe('');
+    // Any video, as an iPhone hands it over when asked for any: the worker
+    // reads what it is.
+    expect(videos.problem({ type: 'video/x-m4v', size: 5 }, info)).toBe('');
+    expect(videos.problem({ type: 'video/3gpp', size: 5 }, info)).toBe('');
     expect(videos.isOn(info)).toBe(true);
     expect(videos.isOn({ metadata: {} })).toBe(false);
     expect(videos.isOn(undefined)).toBe(false);

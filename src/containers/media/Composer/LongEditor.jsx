@@ -59,9 +59,7 @@ const NOT_TYPING = { typed: null, full: false, rect: null };
 
 // What the GIF and Video buttons open the file window on.
 const ANIMATIONS = videos.ANIMATION_TYPES.join(',');
-const MOVIES = videos.TYPES.filter((type) => {
-  return !videos.ANIMATION_TYPES.includes(type);
-}).join(',');
+const { MOVIES } = videos;
 
 const LongEditor = ({
   value,

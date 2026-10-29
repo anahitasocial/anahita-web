@@ -256,7 +256,7 @@ const ReplyForm = ({
           <input
             ref={picker}
             type="file"
-            accept={videos.TYPES.join(',')}
+            accept={videos.PICKER}
             hidden
             onChange={(event) => {
               const chosen = event.target.files && event.target.files[0];
