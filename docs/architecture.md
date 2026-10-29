@@ -568,7 +568,11 @@ replies, made directly to the post.
   Replies and Tagged. All four are the profile's feed asked
   for with a different `filter` (`containers/feed/Actor`); they share one
   place in the store, so each is keyed and read when its tab is opened.
-  Posts are one column beside the profile's details; the others fill the
+  Posts are one column beside the profile's details: About, then the
+  profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`;
+  nine beside the posts, three in a row where the column is the page's width,
+  each opening its post, and See all opening the Photos tab), then
+  administrators and Locations. The others fill the
   page in the same masonry as the lists of notes, articles and
   photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
   is drawn as itself, not inside a card for whoever reposted it.

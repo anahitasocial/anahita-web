@@ -10,6 +10,7 @@ import Tab from '@mui/material/Tab';
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
 import ActorBodyAbout from './About';
+import ActorPhotos from './Photos';
 import useActorRules from './useRules';
 import i18n from '../../../languages';
 import eventDetails from '../../../utils/events';
@@ -143,6 +144,17 @@ const ActorBody = ({
                 utils.federation.isRemote(actor) || hasRules) && (
                 <Grid size={12}>
                   <ActorBodyAbout actor={actor} rules={rules} />
+                </Grid>
+              )}
+              {featureTabs.includes('photos') && (
+                <Grid size={12}>
+                  <ActorPhotos
+                    actor={actor}
+                    onSeeAll={(event) => {
+                      handleChange(event, 'photos');
+                      window.scrollTo({ top: 0 });
+                    }}
+                  />
                 </Grid>
               )}
               {admins && (

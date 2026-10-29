@@ -1,6 +1,8 @@
 export default {
   cTitle: 'Photos',
   mTitle: 'Photos',
+  // The photos card on a profile: its link to the Photos tab.
+  seeAll: 'See all',
   composer: {
     namePlaceholder: "Photo's title ...",
     bodyPlaceholder: 'Write a description ...',
