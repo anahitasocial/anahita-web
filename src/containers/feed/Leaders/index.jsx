@@ -17,8 +17,10 @@ import { App as APP } from '../../../constants';
 
 const { LIMIT } = APP.BROWSE;
 
+// What they posted and reposted, and nothing they only liked: a post liked
+// by somebody one follows, by people one does not, is not theirs to put in
+// a chronological feed of the people one follows (the user, 2026-10-29).
 const PARAMS = {
-  include_liked: true,
   include_reposts: true,
 };
 

@@ -13,6 +13,7 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ColumnsIcon from '@mui/icons-material/ViewColumnOutlined';
 import StreamIcon from '@mui/icons-material/ViewStreamOutlined';
 
+import FollowingIcon from '@mui/icons-material/HowToRegOutlined';
 import CompleteProfileCard from './CompleteProfileCard';
 import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
@@ -123,7 +124,14 @@ const FeedsPage = ({
             }}
             sx={{ flexGrow: 1, minWidth: 0 }}
           >
-            <Tab value={FOLLOWING} label={i18n.t('customFeeds:home.following')} />
+            {/* With an icon, as the custom feeds beside it have. */}
+            <Tab
+              value={FOLLOWING}
+              label={i18n.t('customFeeds:home.following')}
+              icon={<FollowingIcon fontSize="small" />}
+              iconPosition="start"
+              sx={{ minHeight: 48 }}
+            />
             {pinned.map((feed) => {
               return (
                 <Tab
