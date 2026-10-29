@@ -137,6 +137,11 @@ they set their first password:
 It is a pledge to the people who will trust you, from Anahita's creator,
 Rastin Mehr; not a term of the licence.
 
+## Security
+
+To report a vulnerability, see [SECURITY.md](SECURITY.md). Please don't open
+a public issue.
+
 ## Licence
 
 [MIT](LICENSE). The services it talks to, anahita-services, are under the
