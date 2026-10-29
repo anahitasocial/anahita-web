@@ -160,7 +160,7 @@ history. The main paths:
 | `/people`, `/people/:id` | People. A person's old address, `/people/:id` and its tabs, sends to `/@:id` |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A group's page opened on one of its tabs at its address by kind, which still works; for a person, sent to `/@:id/:tab` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
-| `/recommendations` | People, groups and events the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
+| `/recommendations` | People, groups, events and websites the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
@@ -652,8 +652,10 @@ a request that fails as it does without the service
   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
   page brings it back.
 - **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
-  People, Groups and Events, the open tab in the address (`?kind=group`),
-  as cards with the reason inside each, under the name. An event is drawn with the event's
+  People, Groups, Events and Websites (roadmap row 111), the open tab in
+  the address (`?kind=group`), as cards with the reason inside each, under
+  the name; on a phone the tabs slide, never wrap. The onboarding's
+  Recommended step offers people, groups and websites. An event is drawn with the event's
   own card and is not followed from here. It is in the left menu as
   **Recommendations**, where the installation has the service
   (`useHasSuggestions.js` asks once).

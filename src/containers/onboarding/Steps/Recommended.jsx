@@ -24,10 +24,10 @@ const { getActorName } = utils.node;
 // How many of each kind are asked for.
 const EACH = 5;
 
-// People and groups recommended to somebody who has just joined, each with
-// the reason, asked of the recommendation service as for a newcomer
-// (`context=onboarding`): by who invited them, the hashtags they picked a
-// step before, what is popular and what is featured. Asked when the step is
+// People, groups and websites recommended to somebody who has just joined,
+// each with the reason, asked of the recommendation service as for a
+// newcomer (`context=onboarding`): by who invited them, the hashtags they
+// picked a step before, what is popular and what is featured. Asked when the step is
 // reached, so that what was picked and followed before it counts.
 //
 // As with the featured accounts, nothing is followed without a tick, and
@@ -62,11 +62,11 @@ const OnboardingRecommended = ({
       });
     };
 
-    Promise.all([ask('person'), ask('group')]).then(([people, groups]) => {
+    Promise.all([ask('person'), ask('group'), ask('website')]).then(([people, groups, websites]) => {
       if (!current) {
         return;
       }
-      const found = people.concat(groups);
+      const found = people.concat(groups, websites);
       if (found.length === 0) {
         onNext();
         return;

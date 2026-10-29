@@ -26,11 +26,11 @@ import utils from '../../utils';
 const { getActorName } = utils.node;
 
 // The choices, in the order they are shown.
-const CHOICES = ['suggestPeople', 'suggestGroups', 'suggestEvents', 'useActivity'];
+const CHOICES = ['suggestPeople', 'suggestGroups', 'suggestEvents', 'suggestWebsites', 'useActivity'];
 
-// What the viewer is recommended: whether people, groups and events are
-// suggested to them at all, whether what they like and post is used to
-// choose, and the suggestions they removed, each to be taken back.
+// What the viewer is recommended: whether people, groups, events and
+// websites are suggested to them at all, whether what they like and post is
+// used to choose, and the suggestions they removed, each to be taken back.
 //
 // On the Recommendations page, where what it changes is in front of them.
 // Whether they are suggested to others is a privacy choice and is with

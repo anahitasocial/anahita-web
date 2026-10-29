@@ -11,6 +11,7 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import RecommendationsIcon from '@mui/icons-material/Explore';
 import TuneIcon from '@mui/icons-material/TuneOutlined';
@@ -138,6 +139,9 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
   const asked = params.get('kind');
   const kinds = [...recommendations.KINDS, FEED];
   const kind = kinds.includes(asked) ? asked : 'person';
+  // Five tabs and two buttons are more than a phone's width: there they
+  // slide, and never wrap (the user, 2026-10-29).
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [isTuning, setIsTuning] = useState(false);
   const [isChoosing, setIsChoosing] = useState(false);
   // Read again when the weights were changed.
@@ -166,7 +170,10 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
       >
         <Tabs
           value={kind}
-          variant="fullWidth"
+          // On a phone they slide under a finger, with no arrows to take
+          // their room: the one cut at the edge says there is more.
+          variant={phone ? 'scrollable' : 'fullWidth'}
+          scrollButtons={false}
           onChange={(event, chosen) => {
             setParams(chosen === 'person' ? {} : { kind: chosen });
           }}

@@ -5,7 +5,9 @@
 // follow somebody, the hashtags shared. Nothing is suggested without a
 // reason, and the reason is always shown.
 
-const KINDS = ['person', 'group', 'event'];
+// Websites since 2026-10-28 (roadmap row 111): a site's feed to follow, for
+// the reasons that fit a site.
+const KINDS = ['person', 'group', 'event', 'website'];
 
 // What the reasons name, by id.
 const relatedById = (related) => {
