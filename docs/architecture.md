@@ -102,7 +102,11 @@ Four components guard routes (`src/routes/`):
   site's promises first, from the same `GET /site`, with the way to
   `/rules` (`containers/about/Promises.jsx`). An administrator removes a
   person or a group as spam, at once, from its menu or from a report's case
-  (`containers/moderation/useRemoveAsSpam.jsx`, asked once more). A group's
+  (`containers/moderation/useRemoveAsSpam.jsx`, asked once more), and
+  refuses an account from another network for the whole site, from the
+  same places (`containers/moderation/useRefuseAccount.jsx`, with a reason;
+  roadmap row 116): removing as spam is for profiles made here, and is not
+  offered on one from elsewhere. A group's
   and an event's rules are written in a Rules tab of its settings
   (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
   suggestions or written; the site's own open in a dialog from there,
@@ -176,7 +180,7 @@ history. The main paths:
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
-| `/settings` | Site settings, for super administrators only. A page and a menu entry of its own: OAuth clients, signing keys, Privacy, which shows what the installation lets visitors read and can make everything public members-only, and Fediverse, the servers the site refuses |
+| `/settings` | Site settings, for super administrators, and for administrators the Fediverse tab's refused accounts alone (`permissions/settings.js`). A page and a menu entry of its own: OAuth clients, signing keys, Privacy, which shows what the installation lets visitors read and can make everything public members-only, and Fediverse, what the site refuses, in two tabs: Servers and Accounts |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/onboarding` | Where somebody signed in with an incomplete profile is sent, once (`routes/OnboardingGate.jsx`): a name and a few words; a picture, in a circle that shows the initials of that name until there is one; hashtags they are interested in, up to ten, which make one "My interests" feed on their home page; profiles the site features; then people and groups recommended for them, with the reason for each. Nothing is followed without a tick. A step with nothing to show is left out (`onboarding/featured.js#stepsFor`), every step can be skipped, and without the recommendation service there are no interests and no recommendations (`containers/onboarding`) |
@@ -1461,13 +1465,19 @@ draws nothing (`utils/federation.js#isAbsent`).
   as it is for any profile here, to say where an organisation on another
   server is (`locations/Gadget`, `hideWhenEmpty`); nobody else sees it
   while it is empty.
-- **The servers the site refuses** are in Site settings, under Fediverse
-  (`settings/Fediverse.jsx`), for super administrators as every tab there
-  is: the list with why, and a button to stop refusing one. The list is
+- **What the site refuses** is in Site settings, under Fediverse
+  (`settings/Fediverse.jsx`), in two tabs. **Servers**
+  (`settings/FediverseServers.jsx`), for super administrators as every tab
+  there is: the list with why, and a button to stop refusing one. The list is
   read fifty at a time as it is scrolled and searched on the server, by
   name or reason, since an installation that takes up somebody else's list
   has thousands; a server is refused from a dialog, which says that
-  refusing it does not remove what already came from it.
+  refusing it does not remove what already came from it. **Accounts**
+  (`settings/FediverseAccounts.jsx`), for administrators too, who see this
+  tab alone: the accounts refused one by one, on the fediverse or Bluesky,
+  newest first, with the network and why, a search, and a button to let
+  one back; one is refused by a handle or an address from a dialog, which
+  says that refusing it removes what is here of it.
 
 - **The switch** is a card under Settings › Fediverse, beside the Bluesky
   card, on the viewer's own profile only (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and

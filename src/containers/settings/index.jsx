@@ -43,7 +43,9 @@ const TAB_ORDER = [
   TABS.FEDIVERSE,
 ];
 
-// Site settings. Super admin only, every tab.
+// Site settings. Super admin only, every tab, but for the Fediverse tab's
+// list of refused accounts, which administrators see too, alone
+// (permissions/settings.js).
 //
 // About used to sit here and does not any more: nothing on it was a
 // setting, everything on it was already public in NodeInfo, and the
@@ -58,7 +60,12 @@ const Settings = ({
   viewer,
 }) => {
   const canBrowse = permissions.settings.canBrowse(viewer);
-  const [tab, setTab] = useState(TABS.OAUTH_CLIENTS);
+  const tabs = TAB_ORDER.filter((value) => {
+    return permissions.settings.canBrowseTab(viewer, value);
+  });
+  const [chosen, setTab] = useState(TABS.OAUTH_CLIENTS);
+  // The first this viewer may see, when the one chosen is not one.
+  const tab = tabs.includes(chosen) ? chosen : tabs[0];
 
   // No second-factor check here, and nothing passed down about one.
   //
@@ -127,7 +134,7 @@ const Settings = ({
             aria-label={i18n.t('settings:cTitle')}
             allowScrollButtonsMobile
           >
-            {TAB_ORDER.map((value) => {
+            {tabs.map((value) => {
               return (
                 <Tab
                   key={value}

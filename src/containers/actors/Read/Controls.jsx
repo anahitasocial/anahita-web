@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { useNavigate } from 'react-router-dom';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import Menu from '@mui/material/Menu';
@@ -7,12 +8,14 @@ import MenuItem from '@mui/material/MenuItem';
 import SettingsIcon from '@mui/icons-material/SettingsOutlined';
 import ReportIcon from '@mui/icons-material/FlagOutlined';
 import SpamIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
+import RefuseIcon from '@mui/icons-material/BlockOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
 import ControlFeature from '../../controls/Feature';
 import { ShareMenuItem, ofNode } from '../../controls/Share';
 import useReport from '../../reports/useReport';
 import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
+import useRefuseAccount from '../../moderation/useRefuseAccount';
 
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
@@ -47,6 +50,10 @@ const ActorsReadControls = ({
   // An administrator removing spam at once (roadmap row 102), then the
   // page read again, which finds it gone.
   const spam = useRemoveAsSpam(viewer, actor, onChanged);
+  // An administrator refusing a profile from another network for the
+  // whole site, which removes it: the page is then left for home.
+  const navigate = useNavigate();
+  const refuse = useRefuseAccount(viewer, actor, () => { navigate('/'); });
 
   return (
     <>
@@ -136,9 +143,21 @@ const ActorsReadControls = ({
               {i18n.t('abuseReports:spam.action')}
             </MenuItemLabel>
           </MenuItem>}
+        {refuse.canRefuse &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              refuse.open();
+            }}
+          >
+            <MenuItemLabel icon={<RefuseIcon fontSize="small" />}>
+              {i18n.t('abuseReports:refuse.action')}
+            </MenuItemLabel>
+          </MenuItem>}
       </Menu>
       {report.dialog}
       {spam.dialog}
+      {refuse.dialog}
     </>
   );
 };

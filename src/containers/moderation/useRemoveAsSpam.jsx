@@ -14,6 +14,7 @@ import i18n from '../../languages';
 import utils from '../../utils';
 
 const { isAdmin, isPerson } = utils.node;
+const { isRemote } = utils.federation;
 
 // "Remove as spam", for an administrator, on a person or a group (roadmap
 // row 102): at once and for good, without the thirty days a deleted account
@@ -29,7 +30,9 @@ const { isAdmin, isPerson } = utils.node;
 // spamRemovalMaxDays, 30 unless said): spam is new, and an older account is
 // disabled or deleted, with the thirty days to bring it back (the user,
 // 2026-10-19). The server refuses all three; where the account's age is not
-// known here, its answer is said in words.
+// known here, its answer is said in words. Nor on a profile from another
+// network, which the purge is not for: that is refused instead
+// (useRefuseAccount).
 
 const DAY = 24 * 60 * 60 * 1000;
 const useRemoveAsSpam = (viewer, actor, onRemoved = null) => {
@@ -48,6 +51,7 @@ const useRemoveAsSpam = (viewer, actor, onRemoved = null) => {
     isAdmin(viewer) &&
     actor.id !== viewer.id &&
     (kind.includes('person') || kind.includes('group')) &&
+    !isRemote(actor) &&
     !(isPerson(actor) && isAdmin(actor)) &&
     !tooOld;
 

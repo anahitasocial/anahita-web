@@ -14,7 +14,7 @@ import i18n from '../../../languages';
 
 // What can be recorded as having been done. "none" is not offered: that is
 // what dismissing means.
-const ACTIONS = ['deleted', 'disabled', 'archived', 'blocked', 'removed_as_spam', 'other'];
+const ACTIONS = ['deleted', 'disabled', 'archived', 'blocked', 'removed_as_spam', 'refused', 'other'];
 
 const NOTE_MAX = 2000;
 

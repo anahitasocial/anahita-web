@@ -43,6 +43,7 @@ import { Actor as ACTOR } from '../../../constants';
 
 import ActorsType from '../../../proptypes/Actors';
 import PersonType from '../../../proptypes/Person';
+import { canRefuseAccount } from '../../moderation/useRefuseAccount';
 
 const {
   getPortraitURL,
@@ -204,10 +205,13 @@ const ActorsRead = (props) => {
   // where they do not administer the actor.
   // And anybody signed in sees it on somebody else's profile, where it
   // holds Block and Report.
+  // And an administrator on a profile from another network, for Refuse on
+  // this site.
   const showCommands = isAuthenticated && (
     canAdminister ||
     permissions.canFeature(actor, viewer) ||
-    reportPermissions.canAdd(viewer, actor)
+    reportPermissions.canAdd(viewer, actor) ||
+    canRefuseAccount(viewer, actor)
   );
   // A website is public and followed outright: nobody asks.
   const showFollowRequests = isAuthenticated && canAdminister && namespace !== 'websites';

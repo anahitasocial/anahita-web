@@ -52,6 +52,44 @@ export default {
       domain_is_here: 'Das ist diese Website selbst.',
       generic: 'Das hat nicht geklappt. Bitte versuch es noch einmal.',
     },
+    // The tab's two lists (the user, 2026-10-29): the servers refused, and
+    // the accounts refused one by one, which administrators see too.
+    tabs: {
+      servers: 'Server',
+      accounts: 'Konten',
+    },
+    accounts: {
+      cTitle: 'Konten, die diese Seite abweist',
+      cDescription: 'Ein Konto nach dem anderen, im Fediverse oder auf Bluesky. Von ihm wird nichts angenommen und an es nichts gesendet, niemand hier kann ihm folgen, und was hier von ihm war, wurde entfernt.',
+      none: 'Kein Konto ist abgewiesen.',
+      noneFound: 'Kein abgewiesenes Konto passt dazu.',
+      count: '{{ count }} Konto abgewiesen',
+      count_other: '{{ count }} Konten abgewiesen',
+      search: 'Nach Name, Handle oder Grund suchen',
+      open: 'Ein Konto abweisen',
+      removes: 'Das Konto wird jetzt mit allen Beiträgen, Antworten, Likes und Folgen von dieser Seite entfernt. Von ihm kommt nichts mehr an, an es wird nichts gesendet, und niemand hier kann ihm folgen. Es später wieder zuzulassen, bringt nicht zurück, was entfernt wurde.',
+      address: {
+        label: 'Konto',
+        help: 'Sein Handle oder seine Adresse: @name@example.social, name.bsky.social oder eine DID.',
+      },
+      reasonHelp: 'Für die anderen Administratoren. Er wird niemandem sonst gezeigt und nicht an das Konto gesendet.',
+      add: 'Dieses Konto abweisen',
+      added: '{{ name }} ist jetzt abgewiesen.',
+      remove: '{{ name }} wieder zulassen',
+      removed: '{{ name }} ist nicht mehr abgewiesen.',
+      noReason: 'Kein Grund angegeben',
+      networks: {
+        activitypub: 'Fediverse',
+        atproto: 'Bluesky',
+      },
+      errors: {
+        account_required: 'Nenne das Konto, das abgewiesen werden soll.',
+        account_unreadable: 'Das ist kein Handle und keine Adresse.',
+        account_not_found: 'Dieses Konto wurde nicht gefunden.',
+        is_local: 'Das ist ein Profil dieser Seite.',
+        already_refused: 'Dieses Konto oder sein Server ist schon abgewiesen.',
+      },
+    },
   },
   privacy: {
     mTitle: 'Privatsphäre',

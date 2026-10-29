@@ -55,6 +55,26 @@ export default {
     failed: 'La suppression a échoué. Veuillez réessayer.',
     tooOld: 'Seul un compte créé au cours des {{days}} derniers jours peut être supprimé comme spam. Désactivez ou supprimez celui-ci.',
   },
+  // Refusing an account from another network for the whole site, from its
+  // profile or a report about it (anahita-services' docs/federation.md).
+  refuse: {
+    action: 'Refuser sur ce site',
+    caseAction: 'Refuser le compte',
+    confirmTitle: 'Refuser ce compte ?',
+    confirmText: '{{name}} sera refusé sur tout le site, et en sera retiré dès maintenant avec ses publications, réponses, mentions J’aime et abonnements. Plus rien ne sera pris de ce compte ni envoyé, et personne ici ne pourra le suivre. Le laisser revenir plus tard ne rend pas ce qui a été retiré.',
+    reason: {
+      label: 'Raison',
+      help: 'Pour les autres administrateurs. Elle n’est montrée à personne d’autre, ni envoyée au compte.',
+    },
+    confirm: 'Refuser',
+    refused: '{{name}} est refusé, et retiré de ce site.',
+    failed: 'Le compte n’a pas pu être refusé. Veuillez réessayer.',
+    errors: {
+      is_local: 'Ce profil est celui de ce site : désactivez-le ou supprimez-le plutôt.',
+      already_refused: 'Ce compte, ou son serveur, est déjà refusé.',
+      account_not_found: 'Ce compte est introuvable.',
+    },
+  },
   actions: {
     none: 'Rien n’a été fait',
     deleted: 'Le contenu a été supprimé',
@@ -62,6 +82,7 @@ export default {
     archived: 'Le contenu a été archivé',
     blocked: 'La personne a été bloquée',
     removed_as_spam: 'Supprimé comme spam',
+    refused: 'Le compte a été refusé',
     other: 'Autre chose',
   },
   list: {

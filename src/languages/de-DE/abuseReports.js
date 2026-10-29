@@ -55,6 +55,26 @@ export default {
     failed: 'Das Entfernen ist fehlgeschlagen. Bitte versuche es erneut.',
     tooOld: 'Nur ein Konto, das in den letzten {{days}} Tagen erstellt wurde, kann als Spam entfernt werden. Deaktiviere oder lösche dieses stattdessen.',
   },
+  // Refusing an account from another network for the whole site, from its
+  // profile or a report about it (anahita-services' docs/federation.md).
+  refuse: {
+    action: 'Auf dieser Seite abweisen',
+    caseAction: 'Konto abweisen',
+    confirmTitle: 'Dieses Konto abweisen?',
+    confirmText: '{{name}} wird für die ganze Seite abgewiesen und jetzt mit allen Beiträgen, Antworten, Likes und Folgen dieses Kontos entfernt. Von diesem Konto wird nichts mehr angenommen und nichts mehr gesendet, und niemand hier kann ihm folgen. Es später wieder zuzulassen, bringt nicht zurück, was entfernt wurde.',
+    reason: {
+      label: 'Grund',
+      help: 'Für die anderen Administratoren. Er wird niemandem sonst gezeigt und nicht an das Konto gesendet.',
+    },
+    confirm: 'Abweisen',
+    refused: '{{name}} ist abgewiesen und von dieser Seite entfernt.',
+    failed: 'Das Konto konnte nicht abgewiesen werden. Bitte versuche es noch einmal.',
+    errors: {
+      is_local: 'Dieses Profil gehört zu dieser Seite: deaktiviere oder lösche es stattdessen.',
+      already_refused: 'Dieses Konto oder sein Server ist schon abgewiesen.',
+      account_not_found: 'Dieses Konto wurde nicht gefunden.',
+    },
+  },
   actions: {
     none: 'Nichts wurde unternommen',
     deleted: 'Es wurde gelöscht',
@@ -62,6 +82,7 @@ export default {
     archived: 'Es wurde archiviert',
     blocked: 'Die Person wurde blockiert',
     removed_as_spam: 'Als Spam entfernt',
+    refused: 'Das Konto wurde abgewiesen',
     other: 'Etwas anderes',
   },
   list: {

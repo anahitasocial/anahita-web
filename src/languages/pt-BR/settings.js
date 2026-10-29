@@ -52,6 +52,44 @@ export default {
       domain_is_here: 'Esse é o próprio site.',
       generic: 'Não deu certo. Tente de novo.',
     },
+    // The tab's two lists (the user, 2026-10-29): the servers refused, and
+    // the accounts refused one by one, which administrators see too.
+    tabs: {
+      servers: 'Servidores',
+      accounts: 'Contas',
+    },
+    accounts: {
+      cTitle: 'Contas que este site recusa',
+      cDescription: 'Uma conta de cada vez, no fediverso ou no Bluesky. Nada é recebido dela nem enviado a ela, ninguém aqui pode segui-la, e o que havia aqui dela foi removido.',
+      none: 'Nenhuma conta é recusada.',
+      noneFound: 'Nenhuma conta recusada corresponde.',
+      count: '{{ count }} conta recusada',
+      count_other: '{{ count }} contas recusadas',
+      search: 'Buscar por nome, usuário ou motivo',
+      open: 'Recusar uma conta',
+      removes: 'A conta é removida deste site agora, com suas publicações, respostas, curtidas e quem segue. Nada mais chega dela, nada é enviado a ela, e ninguém aqui pode segui-la. Aceitá-la de volta depois não traz de volta o que foi removido.',
+      address: {
+        label: 'Conta',
+        help: 'O usuário ou o endereço dela: @nome@example.social, nome.bsky.social ou um DID.',
+      },
+      reasonHelp: 'Para os outros administradores. Não é mostrado a mais ninguém nem enviado à conta.',
+      add: 'Recusar esta conta',
+      added: '{{ name }} agora está recusada.',
+      remove: 'Aceitar {{ name }} de volta',
+      removed: '{{ name }} não está mais recusada.',
+      noReason: 'Nenhum motivo dado',
+      networks: {
+        activitypub: 'Fediverso',
+        atproto: 'Bluesky',
+      },
+      errors: {
+        account_required: 'Indique a conta a recusar.',
+        account_unreadable: 'Isso não é um usuário nem um endereço.',
+        account_not_found: 'Essa conta não foi encontrada.',
+        is_local: 'É um perfil deste site.',
+        already_refused: 'Essa conta, ou o servidor dela, já está recusada.',
+      },
+    },
   },
   privacy: {
     mTitle: 'Privacidade',

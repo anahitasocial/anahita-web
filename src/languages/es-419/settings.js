@@ -52,6 +52,44 @@ export default {
       domain_is_here: 'Ese es este mismo sitio.',
       generic: 'No funcionó. Inténtalo de nuevo.',
     },
+    // The tab's two lists (the user, 2026-10-29): the servers refused, and
+    // the accounts refused one by one, which administrators see too.
+    tabs: {
+      servers: 'Servidores',
+      accounts: 'Cuentas',
+    },
+    accounts: {
+      cTitle: 'Cuentas que este sitio rechaza',
+      cDescription: 'Una cuenta a la vez, en el fediverso o en Bluesky. No se toma nada de ella ni se le envía nada, nadie aquí puede seguirla, y lo que había aquí de ella se eliminó.',
+      none: 'No se rechaza ninguna cuenta.',
+      noneFound: 'Ninguna cuenta rechazada coincide.',
+      count: '{{ count }} cuenta rechazada',
+      count_other: '{{ count }} cuentas rechazadas',
+      search: 'Buscar por nombre, usuario o motivo',
+      open: 'Rechazar una cuenta',
+      removes: 'La cuenta se elimina ahora de este sitio, con sus publicaciones, respuestas, me gusta y seguimientos. No llega nada más de ella, no se le envía nada y nadie aquí puede seguirla. Volver a admitirla después no recupera lo que se eliminó.',
+      address: {
+        label: 'Cuenta',
+        help: 'Su usuario o su dirección: @nombre@example.social, nombre.bsky.social o un DID.',
+      },
+      reasonHelp: 'Para los demás administradores. No se muestra a nadie más ni se envía a la cuenta.',
+      add: 'Rechazar esta cuenta',
+      added: '{{ name }} ahora está rechazada.',
+      remove: 'Volver a admitir a {{ name }}',
+      removed: '{{ name }} ya no está rechazada.',
+      noReason: 'Sin motivo',
+      networks: {
+        activitypub: 'Fediverso',
+        atproto: 'Bluesky',
+      },
+      errors: {
+        account_required: 'Indica la cuenta que quieres rechazar.',
+        account_unreadable: 'Eso no es un usuario ni una dirección.',
+        account_not_found: 'No se encontró esa cuenta.',
+        is_local: 'Es un perfil de este sitio.',
+        already_refused: 'Esa cuenta, o su servidor, ya está rechazada.',
+      },
+    },
   },
   privacy: {
     mTitle: 'Privacidad',

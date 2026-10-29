@@ -261,8 +261,9 @@ const LeftMenu = ({
           </ListItemIcon>
           <ListItemText primary={i18n.t('invites:mTitle')} />
         </ListItemButton>}
-      {/* Site settings, for super administrators alone, which is why it is
-          not a tab of the administration area above. */}
+      {/* Site settings, for super administrators, and for administrators
+          the list of refused accounts alone (permissions/settings.js);
+          which is why it is not a tab of the administration area above. */}
       {isAuthenticated && permissions.settings.canBrowse(viewer) &&
         <ListItemButton
           component={Link}

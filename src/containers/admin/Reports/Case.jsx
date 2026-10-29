@@ -28,6 +28,7 @@ import utils from '../../../utils';
 
 import ResolveDialog from './ResolveDialog';
 import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
+import useRefuseAccount, { canRefuseAccount } from '../../moderation/useRefuseAccount';
 import target from './target';
 
 const { getURL } = utils.node;
@@ -81,6 +82,26 @@ const ReportsCase = ({
       handleResolve({ status: 'actioned', action: 'removed_as_spam', note: '' });
     },
   );
+
+  // An account from another network, reported or the author of what was
+  // reported, refused for the whole site from here; the case is then
+  // closed as refused. If the account's going closed it first, it stays
+  // as that left it.
+  const reported = item && item.status === 'open' && !item.targetGone ? item.target : null;
+  const author = reported && (reported.author || reported.owner);
+  const refusee = (canRefuseAccount(viewer, reported) && reported) ||
+    (canRefuseAccount(viewer, author) && author) || null;
+  const refuse = useRefuseAccount(viewer, refusee, () => {
+    api.abuseReports.resolve(id, { status: 'actioned', action: 'refused', note: '' })
+      .catch((err) => {
+        const status = err && err.response && err.response.status;
+        if (status !== 409) {
+          alertError(resolveError(err, 'abuseReports:adminErrors.resolve'));
+        }
+      })
+      // eslint-disable-next-line no-use-before-define
+      .then(refresh);
+  });
 
   const fetchCase = useCallback(() => {
     setIsFetching(true);
@@ -254,6 +275,10 @@ const ReportsCase = ({
                   <Button color="error" disabled={submitting} onClick={spam.open}>
                     {i18n.t('abuseReports:spam.action')}
                   </Button>}
+                {refuse.canRefuse &&
+                  <Button color="error" disabled={submitting} onClick={refuse.open}>
+                    {i18n.t('abuseReports:refuse.caseAction')}
+                  </Button>}
               </CardActions>
             </>}
         </Card>
@@ -417,6 +442,7 @@ const ReportsCase = ({
           onConfirm={handleResolve}
         />}
       {spam.dialog}
+      {refuse.dialog}
     </>
   );
 };

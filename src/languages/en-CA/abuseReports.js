@@ -56,6 +56,26 @@ export default {
     failed: 'It could not be removed. Please try again.',
     tooOld: 'Only an account made in the last {{days}} days can be removed as spam. Disable or delete this one instead.',
   },
+  // Refusing an account from another network for the whole site, from its
+  // profile or a report about it (anahita-services' docs/federation.md).
+  refuse: {
+    action: 'Refuse on this site',
+    caseAction: 'Refuse account',
+    confirmTitle: 'Refuse this account?',
+    confirmText: '{{name}} will be refused for the whole site, and removed from it now with their posts, replies, likes and follows. Nothing more is taken from them or sent to them, and nobody here can follow them. Letting them back later does not bring back what was removed.',
+    reason: {
+      label: 'Reason',
+      help: 'For the other administrators. It is not shown to anybody else, nor sent to the account.',
+    },
+    confirm: 'Refuse',
+    refused: '{{name}} is refused, and removed from this site.',
+    failed: 'The account could not be refused. Please try again.',
+    errors: {
+      is_local: 'This profile is this site\'s own: disable or delete it instead.',
+      already_refused: 'This account, or its server, is refused already.',
+      account_not_found: 'That account could not be found.',
+    },
+  },
   actions: {
     none: 'Nothing was done',
     deleted: 'It was deleted',
@@ -63,6 +83,7 @@ export default {
     archived: 'It was archived',
     blocked: 'The person was blocked',
     removed_as_spam: 'It was removed as spam',
+    refused: 'The account was refused',
     other: 'Something else',
   },
   list: {

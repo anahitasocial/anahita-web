@@ -52,6 +52,44 @@ export default {
       domain_is_here: 'That is this site itself.',
       generic: 'That did not work. Please try again.',
     },
+    // The tab's two lists (the user, 2026-10-29): the servers refused, and
+    // the accounts refused one by one, which administrators see too.
+    tabs: {
+      servers: 'Servers',
+      accounts: 'Accounts',
+    },
+    accounts: {
+      cTitle: 'Accounts this site refuses',
+      cDescription: 'One account at a time, on the fediverse or Bluesky. Nothing is taken from it or sent to it, nobody here can follow it, and what was here of it was removed.',
+      none: 'No account is refused.',
+      noneFound: 'No account refused matches that.',
+      count: '{{ count }} account refused',
+      count_other: '{{ count }} accounts refused',
+      search: 'Search by name, handle or reason',
+      open: 'Refuse an account',
+      removes: 'The account is removed from this site now, with its posts, replies, likes and follows. Nothing more arrives from it, nothing is sent to it, and nobody here can follow it. Letting it back later does not bring back what was removed.',
+      address: {
+        label: 'Account',
+        help: 'Its handle or address: @name@example.social, name.bsky.social, or a DID.',
+      },
+      reasonHelp: 'For the other administrators. It is not shown to anybody else, nor sent to the account.',
+      add: 'Refuse this account',
+      added: '{{ name }} is now refused.',
+      remove: 'Let {{ name }} back',
+      removed: '{{ name }} is no longer refused.',
+      noReason: 'No reason given',
+      networks: {
+        activitypub: 'Fediverse',
+        atproto: 'Bluesky',
+      },
+      errors: {
+        account_required: 'Name the account to refuse.',
+        account_unreadable: 'That is not a handle or an address.',
+        account_not_found: 'That account could not be found.',
+        is_local: 'That is a profile on this site.',
+        already_refused: 'That account, or its server, is refused already.',
+      },
+    },
   },
   privacy: {
     mTitle: 'Privacy',

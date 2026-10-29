@@ -1,6 +1,7 @@
 import utils from '../utils';
 
 const {
+  isAdmin,
   isSuperAdmin,
 } = utils.node;
 
@@ -22,10 +23,32 @@ const {
 // by a write permission, which happened to give the right answer only
 // because both are super admin. Opening the area and changing things
 // in it are the same privilege here, so there is one name for it.
+//
+// With one opening (the user, 2026-10-29): administrators refuse accounts
+// from other networks one by one, so the list of them, the Fediverse tab's
+// Accounts, is theirs too. They see Site settings with that tab alone, and
+// in it that list alone; everything else stays super administrators'.
 const canBrowse = (viewer) => {
+  return isAdmin(viewer);
+};
+
+// The tabs of Site settings this viewer sees: every one for a super
+// administrator, the Fediverse tab alone for an administrator.
+const canBrowseTab = (viewer, tab) => {
+  if (isSuperAdmin(viewer)) {
+    return true;
+  }
+  return tab === 'fediverse' && isAdmin(viewer);
+};
+
+// The servers the installation refuses: super administrators', as the
+// server holds them.
+const canRefuseServers = (viewer) => {
   return isSuperAdmin(viewer);
 };
 
 export default {
   canBrowse,
+  canBrowseTab,
+  canRefuseServers,
 };

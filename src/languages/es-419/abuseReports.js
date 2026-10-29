@@ -55,6 +55,26 @@ export default {
     failed: 'No se pudo eliminar. Inténtalo de nuevo.',
     tooOld: 'Solo una cuenta creada en los últimos {{days}} días se puede eliminar como spam. Desactiva o elimina esta en su lugar.',
   },
+  // Refusing an account from another network for the whole site, from its
+  // profile or a report about it (anahita-services' docs/federation.md).
+  refuse: {
+    action: 'Rechazar en este sitio',
+    caseAction: 'Rechazar la cuenta',
+    confirmTitle: '¿Rechazar esta cuenta?',
+    confirmText: '{{name}} será rechazada en todo el sitio y eliminada ahora con sus publicaciones, respuestas, me gusta y seguimientos. No se tomará nada más de esa cuenta ni se le enviará nada, y nadie aquí podrá seguirla. Volver a admitirla después no recupera lo que se eliminó.',
+    reason: {
+      label: 'Motivo',
+      help: 'Para los demás administradores. No se muestra a nadie más ni se envía a la cuenta.',
+    },
+    confirm: 'Rechazar',
+    refused: '{{name}} está rechazada y se eliminó de este sitio.',
+    failed: 'No se pudo rechazar la cuenta. Inténtalo de nuevo.',
+    errors: {
+      is_local: 'Este perfil es de este sitio: desactívalo o elimínalo.',
+      already_refused: 'Esta cuenta, o su servidor, ya está rechazada.',
+      account_not_found: 'No se encontró esa cuenta.',
+    },
+  },
   actions: {
     none: 'No se hizo nada',
     deleted: 'Se eliminó',
@@ -62,6 +82,7 @@ export default {
     archived: 'Se archivó',
     blocked: 'Se bloqueó a la persona',
     removed_as_spam: 'Se eliminó como spam',
+    refused: 'Se rechazó la cuenta',
     other: 'Otra cosa',
   },
   list: {

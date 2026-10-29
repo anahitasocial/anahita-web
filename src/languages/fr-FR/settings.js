@@ -52,6 +52,44 @@ export default {
       domain_is_here: 'C’est ce site lui-même.',
       generic: 'Cela n’a pas fonctionné. Veuillez réessayer.',
     },
+    // The tab's two lists (the user, 2026-10-29): the servers refused, and
+    // the accounts refused one by one, which administrators see too.
+    tabs: {
+      servers: 'Serveurs',
+      accounts: 'Comptes',
+    },
+    accounts: {
+      cTitle: 'Comptes que ce site refuse',
+      cDescription: 'Un compte à la fois, sur le fédivers ou Bluesky. Rien n’en est pris ni ne lui est envoyé, personne ici ne peut le suivre, et ce qu’il y avait ici de lui a été retiré.',
+      none: 'Aucun compte n’est refusé.',
+      noneFound: 'Aucun compte refusé ne correspond.',
+      count: '{{ count }} compte refusé',
+      count_other: '{{ count }} comptes refusés',
+      search: 'Chercher par nom, identifiant ou raison',
+      open: 'Refuser un compte',
+      removes: 'Le compte est retiré de ce site dès maintenant, avec ses publications, réponses, mentions J’aime et abonnements. Plus rien n’en arrive, rien ne lui est envoyé, et personne ici ne peut le suivre. Le laisser revenir plus tard ne rend pas ce qui a été retiré.',
+      address: {
+        label: 'Compte',
+        help: 'Son identifiant ou son adresse : @nom@example.social, nom.bsky.social, ou un DID.',
+      },
+      reasonHelp: 'Pour les autres administrateurs. Elle n’est montrée à personne d’autre, ni envoyée au compte.',
+      add: 'Refuser ce compte',
+      added: '{{ name }} est maintenant refusé.',
+      remove: 'Laisser revenir {{ name }}',
+      removed: '{{ name }} n’est plus refusé.',
+      noReason: 'Aucune raison donnée',
+      networks: {
+        activitypub: 'Fédivers',
+        atproto: 'Bluesky',
+      },
+      errors: {
+        account_required: 'Indiquez le compte à refuser.',
+        account_unreadable: 'Ce n’est ni un identifiant ni une adresse.',
+        account_not_found: 'Ce compte est introuvable.',
+        is_local: 'C’est un profil de ce site.',
+        already_refused: 'Ce compte, ou son serveur, est déjà refusé.',
+      },
+    },
   },
   privacy: {
     mTitle: 'Confidentialité',

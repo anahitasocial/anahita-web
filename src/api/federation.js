@@ -103,6 +103,27 @@ const removeBlock = (domain) => {
   return axios.delete(`/activitypub/blocks/${encodeURIComponent(domain)}`);
 };
 
+// The accounts on other networks refused one by one, on the fediverse
+// and on Bluesky (anahita-services' docs/federation.md, "Accounts that are
+// refused"). For administrators. Newest first, a page at a time.
+const refusedAccounts = ({ q = '', limit = 50, offset = 0 } = {}) => {
+  return axios.get('/activitypub/refused-accounts', {
+    params: { q, limit, start: offset },
+  });
+};
+
+// A profile kept here, by `actorId`, or any account by `address`: a
+// handle, an address or a DID. What is here of it is removed.
+const refuseAccount = ({ actorId = 0, address = '', reason = '' }) => {
+  return axios.post('/activitypub/refused-accounts', actorId ?
+    { actor_id: actorId, reason } :
+    { address, reason });
+};
+
+const letAccountBack = (id) => {
+  return axios.delete(`/activitypub/refused-accounts/${encodeURIComponent(id)}`);
+};
+
 export default {
   settings,
   setEnabled,
@@ -116,4 +137,7 @@ export default {
   blocks,
   addBlock,
   removeBlock,
+  refusedAccounts,
+  refuseAccount,
+  letAccountBack,
 };
