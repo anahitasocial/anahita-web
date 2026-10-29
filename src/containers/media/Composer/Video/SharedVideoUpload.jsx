@@ -18,19 +18,27 @@ const Shared = createContext(null);
 // leaving it stopped the upload (roadmap row 112). One at a time, as the
 // composer has one.
 //
-// What it says is said wherever the viewer is: that it is posted, or why
-// not. A video posted is put at the head of an open feed it belongs in
-// (reducers/lastPosted.js), as any other post is. Leaving the site while it
-// is still being sent is asked about first, by the browser.
+// What it says is said wherever the viewer is: that it is posted, with
+// View, or why not; and, on the home page, the post on its way at the head
+// of the feed (VideoOnItsWayCard). A video posted is put at the head of an
+// open feed it belongs in (reducers/lastPosted.js), as any other post is.
+// Leaving the site while it is still being sent is asked about first, by
+// the browser.
 const SharedVideoUpload = ({ children }) => {
   const upload = useVideoUpload();
   const dispatch = useDispatch();
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
+  // On the home page the card at the head of the feed says why it failed;
+  // a notice over it would say it twice.
+  const onHome = useSelector((state) => {
+    return Boolean(state.composeTarget && state.composeTarget.home);
+  });
 
   useEffect(() => {
     if (upload.phase === 'ready') {
-      dispatch(actions.app.alert.success(i18n.t('videos:upload.ready')));
       const id = upload.upload && upload.upload.nodeId;
+      // With View, to the post, wherever the viewer is.
+      dispatch(actions.app.alert.success(i18n.t('videos:upload.ready'), id ? `/videos/${id}/` : ''));
       if (id) {
         api.videos.read(id).then(({ data }) => {
           dispatch({ type: 'VIDEOS_ADD_SUCCESS', node: data });
@@ -39,7 +47,7 @@ const SharedVideoUpload = ({ children }) => {
         });
       }
     }
-    if (upload.phase === 'failed') {
+    if (upload.phase === 'failed' && !onHome) {
       dispatch(actions.app.alert.error(i18n.t(`videos:problems.${upload.problem || 'failed'}`, {
         size: videos.megabytes(videos.maxBytes(nodeInfo)),
         minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),

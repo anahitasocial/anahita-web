@@ -615,13 +615,24 @@ what the keyboard leaves, and follow Safari when it slides the page
 (`Composer/useKeyboardRoom.js`). A profile that takes only long writing opens
 that at once. A video posted from it is the app's to send, not the
 composer's (`Composer/Video/SharedVideoUpload.jsx`, round the whole app in
-`containers/Root.jsx`), so it goes on from page to page and the composer
-may be closed while it is sent: a ring round the button fills as it is
-sent and turns while it is prepared, and where there is no button a small
-line in its place says the same (`Composer/VideoOnItsWay.jsx`). Leaving
-the site while it is sent is asked about first. What the viewer posts is at the head of an open feed it
+`containers/Root.jsx`), in the background, as on other networks (roadmap
+row 115): Post closes the composer at once, empty, so that nothing of one
+post is left in it to be taken for part of the next. At the head of the
+home feed, the post on its way (`Composer/VideoOnItsWayCard.jsx`): its
+words, how far it has got and the minutes left, then that it is being
+prepared; Cancel while it is sent; why it failed, with Try again where
+trying again can help; and under it the videos handed over earlier, still
+being prepared or failed in the last day (`Composer/VideoUploads.jsx`). A
+ring round the + fills as it is sent and turns while it is prepared, and
+where there is no button a small line in its place says the same
+(`Composer/VideoOnItsWay.jsx`). One video at a time: while one is on its
+way the composer's Video and GIF buttons are off, and it says why; words
+and photos can still be posted. Leaving the site while it is sent is asked
+about first. What the viewer posts is at the head of an open feed it
 belongs in at once (`reducers/lastPosted.js`, `feed/usePosted.js`): the
-home feed, and the profile it was posted to.
+home feed, and the profile it was posted to; the feed is not read again.
+The notice that it is posted has **View**, to the post wherever the feed is
+scrolled (an alert's `link`, `actions/app.js`).
 
 ### Suggestions
 
@@ -705,7 +716,7 @@ own, because a video is too big to be sent with the post (the services'
   video posted from the + button goes on being sent from page to page (see
   Posting, above); one sent from a reply or the media library stops when
   its page is left.
-- **Videos on the way** are listed in the composer: ones still being
+- **Videos on the way** are listed at the head of the home feed: ones still being
   prepared, and ones that failed in the last day, each with why.
 - **The parts go to storage, not to the API**, through an axios instance
   of their own (`api/videos.js#sendPart`) that sends no cookies and none

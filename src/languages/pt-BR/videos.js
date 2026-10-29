@@ -15,8 +15,6 @@ export default {
     left_one: '{{percent}}% · falta cerca de um minuto',
     left_other: '{{percent}}% · faltam cerca de {{count}} minutos',
     keepOpen: 'Mantenha esta página aberta até o envio terminar.',
-    // From the + button's composer, which may be closed while it is sent.
-    carryOn: 'Você pode fechar isto. Mantenha o site aberto até o envio terminar.',
     preparing: 'Preparando seu vídeo',
     processing: 'Preparando seu vídeo. Ele será publicado quando estiver pronto, e você pode sair desta página.',
     ready: 'Seu vídeo foi publicado.',

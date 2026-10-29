@@ -35,6 +35,7 @@ export default (state = {
             id: action.id,
             body: action.body,
             severity: action.severity,
+            link: action.link || '',
           },
         ],
       };

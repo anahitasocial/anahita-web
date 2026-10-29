@@ -1,4 +1,6 @@
 export default {
+  // A notice's link to what it is about: a post just made.
+  view: 'Voir',
   addCover: 'Ajouter une photo de couverture',
   followBack: 'Suivre en retour',
   follow: 'Suivre',

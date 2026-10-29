@@ -18,6 +18,7 @@ import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
 import usePinnedFeeds from './usePinnedFeeds';
 import WhoToFollow from '../recommendations/WhoToFollow';
+import VideoOnItsWayCard from '../media/Composer/VideoOnItsWayCard';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import PageColumn from '../../components/PageColumn';
 import actions from '../../actions';
@@ -167,6 +168,9 @@ const FeedsPage = ({
             </ToggleButton>
           </ToggleButtonGroup>}
         </Box>
+        {/* A video posted, on its way, at the head of the feed it will
+              be in (roadmap row 115). */}
+        <VideoOnItsWayCard />
         {/* Keyed by when it was last changed, so a feed that was just
               edited is read again from the top. */}
         {open ?

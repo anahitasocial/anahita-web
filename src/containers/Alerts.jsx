@@ -1,10 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 
 import actions from '../actions';
+import i18n from '../languages';
 
 // Snackbar's transition needs a ref to the DOM node of its child.
 const Alert = React.forwardRef((props, ref) => {
@@ -41,6 +44,21 @@ const Alerts = ({
             return handleClose(e, alert.id);
           }}
           severity={alert.severity}
+          // A post just made: View goes to it, wherever the feed it went
+          // to is scrolled (the user, 2026-10-28).
+          action={alert.link ?
+            <Button
+              color="inherit"
+              size="small"
+              component={Link}
+              to={alert.link}
+              onClick={(e) => {
+                handleClose(e, alert.id);
+              }}
+            >
+              {i18n.t('actions:view')}
+            </Button> :
+            undefined}
         >
           {alert.body}
         </Alert>
@@ -56,6 +74,7 @@ Alerts.propTypes = {
     id: PropTypes.string,
     body: PropTypes.string,
     severity: PropTypes.string,
+    link: PropTypes.string,
   })),
   deleteItem: PropTypes.func.isRequired,
 };

@@ -111,7 +111,8 @@ const useWakeLock = () => {
 //
 // Answers with where it has got to: `phase` ('idle', 'uploading',
 // 'processing', 'ready' or 'failed'), `percent` while uploading and
-// `minutes`, about how many are left (null until it can tell), the
+// `minutes`, about how many are left (null until it can tell), `caption`,
+// the words of the post it is for, so that it can be told from another, the
 // `upload` as the server last described it, and `problem`, a key of
 // videos:problems, when it failed.
 const useVideoUpload = () => {
@@ -119,10 +120,13 @@ const useVideoUpload = () => {
     phase: 'idle',
     percent: 0,
     minutes: null,
+    caption: '',
     upload: null,
     problem: '',
   });
   const controller = useRef(null);
+  // What was last begun, to begin again with Try again.
+  const last = useRef(null);
   const alive = useRef(true);
   const awake = useWakeLock();
 
@@ -230,12 +234,14 @@ const useVideoUpload = () => {
   };
 
   const start = async (owner, post, file) => {
+    last.current = { owner, post, file };
     controller.current = new AbortController();
     const { signal } = controller.current;
     set({
       phase: 'uploading',
       percent: 0,
       minutes: null,
+      caption: (post && post.content) || '',
       upload: null,
       problem: '',
     });
@@ -281,20 +287,32 @@ const useVideoUpload = () => {
     if (state.upload && videos.isInHand(state.upload)) {
       api.cancel(state.upload).catch(() => {});
     }
+    last.current = null;
     set({
       phase: 'idle',
       percent: 0,
       minutes: null,
+      caption: '',
       upload: null,
       problem: '',
     });
   };
 
+  // The same video, post and profile again, after it failed.
+  const retry = () => {
+    if (last.current) {
+      const { owner, post, file } = last.current;
+      start(owner, post, file);
+    }
+  };
+
   const reset = () => {
+    last.current = null;
     set({
       phase: 'idle',
       percent: 0,
       minutes: null,
+      caption: '',
       upload: null,
       problem: '',
     });
@@ -304,6 +322,7 @@ const useVideoUpload = () => {
     ...state,
     start,
     cancel,
+    retry,
     reset,
   };
 };

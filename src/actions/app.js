@@ -36,12 +36,15 @@ const readNodeInfo = () => {
   };
 };
 
-const addAlert = (body, severity) => {
+// `link`, where there is one, is the address of what the notice is about,
+// offered as View beside it: a post just made.
+const addAlert = (body, severity, link = '') => {
   return {
     type: APP.ALERT.ADD,
     id: window.crypto.randomUUID(),
     body,
     severity,
+    link,
   };
 };
 
@@ -57,8 +60,8 @@ const addInfo = (body) => {
   return addAlert(body, 'info');
 };
 
-const addSuccess = (body) => {
-  return addAlert(body, 'success');
+const addSuccess = (body, link = '') => {
+  return addAlert(body, 'success', link);
 };
 
 const deleteAlert = (id) => {

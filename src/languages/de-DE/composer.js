@@ -120,6 +120,8 @@ export default {
   },
   // The short composer's two steps (roadmap row 114): Next, from the post
   // itself to the choices that go with it, each a row; back returns.
+  // One video at a time: said by the Video button while one is sent.
+  videoOnItsWay: 'Ein Video ist unterwegs: Ein weiteres kann hinzugefügt werden, sobald es veröffentlicht ist.',
   next: 'Weiter',
   details: {
     back: 'Zurück',

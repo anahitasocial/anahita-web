@@ -8,7 +8,6 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-import LinearProgress from '@mui/material/LinearProgress';
 import List from '@mui/material/List';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
@@ -31,13 +30,11 @@ import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
 import ThreadParts from './ThreadParts';
-import VideoUploads from './VideoUploads';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
 import useTextareaHashtags from './useHashtagSuggestions';
 import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import useOnFediverse, { useOnBluesky } from './useOnFediverse';
-import { progressOf } from './Video/useVideoUpload';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
@@ -106,7 +103,6 @@ const ShortComposer = ({
   const [moreParts, setMoreParts] = useState([]);
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
-  const [handedOver, setHandedOver] = useState(0);
   // 'write', the post itself, or 'details', what goes with it.
   const [step, setStep] = useState('write');
   const onDetails = step === 'details';
@@ -141,8 +137,10 @@ const ShortComposer = ({
   const threadParts = canThread ?
     moreParts.map((each) => { return each.trim(); }).filter(Boolean) : [];
   const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
-  const isUploading = upload.phase === 'uploading';
-  const busy = isSending || isUploading;
+  // A video on its way, being sent or prepared, which the app sends: one
+  // at a time, so the Video button is off until it is posted.
+  const videoBusy = upload.phase === 'uploading' || upload.phase === 'processing';
+  const busy = isSending;
   const hasSomething = composer.canPost({
     text,
     takesNotes: canWords,
@@ -215,8 +213,12 @@ const ShortComposer = ({
     };
   };
 
-  const posted = () => {
-    alertSuccess(i18n.t('prompts:posted.success'));
+  // Posted, with View, to the post wherever the feed is scrolled.
+  const posted = (made = null) => {
+    dispatch(actions.app.alert.success(
+      i18n.t('prompts:posted.success'),
+      made && made.id ? utils.node.getURL(made) : '',
+    ));
     reset();
   };
 
@@ -246,18 +248,20 @@ const ShortComposer = ({
   };
 
   const sendPost = () => {
+    // A video goes in the background, as on other networks: the app sends
+    // it, and the composer closes at once, empty, so that nothing of this
+    // post is left in it to be taken for part of the next (roadmap row
+    // 115). How it is getting on is at the head of the home feed and round
+    // the + button; that it is posted, or why not, is said wherever the
+    // viewer is.
     if (video) {
       upload.start(actor, {
         title: '',
         content: text,
         ...choices.request(),
         allowDownload: choices.allowDownload,
-      }, video).then((ok) => {
-        if (ok) {
-          setHandedOver(handedOver + 1);
-          reset();
-        }
-      });
+      }, video);
+      reset();
       return;
     }
 
@@ -278,7 +282,7 @@ const ShortComposer = ({
       api.replies.addThread(actor, post, parts).then((result) => {
         // Its first note, at the head of the open feed, as any post.
         dispatch({ type: 'NOTES_ADD_SUCCESS', node: result.data.parts[0] });
-        posted();
+        posted(result.data.parts[0]);
       }).catch(() => {
         alertError(i18n.t('prompts:posted.error'));
       }).finally(() => {
@@ -306,7 +310,7 @@ const ShortComposer = ({
     const tagged = kind === 'photo' ? people : [];
     dispatch(actions[namespace].add(post, actor)).then((made) => {
       if (tagged.length === 0 || !made || !made.id) {
-        posted();
+        posted(made);
         return null;
       }
       return tagPeople(made, tagged).then((outcomes) => {
@@ -331,6 +335,10 @@ const ShortComposer = ({
   // A video picked with its own button, or picked or dropped where the
   // photos are.
   const takeVideo = (chosen) => {
+    if (videoBusy) {
+      setVideoProblem(i18n.t('composer:videoOnItsWay'));
+      return;
+    }
     const problem = videos.problem(chosen, nodeInfo);
     if (problem) {
       setVideoProblem(i18n.t(`videos:problems.${problem}`, limits));
@@ -339,7 +347,8 @@ const ShortComposer = ({
     setVideoProblem('');
     setVideo(chosen);
     setIsAddingPhotos(false);
-    if (upload.phase !== 'idle') {
+    // A video posted earlier that is done, or failed, is let go.
+    if (upload.phase === 'ready' || upload.phase === 'failed') {
       upload.reset();
     }
   };
@@ -364,8 +373,6 @@ const ShortComposer = ({
     }
   }, [isOpen]);
 
-  const isPreparing = upload.phase === 'processing';
-
   const placeholder = isPerson(actor) && actor.id !== viewer.id ?
     i18n.t('notes:composer.bodyPlaceholderPerson', { name: actor.name }) :
     i18n.t('notes:composer.bodyPlaceholder');
@@ -378,7 +385,7 @@ const ShortComposer = ({
     <AttachButtons
       phone={phone}
       photos={canPhotos && !busy && !video && !hasPhotos}
-      video={canVideo && !busy && !hasPhotos && !video}
+      video={canVideo && !busy && !videoBusy && !hasPhotos && !video}
       onPhotos={(files) => {
         setIsAddingPhotos(true);
         setIncoming({ files });
@@ -608,23 +615,6 @@ const ShortComposer = ({
               <CloseIcon fontSize="small" />
             </IconButton>}
         </Stack>}
-      {isUploading &&
-        <Stack spacing={1} sx={{ mt: 2 }}>
-          <LinearProgress
-            variant="determinate"
-            value={upload.percent}
-            aria-label={i18n.t('videos:upload.uploading', { percent: upload.percent })}
-          />
-          <Typography variant="body2" color="textSecondary">
-            {progressOf(upload)}
-          </Typography>
-          <Typography variant="caption" color="textSecondary">
-            {i18n.t('videos:upload.carryOn')}
-          </Typography>
-          <Button onClick={upload.cancel} size="small" sx={{ alignSelf: 'flex-start' }}>
-            {i18n.t('videos:upload.cancel')}
-          </Button>
-        </Stack>}
       {videoProblem &&
         <Typography variant="caption" color="error" component="p" role="alert" sx={{ mt: 1 }}>
           {videoProblem}
@@ -640,23 +630,6 @@ const ShortComposer = ({
 
     </>
   );
-
-  // A video being prepared.
-  const preparing = isPreparing &&
-    <Stack spacing={1} sx={{ pt: 2 }}>
-      <LinearProgress />
-      <Typography variant="body2" color="textSecondary">
-        {i18n.t('videos:upload.processing')}
-      </Typography>
-    </Stack>;
-
-  const uploadsList = canVideo &&
-    <VideoUploads
-      viewerId={viewer.id}
-      exceptId={upload.upload ? upload.upload.id : 0}
-      limits={limits}
-      refreshKey={handedOver}
-    />;
 
   // Open, in a dialog: the whole screen on a phone, where the keyboard
   // needs the room, and in the middle of it on a desktop. The same in both.
@@ -740,8 +713,6 @@ const ShortComposer = ({
               {content}
             </Box>
           </Stack>
-          {preparing}
-          {uploadsList}
         </Box>
         {!onDetails &&
           <>
@@ -757,6 +728,15 @@ const ShortComposer = ({
             >
               {attachButtons}
             </Stack>
+            {canVideo && videoBusy && !hasPhotos &&
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                component="p"
+                sx={{ px: 2, pb: 1 }}
+              >
+                {i18n.t('composer:videoOnItsWay')}
+              </Typography>}
           </>}
       </Box>
       {rules.dialog}
