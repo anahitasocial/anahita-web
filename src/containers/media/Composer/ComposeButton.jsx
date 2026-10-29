@@ -7,6 +7,8 @@ import Fab from '@mui/material/Fab';
 import AddIcon from '@mui/icons-material/Add';
 
 import ShortComposer from './Short';
+import { useSharedVideoUpload } from './Video/SharedVideoUpload';
+import { progressOf } from './Video/useVideoUpload';
 import LongComposer from './Long';
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -52,16 +54,14 @@ const ComposeButton = () => {
   const [isShortOpen, setIsShortOpen] = useState(false);
   const [isLongOpen, setIsLongOpen] = useState(false);
   const [carried, setCarried] = useState('');
-  const [isPreparing, setIsPreparing] = useState(false);
+  // A video posted from it, on any page with the button: a ring that
+  // fills as it is sent, then turns while it is prepared.
+  const upload = useSharedVideoUpload();
+  const isSending = upload && upload.phase === 'uploading';
+  const isPreparing = upload && upload.phase === 'processing';
 
   const target = onScreen && onScreen.home ? own : onScreen;
 
-  // Somewhere else to post: the composers are new, and a video still being
-  // prepared is said where it is posted, not here.
-  const targetId = target ? target.id : 0;
-  useEffect(() => {
-    setIsPreparing(false);
-  }, [targetId]);
   if (!target || !target.id) {
     return null;
   }
@@ -102,11 +102,12 @@ const ComposeButton = () => {
         >
           <AddIcon fontSize="large" />
         </Fab>
-        {/* A video posted from it, still being prepared. */}
-        {isPreparing &&
+        {(isSending || isPreparing) &&
           <CircularProgress
             size={68}
-            aria-label={i18n.t('videos:upload.processing')}
+            variant={isSending ? 'determinate' : 'indeterminate'}
+            value={isSending ? upload.percent : undefined}
+            aria-label={isSending ? progressOf(upload) : i18n.t('videos:upload.processing')}
             sx={{
               position: 'absolute', top: -6, left: -6, pointerEvents: 'none',
             }}
@@ -122,7 +123,6 @@ const ComposeButton = () => {
             setIsShortOpen(false);
           }}
           onExpand={long.length > 0 ? expand : null}
-          onPreparing={setIsPreparing}
         />}
       {long.length > 0 &&
         <LongComposer

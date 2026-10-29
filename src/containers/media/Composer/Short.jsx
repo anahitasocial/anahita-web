@@ -35,7 +35,8 @@ import useLinkPreview from './useLinkPreview';
 import useTextareaHashtags from './useHashtagSuggestions';
 import HashtagSuggestions from '../../../components/HashtagSuggestions';
 import useOnFediverse, { useOnBluesky } from './useOnFediverse';
-import useVideoUpload, { progressOf } from './Video/useVideoUpload';
+import { progressOf } from './Video/useVideoUpload';
+import { useSharedVideoUpload } from './Video/SharedVideoUpload';
 import usePostChoices from './usePostChoices';
 import usePostLocations from './usePostLocations';
 import photoPosition from '../../../utils/photoPosition';
@@ -64,16 +65,15 @@ const { isPerson } = utils.node;
 // keyboard needs the room; nothing in it changes height as somebody types.
 // What is written is kept as a draft until it is posted (useDraft).
 //
-// `kinds` is what this profile takes, of note, photo and video.
-// `onPreparing` is told whether a video posted from
-// it is still being prepared, which the button shows once it is closed.
+// `kinds` is what this profile takes, of note, photo and video. A video
+// posted from it is the app's to send (Video/SharedVideoUpload), and the
+// + button says how far it has got once this is closed.
 const ShortComposer = ({
   actor,
   kinds,
   open: isOpen,
   onClose,
   onExpand = null,
-  onPreparing = null,
 }) => {
   const dispatch = useDispatch();
   const viewer = useSelector((state) => { return state.session.viewer; });
@@ -113,7 +113,8 @@ const ShortComposer = ({
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
   const [handedOver, setHandedOver] = useState(0);
-  const upload = useVideoUpload();
+  // The app's, so that it goes on being sent from page to page.
+  const upload = useSharedVideoUpload();
 
   const canWords = kinds.includes('note');
   const canPhotos = kinds.includes('photo');
@@ -180,15 +181,6 @@ const ShortComposer = ({
   const alertError = (message) => {
     dispatch(actions.app.alert.error(message));
   };
-
-  useEffect(() => {
-    if (upload.phase === 'ready') {
-      alertSuccess(i18n.t('videos:upload.ready'));
-    }
-    if (upload.phase === 'failed') {
-      alertError(i18n.t(`videos:problems.${upload.problem || 'failed'}`, limits));
-    }
-  }, [upload.phase]);
 
   // Everything back to an empty box, closed. The choices of audience and
   // language stay; who may reply is asked of each post.
@@ -356,13 +348,7 @@ const ShortComposer = ({
     }
   }, [isOpen]);
 
-  // A video still being prepared, said to the button.
   const isPreparing = upload.phase === 'processing';
-  useEffect(() => {
-    if (onPreparing) {
-      onPreparing(isPreparing);
-    }
-  }, [isPreparing]);
 
   const placeholder = isPerson(actor) && actor.id !== viewer.id ?
     i18n.t('notes:composer.bodyPlaceholderPerson', { name: actor.name }) :
@@ -567,7 +553,7 @@ const ShortComposer = ({
             {progressOf(upload)}
           </Typography>
           <Typography variant="caption" color="textSecondary">
-            {i18n.t('videos:upload.keepOpen')}
+            {i18n.t('videos:upload.carryOn')}
           </Typography>
           <Button onClick={upload.cancel} size="small" sx={{ alignSelf: 'flex-start' }}>
             {i18n.t('videos:upload.cancel')}
@@ -621,8 +607,10 @@ const ShortComposer = ({
       slotProps={{
         paper: { sx: visible ? { height: visible, maxHeight: visible } : {} },
       }}
+      // It may be closed while a video is sent: it goes on being sent,
+      // and the + button says how far it has got.
       onClose={() => {
-        if (!busy) {
+        if (!isSending) {
           onClose();
         }
       }}
@@ -639,7 +627,7 @@ const ShortComposer = ({
           <IconButton
             edge="start"
             aria-label={i18n.t('composer:close')}
-            disabled={busy}
+            disabled={isSending}
             onClick={() => {
               onClose();
             }}
@@ -721,7 +709,6 @@ ShortComposer.propTypes = {
   onExpand: PropTypes.func,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onPreparing: PropTypes.func,
 };
 
 export default ShortComposer;

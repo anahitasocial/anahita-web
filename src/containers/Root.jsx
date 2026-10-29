@@ -5,6 +5,7 @@ import { Provider, useSelector } from 'react-redux';
 import { HelmetProvider } from 'react-helmet-async';
 import { ThemeProvider } from '@mui/material/styles';
 import App from './App';
+import SharedVideoUpload from './media/Composer/Video/SharedVideoUpload';
 import Routes from '../routes';
 import styles from '../styles';
 import ColourPicker, { ColourPickerContext, savedPalette } from '../components/ColourPicker';
@@ -34,9 +35,12 @@ const Themed = ({ store }) => {
     <ThemeProvider theme={theme}>
       <HelmetProvider>
         <ColourPickerContext.Provider value={picking ? openPicker : null}>
-          <App>
-            <Routes store={store} />
-          </App>
+          {/* A video posted goes on being sent from page to page. */}
+          <SharedVideoUpload>
+            <App>
+              <Routes store={store} />
+            </App>
+          </SharedVideoUpload>
         </ColourPickerContext.Provider>
         {picking && (
         <ColourPicker

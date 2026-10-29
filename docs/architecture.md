@@ -596,8 +596,13 @@ posts while it is open (`reducers/composeTarget.js`): from home to the
 viewer's own profile, from a profile to that one. It opens the short
 composer, "New post" (`Composer/Short.jsx`), whose Long post opens the
 long one (`Composer/Long.jsx`); a profile that takes only long writing opens
-that at once. A ring goes round the button while a video posted from it is
-being prepared. What the viewer posts is at the head of an open feed it
+that at once. A video posted from it is the app's to send, not the
+composer's (`Composer/Video/SharedVideoUpload.jsx`, round the whole app in
+`containers/Root.jsx`), so it goes on from page to page and the composer
+may be closed while it is sent: a ring round the button fills as it is
+sent and turns while it is prepared, and where there is no button a small
+line in its place says the same (`Composer/VideoOnItsWay.jsx`). Leaving
+the site while it is sent is asked about first. What the viewer posts is at the head of an open feed it
 belongs in at once (`reducers/lastPosted.js`, `feed/usePosted.js`): the
 home feed, and the profile it was posted to.
 
@@ -672,14 +677,17 @@ own, because a video is too big to be sent with the post (the services'
   once if it is not a video or is too large. `useVideoUpload.js` then
   begins the upload, cuts the file into parts and sends them to storage
   three at a time, each tried again when it fails, asking for addresses a
-  few at a time. The page has to stay open for that, and says so, with how
+  few at a time. The site has to stay open for that, and says so, with how
   far it has got and about how many minutes are left
   (`utils/videos.js#minutesLeft`). While it is sent the screen is kept on
   where the browser can (Screen Wake Lock), asked for again when the page
   is back in front, since a phone that sleeps holds the page. When
-  everything is sent the server prepares the video, and the page can be
-  left: the composer asks after it and says when it is posted, and the +
-  button has a ring round it until then.
+  everything is sent the server prepares the video, and the site can be
+  left: the app asks after it and says when it is posted, on whatever page
+  is open, and puts the post at the head of an open feed it belongs in. A
+  video posted from the + button goes on being sent from page to page (see
+  Posting, above); one sent from a reply or the media library stops when
+  its page is left.
 - **Videos on the way** are listed in the composer: ones still being
   prepared, and ones that failed in the last day, each with why.
 - **The parts go to storage, not to the API**, through an axios instance

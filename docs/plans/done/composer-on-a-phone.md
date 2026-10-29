@@ -1,7 +1,7 @@
 # Posting from a phone
 
-*Roadmap row 112, planned 2026-10-28. See the [roadmap](roadmap.md) for order
-and dependencies.*
+*Roadmap row 112, planned and done 2026-10-28. See the [roadmap](../roadmap.md)
+for order and dependencies.*
 
 ## Context
 
@@ -76,6 +76,16 @@ Ive"); as built:
   bar scrolls sideways, the next button showing at the edge.
 - **The reply box** opens the picker in one tap too, the same editor under it.
 - **The cookie notice** is at the top on a phone, clear of the + button.
+- **A video posted from the + button is the app's to send,** not the
+  composer's, so leaving the page no longer stops it (the user,
+  2026-10-28: "What happens if I go to a different page while the animation
+  is going around the + button"). The composer can be closed while it is
+  sent; the ring round the + fills as it is sent and turns while it is
+  prepared, a small line takes its place on pages without one, the notice
+  that it is posted shows on whatever page is open, and the post is put at
+  the head of an open feed. Leaving the site while it is sent is asked
+  about first. Switching apps on a phone can still pause it; parts that
+  fail are tried again.
 
 ## Parts
 
@@ -89,6 +99,7 @@ Ive"); as built:
 | 6 | Videos: progress with the minutes left, the screen kept on (`useVideoUpload.js`) | web |
 | 7 | HEIC photos: made JPEG in the browser rather than taken by photo-service, which stays JPEG and PNG | web |
 | 8 | The long composer's header and drafts, and the reply box, by the same rules | web |
+| 9 | A video from the + button sent by the app, from page to page (`Composer/Video/SharedVideoUpload.jsx`) | web |
 
 Each part is checked at 390 by 844 and 1280 by 900 in headless Chrome, and
 then by the user on an iPhone, which headless Chrome is not: the pickers,
@@ -100,5 +111,6 @@ the keyboard and Safari's handling of a page set aside are only seen there.
 | --- | --- |
 | Plan | written 2026-10-28 |
 | Part 1 | done 2026-10-28 |
-| Parts 2 to 8 | built 2026-10-28, checked in headless Chrome; to be tried by the user on an iPhone |
-| Not tried on the development stack | a photo or a video being stored, and so the time left: the development bucket is gone (banu.io's `docs/plans/launch.md`, row A7), so each upload there fails, which shows Try again |
+| Parts 2 to 8 | done 2026-10-28; tried by the user on an iPhone: "significantly improved" |
+| Part 9 | done 2026-10-28, checked in headless Chrome with storage stood in for |
+| Not tried on the development stack | a photo or a video really being stored: the development bucket is gone (banu.io's `docs/plans/launch.md`, row A7), so each upload there fails, which shows Try again |

@@ -5,7 +5,7 @@
 // So a 12-megapixel photo from a phone goes as a tenth of its weight, and
 // an iPhone's HEIC, which the pickers ask for by name so that the phone
 // hands it over at once instead of converting it first, is made a JPEG
-// here (roadmap row 112, docs/plans/composer-on-a-phone.md). A browser
+// here (roadmap row 112, docs/plans/done/composer-on-a-phone.md). A browser
 // that cannot read a file sends it as it is, and the server says why it
 // will not take it. What a photo carries of where it was taken is read
 // from the original before this (utils/photoPosition), and is not sent.

@@ -27,6 +27,7 @@ import MenuLogo from '../components/Logo';
 import actions from '../actions';
 import NotificationButton from './notifications/Button';
 import ComposeButton from './media/Composer/ComposeButton';
+import VideoOnItsWay from './media/Composer/VideoOnItsWay';
 import adminTabs from './admin/tabs';
 import visitor from '../utils/visitor';
 import { Admin as ADMIN } from '../constants';
@@ -256,6 +257,7 @@ const App = ({
         </Container>
       </main>
       {hasComposeButton && <ComposeButton />}
+      {!hasComposeButton && <VideoOnItsWay />}
     </div>
   );
 };

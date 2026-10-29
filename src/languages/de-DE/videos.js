@@ -15,6 +15,9 @@ export default {
     left_one: '{{percent}} % · noch etwa eine Minute',
     left_other: '{{percent}} % · noch etwa {{count}} Minuten',
     keepOpen: 'Lass diese Seite offen, bis das Hochladen fertig ist.',
+    // From the + button's composer, which may be closed while it is sent.
+    carryOn: 'Du kannst das hier schließen. Lass die Seite offen, bis alles gesendet ist.',
+    preparing: 'Dein Video wird vorbereitet',
     processing: 'Dein Video wird vorbereitet. Es wird veröffentlicht, sobald es fertig ist, und du kannst diese Seite verlassen.',
     ready: 'Dein Video ist veröffentlicht.',
     view: 'Ansehen',

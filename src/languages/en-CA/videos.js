@@ -15,6 +15,9 @@ export default {
     left_one: '{{percent}}% · about a minute left',
     left_other: '{{percent}}% · about {{count}} minutes left',
     keepOpen: 'Keep this page open until the upload has finished.',
+    // From the + button's composer, which may be closed while it is sent.
+    carryOn: 'You can close this. Keep the site open until it is sent.',
+    preparing: 'Preparing your video',
     processing: 'Preparing your video. It will be posted when it is ready, and you can leave this page.',
     ready: 'Your video is posted.',
     view: 'View',

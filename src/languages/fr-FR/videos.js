@@ -15,6 +15,9 @@ export default {
     left_one: '{{percent}} % · environ une minute restante',
     left_other: '{{percent}} % · environ {{count}} minutes restantes',
     keepOpen: 'Gardez cette page ouverte jusqu’à la fin du téléversement.',
+    // From the + button's composer, which may be closed while it is sent.
+    carryOn: 'Vous pouvez fermer ceci. Gardez le site ouvert jusqu’à la fin de l’envoi.',
+    preparing: 'Préparation de votre vidéo',
     processing: 'Préparation de votre vidéo. Elle sera publiée dès qu’elle sera prête ; vous pouvez quitter cette page.',
     ready: 'Votre vidéo est publiée.',
     view: 'Voir',
