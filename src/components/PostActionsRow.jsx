@@ -11,13 +11,22 @@ import CardActions from '@mui/material/CardActions';
 // There were two rows, counts above and actions below, which said some of
 // the same things twice and left reposts and quotes uncounted. Every
 // layout of a post draws this, so they cannot drift apart again.
+//
+// An icon's slot in a button keeps room for a label beside it, which pushes
+// an icon with no count left of the middle. So the room is taken away, and a
+// gap between what is in the button comes only when there are two things.
+const iconSpacing = {
+  '& .MuiButton-root': { gap: 1 },
+  '& .MuiButton-startIcon': { m: 0 },
+};
+
 const PostActionsRow = ({ actions = null, stats = null }) => {
   if (!actions && !stats) {
     return null;
   }
 
   return (
-    <CardActions>
+    <CardActions sx={iconSpacing}>
       {actions}
       {stats}
     </CardActions>

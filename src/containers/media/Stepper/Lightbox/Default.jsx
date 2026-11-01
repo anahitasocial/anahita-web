@@ -527,7 +527,7 @@ const MediumStepperLightboxDefault = ({
               <Card>
                 {medium.owner && medium.owner.type &&
                   getNamespace(medium.owner) !== 'people' &&
-                  <CardHeaderOwner owner={medium.owner} />}
+                  <CardHeaderOwner owner={medium.owner} author={author} />}
                 <CardHeader
                   avatar={
                     <ActorAvatar

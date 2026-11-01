@@ -114,7 +114,7 @@ const MediumReadDefault = ({
               own: a group, or somebody else's profile. A reply says where
               it was said in its context, below. */}
         {!context && medium.owner && medium.owner.id !== author.id &&
-        <CardHeaderOwner owner={medium.owner} />}
+        <CardHeaderOwner owner={medium.owner} author={medium.author} />}
         {cover}
         {!cover && coverUrl &&
         <CardMedia

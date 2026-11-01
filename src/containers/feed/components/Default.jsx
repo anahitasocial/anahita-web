@@ -89,7 +89,7 @@ const FeedCardDefault = ({
       component="article"
     >
       <PinnedLabel show={Boolean(node.pinned)} />
-      {showOwner && node.owner && <CardOwner owner={node.owner} />}
+      {showOwner && node.owner && <CardOwner owner={node.owner} author={node.author} />}
       {context}
       <CardHeader
         avatar={

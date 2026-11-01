@@ -12,11 +12,19 @@ import utils from '../utils';
 
 const { getURL } = utils.node;
 
-const MediumOwner = ({ owner, actions }) => {
+// Where a post was made, above who wrote it, and only when they differ: a post
+// on somebody's own profile says nothing new by naming them twice (the user,
+// 2026-11-01). Its avatar is half the author's, so that the author leads.
+const MediumOwner = ({ owner, author = null, actions }) => {
   if (!owner) {
     console.debug('MediumOwner: No owner provided', { owner, actions });
     return null;
   }
+
+  if (author && author.id === owner.id) {
+    return null;
+  }
+
   const url = getURL(owner);
 
   return (
@@ -30,6 +38,7 @@ const MediumOwner = ({ owner, actions }) => {
         avatar={
           <ActorAvatar
             actor={owner}
+            size="small"
             linked
           />
         }
@@ -61,6 +70,7 @@ const MediumOwner = ({ owner, actions }) => {
 
 MediumOwner.propTypes = {
   owner: NodeType,
+  author: NodeType,
   actions: PropTypes.node,
 };
 
