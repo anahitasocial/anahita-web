@@ -12,6 +12,7 @@ import PersonType from '../../../proptypes/Person';
 import ActorBodyAbout from './About';
 import ActorPhotos from './Photos';
 import useActorRules from './useRules';
+import tabIcon from './tabIcons';
 import i18n from '../../../languages';
 import eventDetails from '../../../utils/events';
 import utils from '../../../utils';
@@ -120,8 +121,11 @@ const ActorBody = ({
             return (
               <Tab
                 label={getTabLabel(tab)}
+                icon={tabIcon(tab)}
+                iconPosition="start"
                 value={tab}
                 key={`${namespace}-${tab}-tab`}
+                sx={{ minHeight: 48 }}
               />
             );
           })}
