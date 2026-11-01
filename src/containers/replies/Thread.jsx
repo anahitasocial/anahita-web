@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
+import { useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Box from '@mui/material/Box';
@@ -11,6 +12,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Divider from '@mui/material/Divider';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 
 import Progress from '../../components/Progress';
@@ -31,6 +34,7 @@ import thread from '../../utils/thread';
 import visitor from '../../utils/visitor';
 import utils from '../../utils';
 import events from '../../utils/events';
+import replyOrder from '../../utils/replyOrder';
 
 const { federation } = utils;
 
@@ -58,6 +62,8 @@ const RepliesThread = ({
   const [canReply, setCanReply] = useState(false);
   // Who the post's author lets reply, as the server reads it.
   const [limitedTo, setLimitedTo] = useState(replyAccess.ANYONE);
+  const [order, setOrder] = useState(replyOrder.load);
+  const location = useLocation();
   const [isTruncated, setIsTruncated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [hasFailed, setHasFailed] = useState(false);
@@ -317,6 +323,7 @@ const RepliesThread = ({
     <Card sx={{ pb: 1 }}>
       {canReply &&
         <ReplyBox
+          autoFocus={Boolean(location.state && location.state.reply)}
           hint={staysHere ? i18n.t(staysHere) : ''}
           direction={postLanguage.directionOf(postLanguage.defaultFor(viewer))}
           attachments
@@ -375,7 +382,33 @@ const RepliesThread = ({
             {i18n.t('replies:empty')}
           </Typography>
         </CardContent>}
-      {shown.map(item)}
+      {shown.length >= replyOrder.MIN_TO_CHOOSE &&
+        <Box sx={{
+          display: 'flex', justifyContent: 'flex-end', px: 2, pb: 1,
+        }}
+        >
+          <ToggleButtonGroup
+            size="small"
+            color="primary"
+            exclusive
+            value={order}
+            aria-label={i18n.t('replies:order.label')}
+            onChange={(event, chosen) => {
+              if (chosen) {
+                setOrder(chosen);
+                replyOrder.save(chosen);
+              }
+            }}
+          >
+            <ToggleButton value={replyOrder.NEWEST} sx={{ px: 2 }}>
+              {i18n.t('replies:order.newest')}
+            </ToggleButton>
+            <ToggleButton value={replyOrder.OLDEST} sx={{ px: 2 }}>
+              {i18n.t('replies:order.oldest')}
+            </ToggleButton>
+          </ToggleButtonGroup>
+        </Box>}
+      {replyOrder.arrange(shown, order).map(item)}
       {isTruncated &&
         <CardContent>
           <Typography variant="caption" color="textSecondary">

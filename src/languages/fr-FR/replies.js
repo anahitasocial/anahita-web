@@ -6,6 +6,11 @@ export default {
   placeholderTo: 'Répondre à {{name}} ...',
   send: 'Répondre',
   more: "Plus d'options",
+  order: {
+    label: 'Ordre des réponses',
+    newest: 'Récentes',
+    oldest: 'Anciennes',
+  },
   attachments: {
     addPhotos: 'Ajouter des images',
     addVideo: 'Ajouter un GIF ou une vidéo',
