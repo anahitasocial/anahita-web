@@ -5,6 +5,7 @@ export default {
   placeholder: 'Escreva uma resposta ...',
   placeholderTo: 'Responder a {{name}} ...',
   send: 'Responder',
+  more: 'Mais opções',
   attachments: {
     addPhotos: 'Adicionar imagens',
     addVideo: 'Adicionar um GIF ou um vídeo',

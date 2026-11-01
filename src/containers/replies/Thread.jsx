@@ -15,7 +15,7 @@ import Typography from '@mui/material/Typography';
 
 import Progress from '../../components/Progress';
 import SignInPrompt from '../../components/SignInPrompt';
-import ReplyForm from './ReplyForm';
+import ReplyBox from './ReplyBox';
 import ReplyItem from './ReplyItem';
 import VideoReplyOnTheWay from './VideoReplyOnTheWay';
 
@@ -316,7 +316,7 @@ const RepliesThread = ({
   return (
     <Card sx={{ pb: 1 }}>
       {canReply &&
-        <ReplyForm
+        <ReplyBox
           hint={staysHere ? i18n.t(staysHere) : ''}
           direction={postLanguage.directionOf(postLanguage.defaultFor(viewer))}
           attachments

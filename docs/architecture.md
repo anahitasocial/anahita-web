@@ -523,7 +523,8 @@ replies, made directly to the post.
   (`utils/federation.js#fromFediverse`).
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
-- **The reply box** (`ReplyForm`, with `attachments` for a new reply) has a
+- **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a
+  touch screen, and `ReplyForm`, with `attachments`, in a dialog) has a
   button for pictures and, where videos may be posted, one for a GIF or a
   video: one or the other, with words or without. Pictures use the photo
   composer's editor (`PhotoFilesEditor`, uploaded for the person replying)

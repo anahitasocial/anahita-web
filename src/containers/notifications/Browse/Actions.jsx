@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import ReplyIcon from '@mui/icons-material/ReplyOutlined';
 
 import ControlFollow from '../../controls/Follow';
-import ReplyForm from '../../replies/ReplyForm';
+import ReplyBox from '../../replies/ReplyBox';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -166,7 +166,7 @@ const NotificationActions = ({
           {i18n.t('replies:reply')}
         </Button>)}
       {replying &&
-        <ReplyForm
+        <ReplyBox
           autoFocus
           flush
           direction={postLanguage.directionOf(postLanguage.defaultFor(viewer))}

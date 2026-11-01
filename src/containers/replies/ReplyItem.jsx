@@ -25,6 +25,7 @@ import ActorAvatar from '../../components/ActorAvatar';
 import ActorHandle from '../../components/ActorHandle';
 import ActorTitle from '../../components/ActorTitle';
 import EntityBody from '../../components/NodeBody';
+import ReplyBox from './ReplyBox';
 import ReplyForm from './ReplyForm';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import PhotoSlides from '../../components/PhotoSlides';
@@ -345,7 +346,7 @@ const ReplyItem = ({
       </Box>
       {isReplying &&
         <Box sx={{ ml: STEP }}>
-          <ReplyForm
+          <ReplyBox
             autoFocus
             hint={staysHere ? i18n.t(staysHere) : ''}
             placeholder={author.name ?
