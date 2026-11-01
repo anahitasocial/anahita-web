@@ -120,7 +120,8 @@ const FeedItems = ({
             what={ofNode(node)}
           />,
         ]}
-        showOwner={node.owner && !isPerson(node.owner)}
+        // Left out by the card when it is the author (MediumOwnerCardHeader).
+        showOwner={Boolean(node.owner)}
       />
     );
   });
