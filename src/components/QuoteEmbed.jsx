@@ -12,6 +12,7 @@ import ActorAvatar from './ActorAvatar';
 import i18n from '../languages';
 import utils from '../utils';
 import quotes from '../utils/quotes';
+import timeAgo from '../utils/timeAgo';
 
 const { getURL, getPortraitURL } = utils.node;
 
@@ -92,7 +93,7 @@ const QuoteEmbed = ({
             color="inherit"
             title={createdAt.local().format('LLL')}
           >
-            {createdAt.fromNow()}
+            {timeAgo(post.createdAt)}
           </Link>}
       />
       <Box sx={{ p: 2 }}>

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import moment from 'moment';
 
 import Badge from '@mui/material/Badge';
 import Box from '@mui/material/Box';
@@ -23,6 +22,7 @@ import NotificationActions from './Actions';
 import NotificationMessage from './NotificationMessage';
 
 import NotificationType from '../../../proptypes/Notification';
+import timeAgo from '../../../utils/timeAgo';
 
 // Read by a screen reader and not seen: the dot says it to the eye.
 const unseen = {
@@ -156,7 +156,7 @@ const NotificationListItem = ({
         }
         secondary={
           <>
-            {moment.utc(item.createdAt).fromNow()}
+            {timeAgo(item.createdAt)}
             {/* An invitation is answered from where it is read. */}
             {item.type === 'actor_invite' && target.id &&
               <Box component="span" sx={{ display: 'block', pt: 1, maxWidth: 320 }}>

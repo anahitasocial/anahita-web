@@ -14,6 +14,7 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import CardOwner from '../../../components/MediumOwnerCardHeader';
 import utils from '../../../utils';
 import NodeType from '../../../proptypes/Node';
+import timeAgo from '../../../utils/timeAgo';
 
 const {
   getURL,
@@ -52,7 +53,7 @@ const FeedCardRepost = ({
   const { classes } = useStyles();
   const url = getURL(node.parent);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
+  const creationTimeFromNow = timeAgo(node.createdAt);
 
   return (
     <Card

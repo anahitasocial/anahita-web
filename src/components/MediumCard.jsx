@@ -35,6 +35,7 @@ import photoFiles from '../utils/photoFiles';
 import openOnClick from '../utils/openOnClick';
 import AltBadge from './AltBadge';
 import RemovedPictures from './RemovedPictures';
+import timeAgo from '../utils/timeAgo';
 
 const {
   getAuthor,
@@ -72,7 +73,7 @@ const MediumCard = ({
   const url = getURL(medium);
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(medium.createdAt).fromNow();
+  const creationTimeFromNow = timeAgo(medium.createdAt);
 
   // A post with several images is drawn as slides, which load their own.
   const hasSlides = photoFiles.hasSeveral(medium);

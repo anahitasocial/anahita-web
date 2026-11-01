@@ -44,6 +44,7 @@ import utils from '../../../../utils';
 import photoFiles from '../../../../utils/photoFiles';
 import styles from './styles';
 import PeopleInPost from '../../PeopleInPost';
+import timeAgo from '../../../../utils/timeAgo';
 
 const {
   getAuthor,
@@ -547,7 +548,7 @@ const MediumStepperLightboxDefault = ({
                       href={url}
                       title={createdAt}
                     >
-                      {moment.utc(medium.createdAt).fromNow()}
+                      {timeAgo(medium.createdAt)}
                     </Link>
                   }
                   action={menu}

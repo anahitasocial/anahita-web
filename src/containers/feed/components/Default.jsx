@@ -29,6 +29,7 @@ import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
+import timeAgo from '../../../utils/timeAgo';
 
 const {
   getURL,
@@ -81,7 +82,7 @@ const FeedCardDefault = ({
   const url = getURL(node);
   const long = isLong(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
-  const creationTimeFromNow = moment.utc(node.createdAt).fromNow();
+  const creationTimeFromNow = timeAgo(node.createdAt);
 
   return (
     <Card

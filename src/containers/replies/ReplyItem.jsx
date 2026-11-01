@@ -38,6 +38,7 @@ import MenuItemLabel from '../../components/MenuItemLabel';
 import i18n from '../../languages';
 import thread from '../../utils/thread';
 import utils from '../../utils';
+import timeAgo from '../../utils/timeAgo';
 
 const { getAuthor } = utils.node;
 
@@ -176,7 +177,7 @@ const ReplyItem = ({
               color="textSecondary"
               title={moment.utc(reply.createdAt).local().format('LLL').toString()}
             >
-              {moment.utc(reply.createdAt).fromNow()}
+              {timeAgo(reply.createdAt)}
             </Typography>
             {reply.hidden &&
               <Chip size="small" label={i18n.t('replies:hidden.badge')} />}
