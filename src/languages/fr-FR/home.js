@@ -43,8 +43,13 @@ export default {
     places: {
       people: 'Personnes',
       groups: 'Groupes',
+      websites: 'Sites web',
       hashtags: 'Hashtags',
+      locations: 'Lieux',
       about: 'À propos de ce site',
+      support: 'Assistance',
+      terms: 'Conditions',
+      privacy: 'Confidentialité',
     },
     runsOn: 'Ce site fonctionne avec',
     runsOnAfter: ', un logiciel libre pour les communautés.',

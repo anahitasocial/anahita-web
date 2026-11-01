@@ -10,8 +10,6 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import ReactMarkdown from 'react-markdown';
-import gfm from 'remark-gfm';
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
@@ -21,14 +19,20 @@ import YoursIcon from '@mui/icons-material/LockPersonOutlined';
 import NetworksIcon from '@mui/icons-material/Hub';
 import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import GroupsIcon from '@mui/icons-material/GroupsOutlined';
+import WebsitesIcon from '@mui/icons-material/RssFeed';
 import HashtagsIcon from '@mui/icons-material/Tag';
+import LocationsIcon from '@mui/icons-material/LocationOnOutlined';
 import AboutIcon from '@mui/icons-material/InfoOutlined';
+import SupportIcon from '@mui/icons-material/ContactSupportOutlined';
+import TermsIcon from '@mui/icons-material/MenuBookOutlined';
+import PrivacyIcon from '@mui/icons-material/PrivacyTipOutlined';
 
 import BlueskyIcon from '../../../components/BlueskyIcon';
 import HeaderMeta from '../../../components/HeaderMeta';
 import i18n from '../../../languages';
 import siteLogo from '../../../utils/siteLogo';
 import Hero from './Hero';
+import Welcome from './Welcome';
 
 // What there is to do here, said in three cards. Each is true of any
 // installation, whatever it is for.
@@ -53,17 +57,24 @@ const networksKey = (networks) => {
   return bluesky ? 'atproto' : '';
 };
 
-// What somebody who is not signed in may look at.
+// What somebody who is not signed in may look at: three rows of three, what
+// there is here, then what there is about here.
 const PLACES = [
   { key: 'people', to: '/people', Icon: PeopleIcon },
   { key: 'groups', to: '/groups', Icon: GroupsIcon },
+  { key: 'websites', to: '/websites', Icon: WebsitesIcon },
   { key: 'hashtags', to: '/hashtags', Icon: HashtagsIcon },
+  { key: 'locations', to: '/locations', Icon: LocationsIcon },
   { key: 'about', to: '/about', Icon: AboutIcon },
+  { key: 'support', to: '/support', Icon: SupportIcon },
+  { key: 'terms', to: '/legal/tos', Icon: TermsIcon },
+  { key: 'privacy', to: '/legal/privacy', Icon: PrivacyIcon },
 ];
 
-// Anahita's own parts of the home page, for a theme with none of its own:
-// what can be done here, and what may be looked at without a profile.
-const AnahitasOwn = ({ reasons }) => {
+// Anahita's own parts of the home page: what can be done here, and what may
+// be looked at without a profile. `ruled` is a hairline over them, which
+// a theme's own words, under one of their own, have no need of.
+const AnahitasOwn = ({ reasons, ruled }) => {
   return (
     <>
       {/* What can be done here: side by side under a hairline, each a small
@@ -75,9 +86,11 @@ const AnahitasOwn = ({ reasons }) => {
         rowSpacing={5}
         sx={{
           mt: { xs: 8, md: 12 },
-          pt: { xs: 5, md: 6 },
-          borderTop: 1,
-          borderColor: 'divider',
+          ...(ruled && {
+            pt: { xs: 5, md: 6 },
+            borderTop: 1,
+            borderColor: 'divider',
+          }),
         }}
       >
         {reasons.map(({ key, Icon, icons = [Icon] }) => {
@@ -112,7 +125,7 @@ const AnahitasOwn = ({ reasons }) => {
         <Grid container spacing={2}>
           {PLACES.map(({ key, to, Icon }) => {
             return (
-              <Grid key={key} size={{ xs: 12, sm: 6 }}>
+              <Grid key={key} size={{ xs: 12, md: 4 }}>
                 <ButtonBase
                   component={RouterLink}
                   to={to}
@@ -150,6 +163,7 @@ AnahitasOwn.propTypes = {
   reasons: PropTypes.arrayOf(PropTypes.shape({
     key: PropTypes.string.isRequired,
   })).isRequired,
+  ruled: PropTypes.bool.isRequired,
 };
 
 // The home page of somebody who is not signed in: calm, with room around
@@ -161,8 +175,8 @@ AnahitasOwn.propTypes = {
 // on Anahita is one line at the foot.
 //
 // A theme with a home page of its own in Markdown (`pages/home.md`) has it
-// here in place of those parts, under the same name, description and ways
-// in: a site says what it is for in its own words, and keeps the rest.
+// here, between the ways in and those parts: a site
+// says what it is for in its own words, and keeps the rest.
 //
 // A members-only installation never draws this: routes/MembersOnlyGate
 // answers for every page there.
@@ -242,30 +256,9 @@ const Home = ({
         canJoin={Boolean(openRegistrations)}
       />
 
-      {ownPage ?
-        <Box
-          component="section"
-          sx={{
-            mt: { xs: 8, md: 12 },
-            pt: { xs: 5, md: 6 },
-            borderTop: 1,
-            borderColor: 'divider',
-            maxWidth: 680,
-            mx: 'auto',
-            '& h1, & h2': { typography: 'h6', mt: 4, mb: 1 },
-            '& h3': {
-              typography: 'subtitle1', fontWeight: 500, mt: 3, mb: 1,
-            },
-            '& p, & li': { typography: 'body1', color: 'text.secondary' },
-            '& a': { color: 'primary.main' },
-            '& img': { maxWidth: '100%', borderRadius: 2 },
-          }}
-        >
-          <ReactMarkdown remarkPlugins={[gfm]}>
-            {ownPage}
-          </ReactMarkdown>
-        </Box> :
-        <AnahitasOwn reasons={reasons} />}
+      {ownPage && <Welcome markdown={ownPage} />}
+
+      <AnahitasOwn reasons={reasons} ruled={!ownPage} />
 
       <Typography
         variant="body2"

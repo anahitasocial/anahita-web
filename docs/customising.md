@@ -50,7 +50,7 @@ A theme exports, from its `index.js`:
 | --- | --- | --- |
 | `logo` | `media/logo` | The logo in the menu and on the home page, when the server gives none (`SITE_LOGO_URL`): `color` for light mode and `white` for dark, which may be the same file. The default theme's is Anahita's mark, an SVG for both |
 | `opengraph` | `media/og` | An image for link previews. Exported, but nothing in the app uses it yet: the picture a shared link shows is `public/statics/media/ogimage.jpg` (below) |
-| `Home` | `home/` | The home page signed-out visitors see. The default's, under the name, description and ways in, shows a theme's `pages/home.md` if it has one, in place of Anahita's own parts |
+| `Home` | `home/` | The home page signed-out visitors see. The default's, under the name, description and ways in, shows a theme's `pages/home.md` if it has one, with an icon above Anahita's own parts |
 | `navs` | `navs/` | The left menu |
 | `styles` | `styles/` | The Material UI theme: fonts and colours, for light and dark mode |
 | `pages` | `pages/` | Markdown pages for the site, such as `contact.md` and `join.md` at `/pages/:alias`, and `home.md`, the home page's own words |
@@ -70,7 +70,7 @@ them by those names.
 The home page somebody not signed in sees has the site's logo, name and
 description, the ways in, and how many are on it; then Anahita's own parts,
 what can be done here and what may be looked at. To say what your site is
-for in its own words instead, give your theme a `pages/home.md`, and name it
+for in its own words as well, give your theme a `pages/home.md`, and name it
 in `pages/index.js`:
 
 ```js
@@ -81,8 +81,16 @@ import home from './home.md';
 export default { contact, join, home };
 ```
 
-It takes the place of Anahita's own parts, under the rest, which stays. A
-theme can take everything else from the default one and change only what is
+It is shown with an icon, as Anahita's own parts are, between the ways in
+and those parts, which stay. A line of `---` in it divides it in two: what
+comes after is a narrow column of its own beside the rest, three parts to
+one, for a few lines such as where to find you. A list there has no bullets, and
+a line that links to a handle is a row with the network's icon:
+
+```markdown
+- **Fediverse** [@ana@example.org](/@ana)
+- **Bluesky** [@example.org](https://bsky.app/profile/example.org)
+``` A theme can take everything else from the default one and change only what is
 its own:
 
 ```js

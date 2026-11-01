@@ -44,8 +44,13 @@ export default {
     places: {
       people: 'Personen',
       groups: 'Gruppen',
+      websites: 'Websites',
       hashtags: 'Hashtags',
+      locations: 'Orte',
       about: 'Über diese Website',
+      support: 'Support',
+      terms: 'Bedingungen',
+      privacy: 'Datenschutz',
     },
     runsOn: 'Diese Website läuft mit',
     runsOnAfter: ', freier Software für Gemeinschaften.',
