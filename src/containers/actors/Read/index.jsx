@@ -266,6 +266,7 @@ const ActorsRead = (props) => {
           <Avatar
             node={actor}
             canEdit={canEdit}
+            viewable={!isBlocked}
           />}
         actor={actor}
         hasCover={Boolean(utils.node.getCoverURL(actor))}

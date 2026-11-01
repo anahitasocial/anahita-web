@@ -11,6 +11,7 @@ const ActorsAvatar = (props) => {
     onChange = () => {},
     onError = () => {},
     prominent = false,
+    viewable = false,
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -102,6 +103,7 @@ const ActorsAvatar = (props) => {
       handleFieldChange={handleFieldChange}
       handleDelete={handleDelete}
       prominent={prominent}
+      viewable={viewable}
       size="large"
     />
   );
@@ -117,6 +119,9 @@ ActorsAvatar.propTypes = {
   // Called when an upload or a delete fails.
   onError: PropTypes.func,
   prominent: PropTypes.bool,
+  // Whether the picture may be seen larger, from the menu for somebody who
+  // can change it and by pressing it for everybody else.
+  viewable: PropTypes.bool,
 };
 
 export default ActorsAvatar;

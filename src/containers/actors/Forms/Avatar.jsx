@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import clsx from 'clsx';
 import PropTypes from 'prop-types';
 import { withStyles } from 'tss-react/mui';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import CircularProgress from '@mui/material/CircularProgress';
+import CloseIcon from '@mui/icons-material/Close';
 import UploadIcon from '@mui/icons-material/AddPhotoAlternateOutlined';
+import ViewIcon from '@mui/icons-material/ZoomInOutlined';
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import NodeType from '../../../proptypes/Node';
@@ -64,8 +68,14 @@ const ActorAvatarForm = ({
   handleDelete,
   size = 'default',
   prominent = false,
+  viewable = false,
 }) => {
+  const [viewing, setViewing] = useState(false);
   const initials = getActorInitials(node);
+
+  // Whether the picture can be seen larger: by pressing it, or for somebody
+  // who can change it, from the menu it opens.
+  const canView = viewable && Boolean(avatar);
 
   // On a profile the circle stands over the cover, and its white edge is
   // what sets it off. On a plain card, as in signing up, that is white on
@@ -98,8 +108,8 @@ const ActorAvatarForm = ({
         color="primary"
         component="span"
         className={classes.button}
-        disabled={!canEdit || isFetching}
-        onClick={handleOpen}
+        disabled={!(canEdit || canView) || isFetching}
+        onClick={canEdit ? handleOpen : () => { setViewing(true); }}
         size="large"
       >
         <Avatar
@@ -114,12 +124,74 @@ const ActorAvatarForm = ({
         </Avatar>
       </IconButton>
 
+      {/* The picture alone over the page, as wide as the largest size kept:
+      a Dialog's paper made clear, so that there is nothing around it. */}
+      {canView &&
+        <Dialog
+          open={viewing}
+          onClose={() => { setViewing(false); }}
+          maxWidth={false}
+          slotProps={{
+            paper: {
+              'aria-label': getActorName(node),
+              sx: {
+                bgcolor: 'transparent',
+                backgroundImage: 'none',
+                boxShadow: 'none',
+                m: 2,
+                maxWidth: 'calc(100% - 32px)',
+                overflow: 'visible',
+              },
+            },
+          }}
+        >
+          <Box
+            component="img"
+            src={avatar}
+            alt={getActorName(node)}
+            sx={{
+              display: 'block',
+              width: 480,
+              maxWidth: '100%',
+              maxHeight: 'calc(100dvh - 32px)',
+              objectFit: 'contain',
+              borderRadius: 2,
+            }}
+          />
+          <IconButton
+            aria-label={i18n.t('actions:close')}
+            onClick={() => { setViewing(false); }}
+            size="small"
+            sx={{
+              position: 'absolute',
+              top: 8,
+              right: 8,
+              color: 'common.white',
+              bgcolor: 'rgba(0, 0, 0, 0.56)',
+              '&:hover': { bgcolor: 'rgba(0, 0, 0, 0.72)' },
+            }}
+          >
+            <CloseIcon fontSize="small" />
+          </IconButton>
+        </Dialog>}
+
       <Menu
         id="avatar-add-menu"
         anchorEl={anchorEl}
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
+        {canView &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setViewing(true);
+            }}
+          >
+            <MenuItemLabel icon={<ViewIcon fontSize="small" />}>
+              {i18n.t('actions:view')}
+            </MenuItemLabel>
+          </MenuItem>}
         {/* The whole row is the file's label, so that all of it opens the
         picker; Delete only when there is a picture to delete. */}
         <MenuItem component="label" htmlFor="selectAvatarFile">
@@ -160,6 +232,9 @@ ActorAvatarForm.propTypes = {
   size: PropTypes.oneOf(['small', 'large', 'default']),
   // Drawn to stand out on a plain card, as in signing up.
   prominent: PropTypes.bool,
+  // Whether the picture may be seen larger: not
+  // on a profile they have blocked, where it is blurred.
+  viewable: PropTypes.bool,
 };
 
 export default withStyles(ActorAvatarForm, styles);
