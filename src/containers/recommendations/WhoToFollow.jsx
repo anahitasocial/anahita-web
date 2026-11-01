@@ -184,7 +184,10 @@ const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
           })}
         </Grid> :
         <List>
-          {items.map(row)}
+          {items.map((item) => {
+            // Not map(row): its second argument would be taken for `onCard`.
+            return row(item);
+          })}
         </List>}
       <CardActions sx={{ p: 1, pt: 0 }}>
         <Button fullWidth component={RouterLink} to="/recommendations">
