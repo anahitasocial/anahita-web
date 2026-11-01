@@ -34,7 +34,7 @@ const protocolClient = axios.create({
 // same amount of code, one fewer dependency to track.
 
 const fromBase64Url = (value) => {
-  let padded = value.replace(/-/g, '+').replace(/\//g, '/').replace(/_/g, '/');
+  let padded = value.replace(/-/g, '+').replace(/_/g, '/');
   while (padded.length % 4) {
     padded += '=';
   }

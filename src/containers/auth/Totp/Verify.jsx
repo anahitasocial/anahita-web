@@ -4,6 +4,7 @@ import Container from '@mui/material/Container';
 import api from '../../../api';
 import form from '../../../utils/form';
 import i18n from '../../../languages';
+import returnPath from '../../../utils/returnPath';
 import TotpForm from './TotpForm';
 
 const totpFormFields = form.createFormFields([
@@ -44,7 +45,7 @@ const TotpVerify = () => {
         .then((response) => {
           setIsFetching(false);
           if (response.status === 200) {
-            window.location.href = returnPathFromQuery || '/';
+            window.location.href = returnPath(returnPathFromQuery);
           }
         })
         .catch(() => {

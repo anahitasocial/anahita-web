@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import embeds from '../embeds';
+import embeds, { withoutEndingSpaces } from '../embeds';
 
 const ORIGIN = 'https://example.org';
 
@@ -50,5 +50,25 @@ describe('embeds', () => {
   it('knows a page by its tidied address', () => {
     expect(embeds.samePage('https://Elsewhere.com/a#part', 'https://elsewhere.com/a')).toBe(true);
     expect(embeds.samePage('https://elsewhere.com/a', 'https://elsewhere.com/b')).toBe(false);
+  });
+});
+
+describe('withoutEndingSpaces', () => {
+  it('takes the &nbsp; at the end, and the spaces among them', () => {
+    expect(withoutEndingSpaces('words &nbsp;  &nbsp;\n')).toBe('words');
+    expect(withoutEndingSpaces('words&nbsp;&nbsp;')).toBe('words');
+  });
+
+  it('leaves text with none at its end as it is', () => {
+    expect(withoutEndingSpaces('words  ')).toBe('words  ');
+    expect(withoutEndingSpaces('a &nbsp; b')).toBe('a &nbsp; b');
+    expect(withoutEndingSpaces()).toBe('');
+  });
+
+  it('does not stall on a long run of spaces', () => {
+    const started = Date.now();
+    expect(withoutEndingSpaces(`${' '.repeat(100000)}x`)).toHaveLength(100001);
+    expect(withoutEndingSpaces(`x${' &nbsp;'.repeat(20000)}`)).toBe('x');
+    expect(Date.now() - started).toBeLessThan(1000);
   });
 });

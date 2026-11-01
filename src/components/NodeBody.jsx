@@ -7,7 +7,7 @@ import { makeStyles } from 'tss-react/mui';
 import PostEmbed from './PostEmbed';
 import SmartLink from './SmartLink';
 import utils from '../utils';
-import embedsOf from '../utils/embeds';
+import embedsOf, { withoutEndingSpaces } from '../utils/embeds';
 
 // The words of a link, as it reads.
 const textOf = (node) => {
@@ -162,7 +162,7 @@ const NodeBody = ({
   // Empty paragraphs at the end of long writing, which its editor wrote
   // as &nbsp; before it learnt not to, left a gap under the text.
   if (embeds) {
-    body = body.replace(/(\s*&nbsp;\s*)+$/, '');
+    body = withoutEndingSpaces(body);
   }
 
   if (contentFilter) {

@@ -5,6 +5,25 @@
 // The server reads the text the same way to keep the cards and the edges
 // (anahita-libs/embeds). The two say the same.
 
+// Text without the &nbsp; at its end, and the spaces among them. A regular
+// expression here takes minutes over a long run of spaces, which anybody can
+// post, and a reader's tab waits for it. Text with none at its end stays as
+// it is.
+export const withoutEndingSpaces = (text = '') => {
+  const NBSP = '&nbsp;';
+  let rest = text.trimEnd();
+
+  if (!rest.endsWith(NBSP)) {
+    return text;
+  }
+
+  while (rest.endsWith(NBSP)) {
+    rest = rest.slice(0, -NBSP.length).trimEnd();
+  }
+
+  return rest;
+};
+
 // The kinds of post an address here can be to, by the first part of its
 // path, and the namespace each is read from.
 const KINDS = {
@@ -133,9 +152,7 @@ const bareLinks = (markdown = '') => {
 // address bare, and no empty paragraphs at the end, which it writes as
 // &nbsp; and which left a gap under the text.
 const tidy = (markdown = '') => {
-  return bareLinks(markdown)
-    .replace(/(\s*&nbsp;\s*)+$/, '')
-    .replace(/\s+$/, '');
+  return withoutEndingSpaces(bareLinks(markdown)).trimEnd();
 };
 
 export default {
