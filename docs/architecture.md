@@ -521,6 +521,14 @@ replies, made directly to the post.
   too, when the post went there; one from the fediverse is hidden here
   only, and asking to hide it says so, naming its server
   (`utils/federation.js#fromFediverse`).
+- Replies made to the post are newest first, or oldest, by a switch that shows
+  with three or more and is remembered in the browser (`utils/replyOrder.js`).
+  What answers a reply stays oldest first, so a conversation reads in order. The
+  server sends the oldest 500 of a thread.
+- Reply under a post in a list opens the post over the list, at its own address
+  (`routes/PostDialog.jsx`, the full screen on a phone): the routes go on showing
+  the list, from `location.state.background`, so it keeps its place. Going back
+  closes it, and a link to it opens the page.
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
 - **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a

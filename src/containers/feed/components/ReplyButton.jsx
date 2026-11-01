@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import ReplyIcon from '@mui/icons-material/ModeCommentOutlined';
 
@@ -10,13 +11,16 @@ import utils from '../../../utils';
 const { getURL } = utils.node;
 
 // The reply button under a post in a feed. Replying is done in the post's
-// thread, on its own page, so this goes there. It is off when the server
-// says the viewer may not reply.
+// thread, ready to write in, over the list (routes/PostDialog), so that nobody
+// loses their place. It is off when the server says the viewer may not reply.
 const FeedReplyButton = ({ post }) => {
+  const location = useLocation();
+
   return (
     <Button
-      component="a"
-      href={getURL(post)}
+      component={RouterLink}
+      to={getURL(post)}
+      state={{ reply: true, background: location }}
       disabled={!replyPerms.canAdd(post)}
       aria-label={i18n.t('replies:reply')}
       title={i18n.t('replies:reply')}

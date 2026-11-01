@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import AuthenticatedRoute from './AuthenticatedRoute';
+import PostDialog from './PostDialog';
 import analytics from '../utils/analytics';
 
 import AuthPage from '../containers/auth';
@@ -150,9 +151,22 @@ const AppRoutes = () => {
     pageview.current = analytics.start();
   }
 
+  // A post opened over a list (PostDialog): the list is what the routes go on
+  // showing, and it keeps its place while the post is open, and after.
+  const background = location.state && location.state.background;
+  const lastBackground = useRef(null);
+
   useEffect(() => {
     pageview.current(location.pathname + location.search);
-    window.scrollTo(0, 0);
+
+    const returned = lastBackground.current &&
+      lastBackground.current.pathname === location.pathname &&
+      lastBackground.current.search === location.search;
+    lastBackground.current = background || null;
+
+    if (!background && !returned) {
+      window.scrollTo(0, 0);
+    }
   }, [location]);
 
   return (
@@ -161,7 +175,7 @@ const AppRoutes = () => {
         <OnboardingGate>
           {/* The one share dialog, opened from any share button. */}
           <ShareDialog />
-          <Routes>
+          <Routes location={background || location}>
             <Route path="/oauth/callback" element={<OAuthCallback />} />
 
             <Route
@@ -522,6 +536,14 @@ const AppRoutes = () => {
             <Route path="/404" element={<NotFoundPage />} />
             <Route path="*" element={<NotFoundPage />} />
           </Routes>
+          {background &&
+            <Routes>
+              <Route path="/articles/:id" element={<PostDialog><ArticlesRead /></PostDialog>} />
+              <Route path="/notes/:id" element={<PostDialog><NotesRead /></PostDialog>} />
+              <Route path="/photos/:id" element={<PostDialog><PhotosRead /></PostDialog>} />
+              <Route path="/videos/:id" element={<PostDialog><VideosRead /></PostDialog>} />
+              <Route path="/topics/:id" element={<PostDialog><TopicsRead /></PostDialog>} />
+            </Routes>}
         </OnboardingGate>
       </AgreementsGate>
     </MembersOnlyGate>
