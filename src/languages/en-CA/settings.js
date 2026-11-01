@@ -57,6 +57,19 @@ export default {
     tabs: {
       servers: 'Servers',
       accounts: 'Accounts',
+      profiles: 'Profiles',
+    },
+    profiles: {
+      cTitle: 'Profiles from other networks',
+      cDescription: 'Everybody from the fediverse and Bluesky kept here, because somebody here followed them or met them in a thread. Only administrators see this list.',
+      none: 'No profile from another network is kept here.',
+      noneFound: 'No profile matches that.',
+      count: '{{ count }} profile',
+      count_other: '{{ count }} profiles',
+      search: 'Search by name or handle',
+      refuse: 'Refuse {{ name }}',
+      followers: '{{ count }} follower here',
+      followers_other: '{{ count }} followers here',
     },
     accounts: {
       cTitle: 'Accounts this site refuses',

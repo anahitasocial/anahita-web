@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -80,6 +81,20 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
     });
   };
 
+  // Whether other servers may list them and find them: each its own choice,
+  // on until they say otherwise, and free to change back, as leaving is not.
+  const saveListing = (listing) => {
+    setIsSaving(true);
+    api.federation.setListing(listing, profile).then((result) => {
+      setSettings(result.data);
+      alertSuccess(i18n.t('federation:settings.saved'));
+    }).catch(() => {
+      alertError(i18n.t('federation:settings.notSaved'));
+    }).finally(() => {
+      setIsSaving(false);
+    });
+  };
+
   // Turning it on is done at once. Turning it off is asked about first: it
   // tells every server that knows them to remove them, and most will not
   // take the same person back.
@@ -122,6 +137,30 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
             {': '}
             <strong>{`@${settings.handle}`}</strong>
           </Typography>}
+        {settings.enabled &&
+          <Box sx={{ mt: 2 }}>
+            {['discoverable', 'indexable'].map((choice) => {
+              return (
+                <Box key={choice} sx={{ mb: 1 }}>
+                  <FormControlLabel
+                    control={
+                      <Switch
+                        checked={settings[choice] !== false}
+                        disabled={isSaving}
+                        onChange={(event) => {
+                          saveListing({ [choice]: event.target.checked });
+                        }}
+                      />
+                    }
+                    label={i18n.t(`federation:settings.listing.${choice}`)}
+                  />
+                  <Typography variant="body2" color="textSecondary">
+                    {i18n.t(`federation:settings.listing.${choice}Help`)}
+                  </Typography>
+                </Box>
+              );
+            })}
+          </Box>}
         {!settings.available && settings.reason &&
           <Alert severity="info" sx={{ mt: 2 }}>
             {i18n.t(`${words}.unavailable.${settings.reason}`)}

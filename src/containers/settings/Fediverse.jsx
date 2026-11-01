@@ -7,21 +7,25 @@ import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 
 import FediverseAccounts from './FediverseAccounts';
+import FediverseProfiles from './FediverseProfiles';
 import FediverseServers from './FediverseServers';
 import i18n from '../../languages';
 import permissions from '../../permissions';
 
 const SERVERS = 'servers';
 const ACCOUNTS = 'accounts';
+const PROFILES = 'profiles';
 
-// Site settings' Fediverse tab: what this installation refuses of other
-// networks, in two lists (the user, 2026-10-29). Servers, refused for
-// everybody on them, by super administrators; and Accounts, refused one by
-// one, by administrators too. An administrator sees the Accounts alone,
-// with no tabs to choose between.
+// Site settings' Fediverse tab: what this installation has to do with other
+// networks, in three lists. Servers, refused for everybody on them, by super
+// administrators; Accounts, refused one by one, by administrators too; and
+// Profiles, who from other networks is kept here, for administrators to see
+// (the user, 2026-11-01).
 const SettingsFediverse = () => {
   const viewer = useSelector((state) => { return state.session.viewer; });
-  const lists = permissions.settings.canRefuseServers(viewer) ? [SERVERS, ACCOUNTS] : [ACCOUNTS];
+  const lists = permissions.settings.canRefuseServers(viewer) ?
+    [SERVERS, ACCOUNTS, PROFILES] :
+    [ACCOUNTS, PROFILES];
   const [chosen, setChosen] = useState(lists[0]);
   const list = lists.includes(chosen) ? chosen : lists[0];
 
@@ -49,7 +53,9 @@ const SettingsFediverse = () => {
           </Tabs>
           <Divider />
         </>}
-      {list === SERVERS ? <FediverseServers /> : <FediverseAccounts />}
+      {list === SERVERS && <FediverseServers />}
+      {list === ACCOUNTS && <FediverseAccounts />}
+      {list === PROFILES && <FediverseProfiles />}
     </Card>
   );
 };

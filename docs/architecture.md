@@ -1482,18 +1482,23 @@ draws nothing (`utils/federation.js#isAbsent`).
   name or reason, since an installation that takes up somebody else's list
   has thousands; a server is refused from a dialog, which says that
   refusing it does not remove what already came from it. **Accounts**
-  (`settings/FediverseAccounts.jsx`), for administrators too, who see this
-  tab alone: the accounts refused one by one, on the fediverse or Bluesky,
+  (`settings/FediverseAccounts.jsx`), for administrators too: the accounts
+  refused one by one, on the fediverse or Bluesky,
   newest first, with the network and why, a search, and a button to let
   one back; one is refused by a handle or an address from a dialog, which
-  says that refusing it removes what is here of it.
+  says that refusing it removes what is here of it. **Profiles**
+  (`settings/FediverseProfiles.jsx`), for administrators too: who from other
+  networks is kept here, newest first, with a search, and each can be refused.
+  Only administrators see this: these people did not ask to be listed here.
 
 - **The switch** is a card under Settings › Fediverse, beside the Bluesky
   card, on the viewer's own profile only (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
   follow me". Off until the person turns it on, and theirs alone to turn
   on. It shows their handle, says that what is sent cannot be called back,
-  asks before it is turned off (other servers are told to remove the
-  person, and may not take them back), says that making a profile private
+  has two more switches once it is on, each free to change back (shown in
+  directories, included in search; anahita-services' docs/federation.md, "Listed
+  and found"), asks before it is turned off (other servers are told to remove
+  the person, and may not take them back), says that making a profile private
   has the same effect,
   and when they cannot turn it on (their profile is not open to everybody,
   or the site does not federate) it is disabled with the server's reason

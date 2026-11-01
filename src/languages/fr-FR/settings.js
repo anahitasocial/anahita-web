@@ -57,6 +57,19 @@ export default {
     tabs: {
       servers: 'Serveurs',
       accounts: 'Comptes',
+      profiles: 'Profils',
+    },
+    profiles: {
+      cTitle: 'Profils d’autres réseaux',
+      cDescription: 'Toutes les personnes du fédivers et de Bluesky conservées ici, parce que quelqu’un ici les suit ou les a croisées dans une discussion. Seuls les administrateurs voient cette liste.',
+      none: 'Aucun profil d’un autre réseau n’est conservé ici.',
+      noneFound: 'Aucun profil ne correspond.',
+      count: '{{ count }} profil',
+      count_other: '{{ count }} profils',
+      search: 'Rechercher par nom ou identifiant',
+      refuse: 'Refuser {{ name }}',
+      followers: '{{ count }} abonné ici',
+      followers_other: '{{ count }} abonnés ici',
     },
     accounts: {
       cTitle: 'Comptes que ce site refuse',

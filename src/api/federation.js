@@ -9,6 +9,13 @@ import federation from '../utils/federation';
 // error, and whoever asked takes that as there being no fediverse here and
 // draws nothing: see utils/federation.js#isAbsent.
 
+// Whether other servers may list the viewer and find them: `{ discoverable }`,
+// `{ indexable }` or both. Theirs, or with a website, its administrators'.
+const setListing = (listing, profile = null) => {
+  const params = profile && profile.id ? { person_id: profile.id } : undefined;
+  return axios.put('/activitypub/settings', listing, { params });
+};
+
 // Whether the viewer is on the fediverse, whether they could be, and what
 // they are or would be called there.
 //
@@ -112,6 +119,14 @@ const refusedAccounts = ({ q = '', limit = 50, offset = 0 } = {}) => {
   });
 };
 
+// Who from other networks is kept here. For administrators: these people did
+// not ask to be listed. Newest first, a page at a time.
+const knownProfiles = ({ q = '', limit = 50, offset = 0 } = {}) => {
+  return axios.get('/activitypub/known-profiles', {
+    params: { q, limit, start: offset },
+  });
+};
+
 // A profile kept here, by `actorId`, or any account by `address`: a
 // handle, an address or a DID. What is here of it is removed.
 const refuseAccount = ({ actorId = 0, address = '', reason = '' }) => {
@@ -127,6 +142,8 @@ const letAccountBack = (id) => {
 export default {
   settings,
   setEnabled,
+  setListing,
+  knownProfiles,
   lookup,
   restorePictures,
   blueskySettings,

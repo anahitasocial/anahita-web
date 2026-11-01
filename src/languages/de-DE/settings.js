@@ -57,6 +57,19 @@ export default {
     tabs: {
       servers: 'Server',
       accounts: 'Konten',
+      profiles: 'Profile',
+    },
+    profiles: {
+      cTitle: 'Profile aus anderen Netzwerken',
+      cDescription: 'Alle aus dem Fediverse und von Bluesky, die hier gespeichert sind, weil ihnen jemand hier folgt oder sie in einer Unterhaltung vorkamen. Nur Administratoren sehen diese Liste.',
+      none: 'Hier ist kein Profil aus einem anderen Netzwerk gespeichert.',
+      noneFound: 'Kein Profil passt dazu.',
+      count: '{{ count }} Profil',
+      count_other: '{{ count }} Profile',
+      search: 'Nach Name oder Handle suchen',
+      refuse: '{{ name }} ablehnen',
+      followers: '{{ count }} Follower hier',
+      followers_other: '{{ count }} Follower hier',
     },
     accounts: {
       cTitle: 'Konten, die diese Seite abweist',

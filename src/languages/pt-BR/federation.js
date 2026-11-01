@@ -1,5 +1,11 @@
 export default {
   settings: {
+    listing: {
+      discoverable: 'Mostrar-me em diretórios',
+      discoverableHelp: 'Outros servidores podem listar este perfil em seus diretórios e sugestões.',
+      indexable: 'Incluir-me na busca',
+      indexableHelp: 'Outros servidores podem encontrar este perfil em sua busca.',
+    },
     title: 'Mastodon e outros servidores (ActivityPub)',
     enable: 'Deixar que pessoas de outros servidores me encontrem e me sigam',
     help: 'Assim, pessoas no Mastodon e em outros servidores do fediverso podem encontrar você pelo seu identificador e seguir você, e suas notas públicas são enviadas a elas. Você também pode seguir pessoas de lá.',

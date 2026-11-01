@@ -57,6 +57,19 @@ export default {
     tabs: {
       servers: 'Servidores',
       accounts: 'Contas',
+      profiles: 'Perfis',
+    },
+    profiles: {
+      cTitle: 'Perfis de outras redes',
+      cDescription: 'Todas as pessoas do fediverso e do Bluesky guardadas aqui, porque alguém daqui as segue ou as encontrou em uma conversa. Apenas administradores veem esta lista.',
+      none: 'Nenhum perfil de outra rede está guardado aqui.',
+      noneFound: 'Nenhum perfil corresponde.',
+      count: '{{ count }} perfil',
+      count_other: '{{ count }} perfis',
+      search: 'Buscar por nome ou identificador',
+      refuse: 'Recusar {{ name }}',
+      followers: '{{ count }} seguidor aqui',
+      followers_other: '{{ count }} seguidores aqui',
     },
     accounts: {
       cTitle: 'Contas que este site recusa',

@@ -1,5 +1,11 @@
 export default {
   settings: {
+    listing: {
+      discoverable: 'In Verzeichnissen anzeigen',
+      discoverableHelp: 'Andere Server dürfen dieses Profil in ihren Verzeichnissen und Vorschlägen aufführen.',
+      indexable: 'In die Suche aufnehmen',
+      indexableHelp: 'Andere Server dürfen dieses Profil in ihrer Suche finden.',
+    },
     title: 'Mastodon und andere Server (ActivityPub)',
     enable: 'Leute auf anderen Servern dürfen mich finden und mir folgen',
     help: 'Leute auf Mastodon und anderen Servern des Fediverse können dich dann über deinen Handle finden und dir folgen, und deine öffentlichen Notizen werden an sie gesendet. Du kannst dort auch anderen folgen.',
