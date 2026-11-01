@@ -23,3 +23,12 @@ is published, with your name in it if you would like.
 | A site that runs Anahita | The people who run it: their address is on the site's `/support` page |
 
 Only `main` is supported: a site builds the web app from it.
+
+## Advisories on build tools
+
+The alerts still open on this repository are all in tools that `react-scripts`
+holds at old versions: `webpack-dev-server`, `webpack-dev-middleware`, `postcss`,
+`svgo`, `minimatch`, `uuid` and `deepmerge`. They run on a developer's machine
+during `yarn start` and `yarn build`, and none is in what is sent to browsers.
+Replacing `react-scripts` closes them (the roadmap's row 118). Until then, close
+other tabs you do not trust while `yarn start` is running.

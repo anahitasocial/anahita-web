@@ -1,0 +1,15 @@
+# Security updates only, and together: one pull request, so that the next
+# advisory is one update and not a dozen. No version updates: a package is
+# otherwise raised when somebody decides to.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 0
+    groups:
+      npm-security:
+        applies-to: security-updates
+        patterns:
+          - "*"
