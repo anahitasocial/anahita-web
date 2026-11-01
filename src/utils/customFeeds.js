@@ -12,10 +12,10 @@ const ACCESS = ['myself', 'followers', 'registered', 'public'];
 
 // The server's limits, repeated so the editor can stop at them.
 const LIMITS = {
-  actors: 50,
-  hashtags: 10,
-  keywords: 10,
-  locations: 5,
+  actors: 100,
+  hashtags: 40,
+  keywords: 40,
+  locations: 40,
   keywordMin: 2,
   keywordMax: 50,
   pinned: 10,

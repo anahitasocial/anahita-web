@@ -359,7 +359,7 @@ const CustomFeedForm = ({
             <>
               <NodesField
                 label={i18n.t('customFeeds:form.actors')}
-                helperText={i18n.t('customFeeds:form.actorsHelp')}
+                helperText={i18n.t('customFeeds:form.actorsHelp', { max: LIMITS.actors })}
                 namespaces={['people', 'groups', 'remote']}
                 value={actors}
                 max={LIMITS.actors}
@@ -447,7 +447,7 @@ const CustomFeedForm = ({
           </FormControl>}
           <WordsField
             label={i18n.t('customFeeds:form.hashtags')}
-            helperText={i18n.t('customFeeds:form.hashtagsHelp')}
+            helperText={i18n.t('customFeeds:form.hashtagsHelp', { max: LIMITS.hashtags })}
             value={definition.filters.hashtagsAny}
             clean={customFeeds.cleanHashtag}
             max={LIMITS.hashtags}
@@ -458,7 +458,7 @@ const CustomFeedForm = ({
           />
           <WordsField
             label={i18n.t('customFeeds:form.keywords')}
-            helperText={i18n.t('customFeeds:form.keywordsHelp')}
+            helperText={i18n.t('customFeeds:form.keywordsHelp', { max: LIMITS.keywords })}
             value={definition.filters.keywordsAny}
             clean={customFeeds.cleanKeyword}
             max={LIMITS.keywords}
@@ -469,7 +469,7 @@ const CustomFeedForm = ({
           />
           <NodesField
             label={i18n.t('customFeeds:form.locations')}
-            helperText={i18n.t('customFeeds:form.locationsHelp')}
+            helperText={i18n.t('customFeeds:form.locationsHelp', { max: LIMITS.locations })}
             namespaces={['locations']}
             value={locations}
             max={LIMITS.locations}

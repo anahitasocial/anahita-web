@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import ArticleIcon from '@mui/icons-material/ArticleOutlined';
 import EventIcon from '@mui/icons-material/EventOutlined';
 import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
+import FediverseIcon from '@mui/icons-material/Hub';
 import GroupIcon from '@mui/icons-material/GroupWorkOutlined';
 import HashtagIcon from '@mui/icons-material/TagOutlined';
 import HeartIcon from '@mui/icons-material/FavoriteBorder';
@@ -18,11 +19,13 @@ import StarIcon from '@mui/icons-material/StarBorder';
 import TopicIcon from '@mui/icons-material/ForumOutlined';
 import WorldIcon from '@mui/icons-material/PublicOutlined';
 
+import BlueskyIcon from './BlueskyIcon';
+
 // The pictures a custom feed can have, by the names the server keeps. They
 // follow what a feed can be made of: kinds of profile and of post, a
-// hashtag, a place, a keyword, a language, and a few for a feed that is none
-// of those in particular. The list is the server's (`feeds.Icons`); a name
-// this does not know is drawn as the default.
+// hashtag, a place, a keyword, a language, the networks a feed can draw on,
+// and a few for a feed that is none of those in particular. The list is the
+// server's (`feeds.Icons`); a name this does not know is drawn as the default.
 const ICONS = {
   feed: FeedIcon,
   people: PeopleIcon,
@@ -40,6 +43,8 @@ const ICONS = {
   heart: HeartIcon,
   news: NewsIcon,
   world: WorldIcon,
+  fediverse: FediverseIcon,
+  bluesky: BlueskyIcon,
 };
 
 const CustomFeedIcon = ({ name = 'feed', ...other }) => {

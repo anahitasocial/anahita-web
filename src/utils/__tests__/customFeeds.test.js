@@ -59,12 +59,21 @@ describe('a custom feed\'s definition', () => {
       });
     };
 
-    expect(feeds.problem({ filters: { hashtagsAny: many(11) } })).toBe('too_many_hashtags');
-    expect(feeds.problem({ filters: { keywordsAny: many(11) } })).toBe('too_many_keywords');
-    expect(feeds.problem({ sources: { following: true }, exclude: { keywords: many(11) } })).toBe('too_many_keywords');
-    expect(feeds.problem({ filters: { locationsAny: [1, 2, 3, 4, 5, 6] } })).toBe('too_many_locations');
+    expect(feeds.problem({ filters: { hashtagsAny: many(41) } })).toBe('too_many_hashtags');
+    expect(feeds.problem({ filters: { keywordsAny: many(41) } })).toBe('too_many_keywords');
+    expect(feeds.problem({ sources: { following: true }, exclude: { keywords: many(41) } })).toBe('too_many_keywords');
+    const places = (count) => {
+      return Array.from({ length: count }, (unused, index) => {
+        return index + 1;
+      });
+    };
+    expect(feeds.problem({ filters: { locationsAny: places(41) } })).toBe('too_many_locations');
+    // A region's places, and a country's words, fit (the user, 2026-11-01).
+    expect(feeds.problem({ filters: { locationsAny: places(40) } })).toBe('');
+    expect(feeds.problem({ filters: { keywordsAny: many(40) } })).toBe('');
+    expect(feeds.problem({ filters: { hashtagsAny: many(40) } })).toBe('');
     expect(feeds.problem({ filters: { keywordsAny: ['a'] } })).toBe('keyword_length');
-    const ids = Array.from({ length: 51 }, (unused, index) => {
+    const ids = Array.from({ length: 101 }, (unused, index) => {
       return index + 1;
     });
     expect(feeds.problem({ sources: { actors: ids } })).toBe('too_many_actors');
