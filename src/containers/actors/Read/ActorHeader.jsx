@@ -115,7 +115,14 @@ const ActorHeader = ({
             <Box
               component="span"
               sx={{
-                fontSize: 16, fontWeight: 400, color: 'text.secondary', ml: 1, whiteSpace: 'nowrap',
+                fontSize: 16,
+                fontWeight: 400,
+                color: 'text.secondary',
+                ml: 1,
+                verticalAlign: 'middle',
+                position: 'relative',
+                top: '-2px',
+                whiteSpace: 'nowrap',
               }}
             >
               {`(${pronouns})`}

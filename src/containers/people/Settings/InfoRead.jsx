@@ -38,6 +38,12 @@ const InfoRead = ({
         </ListItem>
         <ListItem>
           <ListItemText
+            primary={i18n.t('people:person.pronouns')}
+            secondary={person.personPronouns || EMPTY}
+          />
+        </ListItem>
+        <ListItem>
+          <ListItemText
             primary={i18n.t('people:person.body')}
             secondary={person.body || EMPTY}
           />
@@ -46,12 +52,6 @@ const InfoRead = ({
           <ListItemText
             primary={i18n.t('actor:website')}
             secondary={person.websiteUrl || EMPTY}
-          />
-        </ListItem>
-        <ListItem>
-          <ListItemText
-            primary={i18n.t('people:person.pronouns')}
-            secondary={person.personPronouns || EMPTY}
           />
         </ListItem>
 

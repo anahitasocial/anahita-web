@@ -20,7 +20,7 @@ const formFields = form.createFormFields([
   'language',
 ]);
 
-// Display name, bio and pronouns, pre-filled with whatever is already there.
+// Display name, pronouns and bio, pre-filled with whatever is already there.
 //
 // Shown even when all three are filled in — somebody who applied through
 // approval mode arrives with name and bio from their application — so they can

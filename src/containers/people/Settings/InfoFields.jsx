@@ -19,7 +19,7 @@ const {
   BODY,
 } = PERSON.FIELDS;
 
-// Name, bio and pronouns: what others see beside a person's avatar.
+// Name, pronouns and bio: what others see beside a person's avatar.
 //
 // Shared by the settings form and the onboarding profile step, so the two can
 // never disagree about limits or labels. The container declares `name` and
@@ -56,6 +56,17 @@ const PersonInfoFields = ({
           },
         }}
       />
+      <FormControl variant="standard" margin="normal" fullWidth>
+        <InputLabel id="pronouns-label" shrink>
+          {i18n.t('people:person.pronouns')}
+        </InputLabel>
+        <SelectPronouns
+          labelId="pronouns-label"
+          name="personPronouns"
+          value={person.personPronouns || ''}
+          onChange={handleOnChange}
+        />
+      </FormControl>
       <TextField
         variant="standard"
         name="body"
@@ -75,17 +86,6 @@ const PersonInfoFields = ({
           },
         }}
       />
-      <FormControl variant="standard" margin="normal" fullWidth>
-        <InputLabel id="pronouns-label" shrink>
-          {i18n.t('people:person.pronouns')}
-        </InputLabel>
-        <SelectPronouns
-          labelId="pronouns-label"
-          name="personPronouns"
-          value={person.personPronouns || ''}
-          onChange={handleOnChange}
-        />
-      </FormControl>
       {/* The language this person usually writes in. The composer starts
           on it, on every device; each post can still say otherwise. Not
           the language of the interface, which is a different thing. */}

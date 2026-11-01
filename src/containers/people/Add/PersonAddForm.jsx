@@ -67,6 +67,17 @@ const PersonAddForm = (props) => {
               },
             }}
           />
+          <FormControl variant="standard" margin="normal" fullWidth>
+            <InputLabel id="pronouns-label" shrink>
+              {i18n.t('people:person.pronouns')}
+            </InputLabel>
+            <SelectPronouns
+              labelId="pronouns-label"
+              name="personPronouns"
+              value={person.personPronouns || ''}
+              onChange={handleOnChange}
+            />
+          </FormControl>
           <TextField
             variant="standard"
             name="username"
@@ -124,17 +135,6 @@ const PersonAddForm = (props) => {
                 minLength: BODY.MIN_LENGTH,
               },
             }}
-          />
-        </FormControl>
-        <FormControl variant="standard" margin="normal" fullWidth>
-          <InputLabel id="pronouns-label" shrink>
-            {i18n.t('people:person.pronouns')}
-          </InputLabel>
-          <SelectPronouns
-            labelId="pronouns-label"
-            name="personPronouns"
-            value={person.personPronouns || ''}
-            onChange={handleOnChange}
           />
         </FormControl>
         {/* The role radio group was removed here.
