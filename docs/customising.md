@@ -27,7 +27,7 @@ code and no rebuild.
 
 `REACT_APP_NAME` and `REACT_APP_DESCRIPTION` are the build's own: shown until
 the server has answered, and used in the page title and meta tags in
-`public/index.html`. See [Configuration](configuration.md).
+`index.html`. See [Configuration](configuration.md).
 
 ## Themes
 
@@ -58,7 +58,7 @@ A theme exports, from its `index.js`:
 **The picture of a shared link** is `public/statics/media/ogimage.jpg`, 1200
 by 630 pixels: Anahita's logo, its name and "Connect your people, here and
 everywhere." Every page without a picture of its own shows it, in
-`public/index.html` and from web-shell. A site with its own puts its picture
+`index.html` and from web-shell. A site with its own puts its picture
 there in its build, at the same name.
 
 A theme is compiled into the bundle, so changing one means rebuilding. Keep

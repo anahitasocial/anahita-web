@@ -230,7 +230,7 @@ in the browser (`site.readAccess` in `localStorage`), and a site that said
 `public` is drawn straight away.
 
 A request that is refused anyway, because some page did not expect it, is
-caught in `src/index.js`: an unhandled "sign in first" answer from the server
+caught in `src/index.jsx`: an unhandled "sign in first" answer from the server
 is dropped instead of reaching the screen as an error. Every other unhandled
 failure is left to be seen.
 
@@ -1731,4 +1731,4 @@ Styles are plain objects. `theme.spacing(n)` returns a string with its unit
 add `px` after it.
 
 Material UI 9 supports Chrome 117, Edge 121, Firefox 121 and Safari 17 and
-later; `browserslist` in `package.json` matches.
+later; `build.target` in `vite.config.mjs` matches.

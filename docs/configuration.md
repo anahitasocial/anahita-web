@@ -17,23 +17,21 @@ The app is configured with environment variables, set in a `.env` file in
 development or in the host's settings when it is built for production.
 `.env.example` lists them all with notes. Copy it to `.env` to start.
 
-Three things follow from the app being built with Create React App:
+Three things follow from the app being built with [Vite](https://vite.dev):
 
-- **Only `PUBLIC_URL`, `NODE_ENV` and variables beginning `REACT_APP_` reach
-  the app.** Anything else is invisible to it, whatever its name.
+- **Only `PUBLIC_URL` and variables beginning `REACT_APP_` reach the app.** Anything else is invisible to it, whatever its name.
 - **Values are compiled into the bundle when it is built.** Changing one means
   restarting `yarn start`, or rebuilding for production.
 - **Anybody can read them.** They end up in JavaScript that every visitor
   downloads, so none of them may hold a secret.
 
-Create React App reads these files, highest priority first. No other file name
-is read:
+Vite reads these files, highest priority first. No other file name is read:
 
 | File | Loaded |
 | --- | --- |
 | `.env.development.local`, `.env.production.local` | For `yarn start` and `yarn build` respectively |
 | `.env.development`, `.env.production` | Likewise |
-| `.env.local` | Always, except when running tests |
+| `.env.local` | Always |
 | `.env` | Always |
 
 ## Variables
@@ -44,7 +42,7 @@ is read:
 | --- | --- |
 | `REACT_APP_NAME` | The installation's name. Shown throughout the app and used as the page title in `public/index.html` |
 | `REACT_APP_DESCRIPTION` | A one-line description, used as the page's meta description |
-| `PUBLIC_URL` | Where the app is served from, for example `http://localhost:3000` |
+| `PUBLIC_URL` | Where a build is served from, for example `https://cdn.example.org`, when that is not the site's root. Empty unless it is. `yarn start` ignores it |
 
 ### Back end
 

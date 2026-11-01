@@ -3,11 +3,13 @@ import styles from '..';
 import palettes from '../palettes';
 
 // A theme with colours of its own, as banu.io's is.
-jest.mock('../../assets', () => {
+vi.mock('../../assets', () => {
   return {
-    styles: {
-      global: () => {
-        return { palette: { primary: { main: '#0F5257' }, secondary: { main: '#B87333' } } };
+    default: {
+      styles: {
+        global: () => {
+          return { palette: { primary: { main: '#0F5257' }, secondary: { main: '#B87333' } } };
+        },
       },
     },
   };

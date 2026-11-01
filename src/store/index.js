@@ -1,6 +1,4 @@
-/* eslint-disable global-require */
-if (process.env.NODE_ENV === 'development') {
-  module.exports = require('./dev');
-} else {
-  module.exports = require('./prod');
-}
+// With its logging in development only (vite.config.mjs).
+import configureStore from 'site-store';
+
+export default configureStore;

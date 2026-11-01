@@ -26,9 +26,7 @@ Only `main` is supported: a site builds the web app from it.
 
 ## Advisories on build tools
 
-The alerts still open on this repository are all in tools that `react-scripts`
-holds at old versions: `webpack-dev-server`, `webpack-dev-middleware`, `postcss`,
-`svgo`, `minimatch`, `uuid` and `deepmerge`. They run on a developer's machine
-during `yarn start` and `yarn build`, and none is in what is sent to browsers.
-Replacing `react-scripts` closes them (the roadmap's row 118). Until then, close
-other tabs you do not trust while `yarn start` is running.
+`minimatch` under ESLint is the alert still open on this repository.
+`eslint-config-airbnb` holds ESLint at version 8, which uses it, and it has no
+fixed version that ESLint 8 can take. It runs on a developer's machine, on the
+file patterns in this repository, and is not in what is sent to browsers.

@@ -1,7 +1,5 @@
-/* eslint-disable global-require */
-if (process.env.REACT_APP_ASSETS) {
-  // eslint-disable-next-line import/no-dynamic-require
-  module.exports = require(`./${process.env.REACT_APP_ASSETS}`);
-} else {
-  module.exports = require('./default');
-}
+// The theme this site was built with: REACT_APP_ASSETS, or `default`
+// (vite.config.mjs, docs/customising.md).
+import assets from 'site-assets';
+
+export default assets;

@@ -22,8 +22,16 @@
   "bugs": "https://github.com/anahitasocial/anahita-web/issues",
   "license": "MIT",
   "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "eslint": "^8.57.1",
     "eslint-config-airbnb": "^19",
-    "react-scripts": "^5.0.1"
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^4.6.2",
+    "jsdom": "^26.1.0",
+    "vite": "^8.3.5",
+    "vitest": "^5.0.5"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -74,34 +82,14 @@
     "tss-react": "^4.9.21"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "lint": "eslint --ext .js,.jsx src"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
-  "browserslist": [
-    "chrome >= 117",
-    "edge >= 121",
-    "firefox >= 121",
-    "safari >= 17",
-    "ios_saf >= 17",
-    "and_chr >= 117",
-    "and_ff >= 121",
-    "samsung >= 24",
-    "not dead"
-  ],
   "resolutions": {
-    "react-is": "^19.3.0",
-    "body-parser": "^1.20.9",
-    "path-to-regexp": "^0.1.13",
-    "qs": "^6.16.1",
-    "underscore": "^1.13.8",
-    "colord": "^2.9.4",
-    "nth-check": "^2.0.1",
-    "serialize-javascript": "^7.1.3",
-    "@tootallnate/once": "^2.0.1"
+    "react-is": "^19.3.0"
   }
 }

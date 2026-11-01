@@ -59,7 +59,7 @@ Whether the **Create account** button appears depends on the server's
 
 ## Developing
 
-`yarn start` runs the development server with hot reload.
+`yarn start` runs the development server on port 3000, with hot reload.
 
 In development the Redux store also runs `redux-logger`, which logs every
 action to the browser console, and connects to the Redux DevTools browser
@@ -71,12 +71,12 @@ restart `yarn start`.
 ## Tests
 
 ```sh
-yarn test                                  # watch mode
-CI=true yarn test --watchAll=false         # run once, as CI would
+yarn test          # run once
+yarn test:watch    # again at every change
 ```
 
 Tests live next to what they test, in `__tests__` directories, and are run by
-Jest through Create React App. Most test plain modules rather than rendering
+[Vitest](https://vitest.dev). Most test plain modules rather than rendering
 components. For example, `src/containers/actors/Settings/__tests__/` checks
 the settings tabs and the permission rules as data. That is why several of
 those modules are kept free of JSX.
@@ -92,10 +92,8 @@ The one that shows most is that arrow functions always have a block body
 (`arrow-body-style: always`).
 
 ```sh
-npx eslint src
+yarn lint
 ```
-
-`yarn start` shows lint problems in the browser and the terminal as you work.
 
 ## With an AI agent
 

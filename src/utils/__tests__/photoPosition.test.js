@@ -3,7 +3,7 @@ import photoPosition from '../photoPosition';
 
 // exifr itself is not under test: what it mockAnswers for each file is.
 const mockAnswers = new Map();
-jest.mock('exifr', () => {
+vi.mock('exifr', () => {
   return {
     gps: (file) => {
       if (mockAnswers.get(file) === 'throws') {

@@ -1,7 +1,7 @@
 /* eslint-env jest */
 import featured from '../featured';
 
-jest.mock('../../../api', () => {
+vi.mock('../../../api', () => {
   return {};
 });
 

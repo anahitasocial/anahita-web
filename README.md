@@ -156,5 +156,4 @@ registered trademark of Rastin Mehr Design Studio Inc. in Canada.
 Anahita is developed and maintained by [rmd studio](https://www.rmdstudio.com),
 a software development company in Vancouver, Canada.
 
-This project was bootstrapped with
-[Create React App](https://github.com/facebook/create-react-app).
+It is built with [Vite](https://vite.dev).
