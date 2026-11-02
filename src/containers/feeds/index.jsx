@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
@@ -29,6 +30,28 @@ import PersonType from '../../proptypes/Person';
 
 // Which tab is the feed of the people and groups the viewer follows.
 const FOLLOWING = 0;
+
+// A feed's name in its tab, on one line: one too long for the room there is
+// ends in an ellipsis, and the whole of it is in the tab's title.
+const FeedName = ({ name }) => {
+  return (
+    <Box
+      component="span"
+      sx={{
+        minWidth: 0,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+      }}
+    >
+      {name}
+    </Box>
+  );
+};
+
+FeedName.propTypes = {
+  name: PropTypes.string.isRequired,
+};
 
 // Home, for somebody signed in: a place to post, and their feeds.
 //
@@ -99,10 +122,11 @@ const FeedsPage = ({
           <Tab
             key={`home-feed-${feed.id}`}
             value={feed.id}
-            label={feed.name}
+            label={<FeedName name={feed.name} />}
+            title={feed.name}
             icon={<CustomFeedIcon name={feed.icon} fontSize="small" />}
             iconPosition="start"
-            sx={tabSx}
+            sx={{ ...tabSx, maxWidth: sideTabs ? '100%' : 240 }}
           />
         );
       })}
@@ -144,7 +168,9 @@ const FeedsPage = ({
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: '1fr minmax(0, 600px) 1fr',
+            // Two shares of the room to spare for the tabs, one for the space on the
+            // other side, and no more, however long a feed's name.
+            gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 600px) minmax(0, 2fr)',
             columnGap: 2,
             alignItems: 'start',
           }}
@@ -154,7 +180,9 @@ const FeedsPage = ({
             <WhoToFollow columns={false} />
             {feed}
           </Box>
-          <SideTabs>
+          {/* The whole of the column beside the posts, which has room to spare
+              on a wide page, for a feed's name. */}
+          <SideTabs width="100%">
             {toggle}
             {tabs}
           </SideTabs>

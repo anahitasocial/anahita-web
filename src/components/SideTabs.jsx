@@ -75,15 +75,17 @@ export const useTabbedList = () => {
 
 // The column beside a feed. It stays in view as the feed is scrolled, under
 // the top bar.
-const SideTabs = ({ children }) => {
+const SideTabs = ({ width = sideWidth, children }) => {
   return (
-    <Box sx={{ position: 'sticky', top: 80, width: sideWidth }}>
+    <Box sx={{ position: 'sticky', top: 80, width }}>
       {children}
     </Box>
   );
 };
 
 SideTabs.propTypes = {
+  // The whole of its column, where that has more room than the usual width.
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   children: PropTypes.node.isRequired,
 };
 
