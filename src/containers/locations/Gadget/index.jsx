@@ -9,6 +9,7 @@ import List from '@mui/material/List';
 import Typography from '@mui/material/Typography';
 
 import AddIcon from '@mui/icons-material/Add';
+import LocationIcon from '@mui/icons-material/PlaceOutlined';
 
 import api from '../../../api';
 import utils from '../../../utils';
@@ -19,6 +20,7 @@ import NodeType from '../../../proptypes/Node';
 import PersonType from '../../../proptypes/Person';
 
 import AnahitaMap from '../../../components/Map';
+import EmptyList from '../../../components/EmptyList';
 import LocationsAdd from '../Add';
 import Progress from '../../../components/Progress';
 import ListItem from '../Browse/ListItem';
@@ -110,6 +112,8 @@ const LocationsGadget = ({
             </Typography>
           }
         />
+        {locations.length === 0 &&
+          <EmptyList icon={<LocationIcon />} inCard compact />}
         {locations.length !== 0 &&
           <AnahitaMap
             locations={locations}

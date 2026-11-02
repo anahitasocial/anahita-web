@@ -949,9 +949,9 @@ be and its gutters. Inside it a page chooses its own width.
 `components/PageColumn.jsx` is the usual choice: the whole width on a phone,
 centred at 600px at most on anything wider, or all of it with `wide`. Home,
 the pages of custom feeds and the event forms use it. A post's own page has
-the post in two thirds of the page and, in the last third, one card with its
-tabs (replies, locations, citations) above what they open. On a narrow screen
-they are under the post, which is at most 800px. Each stays in view beside the others. A post
+the post and its replies under it in two thirds of the page and, in the last
+third, its Locations and Cited by, each a card, one under the other. On a narrow
+screen all four are one under another, at most 800px. Each stays in view beside the others. A post
 on a profile other than its author's says whose above them, as in a list. An
 article's or a topic's text there is larger, 18px (`size="reading"` in
 `components/NodeBody.jsx`); its citations, replies and everything else are not.

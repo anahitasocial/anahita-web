@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Card from '@mui/material/Card';
+import CardHeader from '@mui/material/CardHeader';
 import List from '@mui/material/List';
+import Typography from '@mui/material/Typography';
 
 import CitedByIcon from '@mui/icons-material/FormatQuote';
 
@@ -11,6 +13,7 @@ import EmptyList from '../../../components/EmptyList';
 import Progress from '../../../components/Progress';
 import { PostRow } from '../../../components/PostEmbed';
 import api from '../../../api';
+import i18n from '../../../languages';
 
 const LIMIT = 20;
 
@@ -20,7 +23,9 @@ const LIMIT = 20;
 // they scroll. What an article cites stays at the end of its text.
 // scrollableTarget is the id of the element that scrolls, where that is not
 // the window: the stepper's side panel.
-const CitedByTab = ({ medium, scrollableTarget = undefined }) => {
+const CitedByTab = ({
+  medium, scrollableTarget = undefined, titled = false,
+}) => {
   const [posts, setPosts] = useState([]);
   const [total, setTotal] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,10 +49,19 @@ const CitedByTab = ({ medium, scrollableTarget = undefined }) => {
   }, [medium.id]);
 
   return (
-    <Card sx={{ py: 1 }}>
+    <Card sx={{ py: titled ? 0 : 1 }}>
+      {/* Its own title where it is a card of its own, and not a tab. */}
+      {titled &&
+        <CardHeader
+          title={
+            <Typography variant="subtitle1" component="h3" sx={{ fontWeight: 500 }}>
+              {i18n.t('media:citations.citedBy')}
+            </Typography>
+          }
+        />}
       {isLoading && <Progress />}
       {!isLoading && posts.length === 0 &&
-        <EmptyList icon={<CitedByIcon />} inCard />}
+        <EmptyList icon={<CitedByIcon />} inCard compact={titled} />}
       {posts.length > 0 &&
         <InfiniteScroll
           dataLength={posts.length}
@@ -70,6 +84,8 @@ const CitedByTab = ({ medium, scrollableTarget = undefined }) => {
 };
 
 CitedByTab.propTypes = {
+  // A card of its own, with a title, beside a post and not in a tab.
+  titled: PropTypes.bool,
   medium: PropTypes.object.isRequired,
   scrollableTarget: PropTypes.string,
 };

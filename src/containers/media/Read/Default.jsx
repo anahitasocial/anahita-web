@@ -7,11 +7,9 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
-import Divider from '@mui/material/Divider';
-import Tabs from '@mui/material/Tabs';
-import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -46,12 +44,6 @@ const {
   getCoverURL,
 } = utils.node;
 
-const TABS = {
-  REPLIES: 'replies',
-  LOCATIONS: 'locations',
-  CITED_BY: 'cited-by',
-};
-
 const MediumReadDefault = ({
   classes,
   medium,
@@ -70,17 +62,12 @@ const MediumReadDefault = ({
   // place of the picture alone.
   cover = null,
 }) => {
-  const [tab, setTab] = useState(TABS.REPLIES);
   const isWide = useMediaQuery((theme) => {
     return theme.breakpoints.up('md');
   });
   // Each keeps its place beside the other, however long the other is.
   const [postRef, postTop] = useStickyColumn(isWide, 64);
   const [talkRef, talkTop] = useStickyColumn(isWide, 64);
-
-  const changeTab = (event, value) => {
-    setTab(value);
-  };
 
   const portrait = getPortraitURL(medium, 'original');
   const coverUrl = getCoverURL(medium, 'large');
@@ -236,44 +223,29 @@ const MediumReadDefault = ({
     </Card>
   );
 
-  // Said for md: the theme sets a wider minWidth there, too wide for a third
-  // of a narrower page.
-  const tabSx = { minWidth: { md: 0 } };
-
-  const tabs = (
-    <Tabs
-      value={tab}
-      onChange={changeTab}
-      variant="fullWidth"
-      indicatorColor="primary"
-      textColor="primary"
-    >
-      <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} sx={tabSx} />
-      <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} sx={tabSx} />
-      <Tab label={i18n.t('media:citations.citedBy')} value={TABS.CITED_BY} sx={tabSx} />
-    </Tabs>
-  );
-
-  const panel = (
+  // What is said about the post, and what it is tied to: its places, and the
+  // posts that cite or quote it. Each a card, one under another.
+  const about = (
     <>
-      {tab === TABS.REPLIES && replies}
-      {tab === TABS.LOCATIONS && locations}
-      {tab === TABS.CITED_BY && <CitedByTab medium={medium} />}
+      {locations}
+      <CitedByTab medium={medium} titled />
     </>
   );
 
   if (!isWide) {
     return (
       <PageColumn width={800}>
-        {post}
-        {tabs}
-        {panel}
+        <Stack spacing={2}>
+          {post}
+          {replies}
+          {about}
+        </Stack>
       </PageColumn>
     );
   }
 
-  // Two thirds for the post, and a third for what was said about it: the
-  // tabs at the head of one card with what they open.
+  // Two thirds for the post and its replies, read one after the other, and a
+  // third for what it is tied to.
   return (
     <Box
       sx={{
@@ -283,17 +255,13 @@ const MediumReadDefault = ({
         alignItems: 'start',
       }}
     >
-      <Box ref={postRef} sx={{ position: 'sticky', top: postTop, minWidth: 0 }}>
+      <Stack ref={postRef} spacing={2} sx={{ position: 'sticky', top: postTop, minWidth: 0 }}>
         {post}
-      </Box>
-      <Card ref={talkRef} sx={{ position: 'sticky', top: talkTop, minWidth: 0 }}>
-        {tabs}
-        <Divider />
-        {/* One card: those inside it lose their own edges. */}
-        <Box sx={{ '& .MuiCard-root': { boxShadow: 'none', backgroundImage: 'none' } }}>
-          {panel}
-        </Box>
-      </Card>
+        {replies}
+      </Stack>
+      <Stack ref={talkRef} spacing={2} sx={{ position: 'sticky', top: talkTop, minWidth: 0 }}>
+        {about}
+      </Stack>
     </Box>
   );
 };
