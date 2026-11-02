@@ -99,7 +99,6 @@ const FeedsPage = ({
       orientation={sideTabs ? 'vertical' : 'horizontal'}
       variant="scrollable"
       scrollButtons="auto"
-      allowScrollButtonsMobile
       onChange={(event, feedId) => {
         setParams(
           feedId === FOLLOWING ? {} : { feed: String(feedId) },

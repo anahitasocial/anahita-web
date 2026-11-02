@@ -132,7 +132,6 @@ const Settings = ({
               setTab(newTab);
             }}
             aria-label={i18n.t('settings:cTitle')}
-            allowScrollButtonsMobile
           >
             {tabs.map((value) => {
               return (

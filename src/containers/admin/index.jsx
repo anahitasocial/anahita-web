@@ -104,7 +104,6 @@ const Admin = ({
             scrollButtons
             value={current.key}
             aria-label={i18n.t('admin:cTitle')}
-            allowScrollButtonsMobile
           >
             {available.map((item) => {
               const waiting = item.count ? Number(counts[item.count]) || 0 : 0;

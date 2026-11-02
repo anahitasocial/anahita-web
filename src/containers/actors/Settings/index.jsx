@@ -286,7 +286,6 @@ const ActorsSettings = ({
             navigate(`/people/${params.id}/settings/${newSection}`);
           }}
           aria-label={i18n.t('commons:settings')}
-          allowScrollButtonsMobile
         >
           {sections.map((entry) => {
             return (
@@ -425,7 +424,6 @@ const ActorsSettings = ({
           setTab(newTab);
         }}
         aria-label={i18n.t('commons:settings')}
-        allowScrollButtonsMobile
       >
         {groupTabs.map((entry) => {
           return (
