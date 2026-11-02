@@ -1,6 +1,5 @@
 export default {
   cTitle: 'Respuestas',
-  empty: 'Todavía no hay respuestas.',
   reply: 'Responder',
   placeholder: 'Escribe una respuesta…',
   placeholderTo: 'Responder a {{name}}…',
@@ -84,11 +83,6 @@ export default {
     replies: 'Respuestas',
     reposts: 'Reposts',
     tagged: 'Etiquetado',
-  },
-  none: {
-    replies: 'No hay respuestas para mostrar.',
-    reposts: 'No hay reposts para mostrar.',
-    tagged: 'Todavía no hay fotos ni videos con esta persona.',
   },
   // What a reply is a reply to, where it is shown away from its thread.
   context: {

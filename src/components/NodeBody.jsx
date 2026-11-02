@@ -141,6 +141,13 @@ const useStyles = makeStyles()((theme) => {
     },
     body1,
     body2,
+    // Long writing on its own page, read at length: larger, with more room
+    // between its lines. Its cards keep their own size.
+    reading: {
+      ...body1,
+      fontSize: '1.125rem',
+      lineHeight: 1.6,
+    },
   };
 });
 
@@ -198,7 +205,7 @@ const NodeBody = ({
 
 NodeBody.propTypes = {
   children: PropTypes.string.isRequired,
-  size: PropTypes.oneOf(['body1', 'body2']),
+  size: PropTypes.oneOf(['body1', 'body2', 'reading']),
   contentFilter: PropTypes.bool,
   filters: PropTypes.arrayOf(PropTypes.string),
   // A language tag, "fr" or "fr-CA".

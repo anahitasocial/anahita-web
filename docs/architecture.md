@@ -947,9 +947,29 @@ person's server the first time and keeps it in the browser.
 `App.jsx` wraps every page in one `Container`, which sets the most a page can
 be and its gutters. Inside it a page chooses its own width.
 `components/PageColumn.jsx` is the usual choice: the whole width on a phone,
-two thirds of the page, centred, on a wide screen, or all of it with `wide`.
-Home, the pages of custom feeds, a post's own page and the event forms use
-it. A profile, with its side column, lays itself out.
+centred at 600px at most on anything wider, or all of it with `wide`. Home,
+the pages of custom feeds and the event forms use it. A post's own page has
+the post in two thirds of the page and, in the last third, one card with its
+tabs (replies, locations, citations) above what they open. On a narrow screen
+they are under the post, which is at most 800px. Each stays in view beside the others. A post
+on a profile other than its author's says whose above them, as in a list. An
+article's or a topic's text there is larger, 18px (`size="reading"` in
+`components/NodeBody.jsx`); its citations, replies and everything else are not.
+A profile lays itself out.
+
+Home and a profile have two views on a wide screen, chosen by the same pair
+of buttons and kept in the browser (`containers/feeds/useFeedView.js`):
+
+| View | Home | A profile |
+| --- | --- | --- |
+| One post under another | Posts at 600px, centred, with vertical tabs beside them | Details, at least 240px, beside posts at most 600px and vertical tabs at 160px; every tab's list is one column (`FixedColumns` in `components/BreakpointMasonry.jsx`) |
+| Columns | The width of the page, with the tabs above | The same, with the tabs above. Posts are two columns beside its details, and a profile's other lists have the width of the page |
+
+The vertical tabs stay in view as the page scrolls. The pair of buttons is 160px
+wide wherever it is (`components/SideTabs.jsx`): beside the tabs on Home, and in
+the header on a profile.
+Below the `md` breakpoint there is one column with the tabs above, and no
+buttons.
 
 ### Describing photos
 
@@ -1085,11 +1105,11 @@ are about, what to leave out. The server's side is in the services'
 - **Back to the top.** Once somebody has scrolled about a screen down Home
   or a profile, an arrow fades in at the bottom left, across from the +
   button, and takes them back up (`components/BackToTop.jsx`).
-- **One column or several.** On a wide screen a pair of buttons at the end
-  of the tabs lays the open feed out one post under another or in columns
-  (`components/BreakpointMasonry`), when it takes the width of the page. The
-  choice is kept in the browser (`home.feedView`). On a narrow screen there
-  is one column and no buttons.
+- **One column or several.** On a wide screen a pair of buttons, beside the
+  vertical tabs on Home and in the header on a profile, lays posts out one
+  under another or in columns. The choice is kept in the browser
+  (`home.feedView`), and is the same on both. On a narrow screen there is one
+  column, and no buttons.
 - **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
   posts and reposts, with their menus and buttons, for Following and for
   custom feeds alike. `containers/feed/Custom` is the list for a custom feed,

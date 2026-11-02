@@ -81,7 +81,10 @@ const useStyles = makeStyles()((theme) => {
     appBarSpacer: theme.mixins.toolbar,
     content: {
       flexGrow: 1,
-      overflow: 'auto',
+      // Clipped and not `auto`: the window scrolls, and a box that scrolls
+      // here would hold back whatever sticks to the top of it.
+      overflowX: 'clip',
+      minWidth: 0,
       paddingBottom: theme.spacing(2),
     },
     // Room for the + button at the bottom right, where it is, so that

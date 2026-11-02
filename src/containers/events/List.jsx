@@ -5,6 +5,9 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
+import EventIcon from '@mui/icons-material/EventOutlined';
+
+import EmptyList from '../../components/EmptyList';
 import Masonry from '../../components/BreakpointMasonry';
 import Progress from '../../components/Progress';
 import EventCard from './Card';
@@ -52,11 +55,7 @@ const EventsList = ({ read, empty }) => {
   }
 
   if (list.rows.length === 0) {
-    return (
-      <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
-        {empty}
-      </Typography>
-    );
+    return <EmptyList icon={<EventIcon />}>{empty}</EmptyList>;
   }
 
   return (

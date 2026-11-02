@@ -12,7 +12,6 @@ export default {
   // A post's Cited by tab: what cites it here.
   citations: {
     citedBy: 'Zitiert von',
-    noneCitedBy: 'Noch zitiert nichts hier dies.',
   },
   embed: {
     in: 'in',

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import Typography from '@mui/material/Typography';
 
 import actions from '../../../actions';
 
@@ -11,6 +10,8 @@ import ControlRepost from '../../controls/Repost';
 import LikesStats from '../../likes';
 import FeedMenu from '../Menu';
 
+import tabIcon from '../../actors/Read/tabIcons';
+import EmptyList from '../../../components/EmptyList';
 import Masonry from '../../../components/BreakpointMasonry';
 import Progress from '../../../components/Progress';
 import FeedCardDefault from '../components/Default';
@@ -22,7 +23,6 @@ import ActorDefault from '../../../proptypes/ActorDefault';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
-import i18n from '../../../languages';
 import utils from '../../../utils';
 import usePosted from '../usePosted';
 
@@ -49,9 +49,9 @@ const FILTER = {
 //             answers. A reply links to its own page, where its thread is.
 //   reposts   what its owner reposted.
 //
-// Posts are a single column, beside the profile's own details. Replies and
-// reposts fill the width of the page in a masonry, like the lists of notes,
-// articles and photos.
+// Posts are a single column, or with `columns` a masonry. Replies and reposts
+// are always in a masonry, like the lists of notes, articles and photos, which
+// the page may hold to one column.
 //
 // The three share one place in the store, so the page shows one at a time
 // and gives each its own key: changing tab empties the list and reads the
@@ -59,6 +59,7 @@ const FILTER = {
 const FeedActorBrowse = ({
   actor = { ...ActorDefault },
   filter = FILTER.POSTS,
+  columns = false,
   browseList,
   resetList,
   prependList,
@@ -112,15 +113,9 @@ const FeedActorBrowse = ({
     return setStart(start + LIMIT);
   };
 
-  // The lists of replies and of reposts are often empty, and an empty
-  // tab with nothing in it reads as one that failed to load.
-  if (!isFetching && !hasMore && items.allIds.length === 0 && filter !== FILTER.POSTS) {
-    return (
-      <Typography variant="body2" color="textSecondary" sx={{ p: 2 }}>
-        {i18n.t(`replies:none.${filter}`)}
-      </Typography>
-    );
-  }
+  // A list with nothing in it says so. An empty tab with nothing to see
+  // reads as one that failed to load.
+  const isEmpty = !isFetching && !hasMore && items.allIds.length === 0;
 
   const cards = items.allIds.map((itemId) => {
     const node = items.byId[itemId];
@@ -282,6 +277,10 @@ const FeedActorBrowse = ({
     );
   });
 
+  if (isEmpty) {
+    return <EmptyList icon={tabIcon(filter === FILTER.POSTS ? 'feed' : filter)} />;
+  }
+
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
@@ -291,10 +290,9 @@ const FeedActorBrowse = ({
         <Progress key="feed-progress" />
       }
     >
-      {/* Posts are read in a column beside what the profile says about
-          itself. Replies and reposts have the width of the page, and are
-          laid out like the lists of notes, articles and photos. */}
-      {filter === FILTER.POSTS ? cards : <Masonry>{cards}</Masonry>}
+      {filter === FILTER.POSTS && !columns ?
+        cards :
+        <Masonry>{cards}</Masonry>}
     </InfiniteScroll>
   );
 };
@@ -302,6 +300,7 @@ const FeedActorBrowse = ({
 FeedActorBrowse.propTypes = {
   actor: ActorType,
   filter: PropTypes.oneOf(['posts', 'replies', 'reposts', 'tagged']),
+  columns: PropTypes.bool,
   browseList: PropTypes.func.isRequired,
   resetList: PropTypes.func.isRequired,
   prependList: PropTypes.func.isRequired,

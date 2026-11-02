@@ -1,6 +1,5 @@
 export default {
   cTitle: 'Réponses',
-  empty: 'Aucune réponse pour le moment.',
   reply: 'Répondre',
   placeholder: 'Écrivez une réponse ...',
   placeholderTo: 'Répondre à {{name}} ...',
@@ -84,11 +83,6 @@ export default {
     replies: 'Réponses',
     reposts: 'Repartages',
     tagged: 'Identifié',
-  },
-  none: {
-    replies: 'Aucune réponse à afficher.',
-    reposts: 'Aucun repartage à afficher.',
-    tagged: 'Aucune photo ni vidéo avec cette personne pour le moment.',
   },
   // Ce à quoi une réponse répond, quand elle est affichée hors de son fil.
   context: {

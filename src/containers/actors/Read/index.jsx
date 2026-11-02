@@ -28,6 +28,8 @@ import EventWhen from '../../events/When';
 import EventsHosted from '../../events/Hosted';
 import LimitedActorCard from '../../../components/LimitedActorCard';
 import BackToTop from '../../../components/BackToTop';
+import FeedViewToggle from '../../../components/FeedViewToggle';
+import useFeedView from '../../feeds/useFeedView';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
 import Progress from '../../../components/Progress';
@@ -110,6 +112,7 @@ const ActorsRead = (props) => {
 
   const params = useParams();
   const navigate = useNavigate();
+  const feedView = useFeedView();
   const slug = routeId || params.id;
   const tab = routeId ? routeTab : params.tab;
   const subtab = routeId ? routeSubtab : params.subtab;
@@ -270,6 +273,8 @@ const ActorsRead = (props) => {
           />}
         actor={actor}
         hasCover={Boolean(utils.node.getCoverURL(actor))}
+        viewToggle={feedView.isWide && !isBlocked &&
+          <FeedViewToggle view={feedView.view} onChoose={feedView.chooseView} />}
         // /people/ana/socialgraph/leaders was a tab of the profile. It now
         // opens the profile with that list showing.
         socialgraphOpenOn={tab === 'socialgraph' ? (subtab || 'followers') : ''}
@@ -319,6 +324,7 @@ const ActorsRead = (props) => {
       {!isBlocked &&
       <ActorBody
         actor={actor}
+        feedView={feedView}
         events={namespace === 'groups' && actor.id &&
         <EventsHosted
           group={actor}
@@ -331,7 +337,7 @@ const ActorsRead = (props) => {
         admins={actor.administrators &&
         <Admins actor={actor} />}
         onTabChange={(newTab) => {
-          navigate(newTab ? `${base}/${newTab}` : base);
+          navigate(newTab ? `${base}/${newTab}` : base, { state: { keepPlace: true } });
         }}
         feed={actor.id &&
         <FeedActorBrowse

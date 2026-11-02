@@ -9,9 +9,11 @@ import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
+import Divider from '@mui/material/Divider';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import PostActionsRow from '../../../components/PostActionsRow';
 import MediumType from '../../../proptypes/Medium';
@@ -35,6 +37,7 @@ import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
+import { useStickyColumn } from '../../../components/SideTabs';
 import PeopleInPost from '../PeopleInPost';
 
 const {
@@ -68,6 +71,12 @@ const MediumReadDefault = ({
   cover = null,
 }) => {
   const [tab, setTab] = useState(TABS.REPLIES);
+  const isWide = useMediaQuery((theme) => {
+    return theme.breakpoints.up('md');
+  });
+  // Each keeps its place beside the other, however long the other is.
+  const [postRef, postTop] = useStickyColumn(isWide, 64);
+  const [talkRef, talkTop] = useStickyColumn(isWide, 64);
 
   const changeTab = (event, value) => {
     setTab(value);
@@ -105,136 +114,187 @@ const MediumReadDefault = ({
     />
   );
 
-  return (
-    <PageColumn>
-      <Card component="article">
-        <PinnedLabel show={Boolean(medium.pinned)} />
-        {context}
-        {/* The profile it was posted on, when that is not its author's
-              own: a group, or somebody else's profile. A reply says where
-              it was said in its context, below. */}
-        {!context && medium.owner && medium.owner.id !== author.id &&
-        <CardHeaderOwner owner={medium.owner} author={medium.author} />}
-        {cover}
-        {!cover && coverUrl &&
-        <CardMedia
-          className={classes.cover}
-          title={medium.title}
-          image={coverUrl}
-          src="picture"
-        />}
-        {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
-        <RemovedPictures medium={medium} auto />}
-        {hasSlides &&
-        <PhotoSlides
-          medium={medium}
-          size="large"
-          onOpen={handleView ? () => {
-            handleView();
-          } : null}
-        />}
-        {/* One photo opens in the theatre too, as several do, to be seen
-            larger and zoomed into (asked for again by the user on
-            2026-10-17). */}
-        {!hasSlides && portrait && isLoaded &&
-        <Box sx={{ position: 'relative' }}>
-          {handleView ?
-            <ButtonBase
-              onClick={handleView}
-              aria-label={i18n.t('media:stepper.open')}
-              sx={{ display: 'block', width: '100%' }}
-            >
-              {portraitMedia}
-            </ButtonBase> :
-            portraitMedia}
-          <AltBadge text={photoFiles.descriptionOf(medium)} />
-        </Box>}
-        {!hasSlides && !isLoaded &&
-        <CardContent>
-          <Progress />
-        </CardContent>}
-        {/* Who is in it, right under the picture (roadmap row 103). */}
-        {!medium.video && <PeopleInPost medium={medium} />}
-        <CardHeader
-          avatar={
-            <ActorAvatar
-              actor={author}
-              linked={Boolean(author.id)}
-            />
-            }
-          title={
-            <ActorTitle
-              actor={author}
-              linked={Boolean(author.id)}
-              withHandle
-              isAuthor
-            />
-            }
-          subheader={
-            <>
-              <time dateTime={moment.utc(medium.createdAt).toISOString()}>{createdAt}</time>
-              {access}
-            </>
-            }
-          action={menu}
+  // Who wrote it.
+  const header = (
+    <CardHeader
+      avatar={
+        <ActorAvatar
+          actor={author}
+          linked={Boolean(author.id)}
         />
-        {editing && form}
-        {!editing &&
+        }
+      title={
+        <ActorTitle
+          actor={author}
+          linked={Boolean(author.id)}
+          withHandle
+          isAuthor
+        />
+        }
+      subheader={
         <>
-          {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
-          {medium.video && <PeopleInPost medium={medium} />}
-          {/* The card is the <article>; this is its text. One article,
-              with an h1 and a byline, is what reading views (Safari's
-              Reader, Firefox's) look for: an article within an article
-              read as none. */}
-          <CardContent>
-            {medium.title &&
-            <Typography
-              variant="h2"
-              component="h1"
-              dir="auto"
-              lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
-              className={classes.title}
-            >
-              {medium.title}
-            </Typography>}
-            {medium.content &&
-            <EntityBody
-              contentFilter
-              lang={medium.language}
-              // Long writing shows what an address on a line of its own
-              // is to: a post here as itself, a page by its card.
-              embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
-              cards={medium.linkPreviews || []}
-            >
-              {medium.content}
-            </EntityBody>}
-            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
-              <Citations text={medium.content} cards={medium.linkPreviews || []} />}
-            {linkPreviews.isShown(medium.linkPreview) &&
-              <LinkPreviewCard preview={medium.linkPreview} />}
-            {quote}
-            <SignInPrompt show={Boolean(medium.truncated)} />
-          </CardContent>
-          <PostActionsRow actions={actions} stats={stats} />
-        </>}
-      </Card>
-      <Tabs
-        value={tab}
-        onChange={changeTab}
-        centered
-        variant="fullWidth"
-        indicatorColor="primary"
-        textColor="primary"
-      >
-        <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
-        <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
-        <Tab label={i18n.t('media:citations.citedBy')} value={TABS.CITED_BY} />
-      </Tabs>
+          <time dateTime={moment.utc(medium.createdAt).toISOString()}>{createdAt}</time>
+          {access}
+        </>
+        }
+      action={menu}
+    />
+  );
+
+  const post = (
+    <Card component="article">
+      <PinnedLabel show={Boolean(medium.pinned)} />
+      {context}
+      {/* The profile it was posted on, when that is not its author's
+            own: a group, or somebody else's profile. A reply says where
+            it was said in its context, below. */}
+      {!context && medium.owner && medium.owner.id !== author.id &&
+      <CardHeaderOwner owner={medium.owner} author={medium.author} roomy />}
+      {cover}
+      {!cover && coverUrl &&
+      <CardMedia
+        className={classes.cover}
+        title={medium.title}
+        image={coverUrl}
+        src="picture"
+      />}
+      {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
+      <RemovedPictures medium={medium} auto />}
+      {hasSlides &&
+      <PhotoSlides
+        medium={medium}
+        size="large"
+        onOpen={handleView ? () => {
+          handleView();
+        } : null}
+      />}
+      {/* One photo opens in the theatre too, as several do, to be seen
+          larger and zoomed into (asked for again by the user on
+          2026-10-17). */}
+      {!hasSlides && portrait && isLoaded &&
+      <Box sx={{ position: 'relative' }}>
+        {handleView ?
+          <ButtonBase
+            onClick={handleView}
+            aria-label={i18n.t('media:stepper.open')}
+            sx={{ display: 'block', width: '100%' }}
+          >
+            {portraitMedia}
+          </ButtonBase> :
+          portraitMedia}
+        <AltBadge text={photoFiles.descriptionOf(medium)} />
+      </Box>}
+      {!hasSlides && !isLoaded &&
+      <CardContent>
+        <Progress />
+      </CardContent>}
+      {/* Who is in it, right under the picture (roadmap row 103). */}
+      {!medium.video && <PeopleInPost medium={medium} />}
+      {header}
+      {editing && form}
+      {!editing &&
+      <>
+        {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
+        {medium.video && <PeopleInPost medium={medium} />}
+        {/* The card is the <article>; this is its text. One article,
+            with an h1 and a byline, is what reading views (Safari's
+            Reader, Firefox's) look for: an article within an article
+            read as none. */}
+        <CardContent>
+          {medium.title &&
+          <Typography
+            variant="h2"
+            component="h1"
+            dir="auto"
+            lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
+            className={classes.title}
+          >
+            {medium.title}
+          </Typography>}
+          {medium.content &&
+          <EntityBody
+            contentFilter
+            // Long writing is read at length, in larger type.
+            size={/\.(article|topic)\.v1$/.test(medium.type || '') ? 'reading' : 'body1'}
+            lang={medium.language}
+            // Long writing shows what an address on a line of its own
+            // is to: a post here as itself, a page by its card.
+            embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
+            cards={medium.linkPreviews || []}
+          >
+            {medium.content}
+          </EntityBody>}
+          {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
+            <Citations text={medium.content} cards={medium.linkPreviews || []} />}
+          {linkPreviews.isShown(medium.linkPreview) &&
+            <LinkPreviewCard preview={medium.linkPreview} />}
+          {quote}
+          <SignInPrompt show={Boolean(medium.truncated)} />
+        </CardContent>
+        <PostActionsRow actions={actions} stats={stats} />
+      </>}
+    </Card>
+  );
+
+  // Said for md: the theme sets a wider minWidth there, too wide for a third
+  // of a narrower page.
+  const tabSx = { minWidth: { md: 0 } };
+
+  const tabs = (
+    <Tabs
+      value={tab}
+      onChange={changeTab}
+      variant="fullWidth"
+      indicatorColor="primary"
+      textColor="primary"
+    >
+      <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} sx={tabSx} />
+      <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} sx={tabSx} />
+      <Tab label={i18n.t('media:citations.citedBy')} value={TABS.CITED_BY} sx={tabSx} />
+    </Tabs>
+  );
+
+  const panel = (
+    <>
       {tab === TABS.REPLIES && replies}
       {tab === TABS.LOCATIONS && locations}
       {tab === TABS.CITED_BY && <CitedByTab medium={medium} />}
-    </PageColumn>
+    </>
+  );
+
+  if (!isWide) {
+    return (
+      <PageColumn width={800}>
+        {post}
+        {tabs}
+        {panel}
+      </PageColumn>
+    );
+  }
+
+  // Two thirds for the post, and a third for what was said about it: the
+  // tabs at the head of one card with what they open.
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 2fr) minmax(0, 1fr)',
+        columnGap: 2,
+        alignItems: 'start',
+      }}
+    >
+      <Box ref={postRef} sx={{ position: 'sticky', top: postTop, minWidth: 0 }}>
+        {post}
+      </Box>
+      <Card ref={talkRef} sx={{ position: 'sticky', top: talkTop, minWidth: 0 }}>
+        {tabs}
+        <Divider />
+        {/* One card: those inside it lose their own edges. */}
+        <Box sx={{ '& .MuiCard-root': { boxShadow: 'none', backgroundImage: 'none' } }}>
+          {panel}
+        </Box>
+      </Card>
+    </Box>
   );
 };
 
