@@ -1,4 +1,5 @@
 export default {
+  nothingToShow: 'Nada para mostrar ainda',
   all: 'Tudo',
   following: 'Seguindo',
   administering: 'Administrando',

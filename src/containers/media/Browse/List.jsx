@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import { makeStyles } from 'tss-react/mui';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import tabIcon from '../../actors/Read/tabIcons';
+import EmptyList from '../../../components/EmptyList';
 import Masonry from '../../../components/BreakpointMasonry';
 import MediaListItem from './ListItem';
 import Progress from '../../../components/Progress';
@@ -25,9 +27,14 @@ const MediaList = ({
   total,
   fetchList,
   handleView,
+  isEmpty = false,
 }) => {
   const { classes } = useStyles();
   const hasMore = total > items.allIds.length;
+
+  if (isEmpty) {
+    return <EmptyList icon={tabIcon(namespace)} />;
+  }
 
   return (
     <InfiniteScroll
@@ -65,6 +72,7 @@ MediaList.propTypes = {
   total: PropTypes.number.isRequired,
   fetchList: PropTypes.func.isRequired,
   handleView: PropTypes.func.isRequired,
+  isEmpty: PropTypes.bool,
 };
 
 export default MediaList;

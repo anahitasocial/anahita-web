@@ -164,7 +164,11 @@ const AppRoutes = () => {
       lastBackground.current.search === location.search;
     lastBackground.current = background || null;
 
-    if (!background && !returned) {
+    // A tab has its own address, and moves nothing: the list that opens is
+    // in the same place on the page.
+    const stays = location.state && location.state.keepPlace;
+
+    if (!background && !returned && !stays) {
       window.scrollTo(0, 0);
     }
   }, [location]);

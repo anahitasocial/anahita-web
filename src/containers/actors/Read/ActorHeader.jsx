@@ -22,7 +22,7 @@ const { getActorName } = utils.node;
 //   picture, over the cover's lower edge | Follow, the other buttons, ⋮
 //   Name (pronouns)
 //   @handle · Follows you
-//   22 followers · 16 following
+//   22 followers · 16 following | the buttons for how its posts are laid out
 //
 // Left aligned, so that it reads in one line down from the picture, and the
 // buttons sit beside the picture rather than in a row of their own below,
@@ -36,6 +36,7 @@ const ActorHeader = ({
   actor,
   followAction = null,
   headerActions = null,
+  viewToggle = null,
   socialgraphOpenOn = '',
   muted = false,
 }) => {
@@ -139,7 +140,17 @@ const ActorHeader = ({
         {/* Seen only by its followers and administrators, and site
             administrators: anybody else cannot reach a deleted profile. */}
         <ScheduledDeletion actor={actor} sx={{ mt: 1 }} />
-        <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 2,
+          }}
+        >
+          <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
+          {viewToggle}
+        </Box>
       </Box>
     </Card>
   );
@@ -153,6 +164,8 @@ ActorHeader.propTypes = {
   actor: ActorType.isRequired,
   followAction: PropTypes.node,
   headerActions: PropTypes.node,
+  // How the profile's posts are laid out, across from its counts.
+  viewToggle: PropTypes.node,
   // A list of followers to open on arriving. See SocialgraphMeta.
   socialgraphOpenOn: PropTypes.string,
   // Drawn as a profile the viewer has blocked.

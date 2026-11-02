@@ -1,4 +1,6 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, {
+  useEffect, useRef, useState, useMemo,
+} from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -21,10 +23,22 @@ const MediaBrowse = ({
   isFetching,
   queryFilters,
   total = 0,
+  error = '',
 }) => {
   const [start, setStart] = useState(0);
   const [currentId, setCurrentId] = useState(null);
   const [stepperOpen, setStepperOpen] = useState(false);
+
+  // The list is known to be empty only once the server has answered: before
+  // that it is empty because nothing has been read yet.
+  const wasFetching = useRef(false);
+  const [hasAnswer, setHasAnswer] = useState(false);
+  useEffect(() => {
+    if (wasFetching.current && !isFetching) {
+      setHasAnswer(true);
+    }
+    wasFetching.current = isFetching;
+  }, [isFetching]);
 
   const Stepper = useMemo(() => {
     return MediumStepper(namespace);
@@ -76,6 +90,7 @@ const MediaBrowse = ({
         total={total}
         fetchList={fetchList}
         handleView={handleView}
+        isEmpty={hasAnswer && !error && total === 0}
       />
     </>
   );
@@ -94,6 +109,7 @@ MediaBrowse.propTypes = {
   items: MediaType.isRequired,
   isFetching: PropTypes.bool.isRequired,
   total: PropTypes.number,
+  error: PropTypes.string,
 };
 
 const mapStateToProps = (namespace) => {

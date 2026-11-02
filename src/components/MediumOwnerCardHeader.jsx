@@ -15,7 +15,9 @@ const { getURL } = utils.node;
 // Where a post was made, above who wrote it, and only when they differ: a post
 // on somebody's own profile says nothing new by naming them twice (the user,
 // 2026-11-01). Its avatar is half the author's, so that the author leads.
-const MediumOwner = ({ owner, author = null, actions }) => {
+const MediumOwner = ({
+  owner, author = null, actions, roomy = false,
+}) => {
   if (!owner) {
     console.debug('MediumOwner: No owner provided', { owner, actions });
     return null;
@@ -34,7 +36,8 @@ const MediumOwner = ({ owner, author = null, actions }) => {
           colour, so it can be read by anybody: the small grey text it was
           could not be (the user, 2026-10-17). */}
       <CardHeader
-        sx={{ py: 1 }}
+        // Roomier at the head of a post's own page.
+        sx={{ py: roomy ? 2 : 1 }}
         avatar={
           <ActorAvatar
             actor={owner}
@@ -72,6 +75,7 @@ MediumOwner.propTypes = {
   owner: NodeType,
   author: NodeType,
   actions: PropTypes.node,
+  roomy: PropTypes.bool,
 };
 
 export default MediumOwner;

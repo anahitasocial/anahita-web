@@ -16,6 +16,7 @@ import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
 
+import RepliesIcon from '@mui/icons-material/ModeCommentOutlined';
 import Progress from '../../components/Progress';
 import SignInPrompt from '../../components/SignInPrompt';
 import ReplyBox from './ReplyBox';
@@ -24,6 +25,8 @@ import VideoReplyOnTheWay from './VideoReplyOnTheWay';
 
 import actions from '../../actions';
 import api from '../../api';
+
+import EmptyList from '../../components/EmptyList';
 import i18n from '../../languages';
 import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import MediumType from '../../proptypes/Medium';
@@ -377,11 +380,7 @@ const RepliesThread = ({
           </Button>
         </CardContent>}
       {!isLoading && !hasFailed && shown.length === 0 &&
-        <CardContent>
-          <Typography variant="body2" color="textSecondary">
-            {i18n.t('replies:empty')}
-          </Typography>
-        </CardContent>}
+        <EmptyList icon={<RepliesIcon />} inCard />}
       {shown.length >= replyOrder.MIN_TO_CHOOSE &&
         <Box sx={{
           display: 'flex', justifyContent: 'flex-end', px: 2, pb: 1,

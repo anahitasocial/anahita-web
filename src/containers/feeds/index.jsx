@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { connect, useDispatch } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
@@ -6,22 +6,21 @@ import { useSearchParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
-import ToggleButton from '@mui/material/ToggleButton';
-import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import useMediaQuery from '@mui/material/useMediaQuery';
-
-import ColumnsIcon from '@mui/icons-material/ViewColumnOutlined';
-import StreamIcon from '@mui/icons-material/ViewStreamOutlined';
 
 import FollowingIcon from '@mui/icons-material/HowToRegOutlined';
 import CompleteProfileCard from './CompleteProfileCard';
 import FeedBrowse from '../feed/Leaders';
 import FeedCustomBrowse from '../feed/Custom';
+import useFeedView from './useFeedView';
 import usePinnedFeeds from './usePinnedFeeds';
 import WhoToFollow from '../recommendations/WhoToFollow';
 import VideoOnItsWayCard from '../media/Composer/VideoOnItsWayCard';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
+import FeedViewToggle from '../../components/FeedViewToggle';
 import PageColumn from '../../components/PageColumn';
+import SideTabs, {
+  listSx, sideTabSx, sideTabsSx, useTabbedList,
+} from '../../components/SideTabs';
 import actions from '../../actions';
 import i18n from '../../languages';
 import BackToTop from '../../components/BackToTop';
@@ -30,28 +29,6 @@ import PersonType from '../../proptypes/Person';
 
 // Which tab is the feed of the people and groups the viewer follows.
 const FOLLOWING = 0;
-
-// How a feed is laid out on a wide screen: one post under another, or in
-// columns. The choice is the viewer's, kept in their browser.
-const STREAM = 'stream';
-const COLUMNS = 'columns';
-const VIEW_KEY = 'home.feedView';
-
-const rememberedView = () => {
-  try {
-    return window.localStorage.getItem(VIEW_KEY) === COLUMNS ? COLUMNS : STREAM;
-  } catch (e) {
-    return STREAM;
-  }
-};
-
-const rememberView = (view) => {
-  try {
-    window.localStorage.setItem(VIEW_KEY, view);
-  } catch (e) {
-    // Not kept, and chosen again next time.
-  }
-};
 
 // Home, for somebody signed in: a place to post, and their feeds.
 //
@@ -63,9 +40,10 @@ const rememberView = (view) => {
 // At the end of the tabs, where a phone has it too, is the way to the list
 // of feeds, which is where a feed is made, changed and deleted.
 //
-// On a wide screen the feeds can be read in columns, by a pair of buttons
-// beside it, and then take the width of the page. On a narrow one there is
-// one column either way, and the buttons are not shown.
+// On a wide screen the feeds are read one post under another with the tabs
+// beside them, or by a pair of buttons in columns, with the tabs above and the
+// width of the page. On a narrow one there is one column with the tabs above,
+// and the buttons are not shown.
 const FeedsPage = ({
   viewer,
 }) => {
@@ -79,116 +57,133 @@ const FeedsPage = ({
       dispatch(actions.composeTarget.clear('home'));
     };
   }, []);
-  const [view, setView] = useState(rememberedView);
-  const isWide = useMediaQuery((theme) => {
-    return theme.breakpoints.up('md');
-  });
-  const columns = isWide && view === COLUMNS;
+  const {
+    view, isWide, columns, sideTabs, chooseView,
+  } = useFeedView();
   const [params, setParams] = useSearchParams();
+  const [listRef, startList] = useTabbedList();
 
   const asked = Number(params.get('feed')) || FOLLOWING;
   const open = pinned.find((feed) => {
     return feed.id === asked;
   });
 
+  const tabSx = sideTabs ? sideTabSx : { minHeight: 48 };
+
+  const tabs = (
+    <Tabs
+      value={open ? open.id : FOLLOWING}
+      orientation={sideTabs ? 'vertical' : 'horizontal'}
+      variant="scrollable"
+      scrollButtons="auto"
+      allowScrollButtonsMobile
+      onChange={(event, feedId) => {
+        setParams(
+          feedId === FOLLOWING ? {} : { feed: String(feedId) },
+          { state: { keepPlace: true } },
+        );
+        startList();
+      }}
+      sx={sideTabs ? sideTabsSx : { flexGrow: 1, minWidth: 0 }}
+    >
+      {/* With an icon, as the custom feeds beside it have. */}
+      <Tab
+        value={FOLLOWING}
+        label={i18n.t('customFeeds:home.following')}
+        icon={<FollowingIcon fontSize="small" />}
+        iconPosition="start"
+        sx={tabSx}
+      />
+      {pinned.map((feed) => {
+        return (
+          <Tab
+            key={`home-feed-${feed.id}`}
+            value={feed.id}
+            label={feed.name}
+            icon={<CustomFeedIcon name={feed.icon} fontSize="small" />}
+            iconPosition="start"
+            sx={tabSx}
+          />
+        );
+      })}
+    </Tabs>
+  );
+
+  const toggle = isWide && (
+    <FeedViewToggle
+      view={view}
+      onChoose={chooseView}
+      sx={sideTabs ? { mb: 2 } : { ml: 2 }}
+    />
+  );
+
+  const feed = (
+    <Box ref={listRef} sx={listSx}>
+      {/* A video posted, on its way, at the head of the feed it will
+            be in (roadmap row 115). */}
+      <VideoOnItsWayCard />
+      {/* Keyed by when it was last changed, so a feed that was just
+            edited is read again from the top. */}
+      {open ?
+        <FeedCustomBrowse
+          key={`home-feed-${open.id}-${open.updatedAt}`}
+          feed={open}
+          columns={columns}
+        /> :
+        <FeedBrowse columns={columns} />}
+    </Box>
+  );
+
   return (
     <>
       <Helmet>
         <title>{i18n.t('home:cTitle')}</title>
       </Helmet>
-      <PageColumn>
-        <CompleteProfileCard viewer={viewer} />
-      </PageColumn>
-      {/* A few people to follow, when the installation suggests any: as
-          wide as the feeds, side by side when they are in columns. */}
-      <PageColumn wide={columns}>
-        <WhoToFollow columns={columns} />
-      </PageColumn>
-      <PageColumn wide={columns}>
+      {sideTabs ?
+        // The feed in the middle of the page, and the tabs beside it.
         <Box
           sx={{
-            display: 'flex',
-            alignItems: 'center',
-            borderBottom: 1,
-            borderColor: 'divider',
-            mb: 2,
+            display: 'grid',
+            gridTemplateColumns: '1fr minmax(0, 600px) 1fr',
+            columnGap: 2,
+            alignItems: 'start',
           }}
         >
-          <Tabs
-            value={open ? open.id : FOLLOWING}
-            variant="scrollable"
-            scrollButtons="auto"
-            allowScrollButtonsMobile
-            onChange={(event, feedId) => {
-              setParams(feedId === FOLLOWING ? {} : { feed: String(feedId) });
-            }}
-            sx={{ flexGrow: 1, minWidth: 0 }}
-          >
-            {/* With an icon, as the custom feeds beside it have. */}
-            <Tab
-              value={FOLLOWING}
-              label={i18n.t('customFeeds:home.following')}
-              icon={<FollowingIcon fontSize="small" />}
-              iconPosition="start"
-              sx={{ minHeight: 48 }}
-            />
-            {pinned.map((feed) => {
-              return (
-                <Tab
-                  key={`home-feed-${feed.id}`}
-                  value={feed.id}
-                  label={feed.name}
-                  icon={<CustomFeedIcon name={feed.icon} fontSize="small" />}
-                  iconPosition="start"
-                  sx={{ minHeight: 48 }}
-                />
-              );
-            })}
-          </Tabs>
-          {isWide &&
-          <ToggleButtonGroup
-            exclusive
-            size="small"
-            value={view}
-            aria-label={i18n.t('customFeeds:home.view')}
-            onChange={(event, chosen) => {
-              // Pressing the one that is on leaves it on.
-              if (chosen) {
-                setView(chosen);
-                rememberView(chosen);
-              }
-            }}
-            sx={{ mx: 1 }}
-          >
-            <ToggleButton
-              value={STREAM}
-              aria-label={i18n.t('customFeeds:home.viewStream')}
-              title={i18n.t('customFeeds:home.viewStream')}
+          <Box sx={{ gridColumn: 2, minWidth: 0 }}>
+            <CompleteProfileCard viewer={viewer} />
+            <WhoToFollow columns={false} />
+            {feed}
+          </Box>
+          <SideTabs>
+            {toggle}
+            {tabs}
+          </SideTabs>
+        </Box> :
+        <>
+          <PageColumn>
+            <CompleteProfileCard viewer={viewer} />
+          </PageColumn>
+          {/* A few people to follow, when the installation suggests any: as
+              wide as the feeds, side by side when they are in columns. */}
+          <PageColumn wide={columns}>
+            <WhoToFollow columns={columns} />
+          </PageColumn>
+          <PageColumn wide={columns}>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                borderBottom: 1,
+                borderColor: 'divider',
+                mb: 2,
+              }}
             >
-              <StreamIcon fontSize="small" />
-            </ToggleButton>
-            <ToggleButton
-              value={COLUMNS}
-              aria-label={i18n.t('customFeeds:home.viewColumns')}
-              title={i18n.t('customFeeds:home.viewColumns')}
-            >
-              <ColumnsIcon fontSize="small" />
-            </ToggleButton>
-          </ToggleButtonGroup>}
-        </Box>
-        {/* A video posted, on its way, at the head of the feed it will
-              be in (roadmap row 115). */}
-        <VideoOnItsWayCard />
-        {/* Keyed by when it was last changed, so a feed that was just
-              edited is read again from the top. */}
-        {open ?
-          <FeedCustomBrowse
-            key={`home-feed-${open.id}-${open.updatedAt}`}
-            feed={open}
-            columns={columns}
-          /> :
-          <FeedBrowse columns={columns} />}
-      </PageColumn>
+              {tabs}
+              {toggle}
+            </Box>
+            {feed}
+          </PageColumn>
+        </>}
       <BackToTop />
     </>
   );

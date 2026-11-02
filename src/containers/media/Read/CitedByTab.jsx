@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import List from '@mui/material/List';
-import Typography from '@mui/material/Typography';
 
+import CitedByIcon from '@mui/icons-material/FormatQuote';
+
+import EmptyList from '../../../components/EmptyList';
 import Progress from '../../../components/Progress';
 import { PostRow } from '../../../components/PostEmbed';
 import api from '../../../api';
-import i18n from '../../../languages';
 
 const LIMIT = 20;
 
@@ -47,11 +47,7 @@ const CitedByTab = ({ medium, scrollableTarget = undefined }) => {
     <Card sx={{ py: 1 }}>
       {isLoading && <Progress />}
       {!isLoading && posts.length === 0 &&
-        <CardContent>
-          <Typography variant="body2" color="textSecondary">
-            {i18n.t('media:citations.noneCitedBy')}
-          </Typography>
-        </CardContent>}
+        <EmptyList icon={<CitedByIcon />} inCard />}
       {posts.length > 0 &&
         <InfiniteScroll
           dataLength={posts.length}
