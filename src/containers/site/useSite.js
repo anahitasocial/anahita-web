@@ -66,11 +66,13 @@ export const textIn = (text, language) => {
 
 // Whether the viewer is behind on the site's rules (roadmap row 102), for the
 // gates and the pages: `known` once the site has answered, or failed to.
-// SITE_RULES off (NodeInfo's `siteRules` false) asks nobody.
+// A guest has nothing to agree to, and SITE_RULES off (NodeInfo's `siteRules`
+// false) asks nobody.
 export const useRules = () => {
   const site = useSite();
   const [known, setKnown] = useState(false);
   const viewer = useSelector((state) => { return state.session.viewer; });
+  const isAuthenticated = useSelector((state) => { return state.session.isAuthenticated; });
   const rulesOn = useSelector((state) => {
     const { metadata } = state.app.nodeInfo || {};
     return !metadata || metadata.siteRules !== false;
@@ -91,7 +93,7 @@ export const useRules = () => {
   return {
     site,
     known,
-    outdated: agreementsUtil.hasOutdatedRules(viewer, site, rulesOn),
+    outdated: isAuthenticated && agreementsUtil.hasOutdatedRules(viewer, site, rulesOn),
   };
 };
 
