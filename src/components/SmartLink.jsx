@@ -51,7 +51,15 @@ const SmartLink = ({ href = '', children, ...rest }) => {
 
   let to = href;
   if (/^https?:\/\//i.test(href)) {
-    const address = new URL(href);
+    // An address a browser cannot read, such as one with a space in it, is
+    // shown as the words it was written with and leads nowhere: one bad
+    // link in a post must not stop the page around it (the user, 2026-11-02).
+    let address;
+    try {
+      address = new URL(href);
+    } catch (e) {
+      return <span>{children}</span>;
+    }
     to = `${address.pathname}${address.search}${address.hash}`;
   }
   if (!to.startsWith('/')) {
