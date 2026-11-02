@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -27,17 +27,24 @@ const clamp = (lines) => {
 // It is as the page was when the note was written, and its picture is this
 // installation's own copy, so drawing it asks nothing of the other site.
 //
+// A picture that will not load is left out: the card is as good without it,
+// and better than the mark for a broken picture.
+//
 // `onRemove`, when given, is for a note being written: a way to post it
 // without the card.
 const LinkPreviewCard = ({
   preview = null,
   onRemove = null,
 }) => {
+  // The picture that would not load, so that another card's still may.
+  const [broken, setBroken] = useState('');
+
   if (!preview || !preview.url || !preview.title) {
     return null;
   }
 
-  const image = linkPreviews.imageOf(preview);
+  const address = linkPreviews.imageOf(preview);
+  const image = address === broken ? '' : address;
   const site = linkPreviews.siteOf(preview);
 
   return (
@@ -65,6 +72,7 @@ const LinkPreviewCard = ({
             src={image}
             alt=""
             loading="lazy"
+            onError={() => { setBroken(address); }}
             sx={{
               width: '100%',
               aspectRatio: '1.91 / 1',
