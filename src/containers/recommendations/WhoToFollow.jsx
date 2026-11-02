@@ -20,6 +20,7 @@ import Stack from '@mui/material/Stack';
 import Tooltip from '@mui/material/Tooltip';
 
 import DismissIcon from '@mui/icons-material/Close';
+import RecommendationsIcon from '@mui/icons-material/Explore';
 
 import useSuggestions from './useSuggestions';
 import ActorAvatar from '../../components/ActorAvatar';
@@ -142,6 +143,8 @@ const WhoToFollow = ({ alertSuccess, alertError, columns = false }) => {
   return (
     <Card component="section" sx={{ mb: 2 }}>
       <CardHeader
+        // The icon Recommendations has in the menu, where the rest of them are.
+        avatar={<RecommendationsIcon color="action" />}
         title={i18n.t('recommendations:whoToFollow')}
         slotProps={{ title: { variant: 'subtitle1', component: 'h2', sx: { fontWeight: 500 } } }}
         action={
