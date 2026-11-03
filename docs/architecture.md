@@ -1341,11 +1341,27 @@ administrators, its access. What only an event has is in `containers/events`.
 
 | Where | What |
 | --- | --- |
-| **Events** in the left menu, `/events` | The viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`). There is no list of every event. Its + follows the installation's `eventsFrom` (`permissions/actor.js`), a setting apart from the one for groups |
+| **Events** in the left menu, `/events`, for everybody | Tabs: **Discover**, what is on (`events/Discover.jsx`), then the viewer's own: Upcoming, Invited, Hosting, Past (`events/index.jsx`, `?list=`). A visitor has Discover alone, without the tabs. Its + follows the installation's `eventsFrom` (`permissions/actor.js`), a setting apart from the one for groups |
 | `/events/add`, `/events/add?host=<group id>` | The form (`events/Form.jsx`). With a host it is the group's event |
 | `/events/:id` | The actor page with `events/Panel.jsx` above the tabs: when it is, who hosts it, how many are going, Going and Maybe, Add to calendar. Its administrators change it from its settings |
 | Info under its settings | The same form, to change it. The old address `/events/:id/edit` sends there; calling an event off is in the Danger zone |
 | A group's **Events** tab | What the group hosts, upcoming or past, with Add event for its administrators (`events/Hosted.jsx`) |
+
+**Discover** lists every event still to come that the viewer may see, soonest
+first and never ranked (`GET /events/`, `api.eventDetails.discover`). Three
+choices narrow it, kept in the address:
+
+| Choice | Options | Sent as |
+| --- | --- | --- |
+| When (`?when=`) | Any date, Today, Tomorrow, This weekend, This week, This month | `from` and `to`, midnight to midnight on the reader's own calendar (`events.windowOf`); a week ends on Sunday |
+| Where (`?where=`) | Anywhere, Online | `online=true` |
+| Whose (`?who=`), signed in | Everyone, Following, For you | `following=true`; For you is the recommendation service's events, each with why, narrowed in the browser to the same when and where (`events.isOnIn`, `hasOnlineUrl`) |
+
+**Who is putting it on.** Under an event's name is its handle, as under any
+profile's. On its card in a list, "Hosted by" is a line in the body with when
+it is: the group hosting it, or else whoever made it (`events.hostOf`). On its
+page its administrators are its **Hosts**, the card in the column beside the
+posts and the tab in its settings, with a group hosting it first.
 
 **Times** are kept as instants with the name of the zone they were chosen in.
 The form works on that zone's clocks, whatever zone the browser is in; a

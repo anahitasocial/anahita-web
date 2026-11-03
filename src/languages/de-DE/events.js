@@ -1,6 +1,32 @@
 export default {
   cTitle: 'Veranstaltungen',
   mTitle: 'Veranstaltungen',
+  // The page of events: what is on, the first of its tabs.
+  discover: {
+    title: 'Entdecken',
+    when: {
+      label: 'Wann',
+      any: 'Jederzeit',
+      today: 'Heute',
+      tomorrow: 'Morgen',
+      weekend: 'Dieses Wochenende',
+      week: 'Diese Woche',
+      month: 'Diesen Monat',
+    },
+    where: {
+      label: 'Wo',
+      anywhere: 'Überall',
+      online: 'Online',
+    },
+    who: {
+      label: 'Von wem',
+      everyone: 'Alle',
+      following: 'Gefolgt',
+      forYou: 'Für dich',
+    },
+    none: 'Noch nichts geplant. Veranstaltungen, zu denen alle kommen können, erscheinen hier.',
+    noneMatching: 'Nichts für diese Auswahl.',
+  },
   add: {
     cTitle: 'Veranstaltung erstellen',
     mTitle: 'Veranstaltung erstellen',
@@ -8,7 +34,7 @@ export default {
   settings: {
     cancel: 'Veranstaltung absagen',
     info: 'Infos',
-    admins: 'Admins',
+    admins: 'Gastgeber', // its administrators, who put it on
     features: 'Funktionen',
     permissions: 'Berechtigungen',
     rules: 'Regeln',

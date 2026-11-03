@@ -4,6 +4,33 @@ import axios from 'axios';
 // api/actor serve those for the `events` namespace like any other).
 
 // The viewer's own events: upcoming, invited, hosting or past.
+// What is on, as the viewer may see it (GET /events/): narrowed to a window
+// of time, to the ones online, or to the ones somebody the viewer follows
+// hosts or is going to.
+const discover = ({
+  start = 0,
+  limit = 20,
+  from = null,
+  to = null,
+  online = false,
+  following = false,
+}) => {
+  const params = { start, limit };
+  if (from) {
+    params.from = from.toISOString();
+  }
+  if (to) {
+    params.to = to.toISOString();
+  }
+  if (online) {
+    params.online = true;
+  }
+  if (following) {
+    params.following = true;
+  }
+  return axios.get('/events/', { params });
+};
+
 const mine = ({ filter, start = 0, limit = 20 }) => {
   return axios.get('/events/mine', {
     params: { filter, start, limit },
@@ -63,6 +90,7 @@ const calendar = (event) => {
 };
 
 export default {
+  discover,
   mine,
   hostedBy,
   add,

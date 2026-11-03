@@ -25,10 +25,10 @@ import events from '../../utils/events';
 import utils from '../../utils';
 import useRulesFirst from '../rules/useRulesFirst';
 
-const { getActorName, getURL } = utils.node;
+const { getURL } = utils.node;
 
-// What an event's page has that a group's does not: when it is, who hosts
-// it, how many are going, the viewer's own answer, and the way to put it in
+// What an event's page has that a group's does not: when it is, how many
+// are going (who hosts it is in its Hosts card), the viewer's own answer, and the way to put it in
 // a calendar.
 //
 // Answering is Going or Maybe. Whichever the viewer chose is the filled
@@ -141,13 +141,7 @@ const EventPanel = ({
                 {events.placeLabel(place)}
               </Link>
             </Typography>}
-          {event.host &&
-            <Typography variant="body2">
-              {`${i18n.t('events:event.host')} `}
-              <Link href={getURL(event.host)} underline="hover">
-                {getActorName(event.host)}
-              </Link>
-            </Typography>}
+          {/* Who hosts it is under its name, in the header. */}
           <Box>
             <Button
               onClick={() => {

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import slugify from 'slugify';
 
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -16,6 +17,7 @@ import ControlInviteAnswer from '../controls/InviteAnswer';
 import EventAnswer from './Answer';
 import EventWhen from './When';
 import i18n from '../../languages';
+import events from '../../utils/events';
 import utils from '../../utils';
 
 const { getActorName, getCoverURL, getURL } = utils.node;
@@ -36,6 +38,11 @@ const EventCard = ({
   // An event's one picture. Not sent of an event the viewer was only
   // invited to, which is drawn without.
   const cover = getCoverURL(actor);
+  // Who is putting it on, with when it is: the group hosting it, or else
+  // whoever made it.
+  const host = events.hostOf(actor);
+  const hasState = Boolean(event) &&
+    ['cancelled', 'past', 'happening'].includes(event.state);
 
   return (
     <Card>
@@ -55,9 +62,9 @@ const EventCard = ({
             {getActorName(actor)}
           </Link>
         }
-        subheader={event && event.host ?
-          i18n.t('events:event.form.hostedBy', { name: getActorName(event.host) }) :
-          null}
+        // Its handle, as under any profile's name; who hosts it is in its
+        // About card.
+        subheader={utils.federation.displayHandle(actor, slugify)}
         slotProps={{
           title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
         }}
@@ -71,26 +78,31 @@ const EventCard = ({
       {event &&
         <CardContent sx={{ pt: 0 }}>
           <EventWhen event={event} dense />
-          <Stack direction="row" spacing={1} sx={{ pt: 1, flexWrap: 'wrap' }}>
-            {(event.state === 'cancelled' || event.state === 'past' || event.state === 'happening') &&
-              <Chip
-                size="small"
-                color={event.state === 'cancelled' ? 'error' : 'default'}
-                label={i18n.t(`events:event.state.${event.state}`)}
-              />}
-            {event.viewerRsvp &&
-              <Chip
-                size="small"
-                color="primary"
-                variant="outlined"
-                label={i18n.t(event.viewerRsvp === 'going' ?
-                  'events:event.rsvp.youAreGoing' :
-                  'events:event.rsvp.youSaidMaybe')}
-              />}
-            <Typography variant="body2" color="textSecondary" sx={{ alignSelf: 'center' }}>
-              {i18n.t('events:event.counts.going', { count: event.goingCount || 0 })}
-            </Typography>
-          </Stack>
+          {/* Who is putting it on and how many are going, one line. */}
+          <Typography variant="body2" color="textSecondary">
+            {[
+              host && i18n.t('events:event.form.hostedBy', { name: getActorName(host) }),
+              i18n.t('events:event.counts.going', { count: event.goingCount || 0 }),
+            ].filter(Boolean).join(' · ')}
+          </Typography>
+          {(hasState || event.viewerRsvp) &&
+            <Stack direction="row" spacing={1} sx={{ pt: 1, flexWrap: 'wrap' }}>
+              {hasState &&
+                <Chip
+                  size="small"
+                  color={event.state === 'cancelled' ? 'error' : 'default'}
+                  label={i18n.t(`events:event.state.${event.state}`)}
+                />}
+              {event.viewerRsvp &&
+                <Chip
+                  size="small"
+                  color="primary"
+                  variant="outlined"
+                  label={i18n.t(event.viewerRsvp === 'going' ?
+                    'events:event.rsvp.youAreGoing' :
+                    'events:event.rsvp.youSaidMaybe')}
+                />}
+            </Stack>}
         </CardContent>}
       {actor.isInvited &&
         <CardActions sx={{ p: 1 }}>

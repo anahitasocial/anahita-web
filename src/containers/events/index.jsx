@@ -12,6 +12,7 @@ import Tabs from '@mui/material/Tabs';
 import EventsIcon from '@mui/icons-material/Event';
 
 import BrowseHeader from '../../components/BrowseHeader';
+import DiscoverEvents from './Discover';
 import EventsList from './List';
 import api from '../../api';
 import i18n from '../../languages';
@@ -19,25 +20,27 @@ import permissions from '../../permissions';
 import PersonType from '../../proptypes/Person';
 import events from '../../utils/events';
 
-// Events, for somebody signed in: their own.
-//
-// Four lists: what they said they are going to, what they were invited to,
-// what they host, and what is over. There is no list of every event on the
-// site. An event is found from an invitation, from the group or person
-// hosting it, or by its address.
-const EventsPage = ({ viewer, actorSettings = {} }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
+const DISCOVER = 'discover';
 
-  // The tab is in the address, so it can be linked to and survives a
-  // reload.
+// Events. First what is on, for everybody (Discover), so an art show, a
+// block party or a meeting can be found by anybody it is open to; then,
+// for somebody signed in, their own four lists: what they said they are
+// going to, were invited to, host, and what is over. A visitor has
+// Discover alone, without a row of tabs.
+//
+// The tab is in the address (?list=), so it can be linked to and survives
+// a reload; Discover's own choices are beside it (?when=, ?where=, ?who=).
+const EventsPage = ({ viewer, isAuthenticated, actorSettings = {} }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const tabs = isAuthenticated ? [DISCOVER, ...events.LISTS] : [DISCOVER];
   const asked = searchParams.get('list');
-  const list = events.LISTS.includes(asked) ? asked : events.UPCOMING;
+  const list = tabs.includes(asked) ? asked : DISCOVER;
 
   const read = useCallback(({ start, limit }) => {
     return api.eventDetails.mine({ filter: list, start, limit });
   }, [list]);
 
-  const canAdd = permissions.actor.canAddEvent(viewer, actorSettings);
+  const canAdd = isAuthenticated && permissions.actor.canAddEvent(viewer, actorSettings);
 
   return (
     <>
@@ -52,49 +55,52 @@ const EventsPage = ({ viewer, actorSettings = {} }) => {
           actionLabel={i18n.t('events:add.cTitle')}
         />
       </Box>
-      <AppBar
-        position="sticky"
-        color="inherit"
-        elevation={1}
-        sx={{ mb: 2, top: 8 * 7, zIndex: 8 }}
-      >
-        <Tabs
-          value={list}
-          onChange={(event, value) => {
-            const params = new URLSearchParams(searchParams);
-            if (value === events.UPCOMING) {
-              params.delete('list');
-            } else {
-              params.set('list', value);
-            }
-            setSearchParams(params);
-          }}
-          variant="fullWidth"
-          indicatorColor="primary"
-          textColor="primary"
+      {tabs.length > 1 &&
+        <AppBar
+          position="sticky"
+          color="inherit"
+          elevation={1}
+          sx={{ mb: 2, top: 8 * 7, zIndex: 8 }}
         >
-          {events.LISTS.map((each) => {
-            return (
-              <Tab
-                key={each}
-                value={each}
-                label={i18n.t(`events:event.mine.${each}`)}
-              />
-            );
-          })}
-        </Tabs>
-      </AppBar>
-      <EventsList
-        key={`events-${list}`}
-        read={read}
-        empty={i18n.t(`events:event.none.${list}`)}
-      />
+          <Tabs
+            value={list}
+            onChange={(event, value) => {
+              // Each list starts over; Discover's choices go with it.
+              setSearchParams(value === DISCOVER ? {} : { list: value });
+            }}
+            variant="scrollable"
+            scrollButtons="auto"
+            indicatorColor="primary"
+            textColor="primary"
+          >
+            {tabs.map((each) => {
+              return (
+                <Tab
+                  key={each}
+                  value={each}
+                  label={each === DISCOVER ?
+                    i18n.t('events:discover.title') :
+                    i18n.t(`events:event.mine.${each}`)}
+                  sx={{ flexGrow: 1 }}
+                />
+              );
+            })}
+          </Tabs>
+        </AppBar>}
+      {list === DISCOVER ?
+        <DiscoverEvents isAuthenticated={isAuthenticated} /> :
+        <EventsList
+          key={`events-${list}`}
+          read={read}
+          empty={i18n.t(`events:event.none.${list}`)}
+        />}
     </>
   );
 };
 
 EventsPage.propTypes = {
   viewer: PersonType.isRequired,
+  isAuthenticated: PropTypes.bool.isRequired,
   // What the installation says about who may make one. Empty until NodeInfo
   // answers, which ranks as "nobody", so the + arrives with the answer.
   actorSettings: PropTypes.object,
@@ -105,6 +111,7 @@ const mapStateToProps = (state) => {
 
   return {
     viewer: state.session.viewer,
+    isAuthenticated: state.session.isAuthenticated,
     actorSettings: (nodeInfo && nodeInfo.metadata) || {},
   };
 };

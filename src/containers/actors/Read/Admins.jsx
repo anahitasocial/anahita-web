@@ -19,8 +19,13 @@ const ActorBodyAdmins = (props) => {
     actor,
   } = props;
 
-  const { administrators: admins } = actor;
   const namespace = utils.node.getNamespace(actor);
+  // An event's administrators are its hosts, and the card says so; a group
+  // putting it on is the first of them.
+  const host = actor.event && actor.event.host && actor.event.host.id ? actor.event.host : null;
+  const admins = host ?
+    [host, ...actor.administrators.filter((admin) => { return admin.id !== host.id; })] :
+    actor.administrators;
 
   return (
     <Card>

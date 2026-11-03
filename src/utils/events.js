@@ -19,6 +19,63 @@ const PAST = 'past';
 // The viewer's own lists, in the order of their tabs.
 const LISTS = [UPCOMING, INVITED, HOSTING, PAST];
 
+// The choices over the list of what is on (Discover): when, where, and
+// whose. Each first one is no choice at all.
+const WHEN = ['any', 'today', 'tomorrow', 'weekend', 'week', 'month'];
+const WHERE = ['anywhere', 'online'];
+const WHO = ['everyone', 'following', 'forYou'];
+
+// The days a choice of when covers, on the reader's own calendar, from
+// midnight to midnight: { from, to } as Dates, or null for any date. The
+// server lists what is on at some time between them, and nothing already
+// over. A week ends on Sunday night, and this weekend is today's when
+// today is Saturday or Sunday.
+const windowOf = (choice, now = new Date()) => {
+  const day = (offset) => {
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate() + offset);
+  };
+  // 0 for Sunday, as Date counts, to 7, so the week runs Monday to Sunday.
+  const weekday = now.getDay() === 0 ? 7 : now.getDay();
+
+  switch (choice) {
+    case 'today':
+      return { from: day(0), to: day(1) };
+    case 'tomorrow':
+      return { from: day(1), to: day(2) };
+    case 'weekend':
+      // Saturday and Sunday of this week: on a Sunday, from yesterday,
+      // which lists nothing already over.
+      return { from: day(6 - weekday), to: day(8 - weekday) };
+    case 'week':
+      return { from: day(0), to: day(8 - weekday) };
+    case 'month':
+      return { from: day(0), to: new Date(now.getFullYear(), now.getMonth() + 1, 1) };
+    default:
+      return null;
+  }
+};
+
+// Who is putting an event on: the group hosting it, or else whoever made
+// it. What is said under its name, on its card and on its page.
+const hostOf = (actor) => {
+  const event = (actor && actor.event) || {};
+  if (event.host && event.host.id) {
+    return event.host;
+  }
+  return actor && actor.author && actor.author.id ? actor.author : null;
+};
+
+// Whether an event is on at some time in a window from windowOf, for a
+// list worked out in the browser.
+const isOnIn = (event, window) => {
+  if (!window || !event) {
+    return true;
+  }
+  const startsAt = new Date(event.startsAt);
+  const endsAt = new Date(event.endsAt);
+  return startsAt < window.to && endsAt > window.from;
+};
+
 // The zone the browser is in, or UTC where it will not say.
 const browserZone = () => {
   try {
@@ -427,6 +484,12 @@ export default {
   HOSTING,
   PAST,
   LISTS,
+  WHEN,
+  WHERE,
+  WHO,
+  windowOf,
+  isOnIn,
+  hostOf,
   browserZone,
   zones,
   isZone,

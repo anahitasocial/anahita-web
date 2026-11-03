@@ -1,6 +1,32 @@
 export default {
   cTitle: 'Events',
   mTitle: 'Events',
+  // The page of events: what is on, the first of its tabs.
+  discover: {
+    title: 'Discover',
+    when: {
+      label: 'When',
+      any: 'Any date',
+      today: 'Today',
+      tomorrow: 'Tomorrow',
+      weekend: 'This weekend',
+      week: 'This week',
+      month: 'This month',
+    },
+    where: {
+      label: 'Where',
+      anywhere: 'Anywhere',
+      online: 'Online',
+    },
+    who: {
+      label: 'Whose',
+      everyone: 'Everyone',
+      following: 'Following',
+      forYou: 'For you',
+    },
+    none: 'Nothing on yet. Events anybody can come to show up here.',
+    noneMatching: 'Nothing on for these choices.',
+  },
   add: {
     cTitle: 'Create event',
     mTitle: 'Create event',
@@ -8,7 +34,7 @@ export default {
   settings: {
     cancel: 'Cancel event',
     info: 'Info',
-    admins: 'Admins',
+    admins: 'Hosts', // its administrators, who put it on
     features: 'Features',
     permissions: 'Permissions',
     rules: 'Rules',

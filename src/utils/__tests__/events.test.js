@@ -237,3 +237,54 @@ describe('answering', () => {
     expect(events.canGo({ state: 'past', isFull: false })).toBe(false);
   });
 });
+
+describe('the days a choice of when covers', () => {
+  // Wednesday 4 November 2026, mid-afternoon, on the reader's own clock.
+  const wednesday = new Date(2026, 10, 4, 15, 30);
+  const day = (date) => {
+    return [date.getFullYear(), date.getMonth() + 1, date.getDate(), date.getHours()];
+  };
+
+  it('is no window for any date', () => {
+    expect(events.windowOf('any', wednesday)).toBeNull();
+  });
+
+  it('runs midnight to midnight for today and tomorrow', () => {
+    const today = events.windowOf('today', wednesday);
+    expect(day(today.from)).toEqual([2026, 11, 4, 0]);
+    expect(day(today.to)).toEqual([2026, 11, 5, 0]);
+    const tomorrow = events.windowOf('tomorrow', wednesday);
+    expect(day(tomorrow.from)).toEqual([2026, 11, 5, 0]);
+    expect(day(tomorrow.to)).toEqual([2026, 11, 6, 0]);
+  });
+
+  it('is the coming Saturday and Sunday on a weekday', () => {
+    const weekend = events.windowOf('weekend', wednesday);
+    expect(day(weekend.from)).toEqual([2026, 11, 7, 0]);
+    expect(day(weekend.to)).toEqual([2026, 11, 9, 0]);
+  });
+
+  it('is this one on a Saturday or a Sunday', () => {
+    const saturday = events.windowOf('weekend', new Date(2026, 10, 7, 10));
+    expect(day(saturday.from)).toEqual([2026, 11, 7, 0]);
+    expect(day(saturday.to)).toEqual([2026, 11, 9, 0]);
+    const sunday = events.windowOf('weekend', new Date(2026, 10, 8, 10));
+    expect(day(sunday.from)).toEqual([2026, 11, 7, 0]);
+    expect(day(sunday.to)).toEqual([2026, 11, 9, 0]);
+  });
+
+  it('ends the week on Sunday night, and the month on its last', () => {
+    expect(day(events.windowOf('week', wednesday).to)).toEqual([2026, 11, 9, 0]);
+    expect(day(events.windowOf('week', new Date(2026, 10, 8, 10)).to)).toEqual([2026, 11, 9, 0]);
+    expect(day(events.windowOf('month', new Date(2026, 11, 20)).to)).toEqual([2027, 1, 1, 0]);
+  });
+
+  it('says whether an event is on at some time in a window', () => {
+    const weekend = events.windowOf('weekend', wednesday);
+    const festival = { startsAt: '2026-11-06T22:00:00Z', endsAt: '2026-11-08T22:00:00Z' };
+    const lastWeek = { startsAt: '2026-10-28T22:00:00Z', endsAt: '2026-10-28T23:00:00Z' };
+    expect(events.isOnIn(festival, weekend)).toBe(true);
+    expect(events.isOnIn(lastWeek, weekend)).toBe(false);
+    expect(events.isOnIn(lastWeek, null)).toBe(true);
+  });
+});

@@ -281,16 +281,9 @@ const AppRoutes = () => {
                 </AuthenticatedRoute>
           }
             />
-            {/* Events — static paths before parameterized. /events is the
-            viewer's own lists; there is no list of every event. */}
-            <Route
-              path="/events"
-              element={
-                <AuthenticatedRoute>
-                  <EventsPage />
-                </AuthenticatedRoute>
-          }
-            />
+            {/* Events — static paths before parameterized. /events is
+            what is on, for everybody, and the viewer's own lists. */}
+            <Route path="/events" element={<EventsPage />} />
             <Route
               path="/events/add"
               element={
