@@ -1291,7 +1291,15 @@ What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 
 A person who follows the viewer says so: "Follows you" after their handle on
-their profile, and beside their name in these lists.
+their profile, and after their handle in these lists, except beside a
+"Follow back" button, which says it already.
+
+The dialog is full screen on a phone, with Close (✕) at the start of its
+title and no row of buttons at its foot; an event's attendees
+(`events/Attendees.jsx`) are the same (`components/ListDialogHeader.jsx`).
+Each row (`components/ProfileRow.jsx`) has the picture, then the name and
+the handle, each on one line cut short with an ellipsis, then the button,
+which takes its own room rather than sitting over the text.
 
 **One word for following.** Every button that follows anything, a profile,
 a hashtag or a place, reads "Follow" with a plus before it

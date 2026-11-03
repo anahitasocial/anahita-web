@@ -2,30 +2,23 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Link from '@mui/material/Link';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-import ActorAvatar from '../../components/ActorAvatar';
+import ListDialogHeader from '../../components/ListDialogHeader';
+import ProfileRow from '../../components/ProfileRow';
 import Progress from '../../components/Progress';
 import api from '../../api';
 import i18n from '../../languages';
 import events from '../../utils/events';
 import socialgraph from '../../utils/socialgraph';
-import utils from '../../utils';
 import { App as APP } from '../../constants';
 
-const { getActorName, getURL } = utils.node;
 const { LIMIT } = APP.BROWSE;
 
 const KINDS = [events.GOING, events.MAYBE];
@@ -40,6 +33,7 @@ const EventAttendees = ({
   const [kind, setKind] = useState(events.GOING);
   const [lists, setLists] = useState({});
   const [failed, setFailed] = useState({});
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
   const load = (which, start) => {
     api.eventDetails.attendees({
@@ -85,13 +79,16 @@ const EventAttendees = ({
     <Dialog
       open={open}
       onClose={onClose}
+      fullScreen={phone}
       fullWidth
       maxWidth="sm"
       aria-labelledby={`attendees-title-${actor.id}`}
     >
-      <DialogTitle id={`attendees-title-${actor.id}`}>
-        {i18n.t('events:event.attendees.title')}
-      </DialogTitle>
+      <ListDialogHeader
+        id={`attendees-title-${actor.id}`}
+        title={i18n.t('events:event.attendees.title')}
+        onClose={onClose}
+      />
       <Tabs
         value={kind}
         onChange={(change, value) => {
@@ -132,30 +129,11 @@ const EventAttendees = ({
           >
             <List disablePadding>
               {list.rows.map((person) => {
-                return (
-                  <ListItem key={`attendee-${kind}-${person.id}`} divider>
-                    <ListItemAvatar>
-                      <ActorAvatar actor={person} linked />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Link href={getURL(person)} color="inherit" underline="hover">
-                          {getActorName(person)}
-                        </Link>
-                      }
-                      secondary={socialgraph.rowNote(person, i18n.t('socialgraph:followsYou'))}
-                    />
-                  </ListItem>
-                );
+                return <ProfileRow key={`attendee-${kind}-${person.id}`} actor={person} />;
               })}
             </List>
           </InfiniteScroll>}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>
-          {i18n.t('commons:close')}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };

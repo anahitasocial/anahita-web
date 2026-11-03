@@ -6,23 +6,19 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Link from '@mui/material/Link';
 import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemAvatar from '@mui/material/ListItemAvatar';
-import ListItemText from '@mui/material/ListItemText';
 import Tab from '@mui/material/Tab';
 import Tabs from '@mui/material/Tabs';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import SortIcon from '@mui/icons-material/SwapVert';
 
-import ActorAvatar from '../../../components/ActorAvatar';
+import ListDialogHeader from '../../../components/ListDialogHeader';
+import ProfileRow from '../../../components/ProfileRow';
 import Progress from '../../../components/Progress';
 import ScheduledDeletion from '../../../components/ScheduledDeletion';
 import SignInPrompt from '../../../components/SignInPrompt';
@@ -39,7 +35,7 @@ import socialgraph from '../../../utils/socialgraph';
 import visitor from '../../../utils/visitor';
 import { App as APP } from '../../../constants';
 
-const { getActorName, getURL, isPerson } = utils.node;
+const { getActorName, isPerson } = utils.node;
 const { LIMIT } = APP.BROWSE;
 
 // Who follows a profile, who it follows, and who the viewer has in common
@@ -65,6 +61,7 @@ const SocialgraphDialog = ({
   const [failed, setFailed] = useState({});
   const [order, setOrder] = useState(socialgraph.LATEST);
   const [orderMenu, setOrderMenu] = useState(null);
+  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
   const load = (which, start) => {
     api.socialgraph.browse({
@@ -116,6 +113,7 @@ const SocialgraphDialog = ({
     <Dialog
       open={open}
       onClose={onClose}
+      fullScreen={phone}
       fullWidth
       maxWidth="sm"
       aria-labelledby={`socialgraph-title-${actor.id}`}
@@ -123,15 +121,11 @@ const SocialgraphDialog = ({
       {/* The order is a small menu in the title's row, which had room for
           it, rather than a row of its own under the tabs: the tabs are what
           is chosen first, the order seldom. */}
-      <DialogTitle
+      <ListDialogHeader
         id={`socialgraph-title-${actor.id}`}
-        sx={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1,
-        }}
+        title={getActorName(actor)}
+        onClose={onClose}
       >
-        <Box component="span" sx={{ overflowWrap: 'anywhere' }}>
-          {getActorName(actor)}
-        </Box>
         {!heldBack &&
           <>
             <Button
@@ -175,7 +169,7 @@ const SocialgraphDialog = ({
               })}
             </Menu>
           </>}
-      </DialogTitle>
+      </ListDialogHeader>
       <Tabs
         value={kind}
         onChange={(event, value) => {
@@ -237,46 +231,24 @@ const SocialgraphDialog = ({
                 const showFollow = isAuthenticated && permissions.canFollow(row, viewer);
                 const showRemove = canRemove && row.id !== viewer.id;
                 return (
-                  <ListItem
+                  <ProfileRow
                     key={`socialgraph-${kind}-${row.id}`}
-                    divider
-                    secondaryAction={
+                    actor={row}
+                    followsYou={Boolean(row.isFollowingViewer) &&
+                      !(showFollow && !row.isLeadingViewer)}
+                    actions={(showFollow || showRemove) &&
                       <>
                         {showFollow && <ControlFollow actor={row} />}
                         {showRemove && <ControlRemoveFollower actor={actor} follower={row} />}
-                      </>
-                    }
+                      </>}
                   >
-                    <ListItemAvatar>
-                      <ActorAvatar actor={row} linked />
-                    </ListItemAvatar>
-                    <ListItemText
-                      primary={
-                        <Link href={getURL(row)} color="inherit" underline="hover">
-                          {getActorName(row)}
-                        </Link>
-                      }
-                      secondary={row.deletedAt ?
-                        <>
-                          <Box component="span" sx={{ display: 'block' }}>
-                            {socialgraph.rowNote(row, i18n.t('socialgraph:followsYou'))}
-                          </Box>
-                          <ScheduledDeletion actor={row} sx={{ mt: 0.5 }} />
-                        </> :
-                        socialgraph.rowNote(row, i18n.t('socialgraph:followsYou'))}
-                      slotProps={{ secondary: { component: 'div' } }}
-                    />
-                  </ListItem>
+                    {row.deletedAt && <ScheduledDeletion actor={row} sx={{ mt: 0.5 }} />}
+                  </ProfileRow>
                 );
               })}
             </List>
           </InfiniteScroll>}
       </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>
-          {i18n.t('commons:close')}
-        </Button>
-      </DialogActions>
     </Dialog>
   );
 };
