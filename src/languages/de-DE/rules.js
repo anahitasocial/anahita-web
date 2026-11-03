@@ -27,6 +27,13 @@ export default {
   },
   about: {
     title: 'Regeln',
+    // A quiet prompt in the About card of a group or an event that has
+    // none, for its administrators alone.
+    add: 'Regeln hinzufügen',
+    addHelp: {
+      group: 'Follower stimmen ihnen zuerst zu. Nur Administratoren sehen das.',
+      event: 'Wer darauf antwortet, stimmt ihnen zuerst zu. Nur Administratoren sehen das.',
+    },
   },
   // A group's or an event's reports against its rules (part 6b).
   reports: {

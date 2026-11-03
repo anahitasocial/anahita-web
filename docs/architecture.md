@@ -1425,6 +1425,11 @@ Privacy settings. Where the installation allows nothing new to be public
 is chosen at first. Whoever makes it is its first administrator and its
 first follower, and is taken to its page.
 
+Rules are not asked for on the form. While a group or an event has none,
+its administrators, and nobody else, see **Add rules** at the foot of its
+About card, which opens the Rules tab of its settings (the link says which
+tab in its router state, `{ tab: 'rules' }`).
+
 ### Inviting people to a group
 
 A group's page has **Invite** for whoever the group lets invite

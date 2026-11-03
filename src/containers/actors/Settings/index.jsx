@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Box from '@mui/material/Box';
@@ -172,7 +172,10 @@ const ActorsSettings = ({
   // Groups only. People take their section from the URL below, which is what
   // makes it shareable and back-buttonable; this local state is the older
   // behaviour, kept for the namespace that is not being regrouped.
-  const [tab, setTab] = useState(selectedTab);
+  // A link may say which tab to open on, as the About card's "Add rules"
+  // does; one the page does not have falls back below.
+  const location = useLocation();
+  const [tab, setTab] = useState((location.state && location.state.tab) || selectedTab);
 
   useEffect(() => {
     if (id && !actor.id) {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
@@ -21,6 +22,7 @@ import DoneIcon from '@mui/icons-material/Done';
 
 import MapIcon from '@mui/icons-material/MapOutlined';
 import OpenIcon from '@mui/icons-material/ExpandMore';
+import NextIcon from '@mui/icons-material/ChevronRight';
 import PlaceIcon from '@mui/icons-material/PlaceOutlined';
 import WebsiteIcon from '@mui/icons-material/Web';
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -57,7 +59,7 @@ const monthYear = (value) => {
 };
 
 const ActorBodyAbout = (props) => {
-  const { actor, rules = null } = props;
+  const { actor, rules = null, addRules = '' } = props;
   // Its rules, which whoever follows it or answers it agrees to (roadmap
   // row 102, part 5): shown at all times, in order.
   const ruleItems = (rules && rules.items) || [];
@@ -289,6 +291,24 @@ const ActorBodyAbout = (props) => {
             </Box>
           </CardContent>
         </>}
+      {/* None yet, to its administrators: where to add them, a step from
+          the group's page, which is where they arrive once it is made. */}
+      {ruleItems.length === 0 && addRules &&
+        <>
+          {(body || hasList) && <Divider />}
+          <List>
+            <ListItemButton component={RouterLink} to={addRules} state={{ tab: 'rules' }}>
+              <ListItemIcon>
+                <RulesIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={i18n.t('rules:about.add')}
+                secondary={i18n.t(`rules:about.addHelp.${events.isEvent(actor) ? 'event' : 'group'}`)}
+              />
+              <NextIcon color="action" />
+            </ListItemButton>
+          </List>
+        </>}
       {address && hasPoint &&
         <AnahitaMap
           locations={[{
@@ -308,6 +328,8 @@ ActorBodyAbout.propTypes = {
   actor: ActorType.isRequired,
   // From GET .../rules: { version, items, agreedVersion }, or null.
   rules: PropTypes.object,
+  // Where its administrators add rules, while it has none: its settings.
+  addRules: PropTypes.string,
 };
 
 export default ActorBodyAbout;

@@ -19,6 +19,7 @@ import useActorRules from './useRules';
 import tabIcon from './tabIcons';
 import i18n from '../../../languages';
 import eventDetails from '../../../utils/events';
+import permissions from '../../../permissions/actor';
 import utils from '../../../utils';
 
 const { getNamespace, getActorFeatureTabs } = utils.node;
@@ -56,6 +57,10 @@ const ActorBody = ({
   // A group's or an event's rules, for its About card (roadmap row 102).
   const rules = useActorRules(actor);
   const hasRules = Boolean(rules && rules.items && rules.items.length > 0);
+  // None yet: its administrators are asked to add some, in the About card.
+  const addRules = rules && !hasRules && permissions.canAdminister(actor) ?
+    `${utils.node.getKindURL(actor)}settings` :
+    '';
   // What a person posted and reposted, what they chose to put out, comes
   // first; then the lists of each kind (notes, articles, photos); then
   // their replies, and the photos and videos they are in (roadmap row
@@ -115,12 +120,12 @@ const ActorBody = ({
   const [detailsRef, detailsTop] = useStickyColumn(sideTabs || besidePosts);
 
   const hasAbout = actor.body || actor.websiteUrl || eventDetails.hasWhere(actor) ||
-    utils.federation.isRemote(actor) || hasRules;
+    utils.federation.isRemote(actor) || hasRules || addRules;
 
   // What the profile says about itself: the first items in columns, and
   // otherwise beside its posts or above them.
   const details = [
-    hasAbout && <ActorBodyAbout key="about" actor={actor} rules={rules} />,
+    hasAbout && <ActorBodyAbout key="about" actor={actor} rules={rules} addRules={addRules} />,
     featureTabs.includes('photos') && (
       <ActorPhotos
         key="photos"

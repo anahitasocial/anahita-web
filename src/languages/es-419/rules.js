@@ -27,6 +27,13 @@ export default {
   },
   about: {
     title: 'Reglas',
+    // A quiet prompt in the About card of a group or an event that has
+    // none, for its administrators alone.
+    add: 'Agregar reglas',
+    addHelp: {
+      group: 'Los seguidores las aceptan primero. Solo los administradores ven esto.',
+      event: 'Quien responde las acepta primero. Solo los administradores ven esto.',
+    },
   },
   // A group's or an event's reports against its rules (part 6b).
   reports: {

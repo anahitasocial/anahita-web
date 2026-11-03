@@ -28,6 +28,13 @@ export default {
   },
   about: {
     title: 'Rules',
+    // A quiet prompt in the About card of a group or an event that has
+    // none, for its administrators alone.
+    add: 'Add rules',
+    addHelp: {
+      group: 'Followers agree to them first. Only administrators see this.',
+      event: 'Whoever answers it agrees to them first. Only administrators see this.',
+    },
   },
   // A group's or an event's reports against its rules (part 6b).
   reports: {
