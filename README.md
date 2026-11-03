@@ -104,19 +104,19 @@ The documentation is in [`docs/`](docs/README.md), and on
 
 ## How it fits together
 
-- **The API** is anahita-services, behind its nginx gateway. Every request goes
-  to `REACT_APP_API_BASE_URL`. Every route is in its
-  [API reference](https://www.anahita.io/api/).
-- **Signing in and signing up happen on the server.** The app sends people to
-  auth-service's pages using OAuth 2.0 with PKCE, and comes back to
-  `/oauth/callback`. Tokens stay on the server behind a session cookie; the app
-  never sees a password.
-- **The server decides what each viewer may do.** Whether someone can post,
-  reply, like or edit is sent with each response, and the app shows only the
-  controls that will work.
-- **Operator settings live on the server.** Registration mode, support
-  contacts and the other settings an operator changes without a rebuild are
-  read from the server's NodeInfo document.
+1. **The API** is anahita-services, behind its nginx gateway. Every request goes
+   to `REACT_APP_API_BASE_URL`. Every route is in its
+   [API reference](https://www.anahita.io/api/).
+2. **Signing in and signing up happen on the server.** The app sends people to
+   auth-service's pages using OAuth 2.0 with PKCE, and comes back to
+   `/oauth/callback`. Tokens stay on the server behind a session cookie; the app
+   never sees a password.
+3. **The server decides what each viewer may do.** Whether someone can post,
+   reply, like or edit is sent with each response, and the app shows only the
+   controls that will work.
+4. **Operator settings live on the server.** Registration mode, support
+   contacts and the other settings an operator changes without a rebuild are
+   read from the server's NodeInfo document.
 
 ## Using Anahita responsibly
 
@@ -127,12 +127,12 @@ they set their first password:
 
 **I won't use Anahita to:**
 
-- Spread hate or organize hate groups, including against women, LGBTQIA+ people, or marginalized communities.
-- Harm or exploit children.
-- Harass, threaten, or expose the private data (dox) of anyone.
-- Promote violent extremism or terrorism.
-- Spread misinformation about health or science.
-- Abuse the system through spam, malware, financial scams, or data harvesting.
+1. Spread hate or organize hate groups, including against women, LGBTQIA+ people, or marginalized communities.
+2. Harm or exploit children.
+3. Harass, threaten, or expose the private data (dox) of anyone.
+4. Promote violent extremism or terrorism.
+5. Spread misinformation about health or science.
+6. Abuse the system through spam, malware, financial scams, or data harvesting.
 
 It is a pledge to the people who will trust you, from Anahita's creator,
 Rastin Mehr; not a term of the licence.

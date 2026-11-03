@@ -7,11 +7,11 @@ documents.
 
 ## Contents
 
-- [Name, description and logo](#name-description-and-logo)
-- [Themes](#themes)
-- [Languages](#languages)
-- [Terms of Service and Privacy Policy](#terms-of-service-and-privacy-policy)
-- [Where the code is](#where-the-code-is)
+1. [Name, description and logo](#name-description-and-logo)
+2. [Themes](#themes)
+3. [Languages](#languages)
+4. [Terms of Service and Privacy Policy](#terms-of-service-and-privacy-policy)
+5. [Where the code is](#where-the-code-is)
 
 ## Name, description and logo
 

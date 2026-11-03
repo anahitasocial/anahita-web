@@ -6,10 +6,10 @@ Building the app and hosting it.
 
 ## Contents
 
-- [Building](#building)
-- [What the server needs to know](#what-the-server-needs-to-know)
-- [Hosting](#hosting)
-- [AWS Amplify](#aws-amplify)
+1. [Building](#building)
+2. [What the server needs to know](#what-the-server-needs-to-know)
+3. [Hosting](#hosting)
+4. [AWS Amplify](#aws-amplify)
 
 ## Building
 

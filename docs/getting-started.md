@@ -6,13 +6,13 @@ Running the app locally and working on it.
 
 ## Contents
 
-- [Requirements](#requirements)
-- [Installing](#installing)
-- [First run](#first-run)
-- [Developing](#developing)
-- [Tests](#tests)
-- [Linting](#linting)
-- [With an AI agent](#with-an-ai-agent)
+1. [Requirements](#requirements)
+2. [Installing](#installing)
+3. [First run](#first-run)
+4. [Developing](#developing)
+5. [Tests](#tests)
+6. [Linting](#linting)
+7. [With an AI agent](#with-an-ai-agent)
 
 ## Requirements
 

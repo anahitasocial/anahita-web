@@ -149,11 +149,11 @@ Each milestone ends in a shippable state.
 | 75 | ⬜ | 58 · Sharing documents: a service of its own for posting and reading documents (PDFs, Word and the like), asked for by the user on 2026-10-16 as later work. Not planned yet. The web app's leftover Documents composer and namespace were removed the same day, so it starts clean | — | services + web | not estimated | — |
 
 **Total: about 472–622 hours, roughly 116–156 sessions** at about 4 h per session. Shared pieces built once save a few percent:
-- the rate limiter;
-- `FilterNodesForViewer`;
-- the jobs queue;
-- the file-grpc streaming RPCs;
-- the ingress/TLS work.
+1. the rate limiter;
+2. `FilterNodesForViewer`;
+3. the jobs queue;
+4. the file-grpc streaming RPCs;
+5. the ingress/TLS work.
 
 **Deliberately early groundwork for federation:**
 - item 9 already fixes storage, TLS and ingress;
@@ -176,16 +176,16 @@ To get to federation sooner, you can move **M9 phase 0** right after M3 and do *
 ### Plan files
 
 **anahita-services** (`docs/plans/`), linked in the table above:
-- scheduled: `auth-service-hardening.md` (items 0b and 0c);
-- new: `feed-access-leak.md`, `remove-private-notes.md`, `recommendation-service.md`,
-  `abuse-report-service.md`, `actor-hard-delete.md`, `login-code.md`, `federation.md`,
-  `cloud-neutral.md`, `link-previews.md`, `actor-invitations.md`, `events.md`,
-  `instance-privacy.md`, `video-service.md`, `photo-albums.md`, `content-licences.md`,
-  `content-language.md`, `data-export.md`, `post-insights.md`, `profile-tabs-and-reposts.md`,
-  `quote-posts.md`, `verified-domains.md`, `migration-baseline.md`, `rules.md`, `people-in-media.md`, `tag-signals.md`;
-- extended with a "Decisions and schedule" section: `notes-as-replies.md`, `feed-generators.md`;
-- pointers added: `done/onboarding.md` (recommendations) and `actor-profile-management.md` §2 (hard delete).
-- finished, in `done/`: `signup-and-onboarding.md`, `onboarding.md`, `dissolve-people-people.md`, `actor-lifecycle-states.md`, `remove-unused-node-columns.md`, `feed-access-leak.md`, `remove-private-notes.md`, `network-limits.md`, `thread-composer.md`, `rules.md`, `people-in-media.md`, `tag-signals.md`.
+1. scheduled: `auth-service-hardening.md` (items 0b and 0c);
+2. new: `feed-access-leak.md`, `remove-private-notes.md`, `recommendation-service.md`,
+   `abuse-report-service.md`, `actor-hard-delete.md`, `login-code.md`, `federation.md`,
+   `cloud-neutral.md`, `link-previews.md`, `actor-invitations.md`, `events.md`,
+   `instance-privacy.md`, `video-service.md`, `photo-albums.md`, `content-licences.md`,
+   `content-language.md`, `data-export.md`, `post-insights.md`, `profile-tabs-and-reposts.md`,
+   `quote-posts.md`, `verified-domains.md`, `migration-baseline.md`, `rules.md`, `people-in-media.md`, `tag-signals.md`;
+3. extended with a "Decisions and schedule" section: `notes-as-replies.md`, `feed-generators.md`;
+4. pointers added: `done/onboarding.md` (recommendations) and `actor-profile-management.md` §2 (hard delete).
+5. finished, in `done/`: `signup-and-onboarding.md`, `onboarding.md`, `dissolve-people-people.md`, `actor-lifecycle-states.md`, `remove-unused-node-columns.md`, `feed-access-leak.md`, `remove-private-notes.md`, `network-limits.md`, `thread-composer.md`, `rules.md`, `people-in-media.md`, `tag-signals.md`.
 
 **anahita-web** (`docs/plans/`): this roadmap, `admin-area.md`,
 `open-graph.md`, `pinned-posts-and-activity-tray.md`, `share-button.md`; finished, in `done/`: `deps-upgrade.md`, `mui-upgrade.md`, `onboarding.md`, `remove-global-media-browse.md`.

@@ -6,10 +6,10 @@ Every environment variable the app reads, and why most settings are not here.
 
 ## Contents
 
-- [How configuration works](#how-configuration-works)
-- [Variables](#variables)
-- [Settings that live on the server](#settings-that-live-on-the-server)
-- [Where the code is](#where-the-code-is)
+1. [How configuration works](#how-configuration-works)
+2. [Variables](#variables)
+3. [Settings that live on the server](#settings-that-live-on-the-server)
+4. [Where the code is](#where-the-code-is)
 
 ## How configuration works
 

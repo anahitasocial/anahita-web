@@ -6,14 +6,14 @@ How the app is put together, and how it talks to anahita-services.
 
 ## Contents
 
-- [Directory layout](#directory-layout)
-- [Talking to the API](#talking-to-the-api)
-- [Signing in](#signing-in)
-- [State](#state)
-- [Routes](#routes)
-- [What a viewer may do](#what-a-viewer-may-do)
-- [Translations](#translations)
-- [Styling](#styling)
+1. [Directory layout](#directory-layout)
+2. [Talking to the API](#talking-to-the-api)
+3. [Signing in](#signing-in)
+4. [State](#state)
+5. [Routes](#routes)
+6. [What a viewer may do](#what-a-viewer-may-do)
+7. [Translations](#translations)
+8. [Styling](#styling)
 
 ## Directory layout
 
@@ -40,14 +40,14 @@ Everything is under `src/`:
 
 All requests go through axios, configured in `src/api/index.js`:
 
-- **Base URL.** Every request is relative to `REACT_APP_API_BASE_URL`.
-- **Cookies.** Requests are sent with credentials, because the session is a
-  cookie set by the API's domain.
-- **Key casing.** The API speaks `snake_case` and the app `camelCase`. A request
-  interceptor converts outgoing keys, including form-data field names, to
-  `snake_case`. A response interceptor converts incoming keys to `camelCase`.
-  Code in the app never sees a `snake_case` key.
-- **Redirects** are not followed (`maxRedirects: 0`).
+1. **Base URL.** Every request is relative to `REACT_APP_API_BASE_URL`.
+2. **Cookies.** Requests are sent with credentials, because the session is a
+   cookie set by the API's domain.
+3. **Key casing.** The API speaks `snake_case` and the app `camelCase`. A request
+   interceptor converts outgoing keys, including form-data field names, to
+   `snake_case`. A response interceptor converts incoming keys to `camelCase`.
+   Code in the app never sees a `snake_case` key.
+4. **Redirects** are not followed (`maxRedirects: 0`).
 
 What each route takes and sends is in the services' API reference
 (anahita-services `docs/api.md` and `docs/api/`, made from the code); to read
@@ -79,54 +79,54 @@ on auth-service too. The app only links to them.
 
 Four components guard routes (`src/routes/`):
 
-- **`AuthenticatedRoute`** sends signed-out visitors to `/auth`. It waits for
-  the session check to finish first, so a signed-in person is not bounced on
-  every reload.
-- **`CookieNotice`** (`components/CookieNotice.jsx`, drawn by `App`) says once,
-  at the foot of the screen, that the site's cookies are only for signing in,
-  and that without them nobody can; OK is its one button, since there is
-  nothing to decline (the user, 2026-10-28). Its reading is kept in the
-  browser (`localStorage`, `anahita-cookie-notice`), and it links to the
-  Privacy Policy, whose Cookies section says the same.
-- **`AgreementsGate`** wraps the whole route table. It sends a signed-in person
-  to `/agreements` when the Terms of Service or Privacy Policy has a newer
-  version than the one they accepted; after that, to `/rules` when the
-  site's rules have (roadmap row 102). The rules are the server's, read once
-  from `GET /site` (`containers/site/useSite.js`, `useRules`, with its own
-  client: no credentials, and language names left as they are). On their
-  page (`containers/rules`) each is ticked in turn: the next zooms forward
-  a moment after the one before is ticked, the keyboard following; for
-  anybody not behind on them it is a numbered list to read. With
-  `metadata.siteRules` false, nobody is sent: whoever installs Anahita makes
-  its creator's pledge on auth-service's set-password page instead. `OnboardingGate` waits for both. The About page shows the
-  site's promises first, from the same `GET /site`, with the way to
-  `/rules` (`containers/about/Promises.jsx`). An administrator removes a
-  person or a group as spam, at once, from its menu or from a report's case
-  (`containers/moderation/useRemoveAsSpam.jsx`, asked once more), and
-  refuses an account from another network for the whole site, from the
-  same places (`containers/moderation/useRefuseAccount.jsx`, with a reason;
-  roadmap row 116): removing as spam is for profiles made here, and is not
-  offered on one from elsewhere. A group's
-  and an event's rules are written in a Rules tab of its settings
-  (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
-  suggestions or written; the site's own open in a dialog from there,
-  `rules/SiteRulesDialog.jsx`) and listed in its About card
-  (`actors/Read/useRules.js`). Every list of rules, here, on `/rules`, in
-  the checklists and on the server's sign-up pages, is numbered when it has
-  more than three (`utils/lists.js`). Following one, asking to, answering an event
-  or accepting an invitation first asks for its rules, ticked one at a time
-  in a dialog (`containers/rules/useRulesFirst.jsx`, `components/RulesChecklist.jsx`,
-  which `/rules` uses too), unless the viewer agreed to the version they are
-  at; the server refuses otherwise (409 `rules_not_agreed`). A new post on
-  one asks the same when its rules changed since (both composers, with
-  `useRulesFirst(actor, 'post')`). See
-  [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
-- **`OnboardingGate`**, inside it, sends a signed-in person with an
-  incomplete profile to `/onboarding`, once, and waits while the agreements
-  are outstanding so the two never send somebody back and forth.
-- **`MembersOnlyGate`**, on a members-only site, shows somebody who is not
-  signed in a way in instead of the page they asked for. See
-  [A members-only site](#a-members-only-site).
+1. **`AuthenticatedRoute`** sends signed-out visitors to `/auth`. It waits for
+   the session check to finish first, so a signed-in person is not bounced on
+   every reload.
+2. **`CookieNotice`** (`components/CookieNotice.jsx`, drawn by `App`) says once,
+   at the foot of the screen, that the site's cookies are only for signing in,
+   and that without them nobody can; OK is its one button, since there is
+   nothing to decline (the user, 2026-10-28). Its reading is kept in the
+   browser (`localStorage`, `anahita-cookie-notice`), and it links to the
+   Privacy Policy, whose Cookies section says the same.
+3. **`AgreementsGate`** wraps the whole route table. It sends a signed-in person
+   to `/agreements` when the Terms of Service or Privacy Policy has a newer
+   version than the one they accepted; after that, to `/rules` when the
+   site's rules have (roadmap row 102). The rules are the server's, read once
+   from `GET /site` (`containers/site/useSite.js`, `useRules`, with its own
+   client: no credentials, and language names left as they are). On their
+   page (`containers/rules`) each is ticked in turn: the next zooms forward
+   a moment after the one before is ticked, the keyboard following; for
+   anybody not behind on them it is a numbered list to read. With
+   `metadata.siteRules` false, nobody is sent: whoever installs Anahita makes
+   its creator's pledge on auth-service's set-password page instead. `OnboardingGate` waits for both. The About page shows the
+   site's promises first, from the same `GET /site`, with the way to
+   `/rules` (`containers/about/Promises.jsx`). An administrator removes a
+   person or a group as spam, at once, from its menu or from a report's case
+   (`containers/moderation/useRemoveAsSpam.jsx`, asked once more), and
+   refuses an account from another network for the whole site, from the
+   same places (`containers/moderation/useRefuseAccount.jsx`, with a reason;
+   roadmap row 116): removing as spam is for profiles made here, and is not
+   offered on one from elsewhere. A group's
+   and an event's rules are written in a Rules tab of its settings
+   (`actors/Settings/Rules.jsx`: at most ten, in order, picked from the site's
+   suggestions or written; the site's own open in a dialog from there,
+   `rules/SiteRulesDialog.jsx`) and listed in its About card
+   (`actors/Read/useRules.js`). Every list of rules, here, on `/rules`, in
+   the checklists and on the server's sign-up pages, is numbered when it has
+   more than three (`utils/lists.js`). Following one, asking to, answering an event
+   or accepting an invitation first asks for its rules, ticked one at a time
+   in a dialog (`containers/rules/useRulesFirst.jsx`, `components/RulesChecklist.jsx`,
+   which `/rules` uses too), unless the viewer agreed to the version they are
+   at; the server refuses otherwise (409 `rules_not_agreed`). A new post on
+   one asks the same when its rules changed since (both composers, with
+   `useRulesFirst(actor, 'post')`). See
+   [Terms of Service and Privacy Policy](customising.md#terms-of-service-and-privacy-policy).
+4. **`OnboardingGate`**, inside it, sends a signed-in person with an
+   incomplete profile to `/onboarding`, once, and waits while the agreements
+   are outstanding so the two never send somebody back and forth.
+5. **`MembersOnlyGate`**, on a members-only site, shows somebody who is not
+   signed in a way in instead of the page they asked for. See
+   [A members-only site](#a-members-only-site).
 
 All four are gates on the interface. What may be read is decided by the
 server.
@@ -500,106 +500,106 @@ a photo post, a GIF or a video a video post. `containers/replies/Thread.jsx` sho
 tab on a post's page and in the lightbox. What used to be comments are
 replies, made directly to the post.
 
-- **The thread is read whole** (`api.replies.thread`) and kept in the
-  component, not in the store. Nothing else on the page shows it.
-- **`src/utils/thread.js`** arranges the flat list the server sends into
-  replies and the replies under them, and holds the rule for each change: a
-  reply added, edited, removed, hidden. After a change is made on the server
-  the same change is made to the copy on the page, so the thread is not read
-  again after every reply. It is plain functions with tests.
-- **What a viewer may do comes with each reply,** in `authorized`: `comment`
-  (reply to it), `edit`, `delete`, `hide`, `like`. A control is drawn only
-  when its answer is yes. Whether somebody may reply to the post at all comes
-  with the thread, as `canReply`.
-- **A removed reply that had been answered** arrives as `deleted`, with no
-  text and no author, and is drawn as a line saying so with its replies still
-  under it.
-- **Hidden replies** are sent only to whoever may show them again, marked
-  `hidden`. They are drawn apart, under the thread, closed until opened.
-  The server also leaves out, for every reader, the replies of somebody the
-  post's owner or writer has blocked. A reply from Bluesky is hidden there
-  too, when the post went there; one from the fediverse is hidden here
-  only, and asking to hide it says so, naming its server
-  (`utils/federation.js#fromFediverse`).
-- Replies made to the post are newest first, or oldest, by a switch that shows
-  with three or more and is remembered in the browser (`utils/replyOrder.js`).
-  What answers a reply stays oldest first, so a conversation reads in order. The
-  server sends the oldest 500 of a thread.
-- Reply under a post in a list opens the post over the list, at its own address
-  (`routes/PostDialog.jsx`, the full screen on a phone): the routes go on showing
-  the list, from `location.state.background`, so it keeps its place. Going back
-  closes it, and a link to it opens the page. It holds the post and its replies
-  in one column, and nothing else: its Locations and Cited by are on its page
-  (`routes/postDialogContext.js` tells the post it is in the dialog).
-- Replies are set in a level for each step down, up to four, with a line down
-  the side. Past that they line up, so a long exchange fits a phone.
-- **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a
-  touch screen, and `ReplyForm`, with `attachments`, in a dialog) has a
-  button for pictures and, where videos may be posted, one for a GIF or a
-  video: one or the other, with words or without. Pictures use the photo
-  composer's editor (`PhotoFilesEditor`, uploaded for the person replying)
-  and go to `api.replies.addWithPictures`. A GIF or a video is sent as a
-  video is, with a `parentId` (`VideoReplyOnTheWay`, through
-  `useVideoUpload`), shown as being sent and then prepared under the box,
-  and the thread is read again once the reply is made. Nothing about who
-  sees a reply, who may answer it or its language is asked: the thread's.
-- **A reply shows its pictures** (`PhotoSlides`) **or its video**
-  (`VideoPlayer`, the looping clip for a GIF) under its words. Its words are
-  changed at `/notes/:id` whatever its kind; it is removed under its own
-  kind's address (`api.replies.remove`), which takes its files with it.
+1. **The thread is read whole** (`api.replies.thread`) and kept in the
+   component, not in the store. Nothing else on the page shows it.
+2. **`src/utils/thread.js`** arranges the flat list the server sends into
+   replies and the replies under them, and holds the rule for each change: a
+   reply added, edited, removed, hidden. After a change is made on the server
+   the same change is made to the copy on the page, so the thread is not read
+   again after every reply. It is plain functions with tests.
+3. **What a viewer may do comes with each reply,** in `authorized`: `comment`
+   (reply to it), `edit`, `delete`, `hide`, `like`. A control is drawn only
+   when its answer is yes. Whether somebody may reply to the post at all comes
+   with the thread, as `canReply`.
+4. **A removed reply that had been answered** arrives as `deleted`, with no
+   text and no author, and is drawn as a line saying so with its replies still
+   under it.
+5. **Hidden replies** are sent only to whoever may show them again, marked
+   `hidden`. They are drawn apart, under the thread, closed until opened.
+   The server also leaves out, for every reader, the replies of somebody the
+   post's owner or writer has blocked. A reply from Bluesky is hidden there
+   too, when the post went there; one from the fediverse is hidden here
+   only, and asking to hide it says so, naming its server
+   (`utils/federation.js#fromFediverse`).
+6. Replies made to the post are newest first, or oldest, by a switch that shows
+   with three or more and is remembered in the browser (`utils/replyOrder.js`).
+   What answers a reply stays oldest first, so a conversation reads in order. The
+   server sends the oldest 500 of a thread.
+7. Reply under a post in a list opens the post over the list, at its own address
+   (`routes/PostDialog.jsx`, the full screen on a phone): the routes go on showing
+   the list, from `location.state.background`, so it keeps its place. Going back
+   closes it, and a link to it opens the page. It holds the post and its replies
+   in one column, and nothing else: its Locations and Cited by are on its page
+   (`routes/postDialogContext.js` tells the post it is in the dialog).
+8. Replies are set in a level for each step down, up to four, with a line down
+   the side. Past that they line up, so a long exchange fits a phone.
+9. **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a
+   touch screen, and `ReplyForm`, with `attachments`, in a dialog) has a
+   button for pictures and, where videos may be posted, one for a GIF or a
+   video: one or the other, with words or without. Pictures use the photo
+   composer's editor (`PhotoFilesEditor`, uploaded for the person replying)
+   and go to `api.replies.addWithPictures`. A GIF or a video is sent as a
+   video is, with a `parentId` (`VideoReplyOnTheWay`, through
+   `useVideoUpload`), shown as being sent and then prepared under the box,
+   and the thread is read again once the reply is made. Nothing about who
+   sees a reply, who may answer it or its language is asked: the thread's.
+10. **A reply shows its pictures** (`PhotoSlides`) **or its video**
+    (`VideoPlayer`, the looping clip for a GIF) under its words. Its words are
+    changed at `/notes/:id` whatever its kind; it is removed under its own
+    kind's address (`api.replies.remove`), which takes its files with it.
 
-- **Who can reply** is the post's own setting, chosen by its author:
-  anyone, nobody, or any of the people who follow them, the people they
-  follow and the people the post mentions. `components/ReplyAccessDialog.jsx`
-  asks it as two questions, anyone or nobody and then who is let in anyway,
-  and `utils/replyAccess.js` turns that into the one value the server keeps.
-  The dialog opens from `ReplyAccessButton` in the composer, beside the
-  audience and the language, and from "Who can reply" in a post's menu
-  (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
-  replies and says it when it is limited.
+11. **Who can reply** is the post's own setting, chosen by its author:
+    anyone, nobody, or any of the people who follow them, the people they
+    follow and the people the post mentions. `components/ReplyAccessDialog.jsx`
+    asks it as two questions, anyone or nobody and then who is let in anyway,
+    and `utils/replyAccess.js` turns that into the one value the server keeps.
+    The dialog opens from `ReplyAccessButton` in the composer, beside the
+    audience and the language, and from "Who can reply" in a post's menu
+    (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
+    replies and says it when it is limited.
 
-- **A post's menu in a feed** has Edit and Delete where the server says the
-  viewer may (`authorized.edit`, `authorized.delete`, sent with each feed
-  item). Edit opens the post's page with its form up (`?edit=1`, which is
-  then taken out of the address). A deleted post leaves every feed on the
-  page, with any repost of it (`reducers/createFeed.js`).
-- **In a feed**, the reply button under a post is a link to the post's page,
-  where its thread is (`containers/feed/components/ReplyButton.jsx`). How
-  many replies it has is in its interactions.
+12. **A post's menu in a feed** has Edit and Delete where the server says the
+    viewer may (`authorized.edit`, `authorized.delete`, sent with each feed
+    item). Edit opens the post's page with its form up (`?edit=1`, which is
+    then taken out of the address). A deleted post leaves every feed on the
+    page, with any repost of it (`reducers/createFeed.js`).
+13. **In a feed**, the reply button under a post is a link to the post's page,
+    where its thread is (`containers/feed/components/ReplyButton.jsx`). How
+    many replies it has is in its interactions.
 
-- **A reply has a page of its own**, at `/notes/:id` like any note. It is
-  drawn as the post, with what it answers above it
-  (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
-  that is under it: the thread is read whole for the post at the top, and
-  `utils/thread.js` picks out the branch. Replying there answers that reply.
-- **Where a reply was said** is shown above it wherever it is away from its
-  thread: the profile the thread is on, a person, a group or any other actor,
-  from `root.owner`. A reply is owned by whoever wrote it, so its own owner
-  does not say. A post shows the profile it is on the same way when that is
-  not its author's own.
-- **A person's profile has four lists**: Posts, Reposts, Replies and
-  Tagged. Tagged is the photos and videos they are in, their tag approved,
-  whoever posted them (roadmap row 103). Only people reply, repost and are
-  tagged, so a group has Posts alone. In the tabs of
-  `containers/actors/Read/Body.jsx`, Posts and Reposts come first, what the
-  person chose to put out; then Notes, Articles, Photos and the rest; then
-  Replies and Tagged. All four are the profile's feed asked
-  for with a different `filter` (`containers/feed/Actor`); they share one
-  place in the store, so each is keyed and read when its tab is opened.
-  Posts are one column beside the profile's details: About, then the
-  profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`:
-  up to ten, as slides swiped through as a post's photos are,
-  `components/PhotoSlides.jsx`, at every width, so no grid is left half
-  full; each opens its post, a stack icon at its top left where that post
-  holds several photos, and See all opens the Photos tab), then
-  administrators and Locations. The others fill the
-  page in the same masonry as the lists of notes, articles and
-  photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
-  is drawn as itself, not inside a card for whoever reposted it.
-  The tab is in the address. Reposts are not among the posts unless the
-  profile's owner asks for that, under Settings › Privacy
-  (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
-  it.
+14. **A reply has a page of its own**, at `/notes/:id` like any note. It is
+    drawn as the post, with what it answers above it
+    (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
+    that is under it: the thread is read whole for the post at the top, and
+    `utils/thread.js` picks out the branch. Replying there answers that reply.
+15. **Where a reply was said** is shown above it wherever it is away from its
+    thread: the profile the thread is on, a person, a group or any other actor,
+    from `root.owner`. A reply is owned by whoever wrote it, so its own owner
+    does not say. A post shows the profile it is on the same way when that is
+    not its author's own.
+16. **A person's profile has four lists**: Posts, Reposts, Replies and
+    Tagged. Tagged is the photos and videos they are in, their tag approved,
+    whoever posted them (roadmap row 103). Only people reply, repost and are
+    tagged, so a group has Posts alone. In the tabs of
+    `containers/actors/Read/Body.jsx`, Posts and Reposts come first, what the
+    person chose to put out; then Notes, Articles, Photos and the rest; then
+    Replies and Tagged. All four are the profile's feed asked
+    for with a different `filter` (`containers/feed/Actor`); they share one
+    place in the store, so each is keyed and read when its tab is opened.
+    Posts are one column beside the profile's details: About, then the
+    profile's latest photos where it has any (`containers/actors/Read/Photos.jsx`:
+    up to ten, as slides swiped through as a post's photos are,
+    `components/PhotoSlides.jsx`, at every width, so no grid is left half
+    full; each opens its post, a stack icon at its top left where that post
+    holds several photos, and See all opens the Photos tab), then
+    administrators and Locations. The others fill the
+    page in the same masonry as the lists of notes, articles and
+    photos (`components/BreakpointMasonry.jsx`). In Reposts the reposted post
+    is drawn as itself, not inside a card for whoever reposted it.
+    The tab is in the address. Reposts are not among the posts unless the
+    profile's owner asks for that, under Settings › Privacy
+    (`containers/actors/Settings/RepostsOnProfile.jsx`), and the server applies
+    it.
 
 ### Home
 
@@ -657,53 +657,53 @@ service is optional, and everything here draws nothing where there is none:
 a request that fails as it does without the service
 (`utils/recommendations.js#isAbsent`) is taken as there being no suggestions.
 
-- **Who to follow** on the home page, above the feed
-  (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
-  reason, **+ Follow** and a ✕ for not interested, and a button on to the
-  rest. As wide as the feeds: when they are read in columns, the three are
-  side by side, each outlined like a card with its ✕ a small circle on the
-  top left corner; otherwise a list. Not drawn while it is read or when there is nobody. The ✕ in
-  its header puts the whole card away for seven days, remembered in the
-  browser (`utils/recommendations.js#hide`); Reset on the Recommendations
-  page brings it back.
-- **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
-  People, Groups, Events and Websites (roadmap row 111), the open tab in
-  the address (`?kind=group`), as cards with the reason inside each, under
-  the name; on a phone the tabs slide, never wrap. The onboarding's
-  Recommended step offers people, groups and websites. An event is drawn with the event's
-  own card and is not followed from here. It is in the left menu as
-  **Recommendations**, where the installation has the service
-  (`useHasSuggestions.js` asks once).
-- **Feeds,** the last tab (`?kind=feed`, `containers/recommendations/SharedFeeds.jsx`),
-  is not chosen by the recommendation service: it is the feeds people have
-  shared that the viewer may open, newest first (feed-service,
-  `GET /feeds/discover`), without the viewer's own, each with the button
-  that adds it to the home page. The weights and preferences beside the
-  tabs do not change it.
-- **What counts** is the viewer's to weigh. The button beside the tabs, and
-  one in settings, opens a dialog of sliders
-  (`containers/recommendations/WeightsDialog.jsx`), one a reason, from nothing,
-  which leaves the reason out, to the most there is; Reset puts them back
-  to the installation's own. Saved, the list is read again. The server
-  names a reason in snake case and the keys of what it sends are put in
-  camel case on the way in: `utils/recommendations.js#weightKey` is the one
-  place that knows.
-  The last slider is not a reason: how lately a person must have been here
-  to be suggested at all, over the steps the server gives, from the last
-  month to any time. A year unless the viewer says.
-- **The reason is always shown.** `utils/recommendations.js#reasonText`
-  puts the first reason into words from what the service sent with it
-  ("Followed by Ana and 2 others"), and counts where it may name nobody.
-- **Not interested** takes a suggestion out at once and tells the service,
-  which does not make it again.
-- **What the viewer is recommended** is chosen on the Recommendations page
-  itself, from the cog beside the weights
-  (`containers/recommendations/PreferencesDialog.jsx`): whether people, groups
-  and events are suggested, whether what they like and post is used, and
-  the suggestions they removed, each to be taken back.
-- **Whether they are suggested to others** is a privacy choice, and is the
-  one switch in Settings › Privacy
-  (`containers/actors/Settings/Suggestions.jsx`).
+1. **Who to follow** on the home page, above the feed
+   (`containers/recommendations/WhoToFollow.jsx`): three people, each with the
+   reason, **+ Follow** and a ✕ for not interested, and a button on to the
+   rest. As wide as the feeds: when they are read in columns, the three are
+   side by side, each outlined like a card with its ✕ a small circle on the
+   top left corner; otherwise a list. Not drawn while it is read or when there is nobody. The ✕ in
+   its header puts the whole card away for seven days, remembered in the
+   browser (`utils/recommendations.js#hide`); Reset on the Recommendations
+   page brings it back.
+2. **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
+   People, Groups, Events and Websites (roadmap row 111), the open tab in
+   the address (`?kind=group`), as cards with the reason inside each, under
+   the name; on a phone the tabs slide, never wrap. The onboarding's
+   Recommended step offers people, groups and websites. An event is drawn with the event's
+   own card and is not followed from here. It is in the left menu as
+   **Recommendations**, where the installation has the service
+   (`useHasSuggestions.js` asks once).
+3. **Feeds,** the last tab (`?kind=feed`, `containers/recommendations/SharedFeeds.jsx`),
+   is not chosen by the recommendation service: it is the feeds people have
+   shared that the viewer may open, newest first (feed-service,
+   `GET /feeds/discover`), without the viewer's own, each with the button
+   that adds it to the home page. The weights and preferences beside the
+   tabs do not change it.
+4. **What counts** is the viewer's to weigh. The button beside the tabs, and
+   one in settings, opens a dialog of sliders
+   (`containers/recommendations/WeightsDialog.jsx`), one a reason, from nothing,
+   which leaves the reason out, to the most there is; Reset puts them back
+   to the installation's own. Saved, the list is read again. The server
+   names a reason in snake case and the keys of what it sends are put in
+   camel case on the way in: `utils/recommendations.js#weightKey` is the one
+   place that knows.
+   The last slider is not a reason: how lately a person must have been here
+   to be suggested at all, over the steps the server gives, from the last
+   month to any time. A year unless the viewer says.
+5. **The reason is always shown.** `utils/recommendations.js#reasonText`
+   puts the first reason into words from what the service sent with it
+   ("Followed by Ana and 2 others"), and counts where it may name nobody.
+6. **Not interested** takes a suggestion out at once and tells the service,
+   which does not make it again.
+7. **What the viewer is recommended** is chosen on the Recommendations page
+   itself, from the cog beside the weights
+   (`containers/recommendations/PreferencesDialog.jsx`): whether people, groups
+   and events are suggested, whether what they like and post is used, and
+   the suggestions they removed, each to be taken back.
+8. **Whether they are suggested to others** is a privacy choice, and is the
+   one switch in Settings › Privacy
+   (`containers/actors/Settings/Suggestions.jsx`).
 
 ### Videos
 
@@ -712,59 +712,59 @@ player with a cog in its top corner that opens the sizes in a menu, the one play
 own, because a video is too big to be sent with the post (the services'
 `docs/videos.md`).
 
-- **Whether there is video at all** is the installation's choice. Where it
-  is off, the server leaves the video feature off every profile, so there
-  is no Video composer and no Videos tab, and nothing here has to hide
-  them. NodeInfo's `videoUploads`, `videoMaxBytes`, `videoMaxSeconds`,
-  `animationMaxBytes` and `animationMaxSeconds` say what is allowed
-  (`utils/videos.js`).
-- **Posting** (`containers/media/Composer/Video`): the file is refused at
-  once if it is not a video or is too large. `useVideoUpload.js` then
-  begins the upload, cuts the file into parts and sends them to storage
-  three at a time, each tried again when it fails, asking for addresses a
-  few at a time. The site has to stay open for that, and says so, with how
-  far it has got and about how many minutes are left
-  (`utils/videos.js#minutesLeft`). While it is sent the screen is kept on
-  where the browser can (Screen Wake Lock), asked for again when the page
-  is back in front, since a phone that sleeps holds the page. When
-  everything is sent the server prepares the video, and the site can be
-  left: the app asks after it and says when it is posted, on whatever page
-  is open, and puts the post at the head of an open feed it belongs in. A
-  video posted from the + button goes on being sent from page to page (see
-  Posting, above); one sent from a reply or the media library stops when
-  its page is left.
-- **Videos on the way** are listed at the head of the home feed: ones still being
-  prepared, and ones that failed in the last day, each with why.
-- **The parts go to storage, not to the API**, through an axios instance
-  of their own (`api/videos.js#sendPart`) that sends no cookies and none
-  of the API's handling.
-- **Playing:** a video is kept at a few sizes. It starts at 720p, at the
-  smallest where the browser says the connection is slow, or at the size
-  chosen last time, which is kept in the browser (`utils/videos.js#pick`).
-  1080p and above are played only when chosen. Changing size carries on
-  from the same moment. Nothing changes size while playing.
-- **A video's files are paths under the API** (`video.files[].url`,
-  `video.poster`), which ask each time whether the viewer may see the post
-  and send the browser on to storage. The player is a plain `<video>`, so
-  the browser sends the session cookie itself.
-- **A GIF or an animated PNG** is posted from the Video composer too,
-  which lists them with the video formats and holds them to their own,
-  smaller limits (`utils/videos.js#problem`). The server makes it a
-  silent clip and marks the post `video.loop`. Where video is off there
-  is no Video composer, so none can be posted; the Photo composer takes
-  JPEG and PNG pictures as before, and keeps an animated PNG still. A
-  picture that does not move is refused by the server as `still`, and the
-  composer says to post it as a photo.
-- **A looping post plays in `components/LoopingClip.jsx`**, which
-  `VideoPlayer` hands it to: muted, on a loop, with no controls or sizes.
-  It plays only while at least half of it is in view and stops when
-  scrolled away, so only the few on the screen move, not every one on a
-  long page. Where the reader asked for less motion
-  (`prefers-reduced-motion`) it waits to be pressed. The whole picture is
-  one button that stops and starts it, and a small "GIF" sits in its
-  corner.
-- A video is a kind of post like the others: `/videos/:id`, the `videos`
-  namespace in the store, and the kind `video` in custom feeds.
+1. **Whether there is video at all** is the installation's choice. Where it
+   is off, the server leaves the video feature off every profile, so there
+   is no Video composer and no Videos tab, and nothing here has to hide
+   them. NodeInfo's `videoUploads`, `videoMaxBytes`, `videoMaxSeconds`,
+   `animationMaxBytes` and `animationMaxSeconds` say what is allowed
+   (`utils/videos.js`).
+2. **Posting** (`containers/media/Composer/Video`): the file is refused at
+   once if it is not a video or is too large. `useVideoUpload.js` then
+   begins the upload, cuts the file into parts and sends them to storage
+   three at a time, each tried again when it fails, asking for addresses a
+   few at a time. The site has to stay open for that, and says so, with how
+   far it has got and about how many minutes are left
+   (`utils/videos.js#minutesLeft`). While it is sent the screen is kept on
+   where the browser can (Screen Wake Lock), asked for again when the page
+   is back in front, since a phone that sleeps holds the page. When
+   everything is sent the server prepares the video, and the site can be
+   left: the app asks after it and says when it is posted, on whatever page
+   is open, and puts the post at the head of an open feed it belongs in. A
+   video posted from the + button goes on being sent from page to page (see
+   Posting, above); one sent from a reply or the media library stops when
+   its page is left.
+3. **Videos on the way** are listed at the head of the home feed: ones still being
+   prepared, and ones that failed in the last day, each with why.
+4. **The parts go to storage, not to the API**, through an axios instance
+   of their own (`api/videos.js#sendPart`) that sends no cookies and none
+   of the API's handling.
+5. **Playing:** a video is kept at a few sizes. It starts at 720p, at the
+   smallest where the browser says the connection is slow, or at the size
+   chosen last time, which is kept in the browser (`utils/videos.js#pick`).
+   1080p and above are played only when chosen. Changing size carries on
+   from the same moment. Nothing changes size while playing.
+6. **A video's files are paths under the API** (`video.files[].url`,
+   `video.poster`), which ask each time whether the viewer may see the post
+   and send the browser on to storage. The player is a plain `<video>`, so
+   the browser sends the session cookie itself.
+7. **A GIF or an animated PNG** is posted from the Video composer too,
+   which lists them with the video formats and holds them to their own,
+   smaller limits (`utils/videos.js#problem`). The server makes it a
+   silent clip and marks the post `video.loop`. Where video is off there
+   is no Video composer, so none can be posted; the Photo composer takes
+   JPEG and PNG pictures as before, and keeps an animated PNG still. A
+   picture that does not move is refused by the server as `still`, and the
+   composer says to post it as a photo.
+8. **A looping post plays in `components/LoopingClip.jsx`**, which
+   `VideoPlayer` hands it to: muted, on a loop, with no controls or sizes.
+   It plays only while at least half of it is in view and stops when
+   scrolled away, so only the few on the screen move, not every one on a
+   long page. Where the reader asked for less motion
+   (`prefers-reduced-motion`) it waits to be pressed. The whole picture is
+   one button that stops and starts it, and a small "GIF" sits in its
+   corner.
+9. A video is a kind of post like the others: `/videos/:id`, the `videos`
+   namespace in the store, and the kind `video` in custom feeds.
 
 ### Downloading
 
@@ -775,18 +775,18 @@ and it is off until they say otherwise. It is not on a post's card in a
 feed or a list: a card is narrow, and one more button does not fit on a
 phone.
 
-- **When posting**, the photo and video composers have a download button
-  among the post's options (`components/DownloadOptionButton.jsx`), which
-  starts on what the profile being posted on says.
-- **Afterwards**, "Allow download" and "Do not allow download" are in the
-  post's menu on its own page, for whoever may edit it
-  (`containers/controls/medium/Download.jsx`).
-- **The default** is a switch under Settings › Permissions, for a person
-  and for a group, not for an event
-  (`containers/actors/Settings/DownloadDefault.jsx`).
-- **The download** sends the browser to the API's address for the file,
-  which answers with something to save, so the page stays where it is. A
-  post with several images offers each in a short menu.
+1. **When posting**, the photo and video composers have a download button
+   among the post's options (`components/DownloadOptionButton.jsx`), which
+   starts on what the profile being posted on says.
+2. **Afterwards**, "Allow download" and "Do not allow download" are in the
+   post's menu on its own page, for whoever may edit it
+   (`containers/controls/medium/Download.jsx`).
+3. **The default** is a switch under Settings › Permissions, for a person
+   and for a group, not for an event
+   (`containers/actors/Settings/DownloadDefault.jsx`).
+4. **The download** sends the browser to the API's address for the file,
+   which answers with something to save, so the page stays where it is. A
+   post with several images offers each in a short menu.
 
 ### Download your data
 
@@ -796,19 +796,19 @@ settings: a copy of everything they put here, as one file, from the
 installation's export service (`/exports`; the services'
 `docs/data-export.md`).
 
-- **Asking** opens the step-up dialog (`containers/auth/StepUp`) when the
-  server says a fresh proof is needed, and asks again once it is given.
-- **While it is made**, the card asks after it every five seconds and can
-  be left; it can be cancelled.
-- **When it is ready**, the card says how big it is and until when it is
-  kept. Download asks the server for the file's address at the press: the
-  address is good for a few minutes, so one read with the page may have
-  run out.
-- **One at a time, and one a week** unless the installation says
-  otherwise. The card says when the next can be asked for
-  (`utils/exports.js#canAsk`).
-- **Where there is no export service**, the card says the download is not
-  available here (`utils/exports.js#isAbsent`).
+1. **Asking** opens the step-up dialog (`containers/auth/StepUp`) when the
+   server says a fresh proof is needed, and asks again once it is given.
+2. **While it is made**, the card asks after it every five seconds and can
+   be left; it can be cancelled.
+3. **When it is ready**, the card says how big it is and until when it is
+   kept. Download asks the server for the file's address at the press: the
+   address is good for a few minutes, so one read with the page may have
+   run out.
+4. **One at a time, and one a week** unless the installation says
+   otherwise. The card says when the next can be asked for
+   (`utils/exports.js#canAsk`).
+5. **Where there is no export service**, the card says the download is not
+   available here (`utils/exports.js#isAbsent`).
 
 ### People in a photo or a video
 
@@ -837,36 +837,36 @@ extended composer's small buttons, **Add location**, tag a new post with up to f
 row 82, part 3). Not replies, which belong to their thread, and not a video,
 whose post is made only once its upload is ready.
 
-- **Choosing:** a popover with a search as one types (on a phone, from
-  the short composer's second step, a page of its own with the whole
-  screen, and back), the arrow keys and
-  Enter, and a **Near me** chip that asks the browser for one position only
-  when it is tapped, to put the nearest first; it is used for that search and
-  kept nowhere.
-- **A new one:** the last line, **Add "…" as a new location**, for those who
-  may add one (`LOCATIONS_FROM`), opens the Add locations form with the name
-  filled in, and what it makes is chosen.
-- **Shown** as chips, under the Location row of the short composer and under the text
-  in the extended composer, removed with their ✕.
-- **From a photo's position:** when a photo with a GPS position is picked
-  for a post, the browser reads it (`utils/photoPosition.js`, with
-  `exifr`, loaded only then, reading only the start of the file), and the
-  popover offers **This photo has a location. Suggest locations near it?**
-  Only when that is tapped is the position used, once, as the point of that
-  search, and as the pin's start if a new location is added; it is never
-  shown, sent elsewhere or kept, and the file uploaded is the one chosen,
-  stripped on the server as always (roadmap row 82, part 5).
-- **Kept** with the draft in this browser, one list for each profile, shared
-  by the short box and the extended composer, so they come along when one
-  becomes the other.
-- **On posting** they are sent with the post (`location_ids`), and the
-  server ties them as it makes it, before it goes to other servers, which it
-  then goes with: the first as its `location`, all as `Place`s in its `tag`
-  (the user, 2026-10-19: choosing them is the author's consent, for that
-  post; part 3b). Where the post will go out, a line under the chips says
-  so. A draft kept on the server is tied to them before it is published.
-  A form sends a list as the same key once for each item
-  (`utils/api.js#constructFormData`).
+1. **Choosing:** a popover with a search as one types (on a phone, from
+   the short composer's second step, a page of its own with the whole
+   screen, and back), the arrow keys and
+   Enter, and a **Near me** chip that asks the browser for one position only
+   when it is tapped, to put the nearest first; it is used for that search and
+   kept nowhere.
+2. **A new one:** the last line, **Add "…" as a new location**, for those who
+   may add one (`LOCATIONS_FROM`), opens the Add locations form with the name
+   filled in, and what it makes is chosen.
+3. **Shown** as chips, under the Location row of the short composer and under the text
+   in the extended composer, removed with their ✕.
+4. **From a photo's position:** when a photo with a GPS position is picked
+   for a post, the browser reads it (`utils/photoPosition.js`, with
+   `exifr`, loaded only then, reading only the start of the file), and the
+   popover offers **This photo has a location. Suggest locations near it?**
+   Only when that is tapped is the position used, once, as the point of that
+   search, and as the pin's start if a new location is added; it is never
+   shown, sent elsewhere or kept, and the file uploaded is the one chosen,
+   stripped on the server as always (roadmap row 82, part 5).
+5. **Kept** with the draft in this browser, one list for each profile, shared
+   by the short box and the extended composer, so they come along when one
+   becomes the other.
+6. **On posting** they are sent with the post (`location_ids`), and the
+   server ties them as it makes it, before it goes to other servers, which it
+   then goes with: the first as its `location`, all as `Place`s in its `tag`
+   (the user, 2026-10-19: choosing them is the author's consent, for that
+   post; part 3b). Where the post will go out, a line under the chips says
+   so. A draft kept on the server is tied to them before it is published.
+   A form sends a list as the same key once for each item
+   (`utils/api.js#constructFormData`).
 
 ### Link previews
 
@@ -876,28 +876,28 @@ card comes from the installation's link preview service (`/link-previews`;
 the services' `docs/link-previews.md`), which is optional: with none there
 is simply no card.
 
-- **While a note is written**, `containers/media/Composer/useLinkPreview.js`
-  finds the first link once the writer has paused for half a second, or
-  at once when it was pasted, and asks for its card. The ✕ on the card posts the note without it. A link
-  with nothing to show, or whose card was taken off, is not asked for
-  again.
-- **While a note is edited** on its own page the same hook is used, given
-  the card the note already has, which it shows without asking again. A
-  different link gets its own card, and the ✕ saves the note without one
-  (`link_preview_remove`).
-- **A reply is a note** and has the card the same way: the reply box
-  (`containers/replies/ReplyForm.jsx`) uses the same hook, for a new reply
-  and for one being changed, and a reply shows its card under its text.
-- **The note is sent with the link only** (`link_preview_url`). What the
-  card says is what the server read off the page, never what the browser
-  sends.
-- **On a post**, the card is `linkPreview` on the node, drawn under the
-  text on the feed, on cards and on the post's own page. Its picture is the
-  installation's own copy (`utils/linkPreviews.js#imageOf`), so reading a
-  note asks nothing of the other site.
-- **A link the player plays** (YouTube, Vimeo and the others in
-  `components/Player.jsx`) keeps the player and has no card
-  (`utils/linkPreviews.js#isShown`).
+1. **While a note is written**, `containers/media/Composer/useLinkPreview.js`
+   finds the first link once the writer has paused for half a second, or
+   at once when it was pasted, and asks for its card. The ✕ on the card posts the note without it. A link
+   with nothing to show, or whose card was taken off, is not asked for
+   again.
+2. **While a note is edited** on its own page the same hook is used, given
+   the card the note already has, which it shows without asking again. A
+   different link gets its own card, and the ✕ saves the note without one
+   (`link_preview_remove`).
+3. **A reply is a note** and has the card the same way: the reply box
+   (`containers/replies/ReplyForm.jsx`) uses the same hook, for a new reply
+   and for one being changed, and a reply shows its card under its text.
+4. **The note is sent with the link only** (`link_preview_url`). What the
+   card says is what the server read off the page, never what the browser
+   sends.
+5. **On a post**, the card is `linkPreview` on the node, drawn under the
+   text on the feed, on cards and on the post's own page. Its picture is the
+   installation's own copy (`utils/linkPreviews.js#imageOf`), so reading a
+   note asks nothing of the other site.
+6. **A link the player plays** (YouTube, Vimeo and the others in
+   `components/Player.jsx`) keeps the player and has no card
+   (`utils/linkPreviews.js#isShown`).
 
 ### Titles and tags
 
@@ -931,18 +931,18 @@ and, where the browser has one, the device's own share sheet ("More
 options"), which has every app the person uses. Mastodon asks for the
 person's server the first time and keeps it in the browser.
 
-- **Anything on a page opens it** through `utils/share.js#open`:
-  `ShareAction`, `ShareButton` and `ShareMenuItem` in
-  `containers/controls/Share.jsx`. A menu can close behind its item, since
-  the dialog is not the menu's.
-- **Where it is:** under a post, in the row with like, reply and repost, in
-  a feed, in a list and on its page; a profile's menu; a shared custom
-  feed.
-- **Only what a visitor could open is sent beyond the site.** Something that
-  is not public, and anything on a members-only site, is offered to copy and
-  nothing else, with a note saying who can open the link.
-- **Nothing is counted and nothing is sent to the server.** The links to
-  other networks are plain addresses, and no script of theirs is loaded.
+1. **Anything on a page opens it** through `utils/share.js#open`:
+   `ShareAction`, `ShareButton` and `ShareMenuItem` in
+   `containers/controls/Share.jsx`. A menu can close behind its item, since
+   the dialog is not the menu's.
+2. **Where it is:** under a post, in the row with like, reply and repost, in
+   a feed, in a list and on its page; a profile's menu; a shared custom
+   feed.
+3. **Only what a visitor could open is sent beyond the site.** Something that
+   is not public, and anything on a members-only site, is offered to copy and
+   nothing else, with a note saying who can open the link.
+4. **Nothing is counted and nothing is sent to the server.** The links to
+   other networks are plain addresses, and no script of theirs is loaded.
 
 ### The width of a page
 
@@ -1035,62 +1035,62 @@ to `/notifications`, the list of them. What the services tell, and to
 whom, is in anahita-services' `docs/notifications.md`; none is ever
 emailed.
 
-- **The bell asks; there are no sockets** (`containers/notifications/useUnreadCount.js`).
-  It asks at once when the app opens, when the tab is looked at again,
-  when the window comes into focus and when the connection comes back;
-  then after 15 seconds, 30, 1 minute, 2, and every 5 minutes after that
-  (`REACT_APP_NOTIFICATIONS_CHECK_INTERVAL`), for as long as the tab is
-  looked at, and never from a tab that is not. Something new, or the
-  viewer doing anything that tends to bring answers (a post, a reply, a
-  follow: any request but a `GET`, theirs or for notifications), begins it
-  again at 15 seconds. Each wait is a fifth longer or shorter at random,
-  and a failure keeps the last count. All of it is `utils/heartbeat.js`
-  with `holdLast` and `spread`.
-- **One tab asks for all of them.** The tab being looked at takes a Web
-  Lock (`anahita-notifications-check`) and tells the others the count over
-  a `BroadcastChannel` (`anahita-notifications`); when it is hidden or
-  closed, the next one looked at takes over. Where a browser has neither,
-  each tab asks for itself.
-- **The count is in the store** (`reducers/notificationsUnread.js`), with
-  when the newest was told (`newestAt`, from `GET /notifications/unread-count`).
-  Marking one read or deleting an unread one lowers it at once. The list,
-  when open, loads again from its start when something newer comes.
-- **The bell's menu** (`containers/notifications/Menu.jsx`), on a desktop:
-  the latest eight as on the page, grouped and with their actions, Mark all
-  read and See all. Following a link in it reads that one and closes it. On
-  a phone the bell goes to the page.
-- **What one is told about** is a person's own Notifications section in
-  settings (`actors/Settings/NotificationChoices.jsx`): eight kinds of
-  thing, on or off, each saved as it is switched.
-- **The list** is `containers/notifications/Browse/`. Each kind has its
-  words in `notifications` (`notifications:replyAdd` for `reply_add`), and
-  `constants/notifications.js` lists the kinds the services send, which a
-  test keeps in step with the words; a kind the app does not know says
-  `notifications:other`. Its links stay in the app, unread is said in
-  words to a screen reader, and the next page begins after what is on the
-  page, so deleting one skips nothing.
-- **Read when opened:** following any of a notification's links marks it
-  read, quietly (`Browse/ListItem.jsx`, `onClickCapture`); seeing it in the
-  list does not. A profile with no name yet is named by its handle.
-- **Several as one:** likes of one post, reposts of one post and follows of
-  one profile come as one line (`ids`, `others`, `others_count`), "dax and 1
-  other liked your post" (`notifications:voteupOthers`, in each language's
-  plurals), with their pictures overlapping. Reading, opening or deleting
-  it does so to all of them, and the bell asks again how many are unread;
-  the next page begins after every row on the page. Marking one read keeps
-  its line whole (`reducers/notifications.js`).
-- **Actions** under a notification (`Browse/Actions.jsx`), as the server
-  says they are still to be done (`actions`): Decline and Accept a request
-  to follow, or a request to be tagged in a photo or a video (`answer_tag`,
-  roadmap row 103), **+ Follow** whoever followed, and Reply, which opens the reply
-  form under it and answers the reply itself, or the post. Using one reads
-  the notification.
-- **Mark all read**, in the page's header (the icon alone on a phone),
-  marks every one read (`PATCH /notifications/read-all`), the list and the
-  bell with them.
-- **Get notifications** in a post's menu subscribes to its replies
-  (`containers/controls/medium/NotificationSub.jsx`), and Stop
-  notifications ends it.
+1. **The bell asks; there are no sockets** (`containers/notifications/useUnreadCount.js`).
+   It asks at once when the app opens, when the tab is looked at again,
+   when the window comes into focus and when the connection comes back;
+   then after 15 seconds, 30, 1 minute, 2, and every 5 minutes after that
+   (`REACT_APP_NOTIFICATIONS_CHECK_INTERVAL`), for as long as the tab is
+   looked at, and never from a tab that is not. Something new, or the
+   viewer doing anything that tends to bring answers (a post, a reply, a
+   follow: any request but a `GET`, theirs or for notifications), begins it
+   again at 15 seconds. Each wait is a fifth longer or shorter at random,
+   and a failure keeps the last count. All of it is `utils/heartbeat.js`
+   with `holdLast` and `spread`.
+2. **One tab asks for all of them.** The tab being looked at takes a Web
+   Lock (`anahita-notifications-check`) and tells the others the count over
+   a `BroadcastChannel` (`anahita-notifications`); when it is hidden or
+   closed, the next one looked at takes over. Where a browser has neither,
+   each tab asks for itself.
+3. **The count is in the store** (`reducers/notificationsUnread.js`), with
+   when the newest was told (`newestAt`, from `GET /notifications/unread-count`).
+   Marking one read or deleting an unread one lowers it at once. The list,
+   when open, loads again from its start when something newer comes.
+4. **The bell's menu** (`containers/notifications/Menu.jsx`), on a desktop:
+   the latest eight as on the page, grouped and with their actions, Mark all
+   read and See all. Following a link in it reads that one and closes it. On
+   a phone the bell goes to the page.
+5. **What one is told about** is a person's own Notifications section in
+   settings (`actors/Settings/NotificationChoices.jsx`): eight kinds of
+   thing, on or off, each saved as it is switched.
+6. **The list** is `containers/notifications/Browse/`. Each kind has its
+   words in `notifications` (`notifications:replyAdd` for `reply_add`), and
+   `constants/notifications.js` lists the kinds the services send, which a
+   test keeps in step with the words; a kind the app does not know says
+   `notifications:other`. Its links stay in the app, unread is said in
+   words to a screen reader, and the next page begins after what is on the
+   page, so deleting one skips nothing.
+7. **Read when opened:** following any of a notification's links marks it
+   read, quietly (`Browse/ListItem.jsx`, `onClickCapture`); seeing it in the
+   list does not. A profile with no name yet is named by its handle.
+8. **Several as one:** likes of one post, reposts of one post and follows of
+   one profile come as one line (`ids`, `others`, `others_count`), "dax and 1
+   other liked your post" (`notifications:voteupOthers`, in each language's
+   plurals), with their pictures overlapping. Reading, opening or deleting
+   it does so to all of them, and the bell asks again how many are unread;
+   the next page begins after every row on the page. Marking one read keeps
+   its line whole (`reducers/notifications.js`).
+9. **Actions** under a notification (`Browse/Actions.jsx`), as the server
+   says they are still to be done (`actions`): Decline and Accept a request
+   to follow, or a request to be tagged in a photo or a video (`answer_tag`,
+   roadmap row 103), **+ Follow** whoever followed, and Reply, which opens the reply
+   form under it and answers the reply itself, or the post. Using one reads
+   the notification.
+10. **Mark all read**, in the page's header (the icon alone on a phone),
+    marks every one read (`PATCH /notifications/read-all`), the list and the
+    bell with them.
+11. **Get notifications** in a post's menu subscribes to its replies
+    (`containers/controls/medium/NotificationSub.jsx`), and Stop
+    notifications ends it.
 
 ### Custom feeds
 
@@ -1099,95 +1099,95 @@ are about, what to leave out. The server's side is in the services'
 `docs/feeds.md`. The words a person reads are always "custom feed", never
 "algorithm".
 
-- **Home tabs.** The first tab is Following, the feed there always was
-  (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
-  in the viewer's order. The open tab is in the address as `?feed=<id>`.
-  The way to `/feeds` is "Feeds" in the left menu; the tabs have no button
-  of their own for it, which looked like a setting (the user, 2026-10-19).
-- **Back to the top.** Once somebody has scrolled about a screen down Home
-  or a profile, an arrow fades in at the bottom left, across from the +
-  button, and takes them back up (`components/BackToTop.jsx`).
-- **One column or several.** On a wide screen a pair of buttons, beside the
-  vertical tabs on Home and in the header on a profile, lays posts out one
-  under another or in columns. The choice is kept in the browser
-  (`home.feedView`), and is the same on both. On a narrow screen there is one
-  column, and no buttons.
-- **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
-  posts and reposts, with their menus and buttons, for Following and for
-  custom feeds alike. `containers/feed/Custom` is the list for a custom feed,
-  given a saved `feed` or an unsaved `definition`.
-- **Paging.** A custom feed is paged by a cursor the server hands back, and
-  the store's lists are kept by how far down they are. `api/customFeeds.js`
-  keeps each list's cursor and reports a page to the store in the store's
-  terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
-- **Under Home in the left menu** are the feeds on the viewer's home page, in
-  their order, each opening Home on that feed. The list page is an entry of
-  its own below them, **Feeds**, like Saved. A feed is made from the + on the Feeds page. A feed is put on its maker's home page when it is made, so it
-  appears there at once. The menu and the tabs read the same list
-  (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
-  changed, deleted or moved: `api/customFeeds.js` tells whoever asked
-  (`onChange`).
-- **The list page** (`containers/feeds/Manage.jsx`, reached from "Feeds" in
-  the menu): the viewer's
-  feeds and the ones of other people's they keep.
-- **Rows of one height.** A feed's row in the list is its name, who can
-  see it and when it was made, and one line cut short: what it is for, or
-  what it shows when it does not say. Pressing the name opens the feed in
-  full in a dialog (`containers/feeds/DetailsDialog.jsx`): its description
-  and every setting it has, one line each, with a button on to the feed.
-- **Finding shared feeds:** the site's search, and the Feeds tab of
-  Recommendations (see *Suggestions*). In search a feed that matches is a
-  result like any other, among the profiles and posts under **All**, and by
-  itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node
-  with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
-  (`components/CustomFeedCard.jsx`) in the same columns, with the button
-  that adds it to the home page. Feeds kept to their owners are never found.
-- **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
-  new feed at `/feeds/new` (`Add.jsx`) and for changing one at
-  `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
-  the + in its header, and the pencil on a feed's card. Hashtags and keywords
-  are typed as chips (`components/WordsField.jsx`); profiles and places are
-  searched for and picked (`components/NodesField.jsx`). People on other
-  servers are found there too, through the site's search, if anybody here
-  has followed or looked them up; the lists of people and groups keep to
-  this site's own. "Posted on" (people, groups, events; people meaning
-  people here and elsewhere) is not offered when profiles named by hand
-  are the feed's only source, since it could only hide some of their
-  posts, and is not sent then. Under the fields is
-  what the feed shows, in a sentence. There is no preview: saving opens the
-  feed, Home on its tab when it is kept there. Everything done to a feed is
-  done from the list page. Home has only the way to it.
-- **A feed's icon** is one of sixteen, chosen in the editor from a list that
-  names each, on the same line as the feed's name, and kept by name
-  (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
-  draws it: in the menu under Home, on the tabs, in the list and on the
-  feed's page.
-- **Deleting a feed** is offered to its owner in two places, each asking
-  first: its card in the list and its own page. Not in the editor, which is
-  for changing a feed.
-- **Ten feeds** is the most a person owns, the number the home page holds.
-- **The sentence** is `utils/customFeeds.js#summary`, from the definition
-  alone. It is on the editor, on a feed's page and in the list, so nothing
-  about what a feed shows is hidden. The same file repeats the server's
-  limits so the editor can say what would be refused before it is sent. The
-  server decides.
-- **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
-  its owner edit and delete. Copying makes a feed of the viewer's own, seen
-  by them alone, and opens it in the editor.
-- **Share** is on a shared feed's card (in search and in Recommendations ›
-  Feeds), in the list of feeds and on the feed's page.
-  See [Sharing](#sharing). Not on a feed kept to its owner.
-- **Following a hashtag or a place** (`containers/feeds/FollowHashtag.jsx`
-  and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
-  `FollowFeed.jsx`) makes a feed of that one hashtag or place, the viewer's
-  alone, and puts it on the home page, or puts there the one the viewer
-  already has. The feed is given the hashtag's or the place's own picture.
-  It goes into no other feed. A feed of a place shows only
-  what the viewer could see anyway, and who follows a place is kept
-  nowhere.
-- **Naming in requests.** The definition's keys are snake case on the server
-  (`hashtags_any`) and camel case here (`hashtagsAny`), converted both ways
-  by the interceptors like every other body.
+1. **Home tabs.** The first tab is Following, the feed there always was
+   (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
+   in the viewer's order. The open tab is in the address as `?feed=<id>`.
+   The way to `/feeds` is "Feeds" in the left menu; the tabs have no button
+   of their own for it, which looked like a setting (the user, 2026-10-19).
+2. **Back to the top.** Once somebody has scrolled about a screen down Home
+   or a profile, an arrow fades in at the bottom left, across from the +
+   button, and takes them back up (`components/BackToTop.jsx`).
+3. **One column or several.** On a wide screen a pair of buttons, beside the
+   vertical tabs on Home and in the header on a profile, lays posts out one
+   under another or in columns. The choice is kept in the browser
+   (`home.feedView`), and is the same on both. On a narrow screen there is one
+   column, and no buttons.
+4. **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
+   posts and reposts, with their menus and buttons, for Following and for
+   custom feeds alike. `containers/feed/Custom` is the list for a custom feed,
+   given a saved `feed` or an unsaved `definition`.
+5. **Paging.** A custom feed is paged by a cursor the server hands back, and
+   the store's lists are kept by how far down they are. `api/customFeeds.js`
+   keeps each list's cursor and reports a page to the store in the store's
+   terms (`feed_custom`, beside `feed_leaders` and `feed_actor`).
+6. **Under Home in the left menu** are the feeds on the viewer's home page, in
+   their order, each opening Home on that feed. The list page is an entry of
+   its own below them, **Feeds**, like Saved. A feed is made from the + on the Feeds page. A feed is put on its maker's home page when it is made, so it
+   appears there at once. The menu and the tabs read the same list
+   (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
+   changed, deleted or moved: `api/customFeeds.js` tells whoever asked
+   (`onChange`).
+7. **The list page** (`containers/feeds/Manage.jsx`, reached from "Feeds" in
+   the menu): the viewer's
+   feeds and the ones of other people's they keep.
+8. **Rows of one height.** A feed's row in the list is its name, who can
+   see it and when it was made, and one line cut short: what it is for, or
+   what it shows when it does not say. Pressing the name opens the feed in
+   full in a dialog (`containers/feeds/DetailsDialog.jsx`): its description
+   and every setting it has, one line each, with a button on to the feed.
+9. **Finding shared feeds:** the site's search, and the Feeds tab of
+   Recommendations (see *Suggestions*). In search a feed that matches is a
+   result like any other, among the profiles and posts under **All**, and by
+   itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node
+   with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
+   (`components/CustomFeedCard.jsx`) in the same columns, with the button
+   that adds it to the home page. Feeds kept to their owners are never found.
+10. **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
+    new feed at `/feeds/new` (`Add.jsx`) and for changing one at
+    `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
+    the + in its header, and the pencil on a feed's card. Hashtags and keywords
+    are typed as chips (`components/WordsField.jsx`); profiles and places are
+    searched for and picked (`components/NodesField.jsx`). People on other
+    servers are found there too, through the site's search, if anybody here
+    has followed or looked them up; the lists of people and groups keep to
+    this site's own. "Posted on" (people, groups, events; people meaning
+    people here and elsewhere) is not offered when profiles named by hand
+    are the feed's only source, since it could only hide some of their
+    posts, and is not sent then. Under the fields is
+    what the feed shows, in a sentence. There is no preview: saving opens the
+    feed, Home on its tab when it is kept there. Everything done to a feed is
+    done from the list page. Home has only the way to it.
+11. **A feed's icon** is one of sixteen, chosen in the editor from a list that
+    names each, on the same line as the feed's name, and kept by name
+    (`icon` on the feed; the server's `feeds.Icons`). `components/CustomFeedIcon`
+    draws it: in the menu under Home, on the tabs, in the list and on the
+    feed's page.
+12. **Deleting a feed** is offered to its owner in two places, each asking
+    first: its card in the list and its own page. Not in the editor, which is
+    for changing a feed.
+13. **Ten feeds** is the most a person owns, the number the home page holds.
+14. **The sentence** is `utils/customFeeds.js#summary`, from the definition
+    alone. It is on the editor, on a feed's page and in the list, so nothing
+    about what a feed shows is hidden. The same file repeats the server's
+    limits so the editor can say what would be refused before it is sent. The
+    server decides.
+15. **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
+    its owner edit and delete. Copying makes a feed of the viewer's own, seen
+    by them alone, and opens it in the editor.
+16. **Share** is on a shared feed's card (in search and in Recommendations ›
+    Feeds), in the list of feeds and on the feed's page.
+    See [Sharing](#sharing). Not on a feed kept to its owner.
+17. **Following a hashtag or a place** (`containers/feeds/FollowHashtag.jsx`
+    and `FollowLocation.jsx`, on the hashtag's and the place's page; both are
+    `FollowFeed.jsx`) makes a feed of that one hashtag or place, the viewer's
+    alone, and puts it on the home page, or puts there the one the viewer
+    already has. The feed is given the hashtag's or the place's own picture.
+    It goes into no other feed. A feed of a place shows only
+    what the viewer could see anyway, and who follows a place is kept
+    nowhere.
+18. **Naming in requests.** The definition's keys are snake case on the server
+    (`hashtags_any`) and camel case here (`hashtagsAny`), converted both ways
+    by the interceptors like every other body.
 
 ### Pinned posts
 
@@ -1237,27 +1237,27 @@ There are no views in it, and nothing anywhere counts them.
 `actors/Read/ActorHeader.jsx` lays it out the same way on a phone and a
 desktop, left aligned:
 
-- **The cover,** when there is one, as a wide band three times as wide as
-  it is tall and no taller than 320px (`components/CoverForm.jsx`). With
-  none, whoever may add one sees an empty band of the same size, in the
-  page's colour, with "Add a cover photo" (`band` on `CoverForm`); anybody
-  else sees no band at all. Cards of profiles use the same band. The cover's
-  and the profile photo's menus have **Upload** and Delete.
-- **The profile photo** over the cover's lower edge, or at the top of the
-  card when there is no band, smaller on a phone. Since the empty band is
-  there whenever a cover may be added, putting one up or taking it down
-  moves nothing; **beside it, the buttons**: Follow
-  (filled while not following, outlined once following), the others the
-  viewer may use, and the ⋮ menu. They were a row of their own under
-  everything, which left a band of white.
-- **The name, with the pronouns after it** in a lighter grey, "Sarah Noble
-  (they/them)".
-- **The handle,** and "· Follows you" after it for somebody who follows
-  the viewer.
-- **One line of counts,** "22 followers · 16 following"
-  (`actors/Read/SocialgraphMeta.jsx`), each opening the dialog below on
-  that list. Following is counted only for this site's people: whom
-  somebody on another server follows is not known here.
+1. **The cover,** when there is one, as a wide band three times as wide as
+   it is tall and no taller than 320px (`components/CoverForm.jsx`). With
+   none, whoever may add one sees an empty band of the same size, in the
+   page's colour, with "Add a cover photo" (`band` on `CoverForm`); anybody
+   else sees no band at all. Cards of profiles use the same band. The cover's
+   and the profile photo's menus have **Upload** and Delete.
+2. **The profile photo** over the cover's lower edge, or at the top of the
+   card when there is no band, smaller on a phone. Since the empty band is
+   there whenever a cover may be added, putting one up or taking it down
+   moves nothing; **beside it, the buttons**: Follow
+   (filled while not following, outlined once following), the others the
+   viewer may use, and the ⋮ menu. They were a row of their own under
+   everything, which left a band of white.
+3. **The name, with the pronouns after it** in a lighter grey, "Sarah Noble
+   (they/them)".
+4. **The handle,** and "· Follows you" after it for somebody who follows
+   the viewer.
+5. **One line of counts,** "22 followers · 16 following"
+   (`actors/Read/SocialgraphMeta.jsx`), each opening the dialog below on
+   that list. Following is counted only for this site's people: whom
+   somebody on another server follows is not known here.
 
 What the profile says of itself is in its About card, not here.
 
@@ -1504,210 +1504,210 @@ server's side is `activitypub-service`, described in the services'
 `docs/federation.md`. It is optional: where there is none, everything here
 draws nothing (`utils/federation.js#isAbsent`).
 
-- **The composer says when a note will stay here.** Somebody on the
-  fediverse, writing a note on their own profile for fewer than everybody,
-  is told above the Post button that it will not be shared with the
-  fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
-  date by the switch in settings). Nothing is said to anybody else, or
-  about any other kind of post: only public notes go out.
-- **A thread written in one go** (roadmap row 101): under a note's words,
-  "Add to thread" opens a box for the next note, up to ten in all
-  (`Composer/ThreadParts.jsx`, `THREAD_PARTS_MAX`). Post sends them together
-  (`api.replies.addThread`, `POST /notes/:owner_id/thread`): the first takes
-  the post's audience, who may reply and quote, its locations and its card;
-  the rest are replies to the one before. Only for words alone: adding
-  photos or a video hides it. The notes after the first are not kept as a
-  draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
-  `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
-  are shown as any replies are, each under the one before.
-- **What other networks will show** of a public post on the viewer's own
-  profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
-  past 300 characters, when their Bluesky account is connected, that
-  Bluesky shows the first 300 with a link to the rest; with more than four
-  photos, that Mastodon, Bluesky or both show the first four with a link to
-  all of them. The Bluesky line's room is kept while the post goes there, so
-  nothing moves as the words pass 300. The numbers are `BLUESKY_POST_MAX` and
-  `PICTURES_SHOWN_MAX` in `constants/limits.js`; the count is of what is
-  typed, Markdown's marks included, a little more than Bluesky is sent.
-- **Answering something from another server** is offered where the server
-  says the viewer may (`authorized.comment`), as for any post: the reply is
-  the viewer's own note and is sent to whoever it answers when the viewer
-  is on the fediverse. When they are not, the reply form says that it will
-  be read here and not there (`useReplyStaysHere`, in
-  `media/Composer/useOnFediverse.js`). Liking and reposting something from
-  elsewhere work the same way, where the server allows them
-  (`authorized.like`), and reach its author's server.
-- **A hashtag at `/tags/<name>`** leads to `/hashtags/<name>`
-  (`routes/index.js#HashtagMoved`). It is the address other servers are
-  given for a hashtag's page, where Mastodon has its own, because some of
-  the apps people read with know a hashtag's link by that shape.
-- **A profile from another server has three lists,** what was posted,
-  Notes and Photos (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`): a
-  post of theirs that came with pictures is a photo post here. Articles
-  and videos are not taken in from other servers, so those lists would be
-  empty for ever and say the person has none; each comes back when it is
-  taken in. Their replies and reposts are in what was posted, not in lists
-  of their own. Its box of locations is the site's administrators' to fill,
-  as it is for any profile here, to say where an organisation on another
-  server is (`locations/Gadget`, `hideWhenEmpty`); nobody else sees it
-  while it is empty.
-- **What the site refuses** is in Site settings, under Fediverse
-  (`settings/Fediverse.jsx`), in two tabs. **Servers**
-  (`settings/FediverseServers.jsx`), for super administrators as every tab
-  there is: the list with why, and a button to stop refusing one. The list is
-  read fifty at a time as it is scrolled and searched on the server, by
-  name or reason, since an installation that takes up somebody else's list
-  has thousands; a server is refused from a dialog, which says that
-  refusing it does not remove what already came from it. **Accounts**
-  (`settings/FediverseAccounts.jsx`), for administrators too: the accounts
-  refused one by one, on the fediverse or Bluesky,
-  newest first, with the network and why, a search, and a button to let
-  one back; one is refused by a handle or an address from a dialog, which
-  says that refusing it removes what is here of it. **Profiles**
-  (`settings/FediverseProfiles.jsx`), for administrators too: who from other
-  networks is kept here, newest first, with a search, and each can be refused.
-  Only administrators see this: these people did not ask to be listed here.
+1. **The composer says when a note will stay here.** Somebody on the
+   fediverse, writing a note on their own profile for fewer than everybody,
+   is told above the Post button that it will not be shared with the
+   fediverse (`media/Composer/useOnFediverse.js`, asked once and kept up to
+   date by the switch in settings). Nothing is said to anybody else, or
+   about any other kind of post: only public notes go out.
+2. **A thread written in one go** (roadmap row 101): under a note's words,
+   "Add to thread" opens a box for the next note, up to ten in all
+   (`Composer/ThreadParts.jsx`, `THREAD_PARTS_MAX`). Post sends them together
+   (`api.replies.addThread`, `POST /notes/:owner_id/thread`): the first takes
+   the post's audience, who may reply and quote, its locations and its card;
+   the rest are replies to the one before. Only for words alone: adding
+   photos or a video hides it. The notes after the first are not kept as a
+   draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
+   `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
+   are shown as any replies are, each under the one before.
+3. **What other networks will show** of a public post on the viewer's own
+   profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
+   past 300 characters, when their Bluesky account is connected, that
+   Bluesky shows the first 300 with a link to the rest; with more than four
+   photos, that Mastodon, Bluesky or both show the first four with a link to
+   all of them. The Bluesky line's room is kept while the post goes there, so
+   nothing moves as the words pass 300. The numbers are `BLUESKY_POST_MAX` and
+   `PICTURES_SHOWN_MAX` in `constants/limits.js`; the count is of what is
+   typed, Markdown's marks included, a little more than Bluesky is sent.
+4. **Answering something from another server** is offered where the server
+   says the viewer may (`authorized.comment`), as for any post: the reply is
+   the viewer's own note and is sent to whoever it answers when the viewer
+   is on the fediverse. When they are not, the reply form says that it will
+   be read here and not there (`useReplyStaysHere`, in
+   `media/Composer/useOnFediverse.js`). Liking and reposting something from
+   elsewhere work the same way, where the server allows them
+   (`authorized.like`), and reach its author's server.
+5. **A hashtag at `/tags/<name>`** leads to `/hashtags/<name>`
+   (`routes/index.js#HashtagMoved`). It is the address other servers are
+   given for a hashtag's page, where Mastodon has its own, because some of
+   the apps people read with know a hashtag's link by that shape.
+6. **A profile from another server has three lists,** what was posted,
+   Notes and Photos (`utils/node.js#getActorFeatureTabs`, `REMOTE_TABS`): a
+   post of theirs that came with pictures is a photo post here. Articles
+   and videos are not taken in from other servers, so those lists would be
+   empty for ever and say the person has none; each comes back when it is
+   taken in. Their replies and reposts are in what was posted, not in lists
+   of their own. Its box of locations is the site's administrators' to fill,
+   as it is for any profile here, to say where an organisation on another
+   server is (`locations/Gadget`, `hideWhenEmpty`); nobody else sees it
+   while it is empty.
+7. **What the site refuses** is in Site settings, under Fediverse
+   (`settings/Fediverse.jsx`), in two tabs. **Servers**
+   (`settings/FediverseServers.jsx`), for super administrators as every tab
+   there is: the list with why, and a button to stop refusing one. The list is
+   read fifty at a time as it is scrolled and searched on the server, by
+   name or reason, since an installation that takes up somebody else's list
+   has thousands; a server is refused from a dialog, which says that
+   refusing it does not remove what already came from it. **Accounts**
+   (`settings/FediverseAccounts.jsx`), for administrators too: the accounts
+   refused one by one, on the fediverse or Bluesky,
+   newest first, with the network and why, a search, and a button to let
+   one back; one is refused by a handle or an address from a dialog, which
+   says that refusing it removes what is here of it. **Profiles**
+   (`settings/FediverseProfiles.jsx`), for administrators too: who from other
+   networks is kept here, newest first, with a search, and each can be refused.
+   Only administrators see this: these people did not ask to be listed here.
 
-- **The switch** is a card under Settings › Fediverse, beside the Bluesky
-  card, on the viewer's own profile only (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
-  follow me". Off until the person turns it on, and theirs alone to turn
-  on. It shows their handle, says that what is sent cannot be called back,
-  has two more switches once it is on, each free to change back (shown in
-  directories, included in search; anahita-services' docs/federation.md, "Listed
-  and found"), asks before it is turned off (other servers are told to remove
-  the person, and may not take them back), says that making a profile private
-  has the same effect,
-  and when they cannot turn it on (their profile is not open to everybody,
-  or the site does not federate) it is disabled with the server's reason
-  beside it.
-- **Closing a profile is the one way to leave by accident,** so the card
-  where a profile's audience is chosen (`actors/Settings/Access.jsx`) asks
-  whether the person is on the fediverse, warns beside the choice as soon
-  as anything but "everybody" is picked, and asks once more before saving.
-  It is the only choice on that card that is confirmed, because it is the
-  only one that cannot be undone. An administrator changing somebody
-  else's profile is warned the same way.
-- **Somebody from another server is a person like any other** to the app:
-  their type ends in `person`, so they are opened at `/people/<handle>`,
-  where the handle is whole, `alice@mastodon.example`, and the same page
-  draws them. What differs is told by `utils/federation.js`:
-  - their handle is drawn whole (`displayHandle`), where a username here
-    is made safe first;
-  - their About card says which network they are on, in a row with the
-    network's mark (the butterfly for Bluesky, the hub for the fediverse),
-    what of them is kept here, and a way to their own page there
-    (`actors/Read/About.jsx`). Nothing is added to the header: it is a
-    fact about the profile, not something to act on;
-  - the server sends nothing they can be edited, run or posted on by, so
-    none of those controls is drawn. Follow is, and works as for anybody.
-- **A post from another server** is an ordinary note with a `uri`. Its menu
-  has "View on <server>" (`media/MediaMenu.jsx`). It cannot be edited
-  here, whatever the viewer's role (`permissions/node.js#canEdit`): it is
-  its author's to change, on their own server. It can be liked, replied to
-  and reposted wherever the server allows (`authorized`).
-- **Looking somebody up** is on the search page
-  (`search/RemoteLookup.jsx`): when what was searched for is a handle with
-  a server in it or the address of a profile, a card offers to ask that
-  server. It asks when the button is pressed, since asking tells another
-  server that this site did; then the person found is drawn first among the
-  search page's results, with their card and its Follow button. It asks at once,
-  without the button, when somebody signed in typed an unmistakable
-  handle into the search box and pressed Enter (`isClearHandle`:
-  `@alice@mastodon.example`, a Bluesky DID, a Bluesky handle written
-  with `@` or on `bsky.social`, or the address of a profile,
-  `https://pixelfed.social/dansup`, which is what Pixelfed and others show
-  people). The box says so in the router's state; a
-  link to the same search does not, so a link cannot make this site call
-  another server just by being opened. See [Search](#search).
-- **A lookup that fails** says what happened and what to try, naming the
-  server (`federation:lookup.errors`): nobody by that name, a group or a
-  post rather than a profile, a server this site does not connect to, or
-  somebody on this site are answers, said with no button; a server that did
-  not answer, or too many lookups, may pass, and offer **Try again**
-  (`utils/federation.js#isRetryable`). A search of this site that fails
-  says so in a sentence with Try again, never the request's own message;
-  and a follow or an unfollow that fails gives the button back and says so
-  (`controls/Follow.jsx`).
-- **Bluesky is read through a service of its own,** which may be there
-  when the fediverse's is not, or the other way round. To the app,
-  somebody on Bluesky is somebody from another server like any other.
-  What differs is in `utils/federation.js`:
-  - **which service a lookup asks** is told by how the handle is written
-    (`lookupKind`): `@alice@mastodon.example` has its server after a
-    second `@`; `alice.bsky.social`, a `did:plc:…` or an address under
-    `bsky.app/profile/` is Bluesky. `api/federation.js#lookup` sends it to
-    `/activitypub/lookup` or `/atproto/lookup`, and the card goes for the
-    one network whose service is not there, not for both;
-  - **the page of a post or a person** (`pageOf`): on the fediverse the
-    address a thing has between servers is its page; on Bluesky it is an
-    `at://` address, and the page is worked out from it. "View on …"
-    leads there, in the menus and on the profile;
-  - **a reply to a post from Bluesky stays here unless its writer
-    connected their Bluesky account:** `useReplyStaysHere` answers with
-    the words to say so under the reply being written, and with nothing
-    for somebody connected (`useOnBluesky`, asked once and kept up to
-    date by the settings card).
-- **A person's own Bluesky account** is connected in their settings,
-  under Fediverse (`actors/Settings/Bluesky.jsx`): a handle and an app
-  password, with a link to where Bluesky makes one, then "Connected as"
-  and a button to disconnect, which asks first. When Bluesky no longer
-  takes the connection the card says so and offers the form again.
-  Once connected, a second button follows here the accounts they follow
-  on Bluesky already. It asks first: a dialog says how many they follow
-  there, offers a number (the 25, 100 or 500 followed most recently, or
-  all of them when there are fewer), and says what it does and that it is
-  not undone in one step. The server carries on with it after answering.
-  Nothing is drawn where the installation does not write to Bluesky.
+8. **The switch** is a card under Settings › Fediverse, beside the Bluesky
+   card, on the viewer's own profile only (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
+   follow me". Off until the person turns it on, and theirs alone to turn
+   on. It shows their handle, says that what is sent cannot be called back,
+   has two more switches once it is on, each free to change back (shown in
+   directories, included in search; anahita-services' docs/federation.md, "Listed
+   and found"), asks before it is turned off (other servers are told to remove
+   the person, and may not take them back), says that making a profile private
+   has the same effect,
+   and when they cannot turn it on (their profile is not open to everybody,
+   or the site does not federate) it is disabled with the server's reason
+   beside it.
+9. **Closing a profile is the one way to leave by accident,** so the card
+   where a profile's audience is chosen (`actors/Settings/Access.jsx`) asks
+   whether the person is on the fediverse, warns beside the choice as soon
+   as anything but "everybody" is picked, and asks once more before saving.
+   It is the only choice on that card that is confirmed, because it is the
+   only one that cannot be undone. An administrator changing somebody
+   else's profile is warned the same way.
+10. **Somebody from another server is a person like any other** to the app:
+    their type ends in `person`, so they are opened at `/people/<handle>`,
+    where the handle is whole, `alice@mastodon.example`, and the same page
+    draws them. What differs is told by `utils/federation.js`:
+    - their handle is drawn whole (`displayHandle`), where a username here
+      is made safe first;
+    - their About card says which network they are on, in a row with the
+      network's mark (the butterfly for Bluesky, the hub for the fediverse),
+      what of them is kept here, and a way to their own page there
+      (`actors/Read/About.jsx`). Nothing is added to the header: it is a
+      fact about the profile, not something to act on;
+    - the server sends nothing they can be edited, run or posted on by, so
+      none of those controls is drawn. Follow is, and works as for anybody.
+11. **A post from another server** is an ordinary note with a `uri`. Its menu
+    has "View on <server>" (`media/MediaMenu.jsx`). It cannot be edited
+    here, whatever the viewer's role (`permissions/node.js#canEdit`): it is
+    its author's to change, on their own server. It can be liked, replied to
+    and reposted wherever the server allows (`authorized`).
+12. **Looking somebody up** is on the search page
+    (`search/RemoteLookup.jsx`): when what was searched for is a handle with
+    a server in it or the address of a profile, a card offers to ask that
+    server. It asks when the button is pressed, since asking tells another
+    server that this site did; then the person found is drawn first among the
+    search page's results, with their card and its Follow button. It asks at once,
+    without the button, when somebody signed in typed an unmistakable
+    handle into the search box and pressed Enter (`isClearHandle`:
+    `@alice@mastodon.example`, a Bluesky DID, a Bluesky handle written
+    with `@` or on `bsky.social`, or the address of a profile,
+    `https://pixelfed.social/dansup`, which is what Pixelfed and others show
+    people). The box says so in the router's state; a
+    link to the same search does not, so a link cannot make this site call
+    another server just by being opened. See [Search](#search).
+13. **A lookup that fails** says what happened and what to try, naming the
+    server (`federation:lookup.errors`): nobody by that name, a group or a
+    post rather than a profile, a server this site does not connect to, or
+    somebody on this site are answers, said with no button; a server that did
+    not answer, or too many lookups, may pass, and offer **Try again**
+    (`utils/federation.js#isRetryable`). A search of this site that fails
+    says so in a sentence with Try again, never the request's own message;
+    and a follow or an unfollow that fails gives the button back and says so
+    (`controls/Follow.jsx`).
+14. **Bluesky is read through a service of its own,** which may be there
+    when the fediverse's is not, or the other way round. To the app,
+    somebody on Bluesky is somebody from another server like any other.
+    What differs is in `utils/federation.js`:
+    - **which service a lookup asks** is told by how the handle is written
+      (`lookupKind`): `@alice@mastodon.example` has its server after a
+      second `@`; `alice.bsky.social`, a `did:plc:…` or an address under
+      `bsky.app/profile/` is Bluesky. `api/federation.js#lookup` sends it to
+      `/activitypub/lookup` or `/atproto/lookup`, and the card goes for the
+      one network whose service is not there, not for both;
+    - **the page of a post or a person** (`pageOf`): on the fediverse the
+      address a thing has between servers is its page; on Bluesky it is an
+      `at://` address, and the page is worked out from it. "View on …"
+      leads there, in the menus and on the profile;
+    - **a reply to a post from Bluesky stays here unless its writer
+      connected their Bluesky account:** `useReplyStaysHere` answers with
+      the words to say so under the reply being written, and with nothing
+      for somebody connected (`useOnBluesky`, asked once and kept up to
+      date by the settings card).
+15. **A person's own Bluesky account** is connected in their settings,
+    under Fediverse (`actors/Settings/Bluesky.jsx`): a handle and an app
+    password, with a link to where Bluesky makes one, then "Connected as"
+    and a button to disconnect, which asks first. When Bluesky no longer
+    takes the connection the card says so and offers the form again.
+    Once connected, a second button follows here the accounts they follow
+    on Bluesky already. It asks first: a dialog says how many they follow
+    there, offers a number (the 25, 100 or 500 followed most recently, or
+    all of them when there are fewer), and says what it does and that it is
+    not undone in one step. The server carries on with it after answering.
+    Nothing is drawn where the installation does not write to Bluesky.
 
 ### Search
 
-- **The box in the top bar** (`components/SearchBox.jsx`) is an MUI
-  `Autocomplete` in free-solo mode. Searching opens the search page
-  through the router, without reloading the app, and marks the search as
-  typed (see Looking somebody up, above).
-- **Recent searches** (`utils/recentSearches.js`): focused while empty,
-  the box lists the last ten searches, newest first, each with the tab it
-  was run under; typing narrows them; each can be forgotten, or all at
-  once. The search page lists them too when nothing has been typed
-  (`search/Browse/RecentSearches.jsx`). They are kept **in this browser
-  only**, under a key with the person's id, and cleared when they sign
-  out. Nothing about what somebody searched for reaches the server, so
-  they do not follow somebody to another device. A search is remembered
-  when it is run, however it was reached.
-- **The controls:** the order as a small menu with, beside it, the two
-  choices below as chips; the row wraps on a narrow screen. The distance
-  is a slider on a line of its own under them (25 to 100 km, or anywhere),
-  written to the address when it is let go.
-- **Two choices for "Most relevant"** (`utils/searchChoices.js`), chips
-  shown only with that order and only to somebody signed in: **Profiles I
-  follow first** (people, groups and events they follow, and what is
-  posted on them, before everything else) and **Newer results first** (the
-  newest first among results that match equally well). Off as they
-  come, kept in this browser per person, and sent with a search only when
-  chosen (`followed_first`, `recent_first`).
-- **The page keeps its place in its address** (`utils/searchAddress.js`):
-  `?q=seeds&scope=feeds&sort=recent&km=50`. Reloading, going back and a
-  link sent to somebody open it as it was. What is as it comes is left
-  out. Changing the tab, the order or the distance replaces the address
-  rather than adding to the history.
-- **The tabs are All, Posts, Media, Profiles and Feeds** (`scope` `all`,
-  `posts`, `media`, `actors`, `feeds`). Posts is every kind of post; Media
-  is photos and videos alone, as other networks mean it (the user,
-  2026-10-20).
-- **Each tab says how many it finds,** in grey after its name and short
-  however large (`utils/shortCount.js`: 515, 1.2K, 48K, 3.1M, as the
-  reader's language writes them). One request for each tab, asking for a
-  single result and reading the total (`search/Browse/useScopeCounts.js`),
-  again when the words or the distance change but not the order. **A tab
-  that finds nothing is not drawn,** except All and the open one.
-- **A search that finds nothing** says so (`search/Browse/NothingFound.jsx`),
-  and offers the other tabs that would find something, from the same
-  counts. A handle from another server is left to the lookup card instead.
-- **A distance needs a place.** The server leaves the distance out when
-  it is not told where the searcher is, so when the browser cannot say or
-  was not allowed to, the page says that the search is not limited by
-  distance, rather than search everywhere and look as though it had not.
-  While the browser is still asking, it waits.
+1. **The box in the top bar** (`components/SearchBox.jsx`) is an MUI
+   `Autocomplete` in free-solo mode. Searching opens the search page
+   through the router, without reloading the app, and marks the search as
+   typed (see Looking somebody up, above).
+2. **Recent searches** (`utils/recentSearches.js`): focused while empty,
+   the box lists the last ten searches, newest first, each with the tab it
+   was run under; typing narrows them; each can be forgotten, or all at
+   once. The search page lists them too when nothing has been typed
+   (`search/Browse/RecentSearches.jsx`). They are kept **in this browser
+   only**, under a key with the person's id, and cleared when they sign
+   out. Nothing about what somebody searched for reaches the server, so
+   they do not follow somebody to another device. A search is remembered
+   when it is run, however it was reached.
+3. **The controls:** the order as a small menu with, beside it, the two
+   choices below as chips; the row wraps on a narrow screen. The distance
+   is a slider on a line of its own under them (25 to 100 km, or anywhere),
+   written to the address when it is let go.
+4. **Two choices for "Most relevant"** (`utils/searchChoices.js`), chips
+   shown only with that order and only to somebody signed in: **Profiles I
+   follow first** (people, groups and events they follow, and what is
+   posted on them, before everything else) and **Newer results first** (the
+   newest first among results that match equally well). Off as they
+   come, kept in this browser per person, and sent with a search only when
+   chosen (`followed_first`, `recent_first`).
+5. **The page keeps its place in its address** (`utils/searchAddress.js`):
+   `?q=seeds&scope=feeds&sort=recent&km=50`. Reloading, going back and a
+   link sent to somebody open it as it was. What is as it comes is left
+   out. Changing the tab, the order or the distance replaces the address
+   rather than adding to the history.
+6. **The tabs are All, Posts, Media, Profiles and Feeds** (`scope` `all`,
+   `posts`, `media`, `actors`, `feeds`). Posts is every kind of post; Media
+   is photos and videos alone, as other networks mean it (the user,
+   2026-10-20).
+7. **Each tab says how many it finds,** in grey after its name and short
+   however large (`utils/shortCount.js`: 515, 1.2K, 48K, 3.1M, as the
+   reader's language writes them). One request for each tab, asking for a
+   single result and reading the total (`search/Browse/useScopeCounts.js`),
+   again when the words or the distance change but not the order. **A tab
+   that finds nothing is not drawn,** except All and the open one.
+8. **A search that finds nothing** says so (`search/Browse/NothingFound.jsx`),
+   and offers the other tabs that would find something, from the same
+   counts. A handle from another server is left to the lookup card instead.
+9. **A distance needs a place.** The server leaves the distance out when
+   it is not told where the searcher is, so when the browser cannot say or
+   was not allowed to, the page says that the search is not limited by
+   distance, rather than search everywhere and look as though it had not.
+   While the browser is still asking, it waits.
 
 ### Cards in lists
 
@@ -1715,24 +1715,24 @@ The cards that show posts in lists, `components/MediumCard.jsx` (search,
 hashtags, places, saved, a profile's tabs) and the feed's
 (`feed/components/Default.jsx`), are drawn alike:
 
-- **A title** (an article's, a topic's, a photo's) through
-  `components/PostTitle.jsx`: one size, a little larger and bolder than the
-  text, in the text's colour, a link with no underline.
-- **The title and the text open the post** when clicked
-  (`utils/openOnClick.js`), unless text is being selected, so it can still
-  be copied, or the click was on a link or a button in it: a hashtag, a
-  mention, an address. Ctrl-, ⌘- or a middle click opens it in a new tab.
-  The title stays a real link for the keyboard and screen readers.
-- **Where it was posted,** a group or somebody else's profile, as a quiet
-  line above the author (`components/MediumOwnerCardHeader.jsx`), not a
-  second header as heavy as the author's.
-- **What a reply answers** is quoted in plain words (`utils/plainText.js`),
-  so a link in it reads as its words, not as Markdown written out.
-- **Raised the same way** as every other card and the gadgets beside them:
-  MUI's default variant and elevation, set by nobody. Only a post quoted
-  inside a repost is outlined, to stand apart from the card it is in. The
-  composer above a feed is raised too, and the form's own card in it lies
-  flat on it.
+1. **A title** (an article's, a topic's, a photo's) through
+   `components/PostTitle.jsx`: one size, a little larger and bolder than the
+   text, in the text's colour, a link with no underline.
+2. **The title and the text open the post** when clicked
+   (`utils/openOnClick.js`), unless text is being selected, so it can still
+   be copied, or the click was on a link or a button in it: a hashtag, a
+   mention, an address. Ctrl-, ⌘- or a middle click opens it in a new tab.
+   The title stays a real link for the keyboard and screen readers.
+3. **Where it was posted,** a group or somebody else's profile, as a quiet
+   line above the author (`components/MediumOwnerCardHeader.jsx`), not a
+   second header as heavy as the author's.
+4. **What a reply answers** is quoted in plain words (`utils/plainText.js`),
+   so a link in it reads as its words, not as Markdown written out.
+5. **Raised the same way** as every other card and the gadgets beside them:
+   MUI's default variant and elevation, set by nobody. Only a post quoted
+   inside a repost is outlined, to stand apart from the card it is in. The
+   composer above a feed is raised too, and the form's own card in it lies
+   flat on it.
 
 ### Long posts
 
@@ -1758,24 +1758,24 @@ icon before its words, through `components/MenuItemLabel.jsx`.
 A quote is a note that carries another post under its own words. It is an
 ordinary note in every other way: its own audience, likes and replies.
 
-- **Making one.** The repost button under a post opens a small menu, upward:
-  Repost, or Quote (`containers/controls/Repost.jsx`). Quote is switched off
-  where the server said this viewer may not quote this post
-  (`authorized.quote`). It opens `containers/controls/QuoteDialog.jsx`, which
-  posts a note on the writer's own profile with `quote_id`. A refusal at that
-  point is said in the server's words (`utils/quotes.js`).
-- **Showing one.** A note that quotes is sent `quote`: the post, or why it is
-  not shown (`unavailable`, `detached`). `components/QuoteEmbed.jsx` draws
-  either, inside the note, in feeds, lists and on the note's page. The server
-  sends the post only to a reader who may see it.
-- **Taking a post out.** On the page of a note that quotes their post, the
-  quoted author has "Remove my post from this quote"
-  (`containers/controls/QuoteDetach.jsx`). It cannot be undone.
-- **Who can quote** is the third part of a post's interaction settings
-  (`components/ReplyAccessDialog.jsx`): anyone, the author's followers, or
-  nobody. A post that has never been asked follows its author's own setting,
-  "Who can quote my posts", under Settings › Permissions
-  (`containers/actors/Settings/QuotePolicy.jsx`).
+1. **Making one.** The repost button under a post opens a small menu, upward:
+   Repost, or Quote (`containers/controls/Repost.jsx`). Quote is switched off
+   where the server said this viewer may not quote this post
+   (`authorized.quote`). It opens `containers/controls/QuoteDialog.jsx`, which
+   posts a note on the writer's own profile with `quote_id`. A refusal at that
+   point is said in the server's words (`utils/quotes.js`).
+2. **Showing one.** A note that quotes is sent `quote`: the post, or why it is
+   not shown (`unavailable`, `detached`). `components/QuoteEmbed.jsx` draws
+   either, inside the note, in feeds, lists and on the note's page. The server
+   sends the post only to a reader who may see it.
+3. **Taking a post out.** On the page of a note that quotes their post, the
+   quoted author has "Remove my post from this quote"
+   (`containers/controls/QuoteDetach.jsx`). It cannot be undone.
+4. **Who can quote** is the third part of a post's interaction settings
+   (`components/ReplyAccessDialog.jsx`): anyone, the author's followers, or
+   nobody. A post that has never been asked follows its author's own setting,
+   "Who can quote my posts", under Settings › Permissions
+   (`containers/actors/Settings/QuotePolicy.jsx`).
 
 There is no comment code left: the comment components, actions, reducers,
 API modules and prop types went with the comment service. Two names remain
