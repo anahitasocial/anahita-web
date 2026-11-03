@@ -1291,7 +1291,8 @@ What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 
 A person who follows the viewer says so: "Follows you" after their handle on
-their profile, and after their handle in these lists, except beside a
+their profile, and after their handle in the lists of who a profile
+follows and what is in common: not in a list of followers, nor beside a
 "Follow back" button, which says it already.
 
 The dialog is full screen on a phone, with Close (✕) at the start of its
