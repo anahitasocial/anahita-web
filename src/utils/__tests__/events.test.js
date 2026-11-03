@@ -288,3 +288,21 @@ describe('the days a choice of when covers', () => {
     expect(events.isOnIn(lastWeek, null)).toBe(true);
   });
 });
+
+describe('who is putting an event on', () => {
+  const group = { id: 3, name: 'Ten Forward' };
+  const maker = { id: 7, name: 'Guinan' };
+
+  it('is the group hosting it', () => {
+    expect(events.hostOf({ event: { host: group }, author: maker })).toBe(group);
+  });
+
+  it('is whoever made it, when no group hosts it', () => {
+    expect(events.hostOf({ event: {}, author: maker })).toBe(maker);
+  });
+
+  it('is nobody when neither is known', () => {
+    expect(events.hostOf({ event: {} })).toBeNull();
+    expect(events.hostOf(null)).toBeNull();
+  });
+});

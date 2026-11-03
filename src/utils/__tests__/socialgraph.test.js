@@ -77,3 +77,25 @@ describe('adding a page to a list', () => {
     expect(socialgraph.merge(undefined, { data: [{ id: 1 }] }, 0).total).toBe(1);
   });
 });
+
+describe('when a row says Follows you', () => {
+  const follows = { isFollowingViewer: true };
+  const both = { isFollowingViewer: true, isLeadingViewer: true };
+
+  it('is never in a list of followers, where every one would', () => {
+    expect(socialgraph.saysFollowsYou(socialgraph.FOLLOWERS, follows, false)).toBe(false);
+  });
+
+  it('is said of one who follows the viewer, in the other lists', () => {
+    expect(socialgraph.saysFollowsYou(socialgraph.LEADERS, follows, false)).toBe(true);
+    expect(socialgraph.saysFollowsYou(socialgraph.MUTUALS, both, true)).toBe(true);
+  });
+
+  it('is left to a Follow back button, which says it already', () => {
+    expect(socialgraph.saysFollowsYou(socialgraph.LEADERS, follows, true)).toBe(false);
+  });
+
+  it('is not said of one who does not follow the viewer', () => {
+    expect(socialgraph.saysFollowsYou(socialgraph.LEADERS, {}, false)).toBe(false);
+  });
+});

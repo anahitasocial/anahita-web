@@ -206,8 +206,20 @@ const defaultFor = (actor, viewer) => {
   return stillThere ? last : options[0].level;
 };
 
+// Who can see a group being made, in the order its form offers them: Anyone
+// left out where the installation allows nothing new to be public
+// (`minContentAccess` in NodeInfo), which the server would refuse. The first
+// is chosen at first.
+const newGroupLevels = (minContentAccess = PUBLIC) => {
+  const levels = [PUBLIC, REGISTERED, FOLLOWERS, ADMINS];
+  return minContentAccess === REGISTERED ?
+    levels.filter((level) => { return level !== PUBLIC; }) :
+    levels;
+};
+
 export default {
   PLACE,
+  newGroupLevels,
   placeOf,
   levelsFor,
   optionsFor,

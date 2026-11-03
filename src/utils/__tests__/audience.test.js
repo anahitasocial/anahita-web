@@ -164,3 +164,14 @@ describe('composer audience', () => {
     }).not.toThrow();
   });
 });
+
+describe('who can see a group being made', () => {
+  it('offers anyone first, then signed in, followers and admins', () => {
+    expect(audience.newGroupLevels('public')).toEqual(['public', 'registered', 'followers', 'admins']);
+    expect(audience.newGroupLevels()).toEqual(['public', 'registered', 'followers', 'admins']);
+  });
+
+  it('leaves out anyone where nothing new may be public', () => {
+    expect(audience.newGroupLevels('registered')).toEqual(['registered', 'followers', 'admins']);
+  });
+});

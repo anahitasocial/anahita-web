@@ -23,17 +23,11 @@ import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
 import utils from '../../../utils';
-import { Access as ACCESS, Actor as ACTOR } from '../../../constants';
+import audience from '../../../utils/audience';
+import { Actor as ACTOR } from '../../../constants';
 
 const { getURL } = utils.node;
 const { NAME, BODY } = ACTOR.FIELDS;
-
-const LEVELS = [
-  ACCESS.ACTORS.PUBLIC,
-  ACCESS.ACTORS.REGISTERED,
-  ACCESS.ACTORS.FOLLOWERS,
-  ACCESS.ACTORS.ADMINS,
-];
 
 // Making a group, laid out as making an event is: its name, what it is
 // about, one link, and who can see it, each with a line saying what it is
@@ -49,9 +43,7 @@ const GroupAdd = () => {
   const navigate = useNavigate();
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const { minContentAccess } = (nodeInfo && nodeInfo.metadata) || {};
-  const levels = LEVELS.filter((level) => {
-    return level !== ACCESS.ACTORS.PUBLIC || minContentAccess !== ACCESS.ACTORS.REGISTERED;
-  });
+  const levels = audience.newGroupLevels(minContentAccess);
 
   const [values, setValues] = useState({
     name: '',

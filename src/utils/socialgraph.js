@@ -86,7 +86,18 @@ const merge = (before, response = {}, start = 0) => {
   return { rows, total: page.length === 0 ? rows.length : total };
 };
 
+// Whether a row in the followers dialog says "Follows you": a profile that
+// follows the viewer, but not in the list of followers, where all of them
+// would, nor beside a Follow back button, which says it already.
+const saysFollowsYou = (kind, row = {}, canFollow = false) => {
+  if (kind === FOLLOWERS || !row.isFollowingViewer) {
+    return false;
+  }
+  return !(canFollow && !row.isLeadingViewer);
+};
+
 export default {
+  saysFollowsYou,
   FOLLOWERS,
   LEADERS,
   MUTUALS,

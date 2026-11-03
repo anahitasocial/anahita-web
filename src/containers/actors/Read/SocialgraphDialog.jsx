@@ -234,9 +234,7 @@ const SocialgraphDialog = ({
                   <ProfileRow
                     key={`socialgraph-${kind}-${row.id}`}
                     actor={row}
-                    followsYou={kind !== socialgraph.FOLLOWERS &&
-                      Boolean(row.isFollowingViewer) &&
-                      !(showFollow && !row.isLeadingViewer)}
+                    followsYou={socialgraph.saysFollowsYou(kind, row, showFollow)}
                     actions={(showFollow || showRemove) &&
                       <>
                         {showFollow && <ControlFollow actor={row} />}
