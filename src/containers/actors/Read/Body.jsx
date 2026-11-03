@@ -123,9 +123,11 @@ const ActorBody = ({
     utils.federation.isRemote(actor) || hasRules || addRules;
 
   // What the profile says about itself: the first items in columns, and
-  // otherwise beside its posts or above them.
+  // otherwise beside its posts or above them. Who looks after it (a
+  // group's admins, an event's hosts) right after its About card.
   const details = [
     hasAbout && <ActorBodyAbout key="about" actor={actor} rules={rules} addRules={addRules} />,
+    admins && <Box key="admins">{admins}</Box>,
     featureTabs.includes('photos') && (
       <ActorPhotos
         key="photos"
@@ -137,7 +139,6 @@ const ActorBody = ({
       />
     ),
     locations && <Box key="locations">{locations}</Box>,
-    admins && <Box key="admins">{admins}</Box>,
   ].filter(Boolean);
 
   const tabList = (
