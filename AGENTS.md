@@ -125,6 +125,12 @@ The same in anahita-services' AGENTS.md.
   only for the ActivityStreams type a post from elsewhere carries.
 - **Profile**, not "actor" or "account". "Actor" is the code's word;
   "account" is for signing in.
+- **Admins** look after a group or a website: in labels and in sentences,
+  "Add admins", "its first admin". An event's are its **hosts**.
+  **Administrator** and **super administrator** are only the account
+  types, the site's own: "Administrators only", "Tell the administrators".
+- **Profile photo** and **cover photo** for a profile's two pictures,
+  never "avatar", which is the code's word.
 - **Account type** for registered, administrator or super administrator,
   never "user type", "person type" or "role"; `person_type` is the code's
   word.

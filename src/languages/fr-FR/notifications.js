@@ -24,7 +24,7 @@ export default {
   replyAdd: '<0>{{subject}}</0> a répondu à une <1>publication</1>',
   quoteAdd: '<0>{{subject}}</0> a cité votre publication dans une <1>note</1>',
   videoAdd: '<0>{{subject}}</0> a posté une <1>vidéo</1>',
-  adminAdd: '<0>{{subject}}</0> fait désormais partie des administrateurs de <2>{{target}}</2>',
+  adminAdd: '<0>{{subject}}</0> fait désormais partie des admins de <2>{{target}}</2>',
   other: 'Du nouveau de <0>{{subject}}</0>',
   bell_one: 'Notifications, {{count}} non lue',
   bell_other: 'Notifications, {{count}} non lues',

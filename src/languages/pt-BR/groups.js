@@ -15,7 +15,7 @@ export default {
       public: 'Qualquer pessoa',
       registered: 'Qualquer pessoa conectada',
       followers: 'Só os seguidores dele',
-      admins: 'Só os administradores dele, por enquanto',
+      admins: 'Só os admins dele, por enquanto',
     },
     failed: 'Não foi possível criar o grupo. Tente de novo.',
   },

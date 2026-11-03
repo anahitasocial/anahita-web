@@ -37,7 +37,7 @@ export default {
       },
       group: {
         followers: 'Las personas que siguen a {{ name }}',
-        admins: 'La administración de {{ name }}',
+        admins: 'Los admins de {{ name }}',
       },
     },
     capped: 'No disponible aquí: {{ name }} no es visible tan ampliamente, así que una publicación ahí tampoco puede serlo.',

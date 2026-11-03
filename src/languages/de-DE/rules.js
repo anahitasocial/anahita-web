@@ -31,8 +31,8 @@ export default {
     // none, for its administrators alone.
     add: 'Regeln hinzufügen',
     addHelp: {
-      group: 'Follower stimmen ihnen zuerst zu. Nur Administratoren sehen das.',
-      event: 'Wer darauf antwortet, stimmt ihnen zuerst zu. Nur Administratoren sehen das.',
+      group: 'Follower stimmen ihnen zuerst zu. Nur Admins sehen das.',
+      event: 'Wer darauf antwortet, stimmt ihnen zuerst zu. Nur Gastgeber sehen das.',
     },
   },
   // A group's or an event's reports against its rules (part 6b).

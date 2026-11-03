@@ -31,8 +31,8 @@ export default {
     // none, for its administrators alone.
     add: 'Adicionar regras',
     addHelp: {
-      group: 'Os seguidores concordam com elas antes. Só os administradores veem isto.',
-      event: 'Quem responde concorda com elas antes. Só os administradores veem isto.',
+      group: 'Os seguidores concordam com elas antes. Só os admins veem isto.',
+      event: 'Quem responde concorda com elas antes. Só os anfitriões veem isto.',
     },
   },
   // A group's or an event's reports against its rules (part 6b).

@@ -62,7 +62,7 @@ export default {
       followers: 'Las personas que siguen este perfil.',
       leaders: 'Las personas a las que sigue este perfil.',
       mutuals: 'Las personas que siguen este perfil y a las que este perfil sigue.',
-      admins: 'La administración de este grupo.',
+      admins: 'Los admins de este grupo.',
       myself: 'Nadie más.',
     },
     labels: {
@@ -128,7 +128,7 @@ export default {
       group: {
         registered: 'Cualquier persona con una cuenta aquí.',
         followers: 'Las personas que siguen este grupo.',
-        admins: 'La administración de este grupo.',
+        admins: 'Los admins de este grupo.',
       },
     },
     // Replies on a profile narrower than registered follow its access.

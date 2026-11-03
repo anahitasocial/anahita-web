@@ -24,7 +24,7 @@ export default {
   replyAdd: '<0>{{subject}}</0> replied to a <1>post</1>',
   quoteAdd: '<0>{{subject}}</0> quoted your post in a <1>note</1>',
   videoAdd: '<0>{{subject}}</0> posted a <1>video</1>',
-  adminAdd: '<0>{{subject}}</0> is now an administrator of <2>{{target}}</2>',
+  adminAdd: '<0>{{subject}}</0> is now an admin of <2>{{target}}</2>',
   other: 'Something new from <0>{{subject}}</0>',
   bell_one: 'Notifications, {{count}} unread',
   bell_other: 'Notifications, {{count}} unread',

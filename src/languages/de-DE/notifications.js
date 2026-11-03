@@ -24,7 +24,7 @@ export default {
   replyAdd: '<0>{{subject}}</0> hat auf einen <1>Beitrag</1> geantwortet',
   quoteAdd: '<0>{{subject}}</0> hat deinen Beitrag in einer <1>Notiz</1> zitiert',
   videoAdd: '<0>{{subject}}</0> hat ein <1>Video</1> veröffentlicht',
-  adminAdd: '<0>{{subject}}</0> ist jetzt Administrator:in von <2>{{target}}</2>',
+  adminAdd: '<0>{{subject}}</0> ist jetzt Admin von <2>{{target}}</2>',
   other: 'Neues von <0>{{subject}}</0>',
   bell_one: 'Benachrichtigungen, {{count}} ungelesen',
   bell_other: 'Benachrichtigungen, {{count}} ungelesen',

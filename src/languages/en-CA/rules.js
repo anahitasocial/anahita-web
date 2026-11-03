@@ -32,8 +32,8 @@ export default {
     // none, for its administrators alone.
     add: 'Add rules',
     addHelp: {
-      group: 'Followers agree to them first. Only administrators see this.',
-      event: 'Whoever answers it agrees to them first. Only administrators see this.',
+      group: 'Followers agree to them first. Only admins see this.',
+      event: 'Whoever answers it agrees to them first. Only hosts see this.',
     },
   },
   // A group's or an event's reports against its rules (part 6b).

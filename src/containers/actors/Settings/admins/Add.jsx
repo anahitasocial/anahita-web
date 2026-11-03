@@ -115,7 +115,8 @@ const ActorsSettingsAdminsAdd = (props) => {
           <TextField
             variant="standard"
             {...params}
-            label={i18n.t('actor:addAdmins')}
+            // An event's administrators are its hosts.
+            label={i18n.t(namespace === 'events' ? 'events:settings.addAdmins' : 'actor:addAdmins')}
             value={keyword}
             placeholder="Jane smith ..."
             slotProps={{

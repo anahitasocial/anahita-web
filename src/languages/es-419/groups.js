@@ -15,7 +15,7 @@ export default {
       public: 'Cualquiera',
       registered: 'Cualquiera con sesión iniciada',
       followers: 'Solo sus seguidores',
-      admins: 'Solo sus administradores, por ahora',
+      admins: 'Solo sus admins, por ahora',
     },
     failed: 'No se pudo crear el grupo. Inténtalo de nuevo.',
   },

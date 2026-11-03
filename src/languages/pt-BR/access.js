@@ -17,7 +17,7 @@ export default {
       followers: 'Seguidores',
       leaders: 'Seguindo',
       mutuals: 'Mútuos',
-      admins: 'Administração',
+      admins: 'Admins',
       myself: 'Só eu',
     },
     descriptions: {
@@ -37,7 +37,7 @@ export default {
       },
       group: {
         followers: 'Pessoas que seguem {{ name }}',
-        admins: 'A administração de {{ name }}',
+        admins: 'Os admins de {{ name }}',
       },
     },
     capped: 'Indisponível aqui: {{ name }} não tem uma visibilidade tão ampla, então uma publicação nele também não pode ter.',

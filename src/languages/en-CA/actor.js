@@ -63,7 +63,7 @@ export default {
       followers: 'People who follow this profile.',
       leaders: 'People this profile follows.',
       mutuals: 'People who follow this profile and are followed back.',
-      admins: 'Administrators of this group.',
+      admins: 'Admins of this group.',
       myself: 'Nobody else.',
     },
     labels: {
@@ -129,7 +129,7 @@ export default {
       group: {
         registered: 'Anyone with an account here.',
         followers: 'People who follow this group.',
-        admins: 'Administrators of this group.',
+        admins: 'Admins of this group.',
       },
     },
     // Replies on a profile narrower than registered follow its access.
@@ -139,5 +139,5 @@ export default {
     },
   },
   tabs: 'Profile tabs',
-  addAdmins: 'Add administrators',
+  addAdmins: 'Add admins',
 };

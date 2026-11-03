@@ -17,7 +17,7 @@ export default {
       followers: 'Followers',
       leaders: 'Following',
       mutuals: 'Mutuals',
-      admins: 'Administrators',
+      admins: 'Admins',
       myself: 'Only me',
     },
     descriptions: {
@@ -37,7 +37,7 @@ export default {
       },
       group: {
         followers: 'People who follow {{ name }}',
-        admins: 'The administrators of {{ name }}',
+        admins: 'The admins of {{ name }}',
       },
     },
     capped: 'Not available here: {{ name }} is not visible that widely, so a post on it cannot be either.',

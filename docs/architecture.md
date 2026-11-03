@@ -1239,10 +1239,14 @@ desktop, left aligned:
 
 - **The cover,** when there is one, as a wide band three times as wide as
   it is tall and no taller than 320px (`components/CoverForm.jsx`). With
-  none it is not drawn at all, apart from a slim "Add a cover photo" band
-  for whoever may add one. Cards of profiles use the same band.
-- **The picture** over the cover's lower edge, or at the top of the card
-  with no cover, smaller on a phone; **beside it, the buttons**: Follow
+  none, whoever may add one sees an empty band of the same size, in the
+  page's colour, with "Add a cover photo" (`band` on `CoverForm`); anybody
+  else sees no band at all. Cards of profiles use the same band. The cover's
+  and the profile photo's menus have **Upload** and Delete.
+- **The profile photo** over the cover's lower edge, or at the top of the
+  card when there is no band, smaller on a phone. Since the empty band is
+  there whenever a cover may be added, putting one up or taking it down
+  moves nothing; **beside it, the buttons**: Follow
   (filled while not following, outlined once following), the others the
   viewer may use, and the ⋮ menu. They were a row of their own under
   everything, which left a band of white.
@@ -1434,13 +1438,13 @@ name is needed; the handle is made from it by the server.
 | Anyone (chosen at first) | `public` |
 | Anyone signed in | `registered` |
 | Only its followers | `followers` |
-| Only its administrators, for now | `admins` |
+| Only its admins, for now | `admins` |
 
 It is sent with the rest in one `POST /groups/`, so a group is never seen by
 more people than chosen, and is changed afterwards under the group's
 Privacy settings. Where the installation allows nothing new to be public
 (`minContentAccess` in NodeInfo), Anyone is not offered and Anyone signed in
-is chosen at first. Whoever makes it is its first administrator and its
+is chosen at first. Whoever makes it is its first admin and its
 first follower, and is taken to its page.
 
 Rules are not asked for on the form. While a group or an event has none,

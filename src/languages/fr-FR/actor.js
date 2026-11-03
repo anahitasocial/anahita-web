@@ -54,7 +54,7 @@ export default {
       followers: 'Les personnes abonnées à ce profil.',
       leaders: 'Les personnes suivies par ce profil.',
       mutuals: 'Les personnes abonnées à ce profil et suivies en retour.',
-      admins: 'Les administrateurs de ce groupe.',
+      admins: 'Les admins de ce groupe.',
       myself: 'Personne d’autre.',
     },
     labels: {
@@ -83,7 +83,7 @@ export default {
       group: {
         registered: 'Toute personne connectée',
         followers: 'Abonnés',
-        admins: 'Administrateurs',
+        admins: 'Admins',
       },
     },
     // Words of a row's own, for a choice the shared words say wrongly
@@ -117,7 +117,7 @@ export default {
       group: {
         registered: 'Toute personne ayant un compte ici.',
         followers: 'Les personnes abonnées à ce groupe.',
-        admins: 'Les administrateurs de ce groupe.',
+        admins: 'Les admins de ce groupe.',
       },
     },
     commentLocked: {

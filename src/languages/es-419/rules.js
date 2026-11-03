@@ -31,8 +31,8 @@ export default {
     // none, for its administrators alone.
     add: 'Agregar reglas',
     addHelp: {
-      group: 'Los seguidores las aceptan primero. Solo los administradores ven esto.',
-      event: 'Quien responde las acepta primero. Solo los administradores ven esto.',
+      group: 'Los seguidores las aceptan primero. Solo los admins ven esto.',
+      event: 'Quien responde las acepta primero. Solo los anfitriones ven esto.',
     },
   },
   // A group's or an event's reports against its rules (part 6b).

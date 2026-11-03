@@ -31,8 +31,8 @@ export default {
     // none, for its administrators alone.
     add: 'Ajouter des règles',
     addHelp: {
-      group: 'Les abonnés les acceptent d’abord. Seuls les administrateurs voient ceci.',
-      event: 'Qui y répond les accepte d’abord. Seuls les administrateurs voient ceci.',
+      group: 'Les abonnés les acceptent d’abord. Seuls les admins voient ceci.',
+      event: 'Qui y répond les accepte d’abord. Seuls les hôtes voient ceci.',
     },
   },
   // A group's or an event's reports against its rules (part 6b).

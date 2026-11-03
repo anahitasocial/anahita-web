@@ -4,7 +4,7 @@ export default {
   followers: 'Follower',
   leaders: 'Gefolgt',
   mutuals: 'Gegenseitig',
-  admins: 'Administrator:innen',
+  admins: 'Admins',
   myself: 'Nur ich',
   // Choosing who can see a post while writing it. Its own wording, not
   // the bare level names above: here each one has to say whose followers
@@ -17,7 +17,7 @@ export default {
       followers: 'Follower',
       leaders: 'Gefolgt',
       mutuals: 'Gegenseitig',
-      admins: 'Administrator:innen',
+      admins: 'Admins',
       myself: 'Nur ich',
     },
     descriptions: {
@@ -37,7 +37,7 @@ export default {
       },
       group: {
         followers: 'Personen, die {{ name }} folgen',
-        admins: 'Die Administrator:innen von {{ name }}',
+        admins: 'Die Admins von {{ name }}',
       },
     },
     capped: 'Hier nicht verfügbar: {{ name }} ist nicht so weit sichtbar, also kann es ein Beitrag darin auch nicht sein.',

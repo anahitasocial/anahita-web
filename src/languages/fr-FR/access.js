@@ -4,7 +4,7 @@ export default {
   followers: 'Abonnés',
   leaders: 'Abonnements',
   mutuals: 'Relations mutuelles',
-  admins: 'Administrateurs',
+  admins: 'Admins',
   myself: 'Moi uniquement',
   // Choisir qui peut voir une publication au moment de l’écrire. Un
   // vocabulaire à part : ici chaque niveau doit dire de qui sont les
@@ -17,7 +17,7 @@ export default {
       followers: 'Abonnés',
       leaders: 'Abonnements',
       mutuals: 'Relations mutuelles',
-      admins: 'Administrateurs',
+      admins: 'Admins',
       myself: 'Moi uniquement',
     },
     descriptions: {
@@ -37,7 +37,7 @@ export default {
       },
       group: {
         followers: 'Les personnes qui suivent {{ name }}',
-        admins: 'Les administrateurs de {{ name }}',
+        admins: 'Les admins de {{ name }}',
       },
     },
     capped: 'Indisponible ici : {{ name }} n’est pas visible aussi largement, donc une publication ne peut pas l’être non plus.',
