@@ -9,11 +9,13 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
 
 import i18n from '../languages';
+import InPostDialog from './postDialogContext';
 
 // A post read over the list it was opened from, so that answering it does not
 // lose somebody's place (the user, 2026-11-01). It has the post's own address:
 // a link to it opens the page, and going back closes this. On a phone it
-// fills the screen, and looks like the page.
+// fills the screen, and looks like the page. It is about answering the post:
+// its places and what cites it are on its own page, not here.
 const PostDialog = ({ children }) => {
   const navigate = useNavigate();
   const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
@@ -54,7 +56,9 @@ const PostDialog = ({ children }) => {
         '& > .MuiGrid-container > .MuiGrid-root': { width: '100%' },
       }}
       >
-        {children}
+        <InPostDialog.Provider value>
+          {children}
+        </InPostDialog.Provider>
       </Box>
     </Dialog>
   );

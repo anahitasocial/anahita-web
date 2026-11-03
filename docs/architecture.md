@@ -528,7 +528,9 @@ replies, made directly to the post.
 - Reply under a post in a list opens the post over the list, at its own address
   (`routes/PostDialog.jsx`, the full screen on a phone): the routes go on showing
   the list, from `location.state.background`, so it keeps its place. Going back
-  closes it, and a link to it opens the page.
+  closes it, and a link to it opens the page. It holds the post and its replies
+  in one column, and nothing else: its Locations and Cited by are on its page
+  (`routes/postDialogContext.js` tells the post it is in the dialog).
 - Replies are set in a level for each step down, up to four, with a line down
   the side. Past that they line up, so a long exchange fits a phone.
 - **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a

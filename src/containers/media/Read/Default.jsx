@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { withStyles } from 'tss-react/mui';
@@ -37,6 +37,7 @@ import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
 import { useStickyColumn } from '../../../components/SideTabs';
 import PeopleInPost from '../PeopleInPost';
+import InPostDialog from '../../../routes/postDialogContext';
 
 const {
   getAuthor,
@@ -62,9 +63,12 @@ const MediumReadDefault = ({
   // place of the picture alone.
   cover = null,
 }) => {
+  // Opened over a list, it is the post and its replies alone, in one
+  // column: its places and what cites it are on its own page.
+  const inDialog = useContext(InPostDialog);
   const isWide = useMediaQuery((theme) => {
     return theme.breakpoints.up('md');
-  });
+  }) && !inDialog;
   // Each keeps its place beside the other, however long the other is.
   const [postRef, postTop] = useStickyColumn(isWide, 64);
   const [talkRef, talkTop] = useStickyColumn(isWide, 64);
@@ -238,7 +242,7 @@ const MediumReadDefault = ({
         <Stack spacing={2}>
           {post}
           {replies}
-          {about}
+          {!inDialog && about}
         </Stack>
       </PageColumn>
     );
