@@ -204,7 +204,7 @@ const ActorAvatarForm = ({
             onChange={handleFieldChange}
           />
           <MenuItemLabel icon={<UploadIcon fontSize="small" />}>
-            {i18n.t('actions:update')}
+            {i18n.t('actions:upload')}
           </MenuItemLabel>
         </MenuItem>
         {avatar &&

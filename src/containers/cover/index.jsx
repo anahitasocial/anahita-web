@@ -13,6 +13,7 @@ const Cover = (props) => {
     node,
     canEdit,
     alertError,
+    band = false,
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -101,6 +102,7 @@ const Cover = (props) => {
       handleClose={handleClose}
       handleFieldChange={handleFieldChange}
       handleDelete={handleDelete}
+      band={band}
     />
   );
 };
@@ -109,6 +111,8 @@ Cover.propTypes = {
   node: NodeType.isRequired,
   canEdit: PropTypes.bool.isRequired,
   alertError: PropTypes.func.isRequired,
+  // See CoverForm.
+  band: PropTypes.bool,
 };
 
 const mapDispatchToProps = (dispatch) => {

@@ -260,6 +260,7 @@ const ActorsRead = (props) => {
           <Cover
             node={actor}
             canEdit={canEdit}
+            band
           />
         }
         // An event has no avatar to show or to upload: its cover is its
@@ -272,7 +273,9 @@ const ActorsRead = (props) => {
             viewable={!isBlocked}
           />}
         actor={actor}
-        hasCover={Boolean(utils.node.getCoverURL(actor))}
+        // A cover, or the band to put one in for whoever may: the picture
+        // overlaps either, so putting one up or taking it down moves nothing.
+        hasCover={Boolean(utils.node.getCoverURL(actor)) || canEdit}
         viewToggle={feedView.isWide && !isBlocked &&
           <FeedViewToggle view={feedView.view} onChoose={feedView.chooseView} />}
         // /people/ana/socialgraph/leaders was a tab of the profile. It now

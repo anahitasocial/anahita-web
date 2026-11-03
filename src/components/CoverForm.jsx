@@ -43,6 +43,26 @@ const styles = (theme) => {
       height: theme.spacing(7),
       color: theme.palette.text.secondary,
     },
+    // The same, the size of a cover: on a profile, where the picture
+    // overlaps it as it would a cover, so nothing moves when one is put up
+    // or taken down, and where it asks to be filled.
+    addCoverBand: {
+      width: '100%',
+      aspectRatio: '3 / 1',
+      maxHeight: theme.spacing(40),
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      gap: theme.spacing(1),
+      color: theme.palette.text.secondary,
+      // The page's own colour, so the band stands apart from the card.
+      backgroundColor: theme.palette.background.default,
+      transition: theme.transitions.create('color'),
+      '&:hover': {
+        color: theme.palette.text.primary,
+      },
+    },
     input: {
       display: 'none',
     },
@@ -63,6 +83,7 @@ const CoverForm = ({
   handleClose,
   handleFieldChange,
   handleDelete,
+  band = false,
 }) => {
   // No cover: nothing at all for whoever may not add one, rather than an
   // empty grey box.
@@ -86,10 +107,20 @@ const CoverForm = ({
               src="picture"
             />
           </Fade>}
-        {!cover && !isFetching &&
+        {!cover && !isFetching && !band &&
           <Typography variant="body2" className={classes.addCover} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             {i18n.t('actions:addCover')}
           </Typography>}
+        {!cover && band &&
+          <span className={classes.addCoverBand}>
+            {!isFetching &&
+              <>
+                <UploadIcon sx={{ fontSize: 40 }} />
+                <Typography variant="body2" component="span">
+                  {i18n.t('actions:addCover')}
+                </Typography>
+              </>}
+          </span>}
         {isFetching && <CircularProgress className={classes.progress} />}
       </ButtonBase>
       {/* In the middle of the cover, where it was pressed, and not at its
@@ -114,7 +145,7 @@ const CoverForm = ({
             onChange={handleFieldChange}
           />
           <MenuItemLabel icon={<UploadIcon fontSize="small" />}>
-            {i18n.t('actions:update')}
+            {i18n.t('actions:upload')}
           </MenuItemLabel>
         </MenuItem>
         {cover &&
@@ -139,6 +170,9 @@ CoverForm.propTypes = {
   handleClose: PropTypes.func.isRequired,
   handleFieldChange: PropTypes.func.isRequired,
   handleDelete: PropTypes.func.isRequired,
+  // With no cover, a band the size of one to fill, for a profile's header;
+  // a slim line otherwise.
+  band: PropTypes.bool,
 };
 
 export default withStyles(CoverForm, styles);

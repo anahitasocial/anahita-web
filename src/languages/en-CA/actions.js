@@ -2,6 +2,8 @@ export default {
   // A notice's link to what it is about: a post just made.
   view: 'View',
   addCover: 'Add a cover photo',
+  // Choosing a file for a cover or a profile photo.
+  upload: 'Upload',
   followBack: 'Follow back',
   follow: 'Follow',
   unfollow: 'Unfollow',
