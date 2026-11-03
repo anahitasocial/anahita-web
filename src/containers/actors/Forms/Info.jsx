@@ -90,10 +90,8 @@ const ActorFormsInfo = ({
           }}
         />}
       </CardContent>
-      {/* Cancel only when a handler is supplied. The settings card opens
-          this form from a read view and needs a way back; actors/Add renders
-          it as the whole page for creating an actor, where there is nothing
-          to cancel back to. */}
+      {/* Cancel only when a handler is supplied: the settings card opens
+          this form from a read view and needs a way back. */}
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         {handleOnCancel &&
           <Button

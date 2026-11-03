@@ -19,7 +19,7 @@ import HomePage from '../containers/home';
 import Actors from '../containers/actors';
 import ActorsRead from '../containers/actors/Read';
 import ActorByHandle from '../containers/actors/ByHandle';
-import ActorsAdd from '../containers/actors/Add';
+import GroupsAdd from '../containers/actors/Add';
 import ActorsSettings from '../containers/actors/Settings';
 
 import Blogs from '../containers/blogs';
@@ -68,7 +68,6 @@ import WebsiteConnect from '../containers/websites/Connect';
 
 const GroupsBrowse = Actors('groups');
 const GroupsRead = ActorsRead('groups');
-const GroupsAdd = ActorsAdd('groups');
 const GroupsSettings = ActorsSettings('groups');
 
 // A hashtag's page is told to other servers as /tags/<name>, where

@@ -4,6 +4,20 @@ export default {
   add: {
     cTitle: 'Criar grupo',
     mTitle: 'Criar grupo',
+    // The form for making one.
+    subheader: 'Você vai administrá-lo desde o começo.',
+    nameHelp: 'O identificador dele é formado a partir do nome.',
+    bodyHelp: 'Do que se trata, no cartão Sobre.',
+    websiteHelp: 'Um link, no cartão Sobre.',
+    access: 'Quem pode ver?',
+    accessHelp: 'Você pode mudar isso depois nas configurações dele.',
+    accessOptions: {
+      public: 'Qualquer pessoa',
+      registered: 'Qualquer pessoa conectada',
+      followers: 'Só os seguidores dele',
+      admins: 'Só os administradores dele, por enquanto',
+    },
+    failed: 'Não foi possível criar o grupo. Tente de novo.',
   },
   settings: {
     info: 'Informações',

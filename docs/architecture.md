@@ -1404,6 +1404,27 @@ where the event is named without its times. Its page has no avatar to upload.
 **Add to calendar** asks the server for the event as an `.ics` file and hands
 it to the browser to save.
 
+### Making a group
+
+`/groups/add` (`containers/actors/Add`) is laid out as making an event is:
+the name, what the group is about, one link, and who can see it, each with a
+line saying what it is for, then Cancel and Create side by side. Only the
+name is needed; the handle is made from it by the server.
+
+| Who can see it | `access` |
+| --- | --- |
+| Anyone (chosen at first) | `public` |
+| Anyone signed in | `registered` |
+| Only its followers | `followers` |
+| Only its administrators, for now | `admins` |
+
+It is sent with the rest in one `POST /groups/`, so a group is never seen by
+more people than chosen, and is changed afterwards under the group's
+Privacy settings. Where the installation allows nothing new to be public
+(`minContentAccess` in NodeInfo), Anyone is not offered and Anyone signed in
+is chosen at first. Whoever makes it is its first administrator and its
+first follower, and is taken to its page.
+
 ### Inviting people to a group
 
 A group's page has **Invite** for whoever the group lets invite

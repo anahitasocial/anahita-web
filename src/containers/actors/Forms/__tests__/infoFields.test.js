@@ -14,8 +14,9 @@ import path from 'path';
 // anything, with nothing on screen to say which field was missing.
 //
 // That is not hypothetical: websiteUrl was added to the form and to
-// actors/Settings/Info, actors/Add was not updated, and /groups/add threw on
-// load for everybody.
+// actors/Settings/Info, the old form for making a group was not updated, and
+// /groups/add threw on load for everybody. That form has its own fields now;
+// the settings card is the one that renders this.
 //
 // Read out of the source rather than by rendering, because rendering these
 // means a store, a router and an i18n instance. The question is only whether
@@ -48,7 +49,6 @@ const fieldsDeclaredIn = (source, file) => {
 };
 
 const CONSUMERS = [
-  ['actors/Add', read('..', 'Add', 'index.jsx')],
   ['actors/Settings/Info', read('..', 'Settings', 'Info.jsx')],
 ];
 

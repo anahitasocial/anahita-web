@@ -4,6 +4,20 @@ export default {
   add: {
     cTitle: 'Gruppe erstellen',
     mTitle: 'Gruppe erstellen',
+    // The form for making one.
+    subheader: 'Du verwaltest sie von Anfang an.',
+    nameHelp: 'Ihr Handle wird aus ihrem Namen gebildet.',
+    bodyHelp: 'Worum es geht, auf ihrer Über-Karte.',
+    websiteHelp: 'Ein Link, auf ihrer Über-Karte.',
+    access: 'Wer kann sie sehen?',
+    accessHelp: 'Du kannst das später in ihren Einstellungen ändern.',
+    accessOptions: {
+      public: 'Alle',
+      registered: 'Alle, die angemeldet sind',
+      followers: 'Nur ihre Follower',
+      admins: 'Vorerst nur ihre Administratoren',
+    },
+    failed: 'Die Gruppe konnte nicht erstellt werden. Bitte versuche es erneut.',
   },
   settings: {
     info: 'Info',
