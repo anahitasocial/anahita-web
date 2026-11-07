@@ -7,6 +7,7 @@ import { Link as RouterLink, useNavigate, useParams } from 'react-router-dom';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Link from '@mui/material/Link';
@@ -146,53 +147,56 @@ const CustomFeedRead = ({
                   isOwn,
                 })}
               </Typography>
-              <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
-                {authorized.pin &&
-                <Button
-                  variant={feed.isPinned ? 'outlined' : 'contained'}
-                  startIcon={feed.isPinned ? <UnpinIcon /> : <PinIcon />}
-                  disabled={waiting}
-                  onClick={handlePin}
-                >
-                  {i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin')}
-                </Button>}
-                {authorized.copy &&
-                <Button
-                  color="inherit"
-                  startIcon={<CopyIcon />}
-                  disabled={waiting}
-                  onClick={handleCopy}
-                >
-                  {i18n.t('customFeeds:actions.copy')}
-                </Button>}
-                {authorized.edit &&
-                <Button
-                  color="inherit"
-                  startIcon={<EditIcon />}
-                  component={RouterLink}
-                  to={`${customFeeds.urlOf(feed)}/edit`}
-                >
-                  {i18n.t('customFeeds:actions.edit')}
-                </Button>}
-                {authorized.delete &&
-                <DialogConfirm
-                  title={i18n.t('customFeeds:delete.title')}
-                  message={i18n.t('customFeeds:delete.message')}
-                  confirm={i18n.t('customFeeds:delete.confirm')}
-                  dismiss={i18n.t('customFeeds:delete.dismiss')}
-                >
-                  <Button
-                    color="error"
-                    startIcon={<DeleteIcon />}
-                    disabled={waiting}
-                    onClick={handleDelete}
-                  >
-                    {i18n.t('customFeeds:actions.delete')}
-                  </Button>
-                </DialogConfirm>}
-              </Stack>
             </Stack>
           </CardContent>
+          {/* What can be done with the feed, at the foot of its card;
+              nothing there for one who may do none of it. */}
+          {(authorized.pin || authorized.copy || authorized.edit || authorized.delete) &&
+          <CardActions disableSpacing sx={{ flexWrap: 'wrap', gap: 1 }}>
+            {authorized.pin &&
+            <Button
+              variant={feed.isPinned ? 'outlined' : 'contained'}
+              startIcon={feed.isPinned ? <UnpinIcon /> : <PinIcon />}
+              disabled={waiting}
+              onClick={handlePin}
+            >
+              {i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin')}
+            </Button>}
+            {authorized.copy &&
+            <Button
+              color="inherit"
+              startIcon={<CopyIcon />}
+              disabled={waiting}
+              onClick={handleCopy}
+            >
+              {i18n.t('customFeeds:actions.copy')}
+            </Button>}
+            {authorized.edit &&
+            <Button
+              color="inherit"
+              startIcon={<EditIcon />}
+              component={RouterLink}
+              to={`${customFeeds.urlOf(feed)}/edit`}
+            >
+              {i18n.t('customFeeds:actions.edit')}
+            </Button>}
+            {authorized.delete &&
+            <DialogConfirm
+              title={i18n.t('customFeeds:delete.title')}
+              message={i18n.t('customFeeds:delete.message')}
+              confirm={i18n.t('customFeeds:delete.confirm')}
+              dismiss={i18n.t('customFeeds:delete.dismiss')}
+            >
+              <Button
+                color="error"
+                startIcon={<DeleteIcon />}
+                disabled={waiting}
+                onClick={handleDelete}
+              >
+                {i18n.t('customFeeds:actions.delete')}
+              </Button>
+            </DialogConfirm>}
+          </CardActions>}
         </Card>
         <FeedCustomBrowse feed={feed} />
       </PageColumn>

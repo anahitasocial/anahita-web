@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -154,30 +155,30 @@ const GroupAdd = () => {
                   {i18n.t('groups:add.accessHelp')}
                 </FormHelperText>
               </FormControl>
-              {/* Side by side, each half the width: Cancel, then the one
-                  that does it. */}
-              <Stack direction="row" spacing={1}>
-                <Button
-                  fullWidth
-                  disabled={isSaving}
-                  onClick={() => {
-                    navigate('/groups/');
-                  }}
-                >
-                  {i18n.t('actions:cancel')}
-                </Button>
-                <Button
-                  fullWidth
-                  type="submit"
-                  variant="contained"
-                  color="primary"
-                  disabled={isSaving || !values.name.trim()}
-                >
-                  {isSaving ? <CircularProgress size={24} /> : i18n.t('actions:create')}
-                </Button>
-              </Stack>
             </Stack>
           </CardContent>
+          {/* Side by side, each half the width: Cancel, then the one that
+              does it. */}
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
+            <Button
+              fullWidth
+              disabled={isSaving}
+              onClick={() => {
+                navigate('/groups/');
+              }}
+            >
+              {i18n.t('actions:cancel')}
+            </Button>
+            <Button
+              fullWidth
+              type="submit"
+              variant="contained"
+              color="primary"
+              disabled={isSaving || !values.name.trim()}
+            >
+              {isSaving ? <CircularProgress size={24} /> : i18n.t('actions:create')}
+            </Button>
+          </CardActions>
         </Card>
       </PageColumn>
     </>

@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import Autocomplete from '@mui/material/Autocomplete';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import CircularProgress from '@mui/material/CircularProgress';
@@ -404,33 +405,33 @@ const EventForm = ({
                 })}
               </RadioGroup>
             </FormControl>}
-          {/* Side by side, each half the width: Cancel, then the one that
-              does it. */}
-          <Stack sx={{ justifyContent: 'flex-end' }} direction="row" spacing={1}>
-            <Button
-              fullWidth
-              disabled={isSaving}
-              onClick={() => {
-                navigate(actor ? getURL(actor) : '/events');
-              }}
-            >
-              {i18n.t('actions:cancel')}
-            </Button>
-            <Button
-              fullWidth
-              type="submit"
-              variant="contained"
-              color="primary"
-              disabled={isSaving || !values.name.trim()}
-            >
-              {!isSaving && (isNew ?
-                i18n.t('events:event.form.create') :
-                i18n.t('events:event.form.save'))}
-              {isSaving && <CircularProgress size={24} />}
-            </Button>
-          </Stack>
         </Stack>
       </CardContent>
+      {/* Side by side, each half the width: Cancel, then the one that
+          does it. */}
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
+        <Button
+          fullWidth
+          disabled={isSaving}
+          onClick={() => {
+            navigate(actor ? getURL(actor) : '/events');
+          }}
+        >
+          {i18n.t('actions:cancel')}
+        </Button>
+        <Button
+          fullWidth
+          type="submit"
+          variant="contained"
+          color="primary"
+          disabled={isSaving || !values.name.trim()}
+        >
+          {!isSaving && (isNew ?
+            i18n.t('events:event.form.create') :
+            i18n.t('events:event.form.save'))}
+          {isSaving && <CircularProgress size={24} />}
+        </Button>
+      </CardActions>
     </Card>
   );
 };

@@ -80,7 +80,8 @@ tone made specific; where they are silent, follow it.
     dialog from a count; what is private to the viewer goes in the left menu
     or settings. Prefer dialogs to new tabs.
 13. Facts about a profile go in its About card, not in a wide banner.
-14. A card's main action goes in its action area at the bottom. Keep a list
+14. A card's main action goes in its action area at the bottom:
+    `CardActions`, after `CardContent`, never inside it. Keep a list
     card's action row short: Download only on a post's own page. Share is
     always the last action, after Download.
 15. No Delete inside an edit form when the list or page has one already.
