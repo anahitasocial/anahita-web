@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -91,6 +91,19 @@ const limitedNote = (actor) => {
   return actor.viaHost ? i18n.t('events:event.viaHost') : '';
 };
 
+// Whether the profile kept is the one the address asks for: a person by
+// their handle, whatever its case, and anything else by its id.
+export const isProfileAsked = (actor, id, namespace) => {
+  if (!actor || !actor.id || !id) {
+    return false;
+  }
+  if (String(actor.id) === String(id)) {
+    return true;
+  }
+  return namespace === 'people' && Boolean(actor.alias) &&
+    actor.alias.toLowerCase() === String(id).toLowerCase();
+};
+
 const ActorsRead = (props) => {
   const {
     namespace,
@@ -125,6 +138,21 @@ const ActorsRead = (props) => {
     readItem(id);
   }, [id, namespace]);
 
+  // The profile kept in the store is the last one read, which until the new
+  // one arrives is the one before: somebody else's, or the viewer's own,
+  // under this address, their name and their picture on a stranger's page
+  // (the user, 2026-11-07). Shown only once it is the one asked for. One
+  // read that comes back after a later one would put the earlier profile
+  // back; it is then asked for once more.
+  const isAsked = isProfileAsked(actor, id, namespace);
+  const askedAgain = useRef('');
+  useEffect(() => {
+    if (actor.id && !isAsked && !isFetching && askedAgain.current !== id) {
+      askedAgain.current = id;
+      readItem(id);
+    }
+  }, [actor.id, isAsked, isFetching, id]);
+
   // While it is open, the + button posts here, when the viewer may
   // (roadmap row 99): to their own profile, or a group or an event that
   // takes their posts.
@@ -141,8 +169,8 @@ const ActorsRead = (props) => {
     };
   }, [mayPost, actor.id, actor.authorized]);
 
-  if (!actor.id) {
-    if (isFetching) {
+  if (!actor.id || !isAsked) {
+    if (isFetching || (actor.id && !error)) {
       return (
         <Progress />
       );

@@ -19,12 +19,14 @@ const READS = {
 // "not found" for whatever does not begin with @. The alias is looked up
 // once (api/handles: which kind of profile it is, and its id), then the
 // profile is drawn as its own page would draw it, its tabs under /@alias.
+// An answer is kept with the alias it was for, so that moving from one
+// profile to another never draws, or redirects to, the one before.
 const ActorByHandle = () => {
   const { handle = '', '*': rest = '' } = useParams();
   const isHandle = handle.startsWith('@') && handle.length > 1;
   const alias = isHandle ? handle.slice(1) : '';
   const [found, setFound] = useState(null);
-  const [missing, setMissing] = useState(false);
+  const [missing, setMissing] = useState('');
 
   useEffect(() => {
     if (!alias) {
@@ -32,14 +34,14 @@ const ActorByHandle = () => {
     }
     let current = true;
     setFound(null);
-    setMissing(false);
+    setMissing('');
     api.handles.read(alias).then((result) => {
       if (current) {
-        setFound(result.data);
+        setFound({ ...result.data, askedFor: alias });
       }
     }).catch(() => {
       if (current) {
-        setMissing(true);
+        setMissing(alias);
       }
     });
     return () => {
@@ -47,10 +49,12 @@ const ActorByHandle = () => {
     };
   }, [alias]);
 
-  if (!isHandle || missing) {
+  if (!isHandle || missing === alias) {
     return <NotFoundPage />;
   }
-  if (!found || !READS[found.kind]) {
+  // Until the answer for this alias is in, nothing of the one before it:
+  // the address has changed before the effect above has run again.
+  if (!found || found.askedFor !== alias || !READS[found.kind]) {
     return <Progress />;
   }
 

@@ -19,14 +19,17 @@ const ActorsAvatar = (props) => {
   const [isLoading, setIsLoading] = useState(true);
   const [waiting, setWaiting] = useState(false);
 
+  // The picture of the profile it is given, again whenever another profile
+  // or another picture comes in. It was read once, so a page moved from one
+  // profile to another went on showing the first one's picture: the
+  // viewer's own on somebody else's profile (the user, 2026-11-07).
+  const given = node.avatarUrls && node.avatarUrls.large && node.avatarUrls.large.url;
   useEffect(() => {
-    const src = node.avatarUrls && node.avatarUrls.large && node.avatarUrls.large.url;
-    if (src) {
-      setAvatar(src);
-    } else {
+    setAvatar(given || null);
+    if (!given) {
       setIsLoading(false);
     }
-  }, []);
+  }, [node.id, given]);
 
   useEffect(() => {
     if (avatar) {
