@@ -9,6 +9,11 @@ export default {
     placeholder: 'Say more…',
     part: 'Note {{number}} of the thread',
     remove: 'Remove from the thread',
+    count: '{{ count }} / {{ max }}',
+    split: 'Split into a thread',
+    splitDone: 'Split into {{ count }} notes.',
+    undo: 'Undo',
+    tooLong: 'Longer than ten notes hold: an article takes it whole.',
   },
   close: 'Close',
   // Opens the extended composer from the short box: an article or a topic.

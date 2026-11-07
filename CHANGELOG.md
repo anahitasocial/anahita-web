@@ -23,7 +23,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **A thread reads as one** (roadmap row 126): in a list, a post its
    writer went on under shows the next note and "Show the thread" with how
    many notes it has; on the post's page their notes come first, flat and
-   joined by a line, and everybody else's replies after them.
+   joined by a line, and everybody else's replies after them. Writing one,
+   each note counts its letters against where the post goes (300 for
+   Bluesky, 500 for the fediverse), "Add to thread" is offered when a note
+   is full, and long words can be split into a thread in one tap.
 2. **The Feeds page lists every feed one may see** (roadmap row 125), newest
    first: Everyone's, People you follow, Yours, or On your home, in its
    order; a page at a time as one scrolls, with a line to Search › Feeds.

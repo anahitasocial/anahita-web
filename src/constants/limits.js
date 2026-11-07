@@ -25,6 +25,10 @@ export default {
   // stock Mastodon server and Bluesky. A post over either goes out with a
   // link to the rest here.
   BLUESKY_POST_MAX: 300,
+  // What people on Mastodon write in a note, and so where a thread's note
+  // ends when the post goes to the fediverse and not Bluesky (roadmap row
+  // 126). Mastodon shows a longer note from elsewhere whole.
+  FEDIVERSE_POST_MAX: 500,
   PICTURES_SHOWN_MAX: 4,
   // How many notes a thread written in one go may have: the services'
   // ThreadPartsMax (roadmap row 101).

@@ -29,7 +29,8 @@ import DetailRow from '../../../components/DetailRow';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
-import ThreadParts from './ThreadParts';
+import ThreadParts, { SplitWords, ThreadLine } from './ThreadParts';
+import useThreadSplit from './useThreadSplit';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
 import useTextareaHashtags from './useHashtagSuggestions';
@@ -48,6 +49,7 @@ import videos from '../../../utils/videos';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
+import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
 import useRulesFirst from '../../rules/useRulesFirst';
 import { TagPeoplePicker, tagPeople, tagOutcomeMessage } from '../TagPeopleDialog';
@@ -166,6 +168,12 @@ const ShortComposer = ({
   // row 100): the first 300 letters on Bluesky, the first four pictures on
   // Mastodon and Bluesky, with a link to the post here for the rest.
   const cutForBluesky = goesToBluesky && [...body].length > LIMITS.BLUESKY_POST_MAX;
+  // Where a note of a thread ends, where the post goes (roadmap row 126),
+  // the count against it, and long words split into a thread.
+  const noteLimit = threadSplit.limitFor({ goesToBluesky, goesToFediverse: goesOut });
+  const split = useThreadSplit({
+    body, setBody, moreParts, setMoreParts, limit: noteLimit, canThread,
+  });
   const morePictures = photoItems.length > LIMITS.PICTURES_SHOWN_MAX && (
     (goesOut && goesToBluesky && 'federation:composer.morePictures') ||
     (goesOut && 'federation:composer.morePicturesMastodon') ||
@@ -552,14 +560,18 @@ const ShortComposer = ({
         }}
       />
       <HashtagSuggestions {...hashtags.overlay} />
-      {/* Its line is kept while the post goes to Bluesky, so that nothing
-          moves when the words grow past what a post there holds. */}
-      {goesToBluesky &&
-        <Typography variant="caption" color="textSecondary" component="p">
-          {cutForBluesky ?
-            i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
-            ' '}
-        </Typography>}
+      {/* Its line is kept, so that nothing moves as the words grow: what
+          Bluesky shows of them, or the thread they can be split into; and
+          how many letters they have of what a note holds where it goes. */}
+      {canWords &&
+        <ThreadLine length={split.length} limit={noteLimit}>
+          <SplitWords
+            split={split}
+            otherwise={cutForBluesky ?
+              i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
+              ' '}
+          />
+        </ThreadLine>}
       {!hasPhotos && !video &&
         <LinkPreviewCard
           preview={linkPreview.preview}
@@ -569,11 +581,13 @@ const ShortComposer = ({
         <ThreadParts
           parts={moreParts}
           onChange={setMoreParts}
-          canAdd={Boolean(text) && !moreParts.some((each) => { return !each.trim(); })}
+          canAdd={Boolean(text) && split.isFull &&
+            !moreParts.some((each) => { return !each.trim(); })}
           max={LIMITS.THREAD_PARTS_MAX}
           disabled={busy}
           direction={choices.direction}
           goesToBluesky={goesToBluesky}
+          limit={noteLimit}
         />}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>

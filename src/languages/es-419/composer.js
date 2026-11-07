@@ -7,6 +7,11 @@ export default {
     placeholder: 'Sigue escribiendo…',
     part: 'Nota {{number}} del hilo',
     remove: 'Quitar del hilo',
+    count: '{{ count }} / {{ max }}',
+    split: 'Dividir en un hilo',
+    splitDone: 'Dividido en {{ count }} notas.',
+    undo: 'Deshacer',
+    tooLong: 'Más largo de lo que caben en diez notas: un artículo lo toma entero.',
   },
   close: 'Cerrar',
   // Opens the extended composer from the short box: an article or a topic.

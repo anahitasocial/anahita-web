@@ -25,7 +25,9 @@ import PhotoFilesEditor from '../../components/PhotoFilesEditor';
 import useLinkPreview from '../media/Composer/useLinkPreview';
 import useTextareaHashtags from '../media/Composer/useHashtagSuggestions';
 import HashtagSuggestions from '../../components/HashtagSuggestions';
-import ThreadParts from '../media/Composer/ThreadParts';
+import ThreadParts, { SplitWords, ThreadLine } from '../media/Composer/ThreadParts';
+import useThreadSplit from '../media/Composer/useThreadSplit';
+import useOnFediverse, { useOnBluesky } from '../media/Composer/useOnFediverse';
 import linkPreviews from '../../utils/linkPreviews';
 import photoFiles from '../../utils/photoFiles';
 import sendOnEnter from '../../utils/sendOnEnter';
@@ -34,6 +36,7 @@ import { PHOTO_TYPES } from '../../utils/preparePhoto';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
 import LIMITS from '../../constants/limits';
+import threadSplit from '../../utils/threadSplit';
 
 const { CONTENT } = MEDIUM.FIELDS;
 
@@ -100,6 +103,17 @@ const ReplyForm = ({
   const canThread = attachments && !hasPhotos && !video && !isAddingPhotos;
   const threadParts = canThread ?
     moreParts.map((each) => { return each.trim(); }).filter(Boolean) : [];
+  // Where a reply's note ends: what the networks the viewer is on hold, as a
+  // reply goes where the thread's writer and its readers are (roadmap row
+  // 126). The count, and long words split into a thread, as in the composer.
+  const onFediverse = useOnFediverse(viewer);
+  const onBluesky = useOnBluesky(viewer);
+  const noteLimit = threadSplit.limitFor({
+    goesToBluesky: onBluesky, goesToFediverse: onFediverse,
+  });
+  const split = useThreadSplit({
+    body, setBody, moreParts, setMoreParts, limit: noteLimit, canThread: canThread && !compact,
+  });
 
   const known = useMemo(() => {
     return linkPreview ?
@@ -260,6 +274,10 @@ const ReplyForm = ({
         }}
       />
       <HashtagSuggestions {...hashtags.overlay} />
+      {canThread && !compact &&
+        <ThreadLine length={split.length} limit={noteLimit}>
+          <SplitWords split={split} />
+        </ThreadLine>}
       {/* A card for a link only where there is nothing else to show. */}
       {!hasPhotos && !video &&
         <LinkPreviewCard
@@ -270,10 +288,12 @@ const ReplyForm = ({
         <ThreadParts
           parts={moreParts}
           onChange={setMoreParts}
-          canAdd={Boolean(text) && !moreParts.some((each) => { return !each.trim(); })}
+          canAdd={Boolean(text) && split.isFull &&
+            !moreParts.some((each) => { return !each.trim(); })}
           max={LIMITS.THREAD_PARTS_MAX}
           disabled={isSending}
           direction={direction}
+          limit={noteLimit}
           outlined
         />}
       {attachments && isAddingPhotos && viewer && viewer.id &&

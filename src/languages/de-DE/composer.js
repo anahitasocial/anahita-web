@@ -7,6 +7,11 @@ export default {
     placeholder: 'Weiterschreiben…',
     part: 'Beitrag {{number}} des Threads',
     remove: 'Aus dem Thread entfernen',
+    count: '{{ count }} / {{ max }}',
+    split: 'In einen Thread aufteilen',
+    splitDone: 'In {{ count }} Notizen aufgeteilt.',
+    undo: 'Rückgängig',
+    tooLong: 'Länger als zehn Notizen fassen: Ein Artikel nimmt es ganz auf.',
   },
   close: 'Schließen',
   // Opens the extended composer from the short box: an article or a topic.

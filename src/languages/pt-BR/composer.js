@@ -7,6 +7,11 @@ export default {
     placeholder: 'Continue escrevendo…',
     part: 'Nota {{number}} do fio',
     remove: 'Remover do fio',
+    count: '{{ count }} / {{ max }}',
+    split: 'Dividir em um fio',
+    splitDone: 'Dividido em {{ count }} notas.',
+    undo: 'Desfazer',
+    tooLong: 'Mais longo do que cabe em dez notas: um artigo o leva inteiro.',
   },
   close: 'Fechar',
   // Opens the extended composer from the short box: an article or a topic.

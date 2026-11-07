@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
@@ -11,7 +12,77 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
 import LIMITS from '../../../constants/limits';
+import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
+
+// The line under a note's words (roadmap row 126): what is to be said of
+// them on the left, one line, cut short rather than wrapped; on the right,
+// how many letters they have of the most a note holds where the post goes.
+// Its room is kept, so nothing moves as it changes.
+export const ThreadLine = ({ length = -1, limit = 0, children = ' ' }) => {
+  return (
+    <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
+      <Typography variant="caption" color="textSecondary" component="p" noWrap sx={{ minWidth: 0 }}>
+        {children}
+      </Typography>
+      {length >= 0 && limit > 0 &&
+        <Typography
+          variant="caption"
+          color={length > limit ? 'textPrimary' : 'textSecondary'}
+          sx={{ flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}
+        >
+          {i18n.t('composer:thread.count', { count: length, max: limit })}
+        </Typography>}
+    </Stack>
+  );
+};
+
+ThreadLine.propTypes = {
+  length: PropTypes.number,
+  limit: PropTypes.number,
+  children: PropTypes.node,
+};
+
+// What the line under the first note says of a thread: that it was split,
+// with Undo; that it can be; that it is too long for one; or `otherwise`.
+export const SplitWords = ({ split, otherwise = ' ' }) => {
+  const asLink = {
+    component: 'button', type: 'button', variant: 'caption', underline: 'hover', sx: { verticalAlign: 'baseline' },
+  };
+  if (split.undoable) {
+    return (
+      <>
+        {i18n.t('composer:thread.splitDone', { count: split.undoable.count })}
+        {' '}
+        <Link {...asLink} onClick={split.undo}>
+          {i18n.t('composer:thread.undo')}
+        </Link>
+      </>
+    );
+  }
+  if (split.canSplit) {
+    return (
+      <Link {...asLink} onClick={split.splitNow}>
+        {i18n.t('composer:thread.split')}
+      </Link>
+    );
+  }
+  if (split.tooLong) {
+    return i18n.t('composer:thread.tooLong');
+  }
+  return otherwise;
+};
+
+SplitWords.propTypes = {
+  split: PropTypes.shape({
+    undoable: PropTypes.object,
+    canSplit: PropTypes.bool,
+    tooLong: PropTypes.bool,
+    splitNow: PropTypes.func,
+    undo: PropTypes.func,
+  }).isRequired,
+  otherwise: PropTypes.node,
+};
 
 // The notes of a thread written in one go after the first (roadmap row
 // 101): each a box of its own under the one before, joined by a line, as a
@@ -29,6 +100,7 @@ const ThreadParts = ({
   direction = 'ltr',
   goesToBluesky = false,
   outlined = false,
+  limit = 0,
 }) => {
   const change = (index, value) => {
     onChange(parts.map((each, at) => { return at === index ? value : each; }));
@@ -68,12 +140,15 @@ const ThreadParts = ({
                   htmlInput: { dir: direction, maxLength: LIMITS.POST_BODY_MAX },
                 }}
               />
-              {goesToBluesky &&
-                <Typography variant="caption" color="textSecondary" component="p">
-                  {[...words].length > LIMITS.BLUESKY_POST_MAX ?
+              {(goesToBluesky || limit > 0) &&
+                <ThreadLine
+                  length={limit > 0 ? threadSplit.lengthOf(words) : -1}
+                  limit={limit}
+                >
+                  {goesToBluesky && threadSplit.lengthOf(words) > LIMITS.BLUESKY_POST_MAX ?
                     i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
                     ' '}
-                </Typography>}
+                </ThreadLine>}
             </Box>
             <IconButton
               size="small"
@@ -117,6 +192,9 @@ ThreadParts.propTypes = {
   goesToBluesky: PropTypes.bool,
   // Boxed, as in the reply form; plain, as in the composer.
   outlined: PropTypes.bool,
+  // Where a note ends, where the post goes: each note's count is shown
+  // against it (roadmap row 126). None, no count.
+  limit: PropTypes.number,
 };
 
 export default ThreadParts;
