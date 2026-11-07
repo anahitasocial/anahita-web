@@ -29,6 +29,18 @@ code and no rebuild.
 the server has answered, and used in the page title and meta tags in
 `index.html`. See [Configuration](configuration.md).
 
+**The icons** are files in the build, at fixed names, which a site's own
+build replaces with its own after `yarn build` (banu.io's `web/build.sh`
+does):
+
+| File | Shown |
+| --- | --- |
+| `favicon.ico` | In a browser's tab, and by browsers that read nothing else |
+| `icon-32.png` | In a browser's tab |
+| `icon-180.png` | On an iPhone's or an iPad's home screen |
+| `icon-192.png`, `icon-512.png` | On an Android home screen, and for the installed app, named in `manifest.json` |
+| `manifest.json` | The installed app's name and icons |
+
 ## Themes
 
 A theme is a directory under `src/assets/`. The app uses the one named by
