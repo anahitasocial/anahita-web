@@ -147,4 +147,5 @@ export default {
     notHidden: 'That could not be done.',
     notAllowed: 'You are not allowed to reply here.',
   },
+  answersNote: 'Replying to note {{ number }} of the thread',
 };

@@ -20,16 +20,20 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Changed
 
-1. **The Feeds page lists every feed one may see** (roadmap row 125), newest
+1. **A thread reads as one** (roadmap row 126): in a list, a post its
+   writer went on under shows the next note and "Show the thread" with how
+   many notes it has; on the post's page their notes come first, flat and
+   joined by a line, and everybody else's replies after them.
+2. **The Feeds page lists every feed one may see** (roadmap row 125), newest
    first: Everyone's, People you follow, Yours, or On your home, in its
    order; a page at a time as one scrolls, with a line to Search › Feeds.
    Edit, Delete and Share are in a menu on each row.
-2. **The first page loads faster:** each page's code is fetched when it is
+3. **The first page loads faster:** each page's code is fetched when it is
    first opened, maps only where one is shown; what the first page loads
    went from 3,097 kB to 2,480 kB.
-3. **A card's buttons are in its action row,** at its foot: the feed's
+4. **A card's buttons are in its action row,** at its foot: the feed's
    page, the feed form, the group and event forms, an event's panel.
-4. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
+5. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
 
 ### Added
 

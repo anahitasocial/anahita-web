@@ -147,4 +147,5 @@ export default {
     notHidden: 'Não foi possível fazer isso.',
     notAllowed: 'Você não tem permissão para responder aqui.',
   },
+  answersNote: 'Em resposta à nota {{ number }} do fio',
 };

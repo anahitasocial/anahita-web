@@ -147,4 +147,5 @@ export default {
     notHidden: 'Das hat nicht geklappt.',
     notAllowed: 'Du darfst hier nicht antworten.',
   },
+  answersNote: 'Antwort auf Notiz {{ number }} des Threads',
 };

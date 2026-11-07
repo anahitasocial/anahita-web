@@ -147,4 +147,5 @@ export default {
     notHidden: 'No se pudo hacer.',
     notAllowed: 'No puedes responder aquí.',
   },
+  answersNote: 'En respuesta a la nota {{ number }} del hilo',
 };

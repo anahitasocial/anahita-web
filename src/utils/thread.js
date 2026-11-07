@@ -37,6 +37,50 @@ const nest = (replies, rootId) => {
   return top;
 };
 
+// The writer's own chain (roadmap row 126): from the post, the earliest
+// reply its writer made to it, then the earliest they made to that one, and
+// so on, as a thread is read. `writerOf` says who wrote a reply, and
+// `writerId` is the post's writer. The chain is drawn flat under the post,
+// and the rest, everybody else's replies, after it; a reply that answered
+// a note of the chain is then among the first replies, where `answers` says
+// which note it was: 2 for the first after the post.
+const chainOf = (replies, rootId, writerId, writerOf) => {
+  // The writer's replies by what they answer, the earliest first, as the
+  // list is oldest first.
+  const firstAnswer = {};
+  replies.forEach((reply) => {
+    if (writerId && !reply.deleted && !reply.hidden && writerOf(reply) === writerId &&
+      !firstAnswer[reply.parentId]) {
+      firstAnswer[reply.parentId] = reply;
+    }
+  });
+
+  const chain = [];
+  const taken = new Set();
+  let next = firstAnswer[rootId];
+  while (next && !taken.has(next.id)) {
+    chain.push(next);
+    taken.add(next.id);
+    next = firstAnswer[next.id];
+  }
+
+  const place = {};
+  chain.forEach((reply, index) => {
+    place[reply.id] = index + 2;
+  });
+  return {
+    chain,
+    rest: replies.filter((reply) => {
+      return !taken.has(reply.id);
+    }),
+    // The place in the thread of the note a reply answers, when it answers
+    // one of the chain's; 0 otherwise.
+    answers: (reply) => {
+      return place[reply.parentId] || 0;
+    },
+  };
+};
+
 // The thread as most people read it, and what has been hidden from it.
 //
 // Hidden replies are sent only to whoever looks after the thread, each
@@ -164,6 +208,7 @@ const setHidden = (replies, id, hidden) => {
 };
 
 export default {
+  chainOf,
   MAX_INDENT,
   add,
   count,

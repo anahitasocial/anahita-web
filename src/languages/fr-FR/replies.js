@@ -147,4 +147,5 @@ export default {
     notHidden: 'Cette action n\'a pas pu être effectuée.',
     notAllowed: 'Vous n\'êtes pas autorisé à répondre ici.',
   },
+  answersNote: 'En réponse à la note {{ number }} du fil',
 };

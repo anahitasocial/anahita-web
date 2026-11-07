@@ -517,6 +517,16 @@ a photo post, a GIF or a video a video post. `containers/replies/Thread.jsx` sho
 tab on a post's page and in the lightbox. What used to be comments are
 replies, made directly to the post.
 
+**A thread** (roadmap row 126) is a post's writer going on under it: their
+earliest reply to the post, their earliest to that one, and so on
+(`utils/thread.js#chainOf`). On the post's page it comes first, flat and
+joined by a line, before the reply box and anybody's reply; everybody
+else's replies follow, and one that answers a note of the thread says which
+("Replying to note 2 of the thread"). In a list the post's card shows the
+next note under it and "Show the thread" with how many notes it has
+(`containers/feed/components/ThreadNext.jsx`), from the `thread` and
+`thread_next` the feed sends with it.
+
 1. **The thread is read whole** (`api.replies.thread`) and kept in the
    component, not in the store. Nothing else on the page shows it.
 2. **`src/utils/thread.js`** arranges the flat list the server sends into

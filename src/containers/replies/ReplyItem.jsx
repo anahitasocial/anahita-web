@@ -66,6 +66,7 @@ const ReplyItem = ({
   onLike,
   onBlockFromOwner = null,
   blockFromOwnerLabel = '',
+  context = '',
 }) => {
   const { reply, children } = node;
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -139,8 +140,12 @@ const ReplyItem = ({
 
   return (
     <Box component="section" id={`reply-${reply.id}`}>
+      {context &&
+        <Typography variant="caption" color="textSecondary" component="p" sx={{ px: 2, pt: 2 }}>
+          {context}
+        </Typography>}
       <Box sx={{
-        display: 'flex', alignItems: 'flex-start', gap: 2, px: 2, pt: 2, pb: 1,
+        display: 'flex', alignItems: 'flex-start', gap: 2, px: 2, pt: context ? 1 : 2, pb: 1,
       }}
       >
         {/* As tall as the line their name is on, with the picture in the
@@ -388,6 +393,8 @@ ReplyItem.propTypes = {
   onBlockFromOwner: PropTypes.func,
   // What that item says: "Block from group".
   blockFromOwnerLabel: PropTypes.string,
+  // A line above it: which note of the writer's thread it answers.
+  context: PropTypes.string,
 };
 
 export default ReplyItem;

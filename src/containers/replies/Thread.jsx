@@ -40,6 +40,13 @@ import events from '../../utils/events';
 import replyOrder from '../../utils/replyOrder';
 
 const { federation } = utils;
+const { getAuthor } = utils.node;
+
+// Who wrote a post or a reply, for the writer's chain.
+const writerOf = (node) => {
+  const author = getAuthor(node);
+  return (author && author.id) || 0;
+};
 
 // Everything said under a post: the replies to it, the replies to those, and
 // a place to add one.
@@ -298,16 +305,23 @@ const RepliesThread = ({
   // On the page of a single reply, only what was said under that reply,
   // and what is written here answers it.
   const top = under || root;
+  // On the post's own page, its writer's chain first, flat, as the post goes
+  // on (roadmap row 126); everybody else's replies after it.
+  const chained = under ?
+    { chain: [], rest: replies, answers: () => { return 0; } } :
+    thread.chainOf(replies, root.id, writerOf(root), writerOf);
   const { thread: shown, hidden } = thread.split(
-    under ? thread.under(replies, under.id) : replies,
+    under ? thread.under(replies, under.id) : chained.rest,
     top.id,
   );
 
   const item = (node) => {
+    const answers = chained.answers(node.reply);
     return (
       <ReplyItem
         key={`reply-${node.reply.id}`}
         node={node}
+        context={answers ? i18n.t('replies:answersNote', { number: answers }) : ''}
         viewer={viewer}
         onReply={handleReply}
         onEdit={handleEdit}
@@ -324,6 +338,14 @@ const RepliesThread = ({
 
   return (
     <Card sx={{ pb: 1 }}>
+      {/* The rest of the post, by its writer: joined by a line, as one
+          piece, before anybody's reply. */}
+      {chained.chain.length > 0 &&
+        <Box sx={{ ml: 2, borderLeft: 2, borderColor: 'divider' }}>
+          {chained.chain.map((reply) => {
+            return item({ reply, children: [] });
+          })}
+        </Box>}
       {canReply &&
         <ReplyBox
           autoFocus={Boolean(location.state && location.state.reply)}

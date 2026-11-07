@@ -174,3 +174,48 @@ describe('changing a thread without reading it again', () => {
     expect(nested[0].children[0].reply.id).toBe(4);
   });
 });
+
+describe('the writer\'s chain (roadmap row 126)', () => {
+  const ALICE = 1;
+  const BOB = 2;
+  const writerOf = (each) => {
+    return each.writer;
+  };
+  // Oldest first, as the server sends them.
+  const replies = [
+    { id: 10, parentId: ROOT, writer: ALICE },
+    { id: 11, parentId: ROOT, writer: BOB },
+    { id: 12, parentId: 10, writer: ALICE },
+    { id: 13, parentId: 10, writer: BOB },
+    { id: 14, parentId: 12, writer: ALICE },
+    // Alice again under her post: not the earliest, so not the chain.
+    { id: 15, parentId: ROOT, writer: ALICE },
+  ];
+
+  it('follows the writer\'s earliest reply to each note, from the post', () => {
+    const { chain } = thread.chainOf(replies, ROOT, ALICE, writerOf);
+    expect(chain.map((each) => {
+      return each.id;
+    })).toEqual([10, 12, 14]);
+  });
+
+  it('leaves everybody else\'s replies, and says which note they answer', () => {
+    const { rest, answers } = thread.chainOf(replies, ROOT, ALICE, writerOf);
+    expect(rest.map((each) => {
+      return each.id;
+    })).toEqual([11, 13, 15]);
+    expect(answers({ parentId: 10 })).toBe(2);
+    expect(answers({ parentId: 12 })).toBe(3);
+    expect(answers({ parentId: ROOT })).toBe(0);
+  });
+
+  it('stops at a note removed or hidden, and is nothing without a writer', () => {
+    const removed = replies.map((each) => {
+      return each.id === 12 ? { ...each, deleted: true } : each;
+    });
+    expect(thread.chainOf(removed, ROOT, ALICE, writerOf).chain.map((each) => {
+      return each.id;
+    })).toEqual([10]);
+    expect(thread.chainOf(replies, ROOT, 0, writerOf).chain).toEqual([]);
+  });
+});
