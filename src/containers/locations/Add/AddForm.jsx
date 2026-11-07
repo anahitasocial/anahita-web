@@ -10,7 +10,7 @@ import { Locations as LOCATION } from '../../../constants';
 import LocationType from '../../../proptypes/Location';
 import CountrySelect from '../../../components/SelectCountry';
 import RegionSelect from '../../../components/SelectRegion';
-import PointPicker from '../../../components/PointPicker';
+import { AnahitaPointPicker as PointPicker } from '../../../components/Maps';
 
 import i18n from '../../../languages';
 

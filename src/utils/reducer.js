@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from './lodash';
 
 // The shape every list slice has. Defaulted here because a parent can be
 // written to before anything has browsed it — tagging a location adds to a

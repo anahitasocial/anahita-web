@@ -19,7 +19,7 @@ import permissions from '../../../permissions/node';
 import NodeType from '../../../proptypes/Node';
 import PersonType from '../../../proptypes/Person';
 
-import AnahitaMap from '../../../components/Map';
+import { AnahitaMap } from '../../../components/Maps';
 import EmptyList from '../../../components/EmptyList';
 import LocationsAdd from '../Add';
 import Progress from '../../../components/Progress';

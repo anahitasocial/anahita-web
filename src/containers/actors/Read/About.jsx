@@ -31,7 +31,7 @@ import FediverseIcon from '@mui/icons-material/Hub';
 import { listProps } from '../../../utils/lists';
 import i18n from '../../../languages';
 import EntityBody from '../../../components/NodeBody';
-import AnahitaMap from '../../../components/Map';
+import { AnahitaMap } from '../../../components/Maps';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import BlueskyIcon from '../../../components/BlueskyIcon';
 import federation from '../../../utils/federation';

@@ -24,7 +24,7 @@ import reportPermissions from '../../../permissions/report';
 import LocationsType from '../../../proptypes/Locations';
 
 import PersonType from '../../../proptypes/Person';
-import AnahitaMap from '../../../components/Map';
+import { AnahitaMap } from '../../../components/Maps';
 import Inbounds from '../../inbounds';
 import Progress from '../../../components/Progress';
 import HeaderMeta from '../../../components/HeaderMeta';

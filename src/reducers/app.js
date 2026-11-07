@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from '../utils/lodash';
 import { App as APP } from '../constants';
 import NODE_INFO_DEFAULT from '../proptypes/NodeInfoDefault';
 

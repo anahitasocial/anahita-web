@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import { CountryRegionData as countryRegionModule } from 'react-country-region-selector';
-import _ from 'lodash';
+import _ from '../utils/lodash';
 
 // Since version 4 the package exports the data module; the array is its default.
 const { default: CountryRegionData } = countryRegionModule;

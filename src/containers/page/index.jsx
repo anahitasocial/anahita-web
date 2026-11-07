@@ -5,7 +5,7 @@ import { makeStyles } from 'tss-react/mui';
 import ReactMarkdown from 'react-markdown';
 import gfm from 'remark-gfm';
 import Container from '@mui/material/Container';
-import _ from 'lodash';
+import _ from '../../utils/lodash';
 
 import HeaderMeta from '../../components/HeaderMeta';
 import i18n from '../../languages';

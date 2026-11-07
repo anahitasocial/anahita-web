@@ -4,7 +4,7 @@ import { Link as RouterLink } from 'react-router-dom';
 import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import { Trans } from 'react-i18next';
-import _ from 'lodash';
+import _ from '../../../utils/lodash';
 import utils from '../../../utils';
 import i18n from '../../../languages';
 

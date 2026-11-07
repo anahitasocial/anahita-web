@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import _ from 'lodash';
 import axios from 'axios';
 import { singularize } from 'inflection';
+import _ from '../utils/lodash';
 import createApi, { browseOwned } from './create';
 import createActor from './actor';
 import photos from './photos';

@@ -17,12 +17,20 @@ import utils from '../utils';
 
 const { getURL } = utils.node;
 
-// Leaflet points its default marker at image paths relative to the stylesheet,
-// which the bundler rewrites — hand it the imported assets instead.
-L.Icon.Default.mergeOptions({
-  iconRetinaUrl: markerIcon2x,
+// The marker's picture, from the imported assets. Leaflet's default icon puts
+// the folder it finds from its stylesheet in front of whatever address it is
+// given, so the address the bundler gives came out twice and the marker did
+// not show. A plain icon uses the addresses as they are; its sizes are the
+// default marker's.
+export const MARKER_ICON = L.icon({
   iconUrl: markerIcon,
+  iconRetinaUrl: markerIcon2x,
   shadowUrl: markerShadow,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41],
 });
 
 // Where map tiles come from. The default is OpenStreetMap's public tile
@@ -114,6 +122,7 @@ const AnahitaMap = ({
           <Marker
             key={key}
             position={[Number(latitude), Number(longitude)]}
+            icon={MARKER_ICON}
             title={name}
             alt={name}
             interactive={linked}

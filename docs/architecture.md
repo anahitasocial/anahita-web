@@ -153,7 +153,7 @@ DevTools browser extension when it is installed.
 
 ## Routes
 
-The route table is `src/routes/index.js`, using React Router 7 with browser
+The route table is `src/routes/index.jsx`, using React Router 7 with browser
 history. The main paths:
 
 | Path | Page |
@@ -187,6 +187,23 @@ history. The main paths:
 | `/pages/:alias` | A page of the installation's own, from the theme's `pages/` folder (`src/assets/<theme>/pages`). `/pages/tos` and `/pages/privacy` redirect to `/legal` |
 | `/404`, and any address not above | The not-found page |
 | `/search`, `/blogs`, `/support`, `/about` | Everything else |
+
+**What loads when** (roadmap row 128). The first script holds what nearly
+every visit begins with: the app's frame, the home feed, the landing page
+and a post. Every other page's code is fetched the first time it is opened
+(`lazy` in `routes/index.jsx`, `lazyMade` for a page a function makes, as
+`Actors('groups')`), with the progress bar where it will be. Two more things
+wait until they are needed:
+
+- **Maps,** with leaflet: `components/Maps.jsx` (`AnahitaMap`,
+  `AnahitaPointPicker`) in place of `components/Map.jsx` and
+  `PointPicker.jsx`, keeping the map's room while it comes. A marker is given
+  `MARKER_ICON`, leaflet's own picture at the address the bundler gives it.
+- **lodash:** only the functions the app uses, from `utils/lodash.js`,
+  imported as `_` as before. One not there is added there.
+
+The five languages, all in the first script, and moment's dates are the
+largest of what remains, for later.
 
 ### A members-only site
 

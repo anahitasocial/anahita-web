@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from './lodash';
 
 const constructURLSearchParams = (urlParams) => {
   const params = new URLSearchParams();

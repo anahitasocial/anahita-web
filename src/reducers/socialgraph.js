@@ -1,4 +1,4 @@
-import _ from 'lodash';
+import _ from '../utils/lodash';
 import { Socialgraph as SOCIALGRAPH } from '../constants';
 import ACTOR_DEFAULT from '../proptypes/ActorDefault';
 import utils from '../utils';

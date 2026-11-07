@@ -13,7 +13,7 @@ import FormHelperText from '@mui/material/FormHelperText';
 import Stack from '@mui/material/Stack';
 import MyLocationIcon from '@mui/icons-material/MyLocation';
 
-import { TILE_URL, TILE_ATTRIBUTION } from './Map';
+import { MARKER_ICON, TILE_URL, TILE_ATTRIBUTION } from './Map';
 import i18n from '../languages';
 
 // The whole world, for a location with no pin yet and nowhere to start.
@@ -176,6 +176,7 @@ const PointPicker = ({
           {isSet(point) &&
             <Marker
               position={asLatLng(point)}
+              icon={MARKER_ICON}
               draggable={!disabled}
               title={i18n.t('locations:point.label')}
               alt={i18n.t('locations:point.label')}

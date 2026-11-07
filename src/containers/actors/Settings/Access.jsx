@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import _ from 'lodash';
 
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
@@ -26,6 +25,7 @@ import RadioGroup from '@mui/material/RadioGroup';
 import Switch from '@mui/material/Switch';
 
 import AccessIcon from '@mui/icons-material/Visibility';
+import _ from '../../../utils/lodash';
 
 import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';

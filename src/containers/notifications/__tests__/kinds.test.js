@@ -1,5 +1,5 @@
 /* eslint-env jest */
-import _ from 'lodash';
+import _ from '../../../utils/lodash';
 
 import { Notifications as NOTIFICATIONS } from '../../../constants';
 import strings from '../../../languages/en-CA/notifications';
