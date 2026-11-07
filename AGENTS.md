@@ -183,3 +183,6 @@ meant, and what goes with them, as text messages (SMS): `SUPPORT_PHONE`,
   change, each beginning with its kind: `- added:`, `- changed:`,
   `- removed:`, `- fixed:` or `- note:` (what stays the same, what it goes
   with). Only the kinds that apply.
+- A change that people using the app, or somebody running it, would
+  notice adds its line to `CHANGELOG.md`, under Embryo, in the same commit;
+  a docs or plan commit does not need one.
