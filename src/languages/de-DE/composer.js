@@ -12,7 +12,7 @@ export default {
   // Opens the extended composer from the short box: an article or a topic.
   longContent: 'Langer Beitrag',
   // What can be added to a post: the words beside each icon where there is
-  // room, and the icon's name where it stands alone, on a phone.
+  // room, and the icon's name where it stands alone, on a mobile.
   photo: 'Foto',
   gif: 'GIF',
   addGif: 'GIF hinzufügen',

@@ -106,7 +106,7 @@ const addBlock = ({ domain, reason = '' }) => {
   return axios.post('/activitypub/blocks', { domain, reason });
 };
 
-const removeBlock = (domain) => {
+const deleteBlock = (domain) => {
   return axios.delete(`/activitypub/blocks/${encodeURIComponent(domain)}`);
 };
 
@@ -153,7 +153,7 @@ export default {
   previewBlueskyFollows,
   blocks,
   addBlock,
-  removeBlock,
+  deleteBlock,
   refusedAccounts,
   refuseAccount,
   letAccountBack,

@@ -30,7 +30,7 @@ const Alerts = ({
       <Snackbar
         open
         autoHideDuration={6000}
-        // On a phone, above the + button where there is one (roadmap row
+        // On a mobile, above the + button where there is one (roadmap row
         // 99): it is across the bottom of the screen there.
         sx={underButton ?
           { bottom: { xs: 'calc(96px + env(safe-area-inset-bottom))', sm: 24 } } :

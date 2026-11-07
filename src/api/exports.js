@@ -22,7 +22,7 @@ const add = () => {
 };
 
 // Gives one up while it is being made, or deletes its archive.
-const remove = (id) => {
+const deleteItem = (id) => {
   return axios.delete(`/exports/${id}`);
 };
 
@@ -30,5 +30,5 @@ export default {
   browse,
   read,
   add,
-  remove,
+  deleteItem,
 };

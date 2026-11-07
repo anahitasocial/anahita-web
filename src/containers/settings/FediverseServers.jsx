@@ -151,7 +151,7 @@ const FediverseServers = ({
   // Taken out of what is shown and not read again: reading again would
   // lose the reader's place in a long list.
   const remove = (block) => {
-    return api.federation.removeBlock(block.domain)
+    return api.federation.deleteBlock(block.domain)
       .then(() => {
         alertSuccess(i18n.t('settings:fediverse.removed', { domain: block.domain }));
         setBlocks((kept) => {

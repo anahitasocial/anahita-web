@@ -58,7 +58,7 @@ const WORDS = {
 };
 
 // The extended composer: writing at length, with a title, in a dialog as
-// tall as the screen allows and full screen on a phone.
+// tall as the screen allows and full screen on a mobile.
 //
 // It is an article or a topic, chosen by the tabs where the profile takes
 // both, and either needs its title. In an article, pictures, a GIF or a
@@ -80,7 +80,7 @@ const LongComposer = ({
 }) => {
   const dispatch = useDispatch();
   const viewer = useSelector((state) => { return state.session.viewer; });
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choices = usePostChoices(actor, viewer);
   // Locations to tag it with, the same list as the short box's, so they
   // come along when it becomes this.
@@ -130,8 +130,8 @@ const LongComposer = ({
     }
   }, [open]);
 
-  // Above the keyboard on a phone, as in the short box.
-  const room = useKeyboardRoom(phone && open);
+  // Above the keyboard on a mobile, as in the short box.
+  const room = useKeyboardRoom(mobile && open);
 
   // The text starts a few lines tall, and grows as somebody writes or as
   // its corner is dragged (LongEditor).
@@ -301,8 +301,8 @@ const LongComposer = ({
   };
 
   // As tall as the screen allows on a desktop, less the dialog's margins;
-  // on a phone, what the keyboard leaves.
-  const paper = phone ? room.paper : { height: 'calc(100% - 64px)' };
+  // on a mobile, what the keyboard leaves.
+  const paper = mobile ? room.paper : { height: 'calc(100% - 64px)' };
 
   const close = () => {
     if (!busy) {
@@ -314,10 +314,10 @@ const LongComposer = ({
     <Dialog
       open={open}
       onClose={close}
-      fullScreen={phone}
+      fullScreen={mobile}
       fullWidth
       maxWidth="md"
-      slotProps={{ container: { sx: phone ? room.container : {} }, paper: { sx: paper } }}
+      slotProps={{ container: { sx: mobile ? room.container : {} }, paper: { sx: paper } }}
     >
       <Box
         component="form"
@@ -325,7 +325,7 @@ const LongComposer = ({
         noValidate
         sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
       >
-        {/* Close and Post at the top, as in the short box on a phone. */}
+        {/* Close and Post at the top, as in the short box on a mobile. */}
         <Toolbar sx={{ gap: 1, px: 1 }}>
           <IconButton
             edge="start"
@@ -344,11 +344,11 @@ const LongComposer = ({
           <DraftsMenu
             actor={actor}
             kinds={kinds}
-            phone={phone}
+            mobile={mobile}
             currentId={draftId}
             disabled={busy}
             saving={isSaving}
-            onSave={phone ? saveDraft : undefined}
+            onSave={mobile ? saveDraft : undefined}
             onOpen={(draft) => {
               setTab(draft.kind);
               setTitle(draft.title || '');
@@ -364,8 +364,8 @@ const LongComposer = ({
               setTried(false);
             }}
           />
-          {/* Beside Drafts where there is room; in its menu on a phone. */}
-          {!phone &&
+          {/* Beside Drafts where there is room; in its menu on a mobile. */}
+          {!mobile &&
             <Button
               variant="outlined"
               onClick={saveDraft}
@@ -430,7 +430,7 @@ const LongComposer = ({
             required
             disabled={busy}
             fullWidth
-            autoFocus={!phone}
+            autoFocus={!mobile}
             slotProps={{
               htmlInput: { dir: choices.direction, maxLength: TITLE.MAX_LENGTH },
               inputLabel: { shrink: true },
@@ -472,7 +472,7 @@ const LongComposer = ({
           </Typography>}
         <Divider />
         {/* The post's choices in one row at the bottom; it scrolls
-            sideways on a phone rather than wrapping. Pictures and videos
+            sideways on a mobile rather than wrapping. Pictures and videos
             are the editor's own buttons. */}
         <Stack
           direction="row"

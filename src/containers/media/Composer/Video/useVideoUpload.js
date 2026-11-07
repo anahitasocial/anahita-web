@@ -58,7 +58,7 @@ const wait = (ms) => {
 };
 
 // The screen kept on while a video is sent, where the browser can (Screen
-// Wake Lock): a phone that sleeps holds the page, and the upload with it
+// Wake Lock): a mobile that sleeps holds the page, and the upload with it
 // (roadmap row 112). The browser lets the lock go when the page is set
 // aside, so it is asked for again when the page is back in front.
 const useWakeLock = () => {
@@ -266,7 +266,7 @@ const useVideoUpload = () => {
       return false;
     }
 
-    // Once handed over, it is prepared on the server, and the phone may sleep.
+    // Once handed over, it is prepared on the server, and the mobile may sleep.
     awake.release();
     set({
       phase: 'processing',

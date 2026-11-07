@@ -48,7 +48,7 @@ import People from '../containers/people/Browse';
 import PeopleAdd from '../containers/people/Add';
 
 import FeedsPage from '../containers/feeds';
-import CustomFeedsManage from '../containers/feeds/Manage';
+import CustomFeedsBrowse from '../containers/feeds/Browse';
 import CustomFeedAdd from '../containers/feeds/Add';
 import CustomFeedEdit from '../containers/feeds/Edit';
 import CustomFeedRead from '../containers/feeds/Read';
@@ -341,12 +341,14 @@ const AppRoutes = () => {
               path="/feeds"
               element={
                 <AuthenticatedRoute>
-                  <CustomFeedsManage />
+                  <CustomFeedsBrowse />
                 </AuthenticatedRoute>
           }
             />
+            {/* Where adding a feed was before it was called adding. */}
+            <Route path="/feeds/new" element={<Navigate to="/feeds/add" replace />} />
             <Route
-              path="/feeds/new"
+              path="/feeds/add"
               element={
                 <AuthenticatedRoute>
                   <CustomFeedAdd />

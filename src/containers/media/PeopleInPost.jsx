@@ -141,7 +141,7 @@ const PeopleInPost = ({
             <Button
               size="small"
               disabled={sending}
-              onClick={() => { answer(api.peopleTags.remove(viewer, medium), 'declined'); }}
+              onClick={() => { answer(api.peopleTags.deleteItem(viewer, medium), 'declined'); }}
             >
               {i18n.t('peopleTags:decline')}
             </Button>
@@ -158,7 +158,7 @@ const PeopleInPost = ({
           <Button
             size="small"
             disabled={sending}
-            onClick={() => { answer(api.peopleTags.remove(viewer, medium), 'declined'); }}
+            onClick={() => { answer(api.peopleTags.deleteItem(viewer, medium), 'declined'); }}
             sx={{ flexShrink: 0 }}
           >
             {i18n.t('peopleTags:removeMe')}

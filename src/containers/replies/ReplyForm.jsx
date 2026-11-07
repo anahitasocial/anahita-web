@@ -108,8 +108,8 @@ const ReplyForm = ({
   }, [linkPreview, initial]);
   const card = useLinkPreview(body, true, known);
   // Hashtags in use offered as one is typed (roadmap row 78).
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, phone });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, mobile });
   const { onKeyDown: keyForHashtags, ...hashtagHandlers } = hashtags.handlers;
   const touch = useMediaQuery('(pointer: coarse)');
 
@@ -326,7 +326,7 @@ const ReplyForm = ({
                 size="small"
                 aria-label={i18n.t('replies:attachments.addPhotos')}
                 onClick={() => {
-                  // One tap to the phone's own picker, for several.
+                  // One tap to the mobile's own picker, for several.
                   photoPicker.current.click();
                 }}
               >

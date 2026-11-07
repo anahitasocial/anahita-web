@@ -27,7 +27,7 @@ const ReplyBox = ({
   const [isOpen, setIsOpen] = useState(false);
   // The line starts again from the draft each time the dialog closes.
   const [round, setRound] = useState(0);
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
   const close = () => {
     setIsOpen(false);
@@ -59,7 +59,7 @@ const ReplyBox = ({
         open={isOpen}
         fullWidth
         maxWidth="sm"
-        fullScreen={phone}
+        fullScreen={mobile}
         disableEscapeKeyDown
         disableRestoreFocus
         // Once it has gone, or the line could not take the focus back.

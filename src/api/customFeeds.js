@@ -43,7 +43,7 @@ const edit = (feed) => {
   return axios.patch(`/feeds/${id}`, fields).then(changed);
 };
 
-const remove = (feed) => {
+const deleteItem = (feed) => {
   return axios.delete(`/feeds/${feed.id}`).then(changed);
 };
 
@@ -173,7 +173,7 @@ export default {
   add,
   read,
   edit,
-  remove,
+  deleteItem,
   copy,
   mine,
   discover,

@@ -16,7 +16,7 @@ import i18n from '../../languages';
 // The bell in the top bar, for somebody signed in: how many notifications
 // are unread, kept current as useUnreadCount says, and the way to them. On
 // a desktop it opens the latest few in a menu (roadmap row 97, part 4); on
-// a phone it goes to the page.
+// a mobile it goes to the page.
 const NotificationButton = ({ count, setUnread, resetUnread }) => {
   useUnreadCount({
     ask: () => {
@@ -30,7 +30,7 @@ const NotificationButton = ({ count, setUnread, resetUnread }) => {
     onCount: setUnread,
   });
 
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [menuAt, setMenuAt] = useState(null);
 
   // Signed out, the count goes with the session.
@@ -45,7 +45,7 @@ const NotificationButton = ({ count, setUnread, resetUnread }) => {
     i18n.t('notifications:cTitle');
   const bell = <Bell count={count} />;
 
-  if (phone) {
+  if (mobile) {
     return (
       <IconButton component={Link} to="/notifications" color="inherit" size="small" aria-label={label}>
         {bell}

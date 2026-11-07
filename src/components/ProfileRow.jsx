@@ -22,7 +22,7 @@ const oneLine = {
 // whether it follows the viewer, with what can be done about it at the end.
 // Each is one line, cut short when there is no room, and the buttons take
 // their own room beside them rather than sitting over the text, as a
-// list item's secondary action does on a phone.
+// list item's secondary action does on a mobile.
 const ProfileRow = ({
   actor,
   actions = null,

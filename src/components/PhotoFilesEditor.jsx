@@ -192,7 +192,7 @@ const failureText = (error) => {
 // One photo at a time, as wide as the editor, swiped through like the
 // slides a reader sees, with its description under it: a field that is
 // there to be written in. A stack of small photos and fields was a long
-// way to scroll on a phone, and before that the description was behind a
+// way to scroll on a mobile, and before that the description was behind a
 // small "ALT" mark that people did not find. Under the photos it says how
 // many have no description yet: said, never insisted on, since a
 // description that had to be given is how photos come to be described as

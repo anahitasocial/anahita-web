@@ -321,7 +321,7 @@ const LeftMenu = ({
       {/* Colours of one's own, for somebody signed in (components/ColourPicker). */}
       {openColours &&
         <ListItemButton
-          // The menu closes, on a phone, so that the page is what is seen
+          // The menu closes, on a mobile, so that the page is what is seen
           // above the colours.
           onClick={(event) => {
             openColours(event.currentTarget);
@@ -351,7 +351,7 @@ const LeftMenu = ({
 
 LeftMenu.propTypes = {
   onLogoutClick: PropTypes.func,
-  // Closes the menu where it is a drawer, on a phone.
+  // Closes the menu where it is a drawer, on a mobile.
   onCloseMenu: PropTypes.func,
   viewer: PersonType.isRequired,
   isAuthenticated: PropTypes.bool.isRequired,

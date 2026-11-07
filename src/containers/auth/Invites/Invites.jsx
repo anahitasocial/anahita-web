@@ -62,7 +62,7 @@ const formatDate = (value) => {
 };
 
 // The status is the row's most useful fact, so it leads with an icon
-// rather than only a chip — scannable down the left edge on a phone,
+// rather than only a chip — scannable down the left edge on a mobile,
 // where the chips have wrapped somewhere below the address.
 const iconFor = (status) => {
   if (status === 'used') {

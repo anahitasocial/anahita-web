@@ -19,7 +19,7 @@ const check = (connection) => {
 };
 
 // The website, once the domain is proved: { id, alias }.
-const make = (connection, { name, alias, body }) => {
+const add = (connection, { name, alias, body }) => {
   return axios.post(`/websites/_connect/${connection.id}`, {
     feedUrl: connection.feedUrl,
     name,
@@ -31,5 +31,5 @@ const make = (connection, { name, alias, body }) => {
 export default {
   start,
   check,
-  make,
+  add,
 };

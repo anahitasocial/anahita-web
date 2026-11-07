@@ -61,7 +61,7 @@ const SocialgraphDialog = ({
   const [failed, setFailed] = useState({});
   const [order, setOrder] = useState(socialgraph.LATEST);
   const [orderMenu, setOrderMenu] = useState(null);
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
   const load = (which, start) => {
     api.socialgraph.browse({
@@ -113,7 +113,7 @@ const SocialgraphDialog = ({
     <Dialog
       open={open}
       onClose={onClose}
-      fullScreen={phone}
+      fullScreen={mobile}
       fullWidth
       maxWidth="sm"
       aria-labelledby={`socialgraph-title-${actor.id}`}

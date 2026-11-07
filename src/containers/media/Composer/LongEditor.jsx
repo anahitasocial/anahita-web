@@ -101,7 +101,7 @@ const LongEditor = ({
   // A hashtag being typed where the caret is, and hashtags in use offered
   // for it (roadmap row 78), as in the short box. The keys the list takes
   // are passed to it before the editor's own.
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [typing, setTyping] = useState(NOT_TYPING);
   const listKeys = useRef(() => { return false; });
   const handleKeyDown = (view, event) => {
@@ -239,7 +239,7 @@ const LongEditor = ({
   const offer = useOffer({
     typed: typing.typed,
     full: typing.full,
-    phone,
+    mobile,
     onPick: pickHashtag,
   });
   listKeys.current = offer.onKey;
@@ -351,7 +351,7 @@ const LongEditor = ({
         }}
       >
         {/* The buttons stay in sight above the text as it scrolls, and
-            scroll sideways on a phone rather than wrapping. */}
+            scroll sideways on a mobile rather than wrapping. */}
         <Stack
           direction="row"
           spacing={0.5}
@@ -515,14 +515,14 @@ const LongEditor = ({
           items={offer.items}
           notice={offer.notice}
           active={offer.active}
-          phone={phone}
+          mobile={mobile}
           onPick={pickHashtag}
         />
         {/* The handle to drag, in the middle of the bottom edge, set into
             the border as the label is into the top one, and the border's
             own grey (the user, 2026-10-17, in place of a corner of slanted
             lines). A finger's width, and it takes the drag for itself, so
-            on a phone moving it does not scroll the page instead. Pointer
+            on a mobile moving it does not scroll the page instead. Pointer
             events are a mouse's and a finger's alike. */}
         <Box sx={{ position: 'relative', height: 0 }}>
           <Box

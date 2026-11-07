@@ -4,7 +4,7 @@ import axios from 'axios';
 // them. Nobody else can see it, and nobody is told that a post was saved.
 
 // What the viewer saved, most recently saved first.
-const list = ({ start = 0, limit = 20 } = {}) => {
+const browse = ({ start = 0, limit = 20 } = {}) => {
   return axios.get('/bookmarks/', { params: { start, limit } });
 };
 
@@ -15,6 +15,6 @@ const set = (post, saved) => {
 };
 
 export default {
-  list,
+  browse,
   set,
 };

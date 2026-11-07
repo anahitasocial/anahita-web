@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-// What a full-screen composer on a phone has once the keyboard is up: the
+// What a full-screen composer on a mobile has once the keyboard is up: the
 // height of what can be seen, which the keyboard takes from, and where that
 // is, as Safari may slide the page up to make room. iOS shrinks only the
 // visual viewport, not the page.

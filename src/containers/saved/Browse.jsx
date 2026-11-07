@@ -28,7 +28,7 @@ const SavedBrowse = () => {
   const [hasFailed, setHasFailed] = useState(false);
 
   const load = (start) => {
-    return api.saved.list({ start, limit: LIMIT }).then((result) => {
+    return api.saved.browse({ start, limit: LIMIT }).then((result) => {
       const page = result.data.data || [];
       setTotal((result.data.pagination && result.data.pagination.total) || 0);
       setPosts((before) => {

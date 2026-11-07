@@ -46,7 +46,7 @@ const AuthViewer = ({
         }}
         color="inherit"
         variant="outlined"
-        // One line in every language: "Iniciar sesión" wrapped on a phone.
+        // One line in every language: "Iniciar sesión" wrapped on a mobile.
         // The search box beside it gives up the room.
         sx={{ whiteSpace: 'nowrap', flexShrink: 0 }}
       >

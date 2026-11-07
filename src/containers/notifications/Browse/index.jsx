@@ -160,7 +160,7 @@ const NotificationsBrowse = ({
     });
   };
 
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [isMarking, setIsMarking] = useState(false);
   const handleReadAll = () => {
     setIsMarking(true);
@@ -189,8 +189,8 @@ const NotificationsBrowse = ({
               {i18n.t('notifications:cTitle')}
             </Typography>
           }
-          // The words on a desktop; on a phone, the icon, which they name.
-          action={phone ?
+          // The words on a desktop; on a mobile, the icon, which they name.
+          action={mobile ?
             <Tooltip title={i18n.t('notifications:markAllRead')}>
               <span>
                 <IconButton

@@ -56,7 +56,7 @@ const NotificationActions = ({
   const answerTag = (accept) => {
     const post = { id: item.object && item.object.id };
     setWaiting(true);
-    (accept ? api.peopleTags.approve(viewer, post) : api.peopleTags.remove(viewer, post))
+    (accept ? api.peopleTags.approve(viewer, post) : api.peopleTags.deleteItem(viewer, post))
       .then(() => {
         setAnswered(accept ? 'accepted' : 'declined');
         onActed(item);

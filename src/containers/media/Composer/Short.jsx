@@ -61,7 +61,7 @@ const { isPerson } = utils.node;
 // long writing, with one, is the extended composer's (`onExpand`).
 //
 // A dialog, opened by the + button (ComposeButton.jsx, roadmap row 99), in
-// the middle of the screen on a desktop and filling it on a phone, where the
+// the middle of the screen on a desktop and filling it on a mobile, where the
 // keyboard needs the room; nothing in it changes height as somebody types.
 // What is written is kept as a draft until it is posted (useDraft).
 //
@@ -85,10 +85,10 @@ const ShortComposer = ({
   const dispatch = useDispatch();
   const viewer = useSelector((state) => { return state.session.viewer; });
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
-  // Above the keyboard on a phone, however much it leaves.
-  const room = useKeyboardRoom(phone && isOpen);
+  // Above the keyboard on a mobile, however much it leaves.
+  const room = useKeyboardRoom(mobile && isOpen);
   const [body, setBody, clearDraft] = useDraft(actor.id);
   const [isSending, setIsSending] = useState(false);
   const [isAddingPhotos, setIsAddingPhotos] = useState(false);
@@ -151,7 +151,7 @@ const ShortComposer = ({
 
   const linkPreview = useLinkPreview(body, canWords && !hasPhotos && !video);
   // Hashtags in use offered as one is typed (roadmap row 78).
-  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, phone });
+  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, mobile });
 
   // A post open to everybody on the writer's own profile goes to their
   // followers on other servers. Said before posting when it will not.
@@ -383,7 +383,7 @@ const ShortComposer = ({
   // on a disabled button is never seen.
   const attachButtons = (
     <AttachButtons
-      phone={phone}
+      mobile={mobile}
       photos={canPhotos && !busy && !video && !hasPhotos}
       video={canVideo && !busy && !videoBusy && !hasPhotos && !video}
       onPhotos={(files) => {
@@ -464,7 +464,7 @@ const ShortComposer = ({
   };
 
   // Hidden rather than disabled while posting: a tooltip on a disabled
-  // button is never seen. Its words, Long post, beside the icon on a phone
+  // button is never seen. Its words, Long post, beside the icon on a mobile
   // too: the icon alone said nothing of where it led.
   const expandButton = (withWords) => {
     if (!onExpand || busy) {
@@ -631,11 +631,11 @@ const ShortComposer = ({
     </>
   );
 
-  // Open, in a dialog: the whole screen on a phone, where the keyboard
+  // Open, in a dialog: the whole screen on a mobile, where the keyboard
   // needs the room, and in the middle of it on a desktop. The same in both.
   return (
     <Dialog
-      fullScreen={phone}
+      fullScreen={mobile}
       fullWidth
       maxWidth="sm"
       open={isOpen}
@@ -660,7 +660,7 @@ const ShortComposer = ({
           display: 'flex',
           flexDirection: 'column',
           height: '100%',
-          minHeight: onDetails && !phone ? held : undefined,
+          minHeight: onDetails && !mobile ? held : undefined,
         }}
       >
         {/* Close, Long post and Post at the top, where a thumb finds
@@ -704,11 +704,11 @@ const ShortComposer = ({
             flexGrow: 1, overflowY: 'auto', p: 2, display: onDetails ? 'none' : 'block',
           }}
         >
-          {/* The words have the width on a phone: who is posting is the
+          {/* The words have the width on a mobile: who is posting is the
               viewer, and their picture beside the box took a fifth of the
               screen (roadmap row 112). */}
           <Stack direction="row" spacing={2}>
-            {!phone && <ActorAvatar actor={viewer} />}
+            {!mobile && <ActorAvatar actor={viewer} />}
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
               {content}
             </Box>

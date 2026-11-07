@@ -342,7 +342,7 @@ Upload.propTypes = {
 
 // One's own photos and videos, to put into what is being written, as
 // WordPress's media library is (the user, 2026-10-16). A dialog, full
-// screen on a phone. What is picked goes in as its address, an embed.
+// screen on a mobile. What is picked goes in as its address, an embed.
 const MediaLibrary = ({
   open,
   onClose,
@@ -352,7 +352,7 @@ const MediaLibrary = ({
   file = null,
 }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [tab, setTab] = useState(initialTab || 'photos');
   // On the tab it is asked to open on, each time it opens.
   useEffect(() => {
@@ -365,10 +365,10 @@ const MediaLibrary = ({
     <Dialog
       open={open}
       onClose={onClose}
-      fullScreen={phone}
+      fullScreen={mobile}
       fullWidth
       maxWidth="md"
-      slotProps={{ paper: { sx: phone ? {} : { height: 'calc(100% - 64px)' } } }}
+      slotProps={{ paper: { sx: mobile ? {} : { height: 'calc(100% - 64px)' } } }}
     >
       <Toolbar sx={{ gap: 1, px: 1 }}>
         <IconButton edge="start" aria-label={i18n.t('composer:close')} onClick={onClose}>

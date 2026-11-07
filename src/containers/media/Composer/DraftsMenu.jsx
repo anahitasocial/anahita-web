@@ -23,13 +23,13 @@ const NAMESPACES = { article: 'articles', topic: 'topics' };
 // One's drafts on this profile, articles and topics still being written,
 // to take up again or to throw away (the user, 2026-10-16). Kept on the
 // server, so they are there on any device; seen by nobody else. On a
-// phone, where the header has no room for both, Save draft is the menu's
+// mobile, where the header has no room for both, Save draft is the menu's
 // first item (`onSave`), and Drafts says its name rather than being an icon
 // that says nothing (roadmap row 112).
 const DraftsMenu = ({
   actor,
   kinds,
-  phone,
+  mobile,
   currentId = 0,
   disabled = false,
   saving = false,
@@ -67,7 +67,7 @@ const DraftsMenu = ({
   return (
     <>
       <Button
-        startIcon={phone ? undefined : <DraftsIcon />}
+        startIcon={mobile ? undefined : <DraftsIcon />}
         onClick={open}
         disabled={disabled}
         sx={{ color: 'text.secondary', flexShrink: 0 }}
@@ -156,7 +156,7 @@ const DraftsMenu = ({
 DraftsMenu.propTypes = {
   actor: PropTypes.object.isRequired,
   kinds: PropTypes.arrayOf(PropTypes.string).isRequired,
-  phone: PropTypes.bool.isRequired,
+  mobile: PropTypes.bool.isRequired,
   // The draft being written now, if it is one.
   currentId: PropTypes.number,
   disabled: PropTypes.bool,

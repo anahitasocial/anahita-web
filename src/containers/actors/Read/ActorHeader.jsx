@@ -16,7 +16,7 @@ import utils from '../../../utils';
 const { getActorName } = utils.node;
 
 // The top of a profile: its cover, its picture, its name and the buttons to
-// act on it, laid out compactly the same way on a phone and a desktop.
+// act on it, laid out compactly the same way on a mobile and a desktop.
 //
 //   cover, when there is one, in a wide band
 //   picture, over the cover's lower edge | Follow, the other buttons, ⋮
@@ -70,7 +70,7 @@ const ActorHeader = ({
               position: 'relative',
               zIndex: 1,
               // The picture's own button is sized for a larger circle; here
-              // the circle is the size, smaller on a phone.
+              // the circle is the size, smaller on a mobile.
               '& .MuiIconButton-root': { width: 'auto', height: 'auto', p: 0 },
               '& .MuiAvatar-root': {
                 ...blurred(6),
@@ -83,7 +83,7 @@ const ActorHeader = ({
             {avatar}
           </Box>
           {/* The buttons, clear of the cover: below its lower edge by a
-          step at least, where on a phone the picture is too short to hold
+          step at least, where on a mobile the picture is too short to hold
           them there. They wrap among themselves, to the right, so that the
           room above them stays. */}
           <Stack

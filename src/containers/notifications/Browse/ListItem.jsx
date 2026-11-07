@@ -105,7 +105,7 @@ const NotificationListItem = ({
       }
       sx={{ pr: 13 }}
     >
-      {/* Smaller on a phone, where the words need the room (the user,
+      {/* Smaller on a mobile, where the words need the room (the user,
           2026-10-19): 32 pixels, not 48. */}
       <ListItemAvatar
         sx={{

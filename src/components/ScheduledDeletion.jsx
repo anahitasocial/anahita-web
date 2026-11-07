@@ -27,7 +27,7 @@ const ScheduledDeletion = ({ actor, sx = {} }) => {
       icon={<DeleteIcon />}
       label={i18n.t('actor:scheduledDeletion', { count: days })}
       // Wraps rather than cutting off the days left, which are the point,
-      // in a narrow list on a phone.
+      // in a narrow list on a mobile.
       sx={{
         maxWidth: '100%',
         height: 'auto',

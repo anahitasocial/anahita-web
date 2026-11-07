@@ -29,7 +29,7 @@ import i18n from '../../languages';
 // `purpose` is 'join' (following, asking, answering, accepting) or 'post'.
 const useRulesFirst = (actor, purpose = 'join') => {
   const dispatch = useDispatch();
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [asking, setAsking] = useState(null);
   const [sending, setSending] = useState(false);
 
@@ -77,7 +77,7 @@ const useRulesFirst = (actor, purpose = 'join') => {
   return {
     run,
     dialog: asking &&
-      <Dialog open onClose={sending ? undefined : close} fullWidth maxWidth="sm" fullScreen={phone}>
+      <Dialog open onClose={sending ? undefined : close} fullWidth maxWidth="sm" fullScreen={mobile}>
         <DialogTitle>
           {i18n.t('rules:join.title', { name: actor.name || actor.alias })}
         </DialogTitle>

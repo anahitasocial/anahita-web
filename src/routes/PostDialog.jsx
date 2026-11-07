@@ -13,12 +13,12 @@ import InPostDialog from './postDialogContext';
 
 // A post read over the list it was opened from, so that answering it does not
 // lose somebody's place (the user, 2026-11-01). It has the post's own address:
-// a link to it opens the page, and going back closes this. On a phone it
+// a link to it opens the page, and going back closes this. On a mobile it
 // fills the screen, and looks like the page. It is about answering the post:
 // its places and what cites it are on its own page, not here.
 const PostDialog = ({ children }) => {
   const navigate = useNavigate();
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
   const close = () => {
     navigate(-1);
@@ -29,12 +29,12 @@ const PostDialog = ({ children }) => {
       open
       fullWidth
       maxWidth="md"
-      fullScreen={phone}
-      scroll={phone ? 'paper' : 'body'}
+      fullScreen={mobile}
+      scroll={mobile ? 'paper' : 'body'}
       onClose={close}
       aria-label={i18n.t('replies:cTitle')}
       slotProps={{
-        paper: { sx: { bgcolor: 'background.default', ...(phone ? {} : { maxWidth: 720 }) } },
+        paper: { sx: { bgcolor: 'background.default', ...(mobile ? {} : { maxWidth: 720 }) } },
       }}
     >
       <Box sx={{
@@ -52,7 +52,7 @@ const PostDialog = ({ children }) => {
       </Box>
       {/* The dialog is the column here: the page's goes the full width. */}
       <Box sx={{
-        p: phone ? 0 : 2,
+        p: mobile ? 0 : 2,
         '& > .MuiGrid-container > .MuiGrid-root': { width: '100%' },
       }}
       >

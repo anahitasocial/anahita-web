@@ -43,7 +43,7 @@ describe('arranging a thread', () => {
     expect(thread.nest([], ROOT)).toEqual([]);
   });
 
-  it('stops indenting past the depth a phone can show', () => {
+  it('stops indenting past the depth a mobile can show', () => {
     expect(thread.indentOf(0)).toBe(0);
     expect(thread.indentOf(3)).toBe(3);
     expect(thread.indentOf(12)).toBe(thread.MAX_INDENT);

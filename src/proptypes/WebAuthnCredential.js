@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 export default PropTypes.shape({
   id: PropTypes.number.isRequired,
   nickname: PropTypes.string.isRequired,
-  // "internal" (built-in sensor), "hybrid" (phone over QR + BLE),
+  // "internal" (built-in sensor), "hybrid" (mobile over QR + BLE),
   // "usb", "nfc", "ble".
   transports: PropTypes.arrayOf(PropTypes.string),
   // True when the passkey is backed up to a cloud keychain and so

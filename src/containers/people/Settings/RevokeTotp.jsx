@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => {
 // Administrator or super administrator, and deliberately NO step-up,
 // unlike the passkey card beside it. That asymmetry is the server's and
 // it is reasoned: this is the undo for a person locked out of their own
-// account — a lost phone with no recovery codes left — and routing
+// account — a lost mobile with no recovery codes left — and routing
 // every one of those through a fresh proof makes the recovery slower
 // than the problem it fixes.
 //

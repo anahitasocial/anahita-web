@@ -120,7 +120,7 @@ const WebsiteConnect = () => {
     }
     setBusy(true);
     setWebsiteError({ field: '', message: '' });
-    api.websiteConnect.make(connection, {
+    api.websiteConnect.add(connection, {
       name: name.trim(),
       alias: alias.trim(),
       body: body.trim(),

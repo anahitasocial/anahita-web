@@ -37,14 +37,14 @@ const setPersonPolicy = (person, quotePolicy) => {
 };
 
 // The notes that quote a post, newest first, as the viewer may see them.
-const list = (post) => {
+const browse = (post) => {
   return axios.get(`/notes/${post.id}/quotes`);
 };
 
 export default {
   add,
   detach,
-  list,
+  browse,
   setPersonPolicy,
   setPolicy,
 };

@@ -165,7 +165,7 @@ history. The main paths:
 | `/people/:id/:tab`, `/groups/:id/:tab` | A group's page opened on one of its tabs at its address by kind, which still works; for a person, sent to `/@:id/:tab` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
 | `/recommendations` | People, groups, events and websites the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
-| `/feeds`, `/feeds/new`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
+| `/feeds`, `/feeds/add`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
 | `/people/add`, `/groups/add` | Making a person (administrators) or a group |
@@ -457,7 +457,7 @@ page. Material UI has no carousel, so this is one made for this one job from
 its small parts (`ButtonBase`, `IconButton`, `MobileStepper` for the dots)
 with no other library. The photos sit side by side in a row that the browser
 scrolls sideways and brings to rest on one photo (CSS scroll snap), so on a
-phone a photo follows the finger and carries on with the flick. Where there
+mobile a photo follows the finger and carries on with the flick. Where there
 is a mouse there are arrows, and the left and right keys work on the focused
 post. Photos after the first load when they are about to come into view. The
 frame takes the first photo's shape, kept between 4 by 5 and about 2 by 1,
@@ -526,13 +526,13 @@ replies, made directly to the post.
    What answers a reply stays oldest first, so a conversation reads in order. The
    server sends the oldest 500 of a thread.
 7. Reply under a post in a list opens the post over the list, at its own address
-   (`routes/PostDialog.jsx`, the full screen on a phone): the routes go on showing
+   (`routes/PostDialog.jsx`, the full screen on a mobile): the routes go on showing
    the list, from `location.state.background`, so it keeps its place. Going back
    closes it, and a link to it opens the page. It holds the post and its replies
    in one column, and nothing else: its Locations and Cited by are on its page
    (`routes/postDialogContext.js` tells the post it is in the dialog).
 8. Replies are set in a level for each step down, up to four, with a line down
-   the side. Past that they line up, so a long exchange fits a phone.
+   the side. Past that they line up, so a long exchange fits a mobile.
 9. **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a
    touch screen, and `ReplyForm`, with `attachments`, in a dialog) has a
    button for pictures and, where videos may be posted, one for a GIF or a
@@ -625,7 +625,7 @@ language, who can reply, whether photos may be downloaded, the location
 and who is tagged, what is chosen in chips under its row, then **Post**.
 Back returns to the words with everything kept, the words step staying
 mounted so that photos go on being sent; the dialog keeps its height from
-one step to the other. On a phone both composers are pinned to the top of
+one step to the other. On a mobile both composers are pinned to the top of
 what the keyboard leaves, and follow Safari when it slides the page
 (`Composer/useKeyboardRoom.js`). A profile that takes only long writing opens
 that at once. A video posted from it is the app's to send, not the
@@ -669,7 +669,7 @@ a request that fails as it does without the service
 2. **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
    People, Groups, Events and Websites (roadmap row 111), the open tab in
    the address (`?kind=group`), as cards with the reason inside each, under
-   the name; on a phone the tabs slide, never wrap. The onboarding's
+   the name; on a mobile the tabs slide, never wrap. The onboarding's
    Recommended step offers people, groups and websites. An event is drawn with the event's
    own card and is not followed from here. It is in the left menu as
    **Recommendations**, where the installation has the service
@@ -726,7 +726,7 @@ own, because a video is too big to be sent with the post (the services'
    far it has got and about how many minutes are left
    (`utils/videos.js#minutesLeft`). While it is sent the screen is kept on
    where the browser can (Screen Wake Lock), asked for again when the page
-   is back in front, since a phone that sleeps holds the page. When
+   is back in front, since a mobile that sleeps holds the page. When
    everything is sent the server prepares the video, and the site can be
    left: the app asks after it and says when it is posted, on whatever page
    is open, and puts the post at the head of an open feed it belongs in. A
@@ -773,7 +773,7 @@ page, where the server said this viewer may download it
 (`authorized.download`; `utils/downloads.js`). Whoever posted it decides,
 and it is off until they say otherwise. It is not on a post's card in a
 feed or a list: a card is narrow, and one more button does not fit on a
-phone.
+mobile.
 
 1. **When posting**, the photo and video composers have a download button
    among the post's options (`components/DownloadOptionButton.jsx`), which
@@ -837,7 +837,7 @@ extended composer's small buttons, **Add location**, tag a new post with up to f
 row 82, part 3). Not replies, which belong to their thread, and not a video,
 whose post is made only once its upload is ready.
 
-1. **Choosing:** a popover with a search as one types (on a phone, from
+1. **Choosing:** a popover with a search as one types (on a mobile, from
    the short composer's second step, a page of its own with the whole
    screen, and back), the arrow keys and
    Enter, and a **Near me** chip that asks the browser for one position only
@@ -948,7 +948,7 @@ person's server the first time and keeps it in the browser.
 
 `App.jsx` wraps every page in one `Container`, which sets the most a page can
 be and its gutters. Inside it a page chooses its own width.
-`components/PageColumn.jsx` is the usual choice: the whole width on a phone,
+`components/PageColumn.jsx` is the usual choice: the whole width on a mobile,
 centred at 600px at most on anything wider, or all of it with `wide`. Home,
 the pages of custom feeds and the event forms use it. A post's own page has
 the post and its replies under it in two thirds of the page and, in the last
@@ -1058,7 +1058,7 @@ emailed.
 4. **The bell's menu** (`containers/notifications/Menu.jsx`), on a desktop:
    the latest eight as on the page, grouped and with their actions, Mark all
    read and See all. Following a link in it reads that one and closes it. On
-   a phone the bell goes to the page.
+   a mobile the bell goes to the page.
 5. **What one is told about** is a person's own Notifications section in
    settings (`actors/Settings/NotificationChoices.jsx`): eight kinds of
    thing, on or off, each saved as it is switched.
@@ -1085,7 +1085,7 @@ emailed.
    roadmap row 103), **+ Follow** whoever followed, and Reply, which opens the reply
    form under it and answers the reply itself, or the post. Using one reads
    the notification.
-10. **Mark all read**, in the page's header (the icon alone on a phone),
+10. **Mark all read**, in the page's header (the icon alone on a mobile),
     marks every one read (`PATCH /notifications/read-all`), the list and the
     bell with them.
 11. **Get notifications** in a post's menu subscribes to its replies
@@ -1127,7 +1127,7 @@ are about, what to leave out. The server's side is in the services'
    (`containers/feeds/usePinnedFeeds.js`), again whenever a feed is made,
    changed, deleted or moved: `api/customFeeds.js` tells whoever asked
    (`onChange`).
-7. **The list page** (`containers/feeds/Manage.jsx`, reached from "Feeds" in
+7. **The list page** (`containers/feeds/Browse.jsx`, reached from "Feeds" in
    the menu): the viewer's
    feeds and the ones of other people's they keep.
 8. **Rows of one height.** A feed's row in the list is its name, who can
@@ -1143,7 +1143,7 @@ are about, what to leave out. The server's side is in the services'
    (`components/CustomFeedCard.jsx`) in the same columns, with the button
    that adds it to the home page. Feeds kept to their owners are never found.
 10. **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
-    new feed at `/feeds/new` (`Add.jsx`) and for changing one at
+    new feed at `/feeds/add` (`Add.jsx`) and for changing one at
     `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
     the + in its header, and the pencil on a feed's card. Hashtags and keywords
     are typed as chips (`components/WordsField.jsx`); profiles and places are
@@ -1234,7 +1234,7 @@ There are no views in it, and nothing anywhere counts them.
 
 ### The top of a profile
 
-`actors/Read/ActorHeader.jsx` lays it out the same way on a phone and a
+`actors/Read/ActorHeader.jsx` lays it out the same way on a mobile and a
 desktop, left aligned:
 
 1. **The cover,** when there is one, as a wide band three times as wide as
@@ -1244,7 +1244,7 @@ desktop, left aligned:
    else sees no band at all. Cards of profiles use the same band. The cover's
    and the profile photo's menus have **Upload** and Delete.
 2. **The profile photo** over the cover's lower edge, or at the top of the
-   card when there is no band, smaller on a phone. Since the empty band is
+   card when there is no band, smaller on a mobile. Since the empty band is
    there whenever a cover may be added, putting one up or taking it down
    moves nothing; **beside it, the buttons**: Follow
    (filled while not following, outlined once following), the others the
@@ -1301,7 +1301,7 @@ their profile, and after their handle in the lists of who a profile
 follows and what is in common: not in a list of followers, nor beside a
 "Follow back" button, which says it already.
 
-The dialog is full screen on a phone, with Close (✕) at the start of its
+The dialog is full screen on a mobile, with Close (✕) at the start of its
 title and no row of buttons at its foot; an event's attendees
 (`events/Attendees.jsx`) are the same (`components/ListDialogHeader.jsx`).
 Each row (`components/ProfileRow.jsx`) has the picture, then the name and

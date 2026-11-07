@@ -139,9 +139,9 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
   const asked = params.get('kind');
   const kinds = [...recommendations.KINDS, FEED];
   const kind = kinds.includes(asked) ? asked : 'person';
-  // Five tabs and two buttons are more than a phone's width: there they
+  // Five tabs and two buttons are more than a mobile's width: there they
   // slide, and never wrap (the user, 2026-10-29).
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const [isTuning, setIsTuning] = useState(false);
   const [isChoosing, setIsChoosing] = useState(false);
   // Read again when the weights were changed.
@@ -170,9 +170,9 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
       >
         <Tabs
           value={kind}
-          // On a phone they slide under a finger, with no arrows to take
+          // On a mobile they slide under a finger, with no arrows to take
           // their room: the one cut at the edge says there is more.
-          variant={phone ? 'scrollable' : 'fullWidth'}
+          variant={mobile ? 'scrollable' : 'fullWidth'}
           scrollButtons={false}
           onChange={(event, chosen) => {
             setParams(chosen === 'person' ? {} : { kind: chosen });

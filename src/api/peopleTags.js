@@ -20,7 +20,7 @@ const approve = (person, post) => {
 };
 
 // The person declining or leaving, or the author taking them out.
-const remove = (person, post) => {
+const deleteItem = (person, post) => {
   return axios.delete(`/people/${person.id}/tags/${post.id}`);
 };
 
@@ -28,5 +28,5 @@ export default {
   browse,
   add,
   approve,
-  remove,
+  deleteItem,
 };

@@ -45,7 +45,7 @@ const { getActorName } = utils.node;
 // A feed on the home page has a filled house; pressing it takes it off, and
 // the arrows move it among the tabs there. Making, changing and deleting a
 // feed are on its own pages.
-const CustomFeedsManage = ({
+const CustomFeedsBrowse = ({
   viewer,
   alertSuccess,
   alertError,
@@ -99,7 +99,7 @@ const CustomFeedsManage = ({
 
   const handleDelete = (feed) => {
     setWaiting(true);
-    api.customFeeds.remove(feed).then(() => {
+    api.customFeeds.deleteItem(feed).then(() => {
       alertSuccess(i18n.t('customFeeds:prompts.deleted'));
       return load();
     }).catch(failed).finally(() => {
@@ -309,7 +309,7 @@ const CustomFeedsManage = ({
             icon={<FeedIcon />}
             title={i18n.t('customFeeds:cTitle')}
             subheader={i18n.t('customFeeds:list.subheader')}
-            actionTo="/feeds/new"
+            actionTo="/feeds/add"
             actionLabel={i18n.t('customFeeds:list.create')}
           />
         </Box>
@@ -349,7 +349,7 @@ const CustomFeedsManage = ({
   );
 };
 
-CustomFeedsManage.propTypes = {
+CustomFeedsBrowse.propTypes = {
   viewer: PropTypes.object.isRequired,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
@@ -372,4 +372,4 @@ const mapDispatchToProps = (dispatch) => {
   };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomFeedsManage);
+export default connect(mapStateToProps, mapDispatchToProps)(CustomFeedsBrowse);

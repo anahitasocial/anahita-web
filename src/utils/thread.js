@@ -7,7 +7,7 @@
 // arranging can be tested on its own.
 
 // How far replies are indented. A long back-and-forth goes deeper than a
-// phone is wide, so past this depth replies line up under each other: the
+// mobile is wide, so past this depth replies line up under each other: the
 // order still shows who answered whom, and nothing is squeezed off the side.
 const MAX_INDENT = 4;
 

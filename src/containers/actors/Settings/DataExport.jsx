@@ -115,7 +115,7 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
 
   const remove = (item) => {
     setIsWorking(true);
-    api.remove(item.id).then(load).catch(() => {
+    api.deleteItem(item.id).then(load).catch(() => {
       alertError(i18n.t('settings:dataExport.failed'));
     }).finally(() => {
       setIsWorking(false);

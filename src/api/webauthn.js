@@ -64,7 +64,7 @@ const toBase64Url = (buffer) => {
 //
 // The secure-context check is the one that catches people out in dev:
 // WebAuthn is available on http://localhost but not on an http://
-// LAN address, so testing from a phone pointed at a dev machine fails
+// LAN address, so testing from a mobile pointed at a dev machine fails
 // here rather than at the prompt.
 const isSupported = () => {
   return Boolean(
@@ -79,7 +79,7 @@ const isSupported = () => {
 // authenticator — Touch ID, Windows Hello, an Android sensor.
 //
 // False does not mean passkeys are unavailable: a security key or a
-// phone over hybrid transport still works. Used only to pick the
+// mobile over hybrid transport still works. Used only to pick the
 // wording on the empty state, never to gate the button.
 const hasPlatformAuthenticator = () => {
   if (!isSupported() ||

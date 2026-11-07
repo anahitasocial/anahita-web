@@ -54,7 +54,7 @@ const LocationPicker = ({
   photoPoint = null,
   row = false,
 }) => {
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const canAdd = useSelector((state) => {
     const { nodeInfo } = state.app;
     return permissions.location.canAdd(
@@ -342,10 +342,10 @@ const LocationPicker = ({
           </IconButton>
         </span>
       </Tooltip>}
-      {/* On a phone, from the Details page, a page of its own, with the
+      {/* On a mobile, from the Details page, a page of its own, with the
           whole screen for the search and its results (roadmap row 114);
           back returns to Details. Elsewhere, a popover by its button. */}
-      {row && phone ?
+      {row && mobile ?
         <Dialog
           open={open}
           onClose={close}
@@ -377,7 +377,7 @@ const LocationPicker = ({
             { vertical: 'bottom', horizontal: 'left' }}
           slotProps={{
             paper: {
-              sx: { width: phone ? 'calc(100vw - 32px)' : 360, maxWidth: 360 },
+              sx: { width: mobile ? 'calc(100vw - 32px)' : 360, maxWidth: 360 },
             },
           }}
         >
@@ -392,9 +392,9 @@ const LocationPicker = ({
         }}
         maxWidth="sm"
         fullWidth
-        fullScreen={phone}
+        fullScreen={mobile}
         aria-labelledby="composer-location-add-title"
-        slotProps={{ paper: { sx: phone ? {} : { height: 'min(640px, calc(100% - 64px))' } } }}
+        slotProps={{ paper: { sx: mobile ? {} : { height: 'min(640px, calc(100% - 64px))' } } }}
       >
         <DialogTitle
           id="composer-location-add-title"

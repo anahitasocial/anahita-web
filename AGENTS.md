@@ -94,7 +94,7 @@ tone made specific; where they are silent, follow it.
 
 Look at every interface change yourself before handing it over: headless
 Chrome (puppeteer-core) against the development stack, at desktop
-(1280×900) and phone (390×844, touch) sizes. Look at the screenshots, and
+(1280×900) and mobile (390×844, touch) sizes. Look at the screenshots, and
 check the API's answer and the rows in MySQL. Say what headless Chrome
 cannot tell: Safari, real keyboards, how it feels. Delete what you posted to
 try it.
@@ -142,6 +142,20 @@ The same in anahita-services' AGENTS.md.
    reply", unless two actions in one menu would otherwise read the same.
 9. Releases are **Embryo** (the main branch) and **Birth** (a tagged
    release), not alpha and beta.
+
+## Naming in code
+
+BREAD, in code and in addresses: **Browse, Read, Edit, Add, Delete**
+(the user, 2026-11-07). `/feeds/add`, not `/feeds/new`; `edit`, not
+`update`; `browse`, not `list`; `deleteItem` in the API client, where
+`delete` is a word JavaScript keeps. What a person does that is not one of
+the five keeps its own verb (`follow`, `rsvp`, `approve`). Labels may say
+otherwise ("Create"), though BREAD is preferred there too.
+
+**Mobile**, not "phone", for the small screen and the device, in code and
+the docs (the user, 2026-11-07): `isMobile`, "full screen on a mobile".
+"Phone" is kept for a telephone number (`SUPPORT_PHONE`), for names that are
+not ours (`PhoneIcon`, iPhone), and in what the app says to people.
 
 ## Docs
 

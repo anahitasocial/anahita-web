@@ -91,7 +91,7 @@ const settingsPath = (account) => {
 // the API refuses them.
 //
 // The filters are select lists and tick boxes, like the reports list:
-// they have to fit a phone. The rarer ones sit behind "More filters".
+// they have to fit a mobile. The rarer ones sit behind "More filters".
 //
 // More accounts are fetched by a "Show more" button that adds to the
 // list. Pages would shift under the selection: remove forty accounts and
@@ -319,7 +319,7 @@ const Accounts = ({
         />
         <Divider />
         <CardContent>
-          {/* Side by side where there is room, stacked on a phone. */}
+          {/* Side by side where there is room, stacked on a mobile. */}
           <Box
             sx={{
               display: 'flex',

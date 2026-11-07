@@ -9,7 +9,7 @@ import i18n from '../languages';
 
 // The top of a dialog that is a list, such as a profile's followers: Close
 // at the start, as the media library has it, the title on one line, and
-// anything else at the end. Full screen on a phone, such a dialog has no
+// anything else at the end. Full screen on a mobile, such a dialog has no
 // row of actions at its foot to take room from the list.
 const ListDialogHeader = ({
   id,

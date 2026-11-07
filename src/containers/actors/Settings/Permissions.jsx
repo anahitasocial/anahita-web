@@ -198,7 +198,7 @@ const ActorsSettingsPermissions = (props) => {
                         {row.choices.map((choice) => {
                           return (
                             // A description wraps rather than being cut off
-                            // on a phone.
+                            // on a mobile.
                             <MenuItem key={choice} value={choice} sx={{ whiteSpace: 'normal' }}>
                               <ListItemText
                                 primary={label(choice)}

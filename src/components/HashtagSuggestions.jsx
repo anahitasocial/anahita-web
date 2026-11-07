@@ -16,10 +16,10 @@ import shortCount from '../utils/shortCount';
 
 // Room kept between the line being written and what is offered.
 const GAP = 4;
-// What is offered takes about this much height on a phone, and as much as
+// What is offered takes about this much height on a mobile, and as much as
 // eight rows on a desktop: below the line when it fits above the bottom
-// of what can be seen (a phone's keyboard takes from it), above otherwise.
-const PHONE_HEIGHT = 48;
+// of what can be seen (a mobile's keyboard takes from it), above otherwise.
+const MOBILE_HEIGHT = 48;
 const ROW_HEIGHT = 56;
 const DESKTOP_WIDTH = 320;
 
@@ -30,10 +30,10 @@ const bottomOfView = () => {
 
 // Hashtags in use, offered under the line somebody is writing as they type
 // one (roadmap row 78). Over the page, by where the caret is, so that
-// nothing under it moves: on a phone a row of chips the width of the
+// nothing under it moves: on a mobile a row of chips the width of the
 // screen, one tap to take one; on a desktop a short list, the arrow keys
 // moving through it and Enter or Tab taking one. Pressing on it does not
-// take the focus from the text, so a phone's keyboard stays up.
+// take the focus from the text, so a mobile's keyboard stays up.
 //
 // `notice`, in place of hashtags, says why there are none: the post has as
 // many as count.
@@ -42,7 +42,7 @@ const HashtagSuggestions = ({
   items = [],
   active = 0,
   notice = '',
-  phone = false,
+  mobile = false,
   onPick,
 }) => {
   if (!rect || (items.length === 0 && !notice)) {
@@ -50,13 +50,13 @@ const HashtagSuggestions = ({
   }
 
   const rows = notice ? 1 : items.length;
-  const height = phone ? PHONE_HEIGHT : (rows * ROW_HEIGHT) + 16;
+  const height = mobile ? MOBILE_HEIGHT : (rows * ROW_HEIGHT) + 16;
   const below = rect.bottom + GAP + height <= bottomOfView();
   const place = below ?
     { top: rect.bottom + GAP } :
     { top: rect.top - GAP, transform: 'translateY(-100%)' };
   const left = Math.max(8, Math.min(rect.left, window.innerWidth - DESKTOP_WIDTH - 8));
-  const across = phone ? { left: 8, right: 8 } : { left, width: DESKTOP_WIDTH };
+  const across = mobile ? { left: 8, right: 8 } : { left, width: DESKTOP_WIDTH };
 
   const keep = (event) => {
     event.preventDefault();
@@ -82,12 +82,12 @@ const HashtagSuggestions = ({
           <Typography variant="body2" color="textSecondary" sx={{ px: 2, py: 1.5 }}>
             {notice}
           </Typography>}
-        {!notice && phone &&
+        {!notice && mobile &&
           <Stack
             direction="row"
             spacing={1}
             sx={{
-              alignItems: 'center', px: 1, height: PHONE_HEIGHT, overflowX: 'auto',
+              alignItems: 'center', px: 1, height: MOBILE_HEIGHT, overflowX: 'auto',
             }}
           >
             {items.map((item) => {
@@ -104,7 +104,7 @@ const HashtagSuggestions = ({
               );
             })}
           </Stack>}
-        {!notice && !phone &&
+        {!notice && !mobile &&
           <List dense sx={{ py: 1 }}>
             {items.map((item, index) => {
               return (
@@ -160,7 +160,7 @@ HashtagSuggestions.propTypes = {
   // Which the arrow keys are on, on a desktop.
   active: PropTypes.number,
   notice: PropTypes.string,
-  phone: PropTypes.bool,
+  mobile: PropTypes.bool,
   onPick: PropTypes.func.isRequired,
 };
 

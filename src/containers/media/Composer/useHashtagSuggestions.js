@@ -61,7 +61,7 @@ const useBegun = (prefix) => {
 const useOffer = ({
   typed,
   full,
-  phone,
+  mobile,
   onPick,
 }) => {
   // Escape puts it away until somebody types on.
@@ -92,7 +92,7 @@ const useOffer = ({
       setDismissed(typed);
       return true;
     }
-    if (phone || items.length === 0) {
+    if (mobile || items.length === 0) {
       return false;
     }
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
@@ -126,7 +126,7 @@ const samePlace = (was, now) => {
 // Hashtags offered as one is typed in a textarea (a TextField's): give the
 // TextField `inputRef` and the handlers, and draw `overlay`'s props with
 // components/HashtagSuggestions.
-const useTextareaHashtags = ({ value, onChange, phone }) => {
+const useTextareaHashtags = ({ value, onChange, mobile }) => {
   const input = useRef(null);
   const [caret, setCaret] = useState(0);
   const [focused, setFocused] = useState(false);
@@ -149,7 +149,7 @@ const useTextareaHashtags = ({ value, onChange, phone }) => {
   };
 
   const offer = useOffer({
-    typed, full, phone, onPick: pick,
+    typed, full, mobile, onPick: pick,
   });
 
   // Where the caret is, while there is something to show by it, and again
@@ -219,7 +219,7 @@ const useTextareaHashtags = ({ value, onChange, phone }) => {
       items: offer.items,
       notice: offer.notice,
       active: offer.active,
-      phone,
+      mobile,
       onPick: pick,
     },
   };

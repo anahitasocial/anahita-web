@@ -82,16 +82,16 @@ Swatch.propTypes = {
 
 // The palettes as rows of swatches, one row for each group, and the chosen
 // one's name at the top, or "This site's colours" while none is: then no
-// swatch is marked, since the site's own may be none of them. On a phone,
+// swatch is marked, since the site's own may be none of them. On a mobile,
 // the sheet across the bottom, as tall as its three rows, so that the page
 // above it shows what each palette does; on a wider screen, a small card
 // beside the left menu, where each swatch says its name when pointed at.
 const Palettes = ({
-  current = undefined, choose, onClose, phone,
+  current = undefined, choose, onClose, mobile,
 }) => {
-  const size = phone ? 40 : 32;
+  const size = mobile ? 40 : 32;
   return (
-    <Box sx={phone ?
+    <Box sx={mobile ?
       { maxHeight: '50vh', display: 'flex', flexDirection: 'column' } :
       { width: 304 }}
     >
@@ -106,7 +106,7 @@ const Palettes = ({
           <CloseIcon fontSize="small" />
         </IconButton>
       </Box>
-      <Box sx={{ overflowY: phone ? 'auto' : 'visible', px: 2 }}>
+      <Box sx={{ overflowY: mobile ? 'auto' : 'visible', px: 2 }}>
         {groups.map((group) => {
           return (
             <Box key={group.name} sx={{ mt: 1 }}>
@@ -117,9 +117,9 @@ const Palettes = ({
                 display: 'flex',
                 gap: 2,
                 // Across the card on a wider screen; scrolled sideways on a
-                // phone. Room all round for the ring of the chosen one.
-                justifyContent: phone ? 'flex-start' : 'space-between',
-                overflowX: phone ? 'auto' : 'visible',
+                // mobile. Room all round for the ring of the chosen one.
+                justifyContent: mobile ? 'flex-start' : 'space-between',
+                overflowX: mobile ? 'auto' : 'visible',
                 py: 1,
                 px: 1,
               }}
@@ -143,7 +143,7 @@ const Palettes = ({
                       <Swatch palette={palette} size={size} />
                     </ButtonBase>
                   );
-                  return phone ? swatch : (
+                  return mobile ? swatch : (
                     <Tooltip key={palette.id} title={palette.name} placement="top">
                       {swatch}
                     </Tooltip>
@@ -170,7 +170,7 @@ Palettes.propTypes = {
   current: PropTypes.object,
   choose: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  phone: PropTypes.bool.isRequired,
+  mobile: PropTypes.bool.isRequired,
 };
 
 // Colours of one's own, for somebody signed in: Colours in the left menu
@@ -181,7 +181,7 @@ Palettes.propTypes = {
 const ColourPicker = ({
   current = undefined, onChoose, open, anchorEl = null, onClose,
 }) => {
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choose = (palette) => {
     save(palette && palette.id);
     onChoose(palette);
@@ -202,14 +202,14 @@ const ColourPicker = ({
   const body = (
     <ClickAwayListener onClickAway={listening ? onClose : () => {}}>
       <Box sx={{ display: 'contents' }}>
-        <Palettes current={current} choose={choose} onClose={onClose} phone={phone} />
+        <Palettes current={current} choose={choose} onClose={onClose} mobile={mobile} />
       </Box>
     </ClickAwayListener>
   );
 
-  // On a phone, a sheet across the bottom; its contents stay as it slides
+  // On a mobile, a sheet across the bottom; its contents stay as it slides
   // away.
-  if (phone) {
+  if (mobile) {
     return (
       <Drawer
         anchor="bottom"

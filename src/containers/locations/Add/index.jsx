@@ -24,7 +24,7 @@ const TABS = {
 };
 
 // The dialog keeps one height whatever is in it, so nothing moves as
-// results arrive, as somebody types, or between the two tabs. On a phone it
+// results arrive, as somebody types, or between the two tabs. On a mobile it
 // is the whole screen.
 const PAPER = {
   height: 'min(640px, calc(100% - 64px))',
@@ -38,7 +38,7 @@ const LocationsSelector = ({
   onChange = null,
 }) => {
   const theme = useTheme();
-  const isPhone = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   // Who may add a location is the installation's (LOCATIONS_FROM); the
   // others search and tie their post to one that exists.
   const canAdd = useSelector((state) => {
@@ -104,9 +104,9 @@ const LocationsSelector = ({
       onClose={handleClose}
       maxWidth="sm"
       fullWidth
-      fullScreen={isPhone}
+      fullScreen={isMobile}
       aria-labelledby="locations-add-title"
-      slotProps={{ paper: { sx: isPhone ? {} : PAPER } }}
+      slotProps={{ paper: { sx: isMobile ? {} : PAPER } }}
     >
       <DialogTitle
         id="locations-add-title"

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import Grid from '@mui/material/Grid';
 
-// The column a page's content sits in: the whole width on a phone, and
+// The column a page's content sits in: the whole width on a mobile, and
 // centred on anything wider, at `width` at most: 600 by default, wide enough
 // for a photo and short enough for lines that are easy to read. `wide` gives
 // it the whole page, for content that is laid out in columns of its own.

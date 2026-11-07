@@ -54,7 +54,7 @@ const READERS = {
     });
   },
   [activity.QUOTES]: (post) => {
-    return api.quotes.list(post).then((result) => {
+    return api.quotes.browse(post).then((result) => {
       return activity.noteRows(result.data.data);
     });
   },

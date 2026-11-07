@@ -127,7 +127,7 @@ const GroupAdd = () => {
                 disabled={isSaving}
                 // Not type="url", which would refuse a bare example.com that
                 // the server takes as https. inputMode still gives the
-                // keyboard for an address on a phone.
+                // keyboard for an address on a mobile.
                 slotProps={{ htmlInput: { maxLength: 255, inputMode: 'url' } }}
               />
               <FormControl disabled={isSaving}>

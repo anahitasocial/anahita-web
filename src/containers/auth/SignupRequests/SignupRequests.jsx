@@ -53,7 +53,7 @@ const useStyles = makeStyles()((theme) => {
     // The actions sit in the flow of the row rather than in a
     // ListItemSecondaryAction, which is absolutely positioned. Two
     // text buttons pinned to the right edge overlap a long email on a
-    // phone; here they wrap under the text instead, and the row grows.
+    // mobile; here they wrap under the text instead, and the row grows.
     actions: {
       display: 'flex',
       flexWrap: 'wrap',

@@ -44,7 +44,7 @@ export const tagPeople = (post, chosen, before = []) => {
         .catch(() => { return { person, outcome: 'refused' }; });
     }),
     ...removed.map((person) => {
-      return api.peopleTags.remove(person, post)
+      return api.peopleTags.deleteItem(person, post)
         .then(() => { return { person, outcome: 'removed' }; })
         .catch(() => { return { person, outcome: 'failed' }; });
     }),

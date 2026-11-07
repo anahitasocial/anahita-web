@@ -21,7 +21,7 @@ import AddIcon from '@mui/icons-material/Add';
 // is the case shortened button labels rest on, and the words it would have
 // carried go to the tooltip and the accessible name instead. A screen reader
 // reaching the button hears "Create group", not "Add" with no object, and the
-// header stays one line wide on a phone.
+// header stays one line wide on a mobile.
 //
 // No action renders when `actionTo` is empty, which is how a viewer who may
 // not add one sees no +. That is a rendering hint and nothing more: the route

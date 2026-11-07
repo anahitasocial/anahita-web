@@ -110,7 +110,7 @@ const StepUp = ({
   const loading = capabilities === null;
   const totpEnabled = Boolean(capabilities && capabilities.totpEnabled);
 
-  // Enrolled AND usable here. Someone can hold a passkey on a phone
+  // Enrolled AND usable here. Someone can hold a passkey on a mobile
   // while sitting at a browser that cannot run the ceremony, and
   // offering a button that throws would be worse than not offering it.
   const canUsePasskey = Boolean(capabilities && capabilities.hasPasskey)

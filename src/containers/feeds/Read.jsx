@@ -99,7 +99,7 @@ const CustomFeedRead = ({
 
   const handleDelete = () => {
     setWaiting(true);
-    api.customFeeds.remove(feed).then(() => {
+    api.customFeeds.deleteItem(feed).then(() => {
       alertSuccess(i18n.t('customFeeds:prompts.deleted'));
       navigate('/feeds');
     }).catch((response) => {

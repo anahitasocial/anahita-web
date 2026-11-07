@@ -57,8 +57,8 @@ const MediumFormEdit = (props) => {
   };
   // Hashtags in use offered as one is typed in the plain text, as when it
   // was written (roadmap row 78). The long editor offers its own.
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const hashtags = useTextareaHashtags({ value: medium.content || '', onChange: changeBody, phone });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const hashtags = useTextareaHashtags({ value: medium.content || '', onChange: changeBody, mobile });
 
   // A photo or a video is described; anything else has content.
   const bodyMissing = richText && !bodyOptional && !(medium.content || '').trim();
@@ -103,7 +103,7 @@ const MediumFormEdit = (props) => {
             helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: CONTENT.MAX_LENGTH }) : ' '}
             disabled={isFetching}
             minHeight={280}
-            // Under the page's bar, which is 56 pixels tall on a phone.
+            // Under the page's bar, which is 56 pixels tall on a mobile.
             stickyTop={{ xs: 56, sm: 64 }}
             uploadAccess={medium.access || 'public'}
             withMedia={withMedia}

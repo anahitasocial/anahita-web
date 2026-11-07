@@ -45,7 +45,7 @@ const formatDate = (value) => {
 // decided.
 //
 // The filters are select lists rather than a row of buttons: three
-// buttons already crowd a phone's width, and a list of sixteen reasons
+// buttons already crowd a mobile's width, and a list of sixteen reasons
 // could not be buttons at any width.
 //
 // More cases are fetched by a "Show more" button that adds to the list,
@@ -129,7 +129,7 @@ const ReportsList = ({
       />
       <Divider />
       <CardContent>
-        {/* Side by side where there is room, stacked on a phone. */}
+        {/* Side by side where there is room, stacked on a mobile. */}
         <Box
           sx={{
             display: 'flex',

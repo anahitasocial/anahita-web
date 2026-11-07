@@ -2,10 +2,10 @@
 // largest size the site keeps, the right way up, and a JPEG or a PNG,
 // which is all photo-service takes (the services' docs/photos.md).
 //
-// So a 12-megapixel photo from a phone goes as a tenth of its weight, and
-// an iPhone's HEIC, which the pickers ask for by name so that the phone
+// So a 12-megapixel photo from a mobile goes as a tenth of its weight, and
+// an iPhone's HEIC, which the pickers ask for by name so that the mobile
 // hands it over at once instead of converting it first, is made a JPEG
-// here (roadmap row 112, docs/plans/done/composer-on-a-phone.md). A browser
+// here (roadmap row 112, docs/plans/done/composer-on-a-mobile.md). A browser
 // that cannot read a file sends it as it is, and the server says why it
 // will not take it. What a photo carries of where it was taken is read
 // from the original before this (utils/photoPosition), and is not sent.

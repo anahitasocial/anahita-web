@@ -19,10 +19,10 @@ const { MOVIES } = videos;
 
 // Photo, GIF and Video, the same in the short box and the extended
 // composer: with their words beside them where there is room, the icons
-// alone on a phone. A post holds photos or a GIF or a video, so the
+// alone on a mobile. A post holds photos or a GIF or a video, so the
 // composer says which are offered (`photos`, `video`).
 const AttachButtons = ({
-  phone,
+  mobile,
   photos = false,
   video = false,
   onPhotos,
@@ -37,7 +37,7 @@ const AttachButtons = ({
     // it again closes it.
     const color = pressed ? 'primary.main' : 'text.secondary';
     const ariaPressed = pressed === undefined ? undefined : pressed;
-    if (phone) {
+    if (mobile) {
       return (
         <Tooltip title={tip}>
           <IconButton
@@ -128,7 +128,7 @@ const AttachButtons = ({
 };
 
 AttachButtons.propTypes = {
-  phone: PropTypes.bool.isRequired,
+  mobile: PropTypes.bool.isRequired,
   photos: PropTypes.bool,
   video: PropTypes.bool,
   // Called with the photos picked.

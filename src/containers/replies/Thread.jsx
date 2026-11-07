@@ -192,7 +192,7 @@ const RepliesThread = ({
       message: i18n.t('replies:confirm.delete'),
       confirm: i18n.t('replies:actions.delete'),
       run: () => {
-        return api.replies.remove(reply).then(() => {
+        return api.replies.deleteItem(reply).then(() => {
           setReplies((current) => {
             return thread.remove(current, reply.id);
           });

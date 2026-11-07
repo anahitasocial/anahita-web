@@ -60,7 +60,7 @@ FeedName.propTypes = {
 // other people's, in the order they put them in. The tab that is open is in
 // the address (`?feed=`), so it survives a reload and can be linked to.
 //
-// At the end of the tabs, where a phone has it too, is the way to the list
+// At the end of the tabs, where a mobile has it too, is the way to the list
 // of feeds, which is where a feed is made, changed and deleted.
 //
 // On a wide screen the feeds are read one post under another with the tabs

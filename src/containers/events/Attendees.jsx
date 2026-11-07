@@ -33,7 +33,7 @@ const EventAttendees = ({
   const [kind, setKind] = useState(events.GOING);
   const [lists, setLists] = useState({});
   const [failed, setFailed] = useState({});
-  const phone = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
+  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
 
   const load = (which, start) => {
     api.eventDetails.attendees({
@@ -79,7 +79,7 @@ const EventAttendees = ({
     <Dialog
       open={open}
       onClose={onClose}
-      fullScreen={phone}
+      fullScreen={mobile}
       fullWidth
       maxWidth="sm"
       aria-labelledby={`attendees-title-${actor.id}`}

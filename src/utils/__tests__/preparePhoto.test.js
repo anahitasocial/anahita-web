@@ -7,7 +7,7 @@ describe('the size a photo is sent at', () => {
     expect(sizeFor(LONGEST, 100)).toEqual({ width: LONGEST, height: 100, scaled: false });
   });
 
-  it('scales a phone\'s photo down to the longest side kept', () => {
+  it('scales a mobile\'s photo down to the longest side kept', () => {
     expect(sizeFor(4032, 3024)).toEqual({ width: 2048, height: 1536, scaled: true });
     expect(sizeFor(3024, 4032)).toEqual({ width: 1536, height: 2048, scaled: true });
   });

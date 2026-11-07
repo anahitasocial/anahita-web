@@ -34,7 +34,7 @@ const edit = (reply, { content, card = {} }) => {
   return axios.patch(`/notes/${reply.id}`, { content, ...card });
 };
 
-const remove = (reply) => {
+const deleteItem = (reply) => {
   const namespace = utils.node.getNamespace(reply) || 'notes';
   return axios.delete(`/${namespace}/${reply.id}`);
 };
@@ -72,7 +72,7 @@ export default {
   addThread,
   addWithPictures,
   edit,
-  remove,
+  deleteItem,
   setAccess,
   setHidden,
   thread,
