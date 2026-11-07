@@ -152,10 +152,11 @@ BREAD, in code and in addresses: **Browse, Read, Edit, Add, Delete**
 the five keeps its own verb (`follow`, `rsvp`, `approve`). Labels may say
 otherwise ("Create"), though BREAD is preferred there too.
 
-**Mobile**, not "phone", for the small screen and the device, in code and
-the docs (the user, 2026-11-07): `isMobile`, "full screen on a mobile".
-"Phone" is kept for a telephone number (`SUPPORT_PHONE`), for names that are
-not ours (`PhoneIcon`, iPhone), and in what the app says to people.
+**Mobile**, not "phone", in code and the docs (the user, 2026-11-07):
+`isMobile`, "full screen on a mobile". "Phone" only where phone numbers are
+meant, and what goes with them, as text messages (SMS): `SUPPORT_PHONE`,
+"a verified phone number". Names that are not ours stay as they are
+(`PhoneIcon`, iPhone), and so, for now, does what the app says to people.
 
 ## Docs
 
