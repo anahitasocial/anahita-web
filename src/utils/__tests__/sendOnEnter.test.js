@@ -10,8 +10,8 @@ describe('sendOnEnter', () => {
     expect(sendOnEnter({ key: 'Enter', shiftKey: true })).toBe(false);
   });
 
-  it('leaves Enter for a new line on a touch screen', () => {
-    expect(sendOnEnter({ key: 'Enter' }, true)).toBe(false);
+  it('sends on Enter on a touch screen too, where there is no send button', () => {
+    expect(sendOnEnter({ key: 'Enter' })).toBe(true);
   });
 
   it('sends nothing while a word is being composed', () => {

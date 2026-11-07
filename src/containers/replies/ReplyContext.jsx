@@ -58,22 +58,28 @@ const ReplyContext = ({
           bgcolor: 'action.hover',
         }}
       >
-        <Typography variant="caption" color="textSecondary" component="p">
-          <Link href={href || getURL(answered)} color="inherit">
+        {/* All of it opens what it answers, not its first words alone. */}
+        <Link
+          href={href || getURL(answered)}
+          color="inherit"
+          underline="none"
+          sx={{ display: 'block', '&:hover .reply-context-to': { textDecoration: 'underline' } }}
+        >
+          <Typography variant="caption" color="textSecondary" component="p" className="reply-context-to">
             {author ?
               i18n.t('replies:context.replyingTo', { name: author }) :
               i18n.t('replies:context.replying')}
-          </Link>
-        </Typography>
-        {excerpt &&
-        <Typography
-          variant="body2"
-          color="textSecondary"
-          dir="auto"
-          sx={{ overflowWrap: 'anywhere' }}
-        >
-          {excerpt}
-        </Typography>}
+          </Typography>
+          {excerpt &&
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            dir="auto"
+            sx={{ overflowWrap: 'anywhere' }}
+          >
+            {excerpt}
+          </Typography>}
+        </Link>
         {children}
       </Box>
     </>

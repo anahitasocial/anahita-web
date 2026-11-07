@@ -1,11 +1,12 @@
-// Whether a key sends what is being written, in a box that sends on Enter.
-// Shift and Enter make a new line, and so does Enter on a touch screen, whose
-// keyboard has no Shift to do it with: there the button sends. Enter that
-// finishes a word being composed, as in Persian or Japanese, sends nothing.
-const sendOnEnter = (event, touch = false) => {
+// Whether a key sends what is being written, in a box that sends on Enter:
+// the one-line reply (the user, 2026-11-07). Enter sends,
+// on a touch screen too, where the keyboard's return key says Send; Shift
+// and Enter make a new line, and the whole form, a tap away, is where a
+// reply of several lines is written. Enter that finishes a word being
+// composed, as in Persian or Japanese, sends nothing.
+const sendOnEnter = (event) => {
   return event.key === 'Enter' &&
     !event.shiftKey &&
-    !touch &&
     !(event.isComposing || (event.nativeEvent && event.nativeEvent.isComposing));
 };
 

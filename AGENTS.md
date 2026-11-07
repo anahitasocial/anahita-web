@@ -71,8 +71,10 @@ tone made specific; where they are silent, follow it.
 8. Menu items carry an icon before their label (`MenuItemLabel.jsx`).
 9. Infinite scroll, not "Show more", inside dialogs too
    (`react-infinite-scroll-component` with `scrollableTarget`).
-10. A new reply is one line that sends on Enter, with the whole form a step
-    away in a dialog (`ReplyBox.jsx`); on a touch screen Enter is a new line.
+10. A new reply is one line that sends on Enter, on a touch screen too, with
+    no send button beside it, only the way to the whole form, a step away in
+    a dialog (`ReplyBox.jsx`); Shift and Enter make a new line there, and in
+    the whole form Enter does (the user, 2026-11-07).
 11. Nothing jumps: a form or dialog keeps its height as somebody types.
     Reserve the error line (`helperText={error || ' '}`), or put what appears
     where it moves nothing.

@@ -22,24 +22,28 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Changed
 
-1. **A thread reads as one** (roadmap row 126): in a list, a post its
+1. **A reply sends on Enter,** on a mobile too, from the one-line box,
+   which has no send button now, only the way to the whole form; Shift and
+   Enter make a new line. Above a reply on its own page, the whole "Replying
+   to" box opens what it answers.
+2. **A thread reads as one** (roadmap row 126): in a list, a post its
    writer went on under shows the next note and "Show the thread" with how
    many notes it has; on the post's page their notes come first, flat and
    joined by a line, and everybody else's replies after them. Writing one,
    each note counts its letters against where the post goes (300 for
    Bluesky, 500 for the fediverse), "Add to thread" is offered when a note
    is full, and long words can be split into a thread in one tap.
-2. **The Feeds page lists every feed one may see** (roadmap row 125), newest
+3. **The Feeds page lists every feed one may see** (roadmap row 125), newest
    first: Everyone's, People you follow, Yours, or On your home, in its
    order; a page at a time as one scrolls, with a line to Search › Feeds.
    Edit, Delete and Share are in a menu on each row.
-3. **The first page loads faster:** each page's code is fetched when it is
+4. **The first page loads faster:** each page's code is fetched when it is
    first opened, maps only where one is shown, and only the language shown;
    what the first page loads went from 3,097 kB to 1,895 kB (935 kB to
    646 kB gzipped).
-4. **A card's buttons are in its action row,** at its foot: the feed's
+5. **A card's buttons are in its action row,** at its foot: the feed's
    page, the feed form, the group and event forms, an event's panel.
-5. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
+6. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
 
 ### Added
 

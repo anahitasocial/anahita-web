@@ -18,7 +18,6 @@ import GifIcon from '@mui/icons-material/GifBoxOutlined';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import RemoveIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
-import SendIcon from '@mui/icons-material/ArrowUpward';
 
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../components/PhotoFilesEditor';
@@ -58,8 +57,9 @@ const { CONTENT } = MEDIUM.FIELDS;
 // thread, so nothing about those is asked here. The GIF or video button is
 // there only where videos may be posted.
 //
-// `compact` is one line with its buttons inside it, for ReplyBox: Enter sends,
-// and the rest of the form is a step away, through `onExpand`.
+// `compact` is one line, for ReplyBox: Enter sends, on a touch screen too,
+// Shift and Enter make a new line, and the rest of the form is a step away,
+// through `onExpand`. It has no send button: Enter is it.
 const ReplyForm = ({
   onSubmit,
   onCancel = null,
@@ -125,7 +125,6 @@ const ReplyForm = ({
   const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const hashtags = useTextareaHashtags({ value: body, onChange: setBody, mobile });
   const { onKeyDown: keyForHashtags, ...hashtagHandlers } = hashtags.handlers;
-  const touch = useMediaQuery('(pointer: coarse)');
 
   // Words carried over from the line or the dialog go on from their end.
   useEffect(() => {
@@ -217,12 +216,14 @@ const ReplyForm = ({
           htmlInput: {
             dir: direction,
             maxLength: CONTENT.MAX_LENGTH,
-            ...(compact ? { style: { padding: '4px 0 4px 14px' } } : {}),
+            // One line: a mobile keyboard's return key says Send, as Enter
+            // sends here.
+            ...(compact ? { style: { padding: '4px 0 4px 14px' }, enterKeyHint: 'send' } : {}),
             ...hashtagHandlers,
             onKeyDown: (event) => {
               keyForHashtags(event);
               // Enter that chose a hashtag has been used.
-              if (compact && !event.defaultPrevented && sendOnEnter(event, touch)) {
+              if (compact && !event.defaultPrevented && sendOnEnter(event)) {
                 handleSubmit(event);
               }
             },
@@ -256,18 +257,9 @@ const ReplyForm = ({
                   >
                     <ExpandIcon fontSize="small" />
                   </IconButton>}
-                <IconButton
-                  type="submit"
-                  size="small"
-                  color="primary"
-                  aria-label={submitLabel}
-                  title={submitLabel}
-                  disabled={!hasSomething || isHeldBack}
-                >
-                  {isSending ?
-                    <CircularProgress size={20} /> :
-                    <SendIcon fontSize="small" />}
-                </IconButton>
+                {/* Enter sends: no button for it. While it goes, this. */}
+                {isSending &&
+                  <CircularProgress size={20} sx={{ m: 0.5 }} aria-label={submitLabel} />}
               </InputAdornment>
             ),
           } : undefined,

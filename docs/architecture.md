@@ -568,8 +568,10 @@ next note under it and "Show the thread" with how many notes it has
    (`routes/postDialogContext.js` tells the post it is in the dialog).
 8. Replies are set in a level for each step down, up to four, with a line down
    the side. Past that they line up, so a long exchange fits a mobile.
-9. **The reply box** (`ReplyBox`: one line that sends on Enter, or Send on a
-   touch screen, and `ReplyForm`, with `attachments`, in a dialog) has a
+9. **The reply box** (`ReplyBox`: one line that sends on Enter, on a touch
+   screen too, where the keyboard's return key says Send, with Shift and
+   Enter for a new line and no send button, only the way to the whole form,
+   `ReplyForm` with `attachments` in a dialog, where Enter is a new line) has a
    button for pictures and, where videos may be posted, one for a GIF or a
    video: one or the other, with words or without. Pictures use the photo
    composer's editor (`PhotoFilesEditor`, uploaded for the person replying)
