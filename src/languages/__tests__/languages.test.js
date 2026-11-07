@@ -1,5 +1,6 @@
 /* eslint-env jest */
-import i18n from '..';
+import moment from 'moment';
+import i18n, { loadAll } from '..';
 import choose from '../choose';
 import frenchSpacing from '../frenchSpacing';
 import enCA from '../en-CA';
@@ -19,6 +20,11 @@ const RESOURCES = {
   'es-419': es419,
   'pt-BR': ptBR,
 };
+
+// Every language, fetched as the app fetches the one it shows.
+beforeAll(() => {
+  return loadAll();
+});
 
 const { NARROW_NO_BREAK } = frenchSpacing;
 
@@ -160,5 +166,18 @@ describe('the layers', () => {
   it('says hashtag in French from France and mot-clic in Quebec French', () => {
     expect(i18n.t('onboarding:interests.follow', { lng: 'fr-FR', count: 2 })).toBe('Suivre 2 hashtags');
     expect(i18n.t('onboarding:interests.follow', { lng: 'fr-CA', count: 2 })).toBe('Suivre 2 mots-clics');
+  });
+});
+
+// moment's locales are given to the copy of moment the app uses, so that a
+// date is written in the language shown (roadmap row 128: the locales had
+// been given to another copy, and dates were in English).
+describe('dates in the language shown', () => {
+  it('writes a month in French, German, Spanish and Portuguese', () => {
+    const day = moment('2026-01-15');
+    expect(day.clone().locale('fr').format('MMMM')).toBe('janvier');
+    expect(day.clone().locale('de').format('MMMM')).toBe('Januar');
+    expect(day.clone().locale('es').format('MMMM')).toBe('enero');
+    expect(day.clone().locale('pt-br').format('MMMM')).toBe('janeiro');
   });
 });

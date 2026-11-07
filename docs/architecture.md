@@ -202,8 +202,16 @@ wait until they are needed:
 - **lodash:** only the functions the app uses, from `utils/lodash.js`,
   imported as `_` as before. One not there is added there.
 
-The five languages, all in the first script, and moment's dates are the
-largest of what remains, for later.
+- **Languages:** only the base, `en-CA`, which every language falls back
+  to, is in the first script. The language shown, and what it falls back
+  to, is fetched before the app is first drawn (`languages/index.js`,
+  `ready`, awaited in `src/index.jsx`), so nothing shows in English first.
+  The tests load them all (`loadAll`).
+
+moment's locales are taken from `moment/dist/locale/`, the copy of moment
+the app imports: from `moment/locale/` they were given to a second copy, in
+the first script too, and dates were written in English whatever the
+language.
 
 ### A members-only site
 

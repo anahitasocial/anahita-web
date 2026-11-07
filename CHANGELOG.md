@@ -17,6 +17,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    address.
 3. **The cookie notice on a mobile** sits at the foot, above the + button,
    no longer over the logo.
+4. **Dates are written in the language shown.** moment's locales had been
+   given to a second copy of it, so dates were in English.
 
 ### Changed
 
@@ -32,8 +34,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    order; a page at a time as one scrolls, with a line to Search › Feeds.
    Edit, Delete and Share are in a menu on each row.
 3. **The first page loads faster:** each page's code is fetched when it is
-   first opened, maps only where one is shown; what the first page loads
-   went from 3,097 kB to 2,480 kB.
+   first opened, maps only where one is shown, and only the language shown;
+   what the first page loads went from 3,097 kB to 1,895 kB (935 kB to
+   646 kB gzipped).
 4. **A card's buttons are in its action row,** at its foot: the feed's
    page, the feed form, the group and event forms, an event's panel.
 5. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.

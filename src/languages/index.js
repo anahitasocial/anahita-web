@@ -1,19 +1,13 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
 import moment from 'moment';
-import 'moment/locale/en-ca';
-import 'moment/locale/fr';
-import 'moment/locale/fr-ca';
-import 'moment/locale/de';
-import 'moment/locale/es';
-import 'moment/locale/pt-br';
+import 'moment/dist/locale/en-ca';
+import 'moment/dist/locale/fr';
+import 'moment/dist/locale/fr-ca';
+import 'moment/dist/locale/de';
+import 'moment/dist/locale/es';
+import 'moment/dist/locale/pt-br';
 import enCA from './en-CA';
-import enUS from './en-US';
-import frFR from './fr-FR';
-import frCA from './fr-CA';
-import deDE from './de-DE';
-import es419 from './es-419';
-import ptBR from './pt-BR';
 import choose from './choose';
 import frenchSpacing from './frenchSpacing';
 
@@ -55,14 +49,10 @@ i18n
   .init({
     // A base has every string; a layer, only those that differ from its
     // base, which fallbackLng reads for the rest. See ./choose.js.
+    // The base everybody falls back to is in the first script; the
+    // language shown is fetched before the app is drawn (`ready`, below).
     resources: {
       'en-CA': enCA,
-      'en-US': enUS,
-      'fr-FR': frFR,
-      'fr-CA': frCA,
-      'de-DE': deDE,
-      'es-419': es419,
-      'pt-BR': ptBR,
     },
     supportedLngs: choose.LANGUAGES,
     lng: choose.choose(browserLanguages, setting),
@@ -83,5 +73,46 @@ i18n
   }, (err) => {
     return err && console.log('Error loading i18n translation module.', err);
   });
+
+// Every language but the base, fetched when it is shown and not with the
+// app (roadmap row 128): each is a script of its own, and somebody reading
+// in one language never loads the other four.
+const LOADERS = {
+  'en-US': () => { return import('./en-US'); },
+  'fr-FR': () => { return import('./fr-FR'); },
+  'fr-CA': () => { return import('./fr-CA'); },
+  'de-DE': () => { return import('./de-DE'); },
+  'es-419': () => { return import('./es-419'); },
+  'pt-BR': () => { return import('./pt-BR'); },
+};
+const loaded = { [choose.BASE]: true };
+
+// A language, and what it falls back to, made ready to be shown. Resolves
+// at once for one already there.
+export const loadLanguage = (language) => {
+  const wanted = [language, ...(choose.FALLBACK[language] || [])].filter((each) => {
+    return !loaded[each] && LOADERS[each];
+  });
+  return Promise.all(wanted.map((each) => {
+    return LOADERS[each]().then((module) => {
+      Object.entries(module.default).forEach(([namespace, strings]) => {
+        i18n.addResourceBundle(each, namespace, strings, true, true);
+      });
+      loaded[each] = true;
+    });
+  }));
+};
+
+// Every language: for the tests, which read them all.
+export const loadAll = () => {
+  return Promise.all(choose.LANGUAGES.map(loadLanguage));
+};
+
+// The language shown, ready. The app is drawn once this has resolved, so
+// that nothing shows in the base first and then changes; a language that
+// could not be fetched shows the base.
+export const ready = loadLanguage(i18n.language).catch((err) => {
+  console.log('A language could not be loaded; the base is shown.', err);
+});
 
 export default i18n;
