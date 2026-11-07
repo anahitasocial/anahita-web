@@ -46,11 +46,11 @@ const CookieNotice = () => {
       sx={{
         position: 'fixed',
         zIndex: (theme) => { return theme.zIndex.snackbar; },
-        // At the top on a phone, under the bar, where it covers nothing a
-        // thumb wants: at the foot it lay over the + button (roadmap row
-        // 112). At the foot on a wider screen, where the + is to its side.
-        top: { xs: 72, sm: 'auto' },
-        bottom: { xs: 'auto', sm: 16 },
+        // At the foot, as on a wider screen: at the top on a phone it lay
+        // over the logo (the user, 2026-11-07). There it sits a step above
+        // the + button (ComposeButton.jsx: 56 high, 16 from the foot, above
+        // the home bar), which it lay over at first (roadmap row 112).
+        bottom: { xs: 'calc(88px + env(safe-area-inset-bottom))', sm: 16 },
         left: { xs: 16, sm: '50%' },
         right: { xs: 16, sm: 'auto' },
         transform: { sm: 'translateX(-50%)' },
