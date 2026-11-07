@@ -5,4 +5,8 @@ export default {
     blockOwner: 'Block {{name}}',
     unblockOwner: 'Unblock {{name}}',
   },
+  thread: {
+    show: 'Show the thread ({{ count }} note)',
+    show_other: 'Show the thread ({{ count }} notes)',
+  },
 };

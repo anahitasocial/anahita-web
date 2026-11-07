@@ -5,4 +5,8 @@ export default {
     blockOwner: '{{name}} blockieren',
     unblockOwner: '{{name}} nicht mehr blockieren',
   },
+  thread: {
+    show: 'Thread anzeigen ({{ count }} Notiz)',
+    show_other: 'Thread anzeigen ({{ count }} Notizen)',
+  },
 };

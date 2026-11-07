@@ -5,4 +5,8 @@ export default {
     blockOwner: 'Bloquer {{name}}',
     unblockOwner: 'Débloquer {{name}}',
   },
+  thread: {
+    show: 'Voir le fil ({{ count }} note)',
+    show_other: 'Voir le fil ({{ count }} notes)',
+  },
 };

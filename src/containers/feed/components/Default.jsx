@@ -10,6 +10,7 @@ import Box from '@mui/material/Box';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
 
+import ThreadNext from './ThreadNext';
 import PostActionsRow from '../../../components/PostActionsRow';
 import ReadMore from '../../../components/ReadMore';
 import ActorAvatar from '../../../components/ActorAvatar';
@@ -176,6 +177,7 @@ const FeedCardDefault = ({
           <LinkPreviewCard preview={node.linkPreview} />}
         <QuoteEmbed quote={node.quote} />
       </CardContent>
+      <ThreadNext thread={node.thread} next={node.threadNext} url={url} />
       <PostActionsRow actions={actions} stats={stats} />
     </Card>
   );
