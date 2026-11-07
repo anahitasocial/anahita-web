@@ -14,12 +14,23 @@ export default {
   list: {
     subheader: 'Feeds que armas tú: elige de dónde vienen las publicaciones y de qué tratan. Lo más reciente primero, siempre.',
     create: 'Crear un feed personalizado',
-    mine: 'Tus feeds',
-    kept: 'Feeds de otras personas',
-    empty: 'Todavía no tienes feeds personalizados.',
-    emptyKept: 'Un feed que hizo otra persona aparece aquí cuando lo agregas a tu página de inicio.',
     by: 'de {{ name }}',
-    loadFailed: 'No se pudieron cargar tus feeds. Inténtalo de nuevo.',
+    show: 'Mostrar',
+    whose: {
+      everyone: 'Todos',
+      following: 'Personas que sigues',
+      mine: 'Tuyos',
+      home: 'En tu inicio',
+    },
+    findOne: '¿Buscas un feed por sus palabras?',
+    searchFeeds: 'Buscar feeds',
+    none: {
+      everyone: 'Todavía nadie ha compartido un feed.',
+      following: 'Las personas que sigues todavía no han compartido un feed.',
+      mine: 'Todavía no tienes feeds personalizados.',
+      home: 'Todavía no hay nada en tu página de inicio. El botón de casa de un feed lo agrega ahí.',
+    },
+    loadFailed: 'No se pudieron cargar los feeds. Inténtalo de nuevo.',
   },
   details: {
     created: 'Creado',
@@ -40,6 +51,7 @@ export default {
     public: 'Cualquiera',
   },
   actions: {
+    more: 'Más',
     pin: 'Agregar al inicio',
     unpin: 'Quitar del inicio',
     edit: 'Editar',

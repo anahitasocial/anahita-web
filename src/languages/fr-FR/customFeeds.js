@@ -14,12 +14,23 @@ export default {
   list: {
     subheader: 'Des fils que vous composez vous-même : choisissez d’où viennent les publications et de quoi elles parlent. Toujours les plus récentes d’abord.',
     create: 'Créer un fil personnalisé',
-    mine: 'Vos fils',
-    kept: 'Fils d’autres personnes',
-    empty: 'Vous n’avez pas encore de fil personnalisé.',
-    emptyKept: 'Un fil créé par quelqu’un d’autre apparaît ici quand vous l’ajoutez à votre page d’accueil.',
     by: 'par {{ name }}',
-    loadFailed: 'Vos fils n’ont pas pu être chargés. Veuillez réessayer.',
+    show: 'Afficher',
+    whose: {
+      everyone: 'Tout le monde',
+      following: 'Les personnes que vous suivez',
+      mine: 'Les vôtres',
+      home: 'Sur votre accueil',
+    },
+    findOne: 'Vous cherchez un fil par ses mots ?',
+    searchFeeds: 'Rechercher des fils',
+    none: {
+      everyone: 'Aucun fil n’a encore été partagé.',
+      following: 'Les personnes que vous suivez n’ont pas encore partagé de fil.',
+      mine: 'Vous n’avez pas encore de fil personnalisé.',
+      home: 'Rien n’est encore sur votre page d’accueil. Le bouton maison d’un fil l’y ajoute.',
+    },
+    loadFailed: 'Les fils n’ont pas pu être chargés. Veuillez réessayer.',
   },
   details: {
     created: 'Créé le',
@@ -40,6 +51,7 @@ export default {
     public: 'Tout le monde',
   },
   actions: {
+    more: 'Plus',
     pin: 'Ajouter à l’accueil',
     unpin: 'Retirer de l’accueil',
     edit: 'Modifier',

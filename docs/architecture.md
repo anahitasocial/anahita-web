@@ -1145,21 +1145,32 @@ are about, what to leave out. The server's side is in the services'
    changed, deleted or moved: `api/customFeeds.js` tells whoever asked
    (`onChange`).
 7. **The list page** (`containers/feeds/Browse.jsx`, reached from "Feeds" in
-   the menu): the viewer's
-   feeds and the ones of other people's they keep.
+   the menu; roadmap row 125): every feed the viewer may see, in one list,
+   newest first and never ranked, with one select, Show, kept in the
+   address (`?show=`): **Everyone**, the default, their own among them;
+   **People you follow**; **Yours**; and **On your home**, the feeds on their
+   home page in their order there, with the arrows that move them. The
+   first three are `GET /feeds/discover` with `whose` (`api.customFeeds.discover`),
+   a page at a time as one scrolls; the last is `GET /feeds/pinned`. A line
+   under the select leads to Search › Feeds, where a feed is found by its
+   words. The column is as wide as a post's page.
 8. **Rows of one height.** A feed's row in the list is its name, who can
    see it and when it was made, and one line cut short: what it is for, or
-   what it shows when it does not say. Pressing the name opens the feed in
-   full in a dialog (`containers/feeds/DetailsDialog.jsx`): its description
-   and every setting it has, one line each, with a button on to the feed.
-9. **Finding shared feeds:** the site's search, and the Feeds tab of
-   Recommendations (see *Suggestions*). In search a feed that matches is a
+   what it shows when it does not say. Beside it, the house that adds it to
+   the home page or takes it off, and a menu (⋮) with Edit and Delete for
+   one's own, then Share for one that is shared, so that the name keeps its
+   room on a mobile. Pressing the name opens the feed in full in a dialog
+   (`containers/feeds/DetailsDialog.jsx`): its description and every
+   setting it has, one line each, with a button on to the feed.
+9. **Finding shared feeds:** the Feeds page, the site's search, and the
+   Feeds tab of Recommendations (see *Suggestions*). In search a feed that matches is a
    result like any other, among the profiles and posts under **All**, and by
    itself under a **Feeds** tab (`scope=feeds`). Search sends it as a node
    with a `feed` block; `containers/feeds/SearchCard.jsx` draws it as a card
    (`components/CustomFeedCard.jsx`) in the same columns, with the button
    that adds it to the home page. Feeds kept to their owners are never found.
-10. **The editor** (`containers/feeds/Form.jsx`) is a form in the page, for a
+10. **The editor** (`containers/feeds/Form.jsx`) is a form in the page, as
+    wide as the list's, so each row of its choices fits one line, for a
     new feed at `/feeds/add` (`Add.jsx`) and for changing one at
     `/feeds/:id/edit` (`Edit.jsx`). Both are reached from the list of feeds:
     the + in its header, and the pencil on a feed's card. Hashtags and keywords

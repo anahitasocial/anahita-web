@@ -14,12 +14,23 @@ export default {
   list: {
     subheader: 'Feeds, die du selbst baust: Wähle, woher die Beiträge kommen und worum es geht. Immer die neuesten zuerst.',
     create: 'Eigenen Feed erstellen',
-    mine: 'Deine Feeds',
-    kept: 'Feeds von anderen',
-    empty: 'Du hast noch keine eigenen Feeds.',
-    emptyKept: 'Ein Feed, den jemand anders gemacht hat, erscheint hier, wenn du ihn zu deiner Startseite hinzufügst.',
     by: 'von {{ name }}',
-    loadFailed: 'Deine Feeds konnten nicht geladen werden. Bitte versuch es noch einmal.',
+    show: 'Anzeigen',
+    whose: {
+      everyone: 'Alle',
+      following: 'Leute, denen du folgst',
+      mine: 'Deine',
+      home: 'Auf deiner Startseite',
+    },
+    findOne: 'Suchst du einen Feed nach seinen Wörtern?',
+    searchFeeds: 'Feeds suchen',
+    none: {
+      everyone: 'Es wurden noch keine Feeds geteilt.',
+      following: 'Die Leute, denen du folgst, haben noch keinen Feed geteilt.',
+      mine: 'Du hast noch keine eigenen Feeds.',
+      home: 'Auf deiner Startseite ist noch nichts. Der Haus-Knopf eines Feeds fügt ihn dort hinzu.',
+    },
+    loadFailed: 'Die Feeds konnten nicht geladen werden. Bitte versuch es noch einmal.',
   },
   details: {
     created: 'Erstellt',
@@ -40,6 +51,7 @@ export default {
     public: 'Alle',
   },
   actions: {
+    more: 'Mehr',
     pin: 'Zur Startseite hinzufügen',
     unpin: 'Von der Startseite entfernen',
     edit: 'Bearbeiten',

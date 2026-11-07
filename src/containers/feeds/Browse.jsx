@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Avatar from '@mui/material/Avatar';
 import Box from '@mui/material/Box';
@@ -10,13 +11,18 @@ import ButtonBase from '@mui/material/ButtonBase';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
+import Menu from '@mui/material/Menu';
+import Link from '@mui/material/Link';
+import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import DownIcon from '@mui/icons-material/ArrowDownward';
 import EditIcon from '@mui/icons-material/EditOutlined';
+import MoreIcon from '@mui/icons-material/MoreVert';
 import FeedIcon from '@mui/icons-material/DynamicFeedOutlined';
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/Home';
@@ -24,7 +30,8 @@ import UpIcon from '@mui/icons-material/ArrowUpward';
 
 import CustomFeedDetailsDialog from './DetailsDialog';
 import BrowseHeader from '../../components/BrowseHeader';
-import { ShareButton } from '../controls/Share';
+import { ShareMenuItem } from '../controls/Share';
+import MenuItemLabel from '../../components/MenuItemLabel';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import DialogConfirm from '../../components/DialogConfirm';
 import Progress from '../../components/Progress';
@@ -34,23 +41,97 @@ import i18n from '../../languages';
 import customFeeds from '../../utils/customFeeds';
 import utils from '../../utils';
 import PageColumn from '../../components/PageColumn';
+import SEARCH from '../../constants/search';
+import searchAddress from '../../utils/searchAddress';
 
 const { getActorName } = utils.node;
 
-// Custom feeds: the ones the viewer made, and the ones of other people's
-// they keep on their home page. What other people have shared is found in
-// the site's search and in the Feeds tab of Recommendations: that is the
-// list that grows, and it is kept out of this one.
+// Every feed the viewer may see, in one list (roadmap row 125): everyone's,
+// theirs among them, the default; the feeds of the people they follow;
+// theirs alone; or the ones on their home page, in their order there, with
+// the arrows that move them. Newest first and never ranked. A feed is found
+// by its words in the site's search, which a line here leads to.
 //
-// A feed on the home page has a filled house; pressing it takes it off, and
-// the arrows move it among the tabs there. Making, changing and deleting a
-// feed are on its own pages.
+// A feed on the home page has a filled house; pressing it takes it off.
+// Making, changing and deleting a feed are on its own pages.
+const WHOSE = ['everyone', 'following', 'mine', 'home'];
+
+// What else can be done with a feed, in a menu, so that its row keeps room
+// for its name on a mobile: Edit, Delete, then Share, last as everywhere.
+// Kept mounted, so that Delete's question stays when the menu is closed.
+const FeedMenu = ({ feed, waiting, onDelete }) => {
+  const [anchor, setAnchor] = useState(null);
+  const close = () => {
+    setAnchor(null);
+  };
+  const canEdit = Boolean(feed.authorized && feed.authorized.edit);
+  const canDelete = Boolean(feed.authorized && feed.authorized.delete);
+  const canShare = customFeeds.isShared(feed);
+
+  if (!canEdit && !canDelete && !canShare) {
+    return null;
+  }
+
+  return (
+    <>
+      <IconButton
+        aria-label={i18n.t('customFeeds:actions.more')}
+        onClick={(event) => {
+          setAnchor(event.currentTarget);
+        }}
+      >
+        <MoreIcon />
+      </IconButton>
+      <Menu anchorEl={anchor} open={Boolean(anchor)} onClose={close} keepMounted>
+        {canEdit &&
+          <MenuItem component={RouterLink} to={`${customFeeds.urlOf(feed)}/edit`} onClick={close}>
+            <MenuItemLabel icon={<EditIcon fontSize="small" />}>
+              {i18n.t('customFeeds:actions.edit')}
+            </MenuItemLabel>
+          </MenuItem>}
+        {canDelete &&
+          <DialogConfirm
+            title={i18n.t('customFeeds:delete.title')}
+            message={i18n.t('customFeeds:delete.message')}
+            confirm={i18n.t('customFeeds:delete.confirm')}
+            dismiss={i18n.t('customFeeds:delete.dismiss')}
+          >
+            <MenuItem
+              disabled={waiting}
+              onClick={() => {
+                close();
+                onDelete(feed);
+              }}
+            >
+              <MenuItemLabel icon={<DeleteIcon fontSize="small" color="error" />}>
+                {i18n.t('customFeeds:actions.delete')}
+              </MenuItemLabel>
+            </MenuItem>
+          </DialogConfirm>}
+        {canShare &&
+          <ShareMenuItem what={customFeeds.toShare(feed)} onDone={close} />}
+      </Menu>
+    </>
+  );
+};
+
+FeedMenu.propTypes = {
+  feed: PropTypes.object.isRequired,
+  waiting: PropTypes.bool.isRequired,
+  onDelete: PropTypes.func.isRequired,
+};
+const PAGE = 20;
+
 const CustomFeedsBrowse = ({
   viewer,
   alertSuccess,
   alertError,
 }) => {
-  const [mine, setMine] = useState([]);
+  const [params, setParams] = useSearchParams();
+  const whose = WHOSE.includes(params.get('show')) ? params.get('show') : 'everyone';
+  const [list, setList] = useState([]);
+  const [next, setNext] = useState(0);
+  const [hasMore, setHasMore] = useState(false);
   const [pinned, setPinned] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [hasFailed, setHasFailed] = useState(false);
@@ -58,10 +139,30 @@ const CustomFeedsBrowse = ({
   // The feed whose details are open in the dialog, or 0.
   const [detailsOf, setDetailsOf] = useState(0);
 
+  // The feeds on the home page: the list of "On your home", and the house
+  // on every row.
+  const loadPinned = () => {
+    return api.customFeeds.pinned().then((result) => {
+      setPinned(result.data.data || []);
+    });
+  };
+
+  // A page of the chosen list, after `start`; the first page anew.
+  const loadPage = (start) => {
+    return api.customFeeds.discover({ whose, start, limit: PAGE }).then((result) => {
+      const page = result.data.data || [];
+      const pagination = result.data.pagination || {};
+      setList((before) => {
+        return start === 0 ? page : [...before, ...page];
+      });
+      setNext(pagination.next_start || 0);
+      setHasMore(Boolean(pagination.has_more));
+    });
+  };
+
   const load = () => {
-    return Promise.all([api.customFeeds.mine(), api.customFeeds.pinned()]).then(([made, kept]) => {
-      setMine(made.data.data || []);
-      setPinned(kept.data.data || []);
+    setIsLoading(true);
+    return Promise.all([loadPinned(), whose === 'home' ? Promise.resolve() : loadPage(0)]).then(() => {
       setHasFailed(false);
     }).catch(() => {
       setHasFailed(true);
@@ -71,8 +172,10 @@ const CustomFeedsBrowse = ({
   };
 
   useEffect(() => {
+    setList([]);
+    setHasMore(false);
     load();
-  }, []);
+  }, [whose]);
 
   const failed = (response) => {
     const data = (response.response && response.response.data) || {};
@@ -91,7 +194,7 @@ const CustomFeedsBrowse = ({
     setWaiting(true);
     api.customFeeds.setPinned(feed, isPinned).then(() => {
       alertSuccess(i18n.t(isPinned ? 'customFeeds:prompts.pinned' : 'customFeeds:prompts.unpinned'));
-      return load();
+      return loadPinned();
     }).catch(failed).finally(() => {
       setWaiting(false);
     });
@@ -101,7 +204,12 @@ const CustomFeedsBrowse = ({
     setWaiting(true);
     api.customFeeds.deleteItem(feed).then(() => {
       alertSuccess(i18n.t('customFeeds:prompts.deleted'));
-      return load();
+      setList((before) => {
+        return before.filter((each) => {
+          return each.id !== feed.id;
+        });
+      });
+      return loadPinned();
     }).catch(failed).finally(() => {
       setWaiting(false);
     });
@@ -192,7 +300,7 @@ const CustomFeedsBrowse = ({
           }
           action={
             <Stack direction="row">
-              {isPinned &&
+              {isPinned && whose === 'home' &&
                 <>
                   <Tooltip title={i18n.t('customFeeds:actions.moveUp')}>
                     <span>
@@ -236,37 +344,7 @@ const CustomFeedsBrowse = ({
                   </IconButton>
                 </span>
               </Tooltip>
-              {customFeeds.isShared(feed) &&
-                <ShareButton what={customFeeds.toShare(feed)} />}
-              {feed.authorized && feed.authorized.edit &&
-                <Tooltip title={i18n.t('customFeeds:actions.edit')}>
-                  <IconButton
-                    aria-label={i18n.t('customFeeds:actions.edit')}
-                    component={RouterLink}
-                    to={`${customFeeds.urlOf(feed)}/edit`}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>}
-              {feed.authorized && feed.authorized.delete &&
-                <DialogConfirm
-                  title={i18n.t('customFeeds:delete.title')}
-                  message={i18n.t('customFeeds:delete.message')}
-                  confirm={i18n.t('customFeeds:delete.confirm')}
-                  dismiss={i18n.t('customFeeds:delete.dismiss')}
-                >
-                  <IconButton
-                    color="error"
-                    aria-label={i18n.t('customFeeds:actions.delete')}
-                    title={i18n.t('customFeeds:actions.delete')}
-                    disabled={waiting}
-                    onClick={() => {
-                      handleDelete(feed);
-                    }}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </DialogConfirm>}
+              <FeedMenu feed={feed} waiting={waiting} onDelete={handleDelete} />
             </Stack>
           }
           slotProps={{
@@ -282,28 +360,16 @@ const CustomFeedsBrowse = ({
     );
   };
 
-  // The viewer's own, the ones on the home page first and in their order
-  // there, then the rest.
-  const ownPinned = pinned.filter((feed) => {
-    return mine.some((each) => {
-      return each.id === feed.id;
-    });
-  });
-  const ownOthers = mine.filter((feed) => {
-    return !pinnedIds.includes(feed.id);
-  });
-  const kept = pinned.filter((feed) => {
-    return !mine.some((each) => {
-      return each.id === feed.id;
-    });
-  });
+  const shown = whose === 'home' ? pinned : list;
 
   return (
     <>
       <Helmet>
         <title>{i18n.t('customFeeds:cTitle')}</title>
       </Helmet>
-      <PageColumn>
+      {/* As wide as a post's page: room for a feed's name and what it is
+          for, on one line each. */}
+      <PageColumn width={800}>
         <Box sx={{ mb: 2 }}>
           <BrowseHeader
             icon={<FeedIcon />}
@@ -313,30 +379,58 @@ const CustomFeedsBrowse = ({
             actionLabel={i18n.t('customFeeds:list.create')}
           />
         </Box>
+        <Box sx={{ px: 2, pb: 2 }}>
+          <TextField
+            select
+            size="small"
+            label={i18n.t('customFeeds:list.show')}
+            value={whose}
+            onChange={(event) => {
+              const chosen = event.target.value;
+              setParams(chosen === 'everyone' ? {} : { show: chosen }, { replace: true });
+            }}
+            sx={{ minWidth: 8 * 28 }}
+          >
+            {WHOSE.map((each) => {
+              return (
+                <MenuItem key={`whose-${each}`} value={each}>
+                  {i18n.t(`customFeeds:list.whose.${each}`)}
+                </MenuItem>
+              );
+            })}
+          </TextField>
+          <Typography variant="body2" color="textSecondary" sx={{ pt: 1 }}>
+            {i18n.t('customFeeds:list.findOne')}
+            {' '}
+            <Link component={RouterLink} to={searchAddress.of({ scope: SEARCH.SCOPE.FEEDS })} underline="hover">
+              {i18n.t('customFeeds:list.searchFeeds')}
+            </Link>
+          </Typography>
+        </Box>
         {isLoading && <Progress />}
         {!isLoading && hasFailed &&
         <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
           {i18n.t('customFeeds:list.loadFailed')}
         </Typography>}
-        {!isLoading && !hasFailed &&
-        <>
-          <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
-            {i18n.t('customFeeds:list.mine')}
-          </Typography>
-          {mine.length === 0 &&
-          <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
-            {i18n.t('customFeeds:list.empty')}
-          </Typography>}
-          {[...ownPinned, ...ownOthers].map(row)}
-          <Typography variant="subtitle1" component="h2" sx={{ px: 2, pb: 1 }}>
-            {i18n.t('customFeeds:list.kept')}
-          </Typography>
-          {kept.length === 0 &&
-          <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
-            {i18n.t('customFeeds:list.emptyKept')}
-          </Typography>}
-          {kept.map(row)}
-        </>}
+        {!isLoading && !hasFailed && shown.length === 0 &&
+        <Typography variant="body1" color="textSecondary" sx={{ px: 2, pb: 2 }}>
+          {i18n.t(`customFeeds:list.none.${whose}`)}
+        </Typography>}
+        {!isLoading && !hasFailed && whose === 'home' && pinned.map(row)}
+        {!isLoading && !hasFailed && whose !== 'home' &&
+        <InfiniteScroll
+          dataLength={list.length}
+          next={() => {
+            loadPage(next).catch(() => {
+              setHasMore(false);
+            });
+          }}
+          hasMore={hasMore}
+          loader={<Progress key="feeds-progress" />}
+          style={{ overflow: 'visible' }}
+        >
+          {list.map(row)}
+        </InfiniteScroll>}
       </PageColumn>
       {detailsOf > 0 &&
         <CustomFeedDetailsDialog

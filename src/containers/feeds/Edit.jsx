@@ -44,7 +44,9 @@ const CustomFeedEdit = () => {
       <Helmet>
         <title>{i18n.t('customFeeds:form.titleEdit')}</title>
       </Helmet>
-      <PageColumn>
+      {/* As wide as the Feeds page: the form's choices side by side on a
+          desktop. */}
+      <PageColumn width={800}>
         <CustomFeedForm
           key={feed.id}
           feed={feed}

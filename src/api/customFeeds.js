@@ -60,8 +60,14 @@ const mine = () => {
 
 // The feeds the viewer keeps on their home page, in order.
 // Feeds people have shared, newest first, each as the viewer may see it.
-const discover = ({ start = 0, limit = 20 } = {}) => {
-  return axios.get('/feeds/discover', { params: { start, limit } });
+// With `whose`, the Feeds page's list: 'everyone' (theirs among them),
+// 'following' or 'mine'.
+const discover = ({ start = 0, limit = 20, whose = '' } = {}) => {
+  const params = { start, limit };
+  if (whose) {
+    params.whose = whose;
+  }
+  return axios.get('/feeds/discover', { params });
 };
 
 const pinned = () => {

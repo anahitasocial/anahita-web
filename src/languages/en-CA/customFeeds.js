@@ -14,12 +14,23 @@ export default {
   list: {
     subheader: 'Feeds you build yourself: choose where the posts come from and what they are about. Newest first, always.',
     create: 'Create a custom feed',
-    mine: 'Your feeds',
-    kept: 'Feeds by other people',
-    empty: 'You have no custom feeds yet.',
-    emptyKept: 'A feed somebody else made appears here when you add it to your home page.',
     by: 'by {{ name }}',
-    loadFailed: 'Your feeds could not be loaded. Please try again.',
+    show: 'Show',
+    whose: {
+      everyone: 'Everyone',
+      following: 'People you follow',
+      mine: 'Yours',
+      home: 'On your home',
+    },
+    findOne: 'Looking for a feed by its words?',
+    searchFeeds: 'Search feeds',
+    none: {
+      everyone: 'No feeds have been shared yet.',
+      following: 'The people you follow have not shared a feed yet.',
+      mine: 'You have no custom feeds yet.',
+      home: 'Nothing is on your home page yet. A feed’s house button adds it there.',
+    },
+    loadFailed: 'The feeds could not be loaded. Please try again.',
   },
   details: {
     created: 'Created',
@@ -40,6 +51,7 @@ export default {
     public: 'Anyone',
   },
   actions: {
+    more: 'More',
     pin: 'Add to home',
     unpin: 'Remove from home',
     edit: 'Edit',

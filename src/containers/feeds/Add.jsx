@@ -20,7 +20,9 @@ const CustomFeedAdd = () => {
       <Helmet>
         <title>{i18n.t('customFeeds:form.titleAdd')}</title>
       </Helmet>
-      <PageColumn>
+      {/* As wide as the Feeds page: the form's choices side by side on a
+          desktop. */}
+      <PageColumn width={800}>
         <CustomFeedForm
           onClose={() => {
             navigate('/feeds');
