@@ -36,7 +36,6 @@ describe('describing what was reported', () => {
     expect(target.title(item).endsWith('…')).toBe(true);
   });
 
-
   it('says so when the thing is gone, and links nowhere', () => {
     const item = { targetType: note.type, target: undefined };
 

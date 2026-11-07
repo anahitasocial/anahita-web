@@ -145,7 +145,9 @@ describe('sending the list', () => {
 
   it('names an upload by its upload and a kept image by its id', () => {
     const kept = photoFiles.fromMedium(post(file('a.jpg', 'first')));
-    const added = { key: 'picked-x', status: STATUS.READY, uploadId: 31, altText: '  a heron  ' };
+    const added = {
+      key: 'picked-x', status: STATUS.READY, uploadId: 31, altText: '  a heron  ',
+    };
 
     expect(photoFiles.toRequest([added, ...kept])).toEqual([
       { uploadId: 31, altText: 'a heron' },

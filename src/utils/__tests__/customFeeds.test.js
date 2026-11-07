@@ -169,7 +169,7 @@ describe('what a custom feed shows, in a sentence', () => {
 });
 
 describe('an area and where posts were written', () => {
-  const t = (key, values = {}) => {
+  const keysOf = (key, values = {}) => {
     return `${key}${values.count !== undefined ? `:${values.count}` : ''}`;
   };
   const around = (radiusKm) => {
@@ -184,9 +184,8 @@ describe('an area and where posts were written', () => {
   });
 
   it('is said in the summary', () => {
-    const said = feeds.summary({ filters: { ...around(25).filters, origin: 'elsewhere' } }, t);
+    const said = feeds.summary({ filters: { ...around(25).filters, origin: 'elsewhere' } }, keysOf);
     expect(said).toContain('customFeeds:summary.near:25');
     expect(said).toContain('customFeeds:summary.origin.elsewhere');
   });
 });
-
