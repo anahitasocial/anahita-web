@@ -29,6 +29,7 @@ import MediumForm from '../EditForm';
 
 import i18n from '../../../languages';
 import utils from '../../../utils';
+import postCounts from '../../../components/PostCounts';
 
 const { getURL } = utils.node;
 
@@ -178,7 +179,7 @@ const MediaStepperView = ({
           />}
         // As on the post's own page, without Download, which has no room
         // beside the picture. No Reply: the Replies tab below has the box.
-        actions={isAuthenticated && [
+        actions={!isAuthenticated ? postCounts(medium, { replies: false }) : [
           Like && <Like node={medium} key={`like-${medium.id}`} />,
           // A reply is not passed on without its thread.
           !medium.rootId &&

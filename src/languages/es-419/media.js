@@ -52,6 +52,8 @@ export default {
     none: 'Aquí no hay nada que puedas ver.',
     failed: 'No se pudo cargar esta lista.',
     open: 'Abrir',
+    signIn: 'Inicia sesión para ver quién fue.',
+    private: 'Las personas aquí mantienen su perfil privado.',
   },
   // An avatar or a cover the server would not take.
   image: {

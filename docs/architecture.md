@@ -1276,7 +1276,15 @@ layout of a post uses), there to press when the post has any of the four,
 and from "Interactions" in a post's menu. There is one row under a post:
 like, reply, repost, share and interactions, each the same kind of button
 and as wide as the others, so the row is shared out evenly. None is an
-icon button. The separate row of counts, of likes and of replies, is gone.
+icon button. The separate row of counts, of likes and of replies, is gone:
+each button carries its own number, likes, replies and reposts with quotes.
+Somebody not signed in sees the same numbers in the same places, shown and
+not offered (`components/PostCounts.jsx`).
+
+A list can be empty with a number above it: everybody in it keeps their
+profile from the viewer, and the dialog says so. The lists of likes and
+reposts are for members; somebody not signed in is asked to sign in to see
+them, in a line, not as an error.
 
 There are no views in it, and nothing anywhere counts them.
 

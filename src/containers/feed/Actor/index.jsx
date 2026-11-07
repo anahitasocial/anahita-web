@@ -25,6 +25,7 @@ import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
 import utils from '../../../utils';
 import usePosted from '../usePosted';
+import postCounts from '../../../components/PostCounts';
 
 const {
   isRepost,
@@ -143,7 +144,7 @@ const FeedActorBrowse = ({
               node={node}
             />,
           ]}
-          actions={isAuthenticated && [
+          actions={!isAuthenticated ? postCounts(node) : [
             <Like
               node={node}
               repostNode={null}
@@ -177,7 +178,7 @@ const FeedActorBrowse = ({
               node={node.parent}
             />,
           ]}
-          actions={isAuthenticated && [
+          actions={!isAuthenticated ? postCounts(node.parent) : [
             <Like
               node={node.parent}
               repostNode={node}
@@ -218,7 +219,7 @@ const FeedActorBrowse = ({
               node={node.parent}
             />,
           ]}
-          actions={isAuthenticated && [
+          actions={!isAuthenticated ? postCounts(node.parent) : [
             <Like
               node={node.parent}
               repostNode={node}
@@ -258,7 +259,7 @@ const FeedActorBrowse = ({
             node={node}
           />,
         ]}
-        actions={isAuthenticated && [
+        actions={!isAuthenticated ? postCounts(node) : [
           <Like
             node={node}
             repostNode={null}

@@ -52,6 +52,8 @@ export default {
     none: 'Hier gibt es nichts, was du sehen kannst.',
     failed: 'Diese Liste konnte nicht geladen werden.',
     open: 'Öffnen',
+    signIn: 'Melde dich an, um zu sehen, wer es war.',
+    private: 'Die Leute hier halten ihr Profil privat.',
   },
   // An avatar or a cover the server would not take.
   image: {

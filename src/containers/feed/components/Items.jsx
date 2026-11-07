@@ -11,6 +11,7 @@ import Masonry from '../../../components/BreakpointMasonry';
 import FeedCardDefault from './Default';
 import FeedCardRepost from './Repost';
 import FeedReplyButton from './ReplyButton';
+import postCounts from '../../../components/PostCounts';
 import NodesType from '../../../proptypes/Nodes';
 import PersonType from '../../../proptypes/Person';
 import utils from '../../../utils';
@@ -58,7 +59,13 @@ const FeedItems = ({
               node={node.parent}
             />,
           ]}
-          actions={isAuthenticated && [
+          actions={!isAuthenticated ? [
+            ...postCounts(node.parent),
+            <ShareAction
+              key={`node-share-${node.id}`}
+              what={ofNode(node.parent)}
+            />,
+          ] : [
             <Like
               node={node.parent}
               repostNode={node}
@@ -101,7 +108,13 @@ const FeedItems = ({
             node={node}
           />,
         ]}
-        actions={isAuthenticated && [
+        actions={!isAuthenticated ? [
+          ...postCounts(node),
+          <ShareAction
+            key={`node-share-${node.id}`}
+            what={ofNode(node)}
+          />,
+        ] : [
           <Like
             node={node}
             repostNode={null}

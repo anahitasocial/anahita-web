@@ -16,6 +16,7 @@ import ControlRepost from '../../controls/Repost';
 import FeedReplyButton from '../../feed/components/ReplyButton';
 import utils from '../../../utils';
 import perms from '../../../permissions';
+import postCounts from '../../../components/PostCounts';
 
 const { getNamespace } = utils.node;
 
@@ -52,7 +53,7 @@ const MediaListItem = ({
         <LikesStats node={medium} />
       }
       // The same as a post in a feed: Download only on the post's own page.
-      actions={isAuthenticated && [
+      actions={!isAuthenticated ? postCounts(medium) : [
         <Like node={medium} key={`medium-like-${medium.id}`} />,
         <FeedReplyButton post={medium} key={`medium-reply-${medium.id}`} />,
         <ControlRepost parent={medium} key={`medium-repost-${medium.id}`} />,

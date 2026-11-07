@@ -12,6 +12,7 @@ import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
 import RepliesThread from '../../replies/Thread';
 import ReplyContext from '../../replies/ReplyContext';
+import postCounts from '../../../components/PostCounts';
 import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
 import { DownloadAction } from '../../controls/medium/Download';
@@ -99,6 +100,9 @@ const MediaReadView = ({
       />
     ),
     actions: [
+      // For somebody not signed in, what the buttons count, shown and not
+      // offered: the replies are below.
+      ...(isAuthenticated ? [] : postCounts(medium, { replies: false })),
       isAuthenticated && <Like node={medium} key={`medium-like-${medium.id}`} />,
       // Repost or quote. Not a reply: it is not passed on without its thread.
       isAuthenticated && !isReply && (

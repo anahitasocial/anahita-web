@@ -49,6 +49,8 @@ export default {
     none: 'Rien ici que vous puissiez voir.',
     failed: 'Cette liste n\'a pas pu être chargée.',
     open: 'Ouvrir',
+    signIn: 'Connectez-vous pour voir qui c’était.',
+    private: 'Les personnes ici gardent leur profil privé.',
   },
   // Un avatar ou une couverture que le serveur a refusé.
   image: {

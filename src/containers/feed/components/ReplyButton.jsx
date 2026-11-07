@@ -30,7 +30,9 @@ const FeedReplyButton = ({ post }) => {
       color="inherit"
       fullWidth
       startIcon={<ReplyIcon />}
-    />
+    >
+      {post.commentCount > 0 && post.commentCount}
+    </Button>
   );
 };
 

@@ -111,10 +111,13 @@ const PostActivity = ({
           return { ...before, [kind]: read };
         });
       }
-    }).catch(() => {
+    }).catch((err) => {
       if (current) {
+        // Not signed in, where the list is for members: said as such, not
+        // as something gone wrong.
+        const why = err && err.response && err.response.status === 401 ? 'signIn' : 'failed';
         setFailed((before) => {
-          return { ...before, [kind]: true };
+          return { ...before, [kind]: why };
         });
       }
     });
@@ -166,12 +169,19 @@ const PostActivity = ({
       <DialogContent dividers sx={{ p: 0, minHeight: 240 }}>
         {!list && !failed[kind] && <Progress />}
         {failed[kind] &&
-          <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
-            {i18n.t('media:activity.failed')}
+          <Typography
+            variant="body2"
+            color="textSecondary"
+            role={failed[kind] === 'failed' ? 'alert' : undefined}
+            sx={{ p: 2 }}
+          >
+            {i18n.t(failed[kind] === 'signIn' ? 'media:activity.signIn' : 'media:activity.failed')}
           </Typography>}
+        {/* Empty with a number above it: everybody in it keeps their
+            profile from the viewer. Said so, not as nothing there. */}
         {list && list.length === 0 &&
           <Typography variant="body2" color="textSecondary" sx={{ p: 2 }}>
-            {i18n.t('media:activity.none')}
+            {i18n.t(counts[kind] > 0 ? 'media:activity.private' : 'media:activity.none')}
           </Typography>}
         {list && list.length > 0 &&
           <List disablePadding>
