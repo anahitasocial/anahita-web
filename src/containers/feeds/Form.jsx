@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Checkbox from '@mui/material/Checkbox';
@@ -734,15 +735,12 @@ const CustomFeedForm = ({
         slotProps={{ title: { variant: 'h5', component: 'h1' } }}
       />
       <CardContent>
-        <Stack spacing={2}>
-          <div>
-            {fields}
-          </div>
-          <Stack direction="row" spacing={1} sx={{ justifyContent: 'flex-end' }}>
-            {buttons}
-          </Stack>
-        </Stack>
+        {fields}
       </CardContent>
+      {/* Outside the form; Save names it (`form`). */}
+      <CardActions sx={{ justifyContent: 'flex-end' }}>
+        {buttons}
+      </CardActions>
     </Card>
   );
 };
