@@ -9,4 +9,5 @@ export default {
     show: 'Ver el hilo ({{ count }} nota)',
     show_other: 'Ver el hilo ({{ count }} notas)',
   },
+  reposted: 'Reposteado · {{ when }}',
 };

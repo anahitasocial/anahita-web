@@ -9,4 +9,5 @@ export default {
     show: 'Voir le fil ({{ count }} note)',
     show_other: 'Voir le fil ({{ count }} notes)',
   },
+  reposted: 'Repartagé · {{ when }}',
 };

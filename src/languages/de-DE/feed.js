@@ -9,4 +9,5 @@ export default {
     show: 'Thread anzeigen ({{ count }} Notiz)',
     show_other: 'Thread anzeigen ({{ count }} Notizen)',
   },
+  reposted: 'Repostet · {{ when }}',
 };

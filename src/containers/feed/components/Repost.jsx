@@ -7,6 +7,7 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
 import Link from '@mui/material/Link';
+import RepostIcon from '@mui/icons-material/Repeat';
 
 import PostActionsRow from '../../../components/PostActionsRow';
 import MediumCard from '../../../components/MediumCard';
@@ -15,6 +16,7 @@ import CardOwner from '../../../components/MediumOwnerCardHeader';
 import utils from '../../../utils';
 import NodeType from '../../../proptypes/Node';
 import timeAgo from '../../../utils/timeAgo';
+import i18n from '../../../languages';
 
 const {
   getURL,
@@ -69,12 +71,17 @@ const FeedCardRepost = ({
           />
         }
         title={node.author.name}
+        // Said in words that it is a repost, and when it was reposted: a
+        // repost of one's own post read as posting it again (banu.io,
+        // 2026-11-07).
         subheader={
           <Link
             href={url}
             title={createdAt}
+            sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}
           >
-            {creationTimeFromNow}
+            <RepostIcon sx={{ fontSize: 'inherit' }} aria-hidden />
+            {i18n.t('feed:reposted', { when: creationTimeFromNow })}
           </Link>
         }
         action={menu}

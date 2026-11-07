@@ -9,4 +9,5 @@ export default {
     show: 'Show the thread ({{ count }} note)',
     show_other: 'Show the thread ({{ count }} notes)',
   },
+  reposted: 'Reposted · {{ when }}',
 };

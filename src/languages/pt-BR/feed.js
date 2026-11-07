@@ -9,4 +9,5 @@ export default {
     show: 'Ver o fio ({{ count }} nota)',
     show_other: 'Ver o fio ({{ count }} notas)',
   },
+  reposted: 'Repostado · {{ when }}',
 };
