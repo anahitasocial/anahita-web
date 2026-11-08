@@ -168,9 +168,30 @@ Each milestone ends in a shippable state.
 | 73 | ⬜ | 56 · Groups and events on the fediverse: asked by the user on 2026-10-15, "if they are public, shouldn't the posts under those profiles be followable by the fediverse?", as a website is. Nothing technical stands in the way; to settle first: consent (federation is opt-in per person today, so whether posting in a public group agrees to it), whether a post goes out as the group or as its author, and how replies from elsewhere are looked after. **To discuss later, at the user's word** **Put off by the user on 2026-10-17** ("too many variables, and they complicate the design"), after weighing it against websites: a group's posts are its members', so each needs their consent and an author on the fediverse, and an event is an `Event` object of its own; Bluesky for a group alone was about a day. Groups and events stay off the fediverse and Bluesky for now | — | services + web | not estimated | 25, 55 |
 | 75 | ⬜ | 58 · Sharing documents: a service of its own for posting and reading documents (PDFs, Word and the like), asked for by the user on 2026-10-16 as later work. Not planned yet. The web app's leftover Documents composer and namespace were removed the same day, so it starts clean | — | services + web | not estimated | — |
 
-### What comes next (2026-11-07)
+### Before launch
 
-Settled with the user on 2026-11-07, Mastodon first: it has the largest
+Launch is making the code public and launching www.anahita.io (the user,
+2026-11-07). The rows done so far are the work that leads to it; what is
+left is the launch itself, kept in anahita.io's `docs/plans/website.md`
+(milestone M4):
+
+1. **anahita-services made public** (the user, U12); then its docs and the
+   API reference on the site (row 24 there).
+2. **The home page's headline and copy, in the user's words** (U5).
+3. **The first blog post, in the user's voice** (U6).
+4. **GitHub Pages and DNS** for staging.anahita.io (U10).
+5. **Launch** (row 25 there): `site.hidden` off, `CNAME` to www.anahita.io,
+   row 91 here marked done.
+
+Checked on 2026-11-07: no key file (`*.pem`, `*.key`) and no `secrets.env`
+or `.env` was ever committed to either repository; they are ignored. Before
+the code is public, the history is also read for a secret written into a
+file (gitleaks, or the like), and for notes that are not the public's.
+
+### After launch (2026-11-07)
+
+Everything planned on 2026-11-07 comes after launch (the user). Settled the
+same day, Mastodon first: it has the largest
 share of the fediverse, so its features come before Pixelfed's and Loops'.
 A stage of code maintenance (row 140) comes every few rows, on the area
 the rows after it touch, so that the features further down are never kept
