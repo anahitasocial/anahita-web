@@ -22,6 +22,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    no longer over the logo.
 5. **Dates are written in the language shown.** moment's locales had been
    given to a second copy of it, so dates were in English.
+6. **A profile's posts, replies and reposts no longer skip a page.** A
+   scroll could ask for the next page twice, and the list then fetched the
+   one after it, leaving out twenty.
 
 ### Changed
 

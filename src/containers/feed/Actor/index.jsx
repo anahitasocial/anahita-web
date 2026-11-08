@@ -1,78 +1,56 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import actions from '../../../actions';
 
-import ControlLike from '../../likes/controls/LikeFeed';
-import ControlRepost from '../../controls/Repost';
-import LikesStats from '../../likes';
-import FeedMenu from '../Menu';
-
 import tabIcon from '../../actors/Read/tabIcons';
 import EmptyList from '../../../components/EmptyList';
-import Masonry from '../../../components/BreakpointMasonry';
 import Progress from '../../../components/Progress';
-import FeedCardDefault from '../components/Default';
-import FeedCardRepost from '../components/Repost';
-import FeedReplyButton from '../components/ReplyButton';
-import ReplyContext from '../../replies/ReplyContext';
+import ActorItems, { FILTER } from '../components/ActorItems';
+import useBrowse from '../../browse/useBrowse';
+import usePosted from '../usePosted';
 import ActorType from '../../../proptypes/Actor';
 import ActorDefault from '../../../proptypes/ActorDefault';
-import NodesType from '../../../proptypes/Nodes';
-import PersonType from '../../../proptypes/Person';
-import { App as APP } from '../../../constants';
-import utils from '../../../utils';
-import usePosted from '../usePosted';
-import postCounts from '../../../components/PostCounts';
 
-const {
-  isRepost,
-  getURL,
-} = utils.node;
-
-const { LIMIT } = APP.BROWSE;
-
-const FILTER = {
-  POSTS: 'posts',
-  REPLIES: 'replies',
-  REPOSTS: 'reposts',
-  // The photos and videos a person is in (roadmap row 103).
-  TAGGED: 'tagged',
+const select = (state) => {
+  const {
+    feed_actor: items, hasMore, error, isFetching,
+  } = state.feedActor;
+  return {
+    items, hasMore, error, isFetching,
+  };
 };
 
-// One of a profile's three lists, chosen by `filter`:
+// One of a profile's lists, chosen by `filter`:
 //
 //   posts     what was posted on it. Also what its owner reposted, when
 //             they have asked for that. The server decides.
 //   replies   the replies its owner wrote, each under a line saying what it
 //             answers. A reply links to its own page, where its thread is.
 //   reposts   what its owner reposted.
+//   tagged    the photos and videos the person is in.
 //
-// Posts are a single column, or with `columns` a masonry. Replies and reposts
-// are always in a masonry, like the lists of notes, articles and photos, which
-// the page may hold to one column.
-//
-// The three share one place in the store, so the page shows one at a time
+// The lists share one place in the store, so the page shows one at a time
 // and gives each its own key: changing tab empties the list and reads the
-// next.
+// next. How each is drawn is ActorItems'.
 const FeedActorBrowse = ({
   actor = { ...ActorDefault },
   filter = FILTER.POSTS,
   columns = false,
-  browseList,
-  resetList,
-  prependList,
-  alertError,
-  items,
-  hasMore = true,
-  isAuthenticated,
-  viewer,
-  error,
-  isFetching,
 }) => {
-  const [start, setStart] = useState(0);
+  const { isAuthenticated, viewer } = useSelector((state) => { return state.session; });
+  const {
+    items, hasMore, isEmpty, next, prepend,
+  } = useBrowse({
+    browse: actions.feed_actor.browse,
+    reset: actions.feed_actor.reset,
+    prepend: actions.feed_actor.prepend,
+    select,
+    params: { id: actor.id, filter },
+    queryKey: `${actor.id}|${filter}`,
+  });
 
   // What the viewer posts to this profile is at the head of its posts at
   // once.
@@ -81,203 +59,11 @@ const FeedActorBrowse = ({
       const owner = (post.owner && post.owner.id) || post.ownerId;
       return filter === FILTER.POSTS && owner === actor.id;
     },
-    put: prependList,
+    put: prepend,
   });
-
-  useEffect(() => {
-    return () => {
-      resetList();
-    };
-  }, []);
-
-  useEffect(() => {
-    // The first page is always asked for. A list that was being read when
-    // the tab changed is still marked as reading, and waiting for it would
-    // leave this one empty.
-    if (!isFetching || start === 0) {
-      browseList({
-        id: actor.id,
-        filter,
-        start,
-        limit: LIMIT,
-      });
-    }
-  }, [start]);
-
-  useEffect(() => {
-    if (error) {
-      alertError(error);
-    }
-  }, [error]);
-
-  const fetchList = () => {
-    return setStart(start + LIMIT);
-  };
 
   // A list with nothing in it says so. An empty tab with nothing to see
   // reads as one that failed to load.
-  const isEmpty = !isFetching && !hasMore && items.allIds.length === 0;
-
-  const cards = items.allIds.map((itemId) => {
-    const node = items.byId[itemId];
-    const key = `feed_nodes_${node.id}`;
-    const Like = ControlLike('feed_actor');
-
-    // A reply, in the list of somebody's replies. Shown with what it
-    // answers, and without the menu and the repost button a post has:
-    // a reply is edited, removed and hidden in its thread.
-    if (node.rootId) {
-      return (
-        <FeedCardDefault
-          node={node}
-          key={key}
-          context={
-            <ReplyContext
-              answered={node.parent}
-              owner={node.root && node.root.owner}
-              href={getURL(node)}
-            />
-            }
-          stats={[
-            <LikesStats
-              key={`node-like-stat-${node.id}`}
-              node={node}
-            />,
-          ]}
-          actions={!isAuthenticated ? postCounts(node) : [
-            <Like
-              node={node}
-              repostNode={null}
-              key={`node-like-${node.id}`}
-            />,
-            <FeedReplyButton
-              key={`node-reply-${node.id}`}
-              post={node}
-            />,
-          ]}
-        />
-      );
-    }
-
-    // In the list of reposts, the post that was reposted is shown as
-    // itself. Everything in that list is a repost by this person, so a
-    // frame around each one saying so adds nothing.
-    if (isRepost(node) && filter === FILTER.REPOSTS && node.parent) {
-      return (
-        <FeedCardDefault
-          node={node.parent}
-          key={key}
-          showOwner={Boolean(
-            node.parent.owner &&
-            node.parent.author &&
-            node.parent.owner.id !== node.parent.author.id,
-          )}
-          stats={[
-            <LikesStats
-              key={`node-like-stat-${node.parent.id}`}
-              node={node.parent}
-            />,
-          ]}
-          actions={!isAuthenticated ? postCounts(node.parent) : [
-            <Like
-              node={node.parent}
-              repostNode={node}
-              key={`node-like-${node.id}`}
-            />,
-            <FeedReplyButton
-              key={`node-reply-${node.id}`}
-              post={node.parent}
-            />,
-            <ControlRepost
-              key={`node-repost-${node.id}`}
-              parent={node.parent}
-            />,
-          ]}
-        />
-      );
-    }
-
-    if (isRepost(node)) {
-      return (
-        <FeedCardRepost
-          node={{
-            ...node,
-            owner: actor,
-          }}
-          key={key}
-          menu={isAuthenticated &&
-          <FeedMenu
-            node={{
-              ...node.parent,
-              owner: actor,
-            }}
-            viewer={viewer}
-          />}
-          stats={[
-            <LikesStats
-              key={`node-like-stat-${node.parent.id}`}
-              node={node.parent}
-            />,
-          ]}
-          actions={!isAuthenticated ? postCounts(node.parent) : [
-            <Like
-              node={node.parent}
-              repostNode={node}
-              key={`node-like-${node.id}`}
-            />,
-            <FeedReplyButton
-              key={`node-reply-${node.id}`}
-              post={node.parent}
-            />,
-            <ControlRepost
-              key={`node-repost-${node.id}`}
-              parent={node.parent}
-            />,
-          ]}
-        />
-      );
-    }
-
-    return (
-      <FeedCardDefault
-        node={{
-          ...node,
-          owner: actor,
-        }}
-        key={key}
-        menu={isAuthenticated &&
-        <FeedMenu
-          node={{
-            ...node,
-            owner: actor,
-          }}
-          viewer={viewer}
-        />}
-        stats={[
-          <LikesStats
-            key={`node-like-stat-${node.id}`}
-            node={node}
-          />,
-        ]}
-        actions={!isAuthenticated ? postCounts(node) : [
-          <Like
-            node={node}
-            repostNode={null}
-            key={`node-like-${node.id}`}
-          />,
-          <FeedReplyButton
-            key={`node-reply-${node.id}`}
-            post={node}
-          />,
-          <ControlRepost
-            key={`node-repost-${node.id}`}
-            parent={node}
-          />,
-        ]}
-      />
-    );
-  });
-
   if (isEmpty) {
     return <EmptyList icon={tabIcon(filter === FILTER.POSTS ? 'feed' : filter)} />;
   }
@@ -285,76 +71,28 @@ const FeedActorBrowse = ({
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
-      next={fetchList}
+      next={next}
       hasMore={hasMore}
       loader={
         <Progress key="feed-progress" />
       }
     >
-      {filter === FILTER.POSTS && !columns ?
-        cards :
-        <Masonry>{cards}</Masonry>}
+      <ActorItems
+        items={items}
+        actor={actor}
+        filter={filter}
+        columns={columns}
+        isAuthenticated={isAuthenticated}
+        viewer={viewer}
+      />
     </InfiniteScroll>
   );
 };
 
 FeedActorBrowse.propTypes = {
   actor: ActorType,
-  filter: PropTypes.oneOf(['posts', 'replies', 'reposts', 'tagged']),
+  filter: PropTypes.oneOf(Object.values(FILTER)),
   columns: PropTypes.bool,
-  browseList: PropTypes.func.isRequired,
-  resetList: PropTypes.func.isRequired,
-  prependList: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
-  items: NodesType.isRequired,
-  hasMore: PropTypes.bool,
-  isFetching: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  viewer: PersonType.isRequired,
 };
 
-const mapStateToProps = (state) => {
-  const {
-    isAuthenticated,
-    viewer,
-  } = state.session;
-
-  const {
-    feed_actor: items,
-    hasMore,
-    error,
-    isFetching,
-  } = state.feedActor;
-
-  return {
-    items,
-    hasMore,
-    error,
-    isFetching,
-    isAuthenticated,
-    viewer,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    browseList: (params) => {
-      return dispatch(actions.feed_actor.browse(params));
-    },
-    resetList: () => {
-      return dispatch(actions.feed_actor.reset());
-    },
-    prependList: (nodes) => {
-      return dispatch(actions.feed_actor.prepend(nodes));
-    },
-    alertError: (message) => {
-      return dispatch(actions.app.alert.error(message));
-    },
-  };
-};
-
-export default (connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FeedActorBrowse));
+export default FeedActorBrowse;
