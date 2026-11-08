@@ -43,6 +43,7 @@ import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
 import ActorBlocked from './Blocked';
 import DataExport from './DataExport';
+import DataImport from './DataImport';
 import ActorSuggestions from './Suggestions';
 import ActorNotificationChoices from './NotificationChoices';
 import ActorFediverse from './Fediverse';
@@ -258,6 +259,7 @@ const ActorsSettings = ({
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
       [ITEMS.MUTED]: <ActorBlocked actor={actor} kind="mutes" />,
       [ITEMS.DATA_EXPORT]: <DataExport />,
+      [ITEMS.DATA_IMPORT]: <DataImport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.FEDIVERSE]: <ActorFediverse />,
       [ITEMS.NOTIFICATIONS]: <ActorNotificationChoices />,

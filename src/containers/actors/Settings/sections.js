@@ -36,6 +36,10 @@ export const SECTIONS = {
   FEDIVERSE: 'fediverse',
   // What the person is told about (roadmap row 97). Their own.
   NOTIFICATIONS: 'notifications',
+  // Their data, out and in: the download, and bringing their lists in
+  // (roadmap row 124). "Your data", the user's word (2026-11-08), where
+  // Mastodon says "Import and export".
+  DATA: 'data',
   // Looking at somebody else's account as an administrator. Never the
   // viewer's own — see the notViewer flag below.
   ADMINISTRATION: 'administration',
@@ -64,6 +68,8 @@ export const ITEMS = {
   DOWNLOADS: 'downloads',
   // A copy of everything the viewer put here, as one file.
   DATA_EXPORT: 'dataExport',
+  // Who they follow, block and mute, and what they saved, from a file.
+  DATA_IMPORT: 'dataImport',
   // The people the viewer has blocked.
   BLOCKED: 'blocked',
   // The people the viewer has muted (roadmap row 133).
@@ -123,8 +129,6 @@ const ALL_SECTIONS = [
       // subject. Administrators see the same card about somebody else
       // in the Administration section.
       { key: ITEMS.AGREEMENTS, bare: false, viewerOnly: true },
-      // Their own data, to take away. Theirs alone to ask for.
-      { key: ITEMS.DATA_EXPORT, bare: false, viewerOnly: true },
     ],
   },
   {
@@ -189,6 +193,14 @@ const ALL_SECTIONS = [
       { key: ITEMS.FEDIVERSE, bare: false, viewerOnly: true },
       // Their own Bluesky account, connected or not.
       { key: ITEMS.BLUESKY, bare: false, viewerOnly: true },
+    ],
+  },
+  {
+    key: SECTIONS.DATA,
+    // Their own data, to take away and to bring: theirs alone.
+    items: [
+      { key: ITEMS.DATA_EXPORT, bare: false, viewerOnly: true },
+      { key: ITEMS.DATA_IMPORT, bare: false, viewerOnly: true },
     ],
   },
   {

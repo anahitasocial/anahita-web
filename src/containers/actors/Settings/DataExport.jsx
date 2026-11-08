@@ -160,7 +160,7 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
           </Typography>}
       </CardContent>
       {items && !isAbsent &&
-        <CardActions sx={{ p: 2, pt: 0, justifyContent: 'flex-end' }}>
+        <CardActions sx={{ justifyContent: 'flex-end' }}>
           {(isActive || dataExports.isReady(shown)) &&
             <Button
               fullWidth
@@ -183,14 +183,17 @@ const ActorsSettingsDataExport = ({ alertSuccess, alertError }) => {
             >
               {i18n.t('actions:download')}
             </Button>}
+          {/* Full width, as Upload is in the card under it, its arrow the
+              other way (the user, 2026-11-08). */}
           {!isActive && !dataExports.isReady(shown) &&
             <Button
               fullWidth
               variant="contained"
+              startIcon={<DownloadIcon />}
               disabled={isWorking || !canAsk}
               onClick={ask}
             >
-              {i18n.t('settings:dataExport.ask')}
+              {i18n.t('actions:download')}
             </Button>}
         </CardActions>}
       <StepUp

@@ -880,11 +880,13 @@ mobile.
 
 ### Download your data
 
-**Settings › Account › Download your data**
+**Settings › Your data › Download your data**
 (`containers/actors/Settings/DataExport.jsx`), on the viewer's own
 settings: a copy of everything they put here, as one file, from the
-installation's export service (`/exports`; the services'
-`docs/data-export.md`).
+installation's import-export service (`/exports`; the services'
+`docs/data-export.md`). The tab is "Your data", the user's word
+(2026-11-08), where Mastodon says "Import and export"; it holds this card
+and the import's, below.
 
 1. **Asking** opens the step-up dialog (`containers/auth/StepUp`) when the
    server says a fresh proof is needed, and asks again once it is given.
@@ -900,6 +902,26 @@ installation's export service (`/exports`; the services'
 5. **Where there is no export service**, the card says the download is not
    available here (`utils/exports.js#isAbsent`).
 
+**Settings › Your data › Bring your lists in**
+(`containers/actors/Settings/DataImport.jsx`, `api/imports.js`; roadmap
+row 124): who the viewer follows, blocks and mutes, and what they saved,
+from another Anahita's download or a CSV of Mastodon's or Misskey's
+(`/imports`; the services' `docs/imports.md`).
+
+1. **Upload** reads a file at once. A CSV whose kind the server cannot
+   tell (`kind_unknown`) asks "What does this file list?" with a select,
+   and Continue sends it again with the answer.
+2. **What is in it** is a tick for each kind, all ticked, with how many
+   ("272 people to follow"), and a line saying nothing is done until
+   Import, and how. Cancel and Import, side by side.
+3. **While it runs**, a bar and "Importing: 120 of 272"; the card asks
+   after it every five seconds and can be left, or cancelled.
+4. **When it is done**, a line says so, or how many could not be brought
+   in, with Download list (`/imports/:id/failed`) beside Upload.
+5. **Every button in the two cards is full width,** alone or in a pair:
+   Download with its arrow down, Upload with its arrow up (the user,
+   2026-11-08), an exception to the rule that a lone button is its own
+   size.
 ### People in a photo or a video
 
 Who is in a photo or a video (roadmap row 103) shows on its page, right

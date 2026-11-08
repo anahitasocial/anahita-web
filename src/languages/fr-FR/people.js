@@ -96,6 +96,7 @@ export default {
       permissions: 'Autorisations',
       fediverse: 'Fédivers',
       notifications: 'Notifications',
+      data: 'Vos données',
       administration: 'Administration',
       danger: 'Zone de danger',
     },

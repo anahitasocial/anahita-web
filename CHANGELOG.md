@@ -100,6 +100,12 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    feeds and lists, and, ticked to begin with, their notifications; until
    unmuted, or for a day, a week or a month. Nobody is told. Settings ›
    Privacy › Muted lists them, with when each mute ends, and Unmute.
+3. **Your data,** a tab of a person's settings (roadmap row 124): Download
+   your data, moved there from Account, and **Bring your lists in**: who
+   you follow, block and mute, and what you saved, from another Anahita's
+   download or a file from Mastodon or Misskey. What is in the file is
+   shown first, a tick for each kind; while it runs a bar says how far it
+   has got; at the end, the list of what could not be brought in, and why.
 
 ### Removed
 
