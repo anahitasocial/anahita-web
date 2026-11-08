@@ -10,6 +10,7 @@ export default {
   leaders: 'Gefolgt',
   mutuals: 'Gemeinsam',
   blocks: 'Blockiert',
+  mutes: 'Stummgeschaltet',
   followsYou: 'Folgt dir',
   followFailed: '{{ name }} konnte gerade nicht gefolgt werden. Versuch es gleich noch einmal.',
   unfollowFailed: 'Entfolgen von {{ name }} hat gerade nicht geklappt. Versuch es gleich noch einmal.',
@@ -79,6 +80,29 @@ export default {
     noMatch: 'Niemand, den du blockiert hast, heißt so.',
     none: 'Du hast niemanden blockiert.',
     failed: 'Das hat nicht geklappt.',
+  },
+  // Muting somebody (roadmap row 133): the dialog, and the list of whom
+  // the viewer muted, in their settings.
+  mute: {
+    title: '{{name}} stummschalten?',
+    help: 'Beiträge, geteilte Beiträge und Antworten dieser Person verschwinden aus deinen Feeds und Listen; ihr Profil bleibt, wie es ist. Sie erfährt nichts davon und kann dir weiter folgen.',
+    hideNotifications: 'Ihre Benachrichtigungen ausblenden',
+    for: 'Dauer',
+    lengths: {
+      always: 'Bis ich es aufhebe',
+      day: '1 Tag',
+      week: '1 Woche',
+      month: '1 Monat',
+    },
+    failed: 'Das hat nicht geklappt.',
+  },
+  muted: {
+    title: 'Leute, die du stummgeschaltet hast',
+    search: 'Jemanden finden, den du stummgeschaltet hast',
+    noMatch: 'Niemand, den du stummgeschaltet hast, heißt so.',
+    none: 'Du hast niemanden stummgeschaltet.',
+    failed: 'Das hat nicht geklappt.',
+    until: 'Bis {{when}}',
   },
   // Who a group or an event has blocked, in its settings.
   groupBlocked: {

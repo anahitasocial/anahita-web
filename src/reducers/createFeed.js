@@ -1,6 +1,8 @@
 import createReducer from './create';
 import NODE_DEFAULT from '../proptypes/NodeDefault';
 import utils from '../utils';
+import { isMutedOut } from '../utils/mutes';
+import { Socialgraph as SOCIALGRAPH } from '../constants';
 
 const {
   editItem,
@@ -20,6 +22,37 @@ export default (namespace) => {
         const item = list.byId[itemId];
         return itemId === action.node.id ||
           Boolean(item && item.parent && item.parent.id === action.node.id);
+      });
+
+      if (gone.length === 0) {
+        return state;
+      }
+
+      const byId = { ...list.byId };
+      gone.forEach((itemId) => {
+        delete byId[itemId];
+      });
+
+      return {
+        ...state,
+        [namespace]: {
+          ...list,
+          byId,
+          allIds: list.allIds.filter((itemId) => {
+            return !gone.includes(itemId);
+          }),
+        },
+      };
+    }
+
+    // Somebody muted (roadmap row 133) leaves the feed at once: what they
+    // wrote, what is on their profile, their reposts and reposts of theirs.
+    // A profile's feed keeps what is on their own profile.
+    if (type === SOCIALGRAPH.MUTE.SUCCESS && action.actor && action.actor.id) {
+      const list = state[namespace];
+      const inProfileFeed = namespace === 'feed_actor';
+      const gone = list.allIds.filter((itemId) => {
+        return isMutedOut(list.byId[itemId], action.actor.id, inProfileFeed);
       });
 
       if (gone.length === 0) {

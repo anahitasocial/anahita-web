@@ -22,6 +22,7 @@ import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlReplyAccess from '../controls/medium/ReplyAccess';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
+import useMute from '../controls/useMute';
 import ControlBlockFromOwner from '../controls/BlockFromOwner';
 import ControlSave from '../controls/medium/Save';
 import { DownloadSwitchMenuItem } from '../controls/medium/Download';
@@ -76,6 +77,8 @@ const MediaMenu = ({
   // Whoever runs the group it is in, or a site administrator, may block
   // its writer from there.
   const canBlockFromOwner = Boolean(medium.authorized && medium.authorized.blockFromOwner);
+  // Whoever wrote it, unless it is the viewer (roadmap row 133).
+  const mute = useMute(viewer, medium.author);
   const report = useReport(viewer, medium);
   // A photo post's images are changed in a dialog of their own: their
   // order, their descriptions, and which there are.
@@ -210,6 +213,18 @@ const MediaMenu = ({
             onDone={handleClose}
             key={`medium-block-from-owner-${medium.id}`}
           />}
+        {mute.canMute &&
+          <MenuItem
+            key={`medium-mute-${medium.id}`}
+            onClick={() => {
+              handleClose();
+              mute.toggle();
+            }}
+          >
+            <MenuItemLabel icon={mute.icon}>
+              {mute.label}
+            </MenuItemLabel>
+          </MenuItem>}
         {report.canReport &&
           <MenuItem
             onClick={() => {
@@ -223,6 +238,7 @@ const MediaMenu = ({
           </MenuItem>}
       </Menu>
       {report.dialog}
+      {mute.dialog}
       <PostActivity
         post={medium}
         open={isShowingActivity}

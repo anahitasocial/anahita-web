@@ -10,6 +10,8 @@ export default {
   unfollow: 'Entfolgen',
   block: 'Blockieren',
   unblock: 'Nicht mehr blockieren',
+  mute: 'Stummschalten',
+  unmute: 'Nicht mehr stumm',
   remove: 'Entfernen',
   like: 'Gefällt mir',
   unlike: 'Gefällt mir nicht mehr',

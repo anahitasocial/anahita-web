@@ -10,6 +10,7 @@ export default {
   leaders: 'Abonnements',
   mutuals: 'En commun',
   blocks: 'Bloqués',
+  mutes: 'En sourdine',
   followsYou: 'Vous suit',
   followFailed: 'Impossible de suivre {{ name }} pour l’instant. Réessayez dans un instant.',
   unfollowFailed: 'Impossible de ne plus suivre {{ name }} pour l’instant. Réessayez dans un instant.',
@@ -79,6 +80,29 @@ export default {
     noMatch: 'Aucune personne bloquée ne porte ce nom.',
     none: 'Vous n\'avez bloqué personne.',
     failed: 'Cette action n\'a pas pu être effectuée.',
+  },
+  // Muting somebody (roadmap row 133): the dialog, and the list of whom
+  // the viewer muted, in their settings.
+  mute: {
+    title: 'Mettre {{name}} en sourdine ?',
+    help: 'Ses publications, partages et réponses quittent vos fils et vos listes ; son profil reste tel quel. La personne n\'est pas prévenue et peut continuer à vous suivre.',
+    hideNotifications: 'Masquer ses notifications',
+    for: 'Durée',
+    lengths: {
+      always: 'Sans limite',
+      day: '1 jour',
+      week: '1 semaine',
+      month: '1 mois',
+    },
+    failed: 'Cette action n\'a pas pu être effectuée.',
+  },
+  muted: {
+    title: 'Personnes que vous avez mises en sourdine',
+    search: 'Trouver une personne en sourdine',
+    noMatch: 'Aucune personne en sourdine ne porte ce nom.',
+    none: 'Vous n\'avez mis personne en sourdine.',
+    failed: 'Cette action n\'a pas pu être effectuée.',
+    until: 'Jusqu\'au {{when}}',
   },
   groupBlocked: {
     title: 'Personnes bloquées de {{name}}',

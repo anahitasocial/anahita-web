@@ -1448,6 +1448,20 @@ else wrote, and on the post's own page to site administrators too. Pin is
 offered the same way. A person's own block does not reach the groups they
 run.
 
+**Mute** (roadmap row 133) is in a person's menu after Block, and in the
+menu of a post or a reply somebody else wrote, before Report
+(`controls/useMute.jsx`, a hook as `useReport` is: the menu closes, and the
+dialog is drawn apart from it). The dialog asks two things: "Hide their
+notifications", ticked to begin with, and "For": until unmuted, a day, a
+week or a month. Cancel and Mute, side by side. While muted the item reads
+Unmute, which unmutes at once. Once muted, the feeds already open let go of
+what the person posted (`reducers/createFeed.js`, `utils/mutes.js`): their
+posts, posts on their profile, and reposts by or of them; a profile's feed
+keeps what is on their own profile. A thread lets go of their replies when it
+is read again. Nobody is told. **Muted** is a row under Settings › Privacy,
+after Blocked: the same component with `kind="mutes"`, each person with when
+the mute ends, on a line of its own, and Unmute.
+
 ### Events
 
 An event is an actor like a group, so most of it is the containers a group

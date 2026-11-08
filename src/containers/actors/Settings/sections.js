@@ -66,6 +66,8 @@ export const ITEMS = {
   DATA_EXPORT: 'dataExport',
   // The people the viewer has blocked.
   BLOCKED: 'blocked',
+  // The people the viewer has muted (roadmap row 133).
+  MUTED: 'muted',
   // What the viewer chose about suggestions of who to follow.
   SUGGESTIONS: 'suggestions',
   FEDIVERSE: 'fediverse',
@@ -151,8 +153,9 @@ const ALL_SECTIONS = [
     items: [
       { key: ITEMS.ACCESS, bare: false, viewerOnly: false },
       { key: ITEMS.REPOSTS, bare: false, viewerOnly: false },
-      // Who you have blocked is yours alone to see and to undo.
+      // Who you have blocked, and muted, is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
+      { key: ITEMS.MUTED, bare: false, viewerOnly: true },
       { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },
     ],
   },

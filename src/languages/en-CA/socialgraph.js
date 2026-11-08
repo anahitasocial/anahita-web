@@ -10,6 +10,7 @@ export default {
   leaders: 'Following',
   mutuals: 'In common',
   blocks: 'Blocked',
+  mutes: 'Muted',
   followsYou: 'Follows you',
   // A follow or an unfollow that failed.
   followFailed: 'Couldn’t follow {{ name }} just now. Try again in a moment.',
@@ -80,6 +81,29 @@ export default {
     noMatch: 'Nobody you blocked has that name.',
     none: 'You have not blocked anybody.',
     failed: 'That could not be done.',
+  },
+  // Muting somebody (roadmap row 133): the dialog, and the list of whom
+  // the viewer muted, in their settings.
+  mute: {
+    title: 'Mute {{name}}?',
+    help: 'Their posts, reposts and replies leave your feeds and lists; their profile stays as it is. They are not told, and can still follow you.',
+    hideNotifications: 'Hide their notifications',
+    for: 'For',
+    lengths: {
+      always: 'Until I unmute',
+      day: '1 day',
+      week: '1 week',
+      month: '1 month',
+    },
+    failed: 'That could not be done.',
+  },
+  muted: {
+    title: 'People you have muted',
+    search: 'Find somebody you muted',
+    noMatch: 'Nobody you muted has that name.',
+    none: 'You have not muted anybody.',
+    failed: 'That could not be done.',
+    until: 'Until {{when}}',
   },
   // Who a group or an event has blocked, in its settings.
   groupBlocked: {

@@ -256,6 +256,7 @@ const ActorsSettings = ({
       [ITEMS.QUOTES]: <ActorQuotes />,
       [ITEMS.DOWNLOADS]: <ActorDownloads />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
+      [ITEMS.MUTED]: <ActorBlocked actor={actor} kind="mutes" />,
       [ITEMS.DATA_EXPORT]: <DataExport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.FEDIVERSE]: <ActorFediverse />,

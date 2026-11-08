@@ -10,6 +10,8 @@ export default {
   unfollow: 'Unfollow',
   block: 'Block',
   unblock: 'Unblock',
+  mute: 'Mute',
+  unmute: 'Unmute',
   remove: 'Remove',
   like: 'Like',
   unlike: 'Unlike',

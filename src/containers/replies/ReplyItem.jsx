@@ -40,6 +40,7 @@ import i18n from '../../languages';
 import thread from '../../utils/thread';
 import utils from '../../utils';
 import timeAgo from '../../utils/timeAgo';
+import useMute from '../controls/useMute';
 
 const { getActorName, getAuthor, getURL } = utils.node;
 
@@ -112,8 +113,11 @@ const ReplyItem = ({
   const original = utils.federation.isRemote(reply) ? utils.federation.pageOf(reply) : '';
   // Whoever runs the group the thread is in may block its writer from there.
   const canBlockFromOwner = Boolean(authorized.blockFromOwner && onBlockFromOwner);
+  // Whoever wrote it, unless it is the viewer (roadmap row 133). Their
+  // replies leave the thread when it is read again.
+  const mute = useMute(reply.deleted ? null : viewer, author);
   const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
-    canBlockFromOwner || report.canReport || original;
+    canBlockFromOwner || mute.canMute || report.canReport || original;
 
   const under = children.length > 0 && (
     <Box
@@ -408,6 +412,17 @@ const ReplyItem = ({
                     {blockFromOwnerLabel}
                   </MenuItemLabel>
                 </MenuItem>}
+              {mute.canMute &&
+                <MenuItem
+                  onClick={() => {
+                    closeMenu();
+                    mute.toggle();
+                  }}
+                >
+                  <MenuItemLabel icon={mute.icon}>
+                    {mute.label}
+                  </MenuItemLabel>
+                </MenuItem>}
               {report.canReport &&
                 <MenuItem
                   onClick={() => {
@@ -421,6 +436,7 @@ const ReplyItem = ({
                 </MenuItem>}
             </Menu>
             {report.dialog}
+            {mute.dialog}
           </>}
       </Box>
       {isReplying &&

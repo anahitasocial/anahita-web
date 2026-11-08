@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
+import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
@@ -28,6 +29,7 @@ import i18n from '../../../languages';
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
 import utils from '../../../utils';
+import { until } from '../../../utils/mutes';
 
 const { getActorName, getURL } = utils.node;
 
@@ -47,14 +49,64 @@ const PAUSE = 300;
 //
 // `onCount` is told how many there are, whenever that is learned or
 // changes, for whoever shows the number.
-// The words for the viewer's own blocks, or for a group's.
-const textsFor = (actor, viewer) => {
+// The same list serves whom the viewer muted (roadmap row 133), `kind`
+// mutes: a person's own alone, each with until when, and Unmute.
+const KINDS = {
+  blocks: {
+    lift: (person, actor) => {
+      return api.socialgraph.unblock({ actor: person, viewer: actor });
+    },
+    action: 'actions:unblock',
+    header: 'socialgraph:blocks',
+  },
+  mutes: {
+    lift: (person, actor) => {
+      return api.socialgraph.unmute({ actor: person, viewer: actor });
+    },
+    action: 'actions:unmute',
+    header: 'socialgraph:mutes',
+  },
+};
+
+// The words for the viewer's own blocks, or for a group's, or for the
+// viewer's mutes.
+const textsFor = (actor, viewer, kind = 'blocks') => {
+  if (kind === 'mutes') {
+    return 'socialgraph:muted';
+  }
   return actor.id === viewer.id ? 'socialgraph:blocked' : 'socialgraph:groupBlocked';
+};
+
+// One line under a name, cut short with an ellipsis if it must be.
+const LINE = { display: 'block', overflow: 'hidden', textOverflow: 'ellipsis' };
+
+// Under a person's name: their handle, and, for a mute that ends, when, on
+// a line of its own: on a mobile, the two on one line cut the date off.
+const secondaryFor = (person, kind) => {
+  const handle = person.alias ? `@${person.alias}` : '';
+  const ends = kind === 'mutes' ? until(person.muteEndsAt, i18n.language) : '';
+  if (!ends) {
+    return handle || null;
+  }
+  return (
+    <>
+      {handle &&
+        <Box component="span" sx={LINE}>
+          {handle}
+        </Box>}
+      {/* When it ends is what matters here: it may take two lines on a
+          mobile rather than be cut short. */}
+      <Box component="span" sx={{ display: 'block', whiteSpace: 'normal' }}>
+        {i18n.t('socialgraph:muted.until', { when: ends })}
+      </Box>
+    </>
+  );
 };
 
 const BlockedDialog = ({
   actor,
   viewer,
+  kind,
   alertError,
   open,
   onClose,
@@ -84,7 +136,7 @@ const BlockedDialog = ({
 
   const read = (start, q) => {
     return api.socialgraph.browse({
-      filter: 'blocks',
+      filter: kind,
       actor,
       start,
       limit: PAGE,
@@ -147,7 +199,7 @@ const BlockedDialog = ({
   const handleUnblock = (person) => {
     setWaiting(person.id);
     // Lifted by whoever made it: the profile these are the blocks of.
-    api.socialgraph.unblock({ actor: person, viewer: actor }).then(() => {
+    KINDS[kind].lift(person, actor).then(() => {
       setRows((before) => {
         return before.filter((each) => {
           return each.id !== person.id;
@@ -162,7 +214,7 @@ const BlockedDialog = ({
         return left;
       });
     }).catch(() => {
-      alertError(i18n.t('socialgraph:blocked.failed'));
+      alertError(i18n.t(`${kind === 'mutes' ? 'socialgraph:muted' : 'socialgraph:blocked'}.failed`));
     }).finally(() => {
       setWaiting(0);
     });
@@ -172,8 +224,8 @@ const BlockedDialog = ({
   // something is typed in it.
   const canSearch = everybody > PAGE || typed !== '';
 
-  const scrollId = `blocked-scroll-${actor.id}`;
-  const texts = textsFor(actor, viewer);
+  const scrollId = `${kind}-scroll-${actor.id}`;
+  const texts = textsFor(actor, viewer, kind);
   const name = getActorName(actor);
 
   return (
@@ -240,7 +292,7 @@ const BlockedDialog = ({
                           handleUnblock(person);
                         }}
                       >
-                        {i18n.t('actions:unblock')}
+                        {i18n.t(KINDS[kind].action)}
                       </Button>
                     }
                   >
@@ -253,7 +305,7 @@ const BlockedDialog = ({
                           {getActorName(person)}
                         </Link>
                       }
-                      secondary={person.alias ? `@${person.alias}` : null}
+                      secondary={secondaryFor(person, kind)}
                       slotProps={{
                         primary: { noWrap: true },
                         secondary: { noWrap: true },
@@ -279,6 +331,7 @@ const BlockedDialog = ({
 BlockedDialog.propTypes = {
   actor: ActorType.isRequired,
   viewer: PersonType.isRequired,
+  kind: PropTypes.oneOf(['blocks', 'mutes']).isRequired,
   alertError: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
@@ -294,6 +347,7 @@ BlockedDialog.propTypes = {
 const ActorsSettingsBlocked = ({
   actor,
   viewer,
+  kind = 'blocks',
   alertError,
 }) => {
   // null until it is known.
@@ -302,7 +356,7 @@ const ActorsSettingsBlocked = ({
 
   useEffect(() => {
     api.socialgraph.browse({
-      filter: 'blocks',
+      filter: kind,
       actor,
       start: 0,
       limit: 1,
@@ -311,15 +365,15 @@ const ActorsSettingsBlocked = ({
     }).catch(() => {
       // The number is left out. The list says what went wrong, if asked.
     });
-  }, [actor.id]);
+  }, [actor.id, kind]);
 
   return (
     <Card>
       <CardHeader
-        title={i18n.t('socialgraph:blocks')}
+        title={i18n.t(KINDS[kind].header)}
         subheader={count === null ? null : i18n.t(count > 0 ?
           'socialgraph:blocked.count' :
-          `${textsFor(actor, viewer)}.none`, { count })}
+          `${textsFor(actor, viewer, kind)}.none`, { count })}
         action={
           <Button
             onClick={() => {
@@ -335,6 +389,7 @@ const ActorsSettingsBlocked = ({
       <BlockedDialog
         actor={actor}
         viewer={viewer}
+        kind={kind}
         alertError={alertError}
         open={isOpen}
         onClose={() => {
@@ -349,6 +404,8 @@ const ActorsSettingsBlocked = ({
 ActorsSettingsBlocked.propTypes = {
   actor: ActorType.isRequired,
   viewer: PersonType.isRequired,
+  // Whom it blocked, or, for a person's own settings, whom they muted.
+  kind: PropTypes.oneOf(['blocks', 'mutes']),
   alertError: PropTypes.func.isRequired,
 };
 

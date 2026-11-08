@@ -70,6 +70,24 @@ function unblock({ actor, viewer }) {
   return axios.delete(`socialgraph/${actor.id}/blocks/${viewer.id}`);
 }
 
+// A mute (roadmap row 133): the viewer's alone, told to nobody. `length` is
+// day, week or month, or empty for until unmuted. Muting again changes it.
+function mute({
+  actor,
+  viewer,
+  hideNotifications = true,
+  length = '',
+}) {
+  return axios.post(`/socialgraph/${actor.id}/mutes/${viewer.id}`, {
+    hide_notifications: hideNotifications,
+    for: length,
+  });
+}
+
+function unmute({ actor, viewer }) {
+  return axios.delete(`/socialgraph/${actor.id}/mutes/${viewer.id}`);
+}
+
 export default {
   browse,
   follow,
@@ -83,4 +101,6 @@ export default {
   declineInvite,
   block,
   unblock,
+  mute,
+  unmute,
 };

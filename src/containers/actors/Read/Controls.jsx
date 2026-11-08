@@ -11,6 +11,7 @@ import SpamIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 import RefuseIcon from '@mui/icons-material/BlockOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
+import useMute from '../../controls/useMute';
 import ControlFeature from '../../controls/Feature';
 import { ShareMenuItem, ofNode } from '../../controls/Share';
 import useReport from '../../reports/useReport';
@@ -44,6 +45,11 @@ const ActorsReadControls = ({
   };
 
   const showBlock = isAuthenticated && perms.canBlock(actor, viewer);
+  const mute = useMute(isAuthenticated ? viewer : null, actor, () => {
+    if (onChanged) {
+      onChanged();
+    }
+  });
   const showEdit = perms.canEdit(actor);
   const showFeature = isAuthenticated && perms.canFeature(actor, viewer);
   const report = useReport(viewer, actor);
@@ -99,6 +105,18 @@ const ActorsReadControls = ({
               }
             }}
           />}
+        {mute.canMute &&
+          <MenuItem
+            key="actor-socialgraph-mute"
+            onClick={() => {
+              handleClose();
+              mute.toggle();
+            }}
+          >
+            <MenuItemLabel icon={mute.icon}>
+              {mute.label}
+            </MenuItemLabel>
+          </MenuItem>}
         {showFeature &&
           <ControlFeature
             actor={actor}
@@ -155,6 +173,7 @@ const ActorsReadControls = ({
             </MenuItemLabel>
           </MenuItem>}
       </Menu>
+      {mute.dialog}
       {report.dialog}
       {spam.dialog}
       {refuse.dialog}

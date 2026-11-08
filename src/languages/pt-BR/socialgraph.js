@@ -10,6 +10,7 @@ export default {
   leaders: 'Seguindo',
   mutuals: 'Em comum',
   blocks: 'Bloqueados',
+  mutes: 'Silenciados',
   followsYou: 'Segue você',
   followFailed: 'Não foi possível seguir {{ name }} agora. Tente de novo daqui a pouco.',
   unfollowFailed: 'Não foi possível deixar de seguir {{ name }} agora. Tente de novo daqui a pouco.',
@@ -79,6 +80,29 @@ export default {
     noMatch: 'Ninguém que você bloqueou tem esse nome.',
     none: 'Você não bloqueou ninguém.',
     failed: 'Não foi possível fazer isso.',
+  },
+  // Muting somebody (roadmap row 133): the dialog, and the list of whom
+  // the viewer muted, in their settings.
+  mute: {
+    title: 'Silenciar {{name}}?',
+    help: 'As publicações, republicações e respostas dessa pessoa saem dos seus feeds e listas; o perfil dela fica como está. Ela não é avisada e pode continuar seguindo você.',
+    hideNotifications: 'Ocultar as notificações dela',
+    for: 'Por',
+    lengths: {
+      always: 'Até eu desfazer',
+      day: '1 dia',
+      week: '1 semana',
+      month: '1 mês',
+    },
+    failed: 'Não foi possível fazer isso.',
+  },
+  muted: {
+    title: 'Pessoas que você silenciou',
+    search: 'Encontrar alguém que você silenciou',
+    noMatch: 'Ninguém que você silenciou tem esse nome.',
+    none: 'Você não silenciou ninguém.',
+    failed: 'Não foi possível fazer isso.',
+    until: 'Até {{when}}',
   },
   // Who a group or an event has blocked, in its settings.
   groupBlocked: {

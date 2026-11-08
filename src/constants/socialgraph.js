@@ -12,4 +12,6 @@ export default {
   REMOVE_FOLLOWER: socialgraph('remove_follower'),
   BLOCK: socialgraph('block'),
   UNBLOCK: socialgraph('unblock'),
+  MUTE: socialgraph('mute'),
+  UNMUTE: socialgraph('unmute'),
 };

@@ -25,6 +25,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 6. **A profile's posts, replies and reposts no longer skip a page.** A
    scroll could ask for the next page twice, and the list then fetched the
    one after it, leaving out twenty.
+7. **Follow is offered only to somebody one has not blocked:** a post's
+   menu asked of a field nothing sends, and offered Follow to somebody
+   blocked, which the server refused.
 
 ### Changed
 
@@ -89,6 +92,11 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **The app's icons** at fixed addresses (`icon-32.png`, `icon-180.png`,
    `icon-192.png`, `icon-512.png`), and a manifest that names it, for a site
    to replace with its own ([Customising](docs/customising.md)).
+2. **Mute** (roadmap row 133), in a person's menu and in the menu of a post
+   or a reply by somebody else: their posts, reposts and replies leave one's
+   feeds and lists, and, ticked to begin with, their notifications; until
+   unmuted, or for a day, a week or a month. Nobody is told. Settings ›
+   Privacy › Muted lists them, with when each mute ends, and Unmute.
 
 ### Removed
 

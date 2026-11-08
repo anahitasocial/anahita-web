@@ -21,6 +21,7 @@ import ControlSave from '../controls/medium/Save';
 import PostActivity from '../activity/PostActivity';
 import ControlFollow from '../controls/Follow';
 import ControlBlockFromOwner from '../controls/BlockFromOwner';
+import useMute from '../controls/useMute';
 import useReport from '../reports/useReport';
 
 import PersonType from '../../proptypes/Person';
@@ -63,6 +64,8 @@ const FeedItemMenu = ({
   const canPin = Boolean(node.authorized && node.authorized.pin);
   // Whoever runs the group it is in may block its writer from there.
   const canBlockFromOwner = Boolean(node.authorized && node.authorized.blockFromOwner);
+  // Whoever wrote it, unless it is the viewer (roadmap row 133).
+  const mute = useMute(viewer, node.author);
   const report = useReport(viewer, node);
 
   return (
@@ -142,6 +145,18 @@ const FeedItemMenu = ({
             onDone={handleClose}
             key={`feed-block-from-owner-${id}`}
           />}
+        {mute.canMute &&
+          <MenuItem
+            key={`feed-mute-${id}`}
+            onClick={() => {
+              handleClose();
+              mute.toggle();
+            }}
+          >
+            <MenuItemLabel icon={mute.icon}>
+              {mute.label}
+            </MenuItemLabel>
+          </MenuItem>}
         {report.canReport &&
           <MenuItem
             onClick={() => {
@@ -155,6 +170,7 @@ const FeedItemMenu = ({
           </MenuItem>}
       </Menu>
       {report.dialog}
+      {mute.dialog}
       <PostActivity
         post={node}
         open={isShowingActivity}

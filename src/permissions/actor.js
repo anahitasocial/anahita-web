@@ -53,12 +53,20 @@ const canAdminister = (actor) => {
   return Boolean(authorized && authorized.administration);
 };
 
+// Not somebody the viewer has blocked: the block is lifted first. It asked
+// `isBlocked`, twice, which nothing sends.
 const canFollow = (actor, viewer) => {
-  return actor.id !== viewer.id && !actor.isBlocked && !actor.isBlocked;
+  return Boolean(actor) && actor.id !== viewer.id && !actor.isBlockedByViewer;
 };
 
 const canBlock = (actor, viewer) => {
   return utils.node.isPerson(actor) && actor.id !== viewer.id;
+};
+
+// A person, here or elsewhere, not the viewer, and not blocked by them: a
+// block hides more than a mute (roadmap row 133).
+const canMute = (actor, viewer) => {
+  return Boolean(actor) && canBlock(actor, viewer) && !actor.isBlockedByViewer;
 };
 
 // Whether the viewer may feature an actor for onboarding. A statement by the
@@ -77,5 +85,6 @@ export default {
   canDelete,
   canFollow,
   canBlock,
+  canMute,
   canFeature,
 };
