@@ -123,6 +123,10 @@ The same in anahita-services' AGENTS.md.
 5. The breadth (groups, events, articles, custom feeds) is the product, for
    schools, newsrooms, libraries, research groups and non-profits leaving
    Meta and X.
+6. Minimal: built for what people do often, not for every case that could
+   arise. A rare need is met by what is there already (a username changed,
+   not an account moved within the site), or waits until somebody asks for
+   it; when in doubt, leave it out (the user, 2026-11-08).
 
 ## Wording, in anything people read
 
