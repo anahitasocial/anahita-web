@@ -22,4 +22,9 @@ describe('a post as plain words', () => {
   it('is nothing for nothing', () => {
     expect(plainText(undefined)).toBe('');
   });
+
+  it('reads the entities a post from elsewhere came with, as text', () => {
+    expect(plainText('Hannah Cyrus &amp; Alison Macrina')).toBe('Hannah Cyrus & Alison Macrina');
+    expect(plainText('&lt;b&gt;not bold&lt;/b&gt; &quot;quoted&quot;')).toBe('<b>not bold</b> "quoted"');
+  });
 });

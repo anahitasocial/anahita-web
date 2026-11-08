@@ -9,20 +9,17 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 import ActorAvatar from './ActorAvatar';
+import SmartLink from './SmartLink';
 import i18n from '../languages';
 import utils from '../utils';
 import quotes from '../utils/quotes';
 import timeAgo from '../utils/timeAgo';
+import excerptOf from '../utils/excerpt';
 
 const { getURL, getPortraitURL } = utils.node;
 
 // How much of the quoted post's text is shown. The rest is a click away.
 const EXCERPT = 280;
-
-const excerptOf = (text = '') => {
-  const plain = String(text).replace(/\s+/g, ' ').trim();
-  return plain.length > EXCERPT ? `${plain.slice(0, EXCERPT).trim()}…` : plain;
-};
 
 // The post a note quotes, drawn inside the note under its own words.
 //
@@ -68,7 +65,8 @@ const QuoteEmbed = ({
   const author = post.author || {};
   const url = getURL(post);
   const image = getPortraitURL(post, 'medium');
-  const excerpt = excerptOf(post.content);
+  // Its words, and its links drawn as links (utils/excerpt.js).
+  const excerpt = excerptOf(post.content, EXCERPT);
   const createdAt = post.createdAt ? moment.utc(post.createdAt) : null;
 
   return (
@@ -103,15 +101,20 @@ const QuoteEmbed = ({
               {post.title}
             </Link>
           </Typography>}
-        {excerpt &&
+        {excerpt.length > 0 &&
           <Typography
             variant="body2"
             dir="auto"
             sx={{ overflowWrap: 'anywhere' }}
           >
-            {excerpt}
+            {excerpt.map((part, index) => {
+              const key = `excerpt-${index}`;
+              return part.href ?
+                <SmartLink key={key} href={part.href}>{part.text}</SmartLink> :
+                <React.Fragment key={key}>{part.text}</React.Fragment>;
+            })}
           </Typography>}
-        {!post.title && !excerpt && !image &&
+        {!post.title && excerpt.length === 0 && !image &&
           <Link href={url} variant="body2">
             {i18n.t('replies:quote.open')}
           </Link>}

@@ -7,8 +7,14 @@ const plainText = (markdown = '') => {
     // Pictures, then links: their words, not their addresses.
     .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
     .replace(/\[([^\]]+)\]\([^)]*\)/g, '$1')
-    // Any HTML that came with a post from elsewhere.
+    // Any HTML that came with a post from elsewhere, and its entities:
+    // "&amp;" is "&" (drawn as text, so nothing in them is markup again).
     .replace(/<[^>]+>/g, ' ')
+    .replace(/&(amp|lt|gt|quot|#39|apos|nbsp);/g, (whole, name) => {
+      return {
+        amp: '&', lt: '<', gt: '>', quot: '"', '#39': "'", apos: "'", nbsp: ' ',
+      }[name];
+    })
     // Code, emphasis and strike marks.
     .replace(/`{1,3}([^`]*)`{1,3}/g, '$1')
     .replace(/(\*\*|__|\*|_|~~)(\S(?:.*?\S)?)\1/g, '$2')

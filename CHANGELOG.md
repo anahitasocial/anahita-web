@@ -28,6 +28,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 7. **Follow is offered only to somebody one has not blocked:** a post's
    menu asked of a field nothing sends, and offered Follow to somebody
    blocked, which the server refused.
+8. **A quoted post's links are links,** not Markdown written out, and
+   "&amp;" from another server reads "&", in the quote under a note and in
+   every short excerpt of a post.
 
 ### Changed
 
