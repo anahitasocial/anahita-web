@@ -195,7 +195,7 @@ or written, when it is reached.
 4. **124, parts 1 to 3,** moving in and out, first at the user's word
    (2026-11-08): who you follow, block and mute, and what you saved, out in
    the download and in from it or from a single CSV, Mastodon's or
-   Misskey's, through **142, phase 1,** imports in export-service, built
+   Misskey's, through **142, phase 1,** imports in import-export-service, built
    with it for lists alone; following somebody who moved; moving with
    followers, and accepting followers moving in.
 5. **140, stage 2,** the composer.
