@@ -186,7 +186,7 @@ history. The main paths:
 | `/onboarding` | Where somebody signed in with an incomplete profile is sent, once (`routes/OnboardingGate.jsx`): a name and a few words; a picture, in a circle that shows the initials of that name until there is one; hashtags they are interested in, up to ten, which make one "My interests" feed on their home page; profiles the site features; then people and groups recommended for them, with the reason for each. Nothing is followed without a tick. A step with nothing to show is left out (`onboarding/featured.js#stepsFor`), every step can be skipped, and without the recommendation service there are no interests and no recommendations (`containers/onboarding`) |
 | `/pages/:alias` | A page of the installation's own, from the theme's `pages/` folder (`src/assets/<theme>/pages`). `/pages/tos` and `/pages/privacy` redirect to `/legal` |
 | `/404`, and any address not above | The not-found page |
-| `/search`, `/blogs`, `/support`, `/about` | Everything else |
+| `/search`, `/support`, `/about` | Everything else |
 
 **What loads when** (roadmap row 128). The first script holds what nearly
 every visit begins with: the app's frame, the home feed, the landing page

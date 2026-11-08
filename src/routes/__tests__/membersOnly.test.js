@@ -21,7 +21,7 @@ describe('members-only gate', () => {
   it('closes everything a member wrote', () => {
     [
       '/people/ada', '/groups/12-gardeners', '/notes/100', '/photos/7',
-      '/hashtags/seeds', '/locations/3', '/search', '/blogs', '/pages/anything',
+      '/hashtags/seeds', '/locations/3', '/search', '/pages/anything',
     ].forEach((path) => {
       expect(isOpen(path)).toBe(false);
     });

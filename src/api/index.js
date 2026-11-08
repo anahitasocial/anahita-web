@@ -125,7 +125,6 @@ const namespaces = {
   ],
   nodes: [
     'search',
-    'blogs',
   ],
 };
 

@@ -28,7 +28,7 @@ refactoring"). Each stage is the area the next features touch.
 
 ## What is there now
 
-Eight containers browse a list of posts or profiles, and each repeats the
+Seven containers browse a list of posts or profiles, and each repeats the
 same steps around the store: a `start`, set to `0`; the list emptied when the
 page is left; the next page asked for when `start` moves; an error shown
 when one comes; and the next start worked out when the reader scrolls to the
@@ -40,7 +40,6 @@ end. Then each hands the items to a component that draws them.
 | `feed/Actor` (a profile's posts, replies, reposts) | 360 | `feed/components/Items.jsx`, and replies and reposts of its own |
 | `feed/Custom` | 175 | `feed/components/Items.jsx` |
 | `media/Browse` (notes, photos, articles, topics) | 163 | `media/Browse/List.jsx` |
-| `blogs/Browse` | 147 | its own cards |
 | `inbounds/Browse` (a hashtag's or a location's posts) | 158 | its own cards |
 | `actors/Browse` (people, groups, events) | 200 | its own cards |
 | `search/Browse/SearchList` | 258 | its own cards |
@@ -74,7 +73,7 @@ drawing components take.
 1. `useBrowse`, and its test: the first page asked for, the next when
    scrolled, the list emptied when left, an error shown, new posts put on
    top.
-2. The eight containers above moved onto it, one commit each, each checked
+2. The seven containers above moved onto it, one commit each, each checked
    in the browser before the next.
 3. A list that keeps its own rules keeps them in a hook of its own beside
    it: `feed/Actor`'s three filters, `actors/Browse`'s query, the new posts

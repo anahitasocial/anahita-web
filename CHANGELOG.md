@@ -86,3 +86,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **The app's icons** at fixed addresses (`icon-32.png`, `icon-180.png`,
    `icon-192.png`, `icon-512.png`), and a manifest that names it, for a site
    to replace with its own ([Customising](docs/customising.md)).
+
+### Removed
+
+1. **The blogs page** (`/blogs`): not in the menu for a long time, and
+   asking the server for something it no longer has.

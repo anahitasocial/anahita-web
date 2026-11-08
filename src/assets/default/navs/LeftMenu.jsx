@@ -7,7 +7,6 @@ import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 
-// import BlogsIcon from '@mui/icons-material/RssFeedOutlined';
 import HomeIcon from '@mui/icons-material/Home';
 import SavedIcon from '@mui/icons-material/Bookmark';
 import FeedsIcon from '@mui/icons-material/DynamicFeed';
@@ -273,16 +272,6 @@ const LeftMenu = ({
           </ListItemIcon>
           <ListItemText primary={i18n.t('settings:mTitle')} />
         </ListItemButton>}
-      {/* <ListItemButton
-        component={Link}
-        to="/blogs/"
-        selected={pathname === '/blogs/'}
-      >
-        <ListItemIcon>
-          <BlogsIcon />
-        </ListItemIcon>
-        <ListItemText primary={i18n.t('blogs:cTitle')} />
-      </ListItemButton> */}
       {/* Public, for everybody signed in or not. Support is where somebody
           who cannot sign in is sent, the terms are read before an account
           exists, and About is how a stranger decides whether to ask for one

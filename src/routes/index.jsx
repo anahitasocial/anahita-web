@@ -31,7 +31,6 @@ const AuthPage = lazy(() => { return import('../containers/auth'); });
 const ActorByHandle = lazy(() => { return import('../containers/actors/ByHandle'); });
 const GroupsAdd = lazy(() => { return import('../containers/actors/Add'); });
 
-const Blogs = lazy(() => { return import('../containers/blogs'); });
 const SupportPage = lazy(() => { return import('../containers/support'); });
 const LegalPage = lazy(() => { return import('../containers/legal'); });
 const AgreementsPage = lazy(() => { return import('../containers/agreements'); });
@@ -218,7 +217,6 @@ const AppRoutes = () => {
             split and showed everybody else the login screen. */}
               <Route path="/about" element={<About />} />
 
-              <Route path="/blogs" element={<Blogs />} />
               {/* Public on purpose. The emails that link here go to somebody who
             cannot sign in, so gating it would make it reachable only by the
             people who do not need it. */}

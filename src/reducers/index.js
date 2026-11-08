@@ -40,7 +40,6 @@ const namespaces = {
   ],
   nodes: [
     'inbounds',
-    'blogs',
   ],
 };
 

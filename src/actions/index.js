@@ -35,7 +35,6 @@ const namespaces = {
   ],
   nodes: [
     'search',
-    'blogs',
   ],
   feeds: [
     'feed_leaders',

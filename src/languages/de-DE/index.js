@@ -17,7 +17,6 @@ import replies from './replies';
 import composer from './composer';
 import auth from './auth';
 import actor from './actor';
-import blogs from './blogs';
 import home from './home';
 import about from './about';
 import abuseReports from './abuseReports';
@@ -72,7 +71,6 @@ export default {
   composer,
   auth,
   actor,
-  blogs,
   home,
   about,
   abuseReports,
