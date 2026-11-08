@@ -2,8 +2,9 @@
 
 What changes in Anahita Web that people using it, or somebody running it,
 would notice. The newest first. **Embryo** is `main`, which is what a site
-building from `main` runs; a Birth release, when one is tagged, takes the
-Embryo section under its version and date. Each change adds its line here
+building from `main` runs; a Birth release, tagged with the same version
+as anahita-services on the same day, takes the Embryo section under its
+version and date. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ## Embryo

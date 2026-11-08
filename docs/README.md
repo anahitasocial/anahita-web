@@ -9,8 +9,10 @@ begin with the four ways in that the services' docs give:
 [Where to begin](https://github.com/anahitasocial/anahita-services/blob/main/docs/README.md#where-to-begin).
 
 Its releases are named as the services' are: `main` is always the
-**Embryo**, and a tagged version is a **Birth** release; see
-[Releases](https://github.com/anahitasocial/anahita-services/blob/main/docs/releases.md).
+**Embryo**, and a tagged version is a **Birth** release. Each Birth release
+is tagged in both repositories with the same version, on the same day, and
+the latest of the one works with the latest of the other; see
+[Releases](https://github.com/anahitasocial/anahita-services/blob/main/docs/releases.md#with-anahita-web).
 
 Asking an AI agent about the web app? Add Anahita's MCP server to it: see
 [Anahita MCP](https://github.com/anahitasocial/anahita-services/blob/main/docs/ai-agents.md).

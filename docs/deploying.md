@@ -6,10 +6,21 @@ Building the app and hosting it.
 
 ## Contents
 
-1. [Building](#building)
-2. [What the server needs to know](#what-the-server-needs-to-know)
-3. [Hosting](#hosting)
-4. [AWS Amplify](#aws-amplify)
+1. [Which version](#which-version)
+2. [Building](#building)
+3. [What the server needs to know](#what-the-server-needs-to-know)
+4. [Hosting](#hosting)
+5. [AWS Amplify](#aws-amplify)
+
+## Which version
+
+The one with the same number as the anahita-services a site runs. Each Birth
+release is tagged in both repositories with the same version, on the same
+day, and the latest tagged anahita-web works with the latest tagged
+anahita-services: build the tag, `v1.0.10` with services `v1.0.10`. The
+`main` branch goes with the services' `main`, and may call routes that
+their last Birth release does not have. See
+[Releases](https://github.com/anahitasocial/anahita-services/blob/main/docs/releases.md#with-anahita-web).
 
 ## Building
 
