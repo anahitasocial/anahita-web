@@ -39,6 +39,7 @@ import HeaderMeta from '../../../components/HeaderMeta';
 import actions from '../../../actions';
 import permissions from '../../../permissions/actor';
 import reportPermissions from '../../../permissions/report';
+import api from '../../../api';
 import utils from '../../../utils';
 import i18n from '../../../languages';
 import { Actor as ACTOR } from '../../../constants';
@@ -152,6 +153,25 @@ const ActorsRead = (props) => {
       readItem(id);
     }
   }, [actor.id, isAsked, isFetching, id]);
+
+  // Somebody on the fediverse is read again from their server when what
+  // was kept of them is old, and the page with it: whether they approve
+  // their followers changes the button (roadmap row 130). Nobody has to
+  // know to look them up again. Once each time the page is opened.
+  const refreshedFor = useRef(0);
+  useEffect(() => {
+    const fromMastodon = typeof actor.type === 'string' &&
+      actor.type.includes('.activitypub-service.person');
+    if (!isAuthenticated || !isAsked || !fromMastodon || refreshedFor.current === actor.id) {
+      return;
+    }
+    refreshedFor.current = actor.id;
+    api.federation.refreshPerson(actor).then(({ data }) => {
+      if (data && data.refreshed) {
+        readItem(id);
+      }
+    }).catch(() => {});
+  }, [actor.id, isAsked, isAuthenticated]);
 
   // While it is open, the + button posts here, when the viewer may
   // (roadmap row 99): to their own profile, or a group or an event that

@@ -83,6 +83,12 @@ const previewBlueskyFollows = () => {
 // The pictures of a post from another server, copied here again after
 // they were removed for its age. Asked of whichever service the post came
 // through, which is told by its address.
+// Somebody on the fediverse, read again from their server when what was
+// kept of them is more than a day old: `{ refreshed }` (roadmap row 130).
+const refreshPerson = (person) => {
+  return axios.post(`/activitypub/people/${person.id}/refresh`);
+};
+
 const restorePictures = (medium) => {
   const service = (medium.uri || '').startsWith('at://') ? 'atproto' : 'activitypub';
   return axios.post(`/${service}/posts/${medium.id}/pictures`);
@@ -146,6 +152,7 @@ export default {
   knownProfiles,
   lookup,
   restorePictures,
+  refreshPerson,
   blueskySettings,
   connectBluesky,
   disconnectBluesky,
