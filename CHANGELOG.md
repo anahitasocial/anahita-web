@@ -80,6 +80,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 12. **A card's buttons are in its action row,** at its foot: the feed's
    page, the feed form, the group and event forms, an event's panel.
 13. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
+14. **Follow post** and **Unfollow post,** in a post's menu, in place of
+   Get notifications and Stop notifications: following a post is hearing
+   of its replies, as following a profile is hearing of its posts.
 
 ### Added
 

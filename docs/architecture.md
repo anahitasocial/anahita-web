@@ -1179,9 +1179,10 @@ emailed.
 10. **Mark all read**, in the page's header (the icon alone on a mobile),
     marks every one read (`PATCH /notifications/read-all`), the list and the
     bell with them.
-11. **Get notifications** in a post's menu subscribes to its replies
-    (`containers/controls/medium/NotificationSub.jsx`), and Stop
-    notifications ends it.
+11. **Follow post** in a post's menu subscribes to its replies
+    (`containers/controls/medium/NotificationSub.jsx`), and Unfollow post
+    ends it. "Post" is in the label because the same menu has Follow for
+    the profile the post is on; the code says subscription.
 
 ### Custom feeds
 
