@@ -1,64 +1,51 @@
-import React, {
-  useEffect, useRef, useState, useMemo,
-} from 'react';
+import React, { useMemo, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import actions from '../../../actions';
-import PersonType from '../../../proptypes/Person';
-import MediaType from '../../../proptypes/Media';
 
 import MediumStepper from '../Stepper';
 import MediaList from './List';
-import { App as APP } from '../../../constants';
+import useBrowse from '../../browse/useBrowse';
 
-const { LIMIT } = APP.BROWSE;
+// A profile's notes, photos, articles or topics, by `namespace`: the list
+// through useBrowse, drawn by MediaList, and a post opened over it in the
+// stepper.
+//
+// No alert on an error: the list stays as it was, and does not call itself
+// empty (`isEmpty` below).
+const MediaBrowse = ({ namespace, queryFilters }) => {
+  const viewer = useSelector((state) => { return state.session.viewer; });
+  const error = useSelector((state) => { return state[namespace].error || ''; });
 
-const MediaBrowse = ({
-  browseList,
-  resetList,
-  items,
-  namespace,
-  viewer,
-  isFetching,
-  queryFilters,
-  total = 0,
-  error = '',
-}) => {
-  const [start, setStart] = useState(0);
+  const list = useMemo(() => {
+    return {
+      browse: (params) => { return actions[namespace].browse(params, namespace); },
+      reset: () => { return actions[namespace].reset(namespace); },
+      select: (state) => {
+        const { total, isFetching } = state[namespace];
+        return { items: state[namespace][namespace], total, isFetching };
+      },
+    };
+  }, [namespace]);
+
+  // The filters by what they say, not by the object, which the page makes
+  // anew each time it draws.
+  const queryKey = JSON.stringify(queryFilters);
+  const {
+    items, total, answered, next,
+  } = useBrowse({
+    ...list,
+    params: queryFilters,
+    queryKey,
+  });
+
   const [currentId, setCurrentId] = useState(null);
   const [stepperOpen, setStepperOpen] = useState(false);
-
-  // The list is known to be empty only once the server has answered: before
-  // that it is empty because nothing has been read yet.
-  const wasFetching = useRef(false);
-  const [hasAnswer, setHasAnswer] = useState(false);
-  useEffect(() => {
-    if (wasFetching.current && !isFetching) {
-      setHasAnswer(true);
-    }
-    wasFetching.current = isFetching;
-  }, [isFetching]);
 
   const Stepper = useMemo(() => {
     return MediumStepper(namespace);
   }, [namespace]);
-
-  useEffect(() => {
-    return () => {
-      resetList();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isFetching) {
-      browseList({
-        start,
-        limit: LIMIT,
-        ...queryFilters,
-      }, namespace);
-    }
-  }, [start, queryFilters]);
 
   const handleClose = () => {
     setStepperOpen(false);
@@ -68,10 +55,6 @@ const MediaBrowse = ({
   const handleView = (mediumId) => {
     setCurrentId(mediumId);
     setStepperOpen(true);
-  };
-
-  const fetchList = () => {
-    return setStart(start + LIMIT);
   };
 
   return (
@@ -88,76 +71,35 @@ const MediaBrowse = ({
         namespace={namespace}
         viewer={viewer}
         total={total}
-        fetchList={fetchList}
+        fetchList={next}
         handleView={handleView}
-        isEmpty={hasAnswer && !error && total === 0}
+        isEmpty={answered && !error && total === 0}
       />
     </>
   );
 };
 
 MediaBrowse.propTypes = {
-  browseList: PropTypes.func.isRequired,
-  resetList: PropTypes.func.isRequired,
   namespace: PropTypes.string.isRequired,
-  viewer: PersonType.isRequired,
   // oid is the profile whose posts are listed. It is required: the server
   // has no list of every post of a type.
   queryFilters: PropTypes.shape({
     oid: PropTypes.number.isRequired,
   }).isRequired,
-  items: MediaType.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  total: PropTypes.number,
-  error: PropTypes.string,
 };
 
-const mapStateToProps = (namespace) => {
-  return (state) => {
-    const {
-      error,
-      total,
-      isFetching,
-    } = state[namespace];
-
-    const { viewer } = state.session;
-
-    return {
-      items: state[namespace][namespace],
-      namespace,
-      error,
-      isFetching,
-      viewer,
-      total,
-    };
-  };
-};
-
-const mapDispatchToProps = (namespace) => {
-  return (dispatch) => {
-    return {
-      browseList: (params) => {
-        return dispatch(actions[namespace].browse(params, namespace));
-      },
-      resetList: () => {
-        return dispatch(actions[namespace].reset(namespace));
-      },
-    };
-  };
-};
-
-// Callers invoke this from inside their render bodies. Returning a new
-// component type each time would make React unmount and remount the list — and
-// therefore reset and refetch it — on every unrelated re-render of the parent.
-const connectedByNamespace = {};
+// One component for each namespace, made once: callers ask for it while
+// drawing, and a new component each time would empty and read the list again
+// on every unrelated redraw of the page.
+const byNamespace = {};
 
 export default (namespace) => {
-  if (!connectedByNamespace[namespace]) {
-    connectedByNamespace[namespace] = connect(
-      mapStateToProps(namespace),
-      mapDispatchToProps(namespace),
-    )(MediaBrowse);
+  if (!byNamespace[namespace]) {
+    const ForNamespace = (props) => {
+      return <MediaBrowse {...props} namespace={namespace} />;
+    };
+    byNamespace[namespace] = ForNamespace;
   }
 
-  return connectedByNamespace[namespace];
+  return byNamespace[namespace];
 };
