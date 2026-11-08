@@ -9,7 +9,9 @@ import useBrowse from '../useBrowse';
 // A list in a store of its own: what the hook asks for is written down, and
 // the test plays the server by answering with a page.
 const listStore = () => {
-  const empty = { items: { byId: {}, allIds: [] }, total: 0, error: '', isFetching: false };
+  const empty = {
+    items: { byId: {}, allIds: [] }, total: 0, error: '', isFetching: false,
+  };
   const asked = [];
   const reducer = (state = empty, action) => {
     asked.push(action);
@@ -20,7 +22,9 @@ const listStore = () => {
         const allIds = [...state.items.allIds, ...action.ids];
         const byId = { ...state.items.byId };
         action.ids.forEach((id) => { byId[id] = { id }; });
-        return { ...state, isFetching: false, total: action.total, items: { byId, allIds } };
+        return {
+          ...state, isFetching: false, total: action.total, items: { byId, allIds },
+        };
       }
       case 'FAIL':
         return { ...state, isFetching: false, error: action.error };
@@ -37,7 +41,9 @@ const browse = (params) => { return { type: 'BROWSE', params }; };
 const reset = () => { return { type: 'RESET' }; };
 const prepend = (nodes) => { return { type: 'PREPEND', nodes }; };
 const select = (state) => { return state; };
-const ids = (from, count) => { return Array.from({ length: count }, (_, i) => { return from + i; }); };
+const ids = (from, count) => {
+  return Array.from({ length: count }, (_, i) => { return from + i; });
+};
 
 describe('useBrowse', () => {
   let box;
@@ -45,7 +51,9 @@ describe('useBrowse', () => {
   let result;
 
   const List = (props) => {
-    result = useBrowse({ browse, reset, prepend, select, ...props });
+    result = useBrowse({
+      browse, reset, prepend, select, ...props,
+    });
     return null;
   };
 

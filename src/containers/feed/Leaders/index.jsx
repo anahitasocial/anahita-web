@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import React from 'react';
+import { useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
+import PropTypes from 'prop-types';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -9,10 +9,9 @@ import api from '../../../api';
 import Progress from '../../../components/Progress';
 import FeedItems from '../components/Items';
 import NewPosts from '../components/NewPosts';
+import useBrowse from '../../browse/useBrowse';
 import useNewPosts from '../useNewPosts';
 import usePosted from '../usePosted';
-import NodesType from '../../../proptypes/Nodes';
-import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
 
 const { LIMIT } = APP.BROWSE;
@@ -31,6 +30,21 @@ const peek = () => {
   });
 };
 
+const select = (state) => {
+  const {
+    feed_leaders: items, hasMore, error, isFetching,
+  } = state.feedLeaders;
+  return {
+    items, hasMore, error, isFetching,
+  };
+};
+
+// The next page begins after what is held, which is more than whole pages
+// once new posts have been put at the top.
+const nextStart = (start, held) => {
+  return Math.max(held, start + 1);
+};
+
 // The home feed: posts and reposts by the people and groups the viewer follows.
 //
 // What is posted while it is open is put at its top: see useNewPosts.
@@ -38,59 +52,29 @@ const peek = () => {
 // A feed holds posts and reposts. Replies are not in it: they are read in
 // their thread, on the post's own page, which is where the reply button
 // goes.
-const FeedLeadersBrowse = ({
-  browseList,
-  resetList,
-  prependList,
-  alertError,
-  items,
-  hasMore = true,
-  isAuthenticated,
-  viewer,
-  error,
-  isFetching,
-  columns = false,
-}) => {
-  const [start, setStart] = useState(0);
+const FeedLeadersBrowse = ({ columns = false }) => {
+  const { isAuthenticated, viewer } = useSelector((state) => { return state.session; });
+  const {
+    items, hasMore, next, prepend,
+  } = useBrowse({
+    browse: actions.feed_leaders.browse,
+    reset: actions.feed_leaders.reset,
+    prepend: actions.feed_leaders.prepend,
+    select,
+    params: PARAMS,
+    nextStart,
+  });
 
   // What the viewer posts is in what they follow, at once.
   usePosted({
     belongs: () => { return true; },
-    put: prependList,
+    put: prepend,
   });
-
-  useEffect(() => {
-    return () => {
-      resetList();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!isFetching) {
-      browseList({
-        ...PARAMS,
-        start,
-        limit: LIMIT,
-      });
-    }
-  }, [start]);
-
-  useEffect(() => {
-    if (error) {
-      alertError(error);
-    }
-  }, [error]);
-
-  // The next page begins after what is held, which is more than whole
-  // pages once new posts have been put at the top.
-  const fetchList = () => {
-    return setStart(Math.max(items.allIds.length, start + 1));
-  };
 
   const { waiting, show } = useNewPosts({
     peek,
     known: items.byId,
-    put: prependList,
+    put: prepend,
     feedKey: 'leaders',
   });
 
@@ -99,7 +83,7 @@ const FeedLeadersBrowse = ({
       <NewPosts count={waiting} onShow={show} />
       <InfiniteScroll
         dataLength={items.allIds.length}
-        next={fetchList}
+        next={next}
         hasMore={hasMore}
         loader={
           <Progress key="feed-progress" />
@@ -118,60 +102,7 @@ const FeedLeadersBrowse = ({
 };
 
 FeedLeadersBrowse.propTypes = {
-  browseList: PropTypes.func.isRequired,
-  resetList: PropTypes.func.isRequired,
-  prependList: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
-  items: NodesType.isRequired,
-  hasMore: PropTypes.bool,
-  isFetching: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  viewer: PersonType.isRequired,
   columns: PropTypes.bool,
 };
 
-const mapStateToProps = (state) => {
-  const {
-    isAuthenticated,
-    viewer,
-  } = state.session;
-
-  const {
-    feed_leaders: items,
-    hasMore,
-    error,
-    isFetching,
-  } = state.feedLeaders;
-
-  return {
-    items,
-    hasMore,
-    error,
-    isFetching,
-    isAuthenticated,
-    viewer,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    browseList: (params) => {
-      return dispatch(actions.feed_leaders.browse(params));
-    },
-    resetList: () => {
-      return dispatch(actions.feed_leaders.reset());
-    },
-    prependList: (nodes) => {
-      return dispatch(actions.feed_leaders.prepend(nodes));
-    },
-    alertError: (message) => {
-      return dispatch(actions.app.alert.error(message));
-    },
-  };
-};
-
-export default (connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FeedLeadersBrowse));
+export default FeedLeadersBrowse;
