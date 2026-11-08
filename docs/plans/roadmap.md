@@ -148,6 +148,7 @@ Each milestone ends in a shippable state.
 | 139 | ⬜ | A web app that fits its site: the kinds of post and of profile a site offers switched on and off by the server (`FEATURES`, sent in NodeInfo), their menus, tabs, composer and pages going with them and the server refusing what is off; each list shown as a list, a grid or masonry, the site choosing the default; and tutorials for making one's own home page, theme and layouts, from what was done for banu.io. For the recipes, and the mobile app with them **Planned on 2026-11-07, at the user's word;** its plan written when it is reached | to be written | web + services | 4–5 | 140, its first stages |
 | 140 | ⬜ | Logic apart from presentation, in stages between the features (the user, 2026-11-07: "I don't want the items down the list starve while we are code refactoring"): the containers whose fetching, state, rules and layout are in one file, some of nearly 800 lines, split into a hook that holds the data and its calls, tested on its own, and components that only draw. One area a stage, about two sessions, each the area the features after it touch: the lists, the composer, the photo and video pages, the replies and settings **Planned on 2026-11-07, at the user's word;** its plan written when it is reached | to be written | web | 2 a stage | — |
 | 141 | ⬜ | Testing and scaling Anahita, asked for by the user on 2026-11-07, for 100,000 active people on one site with room toward a few hundred thousand: metrics from every service and Grafana; a load test with k6 against a population made for it, in steps to 300,000, on EKS with Aurora and on one k3s server, run again after each change; the event bus's queues durable and shared, so that every service can run several copies; a writer and readers (`DSN_READ`), as RDS and Aurora give them; search on an index; home feeds written ahead, caches, push and a CDN only if the test calls for them; the findings written for any system built the same way, and the recipes' sizes made from them **Planned on 2026-11-07, at the user's word** | [scaling.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/scaling.md) | services | 10–14 | — |
+| 142 | ⬜ | Importing a WordPress blog, asked for by the user on 2026-11-07: imports in export-service, not a service of their own ("lean and clean", the user), for every import that is not an ordinary request (a WordPress blog, Mastodon's CSV for row 124, Anahita's download): it asks the service that owns each thing, alone may give a post a past date and send it nowhere, and is renamed `import-export-service` for both directions; a WordPress plugin, `anahita-wordpress`, paired by a code, that lists one's posts, sends the chosen ones oldest first as articles with their dates, covers, pictures and hashtags, sent to no network and told to nobody, and then gives an `index.php` with `.htaccess` that redirects every old address for good, to put in WordPress's place **Planned on 2026-11-07, at the user's word** | [imports.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/imports.md) | services + WordPress | 5 | — |
 | **Kept for later** (not scheduled, not counted in the total) |  | | | | | |
 | 94 | ⬜ | 77 · An actor's own position, with consent, asked for by the user on 2026-10-18 as a plan of its own, for later: a profile that posts where it is, such as a device or an animal tracker, only with the consent of the person, or of the administrators of the profile. Everything row 82 left out belongs here: reading positions from posts, check-ins (`Arrive`), sending positions out, and the decisions row 82 listed on 2026-10-17 (whose positions, devices as accounts, consent per post, the operator's switch, precision and delays, who may see a trail and how long it is kept, readers hiding positions). Not planned yet | — | services + web | not estimated | 82 |
 | 61 | ✅ | 52 · Hashtags doubled by case: a hashtag arriving from another server in other capitals ("Anahita") is made anew beside the one there is ("anahita"), so its page and counts are split. Should find the existing one whatever its case, and the 14 doubles made on 2026-10-13 be merged. Found 2026-10-14 **Done 2026-10-14:** hashtags are matched whatever their capitals and their address kept in lower case; a migration merged the seven doubles that had an original and put the other seven's addresses in lower case | — | services | ½ | 25 |
@@ -182,24 +183,25 @@ or written, when it is reached.
 4. **141, phases 1 and 2,** seeing inside and the load test, on the
    `classic` site; its other phases placed by what the test finds.
 5. **133,** muting: there are no mutes to import until there are mutes.
-6. **124, parts 1 to 3,** moving: who you follow, blocks and mutes in
+6. **142, phase 1,** imports in export-service, which 124's go through.
+7. **124, parts 1 to 3,** moving: who you follow, blocks and mutes in
    Mastodon's CSV; following somebody who moved; moving with followers, and
    accepting followers moving in.
-7. **140, stage 2,** the composer.
-8. **139,** a web app that fits its site; then **30, phases 3 and 4,**
+8. **140, stage 2,** the composer.
+9. **139,** a web app that fits its site; then **30, phases 3 and 4,**
    `microblog` and the Recipes page on anahita.io.
-9. **134,** interacting from another server.
-10. **122,** content warnings, with Made with AI: before messages, and before
+10. **134,** interacting from another server.
+11. **122,** content warnings, with Made with AI: before messages, and before
    growth.
-11. **140, stage 3,** the photo and video pages and the upload.
-12. **135,** WebP, HEIC and AVIF; **136,** the focal point; **131,** Content
+12. **140, stage 3,** the photo and video pages and the upload.
+13. **135,** WebP, HEIC and AVIF; **136,** the focal point; **131,** Content
     Credentials: three changes to the same step of an upload, done together.
-13. **137,** audio, with 120.
-14. **140, stage 4,** the replies and settings.
-15. **123,** direct messages: the largest, after mutes and warnings.
-16. **132,** deleting one's old posts.
-17. **138,** the mobile app: push matters most once there are messages.
-18. **30, phase 5,** the `long-form`, `video` and `events` recipes, each
+14. **137,** audio, with 120.
+15. **140, stage 4,** the replies and settings.
+16. **123,** direct messages: the largest, after mutes and warnings.
+17. **132,** deleting one's old posts.
+18. **138,** the mobile app: push matters most once there are messages.
+19. **30, phase 5,** the `long-form`, `video` and `events` recipes, each
     with its gaps weighed first.
 
 **Mastodon's features kept for later,** not planned:
