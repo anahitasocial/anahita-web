@@ -430,7 +430,9 @@ does, and clears what it kept. Language names come from the browser
 
 Where a post's text is drawn, `components/NodeBody.jsx` puts the post's
 language on it as the `lang` attribute, so a screen reader reads each post in
-the right one.
+the right one. The line a post from Bluesky ends with to lead to its video
+(`▶ bsky.app`, from anahita-libs' `WithVideoLink`) is drawn with a light play
+icon before the link, not the heavy triangle.
 
 **Right-to-left writing.** The interface is left to right and has no
 right-to-left layout. What people write is another matter: a post's title and
@@ -1741,7 +1743,10 @@ draws nothing (`utils/federation.js#isAbsent`).
 1. **The box in the top bar** (`components/SearchBox.jsx`) is an MUI
    `Autocomplete` in free-solo mode. Searching opens the search page
    through the router, without reloading the app, and marks the search as
-   typed (see Looking somebody up, above).
+   typed (see Looking somebody up, above). **On a mobile** it is a
+   magnifying glass beside the bell (`containers/App.jsx`), which opens the
+   box across the bar, focused, with Back in place of the menu; the bell and
+   the profile photo come back when the search page is left.
 2. **Recent searches** (`utils/recentSearches.js`): focused while empty,
    the box lists the last ten searches, newest first, each with the tab it
    was run under; typing narrows them; each can be forgotten, or all at
@@ -1750,7 +1755,8 @@ draws nothing (`utils/federation.js#isAbsent`).
    only**, under a key with the person's id, and cleared when they sign
    out. Nothing about what somebody searched for reaches the server, so
    they do not follow somebody to another device. A search is remembered
-   when it is run, however it was reached.
+   when it is run, however it was reached. Each stays on one line, a long
+   handle cut short with its whole on hover.
 3. **The controls:** the order as a small menu with, beside it, the two
    choices below as chips; the row wraps on a narrow screen. The distance
    is a slider on a line of its own under them (25 to 100 km, or anywhere),
@@ -1810,6 +1816,9 @@ hashtags, places, saved, a profile's tabs) and the feed's
    inside a repost is outlined, to stand apart from the card it is in. The
    composer above a feed is raised too, and the form's own card in it lies
    flat on it.
+6. **A repost says it is one:** its header has the repost icon and
+   "Reposted" before when (`feed/components/Repost.jsx`), so somebody's
+   repost of their own post is not read as their posting it again.
 
 ### Long posts
 
