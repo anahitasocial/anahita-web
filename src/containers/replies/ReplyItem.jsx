@@ -45,6 +45,8 @@ const { getAuthor } = utils.node;
 // How far each level of a thread is set in from the one above: 24 pixels.
 // Every space in a thread is a whole number of the theme's 8-pixel steps.
 const STEP = 3;
+// Around a reply's picture: one step on a mobile, two on anything wider.
+const EDGE = { xs: 1, sm: 2 };
 
 // One reply, and under it the replies made to it.
 //
@@ -67,6 +69,8 @@ const ReplyItem = ({
   onBlockFromOwner = null,
   blockFromOwnerLabel = '',
   context = '',
+  joined = false,
+  footer = null,
 }) => {
   const { reply, children } = node;
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -141,22 +145,43 @@ const ReplyItem = ({
   return (
     <Box component="section" id={`reply-${reply.id}`}>
       {context &&
-        <Typography variant="caption" color="textSecondary" component="p" sx={{ px: 2, pt: 2 }}>
+        <Typography variant="caption" color="textSecondary" component="p" sx={{ px: EDGE, pt: 2 }}>
           {context}
         </Typography>}
+      {/* On a mobile, a step around the picture, not two: the words have
+          the room (the user, 2026-11-07, after Threads). */}
       <Box sx={{
-        display: 'flex', alignItems: 'flex-start', gap: 2, px: 2, pt: context ? 1 : 2, pb: 1,
+        display: 'flex', alignItems: 'flex-start', gap: EDGE, px: EDGE, pt: context ? 1 : 2, pb: 1,
       }}
       >
         {/* As tall as the line their name is on, with the picture in the
             middle of it: a small picture set at the top of a taller line
             sat above the name it belongs to. */}
-        <Box sx={{ display: 'flex', alignItems: 'center', minHeight: HEAD }}>
-          <ActorAvatar
-            actor={author}
-            linked={Boolean(author.id)}
-            size="small"
-          />
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            alignSelf: 'stretch',
+          }}
+        >
+          <Box sx={{ display: 'flex', alignItems: 'center', minHeight: HEAD }}>
+            <ActorAvatar
+              actor={author}
+              linked={Boolean(author.id)}
+              size="small"
+            />
+          </Box>
+          {/* Joined to the next reply of its conversation (roadmap row
+              129): a line from under the picture down to the next one's,
+              through the space between the two. */}
+          {joined &&
+            <Box
+              aria-hidden
+              sx={{
+                flex: 1, width: 2, bgcolor: 'divider', borderRadius: 1, mt: 1, mb: -3,
+              }}
+            />}
         </Box>
         <Box
           sx={{
@@ -261,6 +286,7 @@ const ReplyItem = ({
                   {reply.likesCount > 0 ? reply.likesCount : ''}
                 </Button>}
             </Box>}
+          {footer}
         </Box>
         {hasMenu &&
           <>
@@ -395,6 +421,10 @@ ReplyItem.propTypes = {
   blockFromOwnerLabel: PropTypes.string,
   // A line above it: which note of the writer's thread it answers.
   context: PropTypes.string,
+  // Joined by a line to the reply after it, in its conversation.
+  joined: PropTypes.bool,
+  // Under its words and actions: the way to more of its conversation.
+  footer: PropTypes.node,
 };
 
 export default ReplyItem;

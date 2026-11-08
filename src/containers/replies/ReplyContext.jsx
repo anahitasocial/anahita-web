@@ -18,7 +18,7 @@ const EXCERPT = 140;
 
 // In plain words: the Markdown of what was answered is not drawn here, and
 // written out it showed links as "[@julian](https://…)".
-const excerptOf = (text = '') => {
+export const excerptOf = (text = '') => {
   const plain = plainText(text);
   return plain.length > EXCERPT ? `${plain.slice(0, EXCERPT).trim()}…` : plain;
 };

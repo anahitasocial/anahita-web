@@ -89,6 +89,7 @@ export default {
     replyingTo: 'En réponse à {{ name }}',
     replying: 'En réponse à une publication',
     answered: 'Voir la réponse à laquelle celle-ci répond',
+    thenTo: 'Puis en réponse à {{ name }}',
   },
   // Le réglage qui affiche ou non les repartages parmi les publications d'un profil.
   repostsOnProfile: {
@@ -148,4 +149,9 @@ export default {
     notAllowed: 'Vous n\'êtes pas autorisé à répondre ici.',
   },
   answersNote: 'En réponse à la note {{ number }} du fil',
+  conversation: {
+    show: 'Voir la conversation ({{ count }})',
+    more: '{{ count }} autre réponse à {{ name }}',
+    more_other: '{{ count }} autres réponses à {{ name }}',
+  },
 };

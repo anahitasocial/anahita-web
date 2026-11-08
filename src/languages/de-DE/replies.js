@@ -89,6 +89,7 @@ export default {
     replyingTo: 'Antwort an {{ name }}',
     replying: 'Antwort auf einen Beitrag',
     answered: 'Die Antwort ansehen, auf die sich das bezieht',
+    thenTo: 'Dann als Antwort an {{ name }}',
   },
   // The setting for whether reposts show among a profile's posts.
   repostsOnProfile: {
@@ -148,4 +149,9 @@ export default {
     notAllowed: 'Du darfst hier nicht antworten.',
   },
   answersNote: 'Antwort auf Notiz {{ number }} des Threads',
+  conversation: {
+    show: 'Unterhaltung anzeigen ({{ count }})',
+    more: '{{ count }} weitere Antwort an {{ name }}',
+    more_other: '{{ count }} weitere Antworten an {{ name }}',
+  },
 };

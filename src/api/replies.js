@@ -66,7 +66,14 @@ const setAccess = (medium, replyAccess) => {
   return axios.patch(`/${namespace}/${medium.id}/reply-access`, { replyAccess });
 };
 
+// One reply, by its id: the one a reply answers, for the line above it on
+// its own page (roadmap row 129).
+const read = (id) => {
+  return axios.get(`/notes/${id}`);
+};
+
 export default {
+  read,
   add,
   addReplyThread,
   addThread,

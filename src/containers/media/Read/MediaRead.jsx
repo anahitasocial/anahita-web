@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
-import Link from '@mui/material/Link';
 
 import PersonType from '../../../proptypes/Person';
 import MediumType from '../../../proptypes/Medium';
@@ -12,6 +11,7 @@ import Likes from '../../likes';
 import LocationsGadget from '../../locations/Gadget';
 import RepliesThread from '../../replies/Thread';
 import ReplyContext from '../../replies/ReplyContext';
+import ReplyParent from '../../replies/ReplyParent';
 import postCounts from '../../../components/PostCounts';
 import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
@@ -21,7 +21,6 @@ import { ShareAction, ofNode } from '../../controls/Share';
 import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
-import i18n from '../../../languages';
 import utils from '../../../utils';
 
 const { getPortraitURL, getCoverURL } = utils.node;
@@ -131,13 +130,7 @@ const MediaReadView = ({
     context: isReply && medium.root ? (
       <ReplyContext answered={medium.root} owner={medium.root.owner}>
         {medium.parentId !== medium.rootId &&
-          <Link
-            href={`/notes/${medium.parentId}/`}
-            variant="caption"
-            color="textSecondary"
-          >
-            {i18n.t('replies:context.answered')}
-          </Link>}
+          <ReplyParent id={medium.parentId} />}
       </ReplyContext>
     ) : null,
     locations: (

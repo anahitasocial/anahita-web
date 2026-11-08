@@ -525,6 +525,19 @@ a photo post, a GIF or a video a video post. `containers/replies/Thread.jsx` sho
 tab on a post's page and in the lightbox. What used to be comments are
 replies, made directly to the post.
 
+**A conversation** (roadmap row 129) is drawn flat, though each reply still
+answers what it answered. The replies to the post, or to the reply a page
+is about, stand at the first level; under each, its conversation, at the
+same width, each reply joined to the next by a line in the pictures' column,
+as Threads draws it, whoever answers whom (`utils/thread.js#conversationOf`,
+`ReplyItem`'s `joined`):
+the earliest reply at each step, three in sight, then "Show the conversation
+(n)" to the reply's own page. Where a reply has more than one answer, the
+earliest is followed and the rest are a link under it, "1 more reply to
+Worf", to its page. On a reply's own page the box above it says what the
+whole chain answers: the post, then "Then replying to…" with the reply just
+above (`containers/replies/ReplyParent.jsx`).
+
 **A thread** (roadmap row 126) is a post's writer going on under it: their
 earliest reply to the post, their earliest to that one, and so on
 (`utils/thread.js#chainOf`). On the post's page it comes first, flat and

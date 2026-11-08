@@ -81,6 +81,45 @@ const chainOf = (replies, rootId, writerId, writerOf) => {
   };
 };
 
+// How many of a conversation are in sight under a reply, before "Show the
+// conversation" (roadmap row 129).
+const CONVERSATION_SHOWN = 3;
+
+// Every reply under a nested reply, however deep.
+const countUnder = (node) => {
+  return node.children.reduce((total, child) => {
+    return total + 1 + countUnder(child);
+  }, 0);
+};
+
+// A reply's conversation as it is drawn (roadmap row 129): flat, one level
+// in, whoever answers whom. From the reply, the earliest reply to it, then
+// the earliest to that one, and so on; at each step, how many replies are
+// in the branches not followed (`more`) and the reply they hang from
+// (`moreAt`), whose page shows them. `shown` steps are in sight; `total` is
+// every reply under the first, for "Show the conversation". The tree is not
+// changed: each reply still answers what it answered.
+const conversationOf = (node, shown = CONVERSATION_SHOWN) => {
+  const steps = [];
+  let at = node;
+  while (at.children.length > 0) {
+    const [first, ...others] = at.children;
+    steps.push({
+      reply: first.reply,
+      more: others.reduce((total, other) => {
+        return total + 1 + countUnder(other);
+      }, 0),
+      moreAt: at.reply,
+    });
+    at = first;
+  }
+  return {
+    steps: steps.slice(0, shown),
+    total: countUnder(node),
+    hasMore: steps.length > shown,
+  };
+};
+
 // The thread as most people read it, and what has been hidden from it.
 //
 // Hidden replies are sent only to whoever looks after the thread, each
@@ -208,6 +247,9 @@ const setHidden = (replies, id, hidden) => {
 };
 
 export default {
+  CONVERSATION_SHOWN,
+  conversationOf,
+  countUnder,
   chainOf,
   MAX_INDENT,
   add,

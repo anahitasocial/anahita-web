@@ -219,3 +219,48 @@ describe('the writer\'s chain (roadmap row 126)', () => {
     expect(thread.chainOf(replies, ROOT, 0, writerOf).chain).toEqual([]);
   });
 });
+
+describe('a conversation, drawn flat (roadmap row 129)', () => {
+  // 10 answers the post; 11 answers 10, then 12 answers 11 and 13 answers
+  // 12; 14 also answers 11, later, and 15 answers 14; 16 answers 13.
+  const replies = [
+    reply(10, ROOT),
+    reply(11, 10),
+    reply(12, 11),
+    reply(13, 12),
+    reply(14, 11),
+    reply(15, 14),
+    reply(16, 13),
+  ];
+  const [top] = thread.nest(replies, ROOT);
+  const ids = (steps) => {
+    return steps.map((step) => {
+      return step.reply.id;
+    });
+  };
+
+  it('follows the earliest reply at each step, flat', () => {
+    const { steps } = thread.conversationOf(top, 10);
+    expect(ids(steps)).toEqual([11, 12, 13, 16]);
+  });
+
+  it('counts the branch not followed, where it hangs', () => {
+    const { steps } = thread.conversationOf(top, 10);
+    const atTwelve = steps.find((step) => { return step.reply.id === 12; });
+    expect(atTwelve.more).toBe(2);
+    expect(atTwelve.moreAt.id).toBe(11);
+    expect(steps.find((step) => { return step.reply.id === 11; }).more).toBe(0);
+  });
+
+  it('shows three, and counts every reply for the rest', () => {
+    const conversation = thread.conversationOf(top);
+    expect(ids(conversation.steps)).toEqual([11, 12, 13]);
+    expect(conversation.hasMore).toBe(true);
+    expect(conversation.total).toBe(6);
+  });
+
+  it('is nothing under a reply nobody answered', () => {
+    const [alone] = thread.nest([reply(20, ROOT)], ROOT);
+    expect(thread.conversationOf(alone)).toEqual({ steps: [], total: 0, hasMore: false });
+  });
+});

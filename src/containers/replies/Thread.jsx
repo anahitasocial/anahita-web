@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { useLocation } from 'react-router-dom';
+import { Link as RouterLink, useLocation } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import Box from '@mui/material/Box';
@@ -12,6 +12,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Divider from '@mui/material/Divider';
+import Link from '@mui/material/Link';
 import ToggleButton from '@mui/material/ToggleButton';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 import Typography from '@mui/material/Typography';
@@ -40,7 +41,7 @@ import events from '../../utils/events';
 import replyOrder from '../../utils/replyOrder';
 
 const { federation } = utils;
-const { getAuthor } = utils.node;
+const { getAuthor, getURL } = utils.node;
 
 // Who wrote a post or a reply, for the writer's chain.
 const writerOf = (node) => {
@@ -336,14 +337,104 @@ const RepliesThread = ({
     );
   };
 
+  // A reply of the first level, then its conversation (roadmap row 129):
+  // flat, one step in, joined by a line, whoever answers whom; the
+  // earliest branch followed and the rest counted, a tap from where they
+  // hang; three in sight, then the whole of it on the reply's own page.
+  // Each reply still answers what it answered: only the drawing is flat.
+  const toPage = (reply) => {
+    return getURL(reply);
+  };
+  const conversationLink = (to, words) => {
+    return (
+      <Link
+        component={RouterLink}
+        to={to}
+        variant="body2"
+        underline="hover"
+        sx={{ display: 'block', pt: 1 }}
+      >
+        {words}
+      </Link>
+    );
+  };
+  const withConversation = (node) => {
+    const conversation = thread.conversationOf(node);
+    const { steps } = conversation;
+    // Each reply drawn as it is, at the same width, joined to the next by
+    // the line in the pictures' column. Under a reply with more than one
+    // answer, the rest a tap away, named; under the last in sight, the
+    // whole conversation.
+    const drawn = [{ reply: node.reply }, ...steps];
+    return (
+      <Box key={`conversation-${node.reply.id}`}>
+        {drawn.map((each, index) => {
+          const next = steps[index];
+          const isLast = index === drawn.length - 1;
+          const footer = (
+            <>
+              {next && next.more > 0 &&
+                conversationLink(toPage(each.reply), i18n.t('replies:conversation.more', {
+                  count: next.more,
+                  name: (getAuthor(each.reply) || {}).name || '',
+                }))}
+              {isLast && conversation.hasMore &&
+                conversationLink(toPage(node.reply), i18n.t('replies:conversation.show', {
+                  count: conversation.total,
+                }))}
+            </>
+          );
+          return (
+            <ReplyItem
+              key={`reply-${each.reply.id}`}
+              node={{ reply: each.reply, children: [] }}
+              viewer={viewer}
+              joined={!isLast}
+              footer={footer}
+              context={chained.answers(each.reply) ?
+                i18n.t('replies:answersNote', { number: chained.answers(each.reply) }) : ''}
+              onReply={handleReply}
+              onEdit={handleEdit}
+              onDelete={handleDelete}
+              onHide={handleHide}
+              onLike={handleLike}
+              onBlockFromOwner={handleBlockFromOwner}
+              blockFromOwnerLabel={i18n.t(events.isEvent(group) ?
+                'socialgraph:blockFromOwner.actionEvent' :
+                'socialgraph:blockFromOwner.action')}
+            />
+          );
+        })}
+      </Box>
+    );
+  };
+
   return (
-    <Card sx={{ pb: 1 }}>
+    // Twice the step at its foot, so that a conversation's line ends clear
+    // of the card's edge.
+    <Card sx={{ pb: 2 }}>
       {/* The rest of the post, by its writer: joined by a line, as one
           piece, before anybody's reply. */}
       {chained.chain.length > 0 &&
-        <Box sx={{ ml: 2, borderLeft: 2, borderColor: 'divider' }}>
-          {chained.chain.map((reply) => {
-            return item({ reply, children: [] });
+        <Box>
+          {chained.chain.map((reply, index) => {
+            return (
+              <ReplyItem
+                key={`reply-${reply.id}`}
+                node={{ reply, children: [] }}
+                viewer={viewer}
+                joined={index < chained.chain.length - 1}
+                onReply={handleReply}
+                onEdit={handleEdit}
+                onDelete={handleDelete}
+                onHide={handleHide}
+                onLike={handleLike}
+                onBlockFromOwner={handleBlockFromOwner}
+                blockFromOwnerLabel={i18n.t(events.isEvent(group) ?
+                  'socialgraph:blockFromOwner.actionEvent' :
+                  'socialgraph:blockFromOwner.action')}
+              />
+            );
           })}
         </Box>}
       {canReply &&
@@ -401,7 +492,9 @@ const RepliesThread = ({
             {i18n.t('replies:retry')}
           </Button>
         </CardContent>}
-      {!isLoading && !hasFailed && shown.length === 0 &&
+      {/* Nothing at all under the post: not when only its writer has
+          gone on under it. */}
+      {!isLoading && !hasFailed && shown.length === 0 && chained.chain.length === 0 &&
         <EmptyList icon={<RepliesIcon />} inCard />}
       {shown.length >= replyOrder.MIN_TO_CHOOSE &&
         <Box sx={{
@@ -429,7 +522,7 @@ const RepliesThread = ({
             </ToggleButton>
           </ToggleButtonGroup>
         </Box>}
-      {replyOrder.arrange(shown, order).map(item)}
+      {replyOrder.arrange(shown, order).map(withConversation)}
       {isTruncated &&
         <CardContent>
           <Typography variant="caption" color="textSecondary">

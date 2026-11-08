@@ -89,6 +89,7 @@ export default {
     replyingTo: 'En respuesta a {{ name }}',
     replying: 'En respuesta a una publicación',
     answered: 'Ver la respuesta a la que contesta',
+    thenTo: 'Luego en respuesta a {{ name }}',
   },
   // The setting for whether reposts show among a profile's posts.
   repostsOnProfile: {
@@ -148,4 +149,9 @@ export default {
     notAllowed: 'No puedes responder aquí.',
   },
   answersNote: 'En respuesta a la nota {{ number }} del hilo',
+  conversation: {
+    show: 'Ver la conversación ({{ count }})',
+    more: '{{ count }} respuesta más a {{ name }}',
+    more_other: '{{ count }} respuestas más a {{ name }}',
+  },
 };

@@ -4,7 +4,7 @@ Asked for by the user on 2026-11-07: "each time we reply to someone's reply,
 it becomes a new nested reply with their reply as the parent. Ideally we want
 a thread under a post or under a reply rather than reply on a reply on a
 reply on a reply." And, once the direction was set: "a design decision,
-while respecting the reply tree at the data level." Not built.
+while respecting the reply tree at the data level." Done the same day.
 
 ## Contents
 
@@ -71,3 +71,24 @@ while respecting the reply tree at the data level." Not built.
    `ReplyContext.jsx`), tried at both sizes with a long, branching
    conversation made for it on the development stack, screenshots for the
    user before it is finished. A session.
+
+## Done
+
+2026-11-07, both phases, before v1.0.18 at the user's word. The rules in
+`utils/thread.js` (`conversationOf`, with tests), the post's page and a
+reply's page; tried at both sizes with a conversation of seven replies, one
+branch, between two people on the development stack, deleted after. Three
+changes from the plan while building it:
+
+1. **The link to a branch** sits right under the reply it answers and names
+   its writer, "1 more reply to Worf Mogh": placed after the reply followed,
+   it read as answering that one.
+2. **No step in at all,** after the user showed how Threads draws it: each
+   reply of a conversation at the same width, joined to the next by a line
+   in the pictures' column, from under one picture to the next. The writer's
+   own chain on the post's page is drawn the same way. The links to more
+   sit inside the reply they belong to, under its actions.
+3. **The chain above a reply's own page** is the post, then the reply just
+   above it, "Then replying to…" (`ReplyParent.jsx`), not every reply on the
+   way: each would be a request of its own, and these two say what is being
+   answered.

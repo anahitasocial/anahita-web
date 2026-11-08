@@ -89,6 +89,7 @@ export default {
     replyingTo: 'Replying to {{ name }}',
     replying: 'Replying to a post',
     answered: 'See the reply this answers',
+    thenTo: 'Then replying to {{ name }}',
   },
   // The setting for whether reposts show among a profile's posts.
   repostsOnProfile: {
@@ -148,4 +149,9 @@ export default {
     notAllowed: 'You are not allowed to reply here.',
   },
   answersNote: 'Replying to note {{ number }} of the thread',
+  conversation: {
+    show: 'Show the conversation ({{ count }})',
+    more: '{{ count }} more reply to {{ name }}',
+    more_other: '{{ count }} more replies to {{ name }}',
+  },
 };
