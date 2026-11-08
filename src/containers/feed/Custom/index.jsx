@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import Typography from '@mui/material/Typography';
@@ -12,12 +12,23 @@ import i18n from '../../../languages';
 import Progress from '../../../components/Progress';
 import FeedItems from '../components/Items';
 import NewPosts from '../components/NewPosts';
+import useBrowse from '../../browse/useBrowse';
 import useNewPosts from '../useNewPosts';
-import NodesType from '../../../proptypes/Nodes';
-import PersonType from '../../../proptypes/Person';
 import { App as APP } from '../../../constants';
 
 const { LIMIT } = APP.BROWSE;
+
+// No error here: a feed that cannot be read says why in its own place, not
+// in an alert as well (`failed` below).
+const select = (state) => {
+  const { feed_custom: items, hasMore, isFetching } = state.feedCustom;
+  return { items, hasMore, isFetching };
+};
+
+// The next page begins after what is held, as new posts go on top.
+const nextStart = (start, held) => {
+  return held;
+};
 
 // A custom feed's posts.
 //
@@ -27,43 +38,35 @@ const { LIMIT } = APP.BROWSE;
 const FeedCustomBrowse = ({
   feed,
   emptyText = '',
-  browseList,
-  resetList,
-  prependList,
-  items,
-  hasMore = true,
-  isFetching,
-  isAuthenticated,
-  viewer,
   columns = false,
 }) => {
+  const { isAuthenticated, viewer } = useSelector((state) => { return state.session; });
+
   // Why the feed could not be read, as the server's word for it.
   const [failure, setFailure] = useState('');
 
   // One list in the store for whichever feed is on the page: begun again
   // when the feed changes.
   const key = `feed-${feed.id}`;
-
-  const load = (start) => {
-    browseList({
-      feed,
-      start,
-      limit: LIMIT,
-    }).catch((response) => {
-      const data = (response && response.response && response.response.data) || {};
-      setFailure(data.error || 'generic');
-    });
-  };
-
   useEffect(() => {
     setFailure('');
-    resetList();
-    load(0);
-
-    return () => {
-      resetList();
-    };
   }, [key]);
+
+  const {
+    items, hasMore, isEmpty, next, prepend,
+  } = useBrowse({
+    browse: actions.feed_custom.browse,
+    reset: actions.feed_custom.reset,
+    prepend: actions.feed_custom.prepend,
+    select,
+    params: { feed },
+    queryKey: key,
+    nextStart,
+    failed: (response) => {
+      const data = (response && response.response && response.response.data) || {};
+      setFailure(data.error || 'generic');
+    },
+  });
 
   // What is posted while it is open is put at its top.
   const { waiting, show } = useNewPosts({
@@ -73,7 +76,7 @@ const FeedCustomBrowse = ({
       });
     },
     known: items.byId,
-    put: prependList,
+    put: prepend,
     feedKey: key,
   });
 
@@ -87,7 +90,7 @@ const FeedCustomBrowse = ({
     );
   }
 
-  if (!isFetching && !hasMore && items.allIds.length === 0) {
+  if (isEmpty) {
     return (
       <Typography variant="body1" color="textSecondary" sx={{ p: 2 }}>
         {emptyText || i18n.t('customFeeds:read.empty')}
@@ -100,11 +103,7 @@ const FeedCustomBrowse = ({
       <NewPosts count={waiting} onShow={show} />
       <InfiniteScroll
         dataLength={items.allIds.length}
-        next={() => {
-          if (!isFetching) {
-            load(items.allIds.length);
-          }
-        }}
+        next={next}
         hasMore={hasMore}
         loader={<Progress key="feed-custom-progress" />}
       >
@@ -123,53 +122,7 @@ const FeedCustomBrowse = ({
 FeedCustomBrowse.propTypes = {
   feed: PropTypes.object.isRequired,
   emptyText: PropTypes.string,
-  browseList: PropTypes.func.isRequired,
-  resetList: PropTypes.func.isRequired,
-  prependList: PropTypes.func.isRequired,
-  items: NodesType.isRequired,
-  hasMore: PropTypes.bool,
-  isFetching: PropTypes.bool.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired,
-  viewer: PersonType.isRequired,
   columns: PropTypes.bool,
 };
 
-const mapStateToProps = (state) => {
-  const {
-    isAuthenticated,
-    viewer,
-  } = state.session;
-
-  const {
-    feed_custom: items,
-    hasMore,
-    isFetching,
-  } = state.feedCustom;
-
-  return {
-    items,
-    hasMore,
-    isFetching,
-    isAuthenticated,
-    viewer,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  return {
-    browseList: (params) => {
-      return dispatch(actions.feed_custom.browse(params));
-    },
-    resetList: () => {
-      return dispatch(actions.feed_custom.reset());
-    },
-    prependList: (nodes) => {
-      return dispatch(actions.feed_custom.prepend(nodes));
-    },
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FeedCustomBrowse);
+export default FeedCustomBrowse;

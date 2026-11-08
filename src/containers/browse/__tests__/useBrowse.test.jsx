@@ -138,6 +138,31 @@ describe('useBrowse', () => {
     expect(alert).toBeTruthy();
   });
 
+  it('hands a refused page to the list that says why itself', async () => {
+    const { store } = listStore();
+    const refused = { response: { data: { error: 'not_found' } } };
+    let told = null;
+    const Refusing = () => {
+      useBrowse({
+        browse: () => { return () => { return Promise.reject(refused); }; },
+        reset,
+        select,
+        failed: (response) => { told = response; },
+      });
+      return null;
+    };
+    const withThunks = {
+      ...store,
+      dispatch: (action) => {
+        return typeof action === 'function' ? action(store.dispatch) : store.dispatch(action);
+      },
+    };
+    await act(async () => {
+      root.render(<Provider store={withThunks}><Refusing /></Provider>);
+    });
+    expect(told).toBe(refused);
+  });
+
   it('puts what is posted on top, through the list', () => {
     const { store, asked } = listStore();
     draw(store);

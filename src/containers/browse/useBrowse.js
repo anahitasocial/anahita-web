@@ -23,6 +23,9 @@ const { LIMIT } = APP.BROWSE;
 //   nextStart       where the next page begins, given the start and how many
 //                   are held; a page after the start unless said. The home
 //                   feed counts what it holds, as new posts go on top
+//   failed          given a page the server refused, for a list that says
+//                   why in its own place; such a list leaves `error` out of
+//                   what it selects, so that no alert is shown as well
 //
 // The pagination belongs to the query: `start` is worked out while drawing,
 // not reset in an effect, which would leave one moment with a new query and
@@ -38,6 +41,7 @@ const useBrowse = ({
   queryKey = '',
   limit = LIMIT,
   nextStart,
+  failed,
 }) => {
   const dispatch = useDispatch();
   const {
@@ -85,7 +89,10 @@ const useBrowse = ({
   }, [queryKey]);
 
   useEffect(() => {
-    dispatch(browse({ ...params, start, limit }));
+    const asked = dispatch(browse({ ...params, start, limit }));
+    if (failed && asked && asked.catch) {
+      asked.catch(failed);
+    }
   }, [start, queryKey]);
 
   useEffect(() => {
