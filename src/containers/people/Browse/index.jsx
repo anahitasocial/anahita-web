@@ -59,6 +59,7 @@ const People = ({ viewer, inviteSettings }) => {
           title={i18n.t('people:browse.title')}
           subheader={subheader}
           actionTo={canInvite ? '/invites' : ''}
+          actionState={{ invite: true }}
           actionLabel={i18n.t('invites:form.cTitle')}
         />
       </Box>

@@ -10,14 +10,17 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Fixed
 
-1. **A profile's page shows that profile.** Moving from one profile to
+1. **Inviting from People works:** the + led an administrator to a page
+   that broke the app. It now opens the invitation form on the Invites
+   page, whose own + is in its header, in place of a button at its foot.
+2. **A profile's page shows that profile.** Moving from one profile to
    another, as from a notification, could lead back to the profile one was
    on, or show the first one's name and profile photo under the new address.
-2. **A map's marker shows.** Its picture was broken: leaflet doubled its
+3. **A map's marker shows.** Its picture was broken: leaflet doubled its
    address.
-3. **The cookie notice on a mobile** sits at the foot, above the + button,
+4. **The cookie notice on a mobile** sits at the foot, above the + button,
    no longer over the logo.
-4. **Dates are written in the language shown.** moment's locales had been
+5. **Dates are written in the language shown.** moment's locales had been
    given to a second copy of it, so dates were in English.
 
 ### Changed

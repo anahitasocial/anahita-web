@@ -179,7 +179,7 @@ history. The main paths:
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The Hashtags page has Trending and All; the hashtags one follows are the ones in one's custom feeds, read there, not listed here (`containers/hashtags`). The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
-| `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites` |
+| `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites`. The People page's + leads here with the form already open (`{ invite: true }` in the router's state, kept through the redirect); the list's own + is in its header |
 | `/settings` | Site settings, for super administrators, and for administrators the Fediverse tab's refused accounts alone (`permissions/settings.js`). A page and a menu entry of its own: OAuth clients, signing keys, Privacy, which shows what the installation lets visitors read and can make everything public members-only, and Fediverse, what the site refuses, in two tabs: Servers and Accounts |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |

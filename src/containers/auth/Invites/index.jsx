@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
@@ -72,9 +73,12 @@ const InvitesPage = ({
   inviteSettings = {},
   embedded = false,
 }) => {
+  const location = useLocation();
+  const navigate = useNavigate();
   const [items, setItems] = useState([]);
   const [isFetching, setIsFetching] = useState(true);
-  const [formOpen, setFormOpen] = useState(false);
+  // Open from the start when the People page's + led here.
+  const [formOpen, setFormOpen] = useState(Boolean(location.state && location.state.invite));
   // How many of the viewer's invitations are waiting, as the server
   // counts them, kept up to date here as they send and revoke.
   const [pending, setPending] = useState(0);
@@ -122,6 +126,13 @@ const InvitesPage = ({
   useEffect(() => {
     fetchList();
   }, [fetchList]);
+
+  // Asked once: coming back to the page does not open the form again.
+  useEffect(() => {
+    if (location.state && location.state.invite) {
+      navigate(`${location.pathname}${location.search}`, { replace: true, state: null });
+    }
+  }, [location, navigate]);
 
   const handleAdd = (email) => {
     return api.invites.add(email)

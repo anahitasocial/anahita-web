@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Chip from '@mui/material/Chip';
@@ -102,6 +101,22 @@ const Invites = ({
             {i18n.t('invites:cTitle')}
           </Typography>
         }
+        // Adding is the header's +, as on the other lists; at the limit
+        // it stays, switched off, and the line below says why.
+        action={canAdd &&
+          <Tooltip title={i18n.t('invites:actions.add')}>
+            <span>
+              <IconButton
+                color="primary"
+                aria-label={i18n.t('invites:actions.add')}
+                onClick={onAdd}
+                disabled={remaining === 0}
+                size="large"
+              >
+                <AddIcon />
+              </IconButton>
+            </span>
+          </Tooltip>}
       />
       <Divider />
 
@@ -197,19 +212,6 @@ const Invites = ({
               : i18n.t('invites:atLimit', { count: maxPending })}
           </Typography>
         </CardContent>}
-
-      {canAdd &&
-        <CardActions sx={{ justifyContent: 'flex-end' }}>
-          <Button
-            color="primary"
-            variant="outlined"
-            startIcon={<AddIcon />}
-            onClick={onAdd}
-            disabled={remaining === 0}
-          >
-            {i18n.t('invites:actions.add')}
-          </Button>
-        </CardActions>}
 
       {/* Confirmed because revoking mails the person to say their link
           is dead. Without that mail the invitation would simply stop

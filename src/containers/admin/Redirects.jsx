@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { Navigate } from 'react-router-dom';
+import { Navigate, useLocation } from 'react-router-dom';
 
 import Invites from '../auth/Invites';
 import utils from '../../utils';
@@ -16,9 +16,12 @@ const InvitesPage = () => {
   const viewer = useSelector((state) => {
     return state.session.viewer;
   });
+  const location = useLocation();
 
+  // What the page was asked to do, as opening the form from People's +,
+  // goes with it.
   if (isAdmin(viewer)) {
-    return <Navigate to="/admin/invites" replace />;
+    return <Navigate to="/admin/invites" replace state={location.state} />;
   }
 
   return <Invites />;

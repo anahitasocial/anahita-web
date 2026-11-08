@@ -32,6 +32,7 @@ const BrowseHeader = ({
   title,
   subheader = '',
   actionTo = '',
+  actionState = null,
   actionLabel = '',
 }) => {
   return (
@@ -50,6 +51,7 @@ const BrowseHeader = ({
               color="primary"
               component={Link}
               to={actionTo}
+              state={actionState}
               aria-label={actionLabel}
               size="large"
             >
@@ -71,6 +73,8 @@ BrowseHeader.propTypes = {
   // itself.
   subheader: PropTypes.string,
   actionTo: PropTypes.string,
+  // The router's state for where the + leads: what it is to open there.
+  actionState: PropTypes.object,
   actionLabel: PropTypes.string,
 };
 

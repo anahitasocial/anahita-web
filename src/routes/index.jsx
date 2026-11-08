@@ -62,7 +62,13 @@ const SearchPage = lazy(() => { return import('../containers/search/Browse'); })
 const About = lazy(() => { return import('../containers/about'); });
 const Admin = lazy(() => { return import('../containers/admin'); });
 const Settings = lazy(() => { return import('../containers/settings'); });
-const AdminRedirects = lazy(() => { return import('../containers/admin/Redirects'); });
+// A lazy component is the module's default export, drawn as it is: one of
+// several components in it is taken out here, or it renders as undefined.
+const InvitesRedirect = lazy(() => {
+  return import('../containers/admin/Redirects').then((module) => {
+    return { default: module.default.InvitesPage };
+  });
+});
 const StaticPage = lazy(() => { return import('../containers/page'); });
 const WebsiteConnect = lazy(() => { return import('../containers/websites/Connect'); });
 
@@ -474,7 +480,7 @@ const AppRoutes = () => {
                 path="/invites"
                 element={
                   <AuthenticatedRoute>
-                    <AdminRedirects.InvitesPage />
+                    <InvitesRedirect />
                   </AuthenticatedRoute>
           }
               />
