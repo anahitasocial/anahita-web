@@ -540,6 +540,14 @@ Worf", to its page. On a reply's own page the box above it says what the
 whole chain answers: the post, then "Then replying to…" with the reply just
 above (`containers/replies/ReplyParent.jsx`).
 
+**Each reply is compact,** as Threads draws one (`ReplyItem.jsx`): the name,
+the handle and when on one line, the handle cut short before anything wraps;
+"Author" beside the post's writer's name where they reply; the words right
+under; then a heart and a reply icon, each with its number, small and close
+together at the left. A number the viewer may not add to is shown in grey,
+not offered. A thin rule parts one conversation from the next, and the box
+under the post says whom it answers ("Reply to Worf Mogh ...").
+
 **A thread** (roadmap row 126) is a post's writer going on under it: their
 earliest reply to the post, their earliest to that one, and so on
 (`utils/thread.js#chainOf`). On the post's page it comes first, flat and

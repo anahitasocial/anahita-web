@@ -6,6 +6,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import IconButton from '@mui/material/IconButton';
+import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import EditIcon from '@mui/icons-material/EditOutlined';
@@ -19,11 +20,11 @@ import Typography from '@mui/material/Typography';
 
 import LikeIcon from '@mui/icons-material/FavoriteBorder';
 import LikedIcon from '@mui/icons-material/Favorite';
+import ReplyIcon from '@mui/icons-material/ModeCommentOutlined';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import ActorAvatar from '../../components/ActorAvatar';
 import ActorHandle from '../../components/ActorHandle';
-import ActorTitle from '../../components/ActorTitle';
 import EntityBody from '../../components/NodeBody';
 import ReplyBox from './ReplyBox';
 import ReplyForm from './ReplyForm';
@@ -40,7 +41,23 @@ import thread from '../../utils/thread';
 import utils from '../../utils';
 import timeAgo from '../../utils/timeAgo';
 
-const { getAuthor } = utils.node;
+const { getActorName, getAuthor, getURL } = utils.node;
+
+// One line, cut short where it does not fit.
+const oneLine = {
+  minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+};
+
+// A reply's buttons: an icon and its number, as small as the text, close
+// together at the left (after Threads, the user, 2026-11-07). A number shown
+// where the button cannot be pressed is in grey, not faded.
+const action = {
+  minWidth: 0,
+  px: 1,
+  gap: 0.5,
+  '& .MuiButton-startIcon': { m: 0 },
+  '&.Mui-disabled': { color: 'text.secondary' },
+};
 
 // How far each level of a thread is set in from the one above: 24 pixels.
 // Every space in a thread is a whole number of the theme's 8-pixel steps.
@@ -71,6 +88,7 @@ const ReplyItem = ({
   context = '',
   joined = false,
   footer = null,
+  writerId = 0,
 }) => {
   const { reply, children } = node;
   const [menuAnchor, setMenuAnchor] = useState(null);
@@ -85,6 +103,7 @@ const ReplyItem = ({
 
   const authorized = reply.authorized || {};
   const author = reply.deleted ? {} : getAuthor(reply);
+  const isWriter = Boolean(writerId) && author.id === writerId;
   const closeMenu = () => {
     setMenuAnchor(null);
   };
@@ -120,6 +139,7 @@ const ReplyItem = ({
             onLike={onLike}
             onBlockFromOwner={onBlockFromOwner}
             blockFromOwnerLabel={blockFromOwnerLabel}
+            writerId={writerId}
           />
         );
       })}
@@ -191,26 +211,43 @@ const ReplyItem = ({
             '& p': { mt: 1, mb: 1 },
           }}
         >
+          {/* Name, handle and when, on one line, the handle cut short
+              before anything wraps; the words right under it. */}
           <Box sx={{
-            display: 'flex', alignItems: 'center', gap: 1, flexWrap: 'wrap', minHeight: HEAD,
+            display: 'flex', alignItems: 'center', gap: 1, minHeight: HEAD, minWidth: 0,
           }}
           >
-            <ActorTitle
-              actor={author}
-              linked={Boolean(author.id)}
-            />
+            <Typography
+              component="span"
+              variant="subtitle2"
+              sx={{ ...oneLine, flexShrink: 0, maxWidth: '60%' }}
+            >
+              {author.id ?
+                <Link href={getURL(author)} color="inherit" underline="hover">
+                  {getActorName(author)}
+                </Link> :
+                getActorName(author)}
+            </Typography>
             {/* Their handle in grey: @ana here, and the whole handle for
                 somebody on another server, which says where they are. */}
-            <ActorHandle actor={author} />
+            <Box component="span" sx={{ ...oneLine, flexShrink: 1 }}>
+              <ActorHandle actor={author} />
+            </Box>
+            {/* The post's writer, among the replies to it. */}
+            {isWriter &&
+              <Typography variant="caption" color="textSecondary" sx={{ flexShrink: 0 }}>
+                {i18n.t('replies:writer')}
+              </Typography>}
             <Typography
               variant="caption"
               color="textSecondary"
               title={moment.utc(reply.createdAt).local().format('LLL').toString()}
+              sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}
             >
               {timeAgo(reply.createdAt)}
             </Typography>
             {reply.hidden &&
-              <Chip size="small" label={i18n.t('replies:hidden.badge')} />}
+              <Chip size="small" label={i18n.t('replies:hidden.badge')} sx={{ flexShrink: 0 }} />}
           </Box>
           {/* A reply with pictures or a video shows them first, its words
               under them. 16 pixels show above and below: 8 above, since
@@ -231,9 +268,11 @@ const ReplyItem = ({
               <VideoPlayer video={reply.video} title={reply.title || ''} />
             </Box>}
           {!isEditing &&
-            <EntityBody contentFilter size="body2" lang={reply.language}>
-              {reply.content || ''}
-            </EntityBody>}
+            <Box sx={{ '& p:first-of-type': { mt: 0 } }}>
+              <EntityBody contentFilter size="body2" lang={reply.language}>
+                {reply.content || ''}
+              </EntityBody>
+            </Box>}
           {!isEditing && linkPreviews.isShown(reply.linkPreview) &&
             <LinkPreviewCard preview={reply.linkPreview} />}
           {isEditing &&
@@ -255,18 +294,9 @@ const ReplyItem = ({
             />}
           {!isEditing &&
             <Box sx={{
-              display: 'flex', alignItems: 'center', gap: 1, ml: -1, mt: 2,
+              display: 'flex', alignItems: 'center', gap: 1, ml: -1,
             }}
             >
-              {authorized.comment &&
-                <Button
-                  size="small"
-                  onClick={() => {
-                    setIsReplying(!isReplying);
-                  }}
-                >
-                  {i18n.t('replies:reply')}
-                </Button>}
               {(authorized.like || reply.likesCount > 0) &&
                 <Button
                   size="small"
@@ -279,11 +309,28 @@ const ReplyItem = ({
                     'replies:actions.unlike' :
                     'replies:actions.like')}
                   aria-pressed={Boolean(reply.isLikedByViewer)}
+                  sx={action}
                   onClick={() => {
                     onLike(reply);
                   }}
                 >
                   {reply.likesCount > 0 ? reply.likesCount : ''}
+                </Button>}
+              {(authorized.comment || reply.commentCount > 0) &&
+                <Button
+                  size="small"
+                  color="inherit"
+                  disabled={!authorized.comment}
+                  startIcon={<ReplyIcon fontSize="small" />}
+                  aria-label={i18n.t('replies:reply')}
+                  title={i18n.t('replies:reply')}
+                  aria-expanded={authorized.comment ? isReplying : undefined}
+                  sx={action}
+                  onClick={() => {
+                    setIsReplying(!isReplying);
+                  }}
+                >
+                  {reply.commentCount > 0 ? reply.commentCount : ''}
                 </Button>}
             </Box>}
           {footer}
@@ -425,6 +472,8 @@ ReplyItem.propTypes = {
   joined: PropTypes.bool,
   // Under its words and actions: the way to more of its conversation.
   footer: PropTypes.node,
+  // The post's writer: said beside their name where they reply.
+  writerId: PropTypes.number,
 };
 
 export default ReplyItem;

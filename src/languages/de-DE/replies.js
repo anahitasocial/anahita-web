@@ -5,6 +5,8 @@ export default {
   placeholderTo: '{{name}} antworten …',
   send: 'Antworten',
   more: 'Mehr Optionen',
+  // Beside the post's writer's name, where they reply.
+  writer: 'Autor',
   order: {
     label: 'Reihenfolge der Antworten',
     newest: 'Neueste',

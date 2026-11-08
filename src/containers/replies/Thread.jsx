@@ -324,6 +324,7 @@ const RepliesThread = ({
         node={node}
         context={answers ? i18n.t('replies:answersNote', { number: answers }) : ''}
         viewer={viewer}
+        writerId={writerOf(root)}
         onReply={handleReply}
         onEdit={handleEdit}
         onDelete={handleDelete}
@@ -368,6 +369,9 @@ const RepliesThread = ({
     const drawn = [{ reply: node.reply }, ...steps];
     return (
       <Box key={`conversation-${node.reply.id}`}>
+        {/* A thin rule between one conversation and the next: the line
+            joins only within one (after Threads, the user, 2026-11-07). */}
+        <Divider sx={{ mt: 1 }} />
         {drawn.map((each, index) => {
           const next = steps[index];
           const isLast = index === drawn.length - 1;
@@ -391,6 +395,7 @@ const RepliesThread = ({
               viewer={viewer}
               joined={!isLast}
               footer={footer}
+              writerId={writerOf(root)}
               context={chained.answers(each.reply) ?
                 i18n.t('replies:answersNote', { number: chained.answers(each.reply) }) : ''}
               onReply={handleReply}
@@ -442,6 +447,9 @@ const RepliesThread = ({
           autoFocus={Boolean(location.state && location.state.reply)}
           hint={staysHere ? i18n.t(staysHere) : ''}
           direction={postLanguage.directionOf(postLanguage.defaultFor(viewer))}
+          placeholder={(getAuthor(top) || {}).name ?
+            i18n.t('replies:placeholderTo', { name: getAuthor(top).name }) :
+            i18n.t('replies:placeholder')}
           attachments
           onSubmit={(body, card, attached) => {
             return handleReply(top, body, card, attached);

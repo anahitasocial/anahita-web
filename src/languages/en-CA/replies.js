@@ -5,6 +5,8 @@ export default {
   placeholderTo: 'Reply to {{name}} ...',
   send: 'Reply',
   more: 'More options',
+  // Beside the post's writer's name, where they reply.
+  writer: 'Author',
   order: {
     label: 'Order of replies',
     newest: 'Newest',
