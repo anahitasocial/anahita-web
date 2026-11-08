@@ -4,13 +4,16 @@ import { useTheme } from '@mui/material/styles';
 import { makeStyles } from 'tss-react/mui';
 import CssBaseline from '@mui/material/CssBaseline';
 import { connect, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 import AppBar from '@mui/material/AppBar';
 import Container from '@mui/material/Container';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import MenuIcon from '@mui/icons-material/Menu';
+import BackIcon from '@mui/icons-material/ArrowBack';
+import SearchIcon from '@mui/icons-material/Search';
+import useMediaQuery from '@mui/material/useMediaQuery';
 import Toolbar from '@mui/material/Toolbar';
 
 import IconButton from '@mui/material/IconButton';
@@ -119,6 +122,19 @@ const App = ({
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = useState(false);
+  const location = useLocation();
+  // On a mobile, the search is a magnifying glass until it is opened, and
+  // open on the search page itself.
+  const mobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const onSearchPage = location.pathname.startsWith('/search');
+  const [searchOpen, setSearchOpen] = useState(false);
+  const searching = searchOpen || onSearchPage;
+  // Gone somewhere from the search: the bar as it was.
+  useEffect(() => {
+    if (!onSearchPage) {
+      setSearchOpen(false);
+    }
+  }, [location.pathname]);
 
   useEffect(() => {
     whoami();
@@ -197,25 +213,55 @@ const App = ({
       <CookieNotice />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label={i18n.t('commons:openMenu')}
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-            size="large"
-          >
-            <MenuIcon />
-          </IconButton>
+          {mobile && searching ?
+            <IconButton
+              color="inherit"
+              aria-label={i18n.t('actions:back')}
+              edge="start"
+              onClick={() => {
+                setSearchOpen(false);
+                if (onSearchPage) {
+                  navigate(-1);
+                }
+              }}
+              className={classes.menuButton}
+              size="large"
+            >
+              <BackIcon />
+            </IconButton> :
+            <IconButton
+              color="inherit"
+              aria-label={i18n.t('commons:openMenu')}
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+              size="large"
+            >
+              <MenuIcon />
+            </IconButton>}
           {/* Nothing to search on a members-only site until signed in:
-              the search would only be refused. */}
-          {!isShutOut && <SearchBox />}
-          <div className={classes.grow} />
-          {isAuthenticated && <NotificationButton />}
-          <Viewer
-            viewer={viewer}
-            isAuthenticated={isAuthenticated}
-          />
+              the search would only be refused. On a mobile the box is a
+              magnifying glass beside the bell, which turns the bar into
+              the box, at its whole width, with a way back (the user,
+              2026-11-07, after Facebook); on the search page it stays so,
+              for the search to be changed. */}
+          {!isShutOut && (!mobile || searching) &&
+            <SearchBox autoFocus={mobile && !onSearchPage} />}
+          {!(mobile && searching) && <div className={classes.grow} />}
+          {!isShutOut && mobile && !searching &&
+            <IconButton
+              color="inherit"
+              aria-label={i18n.t('search:cTitle')}
+              onClick={() => { setSearchOpen(true); }}
+            >
+              <SearchIcon />
+            </IconButton>}
+          {!(mobile && searching) && isAuthenticated && <NotificationButton />}
+          {!(mobile && searching) &&
+            <Viewer
+              viewer={viewer}
+              isAuthenticated={isAuthenticated}
+            />}
         </Toolbar>
       </AppBar>
       <nav className={classes.drawer}>

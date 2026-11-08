@@ -1,4 +1,5 @@
 export default {
+  back: 'Zurück',
   // A notice's link to what it is about: a post just made.
   view: 'Ansehen',
   addCover: 'Titelbild hinzufügen',

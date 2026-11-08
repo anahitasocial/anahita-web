@@ -1,4 +1,5 @@
 export default {
+  back: 'Voltar',
   // A notice's link to what it is about: a post just made.
   view: 'Ver',
   addCover: 'Adicionar uma foto de capa',

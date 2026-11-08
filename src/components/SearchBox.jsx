@@ -76,7 +76,7 @@ const filterRecent = createFilterOptions({
 // the router, without reloading the app, and says that the search was
 // typed here: the search page looks a handle up on its own server only
 // for a search somebody typed, not for one a link opened.
-const SearchBox = ({ viewer, isAuthenticated }) => {
+const SearchBox = ({ viewer, isAuthenticated, autoFocus = false }) => {
   const { classes } = useStyles();
   const navigate = useNavigate();
   const location = useLocation();
@@ -166,7 +166,15 @@ const SearchBox = ({ viewer, isAuthenticated }) => {
           return (
             <li key={key} {...rest}>
               <HistoryIcon fontSize="small" color="action" sx={{ mr: 1.5 }} />
-              <Box component="span" sx={{ flexGrow: 1, overflowWrap: 'anywhere' }}>
+              {/* One line, cut short, its whole on hover: a handle broke
+                  across lines at its dots and dashes. */}
+              <Box
+                component="span"
+                title={option.term}
+                sx={{
+                  flexGrow: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+                }}
+              >
                 {option.term}
               </Box>
               <IconButton
@@ -192,13 +200,16 @@ const SearchBox = ({ viewer, isAuthenticated }) => {
         slotProps={{
           popper: {
             placement: 'bottom-start',
-            sx: { minWidth: 280 },
+            // Room for a whole handle beside its icons, short of the
+            // screen's edge on a mobile.
+            sx: { minWidth: 'min(360px, calc(100vw - 16px))' },
           },
         }}
         renderInput={(params) => {
           return (
             <InputBase
               ref={params.slotProps.input.ref}
+              autoFocus={autoFocus}
               placeholder={i18n.t('search:boxPlaceholder')}
               classes={{
                 root: classes.inputRoot,
@@ -223,6 +234,8 @@ SearchBox.propTypes = {
     id: PropTypes.number,
   }).isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
+  // Focused when it appears: on a mobile, opened from the magnifying glass.
+  autoFocus: PropTypes.bool,
 };
 
 const mapStateToProps = (state) => {

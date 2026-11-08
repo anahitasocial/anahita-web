@@ -22,44 +22,47 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Changed
 
-1. **Lighter marks:** the line leading to a video kept on Bluesky has a
+1. **Search on a mobile is a magnifying glass** beside the bell; it opens
+   the search box across the bar, with Back to close it. Recent searches
+   stay on one line, a long handle cut short, its whole on hover.
+2. **Lighter marks:** the line leading to a video kept on Bluesky has a
    light play icon, not a heavy triangle; the notifications bell is plain,
    not a second round picture beside the viewer's own; a profile photo seen
    larger is round, with a ring, as it is everywhere else.
-2. **A conversation reads as one** (roadmap row 129): under each reply, the
+3. **A conversation reads as one** (roadmap row 129): under each reply, the
    replies to it at the same width, joined by a line in the pictures'
    column, as Threads draws it; three in sight, then "Show the
    conversation"; a reply with more than one answer says how many more,
    under it. A reply's own page says, above it, the post and the
    reply it answers. Each reply still answers what it answered.
-3. **A repost says it is one:** "Reposted" before when, in its header.
-4. **A post's numbers show without opening it:** the reply button has its
+4. **A repost says it is one:** "Reposted" before when, in its header.
+5. **A post's numbers show without opening it:** the reply button has its
    count beside likes and reposts, and somebody not signed in sees all
    three. In Interactions they are asked to sign in to see who, and a list
    whose people keep their profiles private says so, where both had read
    as an error.
-5. **A reply sends on Enter,** on a mobile too, from the one-line box,
+6. **A reply sends on Enter,** on a mobile too, from the one-line box,
    which has no send button now, only the way to the whole form; Shift and
    Enter make a new line. Above a reply on its own page, the whole "Replying
    to" box opens what it answers.
-6. **A thread reads as one** (roadmap row 126): in a list, a post its
+7. **A thread reads as one** (roadmap row 126): in a list, a post its
    writer went on under shows the next note and "Show the thread" with how
    many notes it has; on the post's page their notes come first, flat and
    joined by a line, and everybody else's replies after them. Writing one,
    each note counts its letters against where the post goes (300 for
    Bluesky, 500 for the fediverse), "Add to thread" is offered when a note
    is full, and long words can be split into a thread in one tap.
-7. **The Feeds page lists every feed one may see** (roadmap row 125), newest
+8. **The Feeds page lists every feed one may see** (roadmap row 125), newest
    first: Everyone's, People you follow, Yours, or On your home, in its
    order; a page at a time as one scrolls, with a line to Search › Feeds.
    Edit, Delete and Share are in a menu on each row.
-8. **The first page loads faster:** each page's code is fetched when it is
+9. **The first page loads faster:** each page's code is fetched when it is
    first opened, maps only where one is shown, and only the language shown;
    what the first page loads went from 3,097 kB to 1,895 kB (935 kB to
    646 kB gzipped).
-9. **A card's buttons are in its action row,** at its foot: the feed's
+10. **A card's buttons are in its action row,** at its foot: the feed's
    page, the feed form, the group and event forms, an event's panel.
-10. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
+11. **Adding a feed is at `/feeds/add`.** `/feeds/new` leads there.
 
 ### Added
 
