@@ -135,7 +135,7 @@ Each milestone ends in a shippable state.
 | 127 | ✅ | BREAD names in the services' code, asked for by the user on 2026-11-07 ("we would want to stick to BREAD as much as possible"), after anahita-web's were changed the same day: thirty functions in seven services and anahita-libs named `List`, `Remove` or `Update` become `Browse`, `Delete` and `Edit`, five of them gRPC methods, served under both names for one release so that a rolling deploy breaks nothing; Go's `NewX` and `GetX`, and the AT Protocol's own `CreateRecord` and `CreateSession`, kept. **Planned for later on 2026-11-07, at the user's word, after row 126** **Done the same day, for v1.0.17:** renamed with gopls, the API reference made again, the old gRPC names in `old_names.go` until the release after; tried on the dev stack | [bread-names.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/done/bread-names.md) | services | 1 | — |
 | 128 | ✅ | A smaller first script, offered on 2026-11-07 as work needing no feedback, and taken for v1.0.17 at the user's word: every build warned that the web app's script was 3 MB, all loaded before anything showed. **Done the same day:** each page's code fetched when first opened, but the home feed, the landing page and a post; maps and leaflet only where a map is shown, keeping its room; only the lodash functions used. What the first page loads went from 3,097 kB to 2,480 kB (935 to 811 kB gzipped). On the way, a map's marker, a broken picture since leaflet doubled its address, put right. **Then the same day, after rows 125 and 126, at the user's word:** only the language shown fetched, before the app is drawn, so nothing shows in English first; moment in the first script once, not twice, its locales given to the copy the app uses, so dates are in the language shown. What the first page loads: 1,895 kB, 646 kB gzipped. moment itself, and MUI and React, are what remain | [architecture.md › Routes](../architecture.md#routes) | web | 1 | — |
 | 129 | ✅ | Conversations that read as conversations, asked for by the user on 2026-11-07: a reply to a reply to a reply stepped further in each time. Settled the same day: the data stays a tree, each reply's parent kept as the fediverse and Bluesky need; only the drawing changes, as Bluesky and Threads draw it: one level of nesting at most, a conversation flat and joined by a line, its earliest branch followed and the rest counted, three in sight under each reply then "Show the conversation", a reply's page with the chain it answers above it, and "Replying to @name" where the place no longer says it **Done the same day, before v1.0.18:** the rules with tests, both pages; the link to a branch under the reply it answers, naming its writer; above a reply's page the post and the reply it answers; tried with a branching conversation of seven replies at both sizes | [reply-threads.md](done/reply-threads.md) | web | 1.5 | 126 |
-| 130 | ⬜ | Asking to follow on the fediverse, asked for by the user on 2026-11-07: a Mastodon profile that approves its followers showed only Follow, then Following at once, and counted the follow, though nothing comes until they accept and Mastodon often never answers. Their `manuallyApprovesFollowers` is already read and kept, and the follow kept as pending; neither reaches the graph or the web app. Following such a profile becomes a request to follow, the edge local profiles use, sent as `Follow` and made a follow on `Accept`; the button says "Request to follow", then "Requested", as it does for a profile here seen only by its followers; follows pending on a site turned into requests by a migration. Bluesky has no requests to follow **Planned on 2026-11-07, at the user's word** | [remote-follow-requests.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/remote-follow-requests.md) | services + web | 1.5 | — |
+| 130 | ✅ | Asking to follow on the fediverse, asked for by the user on 2026-11-07: a Mastodon profile that approves its followers showed only Follow, then Following at once, and counted the follow, though nothing comes until they accept and Mastodon often never answers. Their `manuallyApprovesFollowers` is already read and kept, and the follow kept as pending; neither reaches the graph or the web app. Following such a profile becomes a request to follow, the edge local profiles use, sent as `Follow` and made a follow on `Accept`; the button says "Request to follow", then "Requested", as it does for a profile here seen only by its followers; follows pending on a site turned into requests by a migration. Bluesky has no requests to follow **Planned on 2026-11-07, at the user's word** **Done the same day:** the column the rules already read, `allow_follow_request`, carries it, not a new one; following such a profile outright refused, asking it sent as a `Follow` and settled by their answer through the graph's own accept; the button "Request to follow", then "Requested"; follows already waiting made requests by a migration; the sweep taught to leave a waiting request alone; tried against a real Mastodon account, asked, waiting and accepted | [remote-follow-requests.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/done/remote-follow-requests.md) | services + web | 1.5 | — |
 | 131 | ⬜ | Content Credentials, asked for by the user on 2026-11-07 ("let's definitely implement C2PA checking"): a photo or video whose signed C2PA manifest checks out against the trust list shows a small mark, and pressed, what it proves in plain words ("Taken with a Leica M11-P. Signed by Leica Camera AG"; "Made with AI, with DALL·E. Signed by OpenAI"); nothing said where there is none. Read on upload, before Anahita makes its own sizes, by a small `credentials-service` on glibc with the C2PA project's own prebuilt library for both platforms and a thin Go wrapper of ours: no Rust to keep. Reading only; signing Anahita's own copies left for when other networks read them **Planned on 2026-11-07, at the user's word** | [content-credentials.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/content-credentials.md) | services + web | 3 | 122 for Made with AI |
 | 132 | ⬜ | Deleting one's old posts, asked for by the user on 2026-11-07 from FediDB's list ("Automatically delete old posts"): each person's own choice, off for everybody, under Settings › Privacy; older than a month up to two years, keeping pinned posts, their own saves, articles and posts with at least 10 likes and reposts; their posts on their own profile and their replies, not what they posted in a group or an event; deleted in the hourly sweeper as their own Delete would, on the fediverse and Bluesky too; how many would go said first, and nothing deleted until a day after it is turned on. An operator never deletes people's posts by a setting **Planned on 2026-11-07, at the user's word** | [old-posts.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/old-posts.md) | services + web | 2 | — |
 | 133 | ⬜ | Muting profiles: their posts, replies and notifications out of the viewer's sight, without their being told or anything sent to their server, as Mastodon's mutes; in the Mastodon CSV that row 124 imports and exports, so mutes come and go with a person. Anahita has blocks and no mutes **Planned on 2026-11-07, at the user's word,** from FediDB's comparison with Mastodon, Pixelfed and Loops and the user's own list, Mastodon first for its share of the fediverse; its plan written when it is reached | to be written | services + web | 1½ | — |
@@ -177,31 +177,31 @@ the rows after it touch, so that the features further down are never kept
 waiting by a long refactoring. Each row's plan is checked against the code,
 or written, when it is reached.
 
-1. **130,** asking to follow on the fediverse: wrong on banu.io today.
+1. **30, phases 1 and 2,** recipes: `site/` with `classic`, then `from-php`:
+   first, at the user's word, for the people waiting to try Anahita.
 2. **140, stage 1,** the lists: split before they gain ways to be shown.
-3. **30, phases 1 and 2,** recipes: `site/` with `classic`, then `from-php`.
-4. **141, phases 1 and 2,** seeing inside and the load test, on the
+3. **141, phases 1 and 2,** seeing inside and the load test, on the
    `classic` site; its other phases placed by what the test finds.
-5. **133,** muting: there are no mutes to import until there are mutes.
-6. **142, phase 1,** imports in export-service, which 124's go through.
-7. **124, parts 1 to 3,** moving: who you follow, blocks and mutes in
+4. **133,** muting: there are no mutes to import until there are mutes.
+5. **142, phase 1,** imports in export-service, which 124's go through.
+6. **124, parts 1 to 3,** moving: who you follow, blocks and mutes in
    Mastodon's CSV; following somebody who moved; moving with followers, and
    accepting followers moving in.
-8. **140, stage 2,** the composer.
-9. **139,** a web app that fits its site; then **30, phases 3 and 4,**
+7. **140, stage 2,** the composer.
+8. **139,** a web app that fits its site; then **30, phases 3 and 4,**
    `microblog` and the Recipes page on anahita.io.
-10. **134,** interacting from another server.
-11. **122,** content warnings, with Made with AI: before messages, and before
+9. **134,** interacting from another server.
+10. **122,** content warnings, with Made with AI: before messages, and before
    growth.
-12. **140, stage 3,** the photo and video pages and the upload.
-13. **135,** WebP, HEIC and AVIF; **136,** the focal point; **131,** Content
+11. **140, stage 3,** the photo and video pages and the upload.
+12. **135,** WebP, HEIC and AVIF; **136,** the focal point; **131,** Content
     Credentials: three changes to the same step of an upload, done together.
-14. **137,** audio, with 120.
-15. **140, stage 4,** the replies and settings.
-16. **123,** direct messages: the largest, after mutes and warnings.
-17. **132,** deleting one's old posts.
-18. **138,** the mobile app: push matters most once there are messages.
-19. **30, phase 5,** the `long-form`, `video` and `events` recipes, each
+13. **137,** audio, with 120.
+14. **140, stage 4,** the replies and settings.
+15. **123,** direct messages: the largest, after mutes and warnings.
+16. **132,** deleting one's old posts.
+17. **138,** the mobile app: push matters most once there are messages.
+18. **30, phase 5,** the `long-form`, `video` and `events` recipes, each
     with its gaps weighed first.
 
 **Mastodon's features kept for later,** not planned:

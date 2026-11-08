@@ -1561,6 +1561,14 @@ follow", then "Requested", which takes the request back when pressed. Whoever
 looks after the profile answers from the follow requests on their own
 profile, and is told by a notification.
 
+**Somebody elsewhere who approves their followers** (roadmap row 130) is
+public, and asked all the same: their server holds a follow until they
+answer. The server marks them `allow_follow_request`, and the Follow control
+itself (`containers/controls/Follow.jsx`) then says "Request to follow",
+then "Requested", from `is_follow_requested_by_viewer`, keeping its sizes
+and its place in menus. Their server's yes makes it a follow, shown the next
+time the profile is read.
+
 ### The home page of somebody not signed in
 
 `assets/default/home`, the theme's, drawn at `/` in place of the feeds. It is

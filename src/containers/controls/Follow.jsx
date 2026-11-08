@@ -10,6 +10,7 @@ import UnfollowIcon from '@mui/icons-material/PersonRemoveOutlined';
 import MenuItemLabel from '../../components/MenuItemLabel';
 
 import actions from '../../actions/socialgraph';
+import api from '../../api';
 import appActions from '../../actions/app';
 import utils from '../../utils';
 import PersonType from '../../proptypes/Person';
@@ -42,6 +43,12 @@ const ControlsFollow = React.forwardRef((props, ref) => {
 
   const [leader, setLeader] = useState(actor.isLeadingViewer);
   const [waiting, setWaiting] = useState(false);
+  // Somebody elsewhere who approves their followers is asked, as a profile
+  // here seen only by its followers is: "Request to follow", then
+  // "Requested" until their server answers (roadmap row 130). Their yes
+  // makes it a follow, shown the next time the profile is read.
+  const asks = !leader && utils.federation.isRemote(actor) && Boolean(actor.allowFollowRequest);
+  const [requested, setRequested] = useState(Boolean(actor.isFollowRequestedByViewer));
 
   // A follow or an unfollow that fails gives the button back and says so,
   // in a sentence (the user, 2026-10-19). It used to wait for ever: the
@@ -68,6 +75,22 @@ const ControlsFollow = React.forwardRef((props, ref) => {
     });
   };
 
+  const handleAsk = () => {
+    setWaiting(true);
+    const call = requested ?
+      api.socialgraph.withdrawFollowRequest({ actor, viewer }) :
+      api.socialgraph.requestFollow({ actor, viewer });
+    return call
+      .then(() => {
+        setWaiting(false);
+        setRequested(!requested);
+      })
+      .catch(() => {
+        setWaiting(false);
+        alertError(i18n.t('actor:limited.failed'));
+      });
+  };
+
   const handleUnfollow = () => {
     setWaiting(true);
     unfollowActor({ actor, viewer })
@@ -80,12 +103,19 @@ const ControlsFollow = React.forwardRef((props, ref) => {
 
   const askLabel = followLabel ||
     i18n.t(actor.isFollowingViewer ? 'actions:followBack' : 'actions:follow');
-  const title = leader ? unfollowLabel : askLabel;
-  const onClick = leader ? handleUnfollow : handleFollow;
-  const color = leader ? 'inherit' : 'primary';
+  let title = leader ? unfollowLabel : askLabel;
+  let onClick = leader ? handleUnfollow : handleFollow;
+  // Done already, in the colour of what is done: following, or asked.
+  let done = leader;
+  if (asks) {
+    title = i18n.t(requested ? 'actor:limited.requested' : 'actor:limited.request');
+    onClick = handleAsk;
+    done = requested;
+  }
+  const color = done ? 'inherit' : 'primary';
   let drawn = variant;
   if (prominent) {
-    drawn = leader ? 'outlined' : 'contained';
+    drawn = done ? 'outlined' : 'contained';
   }
 
   if (component === 'menuitem') {
@@ -96,7 +126,7 @@ const ControlsFollow = React.forwardRef((props, ref) => {
           disabled={waiting}
           ref={ref}
         >
-          <MenuItemLabel icon={leader ? <UnfollowIcon fontSize="small" /> : <FollowIcon fontSize="small" />}>
+          <MenuItemLabel icon={done ? <UnfollowIcon fontSize="small" /> : <FollowIcon fontSize="small" />}>
             {title}
           </MenuItemLabel>
         </MenuItem>
@@ -113,7 +143,11 @@ const ControlsFollow = React.forwardRef((props, ref) => {
         color={color}
         fullWidth={fullWidth}
         variant={drawn}
-        startIcon={leader ? null : <AddIcon />}
+        // A plus before Follow, as everywhere; asking has none, as on a
+        // profile here.
+        startIcon={leader || asks ? null : <AddIcon />}
+        // What pressing "Requested" does.
+        title={asks && requested ? i18n.t('actor:limited.withdraw') : undefined}
         ref={ref}
       >
         {title}
