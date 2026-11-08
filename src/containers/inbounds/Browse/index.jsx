@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import { makeStyles } from 'tss-react/mui';
 
@@ -8,7 +7,6 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 
 import actions from '../../../actions';
 import NodeType from '../../../proptypes/Node';
-import NodesType from '../../../proptypes/Nodes';
 
 import ActorCard from '../../../components/ActorCard';
 import Masonry from '../../../components/BreakpointMasonry';
@@ -16,15 +14,25 @@ import MediumNode from '../../nodes/MediumNode';
 import Progress from '../../../components/Progress';
 import { App as APP } from '../../../constants';
 
+import useBrowse from '../../browse/useBrowse';
 import utils from '../../../utils/node';
 
 const {
-  LIMIT,
   SORTING: {
     TOP,
     RECENT,
   },
 } = APP.BROWSE;
+
+// Counted against the total, as the server says how many there are.
+const select = (state) => {
+  const {
+    inbounds: items, error, total, isFetching,
+  } = state.inbounds;
+  return {
+    items, error, total, isFetching,
+  };
+};
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -34,56 +42,36 @@ const useStyles = makeStyles()((theme) => {
   };
 });
 
+// The posts and profiles tagged with a hashtag or a location: the list
+// through useBrowse, drawn as cards in a masonry. The page gives each sort
+// its own list.
 const InboundsBrowse = ({
-  browseList,
-  resetList,
-  alertError,
   tag,
-  items,
-  error,
-  total = 0,
-  isFetching,
   queryFilters: {
     sort = TOP,
   },
 }) => {
   const { classes } = useStyles();
 
-  const [start, setStart] = useState(0);
-
-  useEffect(() => {
-    return () => {
-      resetList(tag);
+  const list = useMemo(() => {
+    const tagged = actions.inbounds(tag);
+    return {
+      browse: tagged.browse,
+      reset: tagged.reset,
     };
-  }, [tag]);
+  }, [tag.id]);
 
-  useEffect(() => {
-    if (error) {
-      alertError(error);
-    }
-  }, [error]);
-
-  useEffect(() => {
-    if (!isFetching) {
-      browseList(tag, {
-        tag,
-        sort,
-        start,
-        limit: LIMIT,
-      });
-    }
-  }, [start, sort]);
-
-  const fetchList = () => {
-    return setStart(start + LIMIT);
-  };
-
-  const hasMore = total > items.allIds.length;
+  const { items, hasMore, next } = useBrowse({
+    ...list,
+    select,
+    params: { tag, sort },
+    queryKey: `${tag.id}|${sort}`,
+  });
 
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
-      next={fetchList}
+      next={next}
       hasMore={hasMore}
       loader={
         <Progress key="items-progress" />
@@ -107,52 +95,12 @@ const InboundsBrowse = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  const {
-    inbounds: items,
-    error,
-    total,
-    isFetching,
-  } = state.inbounds;
-
-  return {
-    items,
-    error,
-    total,
-    isFetching,
-  };
-};
-
 InboundsBrowse.propTypes = {
-  browseList: PropTypes.func.isRequired,
-  resetList: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
   tag: NodeType.isRequired,
-  items: NodesType.isRequired,
   queryFilters: PropTypes.shape({
     sort: PropTypes.oneOf([TOP, RECENT]),
     q: PropTypes.string,
   }),
-  error: PropTypes.string.isRequired,
-  total: PropTypes.number,
-  isFetching: PropTypes.bool.isRequired,
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    browseList: (tag, params) => {
-      return dispatch(actions.inbounds(tag).browse(params));
-    },
-    resetList: (tag) => {
-      return dispatch(actions.inbounds(tag).reset());
-    },
-    alertError: (message) => {
-      return dispatch(actions.app.alert.error(message));
-    },
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(InboundsBrowse);
+export default InboundsBrowse;
