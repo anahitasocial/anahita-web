@@ -70,6 +70,7 @@ const CompleteProfileCard = ({ viewer }) => {
         />
         <CardActions>
           <Button
+            fullWidth
             component={RouterLink}
             to="/onboarding"
             color="primary"

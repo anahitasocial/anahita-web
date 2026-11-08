@@ -87,7 +87,7 @@ const VideoOnItsWayCard = () => {
           </CardContent>
           {isSending &&
             <CardActions sx={{ justifyContent: 'flex-end' }}>
-              <Button onClick={upload.cancel}>
+              <Button fullWidth onClick={upload.cancel}>
                 {i18n.t('videos:upload.cancel')}
               </Button>
             </CardActions>}
@@ -102,7 +102,7 @@ const VideoOnItsWayCard = () => {
             </CardActions>}
           {failed && !canRetry &&
             <CardActions sx={{ justifyContent: 'flex-end' }}>
-              <Button onClick={upload.reset}>
+              <Button fullWidth onClick={upload.reset}>
                 {i18n.t('videos:upload.dismiss')}
               </Button>
             </CardActions>}

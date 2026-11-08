@@ -57,8 +57,9 @@ const Promises = () => {
           </CardContent>
         </>}
       {hasRules &&
-        <CardActions sx={{ px: 2, pb: 2 }}>
+        <CardActions>
           <Button
+            fullWidth
             component={RouterLink}
             to="/rules"
             startIcon={<RulesIcon />}

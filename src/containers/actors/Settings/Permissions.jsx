@@ -226,6 +226,7 @@ const ActorsSettingsPermissions = (props) => {
           {/* No confirmation, as on the Access card: every value is on
               screen and restoring is undone by setting them again. */}
           <Button
+            fullWidth
             onClick={() => {
               return save([]);
             }}
@@ -234,6 +235,7 @@ const ActorsSettingsPermissions = (props) => {
             {i18n.t('actor:permissions.restoreDefaults')}
           </Button>
           <Button
+            fullWidth
             type="submit"
             variant="contained"
             color="primary"

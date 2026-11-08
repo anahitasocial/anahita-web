@@ -11,15 +11,21 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Chip from '@mui/material/Chip';
 import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
 import Link from '@mui/material/Link';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
 import BackIcon from '@mui/icons-material/ArrowBack';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import RefuseIcon from '@mui/icons-material/BlockOutlined';
+import SpamIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
 import actions from '../../../actions';
 import api from '../../../api';
@@ -27,6 +33,7 @@ import i18n from '../../../languages';
 import utils from '../../../utils';
 
 import ResolveDialog from './ResolveDialog';
+import MenuItemLabel from '../../../components/MenuItemLabel';
 import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
 import useRefuseAccount, { canRefuseAccount } from '../../moderation/useRefuseAccount';
 import target from './target';
@@ -71,6 +78,8 @@ const ReportsCase = ({
   const [notFound, setNotFound] = useState(false);
   const [resolving, setResolving] = useState('');
   const [submitting, setSubmitting] = useState(false);
+  // The menu of what else an administrator may do, at the case's head.
+  const [menuAnchor, setMenuAnchor] = useState(null);
   const viewer = useSelector((state) => { return state.session.viewer; });
   // A person or a group reported as spam, removed from here at once (roadmap
   // row 102); the case is then closed as removed as spam.
@@ -233,11 +242,24 @@ const ReportsCase = ({
               </>
             }
             action={
-              <Chip
-                size="small"
-                label={statusLabel}
-                color={isOpen ? 'primary' : 'default'}
-              />
+              <>
+                <Chip
+                  size="small"
+                  label={statusLabel}
+                  color={isOpen ? 'primary' : 'default'}
+                />
+                {/* What else an administrator may do about it: the third
+                    action and after go in a menu (AGENTS.md, rule 2). */}
+                {targetUrl && (spam.canRemove || refuse.canRefuse) &&
+                  <IconButton
+                    size="small"
+                    aria-label={i18n.t('actions:more')}
+                    onClick={(event) => { setMenuAnchor(event.currentTarget); }}
+                    sx={{ ml: 1 }}
+                  >
+                    <MoreVertIcon fontSize="small" />
+                  </IconButton>}
+              </>
             }
             // The text wraps beside the status, never under it.
             sx={{
@@ -268,18 +290,40 @@ const ReportsCase = ({
                 </Typography>
               </CardContent>
               <CardActions>
-                <Button component={RouterLink} to={targetUrl} color="primary">
+                <Button fullWidth component={RouterLink} to={targetUrl} color="primary">
                   {i18n.t('abuseReports:case.open')}
                 </Button>
-                {spam.canRemove &&
-                  <Button color="error" disabled={submitting} onClick={spam.open}>
-                    {i18n.t('abuseReports:spam.action')}
-                  </Button>}
-                {refuse.canRefuse &&
-                  <Button color="error" disabled={submitting} onClick={refuse.open}>
-                    {i18n.t('abuseReports:refuse.caseAction')}
-                  </Button>}
               </CardActions>
+              <Menu
+                anchorEl={menuAnchor}
+                open={Boolean(menuAnchor)}
+                onClose={() => { setMenuAnchor(null); }}
+              >
+                {spam.canRemove &&
+                  <MenuItem
+                    disabled={submitting}
+                    onClick={() => {
+                      setMenuAnchor(null);
+                      spam.open();
+                    }}
+                  >
+                    <MenuItemLabel icon={<SpamIcon fontSize="small" />}>
+                      {i18n.t('abuseReports:spam.action')}
+                    </MenuItemLabel>
+                  </MenuItem>}
+                {refuse.canRefuse &&
+                  <MenuItem
+                    disabled={submitting}
+                    onClick={() => {
+                      setMenuAnchor(null);
+                      refuse.open();
+                    }}
+                  >
+                    <MenuItemLabel icon={<RefuseIcon fontSize="small" />}>
+                      {i18n.t('abuseReports:refuse.caseAction')}
+                    </MenuItemLabel>
+                  </MenuItem>}
+              </Menu>
             </>}
         </Card>
       </Box>
@@ -323,7 +367,7 @@ const ReportsCase = ({
                 {i18n.t('abuseReports:resolve.hint')}
               </Typography>
             </CardContent>}
-          <CardActions sx={{ justifyContent: 'flex-end', px: 2, pb: 2 }}>
+          <CardActions sx={{ justifyContent: 'flex-end' }}>
             {isOpen &&
               <>
                 <Button
@@ -349,7 +393,7 @@ const ReportsCase = ({
               </>}
             {/* Nothing to reopen once the thing itself is gone. */}
             {!isOpen && !item.targetGone &&
-              <Button disabled={submitting} onClick={handleReopen}>
+              <Button fullWidth disabled={submitting} onClick={handleReopen}>
                 {i18n.t('abuseReports:resolve.reopen')}
               </Button>}
           </CardActions>

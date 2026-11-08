@@ -48,15 +48,15 @@ tone made specific; where they are silent, follow it.
 1. A button's label is short, three words at most, and never wraps:
    "Close", not "Record what was done". What a choice means goes in a line of
    text beside the buttons, not in the label. Backing out is always "Cancel".
-2. Buttons in a card's or a dialog's action row, when one backs out
-   (Cancel, Dismiss, Decline) beside the main action, are full width and
-   side by side, never stacked: the one that backs out first, then the main
-   action, the only contained one (the user, 2026-10-20). A button alone
-   there is normal size, aligned right (`sx={{ justifyContent: 'flex-end' }}`
-   on a card's row). A dialog's padding is in the theme (`MuiDialogActions`).
-   Full width alone only where a button is the whole of a page or a step
-   (Sign in, Continue, onboarding), for a row of equal answers, for the
-   actions on a profile or a post, and for "Show more" at a list's foot.
+2. A card's action row (`CardActions`) holds one or two buttons, full
+   width, side by side: the one that backs out (Cancel, Dismiss, Decline)
+   first, then the main action, the only contained one. Alone, a button is
+   full width too: easy to reach with a thumb, and in the same place on
+   every card as one scrolls (the user, 2026-11-08). A third action goes in
+   a menu. The row keeps MUI's own 8 pixels. In a dialog, a pair is full
+   width and side by side as in a card, and a button alone is its own
+   size, at the right; the dialog's padding is in the theme
+   (`MuiDialogActions`). Lists keep their own buttons (Unblock, Manage).
 3. Calm, not busy: one flat list, never indented lists under headings inside
    it. A choice with many options under it opens a select right under the
    choice (`ReportDialog.jsx`, "Which rule").

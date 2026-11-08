@@ -10,7 +10,10 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
+import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -19,11 +22,13 @@ import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import EditIcon from '@mui/icons-material/EditOutlined';
 import PinIcon from '@mui/icons-material/AddHomeOutlined';
 import UnpinIcon from '@mui/icons-material/HomeOutlined';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 import FeedCustomBrowse from '../feed/Custom';
 import useFeed from './useFeed';
 import { ShareButton } from '../controls/Share';
 import DialogConfirm from '../../components/DialogConfirm';
+import MenuItemLabel from '../../components/MenuItemLabel';
 import CustomFeedIcon from '../../components/CustomFeedIcon';
 import Progress from '../../components/Progress';
 import actions from '../../actions';
@@ -50,6 +55,9 @@ const CustomFeedRead = ({
   const navigate = useNavigate();
   const { feed, isMissing, reload } = useFeed(id);
   const [waiting, setWaiting] = useState(false);
+  // The menu at the card's head, and the question before Delete.
+  const [menuAnchor, setMenuAnchor] = useState(null);
+  const [confirmDelete, setConfirmDelete] = useState(false);
 
   if (isMissing) {
     return (
@@ -97,6 +105,14 @@ const CustomFeedRead = ({
     });
   };
 
+  // The second button: Edit for whoever may edit it, Copy for anybody
+  // else; what is left goes in the menu.
+  const main = (authorized.edit && 'edit') || (authorized.copy && 'copy') || '';
+  const inMenu = {
+    copy: Boolean(authorized.copy) && main !== 'copy',
+    delete: Boolean(authorized.delete),
+  };
+
   const handleDelete = () => {
     setWaiting(true);
     api.customFeeds.deleteItem(feed).then(() => {
@@ -132,7 +148,18 @@ const CustomFeedRead = ({
               {customFeeds.madeOn(feed, i18n.language) &&
                 ` · ${i18n.t('customFeeds:made', { date: customFeeds.madeOn(feed, i18n.language) })}`}
             </>}
-            action={customFeeds.isShared(feed) && <ShareButton what={customFeeds.toShare(feed)} />}
+            action={
+              <>
+                {customFeeds.isShared(feed) && <ShareButton what={customFeeds.toShare(feed)} />}
+                {(inMenu.copy || inMenu.delete) &&
+                <IconButton
+                  aria-label={i18n.t('actions:more')}
+                  onClick={(event) => { setMenuAnchor(event.currentTarget); }}
+                >
+                  <MoreVertIcon />
+                </IconButton>}
+              </>
+            }
             slotProps={{ title: { variant: 'h5', component: 'h1' } }}
           />
           <CardContent sx={{ pt: 0 }}>
@@ -149,12 +176,16 @@ const CustomFeedRead = ({
               </Typography>
             </Stack>
           </CardContent>
-          {/* What can be done with the feed, at the foot of its card;
-              nothing there for one who may do none of it. */}
-          {(authorized.pin || authorized.copy || authorized.edit || authorized.delete) &&
-          <CardActions disableSpacing sx={{ flexWrap: 'wrap', gap: 1 }}>
+          {/* What can be done with the feed, at the foot of its card: two
+              buttons at most, full width (AGENTS.md, rule 2), On your home
+              and Edit for its owner, Copy for anybody else; the rest is in
+              the menu at its head. Nothing there for one who may do none
+              of it. */}
+          {(authorized.pin || main) &&
+          <CardActions>
             {authorized.pin &&
             <Button
+              fullWidth
               variant={feed.isPinned ? 'outlined' : 'contained'}
               startIcon={feed.isPinned ? <UnpinIcon /> : <PinIcon />}
               disabled={waiting}
@@ -162,17 +193,9 @@ const CustomFeedRead = ({
             >
               {i18n.t(feed.isPinned ? 'customFeeds:actions.unpin' : 'customFeeds:actions.pin')}
             </Button>}
-            {authorized.copy &&
+            {main === 'edit' &&
             <Button
-              color="inherit"
-              startIcon={<CopyIcon />}
-              disabled={waiting}
-              onClick={handleCopy}
-            >
-              {i18n.t('customFeeds:actions.copy')}
-            </Button>}
-            {authorized.edit &&
-            <Button
+              fullWidth
               color="inherit"
               startIcon={<EditIcon />}
               component={RouterLink}
@@ -180,23 +203,56 @@ const CustomFeedRead = ({
             >
               {i18n.t('customFeeds:actions.edit')}
             </Button>}
-            {authorized.delete &&
-            <DialogConfirm
-              title={i18n.t('customFeeds:delete.title')}
-              message={i18n.t('customFeeds:delete.message')}
-              confirm={i18n.t('customFeeds:delete.confirm')}
-              dismiss={i18n.t('customFeeds:delete.dismiss')}
+            {main === 'copy' &&
+            <Button
+              fullWidth
+              color="inherit"
+              startIcon={<CopyIcon />}
+              disabled={waiting}
+              onClick={handleCopy}
             >
-              <Button
-                color="error"
-                startIcon={<DeleteIcon />}
-                disabled={waiting}
-                onClick={handleDelete}
-              >
-                {i18n.t('customFeeds:actions.delete')}
-              </Button>
-            </DialogConfirm>}
+              {i18n.t('customFeeds:actions.copy')}
+            </Button>}
           </CardActions>}
+          <Menu
+            anchorEl={menuAnchor}
+            open={Boolean(menuAnchor)}
+            onClose={() => { setMenuAnchor(null); }}
+          >
+            {inMenu.copy &&
+            <MenuItem
+              disabled={waiting}
+              onClick={() => {
+                setMenuAnchor(null);
+                handleCopy();
+              }}
+            >
+              <MenuItemLabel icon={<CopyIcon fontSize="small" />}>
+                {i18n.t('customFeeds:actions.copy')}
+              </MenuItemLabel>
+            </MenuItem>}
+            {inMenu.delete &&
+            <MenuItem
+              disabled={waiting}
+              onClick={() => {
+                setMenuAnchor(null);
+                setConfirmDelete(true);
+              }}
+            >
+              <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
+                {i18n.t('customFeeds:actions.delete')}
+              </MenuItemLabel>
+            </MenuItem>}
+          </Menu>
+          <DialogConfirm
+            open={confirmDelete}
+            onClose={() => { setConfirmDelete(false); }}
+            onConfirm={handleDelete}
+            title={i18n.t('customFeeds:delete.title')}
+            message={i18n.t('customFeeds:delete.message')}
+            confirm={i18n.t('customFeeds:delete.confirm')}
+            dismiss={i18n.t('customFeeds:delete.dismiss')}
+          />
         </Card>
         <FeedCustomBrowse feed={feed} />
       </PageColumn>

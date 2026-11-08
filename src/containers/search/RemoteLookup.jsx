@@ -129,6 +129,7 @@ const RemoteLookup = ({ query = '', now = false, onFound }) => {
       {(!error || federation.isRetryable(error)) &&
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             variant="contained"
             onClick={() => {
               handleLookup();

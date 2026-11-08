@@ -83,6 +83,7 @@ const InfoRead = ({
 
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           onClick={onEdit}
           color="primary"
           variant="outlined"

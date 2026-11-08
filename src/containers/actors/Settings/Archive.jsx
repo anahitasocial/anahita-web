@@ -153,6 +153,7 @@ const ActorsSettingsArchive = (props) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           onClick={submit}
           color="secondary"
           variant="contained"

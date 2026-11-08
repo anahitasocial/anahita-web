@@ -15,11 +15,28 @@ const DialogConfirm = (props) => {
     message = i18n.t('prompts:confirm.message'),
     confirm = i18n.t('actions:confirm'),
     dismiss = i18n.t('actions:cancel'),
+    // Opened from outside, as from a menu, which unmounts what is in it
+    // when it closes: `open` and `onClose` say whether it shows, and
+    // `onConfirm` is what is confirmed. Without them, the child opens it.
+    open: openFromOutside = null,
+    onClose = null,
+    onConfirm = null,
   } = props;
 
-  const [open, setOpen] = useState(false);
+  const [openHere, setOpenHere] = useState(false);
+  const controlled = openFromOutside !== null;
+  const open = controlled ? openFromOutside : openHere;
+  const setOpen = (value) => {
+    if (controlled) {
+      if (!value && onClose) {
+        onClose();
+      }
+      return;
+    }
+    setOpenHere(value);
+  };
 
-  const childrenWithProps = React.Children.map(children, (child) => {
+  const childrenWithProps = controlled ? children : React.Children.map(children, (child) => {
     return cloneElement(child, {
       onClick: (e) => {
         e.preventDefault();
@@ -33,7 +50,11 @@ const DialogConfirm = (props) => {
   };
 
   const handleConfirm = () => {
-    children.props.onClick();
+    if (onConfirm) {
+      onConfirm();
+    } else {
+      children.props.onClick();
+    }
     setOpen(false);
   };
 
@@ -77,7 +98,10 @@ const DialogConfirm = (props) => {
 };
 
 DialogConfirm.propTypes = {
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
+  open: PropTypes.bool,
+  onClose: PropTypes.func,
+  onConfirm: PropTypes.func,
   title: PropTypes.string,
   message: PropTypes.string,
   confirm: PropTypes.string,

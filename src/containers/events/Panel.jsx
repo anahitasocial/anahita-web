@@ -224,7 +224,7 @@ const EventPanel = ({
               </Typography>}
           </Box>}
         <Box>
-          <Button startIcon={<CalendarIcon />} onClick={handleCalendar}>
+          <Button fullWidth startIcon={<CalendarIcon />} onClick={handleCalendar}>
             {i18n.t('events:event.calendar')}
           </Button>
         </Box>

@@ -146,6 +146,7 @@ const RevokePasskeys = ({
 
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           variant="outlined"
           className={hasPasskeys ? classes.destructive : ''}
           disabled={!hasPasskeys}

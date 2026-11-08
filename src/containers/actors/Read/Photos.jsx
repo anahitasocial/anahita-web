@@ -73,7 +73,7 @@ const ActorPhotos = ({ actor, onSeeAll }) => {
         albumAt={(at) => { return photoFiles.hasSeveral(photos[at]); }}
       />
       <CardActions sx={{ justifyContent: 'flex-end' }}>
-        <Button onClick={onSeeAll}>
+        <Button fullWidth onClick={onSeeAll}>
           {i18n.t('photos:seeAll')}
         </Button>
       </CardActions>

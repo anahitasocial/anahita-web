@@ -103,6 +103,7 @@ const ActorsSettingsDisable = (props) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           onClick={submit}
           color={isEnabled ? 'secondary' : 'primary'}
           variant="contained"

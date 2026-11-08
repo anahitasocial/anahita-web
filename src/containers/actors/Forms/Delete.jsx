@@ -90,6 +90,7 @@ const ActorDeleteForm = (props) => {
         </CardContent>
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             onClick={handleOnRestore}
             color="primary"
             variant="contained"
@@ -265,6 +266,7 @@ const ActorDeleteForm = (props) => {
       </CardContent>
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           type="submit"
           variant="contained"
           color="secondary"

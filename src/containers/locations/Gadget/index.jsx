@@ -136,7 +136,7 @@ const LocationsGadget = ({
           })}
         </List>
         {canAdd && isFull &&
-          <CardActions sx={{ px: 2, pb: 2 }}>
+          <CardActions>
             <Typography variant="body2" color="textSecondary">
               {i18n.t('locations:add.full', { count: MEDIUM.MAX_LOCATIONS })}
             </Typography>
@@ -144,6 +144,7 @@ const LocationsGadget = ({
         {canAdd && !isFull &&
           <CardActions>
             <Button
+              fullWidth
               onClick={() => {
                 return setIsOpen(true);
               }}

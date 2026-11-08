@@ -242,6 +242,7 @@ const ActorsSettingsAccess = (props) => {
         <Divider />
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             type="submit"
             variant="contained"
             color="primary"

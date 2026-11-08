@@ -144,6 +144,7 @@ const RevokeTotp = ({
 
       <CardActions sx={{ justifyContent: 'flex-end' }}>
         <Button
+          fullWidth
           variant="outlined"
           className={enabled ? classes.destructive : ''}
           disabled={!enabled}

@@ -200,6 +200,7 @@ const OAuthClients = ({
       {canAdd &&
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             color="primary"
             variant="outlined"
             startIcon={<AddIcon />}

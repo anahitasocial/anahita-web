@@ -377,35 +377,42 @@ const CustomFeedsBrowse = ({
             subheader={i18n.t('customFeeds:list.subheader')}
             actionTo="/feeds/add"
             actionLabel={i18n.t('customFeeds:list.create')}
-          />
-        </Box>
-        <Box sx={{ px: 2, pb: 2 }}>
-          <TextField
-            select
-            size="small"
-            label={i18n.t('customFeeds:list.show')}
-            value={whose}
-            onChange={(event) => {
-              const chosen = event.target.value;
-              setParams(chosen === 'everyone' ? {} : { show: chosen }, { replace: true });
-            }}
-            sx={{ minWidth: 8 * 28 }}
           >
-            {WHOSE.map((each) => {
-              return (
-                <MenuItem key={`whose-${each}`} value={each}>
-                  {i18n.t(`customFeeds:list.whose.${each}`)}
-                </MenuItem>
-              );
-            })}
-          </TextField>
-          <Typography variant="body2" color="textSecondary" sx={{ pt: 1 }}>
-            {i18n.t('customFeeds:list.findOne')}
-            {' '}
-            <Link component={RouterLink} to={searchAddress.of({ scope: SEARCH.SCOPE.FEEDS })} underline="hover">
-              {i18n.t('customFeeds:list.searchFeeds')}
-            </Link>
-          </Typography>
+            {/* Whose feeds, and the way to find one by its words: side by
+                side, or one above the other on a mobile. */}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={{ xs: 1, sm: 2 }}
+              sx={{ alignItems: { xs: 'stretch', sm: 'center' } }}
+            >
+              <TextField
+                select
+                size="small"
+                label={i18n.t('customFeeds:list.show')}
+                value={whose}
+                onChange={(event) => {
+                  const chosen = event.target.value;
+                  setParams(chosen === 'everyone' ? {} : { show: chosen }, { replace: true });
+                }}
+                sx={{ width: { xs: '100%', sm: 8 * 28 }, flexShrink: 0 }}
+              >
+                {WHOSE.map((each) => {
+                  return (
+                    <MenuItem key={`whose-${each}`} value={each}>
+                      {i18n.t(`customFeeds:list.whose.${each}`)}
+                    </MenuItem>
+                  );
+                })}
+              </TextField>
+              <Typography variant="body2" color="textSecondary">
+                {i18n.t('customFeeds:list.findOne')}
+                {' '}
+                <Link component={RouterLink} to={searchAddress.of({ scope: SEARCH.SCOPE.FEEDS })} underline="hover">
+                  {i18n.t('customFeeds:list.searchFeeds')}
+                </Link>
+              </Typography>
+            </Stack>
+          </BrowseHeader>
         </Box>
         {isLoading && <Progress />}
         {!isLoading && hasFailed &&

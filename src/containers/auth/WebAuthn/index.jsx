@@ -277,6 +277,7 @@ const WebAuthn = () => {
       {supported &&
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             color="primary"
             startIcon={<AddIcon />}
             disabled={isBusy || isFetching || atLimit}

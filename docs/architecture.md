@@ -1250,7 +1250,9 @@ are about, what to leave out. The server's side is in the services'
    first three are `GET /feeds/discover` with `whose` (`api.customFeeds.discover`),
    a page at a time as one scrolls; the last is `GET /feeds/pinned`. A line
    under the select leads to Search › Feeds, where a feed is found by its
-   words. The column is as wide as a post's page.
+   words. Both are in the page's header card, under its title
+   (`components/BrowseHeader.jsx`, its children), side by side, or one
+   above the other on a mobile. The column is as wide as a post's page.
 8. **Rows of one height.** A feed's row in the list is its name, who can
    see it and when it was made, and one line cut short: what it is for, or
    what it shows when it does not say. Beside it, the house that adds it to
@@ -1296,8 +1298,10 @@ are about, what to leave out. The server's side is in the services'
     about what a feed shows is hidden. The same file repeats the server's
     limits so the editor can say what would be refused before it is sent. The
     server decides.
-15. **A feed's page** (`containers/feeds/Read.jsx`): add to home, copy, and for
-    its owner edit and delete. Copying makes a feed of the viewer's own, seen
+15. **A feed's page** (`containers/feeds/Read.jsx`): two full-width buttons
+    at its foot, Add to home (On your home once it is) and Edit for its
+    owner, Copy for anybody else; Copy for the owner and Delete in the menu
+    (⋮) at its head, beside Share (AGENTS.md, rule 2). Copying makes a feed of the viewer's own, seen
     by them alone, and opens it in the editor.
 16. **Share** is on a shared feed's card (in search and in Recommendations ›
     Feeds), in the list of feeds and on the feed's page.

@@ -12,7 +12,7 @@ export default {
     viewColumns: 'Colonnes',
   },
   list: {
-    subheader: 'Des fils que vous composez vous-même : choisissez d’où viennent les publications et de quoi elles parlent. Toujours les plus récentes d’abord.',
+    subheader: 'Vos fils : vos sources, vos sujets, plus récents d’abord.',
     create: 'Créer un fil personnalisé',
     by: 'par {{ name }}',
     show: 'Afficher',
@@ -53,7 +53,7 @@ export default {
   actions: {
     more: 'Plus',
     pin: 'Ajouter à l’accueil',
-    unpin: 'Retirer de l’accueil',
+    unpin: 'Sur l’accueil',
     edit: 'Modifier',
     copy: 'Copier',
     delete: 'Supprimer',

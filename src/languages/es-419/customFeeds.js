@@ -12,7 +12,7 @@ export default {
     viewColumns: 'Columnas',
   },
   list: {
-    subheader: 'Feeds que armas tú: elige de dónde vienen las publicaciones y de qué tratan. Lo más reciente primero, siempre.',
+    subheader: 'Tus feeds: tus fuentes y temas, lo nuevo primero.',
     create: 'Crear un feed personalizado',
     by: 'de {{ name }}',
     show: 'Mostrar',
@@ -53,7 +53,7 @@ export default {
   actions: {
     more: 'Más',
     pin: 'Agregar al inicio',
-    unpin: 'Quitar del inicio',
+    unpin: 'En el inicio',
     edit: 'Editar',
     copy: 'Copiar',
     delete: 'Eliminar',

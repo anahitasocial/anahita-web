@@ -234,7 +234,7 @@ const ActorsSettingsRules = ({
           onClose={() => { setShowSiteRules(false); }}
         />
       </CardContent>
-      <CardActions sx={{ px: 2, pb: 2 }}>
+      <CardActions>
         <Stack direction="row" spacing={1} sx={{ width: '100%', justifyContent: 'flex-end' }}>
           <Button
             fullWidth

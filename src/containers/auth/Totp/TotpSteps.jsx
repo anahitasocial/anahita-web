@@ -146,6 +146,7 @@ const TotpSteps = ({
           </CardContent>
           <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
+              fullWidth
               startIcon={<CopyIcon />}
               type="submit"
               variant="outlined"
@@ -155,6 +156,7 @@ const TotpSteps = ({
               {codesCopySuccess ? i18n.t('auth:totp.recoveryCodes.prompts.copySuccess') : i18n.t('auth:totp.recoveryCodes.prompts.copyCodes')}
             </Button>
             <Button
+              fullWidth
               startIcon={<DownloadIcon />}
               variant="outlined"
               onClick={handleDownloadRecoveryCodes}
@@ -164,6 +166,7 @@ const TotpSteps = ({
           </CardActions>
           <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
+              fullWidth
               type="submit"
               color="primary"
               variant="contained"
@@ -187,6 +190,7 @@ const TotpSteps = ({
               was working on. */}
           <CardActions sx={{ justifyContent: 'flex-end' }}>
             <Button
+              fullWidth
               onClick={handleDone}
               color="primary"
               variant="contained"

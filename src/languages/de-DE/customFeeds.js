@@ -12,7 +12,7 @@ export default {
     viewColumns: 'Spalten',
   },
   list: {
-    subheader: 'Feeds, die du selbst baust: Wähle, woher die Beiträge kommen und worum es geht. Immer die neuesten zuerst.',
+    subheader: 'Deine Feeds: deine Quellen, deine Themen, Neuestes zuerst.',
     create: 'Eigenen Feed erstellen',
     by: 'von {{ name }}',
     show: 'Anzeigen',
@@ -52,8 +52,8 @@ export default {
   },
   actions: {
     more: 'Mehr',
-    pin: 'Zur Startseite hinzufügen',
-    unpin: 'Von der Startseite entfernen',
+    pin: 'Zur Startseite',
+    unpin: 'Auf der Startseite',
     edit: 'Bearbeiten',
     copy: 'Kopieren',
     delete: 'Löschen',

@@ -241,6 +241,7 @@ const SettingsPrivacy = ({
             {total > 0 &&
               <CardActions sx={{ justifyContent: 'flex-end' }}>
                 <Button
+                  fullWidth
                   color="secondary"
                   variant="contained"
                   disabled={!confirmed || submitting}

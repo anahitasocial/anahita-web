@@ -78,6 +78,7 @@ const AccountType = ({
       {choices.length > 0 &&
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             onClick={() => {
               setOpen(true);
             }}

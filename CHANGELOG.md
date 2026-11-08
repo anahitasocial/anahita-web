@@ -89,6 +89,16 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 14. **Follow post** and **Unfollow post,** in a post's menu, in place of
    Get notifications and Stop notifications: following a post is hearing
    of its replies, as following a profile is hearing of its posts.
+15. **A card's buttons are full width,** one or two of them, on every card
+   (AGENTS.md, rule 2, the user, 2026-11-08): easy to reach with a thumb,
+   and in the same place on every card. A third action is in a menu: a
+   feed's page keeps Add to home and Edit (or Copy), with Copy and Delete
+   in its ⋮; a report's case keeps Open, with Remove as spam and Refuse in
+   its ⋮. Dialogs and lists keep their own.
+16. **The Feeds page's filter** is in its header card, and its line says
+   it in nine words: "Feeds you build: your sources, your topics, newest
+   first." A feed on one's home says "On your home", short enough not to
+   wrap on a mobile.
 
 ### Added
 

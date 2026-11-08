@@ -12,7 +12,7 @@ export default {
     viewColumns: 'Columns',
   },
   list: {
-    subheader: 'Feeds you build yourself: choose where the posts come from and what they are about. Newest first, always.',
+    subheader: 'Feeds you build: your sources, your topics, newest first.',
     create: 'Create a custom feed',
     by: 'by {{ name }}',
     show: 'Show',
@@ -53,7 +53,7 @@ export default {
   actions: {
     more: 'More',
     pin: 'Add to home',
-    unpin: 'Remove from home',
+    unpin: 'On your home',
     edit: 'Edit',
     copy: 'Copy',
     delete: 'Delete',

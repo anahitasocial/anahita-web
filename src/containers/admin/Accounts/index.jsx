@@ -460,6 +460,7 @@ const Accounts = ({
         </CardContent>
         <CardActions>
           <Button
+            fullWidth
             size="small"
             onClick={() => {
               setShowMore(!showMore);
@@ -471,6 +472,7 @@ const Accounts = ({
           </Button>
           {filtered &&
             <Button
+              fullWidth
               size="small"
               onClick={() => {
                 setFilters(NO_FILTERS);

@@ -41,6 +41,7 @@ const NothingFound = ({
           {offers.map((other) => {
             return (
               <Button
+                fullWidth
                 key={other}
                 variant="outlined"
                 onClick={() => {

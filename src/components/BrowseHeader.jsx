@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
@@ -34,6 +35,7 @@ const BrowseHeader = ({
   actionTo = '',
   actionState = null,
   actionLabel = '',
+  children = null,
 }) => {
   return (
     <Card>
@@ -62,6 +64,12 @@ const BrowseHeader = ({
           title: { variant: 'h5' },
         }}
       />
+      {/* What the page's list is narrowed by, in the header's own card and
+          not floating under it (the user, 2026-11-08). */}
+      {children &&
+        <CardContent>
+          {children}
+        </CardContent>}
     </Card>
   );
 };
@@ -76,6 +84,8 @@ BrowseHeader.propTypes = {
   // The router's state for where the + leads: what it is to open there.
   actionState: PropTypes.object,
   actionLabel: PropTypes.string,
+  // What narrows the list, under the title: a select, a line.
+  children: PropTypes.node,
 };
 
 export default BrowseHeader;

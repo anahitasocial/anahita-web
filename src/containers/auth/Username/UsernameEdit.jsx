@@ -74,6 +74,7 @@ const UsernameEdit = ({
       {!isEditing &&
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             onClick={onOpen}
             color="primary"
             variant="outlined"

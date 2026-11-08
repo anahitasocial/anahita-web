@@ -272,6 +272,7 @@ const FediverseServers = ({
                 edge of the card. */}
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             color="secondary"
             variant="contained"
             onClick={() => {

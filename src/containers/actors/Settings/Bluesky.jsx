@@ -246,6 +246,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
         {works ?
           <>
             <Button
+              fullWidth
               variant="outlined"
               color="error"
               disabled={isSaving}
@@ -255,6 +256,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
             </Button>
             {!profile &&
               <Button
+                fullWidth
                 variant="contained"
                 color="secondary"
                 disabled={isSaving || isImported}
@@ -266,6 +268,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
           <>
             {settings.connected &&
               <Button
+                fullWidth
                 variant="outlined"
                 color="error"
                 disabled={isSaving}
@@ -274,6 +277,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
                 {i18n.t('federation:bluesky.disconnect')}
               </Button>}
             <Button
+              fullWidth
               type="submit"
               variant="contained"
               color="secondary"

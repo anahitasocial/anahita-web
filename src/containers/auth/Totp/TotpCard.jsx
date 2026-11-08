@@ -65,6 +65,7 @@ const TotpCard = ({
       {!loading && !enabled &&
         <CardActions sx={{ justifyContent: 'flex-end' }}>
           <Button
+            fullWidth
             onClick={onEnable}
             color="primary"
             variant="outlined"
@@ -84,6 +85,7 @@ const TotpCard = ({
             message={i18n.t('auth:totp.disableDialog.message')}
           >
             <Button
+              fullWidth
               onClick={onDisable}
               color="secondary"
               variant="outlined"

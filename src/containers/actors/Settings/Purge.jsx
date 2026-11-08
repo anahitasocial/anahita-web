@@ -183,6 +183,7 @@ const ActorsSettingsPurge = (props) => {
         {/* Proof first, then the request: every purge is refused without
             one, so sending it first would only be a refused request. */}
         <Button
+          fullWidth
           onClick={() => {
             setStepUpOpen(true);
           }}
