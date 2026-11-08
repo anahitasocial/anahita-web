@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@mui/material/Avatar';
 import Badge from '@mui/material/Badge';
-import NotificationsIcon from '@mui/icons-material/Notifications';
+import NotificationsIcon from '@mui/icons-material/NotificationsOutlined';
 
-// The bell in its circle, with how many are unread on the circle's edge, in
-// the secondary colour, which shows on the top bar's primary. The badge is
-// outside the Avatar: inside, the circle clips it.
+// The bell, with how many are unread at its corner, in the secondary
+// colour, which shows on the top bar's primary. Plain, as the menu and
+// search are: in a circle it was a second round picture beside the
+// viewer's own (the user, 2026-11-07).
 const NotificationsBell = ({ count = 0 }) => {
   return (
-    <Badge badgeContent={count} color="secondary" overlap="circular">
-      <Avatar color="inherit">
-        <NotificationsIcon />
-      </Avatar>
+    <Badge badgeContent={count} color="secondary">
+      <NotificationsIcon />
     </Badge>
   );
 };

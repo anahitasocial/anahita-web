@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import remarkGfm from 'remark-gfm';
 import { makeStyles } from 'tss-react/mui';
 
+import PlayIcon from '@mui/icons-material/PlayCircleOutlineOutlined';
+
 import PostEmbed from './PostEmbed';
 import SmartLink from './SmartLink';
 import utils from '../utils';
@@ -38,6 +40,47 @@ const addressAlone = (paragraph) => {
   return href;
 };
 
+// The line a post from elsewhere ends with, for a video or a sound not kept
+// here: "▶ [bsky.app](…)", as anahita-libs/federation WithVideoLink writes
+// it. Its link, or null for any other paragraph.
+const PLAY_MARKS = ['\u25b6', '\u25b6\ufe0e', '\u25b6\ufe0f'];
+const playLink = (paragraph) => {
+  const children = (paragraph.children || []).filter((child) => {
+    return !(child.type === 'text' && !child.value.trim());
+  });
+  if (children.length !== 2 || children[0].type !== 'text' || children[1].tagName !== 'a') {
+    return null;
+  }
+  return PLAY_MARKS.includes(children[0].value.trim()) ? children[1] : null;
+};
+
+// That line, drawn with the app's own light play icon in place of the
+// heavy triangle the text carries, then its link.
+const PlayLine = ({ link }) => {
+  const href = (link.properties && link.properties.href) || '';
+  return (
+    <p style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+      <PlayIcon fontSize="small" aria-hidden />
+      <SmartLink href={href}>{textOf(link)}</SmartLink>
+    </p>
+  );
+};
+
+PlayLine.propTypes = {
+  link: PropTypes.object.isRequired,
+};
+
+// A paragraph where links are drawn and nothing is embedded: the play line
+// as above, the rest as they are.
+// eslint-disable-next-line react/prop-types
+const PlainParagraph = ({ node, children, ...rest }) => {
+  const play = playLink(node);
+  if (play) {
+    return <PlayLine link={play} />;
+  }
+  return <p {...rest}>{children}</p>;
+};
+
 // The cards kept with the post being drawn, for its paragraphs to find.
 const Cards = createContext([]);
 
@@ -47,6 +90,10 @@ const Cards = createContext([]);
 // eslint-disable-next-line react/prop-types
 const Paragraph = ({ node, children, ...rest }) => {
   const cards = useContext(Cards);
+  const play = playLink(node);
+  if (play) {
+    return <PlayLine link={play} />;
+  }
   const address = addressAlone(node);
   if (address) {
     return <PostEmbed url={address} cards={cards} />;
@@ -69,7 +116,7 @@ Anchor.propTypes = {
   children: PropTypes.node,
 };
 
-const LINKS = { a: Anchor };
+const LINKS = { p: PlainParagraph, a: Anchor };
 const WITH_EMBEDS = { p: Paragraph, a: Anchor };
 
 const useStyles = makeStyles()((theme) => {

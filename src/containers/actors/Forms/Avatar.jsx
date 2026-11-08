@@ -149,13 +149,17 @@ const ActorAvatarForm = ({
             component="img"
             src={avatar}
             alt={getActorName(node)}
+            // Round, as the picture is everywhere else, with a ring the
+            // colour of the page around it (the user, 2026-11-07).
             sx={{
               display: 'block',
-              width: 480,
-              maxWidth: '100%',
-              maxHeight: 'calc(100dvh - 32px)',
-              objectFit: 'contain',
-              borderRadius: 2,
+              width: 'min(480px, calc(100vw - 32px), calc(100dvh - 32px))',
+              aspectRatio: '1 / 1',
+              objectFit: 'cover',
+              borderRadius: '50%',
+              border: 4,
+              borderColor: 'background.paper',
+              boxShadow: 8,
             }}
           />
           <IconButton
