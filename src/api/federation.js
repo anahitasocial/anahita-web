@@ -84,7 +84,7 @@ const previewBlueskyFollows = () => {
 // they were removed for its age. Asked of whichever service the post came
 // through, which is told by its address.
 // Somebody on the fediverse, read again from their server when what was
-// kept of them is more than a day old: `{ refreshed }` (roadmap row 130).
+// kept of them is more than an hour old: `{ refreshed }` (roadmap row 130).
 const refreshPerson = (person) => {
   return axios.post(`/activitypub/people/${person.id}/refresh`);
 };

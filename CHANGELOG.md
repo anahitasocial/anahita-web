@@ -30,7 +30,7 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    they answer there, as for a profile here seen only by its followers.
    It used to say Follow, and Following at once, before they had said yes.
    Opening such a profile reads it again from Mastodon when it is more than
-   a day old, so that a change there shows here.
+   an hour old, so that a change there shows here.
 2. **A reply reads as a Threads reply:** name, handle and when on one line,
    the words right under, then a heart and a reply icon, each with its
    number, in place of the word "Reply"; "Author" beside the post's

@@ -1568,7 +1568,7 @@ itself (`containers/controls/Follow.jsx`) then says "Request to follow",
 then "Requested", from `is_follow_requested_by_viewer`, keeping its sizes
 and its place in menus. Their server's yes makes it a follow, shown the next
 time the profile is read. Opening such a profile asks the server to read
-them again from their own when what was kept is more than a day old
+them again from their own when what was kept is more than an hour old
 (`api.federation.refreshPerson`), and reads the page again if it did, so that
 a change there shows here without anybody looking them up.
 
