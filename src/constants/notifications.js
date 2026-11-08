@@ -23,6 +23,10 @@ const KINDS = [
   'actor_follow',
   'actor_follow_request',
   'actor_follow_request_accept',
+  // Somebody followed moved their account, and the reader follows the new
+  // one, or has asked to (roadmap row 124, part 2).
+  'actor_moved',
+  'actor_moved_asked',
   'actor_invite',
   'actor_invite_accept',
   'admin_add',

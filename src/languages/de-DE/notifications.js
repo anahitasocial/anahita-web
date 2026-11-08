@@ -8,6 +8,8 @@ export default {
   actorFollow: '<0>{{subject}}</0> folgt <2>{{target}}</2>',
   actorFollowRequest: '<0>{{subject}}</0> möchte <2>{{target}}</2> folgen',
   actorFollowRequestAccept: '<0>{{subject}}</0> hat deine Folgeanfrage angenommen',
+  actorMoved: '<0>{{subject}}</0> ist zu <2>{{target}}</2> umgezogen. Du folgst jetzt diesem Profil',
+  actorMovedAsked: '<0>{{subject}}</0> ist zu <2>{{target}}</2> umgezogen. Du hast diesem Profil eine Folgeanfrage gestellt',
   actorInvite: '<0>{{subject}}</0> hat dich eingeladen, <2>{{target}}</2> zu folgen',
   actorInviteAccept: '<0>{{subject}}</0> hat deine Einladung angenommen, <2>{{target}}</2> zu folgen',
   eventRsvp: '<0>{{subject}}</0> kommt zu <2>{{target}}</2>',

@@ -1390,7 +1390,9 @@ desktop, left aligned:
 3. **The name, with the pronouns after it** in a lighter grey, "Sarah Noble
    (they/them)".
 4. **The handle,** and "· Follows you" after it for somebody who follows
-   the viewer.
+   the viewer. Under it, for somebody from another server who moved their
+   account, "Moved to" and the new handle, a link (`moved_to`); View new
+   profile then takes the place of Follow (roadmap row 124, part 2).
 5. **One line of counts,** "22 followers · 16 following"
    (`actors/Read/SocialgraphMeta.jsx`), each opening the dialog below on
    that list. Following is counted only for this site's people: whom

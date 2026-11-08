@@ -12,6 +12,11 @@ export default {
   blocks: 'Bloqueados',
   mutes: 'Silenciados',
   followsYou: 'Segue você',
+  // Somebody from another server who moved their account.
+  moved: {
+    to: 'Se mudou para',
+    view: 'Ver novo perfil',
+  },
   followFailed: 'Não foi possível seguir {{ name }} agora. Tente de novo daqui a pouco.',
   unfollowFailed: 'Não foi possível deixar de seguir {{ name }} agora. Tente de novo daqui a pouco.',
   blockedNotice: {

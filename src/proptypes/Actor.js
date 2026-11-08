@@ -35,6 +35,12 @@ export default shape({
   coverUrls: imageUrls,
   administrators: arrayOf(personType),
   followerCount: number,
+  // Where somebody from another server moved their account to.
+  movedTo: shape({
+    id: number,
+    alias: string,
+    name: string,
+  }),
   subscriberCount: number,
   isSubscribedByViewer: bool,
   author: personType,

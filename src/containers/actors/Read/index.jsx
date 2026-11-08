@@ -1,9 +1,12 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect, useDispatch } from 'react-redux';
-import { Navigate, useNavigate, useParams } from 'react-router-dom';
+import {
+  Link as RouterLink, Navigate, useNavigate, useParams,
+} from 'react-router-dom';
 
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Typography from '@mui/material/Typography';
 
@@ -246,7 +249,10 @@ const ActorsRead = (props) => {
   // Somebody the viewer has blocked: their profile says so, with the way
   // back, in place of what they post; nothing to follow.
   const isBlocked = isAuthenticated && Boolean(actor.isBlockedByViewer);
-  const showFollow = isAuthenticated && canFollow && !isEvent && !isBlocked;
+  // Somebody from another server who moved their account: followed at
+  // their new profile, which takes the place of + Follow.
+  const movedTo = actor.movedTo && actor.movedTo.alias ? actor.movedTo : null;
+  const showFollow = isAuthenticated && canFollow && !isEvent && !isBlocked && !movedTo;
   // Inviting follows the group's "who can invite" setting, which the
   // server answers as authorized.invite.
   const showInvite = isAuthenticated && Boolean(actor.authorized && actor.authorized.invite);
@@ -346,6 +352,15 @@ const ActorsRead = (props) => {
                 />
               </Box>}
             {showFollow && !showInviteAnswer && <ControlFollow actor={actor} prominent />}
+            {movedTo && !isBlocked &&
+              <Button
+                variant="contained"
+                component={RouterLink}
+                to={`/@${movedTo.alias}/`}
+                sx={{ whiteSpace: 'nowrap' }}
+              >
+                {i18n.t('socialgraph:moved.view')}
+              </Button>}
           </>
         }
         headerActions={showCommands &&

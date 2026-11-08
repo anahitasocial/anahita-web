@@ -1,9 +1,11 @@
 import React from 'react';
 import slugify from 'slugify';
 import PropTypes from 'prop-types';
+import { Link as RouterLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
+import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -22,6 +24,7 @@ const { getActorName } = utils.node;
 //   picture, over the cover's lower edge | Follow, the other buttons, ⋮
 //   Name (pronouns)
 //   @handle · Follows you
+//   Moved to @new@handle, for somebody who moved their account
 //   22 followers · 16 following | the buttons for how its posts are laid out
 //
 // Left aligned, so that it reads in one line down from the picture, and the
@@ -137,6 +140,15 @@ const ActorHeader = ({
           {utils.federation.displayHandle(actor, slugify)}
           {actor.isFollowingViewer && ` · ${i18n.t('socialgraph:followsYou')}`}
         </Typography>
+        {/* Somebody from another server who moved their account (roadmap
+        row 124, part 2): where to, under the handle it replaces. */}
+        {actor.movedTo && actor.movedTo.alias &&
+          <Typography variant="body2" color="textSecondary" sx={{ overflowWrap: 'anywhere' }}>
+            {`${i18n.t('socialgraph:moved.to')} `}
+            <Link component={RouterLink} to={`/@${actor.movedTo.alias}/`}>
+              {`@${actor.movedTo.alias}`}
+            </Link>
+          </Typography>}
         {/* Seen only by its followers and administrators, and site
             administrators: anybody else cannot reach a deleted profile. */}
         <ScheduledDeletion actor={actor} sx={{ mt: 1 }} />

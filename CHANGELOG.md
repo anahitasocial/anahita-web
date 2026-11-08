@@ -117,6 +117,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    download or a file from Mastodon or Misskey. What is in the file is
    shown first, a tick for each kind; while it runs a bar says how far it
    has got; at the end, the list of what could not be brought in, and why.
+4. **Somebody who moved** (roadmap row 124, part 2): the profile of
+   somebody on another server who moved their account says "Moved to",
+   with the new handle, and View new profile in place of + Follow. Whoever
+   followed them is told they follow the new profile now, or asked to.
 
 ### Removed
 

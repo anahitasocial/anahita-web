@@ -12,6 +12,11 @@ export default {
   blocks: 'Blocked',
   mutes: 'Muted',
   followsYou: 'Follows you',
+  // Somebody from another server who moved their account.
+  moved: {
+    to: 'Moved to',
+    view: 'View new profile',
+  },
   // A follow or an unfollow that failed.
   followFailed: 'Couldn’t follow {{ name }} just now. Try again in a moment.',
   unfollowFailed: 'Couldn’t unfollow {{ name }} just now. Try again in a moment.',
