@@ -99,4 +99,4 @@ Each when the features after it need it, as the roadmap's order says:
 | Item | State |
 | --- | --- |
 | Plan | written 2026-11-08 |
-| Stage 1, the lists | not started |
+| Stage 1, the lists | done 2026-11-08: `useBrowse` and its twelve tests; the seven lists on it, one commit each, each the same before and after in screenshots at both sizes; `feed/components/ActorItems.jsx` drawing a profile's cards. On the way: a profile's lists no longer skip their second page, a redraw of a profile no longer asks again for its notes or photos, and the blogs page, which the server no longer had, removed |

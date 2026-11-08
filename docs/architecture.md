@@ -151,6 +151,36 @@ socialgraph, has its own module.
 In development the store also logs every action, and connects to the Redux
 DevTools browser extension when it is installed.
 
+### Lists
+
+A list read from the server a page at a time, as a feed or a profile's
+photos, is two things: a hook that holds it, and components that draw it
+(roadmap row 140, [the plan](plans/logic-and-presentation.md)).
+
+`containers/browse/useBrowse.js` holds a list: given its `browse`, `reset`
+and `prepend` actions and its place in the store, it asks for the first page,
+the next when the reader scrolls, and nothing while a page is on its way or
+when there is no more. It empties the list when the page is left or when
+what the list is of (`queryKey`) changes, and shows an error in an alert,
+unless the list says why itself (`failed`). `skip` asks for nothing, as a
+search with no words; `again()` asks once more for the page it is on; and
+`answered` says whether the server has answered, so that a list is called
+empty only then. Its test is `containers/browse/__tests__/useBrowse.test.jsx`.
+
+| List | Holds it | Draws it |
+| --- | --- | --- |
+| Home | `feed/Leaders` | `feed/components/Items.jsx` |
+| A custom feed | `feed/Custom` | `feed/components/Items.jsx` |
+| A profile's posts, replies, reposts, tagged | `feed/Actor` | `feed/components/ActorItems.jsx` |
+| A profile's notes, photos, articles, topics | `media/Browse` | `media/Browse/List.jsx` |
+| A hashtag's or a location's posts | `inbounds/Browse` | its cards, in a masonry |
+| People, groups and events | `actors/Browse` | its cards, in a masonry |
+| Search | `search/Browse/SearchList.jsx` | its cards, in a masonry |
+
+A component that draws takes what to draw and never fetches, so that a list
+can be drawn another way, a grid or a column, without touching how it is
+read.
+
 ## Routes
 
 The route table is `src/routes/index.jsx`, using React Router 7 with browser
