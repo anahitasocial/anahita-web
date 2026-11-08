@@ -955,9 +955,10 @@ is simply no card.
    text on the feed, on cards and on the post's own page. Its picture is the
    installation's own copy (`utils/linkPreviews.js#imageOf`), so reading a
    note asks nothing of the other site.
-6. **A link the player plays** (YouTube, Vimeo and the others in
-   `components/Player.jsx`) keeps the player and has no card
-   (`utils/linkPreviews.js#isShown`).
+6. **A link to a video elsewhere** (YouTube, Vimeo and the like) is a
+   card like any other, which leads to the source: nothing from another
+   site plays within a post. A card is drawn when it has an address and a
+   title (`utils/linkPreviews.js#isShown`).
 
 ### Titles and tags
 
