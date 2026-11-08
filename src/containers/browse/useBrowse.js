@@ -26,6 +26,12 @@ const { LIMIT } = APP.BROWSE;
 //   failed          given a page the server refused, for a list that says
 //                   why in its own place; such a list leaves `error` out of
 //                   what it selects, so that no alert is shown as well
+//   skip            true while there is nothing to ask for, as a search
+//                   with no words: the list is emptied and nothing asked
+//
+// It gives the list, whether there is more, `next()` for the next page,
+// `again()` to ask once more for the page it is on, after a failure, and
+// `prepend(nodes)`.
 //
 // The pagination belongs to the query: `start` is worked out while drawing,
 // not reset in an effect, which would leave one moment with a new query and
@@ -42,6 +48,7 @@ const useBrowse = ({
   limit = LIMIT,
   nextStart,
   failed,
+  skip = false,
 }) => {
   const dispatch = useDispatch();
   const {
@@ -53,6 +60,7 @@ const useBrowse = ({
   } = useSelector(select, shallowEqual);
 
   const [page, setPage] = useState({ key: queryKey, start: 0 });
+  const [tries, setTries] = useState(0);
   const start = page.key === queryKey ? page.start : 0;
   const hasMore = said === undefined ? total > items.allIds.length : said;
 
@@ -89,11 +97,15 @@ const useBrowse = ({
   }, [queryKey]);
 
   useEffect(() => {
+    if (skip) {
+      dispatch(reset());
+      return;
+    }
     const asked = dispatch(browse({ ...params, start, limit }));
     if (failed && asked && asked.catch) {
       asked.catch(failed);
     }
-  }, [start, queryKey]);
+  }, [start, queryKey, tries, skip]);
 
   useEffect(() => {
     if (error) {
@@ -118,6 +130,9 @@ const useBrowse = ({
     answered,
     isEmpty: answered && !isFetching && !hasMore && items.allIds.length === 0,
     next,
+    again: () => {
+      setTries((n) => { return n + 1; });
+    },
     prepend: (nodes) => {
       return prepend && dispatch(prepend(nodes));
     },

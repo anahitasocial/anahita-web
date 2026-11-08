@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { makeStyles } from 'tss-react/mui';
 import Alert from '@mui/material/Alert';
@@ -9,7 +9,6 @@ import Button from '@mui/material/Button';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
 import actions from '../../../actions';
-import NodesType from '../../../proptypes/Nodes';
 
 import ActorsCard from '../../actors/Browse/Card';
 import Masonry from '../../../components/BreakpointMasonry';
@@ -18,14 +17,13 @@ import CustomFeedSearchCard from '../../feeds/SearchCard';
 import customFeeds from '../../../utils/customFeeds';
 import Progress from '../../../components/Progress';
 import NothingFound from './NothingFound';
+import useBrowse from '../../browse/useBrowse';
 import federation from '../../../utils/federation';
 import searchChoices from '../../../utils/searchChoices';
-import { App as APP, Search as SEARCH } from '../../../constants';
+import { Search as SEARCH } from '../../../constants';
 
 import utils from '../../../utils/node';
 import i18n from '../../../languages';
-
-const { LIMIT } = APP.BROWSE;
 
 const {
   RELEVANT,
@@ -40,16 +38,19 @@ const useStyles = makeStyles()((theme) => {
   };
 });
 
+// No error here: a search that failed says so in its own place, with Try
+// again, never in an alert as well.
+const select = (state) => {
+  const { search: items, isFetching, total } = state.search;
+  return { items, isFetching, total };
+};
+
+// What was searched for, its results through useBrowse, drawn as cards in a
+// masonry. The page gives each search its own list.
 const SearchList = ({
-  browseList,
-  resetList,
-  items,
-  error,
-  isFetching,
   onScope,
   lead = null,
   counts = {},
-  total = 0,
   queryParams: {
     sort,
     q,
@@ -61,67 +62,32 @@ const SearchList = ({
   },
 }) => {
   const { classes } = useStyles();
+  const error = useSelector((state) => { return state.search.error; });
 
-  const [start, setStart] = useState(0);
-  // Asked again with Try again, after a search that failed.
-  const [tries, setTries] = useState(0);
-
-  // Whether this search has had its answer: the list is drawn anew for
-  // each search, and until the answer comes an empty list says nothing.
-  const [answered, setAnswered] = useState(false);
-  const wasFetching = useRef(false);
-  useEffect(() => {
-    if (isFetching) {
-      wasFetching.current = true;
-    } else if (wasFetching.current) {
-      setAnswered(true);
-    }
-  }, [isFetching]);
-
-  useEffect(() => {
-    return () => {
-      resetList();
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!q) {
-      resetList();
-      return;
-    }
-
-    // The distance is chosen in kilometres and asked for in metres; the
-    // last mark on the slider is anywhere, and sends none.
-    const near = searchRange <= 100;
-    browseList({
+  // The distance is chosen in kilometres and asked for in metres; the last
+  // mark on the slider is anywhere, and sends none.
+  const near = searchRange <= 100;
+  const {
+    items, hasMore, answered, next, again,
+  } = useBrowse({
+    browse: actions.search.browse,
+    reset: actions.search.reset,
+    select,
+    params: {
       ...(sort === RELEVANT ? searchChoices.paramsOf(choices) : {}),
       sort,
-      start,
       scope,
       search_range: near ? searchRange * 1000 : '',
       coord_lng: near ? coordLong : '',
       coord_lat: near ? coordLat : '',
-      limit: LIMIT,
       term: q,
-    }).catch(() => {
-      // Said below, from the store, as a sentence and not a status code.
-    });
-  }, [
-    tries,
-    sort,
-    start,
-    scope,
-    searchRange,
-    searchRange,
-    coordLong,
-    coordLat,
-  ]);
-
-  const fetchList = () => {
-    return setStart(start + LIMIT);
-  };
-
-  const hasMore = total > items.allIds.length;
+    },
+    queryKey: JSON.stringify([q, sort, scope, searchRange, coordLong, coordLat, choices]),
+    // Nothing to ask for until something is typed.
+    skip: !q,
+    // Said below, from the store, as a sentence and not a status code.
+    failed: () => {},
+  });
 
   // A search that failed, said once and plainly, with the way to ask
   // again: never the request's own message ("Request failed with status
@@ -135,9 +101,7 @@ const SearchList = ({
           <Button
             color="inherit"
             size="small"
-            onClick={() => {
-              setTries(tries + 1);
-            }}
+            onClick={again}
           >
             {i18n.t('search:retry')}
           </Button>
@@ -164,7 +128,7 @@ const SearchList = ({
   return (
     <InfiniteScroll
       dataLength={items.allIds.length}
-      next={fetchList}
+      next={next}
       hasMore={hasMore}
       loader={
         <Progress key="items-progress" />
@@ -196,26 +160,7 @@ const SearchList = ({
   );
 };
 
-const mapStateToProps = (state) => {
-  const {
-    search: items,
-    error,
-    isFetching,
-    total,
-  } = state.search;
-
-  return {
-    items,
-    error,
-    isFetching,
-    total,
-  };
-};
-
 SearchList.propTypes = {
-  browseList: PropTypes.func.isRequired,
-  resetList: PropTypes.func.isRequired,
-  items: NodesType.isRequired,
   queryParams: PropTypes.shape({
     sort: PropTypes.oneOf([RELEVANT, RECENT]),
     q: PropTypes.string,
@@ -230,29 +175,12 @@ SearchList.propTypes = {
       recentFirst: PropTypes.bool,
     }),
   }).isRequired,
-  error: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
   // Opens another tab, from the words for a search that found nothing.
   onScope: PropTypes.func.isRequired,
   // Somebody looked up on another server, drawn first.
   lead: PropTypes.objectOf(PropTypes.any),
   // How many each tab finds.
   counts: PropTypes.objectOf(PropTypes.number),
-  total: PropTypes.number,
 };
 
-const mapDispatchToProps = (dispatch) => {
-  return {
-    browseList: (params) => {
-      return dispatch(actions.search.browse(params));
-    },
-    resetList: () => {
-      return dispatch(actions.search.reset());
-    },
-  };
-};
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SearchList);
+export default SearchList;

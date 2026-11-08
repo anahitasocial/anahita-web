@@ -163,6 +163,23 @@ describe('useBrowse', () => {
     expect(told).toBe(refused);
   });
 
+  it('asks for nothing while there is nothing to ask for, as a search with no words', () => {
+    const { store, asked } = listStore();
+    draw(store, { skip: true });
+    expect(browsed(asked)).toHaveLength(0);
+    expect(asked.map((x) => { return x.type; })).toContain('RESET');
+  });
+
+  it('asks once more for the page it is on, after a failure', () => {
+    const { store, asked } = listStore();
+    draw(store);
+    act(() => { store.dispatch({ type: 'ANSWER', ids: ids(1, 20), total: 45 }); });
+    act(() => { result.next(); });
+    act(() => { store.dispatch({ type: 'FAIL', error: 'The server could not be reached.' }); });
+    act(() => { result.again(); });
+    expect(browsed(asked).map((p) => { return p.start; })).toEqual([0, 20, 20]);
+  });
+
   it('puts what is posted on top, through the list', () => {
     const { store, asked } = listStore();
     draw(store);
