@@ -144,7 +144,7 @@ Each milestone ends in a shippable state.
 | 136 | ⬜ | A photo's focal point: the author marks what matters in a picture, and every crop of it keeps that in sight; sent and read as Mastodon's `focalPoint` **Planned on 2026-11-07, at the user's word,** from FediDB's comparison with Mastodon, Pixelfed and Loops and the user's own list, Mastodon first for its share of the fediverse; its plan written when it is reached | to be written | services + web | 1 | — |
 | 137 | ⬜ | Audio posts, with row 120: a sound as a post of its own kind, played in the app, sent to the fediverse as Mastodon's `Audio` (Bluesky has none); and the videos and sounds that arrive from Mastodon played here, where today they lead to their page elsewhere **Planned on 2026-11-07, at the user's word,** from FediDB's comparison with Mastodon, Pixelfed and Loops and the user's own list, Mastodon first for its share of the fediverse; its plan written when it is reached | to be written | services + web | 3–4 | 120, built with it |
 | 138 | ⬜ | The mobile app: anahita-web wrapped with Capacitor for iOS and Android, keeping MUI's own look, not rewritten in React Native (the user, 2026-11-07); a server chosen at the start, as Mastodon's apps do; signing in with OAuth and PKCE, the tokens in the Keychain, since the web app's session cookie is a third-party cookie in an app; push notifications, from a small service of the server's, also for the installed web app; the share sheet, the photo picker and links that open in the app. A Mastodon-compatible API, so that Mastodon's apps work too, is not part of it **Planned on 2026-11-07, at the user's word,** from FediDB's comparison with Mastodon, Pixelfed and Loops and the user's own list, Mastodon first for its share of the fediverse; its plan written when it is reached | to be written | web + services | 5–7 | 123 |
-| 30 | ⬜ | 40 · Anahita Recipes: a site ready to run for each purpose, so that running Anahita needs no knowledge of Kubernetes. **Planned again 2026-11-07 by purpose, at the user's word:** "The biggest challenge for setting up Anahita is the knowledge of devops and k8s. If we make it really simple for them with prewritten config and make files, then they can really benefit from the microservices architecture." `anahita-recipes` holds `site/`, banu.io's overlay and Makefile made general, with `make init`, and the recipes: `from-php` (row 92 made simple), `classic` (Mastodon and Pixelfed), `microblog` first; `long-form`, `video` and `events` later, each with its gaps. Planned 2026-10-11 by kind of organisation, kept for later until the code was public | [recipes.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/recipes.md) | services + web | 5 | 139 for `microblog` |
+| 30 | ⬜ | 40 · Anahita Recipes: a site ready to run for each purpose, so that running Anahita needs no knowledge of Kubernetes. **Planned again 2026-11-07 by purpose, at the user's word:** "The biggest challenge for setting up Anahita is the knowledge of devops and k8s. If we make it really simple for them with prewritten config and make files, then they can really benefit from the microservices architecture." `anahita-recipes` holds the recipes, each a directory that stands alone, made from banu.io's overlay and Makefile, with `make init` (2026-11-08): `php-migration` (row 92 made simple), `commons` (Mastodon and Pixelfed), `coffeehouse` (microblogging) first; `journal`, `theatre` and `gathering` later, each with its gaps. Planned 2026-10-11 by kind of organisation, kept for later until the code was public | [recipes.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/recipes.md) | services + web | 5 | 139 for `coffeehouse` |
 | 139 | ⬜ | A web app that fits its site: the kinds of post and of profile a site offers switched on and off by the server (`FEATURES`, sent in NodeInfo), their menus, tabs, composer and pages going with them and the server refusing what is off; each list shown as a list, a grid or masonry, the site choosing the default; and tutorials for making one's own home page, theme and layouts, from what was done for banu.io. For the recipes, and the mobile app with them **Planned on 2026-11-07, at the user's word;** its plan written when it is reached | to be written | web + services | 4–5 | 140, its first stages |
 | 140 | ⬜ | Logic apart from presentation, in stages between the features (the user, 2026-11-07: "I don't want the items down the list starve while we are code refactoring"): the containers whose fetching, state, rules and layout are in one file, some of nearly 800 lines, split into a hook that holds the data and its calls, tested on its own, and components that only draw. One area a stage, about two sessions, each the area the features after it touch: the lists, the composer, the photo and video pages, the replies and settings **Planned on 2026-11-07, at the user's word;** its plan written when it is reached | to be written | web | 2 a stage | — |
 | 141 | ⬜ | Testing and scaling Anahita, asked for by the user on 2026-11-07, for 100,000 active people on one site with room toward a few hundred thousand: metrics from every service and Grafana; a load test with k6 against a population made for it, in steps to 300,000, on EKS with Aurora and on one k3s server, run again after each change; the event bus's queues durable and shared, so that every service can run several copies; a writer and readers (`DSN_READ`), as RDS and Aurora give them; search on an index; home feeds written ahead, caches, push and a CDN only if the test calls for them; the findings written for any system built the same way, and the recipes' sizes made from them **Planned on 2026-11-07, at the user's word** | [scaling.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/scaling.md) | services | 10–14 | — |
@@ -188,11 +188,11 @@ the rows after it touch, so that the features further down are never kept
 waiting by a long refactoring. Each row's plan is checked against the code,
 or written, when it is reached.
 
-1. **30, phases 1 and 2,** recipes: `site/` with `classic`, then `from-php`:
+1. **30, phases 1 and 2,** recipes: `commons`, then `php-migration`:
    first, at the user's word, for the people waiting to try Anahita.
 2. **140, stage 1,** the lists: split before they gain ways to be shown.
 3. **141, phases 1 and 2,** seeing inside and the load test, on the
-   `classic` site; its other phases placed by what the test finds.
+   `commons` site; its other phases placed by what the test finds.
 4. **133,** muting: there are no mutes to import until there are mutes.
 5. **142, phase 1,** imports in export-service, which 124's go through.
 6. **124, parts 1 to 3,** moving: who you follow, blocks and mutes in
@@ -200,7 +200,7 @@ or written, when it is reached.
    accepting followers moving in.
 7. **140, stage 2,** the composer.
 8. **139,** a web app that fits its site; then **30, phases 3 and 4,**
-   `microblog` and the Recipes page on anahita.io.
+   `coffeehouse` and the Recipes page on anahita.io.
 9. **134,** interacting from another server.
 10. **122,** content warnings, with Made with AI: before messages, and before
    growth.
@@ -212,7 +212,7 @@ or written, when it is reached.
 15. **123,** direct messages: the largest, after mutes and warnings.
 16. **132,** deleting one's old posts.
 17. **138,** the mobile app: push matters most once there are messages.
-18. **30, phase 5,** the `long-form`, `video` and `events` recipes, each
+18. **30, phase 5,** the `journal`, `theatre` and `gathering` recipes, each
     with its gaps weighed first.
 
 **Mastodon's features kept for later,** not planned:
