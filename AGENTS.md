@@ -101,8 +101,12 @@ check the API's answer and the rows in MySQL. Say what headless Chrome
 cannot tell: Safari, real keyboards, how it feels. Delete what you posted to
 try it.
 
-People and places made up for a test, or to try a change, are named after
-Star Trek characters and places.
+People, groups and places made up for a test, an example, the dev seed or
+to try a change are named after characters and places from five shows, as
+Faker names them (`faker-ruby/faker`, `tv_shows`): Star Trek, Stargate, Doctor
+Who, The Expanse and The IT Crowd, and no others (the user, 2026-11-08). She,
+he and they among them, and some with no pronouns. Their names and places
+only: no logos, insignia or lines quoted from the shows.
 
 ## Product principles
 
