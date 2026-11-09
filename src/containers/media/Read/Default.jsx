@@ -19,6 +19,8 @@ import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
 import PhotoSlides from '../../../components/PhotoSlides';
+import VideoElsewhere from '../../../components/VideoElsewhere';
+import videoElsewhere from '../../../utils/videoElsewhere';
 import PinnedLabel from '../../../components/PinnedLabel';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
@@ -74,6 +76,10 @@ const MediumReadDefault = ({
   const [talkRef, talkTop] = useStickyColumn(isWide, 64);
 
   const portrait = getPortraitURL(medium, 'original');
+  // A video from elsewhere shows as its poster, leading to it, and its
+  // words without the line that did.
+  const elsewhere = videoElsewhere.of(medium);
+  const content = elsewhere ? elsewhere.content : medium.content;
   const coverUrl = getCoverURL(medium, 'large');
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
@@ -162,7 +168,15 @@ const MediumReadDefault = ({
       {/* One photo opens in the theatre too, as several do, to be seen
           larger and zoomed into (asked for again by the user on
           2026-10-17). */}
-      {!hasSlides && portrait && isLoaded &&
+      {elsewhere && portrait && isLoaded &&
+        <VideoElsewhere
+          poster={portrait}
+          page={elsewhere.page}
+          site={elsewhere.site}
+          alt={photoFiles.altOf(medium)}
+          description={photoFiles.descriptionOf(medium)}
+        />}
+      {!hasSlides && portrait && isLoaded && !elsewhere &&
       <Box sx={{ position: 'relative' }}>
         {handleView ?
           <ButtonBase
@@ -202,7 +216,7 @@ const MediumReadDefault = ({
           >
             {medium.title}
           </Typography>}
-          {medium.content &&
+          {content &&
           <EntityBody
             contentFilter
             // Long writing is read at length, in larger type.
@@ -213,7 +227,7 @@ const MediumReadDefault = ({
             embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
             cards={medium.linkPreviews || []}
           >
-            {medium.content}
+            {content}
           </EntityBody>}
           {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
             <Citations text={medium.content} cards={medium.linkPreviews || []} />}

@@ -21,6 +21,8 @@ import CardOwner from '../../../components/MediumOwnerCardHeader';
 import openOnClick from '../../../utils/openOnClick';
 import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
+import VideoElsewhere from '../../../components/VideoElsewhere';
+import videoElsewhere from '../../../utils/videoElsewhere';
 import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
@@ -78,7 +80,10 @@ const FeedCardDefault = ({
   const authorName = getPersonName(node.author);
   const portrait = getPortraitURL(node, 'medium');
   const cover = getCoverURL(node, 'medium');
-  const { content } = node;
+  // A video from elsewhere shows as its poster, leading to it, and its
+  // words without the line that did.
+  const elsewhere = videoElsewhere.of(node);
+  const content = elsewhere ? elsewhere.content : node.content;
   const title = node.title || '';
   const url = getURL(node);
   const long = isLong(node);
@@ -146,7 +151,15 @@ const FeedCardDefault = ({
             navigate(url);
           }}
         />}
-      {!photoFiles.hasSeveral(node) && portrait &&
+      {elsewhere && portrait &&
+        <VideoElsewhere
+          poster={portrait}
+          page={elsewhere.page}
+          site={elsewhere.site}
+          alt={photoFiles.altOf(node)}
+          description={photoFiles.descriptionOf(node)}
+        />}
+      {!photoFiles.hasSeveral(node) && portrait && !elsewhere &&
         <Box sx={{ position: 'relative' }}>
           <Link href={url}>
             <CardMedia

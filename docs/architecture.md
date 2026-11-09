@@ -460,9 +460,13 @@ does, and clears what it kept. Language names come from the browser
 
 Where a post's text is drawn, `components/NodeBody.jsx` puts the post's
 language on it as the `lang` attribute, so a screen reader reads each post in
-the right one. The line a post from Bluesky ends with to lead to its video
+the right one. The line a post from elsewhere ends with to lead to its video
 (`▶ bsky.app`, from anahita-libs' `WithVideoLink`) is drawn with a light play
-icon before the link, not the heavy triangle.
+icon before the link, not the heavy triangle. When the post's one picture is
+that video's poster, as a Bluesky video's is, the two are drawn as one
+(`components/VideoElsewhere.jsx`, `utils/videoElsewhere.js`): the poster
+with a play button and the site's name in its corner, opening the video
+there in a new tab, and the words without the line.
 
 **Right-to-left writing.** The interface is left to right and has no
 right-to-left layout. What people write is another matter: a post's title and

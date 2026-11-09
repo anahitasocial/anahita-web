@@ -128,6 +128,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    followers follow you there, the posts stay, and this account shows
    where you went and no longer posts, follows or likes. Come back takes
    it back.
+6. **A video from Bluesky shows as its poster,** with a play button that
+   opens it on Bluesky, in place of a bare "▶ bsky.app" link.
 
 ### Removed
 

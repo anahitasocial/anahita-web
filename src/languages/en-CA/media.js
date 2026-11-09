@@ -20,6 +20,8 @@ export default {
     readMore: 'Read more',
     viewProfile: 'View profile',
   },
+  // A video from elsewhere, not kept here: its poster leads to it.
+  videoElsewhere: 'Play on {{site}}',
   stepper: {
     position: '{{index}} of {{total}}',
     next: 'Next post',

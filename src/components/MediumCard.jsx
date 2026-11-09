@@ -19,6 +19,8 @@ import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';
 import CardHeaderOwner from './MediumOwnerCardHeader';
 import PhotoSlides from './PhotoSlides';
+import VideoElsewhere from './VideoElsewhere';
+import videoElsewhere from '../utils/videoElsewhere';
 import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
 import LinkPreviewCard from './LinkPreviewCard';
@@ -77,6 +79,10 @@ const MediumCard = ({
 
   // A post with several images is drawn as slides, which load their own.
   const hasSlides = photoFiles.hasSeveral(medium);
+  // A video from elsewhere shows as its poster, leading to it, and its
+  // words without the line that did.
+  const elsewhere = videoElsewhere.of(medium);
+  const content = elsewhere ? elsewhere.content : medium.content;
 
   const [isPortraitLoaded, setIsPortraitLoaded] = useState(!portrait);
 
@@ -150,7 +156,15 @@ const MediumCard = ({
             return navigate(url);
           }}
         />}
-      {!hasSlides && portrait && isPortraitLoaded &&
+      {elsewhere && portrait && isPortraitLoaded &&
+        <VideoElsewhere
+          poster={portrait}
+          page={elsewhere.page}
+          site={elsewhere.site}
+          alt={photoFiles.altOf(medium)}
+          description={photoFiles.descriptionOf(medium)}
+        />}
+      {!hasSlides && portrait && isPortraitLoaded && !elsewhere &&
         <Box sx={{ position: 'relative' }}>
           <ButtonBase
             style={{
@@ -219,9 +233,9 @@ const MediumCard = ({
             {medium.title}
           </PostTitle>}
         {medium.content && isLong(medium) && <LongSummary node={medium} url={url} />}
-        {medium.content && !isLong(medium) &&
+        {content && !isLong(medium) &&
           <ReadMore contentFilter lang={medium.language} to={url}>
-            {medium.content}
+            {content}
           </ReadMore>}
         {linkPreviews.isShown(medium.linkPreview) &&
           <LinkPreviewCard preview={medium.linkPreview} />}
