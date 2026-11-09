@@ -725,7 +725,7 @@ and who is tagged, what is chosen in chips under its row, then **Post**.
 The words step is written as Threads writes a post (the user,
 2026-11-08): the writer's name above the words, in bold, and, in a thread,
 where each note is in it ("2/3", `NoteHead` in `Composer/ThreadParts.jsx`);
-the words at 15 px (`WORDS`); and under them one line, with the Photo,
+the words at 15 px, 16 on a touch screen, where Safari zooms into a smaller field (`WORDS`); and under them one line, with the Photo,
 GIF, Video and Audio icons, their glyphs in line with the words, and the
 count, in place of a row at the dialog's foot.
 Back returns to the words with everything kept, the words step staying
@@ -1024,7 +1024,8 @@ is simply no card.
    finds the first link once the writer has paused for half a second, or
    at once when it was pasted, and asks for its card. The ✕ on the card posts the note without it. A link
    with nothing to show, or whose card was taken off, is not asked for
-   again.
+   again. Each note of a thread written in one go finds its own
+   card the same way, and sends it with it, where it has no photos.
 2. **While a note is edited** on its own page the same hook is used, given
    the card the note already has, which it shows without asking again. A
    different link gets its own card, and the ✕ saves the note without one
