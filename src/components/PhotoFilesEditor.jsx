@@ -244,6 +244,12 @@ const PhotoFilesEditor = ({
   // when its upload failed.
   const originals = useRef({});
 
+  // Whether this browser can draw the file as it was picked: not a HEIC,
+  // anywhere but Safari, which preparePhoto has then made a JPEG.
+  const canShow = (file) => {
+    return !/^image\/hei[cf]/.test(file.type || '') && !/\.hei[cf]$/i.test(file.name || '');
+  };
+
   // A photo made ready (utils/preparePhoto: no larger than is kept, upright,
   // a JPEG or a PNG), then sent, saying how far it has got. Its preview is
   // the one made ready, which every browser can show, an iPhone's HEIC
@@ -267,10 +273,15 @@ const PhotoFilesEditor = ({
       });
     }).then((result) => {
       delete originals.current[key];
+      // A HEIC this browser could not read was sent as it is (roadmap row
+      // 135): its preview is the size the server made of it.
+      const urls = result.data.urls || {};
+      const made = !canShow(file) && (urls.medium || urls.large || urls.original);
       onChange((current) => {
         return photoFiles.update(current, key, {
           status: STATUS.READY,
           uploadId: result.data.uploadId,
+          ...(made && made.url ? { previewUrl: made.url } : {}),
         });
       });
     }).catch((error) => {

@@ -374,6 +374,10 @@ const getSupportedMimetypes = (namespace) => {
       return [
         'image/jpeg',
         'image/png',
+        'image/webp',
+        'image/heic',
+        'image/heif',
+        'image/avif',
       ];
     default:
       return [];

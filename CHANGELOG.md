@@ -26,6 +26,10 @@ Needs Anahita Services from `main` (Embryo), for content warnings.
    order; the + button shows the files' progress together, and a file that
    cannot be posted stops the thread there, saying why.
 
+3. **WebP, HEIC and AVIF photos** (roadmap row 135), in posts, replies and
+   an article's cover: asked for by the pickers, and shown before they are
+   posted, an iPhone's HEIC too where the browser cannot draw it.
+
 ### Fixed
 
 1. **A GIF or a video sent as a reply kept its words:** they were dropped

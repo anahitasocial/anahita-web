@@ -511,8 +511,12 @@ itself. There they are put in order with the arrows under each, removed, and
 described with Add alt text; taking out the last one closes it, and more can
 be added or dropped. Each image is made ready in the browser first
 (`utils/preparePhoto.js`): no more than 2,048 pixels on its longest side,
-turned upright, and an iPhone's HEIC made a JPEG, since photo-service takes
-JPEG and PNG only. It is then uploaded at once, in a request of its own
+turned upright, and an iPhone's HEIC made a JPEG where the browser can read
+one (Safari). photo-service takes JPEG, PNG, WebP, HEIC and AVIF (roadmap
+row 135), and keeps each as a JPEG or a PNG: a WebP or an AVIF no larger than
+is kept is sent as it is, and a HEIC this browser cannot draw is sent as it
+is and shown by the size the server made of it (the upload's `urls`). It is
+then uploaded at once, in a request of its own
 (`api.photos.upload`), with its progress on it, and "Try again" if it fails.
 The Post button waits until all of them are stored, and the post itself is
 then a small JSON request naming the uploads.

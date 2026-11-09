@@ -12,7 +12,7 @@ import i18n from '../../../languages';
 
 // What the cover service takes (identity-image-service): said when it is
 // picked rather than after the article is posted.
-const TYPES = ['image/jpeg', 'image/png'];
+const TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/heic', 'image/heif', 'image/avif'];
 const MAX_BYTES = 10 * 1024 * 1024;
 
 // An article's cover, chosen before it is posted: a slim band that says so
