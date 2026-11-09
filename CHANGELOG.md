@@ -7,7 +7,9 @@ as anahita-services on the same day, takes the Embryo section under its
 version and date. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
-## Embryo
+## v1.2.2 Birth, 2026-11-08
+
+A maintenance release of the web app alone, for Anahita Services v1.2.0.
 
 ### Fixed
 
