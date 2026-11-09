@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -13,12 +13,14 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
 import ActorAvatar from '../../../components/ActorAvatar';
+import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import LIMITS from '../../../constants/limits';
 import threadNotes from '../../../utils/threadNotes';
 import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
 import AttachButtons from './AttachButtons';
+import useLinkPreview from './useLinkPreview';
 
 // How much room is left, as Bluesky counts it down (the user, 2026-11-08):
 // what is left, then a ring that fills. Ink as it fills; the warning's
@@ -156,8 +158,13 @@ SplitWords.propTypes = {
 // its replies (ReplyItem.jsx) and as Threads writes one (the user,
 // 2026-11-08).
 // The words of a note in the composer: 15 px, as Threads writes them, a
-// step under MUI's 16 (the user, 2026-11-08).
-export const WORDS = { fontSize: '0.9375rem' };
+// step under MUI's 16 (the user, 2026-11-08); but 16 on a touch screen,
+// where Safari zooms the page into any field smaller as it is focused, and
+// the composer opened wider than the screen.
+export const WORDS = {
+  fontSize: '0.9375rem',
+  '@media (pointer: coarse)': { fontSize: '1rem' },
+};
 
 // Above a note's words in the composer: its writer's name, and, in a thread,
 // where it is in it, "2/3", as Threads writes a thread (the user,
@@ -253,6 +260,14 @@ const ThreadNote = ({
   const change = (changeNote) => {
     onChange(threadNotes.changeOne(note.key, changeNote));
   };
+  // A card for the link in it, as the first note has, where it has no
+  // photos to show; which link goes with the note when it is posted.
+  const card = useLinkPreview(words, photos.length === 0);
+  useEffect(() => {
+    if ((note.linkPreviewUrl || '') !== card.url) {
+      change((current) => { return { ...current, linkPreviewUrl: card.url }; });
+    }
+  }, [card.url]);
   const canPhotos = Boolean(uploader) && photosMax > 0;
   const removeButton = (sx) => {
     return (
@@ -305,6 +320,7 @@ const ThreadNote = ({
             const { value } = event.target;
             change((current) => { return { ...current, words: value }; });
           }}
+          onPaste={card.onPaste}
           placeholder={i18n.t('composer:thread.placeholder')}
           aria-label={i18n.t('composer:thread.part', { number: index + 2 })}
           autoFocus={isLast}
@@ -319,6 +335,11 @@ const ThreadNote = ({
             htmlInput: { dir: direction, maxLength: LIMITS.POST_BODY_MAX },
           }}
         />
+        {photos.length === 0 &&
+          <LinkPreviewCard
+            preview={card.preview}
+            onRemove={disabled ? null : card.remove}
+          />}
         {canPhotos && (photos.length > 0 || incoming) &&
           <Box sx={{ mt: 1 }}>
             <PhotoFilesEditor
@@ -368,6 +389,7 @@ const ThreadNote = ({
 const notePropType = PropTypes.shape({
   key: PropTypes.string.isRequired,
   words: PropTypes.string.isRequired,
+  linkPreviewUrl: PropTypes.string,
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
 });
 

@@ -9,7 +9,9 @@ import photoFiles from './photoFiles';
 let made = 0;
 const make = (words = '') => {
   made += 1;
-  return { key: `note-${made}`, words, photos: [] };
+  return {
+    key: `note-${made}`, words, photos: [], linkPreviewUrl: '',
+  };
 };
 
 // The notes with `key` changed by `change`, from a note to the note as it
@@ -36,6 +38,9 @@ const toPart = (note, language) => {
     content: note.words.trim(),
     language,
     ...(note.photos.length > 0 ? { uploads: photoFiles.toRequest(note.photos) } : {}),
+    // The card for its link, as the composer found it; none with photos.
+    ...(note.photos.length === 0 && note.linkPreviewUrl ?
+      { linkPreviewUrl: note.linkPreviewUrl } : {}),
   };
 };
 

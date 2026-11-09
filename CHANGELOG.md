@@ -7,6 +7,17 @@ as anahita-services on the same day, takes the Embryo section under its
 version and date. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Fixed
+
+1. **The composer no longer zooms on an iPhone.** Its words are 16 px on
+   a touch screen, where Safari zooms into any smaller field as it is
+   focused and the composer opened wider than the screen; 15 px on a
+   desktop.
+2. **A link in a thread's later note shows its card,** as in the first,
+   and the card goes with the note.
+
 ## v1.2.1 Birth, 2026-11-08
 
 A maintenance release of the web app alone, for Anahita Services v1.2.0.

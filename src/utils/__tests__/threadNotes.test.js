@@ -22,6 +22,14 @@ describe('threadNotes', () => {
     expect(threadNotes.isReady({ words: '', photos: [stored, sending] })).toBe(false);
   });
 
+  it('is sent with its card\'s link, but not beside pictures', () => {
+    const address = 'https://example.org/tycho';
+    expect(threadNotes.toPart({ words: address, photos: [], linkPreviewUrl: address }, 'en'))
+      .toEqual({ content: address, language: 'en', linkPreviewUrl: address });
+    expect(threadNotes.toPart({ words: address, photos: [stored], linkPreviewUrl: address }, 'en'))
+      .not.toHaveProperty('linkPreviewUrl');
+  });
+
   it('is sent with its uploads only when it has pictures', () => {
     expect(threadNotes.toPart(threadNotes.make(' On the Canterbury '), 'en')).toEqual({ content: 'On the Canterbury', language: 'en' });
     expect(threadNotes.toPart({ words: '', photos: [stored] }, 'en')).toEqual({
