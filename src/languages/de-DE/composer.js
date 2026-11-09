@@ -6,6 +6,9 @@ export default {
     add: 'Zum Thread hinzufügen',
     placeholder: 'Weiterschreiben…',
     part: 'Beitrag {{number}} des Threads',
+    // Where a note is in its thread, under its writer's name.
+    position: '{{number}}/{{count}}',
+    positionLabel: 'Beitrag {{number}} von {{count}}',
     remove: 'Aus dem Thread entfernen',
     count: '{{ count }} / {{ max }}',
     split: 'In einen Thread aufteilen',

@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
 import LIMITS from '../../../constants/limits';
+import threadNotes from '../../../utils/threadNotes';
 import threadSplit from '../../../utils/threadSplit';
 
 // The count and the split of a thread's first note, for the composer and
@@ -31,7 +32,8 @@ const useThreadSplit = ({
       body, moreParts, first: notes[0], count: notes.length,
     });
     setBody(notes[0]);
-    setMoreParts([...notes.slice(1), ...moreParts]);
+    const made = notes.slice(1).map((words) => { return threadNotes.make(words); });
+    setMoreParts([...made, ...moreParts]);
   };
 
   const undo = () => {

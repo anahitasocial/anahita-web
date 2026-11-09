@@ -6,6 +6,9 @@ export default {
     add: 'Agregar al hilo',
     placeholder: 'Sigue escribiendo…',
     part: 'Nota {{number}} del hilo',
+    // Where a note is in its thread, under its writer's name.
+    position: '{{number}}/{{count}}',
+    positionLabel: 'Nota {{number}} de {{count}}',
     remove: 'Quitar del hilo',
     count: '{{ count }} / {{ max }}',
     split: 'Dividir en un hilo',

@@ -8,6 +8,9 @@ export default {
     add: 'Add to thread',
     placeholder: 'Say more…',
     part: 'Note {{number}} of the thread',
+    // Where a note is in its thread, under its writer's name.
+    position: '{{number}}/{{count}}',
+    positionLabel: 'Note {{number}} of {{count}}',
     remove: 'Remove from the thread',
     count: '{{ count }} / {{ max }}',
     split: 'Split into a thread',

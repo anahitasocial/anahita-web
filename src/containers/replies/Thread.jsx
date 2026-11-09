@@ -35,6 +35,7 @@ import PersonType from '../../proptypes/Person';
 import postLanguage from '../../utils/postLanguage';
 import replyAccess from '../../utils/replyAccess';
 import thread from '../../utils/thread';
+import threadNotes from '../../utils/threadNotes';
 import visitor from '../../utils/visitor';
 import utils from '../../utils';
 import events from '../../utils/events';
@@ -133,15 +134,19 @@ const RepliesThread = ({
     }
 
     // A thread written in one go: its notes made together, in order, each
-    // answering the one before (roadmap row 101).
+    // answering the one before (roadmap row 101), each with words,
+    // pictures or both (row 143).
     if (attached.thread) {
-      const parts = [body, ...attached.thread].map((content, at) => {
-        return {
-          content,
-          language,
-          ...(at === 0 && card.linkPreviewUrl ? { linkPreviewUrl: card.linkPreviewUrl } : {}),
-        };
-      });
+      const first = {
+        content: body,
+        language,
+        ...(attached.uploads ? { uploads: attached.uploads } : {}),
+        ...(!attached.uploads && card.linkPreviewUrl ?
+          { linkPreviewUrl: card.linkPreviewUrl } : {}),
+      };
+      const parts = [first, ...attached.thread.map((note) => {
+        return threadNotes.toPart(note, language);
+      })];
       return api.replies.addReplyThread(parent, parts).then((result) => {
         setReplies((current) => {
           return result.data.parts.reduce((list, part) => {

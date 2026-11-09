@@ -30,7 +30,9 @@ import DetailRow from '../../../components/DetailRow';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
-import ThreadParts, { SplitWords, ThreadJoin, ThreadLine } from './ThreadParts';
+import ThreadParts, {
+  NoteHead, SplitWords, ThreadJoin, ThreadLine, WORDS,
+} from './ThreadParts';
 import useThreadSplit from './useThreadSplit';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
@@ -51,6 +53,7 @@ import audioFiles from '../../../utils/audio';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
+import threadNotes from '../../../utils/threadNotes';
 import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
 import useRulesFirst from '../../rules/useRulesFirst';
@@ -143,10 +146,10 @@ const ShortComposer = ({
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
-  // A thread is of notes: words alone, no pictures and no video.
-  const canThread = canWords && !hasPhotos && !video && !isAddingPhotos;
-  const threadParts = canThread ?
-    moreParts.map((each) => { return each.trim(); }).filter(Boolean) : [];
+  // A thread is of notes, each with words, pictures or both (roadmap row
+  // 143); not yet with a GIF, a video or a sound.
+  const canThread = canWords && !video;
+  const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
   const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
   // A video on its way, being sent or prepared, which the app sends: one
   // at a time, so the Video button is off until it is posted.
@@ -158,7 +161,9 @@ const ShortComposer = ({
     photosReady,
     hasVideo: Boolean(video),
   });
-  const isHeldBack = (hasPhotos && !photosReady) || busy;
+  // Held back too while a note's pictures are still being sent.
+  const isHeldBack = (hasPhotos && !photosReady) || busy ||
+    threadParts.some((note) => { return !threadNotes.isReady(note); });
 
   const linkPreview = useLinkPreview(body, canWords && !hasPhotos && !video);
   // Hashtags in use offered as one is typed (roadmap row 78).
@@ -243,6 +248,27 @@ const ShortComposer = ({
   // agreed: agreed to again first (roadmap row 102, part 5c).
   const rules = useRulesFirst(actor, 'post');
 
+  // Once a photo post is made, alone or as a thread's first note: whoever
+  // is in its photos tagged, and who could not be, or is asked first, said
+  // so instead of "Posted".
+  const taggedAfter = (made, tagged) => {
+    if (tagged.length === 0 || !made || !made.id) {
+      posted(made);
+      return null;
+    }
+    return tagPeople(made, tagged).then((outcomes) => {
+      const said = tagOutcomeMessage(outcomes);
+      if (said.error) {
+        alertError(said.text);
+      } else if (outcomes.some((each) => { return each.outcome === 'asked'; })) {
+        alertSuccess(said.text);
+      } else {
+        alertSuccess(i18n.t('prompts:posted.success'));
+      }
+      reset();
+    });
+  };
+
   const handleSubmit = (event) => {
     if (event) {
       event.preventDefault();
@@ -284,22 +310,34 @@ const ShortComposer = ({
 
     // A thread: its notes made together, in order, all or none. The first
     // takes what a post takes; the rest are replies to the one before.
+    // Each note with pictures is a photo post in it (roadmap row 143): the
+    // first with the post's own, uploaded for the profile it is on, and
+    // whether they may be downloaded; the rest with theirs, the writer's.
     if (threadParts.length > 0) {
       const { language } = choices.request();
-      const post = shared();
+      const post = {
+        ...shared(),
+        ...(photosReady ? { allow_download: choices.allowDownload } : {}),
+      };
       delete post.content;
-      const parts = [text, ...threadParts].map((content, at) => {
-        return {
-          content,
-          language,
-          ...(at === 0 && linkPreview.url ? { linkPreviewUrl: linkPreview.url } : {}),
-        };
-      });
+      const first = {
+        content: text,
+        language,
+        ...(photosReady ? { uploads: photoFiles.toRequest(photoItems) } : {}),
+        ...(!photosReady && linkPreview.url ? { linkPreviewUrl: linkPreview.url } : {}),
+      };
+      const parts = [first, ...threadParts.map((note) => {
+        return threadNotes.toPart(note, language);
+      })];
+      // Whoever is in the first note's photos is tagged once it is made, as
+      // on a photo post.
+      const tagged = photosReady ? people : [];
       setIsSending(true);
       api.replies.addThread(actor, post, parts).then((result) => {
+        const [made] = result.data.parts;
         // Its first note, at the head of the open feed, as any post.
-        dispatch({ type: 'NOTES_ADD_SUCCESS', node: result.data.parts[0] });
-        posted(result.data.parts[0]);
+        dispatch({ type: 'NOTES_ADD_SUCCESS', node: made });
+        return taggedAfter(made, tagged);
       }).catch(() => {
         alertError(i18n.t('prompts:posted.error'));
       }).finally(() => {
@@ -322,25 +360,9 @@ const ShortComposer = ({
     const namespace = kind === 'photo' ? 'photos' : 'notes';
 
     setIsSending(true);
-    // Whoever is in the photos is tagged once the post is made; who could
-    // not be, or is asked first, is said so instead of "Posted".
     const tagged = kind === 'photo' ? people : [];
     dispatch(actions[namespace].add(post, actor)).then((made) => {
-      if (tagged.length === 0 || !made || !made.id) {
-        posted(made);
-        return null;
-      }
-      return tagPeople(made, tagged).then((outcomes) => {
-        const said = tagOutcomeMessage(outcomes);
-        if (said.error) {
-          alertError(said.text);
-        } else if (outcomes.some((each) => { return each.outcome === 'asked'; })) {
-          alertSuccess(said.text);
-        } else {
-          alertSuccess(i18n.t('prompts:posted.success'));
-        }
-        reset();
-      });
+      return taggedAfter(made, tagged);
     }).catch(() => {
       // The words and pictures stay, to post again.
       alertError(i18n.t('prompts:posted.error'));
@@ -408,12 +430,17 @@ const ShortComposer = ({
   // opens the system's picker at once, and what is picked shows straight
   // away, being sent. Hidden while posting rather than disabled: a tooltip
   // on a disabled button is never seen.
+  const offers = {
+    photos: canPhotos && !busy && !video && !hasPhotos,
+    video: canVideo && !busy && !videoBusy && !hasPhotos && !video,
+    audio: canAudio && !busy && !videoBusy && !hasPhotos && !video,
+  };
   const attachButtons = (
     <AttachButtons
-      mobile={mobile}
-      photos={canPhotos && !busy && !video && !hasPhotos}
-      video={canVideo && !busy && !videoBusy && !hasPhotos && !video}
-      audio={canAudio && !busy && !videoBusy && !hasPhotos && !video}
+      mobile
+      photos={offers.photos}
+      video={offers.video}
+      audio={offers.audio}
       onPhotos={(files) => {
         setIsAddingPhotos(true);
         setIncoming({ files });
@@ -549,22 +576,28 @@ const ShortComposer = ({
     );
   };
 
+  // Who writes it, above each note: the viewer, wherever it is posted.
+  const writerName = utils.node.getActorName(viewer);
+
   // The notes after the first: beside the writer's small picture on a
   // desktop, joined by one line to theirs on the first, as Threads writes a
   // thread (the user, 2026-11-08); on a mobile, where the words have the
   // width, a line alone.
-  const threadNotes = (
+  const threadNotesShown = (
     <ThreadParts
       parts={moreParts}
       onChange={setMoreParts}
-      canAdd={Boolean(text) &&
-        !moreParts.some((each) => { return !each.trim(); })}
+      canAdd={(Boolean(text) || photosReady) &&
+        !moreParts.some((note) => { return !threadNotes.hasSomething(note); })}
       max={LIMITS.THREAD_PARTS_MAX}
       disabled={busy}
       direction={choices.direction}
       goesToBluesky={goesToBluesky}
       limit={noteLimit}
       writer={mobile ? null : viewer}
+      uploader={viewer}
+      writerName={writerName}
+      photosMax={canPhotos ? photoFiles.maxFiles(nodeInfo) : 0}
     />
   );
 
@@ -572,6 +605,7 @@ const ShortComposer = ({
   // screen.
   const content = (
     <>
+      <NoteHead name={writerName} number={1} count={canThread ? moreParts.length + 1 : 1} />
       <TextField
         value={body}
         onChange={(event) => {
@@ -584,13 +618,14 @@ const ShortComposer = ({
         disabled={busy}
         variant="standard"
         multiline
-        // Room to write in, until a photo, a video or the next note of a
-        // thread is the post's: then two lines, so that it sits close.
-        minRows={hasPhotos || video || moreParts.length > 0 ? 2 : 6}
+        // Room to write in, until a photo or a video is the post's: then
+        // two lines, so that it sits close; one, as each note after it, once
+        // a thread has a second note.
+        minRows={(moreParts.length > 0 && 1) || (hasPhotos || video ? 2 : 6)}
         fullWidth
         inputRef={hashtags.inputRef}
         slotProps={{
-          input: { disableUnderline: true },
+          input: { disableUnderline: true, sx: WORDS },
           htmlInput: {
             dir: choices.direction,
             maxLength: CONTENT.MAX_LENGTH,
@@ -599,24 +634,11 @@ const ShortComposer = ({
         }}
       />
       <HashtagSuggestions {...hashtags.overlay} />
-      {/* Its line is kept, so that nothing moves as the words grow: what
-          Bluesky shows of them, or the thread they can be split into; and
-          how many letters they have of what a note holds where it goes. */}
-      {canWords &&
-        <ThreadLine length={split.length} limit={noteLimit}>
-          <SplitWords
-            split={split}
-            otherwise={cutForBluesky ?
-              i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
-              ' '}
-          />
-        </ThreadLine>}
       {!hasPhotos && !video &&
         <LinkPreviewCard
           preview={linkPreview.preview}
           onRemove={busy ? null : linkPreview.remove}
         />}
-      {canThread && mobile && threadNotes}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>
           <PhotoFilesEditor
@@ -671,6 +693,38 @@ const ShortComposer = ({
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {i18n.t(morePictures, { max: LIMITS.PICTURES_SHOWN_MAX })}
         </Typography>}
+      {/* One line under it, as under each note of a thread (the user,
+          2026-11-08, after Threads): what can be added to it, the icons'
+          glyphs in line with the words; then, kept so that nothing moves as
+          the words grow, what Bluesky shows of them or the thread they can
+          be split into, and how many letters they have of what a note holds
+          where it goes. */}
+      <Box sx={{
+        display: 'flex', gap: 1, alignItems: 'center', mt: 1,
+      }}
+      >
+        {(offers.photos || offers.video || offers.audio) &&
+          <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center', ml: -1, flexShrink: 0 }}>
+            {attachButtons}
+          </Stack>}
+        {canWords &&
+          <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+            <ThreadLine length={split.length} limit={noteLimit}>
+              <SplitWords
+                split={split}
+                otherwise={cutForBluesky ?
+                  i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
+                  ' '}
+              />
+            </ThreadLine>
+          </Box>}
+      </Box>
+      {(canVideo || canAudio) && videoBusy && !hasPhotos &&
+        <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
+          {onItsWay}
+        </Typography>}
+      {/* On a mobile, the notes after the first come after all of it. */}
+      {canThread && mobile && threadNotesShown}
 
     </>
   );
@@ -772,34 +826,8 @@ const ShortComposer = ({
               {content}
             </Box>
           </Stack>
-          {canThread && !mobile && threadNotes}
+          {canThread && !mobile && threadNotesShown}
         </Box>
-        {!onDetails &&
-          <>
-            <Divider />
-            {/* What can be added, at the bottom, above the keyboard and
-                within a thumb's reach. */}
-            <Stack
-              direction="row"
-              spacing={0.5}
-              sx={{
-                // Its icons 16 px from the edge, inside each button's own
-                // 8 px, and a step clear of the line above and the edge below.
-                alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
-              }}
-            >
-              {attachButtons}
-            </Stack>
-            {(canVideo || canAudio) && videoBusy && !hasPhotos &&
-              <Typography
-                variant="caption"
-                color="textSecondary"
-                component="p"
-                sx={{ px: 2, pb: 1 }}
-              >
-                {onItsWay}
-              </Typography>}
-          </>}
       </Box>
       {rules.dialog}
       <TagPeoplePicker

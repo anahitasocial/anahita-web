@@ -4,6 +4,9 @@ export default {
     add: 'Ajouter au fil',
     placeholder: 'Ajoutez la suite…',
     part: 'Note {{number}} du fil',
+    // Where a note is in its thread, under its writer's name.
+    position: '{{number}}/{{count}}',
+    positionLabel: 'Note {{number}} sur {{count}}',
     remove: 'Retirer du fil',
     count: '{{ count }} / {{ max }}',
     split: 'Découper en fil',

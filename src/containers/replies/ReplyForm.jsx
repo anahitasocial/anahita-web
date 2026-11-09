@@ -35,6 +35,7 @@ import { PHOTO_TYPES } from '../../utils/preparePhoto';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
 import LIMITS from '../../constants/limits';
+import threadNotes from '../../utils/threadNotes';
 import threadSplit from '../../utils/threadSplit';
 
 const { CONTENT } = MEDIUM.FIELDS;
@@ -98,11 +99,12 @@ const ReplyForm = ({
   const canAddVideo = attachments && videos.isOn(nodeInfo);
   // Something to send: words, pictures that are all stored, or a video.
   const hasSomething = Boolean(text) || photosReady || Boolean(video);
-  const isHeldBack = (hasPhotos && !photosReady) || isSending;
-  // Of words alone, and only for a new reply.
-  const canThread = attachments && !hasPhotos && !video && !isAddingPhotos;
-  const threadParts = canThread ?
-    moreParts.map((each) => { return each.trim(); }).filter(Boolean) : [];
+  // Only for a new reply, its notes with words, pictures or both (roadmap
+  // row 143), not yet with a GIF or a video.
+  const canThread = attachments && !video;
+  const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
+  const isHeldBack = (hasPhotos && !photosReady) || isSending ||
+    threadParts.some((note) => { return !threadNotes.isReady(note); });
   // Where a reply's note ends: what the networks the viewer is on hold, as a
   // reply goes where the thread's writer and its readers are (roadmap row
   // 126). The count, and long words split into a thread, as in the composer.
@@ -160,11 +162,15 @@ const ReplyForm = ({
       return;
     }
 
+    // A thread's first note may have pictures as well (roadmap row 143).
     let attached = {};
-    if (photosReady) {
+    if (threadParts.length > 0) {
+      attached = {
+        thread: threadParts,
+        ...(photosReady ? { uploads: photoFiles.toRequest(photoItems) } : {}),
+      };
+    } else if (photosReady) {
       attached = { uploads: photoFiles.toRequest(photoItems) };
-    } else if (threadParts.length > 0 && text) {
-      attached = { thread: threadParts };
     } else if (video) {
       attached = { video };
     }
@@ -275,18 +281,6 @@ const ReplyForm = ({
         <LinkPreviewCard
           preview={card.preview}
           onRemove={isSending ? null : card.remove}
-        />}
-      {canThread && !compact &&
-        <ThreadParts
-          parts={moreParts}
-          onChange={setMoreParts}
-          canAdd={Boolean(text) &&
-            !moreParts.some((each) => { return !each.trim(); })}
-          max={LIMITS.THREAD_PARTS_MAX}
-          disabled={isSending}
-          direction={direction}
-          limit={noteLimit}
-          outlined
         />}
       {attachments && isAddingPhotos && viewer && viewer.id &&
         <Box sx={{ mt: 1 }}>
@@ -401,6 +395,22 @@ const ReplyForm = ({
             }}
           />
         </Box>}
+      {/* The notes after the first, under its pictures and its buttons
+          (roadmap row 143). */}
+      {canThread && !compact &&
+        <ThreadParts
+          parts={moreParts}
+          onChange={setMoreParts}
+          canAdd={(Boolean(text) || photosReady) &&
+            !moreParts.some((note) => { return !threadNotes.hasSomething(note); })}
+          max={LIMITS.THREAD_PARTS_MAX}
+          disabled={isSending}
+          direction={direction}
+          limit={noteLimit}
+          outlined
+          uploader={viewer && viewer.id ? viewer : null}
+          photosMax={attachments ? photoFiles.maxFiles(nodeInfo) : 0}
+        />}
       {hint &&
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {hint}

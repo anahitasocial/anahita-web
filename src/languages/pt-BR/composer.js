@@ -6,6 +6,9 @@ export default {
     add: 'Adicionar ao fio',
     placeholder: 'Continue escrevendo…',
     part: 'Nota {{number}} do fio',
+    // Where a note is in its thread, under its writer's name.
+    position: '{{number}}/{{count}}',
+    positionLabel: 'Nota {{number}} de {{count}}',
     remove: 'Remover do fio',
     count: '{{ count }} / {{ max }}',
     split: 'Dividir em um fio',

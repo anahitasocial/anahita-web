@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -12,9 +12,12 @@ import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
 import ActorAvatar from '../../../components/ActorAvatar';
+import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import LIMITS from '../../../constants/limits';
+import threadNotes from '../../../utils/threadNotes';
 import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
+import AttachButtons from './AttachButtons';
 
 // The line under a note's words (roadmap row 126): what is to be said of
 // them on the left, one line, cut short rather than wrapped; on the right,
@@ -90,14 +93,51 @@ SplitWords.propTypes = {
 // thread is read; and "Add to thread" for the next, up to `max` in all with
 // the first. Posted together with the first, in order, all or none.
 //
-// `parts` is the words of each, in order. `goesToBluesky` keeps a line under
-// each for what Bluesky shows of it, as under the first.
+// `parts` is the notes, each its words and its pictures (utils/threadNotes),
+// in order. `goesToBluesky` keeps a line under each for what Bluesky shows
+// of it, as under the first.
 //
 // With `writer`, as in the composer on a desktop, each note has the
 // writer's small picture in the column under theirs on the first, and one
 // line runs down through them to "Add to thread", as a thread is shown in
 // its replies (ReplyItem.jsx) and as Threads writes one (the user,
 // 2026-11-08).
+// The words of a note in the composer: 15 px, as Threads writes them, a
+// step under MUI's 16 (the user, 2026-11-08).
+export const WORDS = { fontSize: '0.9375rem' };
+
+// Above a note's words in the composer: its writer's name, and, in a thread,
+// where it is in it, "2/3", as Threads writes a thread (the user,
+// 2026-11-08).
+export const NoteHead = ({ name, number = 0, count = 0 }) => {
+  return (
+    <Box sx={{
+      display: 'flex', alignItems: 'baseline', gap: 1, minWidth: 0,
+    }}
+    >
+      <Typography variant="subtitle2" component="span" noWrap sx={{ minWidth: 0, fontWeight: 'bold' }}>
+        {name}
+      </Typography>
+      {count > 1 &&
+        <Typography
+          variant="caption"
+          color="textSecondary"
+          aria-label={i18n.t('composer:thread.positionLabel', { number, count })}
+          sx={{ flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}
+        >
+          {i18n.t('composer:thread.position', { number, count })}
+        </Typography>}
+    </Box>
+  );
+};
+
+NoteHead.propTypes = {
+  name: PropTypes.string.isRequired,
+  // Its place in the thread, from 1, and how many notes it has.
+  number: PropTypes.number,
+  count: PropTypes.number,
+};
+
 // As wide as the first note's picture, MUI's 40 px.
 const COLUMN = 5;
 
@@ -134,6 +174,153 @@ Column.propTypes = {
   children: PropTypes.node.isRequired,
 };
 
+// One note after the first: its words, its pictures with their own Photo
+// button (roadmap row 143), and the line under it. Its pictures are
+// uploaded for `uploader`, the writer, whose the notes after the first are.
+const ThreadNote = ({
+  note,
+  index,
+  count,
+  writerName,
+  isLast,
+  hasNext,
+  onChange,
+  disabled,
+  direction,
+  goesToBluesky,
+  outlined,
+  limit,
+  writer,
+  uploader,
+  photosMax,
+}) => {
+  // The photos just picked, for the editor to take as if dropped.
+  const [incoming, setIncoming] = useState(null);
+  const { words, photos } = note;
+  const change = (changeNote) => {
+    onChange(threadNotes.changeOne(note.key, changeNote));
+  };
+  const canPhotos = Boolean(uploader) && photosMax > 0;
+
+  return (
+    <Stack direction="row" spacing={writer ? 2 : 1} sx={{ mt: 2 }}>
+      {writer ?
+        // Its picture, in the middle of the words' first line, and the
+        // line on to the next.
+        <Column>
+          <Box>
+            <ActorAvatar actor={writer} size="small" />
+          </Box>
+          {hasNext && <ThreadJoin />}
+        </Column> :
+        // The line that joins it to the one before.
+        <Box sx={{
+          width: 2, borderRadius: 1, bgcolor: 'divider', flexShrink: 0,
+        }}
+        />}
+      <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+        {writerName && <NoteHead name={writerName} number={index + 2} count={count} />}
+        <TextField
+          value={words}
+          onChange={(event) => {
+            const { value } = event.target;
+            change((current) => { return { ...current, words: value }; });
+          }}
+          placeholder={i18n.t('composer:thread.placeholder')}
+          aria-label={i18n.t('composer:thread.part', { number: index + 2 })}
+          autoFocus={isLast}
+          disabled={disabled}
+          variant={outlined ? 'outlined' : 'standard'}
+          size={outlined ? 'small' : 'medium'}
+          multiline
+          minRows={1}
+          fullWidth
+          slotProps={{
+            ...(outlined ? {} : { input: { disableUnderline: true, sx: WORDS } }),
+            htmlInput: { dir: direction, maxLength: LIMITS.POST_BODY_MAX },
+          }}
+        />
+        {canPhotos && (photos.length > 0 || incoming) &&
+          <Box sx={{ mt: 1 }}>
+            <PhotoFilesEditor
+              owner={uploader}
+              items={photos}
+              onChange={(update) => {
+                change((current) => { return { ...current, photos: update(current.photos) }; });
+              }}
+              max={photosMax}
+              disabled={disabled}
+              incoming={incoming}
+              onIncomingTaken={() => { setIncoming(null); }}
+            />
+          </Box>}
+        {/* Its Photo button, its glyph in line with the words as under the
+            first note, then what is said of it and its count. A Stack's
+            spacing would undo the button's own margin. */}
+        <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
+          {canPhotos && photos.length === 0 && !incoming && !disabled &&
+            <Box sx={{ ml: -1, flexShrink: 0 }}>
+              <AttachButtons
+                mobile
+                photos
+                onPhotos={(files) => { setIncoming({ files }); }}
+                onVideo={() => {}}
+              />
+            </Box>}
+          {(goesToBluesky || limit > 0) &&
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+              <ThreadLine
+                length={limit > 0 ? threadSplit.lengthOf(words) : -1}
+                limit={limit}
+              >
+                {goesToBluesky && threadSplit.lengthOf(words) > LIMITS.BLUESKY_POST_MAX ?
+                  i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
+                  ' '}
+              </ThreadLine>
+            </Box>}
+        </Box>
+      </Box>
+      <IconButton
+        size="small"
+        aria-label={i18n.t('composer:thread.remove')}
+        disabled={disabled}
+        onClick={() => {
+          onChange((notes) => {
+            return notes.filter((each) => { return each.key !== note.key; });
+          });
+        }}
+        sx={{ alignSelf: 'flex-start' }}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </Stack>
+  );
+};
+
+const notePropType = PropTypes.shape({
+  key: PropTypes.string.isRequired,
+  words: PropTypes.string.isRequired,
+  photos: PropTypes.arrayOf(PropTypes.object).isRequired,
+});
+
+ThreadNote.propTypes = {
+  note: notePropType.isRequired,
+  index: PropTypes.number.isRequired,
+  count: PropTypes.number.isRequired,
+  writerName: PropTypes.string,
+  isLast: PropTypes.bool.isRequired,
+  hasNext: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+  disabled: PropTypes.bool.isRequired,
+  direction: PropTypes.string.isRequired,
+  goesToBluesky: PropTypes.bool.isRequired,
+  outlined: PropTypes.bool.isRequired,
+  limit: PropTypes.number.isRequired,
+  writer: PropTypes.object,
+  uploader: PropTypes.object,
+  photosMax: PropTypes.number.isRequired,
+};
+
 const ThreadParts = ({
   parts,
   onChange,
@@ -145,76 +332,36 @@ const ThreadParts = ({
   outlined = false,
   limit = 0,
   writer = null,
+  uploader = null,
+  photosMax = 0,
+  writerName = '',
 }) => {
-  const change = (index, value) => {
-    onChange(parts.map((each, at) => { return at === index ? value : each; }));
-  };
-  const remove = (index) => {
-    onChange(parts.filter((each, at) => { return at !== index; }));
+  const add = () => {
+    onChange((notes) => { return [...notes, threadNotes.make()]; });
   };
 
   return (
     <>
-      {parts.map((words, index) => {
+      {parts.map((note, index) => {
         return (
-          // eslint-disable-next-line react/no-array-index-key
-          <Stack key={`thread-part-${index}`} direction="row" spacing={writer ? 2 : 1} sx={{ mt: 2 }}>
-            {writer ?
-              // Its picture, in the middle of the words' first line, and
-              // the line on to the next.
-              <Column>
-                <Box sx={{ mt: '2px' }}>
-                  <ActorAvatar actor={writer} size="small" />
-                </Box>
-                {(index < parts.length - 1 || parts.length + 1 < max) && <ThreadJoin />}
-              </Column> :
-              // The line that joins it to the one before.
-              <Box sx={{
-                width: 2, borderRadius: 1, bgcolor: 'divider', flexShrink: 0,
-              }}
-              />}
-            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-              <TextField
-                value={words}
-                onChange={(event) => {
-                  change(index, event.target.value);
-                }}
-                placeholder={i18n.t('composer:thread.placeholder')}
-                aria-label={i18n.t('composer:thread.part', { number: index + 2 })}
-                autoFocus={index === parts.length - 1}
-                disabled={disabled}
-                variant={outlined ? 'outlined' : 'standard'}
-                size={outlined ? 'small' : 'medium'}
-                multiline
-                minRows={2}
-                fullWidth
-                slotProps={{
-                  ...(outlined ? {} : { input: { disableUnderline: true } }),
-                  htmlInput: { dir: direction, maxLength: LIMITS.POST_BODY_MAX },
-                }}
-              />
-              {(goesToBluesky || limit > 0) &&
-                <ThreadLine
-                  length={limit > 0 ? threadSplit.lengthOf(words) : -1}
-                  limit={limit}
-                >
-                  {goesToBluesky && threadSplit.lengthOf(words) > LIMITS.BLUESKY_POST_MAX ?
-                    i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
-                    ' '}
-                </ThreadLine>}
-            </Box>
-            <IconButton
-              size="small"
-              aria-label={i18n.t('composer:thread.remove')}
-              disabled={disabled}
-              onClick={() => {
-                remove(index);
-              }}
-              sx={{ alignSelf: 'flex-start' }}
-            >
-              <CloseIcon fontSize="small" />
-            </IconButton>
-          </Stack>
+          <ThreadNote
+            key={note.key}
+            note={note}
+            index={index}
+            count={parts.length + 1}
+            writerName={writerName}
+            isLast={index === parts.length - 1}
+            hasNext={index < parts.length - 1 || parts.length + 1 < max}
+            onChange={onChange}
+            disabled={disabled}
+            direction={direction}
+            goesToBluesky={goesToBluesky}
+            outlined={outlined}
+            limit={limit}
+            writer={writer}
+            uploader={uploader}
+            photosMax={photosMax}
+          />
         );
       })}
       {parts.length + 1 < max && writer &&
@@ -233,9 +380,7 @@ const ThreadParts = ({
             size="small"
             sx={{ ml: '-5px' }}
             disabled={disabled || !canAdd}
-            onClick={() => {
-              onChange([...parts, '']);
-            }}
+            onClick={add}
           >
             {i18n.t('composer:thread.add')}
           </Button>
@@ -249,9 +394,7 @@ const ThreadParts = ({
             startIcon={<AddIcon />}
             sx={{ ml: -1 }}
             disabled={disabled || !canAdd}
-            onClick={() => {
-              onChange([...parts, '']);
-            }}
+            onClick={add}
           >
             {i18n.t('composer:thread.add')}
           </Button>
@@ -261,9 +404,12 @@ const ThreadParts = ({
 };
 
 ThreadParts.propTypes = {
-  parts: PropTypes.arrayOf(PropTypes.string).isRequired,
+  // The notes after the first, in order (utils/threadNotes).
+  parts: PropTypes.arrayOf(notePropType).isRequired,
+  // A state setter: given a function from the notes as they are to the
+  // notes as they are to be.
   onChange: PropTypes.func.isRequired,
-  // Whether another may be added now: the last has words in it.
+  // Whether another may be added now: the last says something.
   canAdd: PropTypes.bool.isRequired,
   max: PropTypes.number.isRequired,
   disabled: PropTypes.bool,
@@ -277,6 +423,13 @@ ThreadParts.propTypes = {
   // Whose pictures go beside the notes, in a column as wide as the first
   // note's; none, a line alone.
   writer: PropTypes.object,
+  // Whom a note's photos are uploaded for: the writer. None, no photos.
+  uploader: PropTypes.object,
+  // How many photos a note may have (photoFiles.maxFiles).
+  photosMax: PropTypes.number,
+  // The writer's name, above each note with its place in the thread. None,
+  // as in the reply form, none said.
+  writerName: PropTypes.string,
 };
 
 export default ThreadParts;

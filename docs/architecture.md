@@ -722,6 +722,12 @@ used, each a row (`components/DetailRow.jsx`, the `row` form of the
 audience, language, reply and download buttons): who can see it, the
 language, who can reply, whether photos may be downloaded, the location
 and who is tagged, what is chosen in chips under its row, then **Post**.
+The words step is written as Threads writes a post (the user,
+2026-11-08): the writer's name above the words, in bold, and, in a thread,
+where each note is in it ("2/3", `NoteHead` in `Composer/ThreadParts.jsx`);
+the words at 15 px (`WORDS`); and under them one line, with the Photo,
+GIF, Video and Audio icons, their glyphs in line with the words, and the
+count, in place of a row at the dialog's foot.
 Back returns to the words with everything kept, the words step staying
 mounted so that photos go on being sent; the dialog keeps its height from
 one step to the other. On a mobile both composers are pinned to the top of
@@ -1705,9 +1711,15 @@ draws nothing (`utils/federation.js#isAbsent`).
    (`Composer/ThreadParts.jsx`, `THREAD_PARTS_MAX`). Post sends them together
    (`api.replies.addThread`, `POST /notes/:owner_id/thread`): the first takes
    the post's audience, who may reply and quote, its locations and its card;
-   the rest are replies to the one before. Only for words alone: adding
-   photos or a video hides it. The notes after the first are not kept as a
-   draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
+   the rest are replies to the one before. Each note may have photos
+   (roadmap row 143, `utils/threadNotes.js`): its own Photo icon under its
+   words, and its own photos, uploaded for the writer; the first note's,
+   from its own icons, for the profile it is on, with whether they may be
+   downloaded and who is in them. A note with photos is posted as a photo
+   post in the thread. A GIF, a video or a sound hides Add to thread. On a
+   desktop the writer's small profile photo is beside each note, and one
+   line runs from theirs on the first down to Add to thread. The notes
+   after the first are not kept as a draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
    `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
    are shown as any replies are, each under the one before. Under each
    note's words is its count against where the post goes (roadmap row 126,

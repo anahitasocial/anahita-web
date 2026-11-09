@@ -28,6 +28,12 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 2. **Add to thread is there wherever a post goes:** once a note has words,
    in the composer and in a reply. It waited for a full note, which on a
    post that stays on the site meant 8,000 letters.
+3. **Photos in a thread's notes** (roadmap row 143): each note has its own
+   Photo button under its words, and the first may keep its photos when
+   the thread grows. The Photo, GIF, Video and Audio buttons are under the
+   words, in line with them, not at the foot of the composer, and each
+   note says who writes it, with its place in the thread ("2/3"). The
+   words are a step smaller, at 15 px.
 
 ## v1.1.0 Birth, 2026-11-08
 
