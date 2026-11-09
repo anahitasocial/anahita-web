@@ -19,15 +19,24 @@ const thread = (root) => {
 // `card` says which link in it to show a card for (`linkPreviewUrl`), or,
 // for an edit, that its card was taken off (`linkPreviewRemove`). What the
 // card says is the server's.
-const add = (parent, { content, language, card = {} }) => {
-  return axios.post(`/notes/${parent.id}/replies`, { content, language, ...card });
+// `warning` is its content warning as utils/warnings#toRequest makes it.
+const add = (parent, {
+  content, language, card = {}, warning = {},
+}) => {
+  return axios.post(`/notes/${parent.id}/replies`, {
+    content, language, ...card, ...warning,
+  });
 };
 
 // Answers a post or a reply with pictures, uploaded first for the person
 // replying (api/photos#upload with their own profile): `uploads` as
 // utils/photoFiles#toRequest makes them.
-const addWithPictures = (parent, { content, language, uploads }) => {
-  return axios.post(`/photos/${parent.id}/replies`, { content, language, uploads });
+const addWithPictures = (parent, {
+  content, language, uploads, warning = {},
+}) => {
+  return axios.post(`/photos/${parent.id}/replies`, {
+    content, language, uploads, ...warning,
+  });
 };
 
 const edit = (reply, { content, card = {} }) => {
@@ -51,8 +60,8 @@ const addThread = (owner, post, parts) => {
 };
 
 // One that answers a post or a reply.
-const addReplyThread = (parent, parts) => {
-  return axios.post(`/notes/${parent.id}/replies/thread`, { parts });
+const addReplyThread = (parent, parts, warning = {}) => {
+  return axios.post(`/notes/${parent.id}/replies/thread`, { parts, ...warning });
 };
 
 const setHidden = (reply, hidden) => {

@@ -29,6 +29,7 @@ import useDraft from './useDraft';
 import useKeyboardRoom from './useKeyboardRoom';
 import useOnFediverse from './useOnFediverse';
 import usePostChoices from './usePostChoices';
+import warnings from '../../../utils/warnings';
 import usePostLocations from './usePostLocations';
 
 import embeds from '../../../utils/embeds';
@@ -221,6 +222,9 @@ const LongComposer = ({
   const saveOver = () => {
     return api[namespace].edit({
       id: draftId, title: name, content: text, language: choices.language,
+    }).then((result) => {
+      // Its content warning has an address of its own.
+      return api.warnings.edit(result.data, choices.warning);
     });
   };
 
@@ -354,6 +358,7 @@ const LongComposer = ({
               setTitle(draft.title || '');
               setBody(draft.content || '');
               setDraftRef(`${draft.kind}:${draft.id}`);
+              choices.setWarning(warnings.of(draft));
               setTried(false);
             }}
             onNew={() => {

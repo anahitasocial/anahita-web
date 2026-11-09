@@ -33,6 +33,7 @@ import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
+import WarningCover from '../../../components/WarningCover';
 import timeAgo from '../../../utils/timeAgo';
 
 const {
@@ -133,7 +134,10 @@ const FeedCardDefault = ({
         }
         action={menu}
       />
-      {cover &&
+      {/* Its content warning: all of it behind the warning until View is
+          pressed (row 122), the notes after it in its thread too. */}
+      <WarningCover post={node}>
+        {cover &&
         <Link href={url}>
           <CardMedia
             className={classes.cover}
@@ -142,17 +146,17 @@ const FeedCardDefault = ({
             src="picture"
           />
         </Link>}
-      {!cover && long && <SummaryPicture node={node} url={url} />}
-      {node.mediaRemoved && photoFiles.countOf(node) === 0 &&
+        {!cover && long && <SummaryPicture node={node} url={url} />}
+        {node.mediaRemoved && photoFiles.countOf(node) === 0 &&
         <RemovedPictures medium={node} />}
-      {photoFiles.hasSeveral(node) &&
+        {photoFiles.hasSeveral(node) &&
         <PhotoSlides
           medium={node}
           onOpen={() => {
             navigate(url);
           }}
         />}
-      {elsewhere &&
+        {elsewhere &&
         <VideoElsewhere
           node={node}
           elsewhere={elsewhere}
@@ -161,7 +165,7 @@ const FeedCardDefault = ({
           description={photoFiles.descriptionOf(node)}
           title={title || ''}
         />}
-      {!photoFiles.hasSeveral(node) && portrait && !elsewhere &&
+        {!photoFiles.hasSeveral(node) && portrait && !elsewhere &&
         <Box sx={{ position: 'relative' }}>
           <Link href={url}>
             <CardMedia
@@ -173,27 +177,28 @@ const FeedCardDefault = ({
           </Link>
           <AltBadge text={photoFiles.descriptionOf(node)} />
         </Box>}
-      {node.video && !elsewhere && <VideoPlayer video={node.video} title={title} />}
-      {node.audio && <AudioPlayer audio={node.audio} title={title} />}
-      {/* The title and the text open the post when clicked, unless text
+        {node.video && !elsewhere && <VideoPlayer video={node.video} title={title} />}
+        {node.audio && <AudioPlayer audio={node.audio} title={title} />}
+        {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
-      <CardContent {...openOnClick.handlersFor(url, navigate)}>
-        {title &&
+        <CardContent {...openOnClick.handlersFor(url, navigate)}>
+          {title &&
           <PostTitle href={url} lang={node.language}>
             {title}
           </PostTitle>}
-        {/* An article or a topic by its summary: what it shows within
+          {/* An article or a topic by its summary: what it shows within
             itself is on its page. */}
-        {content && long && <LongSummary node={node} url={url} />}
-        {content && !long &&
+          {content && long && <LongSummary node={node} url={url} />}
+          {content && !long &&
           <ReadMore contentFilter to={url}>
             {content}
           </ReadMore>}
-        {linkPreviews.isShown(node.linkPreview) &&
+          {linkPreviews.isShown(node.linkPreview) &&
           <LinkPreviewCard preview={node.linkPreview} />}
-        <QuoteEmbed quote={node.quote} />
-      </CardContent>
-      <ThreadNext thread={node.thread} next={node.threadNext} url={url} />
+          <QuoteEmbed quote={node.quote} />
+        </CardContent>
+        <ThreadNext thread={node.thread} next={node.threadNext} url={url} />
+      </WarningCover>
       <PostActionsRow actions={actions} stats={stats} />
     </Card>
   );

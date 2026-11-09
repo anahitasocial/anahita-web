@@ -8,6 +8,7 @@ import photos from './photos';
 import pins from './pins';
 import quotes from './quotes';
 import replies from './replies';
+import warnings from './warnings';
 import saved from './saved';
 import citations from './citations';
 import searchPreferences from './searchPreferences';
@@ -185,6 +186,7 @@ const apis = {
   accounts,
   email,
   username,
+  warnings,
 };
 
 namespaces.actors.forEach((ns) => {

@@ -19,6 +19,7 @@ import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import RemoveIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 
+import ContentWarningButton from '../../components/ContentWarningButton';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../components/PhotoFilesEditor';
 import useLinkPreview from '../media/Composer/useLinkPreview';
@@ -37,6 +38,7 @@ import { Medium as MEDIUM } from '../../constants';
 import LIMITS from '../../constants/limits';
 import threadNotes from '../../utils/threadNotes';
 import threadSplit from '../../utils/threadSplit';
+import warnings from '../../utils/warnings';
 
 const { CONTENT } = MEDIUM.FIELDS;
 
@@ -88,6 +90,8 @@ const ReplyForm = ({
   const [moreParts, setMoreParts] = useState([]);
   const [video, setVideo] = useState(null);
   const [videoProblem, setVideoProblem] = useState('');
+  // Its content warning (anahita-services row 122), for a new reply.
+  const [warning, setWarning] = useState(warnings.NONE);
   const picker = useRef(null);
   const photoPicker = useRef(null);
   const viewer = useSelector((state) => { return state.session.viewer; });
@@ -178,6 +182,9 @@ const ReplyForm = ({
     } else if (video) {
       attached = { video };
     }
+    if (warnings.has(warning)) {
+      attached = { ...attached, warning };
+    }
 
     setIsSending(true);
     onSubmit(text, {
@@ -191,6 +198,7 @@ const ReplyForm = ({
       setIsAddingPhotos(false);
       setIncoming(null);
       setVideo(null);
+      setWarning(warnings.NONE);
     }).catch(() => {
       // The caller has said what went wrong. The text stays.
     }).finally(() => {
@@ -360,6 +368,7 @@ const ReplyForm = ({
                 <GifIcon fontSize="small" />
               </IconButton>
             </Tooltip>}
+          <ContentWarningButton value={warning} onChange={setWarning} disabled={isSending} />
           <input
             ref={photoPicker}
             type="file"
@@ -472,7 +481,8 @@ ReplyForm.propTypes = {
   // Whether pictures or a video can be added: for a new reply, not for
   // changing one. Sent as a third argument to onSubmit: { uploads } or
   // { video }. A new reply can also be a thread written in one go:
-  // { thread }, the words of the notes after the first.
+  // { thread }, the words of the notes after the first; and have a content
+  // warning, { warning }, as utils/warnings has it.
   attachments: PropTypes.bool,
   // One line with its buttons inside it: see above.
   compact: PropTypes.bool,

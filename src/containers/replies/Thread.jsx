@@ -33,6 +33,7 @@ import { useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import MediumType from '../../proptypes/Medium';
 import PersonType from '../../proptypes/Person';
 import postLanguage from '../../utils/postLanguage';
+import warnings from '../../utils/warnings';
 import replyAccess from '../../utils/replyAccess';
 import thread from '../../utils/thread';
 import threadNotes from '../../utils/threadNotes';
@@ -123,11 +124,14 @@ const RepliesThread = ({
   const handleReply = (parent, body, card = {}, attached = {}) => {
     // The language this person writes in, as for any post.
     const language = postLanguage.defaultFor(viewer);
+    // Its content warning, when its writer gave it one (row 122): a
+    // thread's is every note's.
+    const warning = warnings.toRequest(attached.warning);
 
     if (attached.video) {
       setOnTheWay((current) => {
         return [...current, {
-          key: `${Date.now()}-${current.length}`, parent, body, language, file: attached.video,
+          key: `${Date.now()}-${current.length}`, parent, body, language, warning, file: attached.video,
         }];
       });
       return Promise.resolve();
@@ -147,7 +151,7 @@ const RepliesThread = ({
       const parts = [first, ...attached.thread.map((note) => {
         return threadNotes.toPart(note, language);
       })];
-      return api.replies.addReplyThread(parent, parts).then((result) => {
+      return api.replies.addReplyThread(parent, parts, warning).then((result) => {
         setReplies((current) => {
           return result.data.parts.reduce((list, part) => {
             return thread.add(list, part);
@@ -163,8 +167,12 @@ const RepliesThread = ({
     }
 
     const sent = attached.uploads ?
-      api.replies.addWithPictures(parent, { content: body, language, uploads: attached.uploads }) :
-      api.replies.add(parent, { content: body, card, language });
+      api.replies.addWithPictures(parent, {
+        content: body, language, uploads: attached.uploads, warning,
+      }) :
+      api.replies.add(parent, {
+        content: body, card, language, warning,
+      });
 
     return sent.then((result) => {
       setReplies((current) => {
@@ -196,6 +204,22 @@ const RepliesThread = ({
       alertSuccess(i18n.t('replies:prompts.saved'));
     }).catch((error) => {
       alertError(i18n.t('replies:prompts.notSaved'));
+      throw error;
+    });
+  };
+
+  // A reply's content warning (row 122), given, changed or taken off.
+  const handleWarning = (reply, warning) => {
+    return api.warnings.edit(reply, warning).then((result) => {
+      setReplies((current) => {
+        return thread.replace(current, {
+          id: reply.id,
+          warning: result.data.warning || null,
+        });
+      });
+      alertSuccess(i18n.t('warnings:saved'));
+    }).catch((error) => {
+      alertError(i18n.t('warnings:notSaved'));
       throw error;
     });
   };
@@ -332,6 +356,7 @@ const RepliesThread = ({
         writerId={writerOf(root)}
         onReply={handleReply}
         onEdit={handleEdit}
+        onWarning={handleWarning}
         onDelete={handleDelete}
         onHide={handleHide}
         onLike={handleLike}
@@ -405,6 +430,7 @@ const RepliesThread = ({
                 i18n.t('replies:answersNote', { number: chained.answers(each.reply) }) : ''}
               onReply={handleReply}
               onEdit={handleEdit}
+              onWarning={handleWarning}
               onDelete={handleDelete}
               onHide={handleHide}
               onLike={handleLike}
@@ -436,6 +462,7 @@ const RepliesThread = ({
                 joined={index < chained.chain.length - 1}
                 onReply={handleReply}
                 onEdit={handleEdit}
+                onWarning={handleWarning}
                 onDelete={handleDelete}
                 onHide={handleHide}
                 onLike={handleLike}
@@ -466,8 +493,9 @@ const RepliesThread = ({
             key={`on-the-way-${each.key}`}
             viewer={viewer}
             parent={each.parent}
-            body={each.content}
+            body={each.body}
             language={each.language}
+            warning={each.warning}
             file={each.file}
             onReady={load}
             onGone={() => {

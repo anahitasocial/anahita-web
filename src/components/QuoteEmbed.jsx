@@ -15,6 +15,7 @@ import utils from '../utils';
 import quotes from '../utils/quotes';
 import timeAgo from '../utils/timeAgo';
 import excerptOf from '../utils/excerpt';
+import WarningCover from './WarningCover';
 
 const { getURL, getPortraitURL } = utils.node;
 
@@ -94,14 +95,17 @@ const QuoteEmbed = ({
             {timeAgo(post.createdAt)}
           </Link>}
       />
-      <Box sx={{ p: 2 }}>
-        {post.title &&
+      {/* The quoted post's content warning, over its words and picture
+          (row 122). */}
+      <WarningCover post={post}>
+        <Box sx={{ p: 2 }}>
+          {post.title &&
           <Typography variant="subtitle2" dir="auto">
             <Link href={url} color="inherit">
               {post.title}
             </Link>
           </Typography>}
-        {excerpt.length > 0 &&
+          {excerpt.length > 0 &&
           <Typography
             variant="body2"
             dir="auto"
@@ -114,12 +118,12 @@ const QuoteEmbed = ({
                 <React.Fragment key={key}>{part.text}</React.Fragment>;
             })}
           </Typography>}
-        {!post.title && excerpt.length === 0 && !image &&
+          {!post.title && excerpt.length === 0 && !image &&
           <Link href={url} variant="body2">
             {i18n.t('replies:quote.open')}
           </Link>}
-      </Box>
-      {image &&
+        </Box>
+        {image &&
         <Link href={url} sx={{ display: 'block', lineHeight: 0 }}>
           <Box
             component="img"
@@ -133,6 +137,7 @@ const QuoteEmbed = ({
             }}
           />
         </Link>}
+      </WarningCover>
       {(onDetach || onRemove) &&
         <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>
           {onDetach &&

@@ -14,6 +14,7 @@ import ActorType from '../../../proptypes/Actor';
 import i18n from '../../../languages';
 import photoFiles from '../../../utils/photoFiles';
 import utils from '../../../utils';
+import warnings from '../../../utils/warnings';
 
 const { getURL } = utils.node;
 
@@ -36,7 +37,11 @@ const ActorPhotos = ({ actor, onSeeAll }) => {
     api.photos.browse({ oid: actor.id, start: 0, limit: SHOWN }).then((result) => {
       if (current) {
         const listed = (result.data && result.data.data) || [];
-        setPhotos(listed.filter((photo) => { return photoFiles.filesOf(photo).length > 0; }));
+        // A photo behind a content warning (row 122) is left out of a
+        // glance: it is on its post, and in the Photos tab, behind it.
+        setPhotos(listed.filter((photo) => {
+          return photoFiles.filesOf(photo).length > 0 && !warnings.has(warnings.of(photo));
+        }));
       }
     }).catch(() => {
       // No card: the Photos tab says what went wrong.

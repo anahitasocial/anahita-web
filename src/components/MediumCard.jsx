@@ -38,6 +38,7 @@ import photoFiles from '../utils/photoFiles';
 import openOnClick from '../utils/openOnClick';
 import AltBadge from './AltBadge';
 import RemovedPictures from './RemovedPictures';
+import WarningCover, { Blurred, useWarning } from './WarningCover';
 import timeAgo from '../utils/timeAgo';
 
 const {
@@ -86,6 +87,9 @@ const MediumCard = ({
   const content = elsewhere ? elsewhere.content : medium.content;
 
   const [isPortraitLoaded, setIsPortraitLoaded] = useState(!portrait);
+  // Its content warning: its pictures, words and cover behind it until
+  // View is pressed (row 122).
+  const warned = useWarning(medium);
 
   useEffect(() => {
     if (portrait) {
@@ -108,16 +112,18 @@ const MediumCard = ({
           owner={medium.owner}
           actions={ownerActions}
         />}
-      {cover &&
-        <Link href={url}>
-          <CardMedia
-            className={classes.cover}
-            image={cover}
-            title={medium.title}
-            src="picture"
-          />
-        </Link>}
-      {!cover && isLong(medium) && <SummaryPicture node={medium} url={url} />}
+      <Blurred state={warned}>
+        {cover &&
+          <Link href={url}>
+            <CardMedia
+              className={classes.cover}
+              image={cover}
+              title={medium.title}
+              src="picture"
+            />
+          </Link>}
+        {!cover && isLong(medium) && <SummaryPicture node={medium} url={url} />}
+      </Blurred>
       <CardHeader
         avatar={
           <ActorAvatar
@@ -145,9 +151,10 @@ const MediumCard = ({
         }
         action={menu}
       />
-      {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
+      <WarningCover state={warned}>
+        {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
         <RemovedPictures medium={medium} />}
-      {hasSlides &&
+        {hasSlides &&
         <PhotoSlides
           medium={medium}
           onOpen={() => {
@@ -157,7 +164,7 @@ const MediumCard = ({
             return navigate(url);
           }}
         />}
-      {elsewhere &&
+        {elsewhere &&
         <VideoElsewhere
           node={medium}
           elsewhere={elsewhere}
@@ -166,7 +173,7 @@ const MediumCard = ({
           description={photoFiles.descriptionOf(medium)}
           title={medium.title || ''}
         />}
-      {!hasSlides && portrait && isPortraitLoaded && !elsewhere &&
+        {!hasSlides && portrait && isPortraitLoaded && !elsewhere &&
         <Box sx={{ position: 'relative' }}>
           <ButtonBase
             style={{
@@ -192,14 +199,14 @@ const MediumCard = ({
           </ButtonBase>
           <AltBadge text={photoFiles.descriptionOf(medium)} />
         </Box>}
-      {!hasSlides && !isPortraitLoaded &&
+        {!hasSlides && !isPortraitLoaded &&
         <CardContent>
           <Progress />
         </CardContent>}
-      {/* In a list that steps through its posts (a profile's Videos tab), a
+        {/* In a list that steps through its posts (a profile's Videos tab), a
           video is its poster, opened in the stepper to play; elsewhere it
           plays where it is. */}
-      {medium.video && handleView && !elsewhere &&
+        {medium.video && handleView && !elsewhere &&
         <ButtonBase
           onClick={() => {
             return handleView(medium.id);
@@ -221,31 +228,32 @@ const MediumCard = ({
             }}
           />
         </ButtonBase>}
-      {medium.video && !handleView && !elsewhere &&
+        {medium.video && !handleView && !elsewhere &&
         <VideoPlayer video={medium.video} title={medium.title} />}
-      {/* A sound plays where it is, in a list too: it is small. */}
-      {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
-      {/* The title and the text open the post when clicked, unless text
+        {/* A sound plays where it is, in a list too: it is small. */}
+        {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
+        {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
-      <CardContent
-        component="article"
-        className={classes.content}
-        {...openOnClick.handlersFor(url, navigate)}
-      >
-        {medium.title &&
+        <CardContent
+          component="article"
+          className={classes.content}
+          {...openOnClick.handlersFor(url, navigate)}
+        >
+          {medium.title &&
           <PostTitle href={url} lang={medium.language}>
             {medium.title}
           </PostTitle>}
-        {medium.content && isLong(medium) && <LongSummary node={medium} url={url} />}
-        {content && !isLong(medium) &&
+          {medium.content && isLong(medium) && <LongSummary node={medium} url={url} />}
+          {content && !isLong(medium) &&
           <ReadMore contentFilter lang={medium.language} to={url}>
             {content}
           </ReadMore>}
-        {linkPreviews.isShown(medium.linkPreview) &&
+          {linkPreviews.isShown(medium.linkPreview) &&
           <LinkPreviewCard preview={medium.linkPreview} />}
-        <QuoteEmbed quote={medium.quote} />
-        <SignInPrompt show={Boolean(medium.truncated)} />
-      </CardContent>
+          <QuoteEmbed quote={medium.quote} />
+          <SignInPrompt show={Boolean(medium.truncated)} />
+        </CardContent>
+      </WarningCover>
       <PostActionsRow actions={actions} stats={stats} />
     </Card>
   );

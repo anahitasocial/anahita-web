@@ -7,6 +7,24 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+Needs Anahita Services from `main` (Embryo), for content warnings.
+
+### Added
+
+1. **Content warnings** (roadmap row 122, phase 1): a post or a reply can
+   say what it holds, Adult content, Sexually suggestive, Graphic media,
+   Non-sexual nudity, or Other in its author's words, from Content warning
+   among its choices, or later from its menu. Wherever it is drawn, it
+   shows the warning and View, the post blurred behind it, until the reader
+   chooses to see it.
+
+### Fixed
+
+1. **A GIF or a video sent as a reply kept its words:** they were dropped
+   on the way.
+
 ## v1.2.3 Birth, 2026-11-09
 
 With Anahita Services v1.2.3: the two are released together, with the same

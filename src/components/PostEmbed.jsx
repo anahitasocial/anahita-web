@@ -29,6 +29,7 @@ import linkPreviews from '../utils/linkPreviews';
 import plainText from '../utils/plainText';
 import utils from '../utils';
 import i18n from '../languages';
+import WarningCover from './WarningCover';
 
 const {
   getAuthor,
@@ -441,8 +442,10 @@ const Post = ({ url, at }) => {
   if (at.kind === 'photo') {
     return (
       <Box sx={SPACE}>
-        <PhotoSlides medium={post} size="large" natural />
-        <Caption post={post} />
+        <WarningCover post={post}>
+          <PhotoSlides medium={post} size="large" natural />
+          <Caption post={post} />
+        </WarningCover>
       </Box>
     );
   }
@@ -450,8 +453,10 @@ const Post = ({ url, at }) => {
   if (at.kind === 'video' && post.video) {
     return (
       <Box sx={SPACE}>
-        <VideoPlayer video={post.video} title={post.title} />
-        <Caption post={post} />
+        <WarningCover post={post}>
+          <VideoPlayer video={post.video} title={post.title} />
+          <Caption post={post} />
+        </WarningCover>
       </Box>
     );
   }
@@ -459,13 +464,20 @@ const Post = ({ url, at }) => {
   if (at.kind === 'audio' && post.audio) {
     return (
       <Box sx={SPACE}>
-        <AudioPlayer audio={post.audio} title={post.title} />
-        <Caption post={post} />
+        <WarningCover post={post}>
+          <AudioPlayer audio={post.audio} title={post.title} />
+          <Caption post={post} />
+        </WarningCover>
       </Box>
     );
   }
 
-  return <Words post={post} />;
+  // Its content warning over it, as anywhere a post is drawn (row 122).
+  return (
+    <WarningCover post={post}>
+      <Words post={post} />
+    </WarningCover>
+  );
 };
 
 Post.propTypes = {

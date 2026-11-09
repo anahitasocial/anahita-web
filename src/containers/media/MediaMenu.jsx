@@ -20,6 +20,8 @@ import utils from '../../utils';
 
 import ControlNotificationSub from '../controls/medium/NotificationSub';
 import ControlReplyAccess from '../controls/medium/ReplyAccess';
+import ControlContentWarning from '../controls/medium/ContentWarning';
+import warnings from '../../utils/warnings';
 import ControlDelete from '../controls/Delete';
 import ControlPin from '../controls/medium/Pin';
 import useMute from '../controls/useMute';
@@ -57,6 +59,7 @@ const MediaMenu = ({
   const [isEditingPhotos, setIsEditingPhotos] = React.useState(false);
   const [isTagging, setIsTagging] = React.useState(false);
   const [isSettingReplies, setIsSettingReplies] = React.useState(false);
+  const [isSettingWarning, setIsSettingWarning] = React.useState(false);
   const [isShowingActivity, setIsShowingActivity] = React.useState(false);
 
   const handleOpenMenu = (event) => {
@@ -72,6 +75,10 @@ const MediaMenu = ({
   // the post.
   // Not on a reply, which follows the post at the top of its thread.
   const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
+  // Its content warning (row 122), for whoever may edit it, on a post made
+  // here; not one the administrators gave.
+  const warning = warnings.of(medium);
+  const canSetWarning = canEdit && !utils.federation.isRemote(medium) && !warning.byModerator;
   // Pinning is the profile's: the server says whether this viewer may.
   const canPin = Boolean(medium.authorized && medium.authorized.pin);
   // Whoever runs the group it is in, or a site administrator, may block
@@ -200,6 +207,17 @@ const MediaMenu = ({
               {i18n.t('replies:access.menu')}
             </MenuItemLabel>
           </MenuItem>}
+        {canSetWarning &&
+          <MenuItem
+            onClick={() => {
+              handleClose();
+              setIsSettingWarning(true);
+            }}
+          >
+            <MenuItemLabel icon={warnings.iconOf(warning.kind, { fontSize: 'small' })}>
+              {i18n.t('warnings:label')}
+            </MenuItemLabel>
+          </MenuItem>}
         <DeleteActionWithRef
           node={medium}
           key={`medium-delete-${medium.id}`}
@@ -252,6 +270,14 @@ const MediaMenu = ({
           open={isSettingReplies}
           onClose={() => {
             setIsSettingReplies(false);
+          }}
+        />}
+      {canSetWarning &&
+        <ControlContentWarning
+          medium={medium}
+          open={isSettingWarning}
+          onClose={() => {
+            setIsSettingWarning(false);
           }}
         />}
       {canEditPhotos &&

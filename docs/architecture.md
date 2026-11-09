@@ -657,26 +657,45 @@ next note under it and "Show the thread" with how many notes it has
     (`controls/medium/ReplyAccess.jsx`). The thread reads the setting with the
     replies and says it when it is limited.
 
-12. **A post's menu in a feed** has Edit and Delete where the server says the
+12. **A content warning** (anahita-services row 122) says what a post holds,
+    so that a reader sees it first and chooses to view the post.
+    `components/ContentWarningDialog.jsx` offers None and the five kinds, each
+    with its line, and asks for the words of Other right under it;
+    `utils/warnings.js` reads a post's `warning` and makes the request's
+    `warning` and `warning_text`. The dialog opens from
+    `ContentWarningButton` among a post's choices (`usePostChoices`: a row on
+    the short composer's Details page, an icon in the long composer and the
+    reply form), from "Content warning" in a post's menu on its own page
+    (`controls/medium/ContentWarning.jsx`, `PATCH /…/:id/warning` through
+    `api.warnings.edit`), and from a reply's menu for its writer. A draft
+    keeps its warning when it is saved again. `components/WarningCover.jsx`
+    draws a post with one behind the warning and View, blurred so that it
+    keeps its height: `MediumCard`, the feed's card, a post's page (over its
+    pictures when it has any, else its words), replies, quotes and posts in an
+    article; `WarningVeil` lies over the photo theatre's picture. A profile's
+    Photos card leaves such photos out. Everybody sees every kind behind its
+    warning until each reader can choose.
+
+13. **A post's menu in a feed** has Edit and Delete where the server says the
     viewer may (`authorized.edit`, `authorized.delete`, sent with each feed
     item). Edit opens the post's page with its form up (`?edit=1`, which is
     then taken out of the address). A deleted post leaves every feed on the
     page, with any repost of it (`reducers/createFeed.js`).
-13. **In a feed**, the reply button under a post is a link to the post's page,
+14. **In a feed**, the reply button under a post is a link to the post's page,
     where its thread is (`containers/feed/components/ReplyButton.jsx`). How
     many replies it has is in its interactions.
 
-14. **A reply has a page of its own**, at `/notes/:id` like any note. It is
+15. **A reply has a page of its own**, at `/notes/:id` like any note. It is
     drawn as the post, with what it answers above it
     (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
     that is under it: the thread is read whole for the post at the top, and
     `utils/thread.js` picks out the branch. Replying there answers that reply.
-15. **Where a reply was said** is shown above it wherever it is away from its
+16. **Where a reply was said** is shown above it wherever it is away from its
     thread: the profile the thread is on, a person, a group or any other actor,
     from `root.owner`. A reply is owned by whoever wrote it, so its own owner
     does not say. A post shows the profile it is on the same way when that is
     not its author's own.
-16. **A person's profile has four lists**: Posts, Reposts, Replies and
+17. **A person's profile has four lists**: Posts, Reposts, Replies and
     Tagged. Tagged is the photos and videos they are in, their tag approved,
     whoever posted them (roadmap row 103). Only people reply, repost and are
     tagged, so a group has Posts alone. In the tabs of

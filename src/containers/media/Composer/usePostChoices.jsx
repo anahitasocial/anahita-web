@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 
+import ContentWarningButton from '../../../components/ContentWarningButton';
 import DownloadOptionButton from '../../../components/DownloadOptionButton';
 import LanguageButton from '../../../components/LanguageButton';
 import ReplyAccessButton from '../../../components/ReplyAccessButton';
@@ -8,10 +9,12 @@ import ComposerAudience from './Audience';
 import audience from '../../../utils/audience';
 import postLanguage from '../../../utils/postLanguage';
 import replyAccess from '../../../utils/replyAccess';
+import warnings from '../../../utils/warnings';
 
 // The choices that go with a post, the same in the short box and the
 // extended composer: who can see it, its language, who may reply and quote
-// it, and for pictures and a video whether they may be downloaded.
+// it, its content warning (anahita-services row 122), and for pictures and
+// a video whether they may be downloaded.
 //
 // Who can see it starts on the last choice for this kind of place
 // (utils/audience) and its language on the last one written in; who may
@@ -34,6 +37,9 @@ const usePostChoices = (actor, viewer) => {
 
   const [whoReplies, setWhoReplies] = useState(replyAccess.ANYONE);
   const [whoQuotes, setWhoQuotes] = useState('');
+  // Asked of each post, as who may reply is: what one post holds says
+  // nothing of the next.
+  const [warning, setWarning] = useState(warnings.NONE);
   const [allowDownload, setAllowDownload] = useState(Boolean(actor.allowDownload));
   useEffect(() => {
     setAllowDownload(Boolean(actor.allowDownload));
@@ -43,6 +49,9 @@ const usePostChoices = (actor, viewer) => {
     access,
     language,
     allowDownload,
+    warning,
+    // A draft taken up again brings its own.
+    setWarning,
     direction: postLanguage.directionOf(language),
     // What goes with a post of any kind, as the server reads it.
     request: () => {
@@ -51,6 +60,7 @@ const usePostChoices = (actor, viewer) => {
         language,
         ...replyAccess.toRequest(whoReplies),
         ...(whoQuotes ? { quote_policy: whoQuotes } : {}),
+        ...warnings.toRequest(warning),
       };
     },
     // After posting: who may reply and quote are asked again; the audience
@@ -59,6 +69,7 @@ const usePostChoices = (actor, viewer) => {
       audience.remember(actor, viewer, access);
       setWhoReplies(replyAccess.ANYONE);
       setWhoQuotes('');
+      setWarning(warnings.NONE);
     },
     // The same choices as rows, one beneath another, on the short composer's
     // second step (roadmap row 114).
@@ -83,6 +94,7 @@ const usePostChoices = (actor, viewer) => {
             disabled={busy}
             row
           />
+          <ContentWarningButton value={warning} onChange={setWarning} disabled={busy} row />
           {withDownload &&
             <DownloadOptionButton
               value={allowDownload}
@@ -113,6 +125,7 @@ const usePostChoices = (actor, viewer) => {
             onQuotePolicyChange={setWhoQuotes}
             disabled={busy}
           />
+          <ContentWarningButton value={warning} onChange={setWarning} disabled={busy} />
           {withDownload &&
             <DownloadOptionButton
               value={allowDownload}

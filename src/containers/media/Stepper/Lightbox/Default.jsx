@@ -46,6 +46,7 @@ import photoFiles from '../../../../utils/photoFiles';
 import styles from './styles';
 import PeopleInPost from '../../PeopleInPost';
 import timeAgo from '../../../../utils/timeAgo';
+import { Blurred, WarningVeil, useWarning } from '../../../../components/WarningCover';
 
 const {
   getAuthor,
@@ -113,6 +114,9 @@ const MediumStepperLightboxDefault = ({
   // post as if the image on show were its only one, which is all the rest
   // of this needs to know about there being several.
   const fileCount = photoFiles.countOf(medium);
+  // Its content warning (row 122): a veil over the picture, its words
+  // blurred, until View; each post of the theatre behind its own.
+  const warned = useWarning(medium);
   const shown = useMemo(() => {
     return photoFiles.asSingle(medium, fileIndex);
   }, [medium, fileIndex]);
@@ -394,6 +398,8 @@ const MediumStepperLightboxDefault = ({
             >
               <VideoPlayer video={medium.video} title={medium.title} />
             </Box>
+            {/* Its content warning over it (row 122), for each post. */}
+            <WarningVeil state={warned} />
           </Grid>}
         {hasPortrait &&
           <Grid
@@ -411,6 +417,7 @@ const MediumStepperLightboxDefault = ({
             onMouseLeave={handleMouseUp}
             size={{ xs: 12, md: 8 }}
           >
+            <WarningVeil state={warned} />
             {(isZoomLoading || (!isPortraitLoaded && !(hasRow && !isZoomed))) &&
               <CircularProgress className={classes.spinner} />}
             {fileCount > 1 && !isZoomed &&
@@ -563,15 +570,16 @@ const MediumStepperLightboxDefault = ({
                     {/* A sound has no pane of its own: it plays here. */}
                     {medium.audio &&
                       <AudioPlayer audio={medium.audio} title={medium.title || ''} />}
-                    <CardContent component="article">
-                      {medium.title &&
+                    <Blurred state={warned}>
+                      <CardContent component="article">
+                        {medium.title &&
                         <Typography
                           variant="h2"
                           className={classes.title}
                         >
                           {medium.title}
                         </Typography>}
-                      {medium.content &&
+                        {medium.content &&
                         <EntityBody>
                           {utils.contentfilter({
                             text: medium.content,
@@ -582,7 +590,8 @@ const MediumStepperLightboxDefault = ({
                             ],
                           })}
                         </EntityBody>}
-                    </CardContent>
+                      </CardContent>
+                    </Blurred>
                     <PostActionsRow actions={actions} stats={stats} />
                   </>}
               </Card>

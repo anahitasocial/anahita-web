@@ -25,6 +25,7 @@ const VideoReplyOnTheWay = ({
   parent,
   body = '',
   language = '',
+  warning = {},
   file,
   onReady,
   onGone,
@@ -39,7 +40,9 @@ const VideoReplyOnTheWay = ({
       return;
     }
     started.current = true;
-    upload.start(viewer, { parentId: parent.id, content: body, language }, file);
+    upload.start(viewer, {
+      parentId: parent.id, content: body, language, ...warning,
+    }, file);
   }, []);
 
   useEffect(() => {
@@ -96,6 +99,8 @@ VideoReplyOnTheWay.propTypes = {
   }).isRequired,
   body: PropTypes.string,
   language: PropTypes.string,
+  // Its content warning, as utils/warnings#toRequest makes it.
+  warning: PropTypes.objectOf(PropTypes.string),
   file: PropTypes.object.isRequired,
   // When the reply has been made: read the thread again.
   onReady: PropTypes.func.isRequired,

@@ -30,6 +30,7 @@ import MediumForm from '../EditForm';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import postCounts from '../../../components/PostCounts';
+import warnings from '../../../utils/warnings';
 
 const { getURL } = utils.node;
 
@@ -57,7 +58,12 @@ const styles = (theme) => {
   };
 };
 
+// A post behind a content warning is called by its warning (row 122).
 const getTitle = (medium) => {
+  const warning = warnings.of(medium);
+  if (warnings.has(warning)) {
+    return warnings.say(warning, i18n.t.bind(i18n));
+  }
   return medium.title || striptags(medium.content || '').substring(0, 60);
 };
 

@@ -36,6 +36,7 @@ import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
+import WarningCover, { Blurred, useWarning } from '../../../components/WarningCover';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
 import { useStickyColumn } from '../../../components/SideTabs';
@@ -89,6 +90,14 @@ const MediumReadDefault = ({
   const hasSlides = photoFiles.hasSeveral(medium);
 
   const [isLoaded, setIsLoaded] = useState(!portrait);
+  // Its content warning (row 122): said over its pictures when it has
+  // any, above its writer's name, and over its words when it has none;
+  // the other part only blurred.
+  const warned = useWarning(medium);
+  const hasPictures = Boolean(cover || coverUrl || hasSlides || portrait || elsewhere ||
+    (medium.mediaRemoved && photoFiles.countOf(medium) === 0));
+  const Top = hasPictures ? WarningCover : Blurred;
+  const Bottom = hasPictures ? Blurred : WarningCover;
 
   useEffect(() => {
     if (portrait) {
@@ -148,28 +157,29 @@ const MediumReadDefault = ({
             it was said in its context, below. */}
       {!context && medium.owner && medium.owner.id !== author.id &&
       <CardHeaderOwner owner={medium.owner} author={medium.author} roomy />}
-      {cover}
-      {!cover && coverUrl &&
-      <CardMedia
-        className={classes.cover}
-        title={medium.title}
-        image={coverUrl}
-        src="picture"
-      />}
-      {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
-      <RemovedPictures medium={medium} auto />}
-      {hasSlides &&
-      <PhotoSlides
-        medium={medium}
-        size="large"
-        onOpen={handleView ? () => {
-          handleView();
-        } : null}
-      />}
-      {/* One photo opens in the theatre too, as several do, to be seen
+      <Top state={warned}>
+        {cover}
+        {!cover && coverUrl &&
+        <CardMedia
+          className={classes.cover}
+          title={medium.title}
+          image={coverUrl}
+          src="picture"
+        />}
+        {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
+        <RemovedPictures medium={medium} auto />}
+        {hasSlides &&
+        <PhotoSlides
+          medium={medium}
+          size="large"
+          onOpen={handleView ? () => {
+            handleView();
+          } : null}
+        />}
+        {/* One photo opens in the theatre too, as several do, to be seen
           larger and zoomed into (asked for again by the user on
           2026-10-17). */}
-      {elsewhere &&
+        {elsewhere &&
         <VideoElsewhere
           node={medium}
           elsewhere={elsewhere}
@@ -178,29 +188,30 @@ const MediumReadDefault = ({
           description={photoFiles.descriptionOf(medium)}
           title={medium.title || ''}
         />}
-      {!hasSlides && portrait && isLoaded && !elsewhere &&
-      <Box sx={{ position: 'relative' }}>
-        {handleView ?
-          <ButtonBase
-            onClick={handleView}
-            aria-label={i18n.t('media:stepper.open')}
-            sx={{ display: 'block', width: '100%' }}
-          >
-            {portraitMedia}
-          </ButtonBase> :
-          portraitMedia}
-        <AltBadge text={photoFiles.descriptionOf(medium)} />
-      </Box>}
-      {!hasSlides && !isLoaded &&
-      <CardContent>
-        <Progress />
-      </CardContent>}
-      {/* Who is in it, right under the picture (roadmap row 103). */}
-      {!medium.video && <PeopleInPost medium={medium} />}
+        {!hasSlides && portrait && isLoaded && !elsewhere &&
+        <Box sx={{ position: 'relative' }}>
+          {handleView ?
+            <ButtonBase
+              onClick={handleView}
+              aria-label={i18n.t('media:stepper.open')}
+              sx={{ display: 'block', width: '100%' }}
+            >
+              {portraitMedia}
+            </ButtonBase> :
+            portraitMedia}
+          <AltBadge text={photoFiles.descriptionOf(medium)} />
+        </Box>}
+        {!hasSlides && !isLoaded &&
+        <CardContent>
+          <Progress />
+        </CardContent>}
+        {/* Who is in it, right under the picture (roadmap row 103). */}
+        {!medium.video && <PeopleInPost medium={medium} />}
+      </Top>
       {header}
       {editing && form}
       {!editing &&
-      <>
+      <Bottom state={warned}>
         {medium.video && !elsewhere && <VideoPlayer video={medium.video} title={medium.title} />}
         {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
         {medium.video && <PeopleInPost medium={medium} />}
@@ -239,8 +250,8 @@ const MediumReadDefault = ({
           {quote}
           <SignInPrompt show={Boolean(medium.truncated)} />
         </CardContent>
-        <PostActionsRow actions={actions} stats={stats} />
-      </>}
+      </Bottom>}
+      {!editing && <PostActionsRow actions={actions} stats={stats} />}
     </Card>
   );
 

@@ -37,6 +37,9 @@ import useReport from '../reports/useReport';
 import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFediverse';
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
+import ContentWarningDialog from '../../components/ContentWarningDialog';
+import WarningCover from '../../components/WarningCover';
+import warnings from '../../utils/warnings';
 import i18n from '../../languages';
 import thread from '../../utils/thread';
 import utils from '../../utils';
@@ -85,6 +88,7 @@ const ReplyItem = ({
   onDelete,
   onHide,
   onLike,
+  onWarning = null,
   onBlockFromOwner = null,
   blockFromOwnerLabel = '',
   context = '',
@@ -96,6 +100,8 @@ const ReplyItem = ({
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const [isWarning, setIsWarning] = useState(false);
+  const [isSavingWarning, setIsSavingWarning] = useState(false);
   const report = useReport(viewer, reply);
   // Answering something from another server, and not on the fediverse:
   // said before it is sent.
@@ -117,6 +123,10 @@ const ReplyItem = ({
   // Whoever wrote it, unless it is the viewer (roadmap row 133). Their
   // replies leave the thread when it is read again.
   const mute = useMute(reply.deleted ? null : viewer, author);
+  // Its content warning, changed by its writer (row 122), but not one the
+  // administrators gave.
+  const warning = warnings.of(reply);
+  const canWarn = Boolean(authorized.edit && onWarning && !reply.deleted && !warning.byModerator);
   const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
     canBlockFromOwner || mute.canMute || report.canReport || original;
 
@@ -142,6 +152,7 @@ const ReplyItem = ({
             onDelete={onDelete}
             onHide={onHide}
             onLike={onLike}
+            onWarning={onWarning}
             onBlockFromOwner={onBlockFromOwner}
             blockFromOwnerLabel={blockFromOwnerLabel}
             writerId={writerId}
@@ -258,32 +269,36 @@ const ReplyItem = ({
               under them. 16 pixels show above and below: 8 above, since
               the line with the name is as tall as the picture beside it
               and already leaves some 8 under the name. */}
-          {Array.isArray(reply.files) && reply.files.length > 0 &&
+          {/* Its content warning over its pictures and words, until View
+              is pressed (row 122). */}
+          <WarningCover post={isEditing ? null : reply}>
+            {Array.isArray(reply.files) && reply.files.length > 0 &&
             <Box sx={{
               mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
             }}
             >
               <PhotoSlides medium={reply} size="medium" />
             </Box>}
-          {reply.video &&
+            {reply.video &&
             <Box sx={{
               mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
             }}
             >
               <VideoPlayer video={reply.video} title={reply.title || ''} />
             </Box>}
-          {reply.audio &&
+            {reply.audio &&
             <Box sx={{ mt: 1, mb: 2 }}>
               <AudioPlayer audio={reply.audio} title={reply.title || ''} padded={false} />
             </Box>}
-          {!isEditing &&
+            {!isEditing &&
             <Box sx={{ '& p:first-of-type': { mt: 0 } }}>
               <EntityBody contentFilter size="body2" lang={reply.language}>
                 {reply.content || ''}
               </EntityBody>
             </Box>}
-          {!isEditing && linkPreviews.isShown(reply.linkPreview) &&
+            {!isEditing && linkPreviews.isShown(reply.linkPreview) &&
             <LinkPreviewCard preview={reply.linkPreview} />}
+          </WarningCover>
           {isEditing &&
             <ReplyForm
               initial={reply.content || ''}
@@ -384,6 +399,17 @@ const ReplyItem = ({
                     {i18n.t('replies:actions.edit')}
                   </MenuItemLabel>
                 </MenuItem>}
+              {canWarn &&
+                <MenuItem
+                  onClick={() => {
+                    closeMenu();
+                    setIsWarning(true);
+                  }}
+                >
+                  <MenuItemLabel icon={warnings.iconOf(warning.kind, { fontSize: 'small' })}>
+                    {i18n.t('warnings:label')}
+                  </MenuItemLabel>
+                </MenuItem>}
               {authorized.hide &&
                 <MenuItem
                   onClick={() => {
@@ -442,6 +468,25 @@ const ReplyItem = ({
             </Menu>
             {report.dialog}
             {mute.dialog}
+            {canWarn &&
+              <ContentWarningDialog
+                open={isWarning}
+                value={warning}
+                saving={isSavingWarning}
+                onClose={() => {
+                  setIsWarning(false);
+                }}
+                onSave={(chosen) => {
+                  setIsSavingWarning(true);
+                  onWarning(reply, chosen).then(() => {
+                    setIsWarning(false);
+                  }).catch(() => {
+                    // Said by the thread; the dialog stays.
+                  }).finally(() => {
+                    setIsSavingWarning(false);
+                  });
+                }}
+              />}
           </>}
       </Box>
       {isReplying &&
@@ -482,6 +527,8 @@ ReplyItem.propTypes = {
   onDelete: PropTypes.func.isRequired,
   onHide: PropTypes.func.isRequired,
   onLike: PropTypes.func.isRequired,
+  // Changing its content warning: called with the reply and { kind, text }.
+  onWarning: PropTypes.func,
   // Blocking the writer from the group the thread is in, for whoever runs
   // it. Given only on a group's thread.
   onBlockFromOwner: PropTypes.func,

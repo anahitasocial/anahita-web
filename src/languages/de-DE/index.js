@@ -51,6 +51,7 @@ import search from './search';
 import inbounds from './inbounds';
 import commons from './commons';
 import email from './email';
+import warnings from './warnings';
 
 export default {
   apps,
@@ -105,5 +106,6 @@ export default {
   search,
   inbounds,
   email,
+  warnings,
   commons,
 };
