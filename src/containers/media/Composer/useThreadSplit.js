@@ -8,7 +8,9 @@ import threadSplit from '../../../utils/threadSplit';
 // (utils/threadSplit.limitFor). Past it, the words can be split into a
 // thread, at most ten notes with the ones already there; one step back puts
 // them as they were, while the first note is still as the split left it.
-// "Add to thread" is offered once the last note has reached the limit.
+// "Add to thread" is offered once the last note has words, wherever the post
+// goes: a post that stays here holds 8,000 letters, too many to wait for
+// (the user, 2026-11-08).
 const useThreadSplit = ({
   body,
   setBody,
@@ -23,7 +25,6 @@ const useThreadSplit = ({
   const over = canThread && length > limit;
   const room = LIMITS.THREAD_PARTS_MAX - moreParts.length;
   const notes = over ? threadSplit.split(body, limit, room) : null;
-  const last = moreParts.length > 0 ? moreParts[moreParts.length - 1] : body;
 
   const splitNow = () => {
     setBefore({
@@ -44,7 +45,6 @@ const useThreadSplit = ({
     limit,
     canSplit: Boolean(notes && notes.length > 1),
     tooLong: over && !notes,
-    isFull: threadSplit.lengthOf(last.trim()) >= limit,
     // What the last split made, while it can still be taken back.
     undoable: before && before.first === body ? before : null,
     splitNow,

@@ -25,6 +25,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    its notes with one line, from the writer's profile photo down through
    each note's small one to Add to thread, and the composer's edges are an
    even 16 px all round.
+2. **Add to thread is there wherever a post goes:** once a note has words,
+   in the composer and in a reply. It waited for a full note, which on a
+   post that stays on the site meant 8,000 letters.
 
 ## v1.1.0 Birth, 2026-11-08
 

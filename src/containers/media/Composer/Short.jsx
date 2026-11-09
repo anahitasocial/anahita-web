@@ -557,7 +557,7 @@ const ShortComposer = ({
     <ThreadParts
       parts={moreParts}
       onChange={setMoreParts}
-      canAdd={Boolean(text) && split.isFull &&
+      canAdd={Boolean(text) &&
         !moreParts.some((each) => { return !each.trim(); })}
       max={LIMITS.THREAD_PARTS_MAX}
       disabled={busy}

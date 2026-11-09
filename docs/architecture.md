@@ -1714,10 +1714,10 @@ draws nothing (`utils/federation.js#isAbsent`).
    `Composer/useThreadSplit.js`, `utils/threadSplit.js`): Bluesky's 300 when
    it goes there, the fediverse's 500 when it goes only there, 8,000 when it
    stays here (`FEDIVERSE_POST_MAX` in `constants/limits.js`). "Add to
-   thread" is offered once the last note has reached it. Past it, "Split
-   into a thread" breaks the words at paragraphs, then sentences, then
-   spaces, never inside a link, into ten notes at most; "Undo" puts them back
-   while the first note is as the split left it.
+   thread" is offered once the last note has words, wherever the post goes.
+   Past the limit, "Split into a thread" breaks the words at paragraphs, then
+   sentences, then spaces, never inside a link, into ten notes at most;
+   "Undo" puts them back while the first note is as the split left it.
 3. **What other networks will show** of a public post on the viewer's own
    profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
    past 300 characters, when their Bluesky account is connected, that
