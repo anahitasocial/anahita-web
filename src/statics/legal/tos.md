@@ -1,6 +1,6 @@
 # Terms of Service
 
-**Version 1.0.1**
+**Version 1.1.0**
 
 > **This is boilerplate.** It ships with Anahita as a starting point so a new
 > installation has something coherent on this page from day one. It is not
@@ -63,6 +63,12 @@ Do not use the Service to:
 
 - break the law, or help anybody else to;
 - post content you have no right to post;
+- post music, recordings, video, pictures or writing that belong to
+  somebody else, without their permission or another right to (quoting a
+  short part to comment on it, for example);
+- record anybody without their consent where the law requires it, or post
+  a recording of a private conversation without the consent of the people
+  in it;
 - harass, threaten, impersonate, or deliberately mislead other people;
 - post sexual content involving children, or content that incites violence;
 - send bulk unsolicited messages, or scrape the Service to build a dataset;
@@ -76,6 +82,18 @@ We may remove content, or suspend or close an account, when we believe these
 terms have been broken. Where we reasonably can, we will tell you why and give
 you a way to reply. Where the law or an immediate risk of harm requires us to
 act at once, we may act first.
+
+## Copyright
+
+If something on the Service uses work you hold the rights to without your
+permission, tell us at **[your contact address]**: what the work is, the
+address of the post, how to reach you, and that you hold the rights or act
+for whoever does.
+
+We will pass your notice on to the person who posted it, as the law where
+we operate asks of us, and remove the post where we believe it infringes.
+If your post was removed and you believe it should not have been, reply to
+our message and tell us why.
 
 ## Ending your account
 

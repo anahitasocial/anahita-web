@@ -17,6 +17,15 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    a red dot and the time while it records, Cancel and Done; then it is
    posted as any sound is. Any sound can be listened to before posting.
 
+### Changed
+
+1. **The boilerplate Terms of Service, version 1.1.0:** music, recordings,
+   video, pictures or writing that belong to somebody else are not to be
+   posted without a right to; nobody is to be recorded without their
+   consent where the law requires it; and a Copyright section says how a
+   rights holder tells the site, and what it does. Everybody is asked to
+   accept the terms again. A site with its own terms adds the same.
+
 ## v1.2.2 Birth, 2026-11-08
 
 A maintenance release of the web app alone, for Anahita Services v1.2.0.
