@@ -7,7 +7,9 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 import EmptyList from '../EmptyList';
 import Masonry, { FixedColumns } from '../BreakpointMasonry';
 import { useTabbedList } from '../SideTabs';
-import useFeedView, { COLUMNS, STREAM } from '../../containers/feeds/useFeedView';
+import useFeedView, {
+  COLUMNS, STREAM, PROFILES,
+} from '../../containers/feeds/useFeedView';
 
 describe('the views of a feed', () => {
   let box;
@@ -74,6 +76,31 @@ describe('the views of a feed', () => {
       root = createRoot(box);
       draw(<Probe />);
       expect(seen.columns).toBe(true);
+    });
+
+    it('keeps the feeds\' choice apart from the profiles\'', () => {
+      wide(true);
+      let profile;
+      const Profile = () => {
+        profile = useFeedView(PROFILES);
+        return null;
+      };
+      const both = (
+        <>
+          <Probe />
+          <Profile />
+        </>
+      );
+      draw(both);
+      act(() => { seen.chooseView(COLUMNS); });
+      expect(seen.columns).toBe(true);
+      expect(profile.columns).toBe(false);
+
+      act(() => { root.unmount(); });
+      root = createRoot(box);
+      draw(both);
+      expect(seen.columns).toBe(true);
+      expect(profile.view).toBe(STREAM);
     });
 
     it('has neither on a narrow screen, whatever was chosen', () => {

@@ -32,6 +32,12 @@ Needs Anahita Services v1.2.4 or later, for content warnings.
    an article's cover: asked for by the pickers, and shown before they are
    posted, an iPhone's HEIC too where the browser cannot draw it.
 
+### Changed
+
+1. **One column or several, chosen apart for feeds and for profiles:**
+   columns on Home no longer lay profiles out in columns too. Profiles
+   start in one column; the feeds keep what was chosen before.
+
 ### Fixed
 
 1. **A GIF or a video sent as a reply kept its words:** they were dropped

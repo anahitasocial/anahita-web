@@ -1292,8 +1292,10 @@ are about, what to leave out. The server's side is in the services'
    button, and takes them back up (`components/BackToTop.jsx`).
 3. **One column or several.** On a wide screen a pair of buttons, beside the
    vertical tabs on Home and in the header on a profile, lays posts out one
-   under another or in columns. The choice is kept in the browser
-   (`home.feedView`), and is the same on both. On a narrow screen there is one
+   under another or in columns. The choice is kept in the browser, one for
+   the feeds (`home.feedView`) and one for profiles (`profile.feedView`), so
+   that columns on Home leave profiles in one; each starts as one column
+   (`containers/feeds/useFeedView.js`). On a narrow screen there is one
    column, and no buttons.
 4. **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's
    posts and reposts, with their menus and buttons, for Following and for

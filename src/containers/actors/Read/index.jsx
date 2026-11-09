@@ -32,7 +32,7 @@ import EventsHosted from '../../events/Hosted';
 import LimitedActorCard from '../../../components/LimitedActorCard';
 import BackToTop from '../../../components/BackToTop';
 import FeedViewToggle from '../../../components/FeedViewToggle';
-import useFeedView from '../../feeds/useFeedView';
+import useFeedView, { PROFILES } from '../../feeds/useFeedView';
 import LocationsGadget from '../../locations/Gadget';
 import MediaBrowse from '../../media/Browse';
 import Progress from '../../../components/Progress';
@@ -129,7 +129,7 @@ const ActorsRead = (props) => {
 
   const params = useParams();
   const navigate = useNavigate();
-  const feedView = useFeedView();
+  const feedView = useFeedView(PROFILES);
   const slug = routeId || params.id;
   const tab = routeId ? routeTab : params.tab;
   const subtab = routeId ? routeSubtab : params.subtab;
