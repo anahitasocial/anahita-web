@@ -3,7 +3,7 @@ export default {
   label: 'Advertencia',
   none: 'Ninguna',
   title: 'Advertencia de contenido',
-  help: 'Primero se ve la advertencia, y cada quien elige si ver la publicación.',
+  help: 'Verán tu contenido borroso, y detrás de una advertencia.',
   kinds: {
     adult: 'Contenido para adultos',
     suggestive: 'Sexualmente sugerente',

@@ -3,7 +3,7 @@ export default {
   label: 'Inhaltswarnung',
   none: 'Keine',
   title: 'Inhaltswarnung',
-  help: 'Man sieht zuerst die Warnung und entscheidet dann, ob man den Beitrag ansieht.',
+  help: 'Man sieht deinen Inhalt verschwommen und hinter einer Warnung.',
   kinds: {
     adult: 'Inhalte für Erwachsene',
     suggestive: 'Sexuell anzüglich',

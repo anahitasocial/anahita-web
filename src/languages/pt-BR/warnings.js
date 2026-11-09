@@ -3,7 +3,7 @@ export default {
   label: 'Aviso de conteúdo',
   none: 'Nenhum',
   title: 'Aviso de conteúdo',
-  help: 'Primeiro aparece o aviso, e cada pessoa escolhe se quer ver a publicação.',
+  help: 'As pessoas verão seu conteúdo desfocado, e atrás de um aviso.',
   kinds: {
     adult: 'Conteúdo adulto',
     suggestive: 'Sexualmente sugestivo',

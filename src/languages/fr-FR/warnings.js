@@ -3,7 +3,7 @@ export default {
   label: 'Avertissement',
   none: 'Aucun',
   title: 'Avertissement de contenu',
-  help: 'On voit d’abord l’avertissement, puis on choisit d’afficher la publication ou non.',
+  help: 'On verra votre contenu flouté, et derrière un avertissement.',
   kinds: {
     adult: 'Contenu pour adultes',
     suggestive: 'Contenu suggestif',

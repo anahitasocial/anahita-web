@@ -6,7 +6,7 @@ export default {
   label: 'Content warning',
   none: 'None',
   title: 'Content warning',
-  help: 'People see the warning first, and choose whether to view the post.',
+  help: 'People will see your content blurred, and behind a warning.',
   kinds: {
     adult: 'Adult content',
     suggestive: 'Sexually suggestive',
