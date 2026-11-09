@@ -30,6 +30,14 @@ export default {
   addVideo: 'Add a video',
   audio: 'Audio',
   addAudio: 'Add audio',
+  // Recording a sound in the page (the user, 2026-11-08).
+  record: 'Record',
+  recordTip: 'Record a sound',
+  recording: 'Recording',
+  recordDone: 'Done',
+  micAsking: 'Allow the microphone to record.',
+  micRefused: 'The microphone was not allowed. It can be allowed in the browser\'s settings.',
+  listenBack: 'Listen before posting',
   // Taking the sound picked out again.
   removeAudio: 'Remove the sound',
   // The extended composer's heading, and the button where a profile takes

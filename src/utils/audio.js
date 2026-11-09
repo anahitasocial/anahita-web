@@ -40,6 +40,18 @@ const metadataOf = (nodeInfo) => {
   return (nodeInfo && nodeInfo.metadata) || {};
 };
 
+// Whether the installation takes audio posts (AUDIO_UPLOADS): yes unless
+// it says no, as one from before the setting says nothing.
+const isOn = (nodeInfo) => {
+  return metadataOf(nodeInfo).audioUploads !== false;
+};
+
+// Whether it offers to record one in the composer (AUDIO_RECORDING): only
+// where it says so.
+const recordingOn = (nodeInfo) => {
+  return metadataOf(nodeInfo).audioRecording === true;
+};
+
 // The installation's limits, where it says them; otherwise the server's
 // defaults, 500 MB and an hour.
 const maxBytes = (nodeInfo) => {
@@ -72,6 +84,8 @@ const of = (node) => {
 };
 
 export default {
+  isOn,
+  recordingOn,
   TYPES,
   PICKER,
   isAudioType,

@@ -7,6 +7,16 @@ as anahita-services on the same day, takes the Embryo section under its
 version and date. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Added
+
+1. **A sound recorded in the composer,** where the site turns it on
+   (`AUDIO_RECORDING`, off unless said). A microphone icon beside Audio
+   records with the device's microphone, once the browser is allowed to:
+   a red dot and the time while it records, Cancel and Done; then it is
+   posted as any sound is. Any sound can be listened to before posting.
+
 ## v1.2.2 Birth, 2026-11-08
 
 A maintenance release of the web app alone, for Anahita Services v1.2.0.

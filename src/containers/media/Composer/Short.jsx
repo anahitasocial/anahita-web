@@ -50,6 +50,7 @@ import photoFiles from '../../../utils/photoFiles';
 import utils from '../../../utils';
 import videos from '../../../utils/videos';
 import audioFiles from '../../../utils/audio';
+import useVoiceRecorder, { canRecord } from './useVoiceRecorder';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
@@ -129,7 +130,7 @@ const ShortComposer = ({
   const canWords = kinds.includes('note');
   const canPhotos = kinds.includes('photo');
   const canVideo = kinds.includes('video') && videos.isOn(nodeInfo);
-  const canAudio = kinds.includes('audio') && videos.isOn(nodeInfo);
+  const canAudio = kinds.includes('audio') && videos.isOn(nodeInfo) && audioFiles.isOn(nodeInfo);
   // The file picked is a sound rather than a video.
   const isSound = audioFiles.isAudioType(video);
   // What is said while one is on its way: a sound's words for a sound.
@@ -406,6 +407,30 @@ const ShortComposer = ({
     }
   };
 
+  // A sound recorded here (useVoiceRecorder), taken as one chosen is; at
+  // most as long as an audio post may be.
+  const recorder = useVoiceRecorder({
+    maxSeconds: audioFiles.maxSeconds(nodeInfo),
+    onRecorded: takeVideo,
+  });
+  // The microphone let go when the composer closes, nothing kept.
+  useEffect(() => {
+    if (!isOpen) {
+      recorder.cancel();
+    }
+  }, [isOpen]);
+  // To listen to the sound before it is posted, from the file itself.
+  const listenTo = React.useMemo(() => {
+    return isSound ? URL.createObjectURL(video) : '';
+  }, [video, isSound]);
+  useEffect(() => {
+    return () => {
+      if (listenTo) {
+        URL.revokeObjectURL(listenTo);
+      }
+    };
+  }, [listenTo]);
+
   // The last photo taken out: the place for them closes, as it opened.
   const hadPhotos = React.useRef(false);
   useEffect(() => {
@@ -434,10 +459,13 @@ const ShortComposer = ({
   // opens the system's picker at once, and what is picked shows straight
   // away, being sent. Hidden while posting rather than disabled: a tooltip
   // on a disabled button is never seen.
+  const recording = recorder.phase === 'recording' || recorder.phase === 'asking';
   const offers = {
-    photos: canPhotos && !busy && !video && !hasPhotos,
-    video: canVideo && !busy && !videoBusy && !hasPhotos && !video,
-    audio: canAudio && !busy && !videoBusy && !hasPhotos && !video,
+    photos: canPhotos && !busy && !video && !hasPhotos && !recording,
+    video: canVideo && !busy && !videoBusy && !hasPhotos && !video && !recording,
+    audio: canAudio && !busy && !videoBusy && !hasPhotos && !video && !recording,
+    record: canAudio && audioFiles.recordingOn(nodeInfo) && canRecord() &&
+      !busy && !videoBusy && !hasPhotos && !video && !recording,
   };
   const attachButtons = (
     <AttachButtons
@@ -445,11 +473,13 @@ const ShortComposer = ({
       photos={offers.photos}
       video={offers.video}
       audio={offers.audio}
+      record={offers.record}
       onPhotos={(files) => {
         setIsAddingPhotos(true);
         setIncoming({ files });
       }}
       onVideo={takeVideo}
+      onRecord={recorder.start}
     />
   );
 
@@ -605,6 +635,11 @@ const ShortComposer = ({
     />
   );
 
+  // A recording's length as a clock shows it: 0:42, 12:05.
+  const clock = (seconds) => {
+    return `${Math.floor(seconds / 60)}:${String(seconds % 60).padStart(2, '0')}`;
+  };
+
   // What is written and what goes with it, the same in place and full
   // screen.
   const content = (
@@ -685,6 +720,15 @@ const ShortComposer = ({
               <CloseIcon fontSize="small" />
             </IconButton>}
         </Stack>}
+      {listenTo &&
+        <Box
+          component="audio"
+          src={listenTo}
+          controls
+          preload="metadata"
+          aria-label={i18n.t('composer:listenBack')}
+          sx={{ display: 'block', width: '100%', mt: 1 }}
+        />}
       {videoProblem &&
         <Typography variant="caption" color="error" component="p" role="alert" sx={{ mt: 1 }}>
           {videoProblem}
@@ -707,10 +751,33 @@ const ShortComposer = ({
         display: 'flex', gap: 1, alignItems: 'center', mt: 1,
       }}
       >
-        {(offers.photos || offers.video || offers.audio) &&
+        {(offers.photos || offers.video || offers.audio || offers.record) &&
           <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center', ml: -1, flexShrink: 0 }}>
             {attachButtons}
           </Stack>}
+        {/* While a sound is recorded, in place of the icons: a red dot and
+            the time, then Cancel and Done. */}
+        {recorder.phase === 'recording' &&
+          <Box sx={{
+            display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0,
+          }}
+          >
+            <Box
+              aria-hidden
+              sx={{
+                width: 8, height: 8, borderRadius: '50%', bgcolor: 'error.main', flexShrink: 0,
+              }}
+            />
+            <Typography variant="body2" sx={{ fontVariantNumeric: 'tabular-nums', mr: 1 }} role="timer">
+              {`${i18n.t('composer:recording')} ${clock(recorder.seconds)}`}
+            </Typography>
+            <Button size="small" onClick={recorder.cancel}>
+              {i18n.t('actions:cancel')}
+            </Button>
+            <Button size="small" onClick={recorder.stop}>
+              {i18n.t('composer:recordDone')}
+            </Button>
+          </Box>}
         {canWords &&
           <Box sx={{ flexGrow: 1, minWidth: 0 }}>
             <ThreadLine
@@ -730,6 +797,18 @@ const ShortComposer = ({
       {(canVideo || canAudio) && videoBusy && !hasPhotos &&
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>
           {onItsWay}
+        </Typography>}
+      {/* What the browser asks before recording, and what to do when the
+          microphone was not allowed. */}
+      {(recorder.phase === 'asking' || recorder.phase === 'refused') &&
+        <Typography
+          variant="caption"
+          color={recorder.phase === 'refused' ? 'error' : 'textSecondary'}
+          component="p"
+          role={recorder.phase === 'refused' ? 'alert' : undefined}
+          sx={{ mt: 1 }}
+        >
+          {i18n.t(recorder.phase === 'refused' ? 'composer:micRefused' : 'composer:micAsking')}
         </Typography>}
       {/* On a mobile, the notes after the first come after all of it. */}
       {canThread && mobile && threadNotesShown}

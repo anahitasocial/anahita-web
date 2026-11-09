@@ -48,3 +48,12 @@ describe('audio posts', () => {
     expect(kinds.indexOf('audio')).toBe(kinds.indexOf('video') + 1);
   });
 });
+
+describe('the installation\'s switches', () => {
+  it('takes audio posts unless it says not, and records only where it says so', () => {
+    expect(audio.isOn({ metadata: {} })).toBe(true);
+    expect(audio.isOn({ metadata: { audioUploads: false } })).toBe(false);
+    expect(audio.recordingOn({ metadata: {} })).toBe(false);
+    expect(audio.recordingOn({ metadata: { audioRecording: true } })).toBe(true);
+  });
+});

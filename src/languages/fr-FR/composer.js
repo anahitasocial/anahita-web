@@ -24,6 +24,14 @@ export default {
   addVideo: 'Ajouter une vidéo',
   audio: 'Audio',
   addAudio: 'Ajouter un son',
+  // Recording a sound in the page (the user, 2026-11-08).
+  record: 'Enregistrer',
+  recordTip: 'Enregistrer un son',
+  recording: 'Enregistrement',
+  recordDone: 'Terminé',
+  micAsking: 'Autorisez le micro pour enregistrer.',
+  micRefused: 'Le micro n\'a pas été autorisé. Il peut l\'être dans les réglages du navigateur.',
+  listenBack: 'Écouter avant de publier',
   // Taking the sound picked out again.
   removeAudio: 'Retirer le son',
   titleNeeded: 'Un titre est nécessaire.',

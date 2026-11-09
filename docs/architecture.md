@@ -876,7 +876,17 @@ own, because a video is too big to be sent with the post (the services'
     takes the sounds the server takes (`utils/audio.js`: MP3, M4A, AAC, Ogg,
     Opus, WAV, FLAC, WebM sound), and it is sent through the same upload as
     a video (`useVideoUpload.js`, which keeps its `kind` so that what is said
-    of it says audio); the server makes it one M4A file. It plays in
+    of it says audio); the server makes it one M4A file. A sound can be
+    recorded in the composer too, where the site allows it (NodeInfo's
+    `audioRecording`, `AUDIO_RECORDING` in the services, off unless said;
+    `audioUploads` says whether sound may be posted at all), with the
+    microphone icon beside Audio
+    (`Composer/useVoiceRecorder.js`, the browser's own `MediaRecorder`; the
+    user, 2026-11-08): while recording, a red dot, the time, Cancel and
+    Done, in place of the icons; then it is taken as a sound chosen is, M4A
+    or WebM as the browser records, stopping by itself at the longest a
+    sound may be. Any sound, recorded or chosen, can be listened to before
+    it is posted. It plays in
     `components/AudioPlayer.jsx`: the browser's own `<audio>`, full width,
     with the cover the file carried, small, beside it, wherever a video's
     player is drawn. It is at `/audio/:id` here, read, edited and deleted at

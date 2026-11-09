@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
 import AudioIcon from '@mui/icons-material/HeadphonesOutlined';
 import GifIcon from '@mui/icons-material/GifBoxOutlined';
+import MicIcon from '@mui/icons-material/MicNoneOutlined';
 import PhotoIcon from '@mui/icons-material/Photo';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
@@ -30,8 +31,10 @@ const AttachButtons = ({
   photos = false,
   video = false,
   audio = false,
+  record = false,
   onPhotos,
   onVideo,
+  onRecord = null,
 }) => {
   const photoPicker = useRef(null);
   const gifPicker = useRef(null);
@@ -128,6 +131,13 @@ const AttachButtons = ({
             audioPicker.current.click();
           },
         )}
+      {record && onRecord &&
+        button(
+          i18n.t('composer:record'),
+          i18n.t('composer:recordTip'),
+          <MicIcon />,
+          onRecord,
+        )}
       <input
         ref={photoPicker}
         type="file"
@@ -152,6 +162,9 @@ AttachButtons.propTypes = {
   onPhotos: PropTypes.func.isRequired,
   // Called with the file picked, a GIF, a video or a sound.
   onVideo: PropTypes.func.isRequired,
+  // A sound recorded here, with the microphone (useVoiceRecorder).
+  record: PropTypes.bool,
+  onRecord: PropTypes.func,
 };
 
 export default AttachButtons;
