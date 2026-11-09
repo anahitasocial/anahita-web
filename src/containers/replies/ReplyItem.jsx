@@ -38,7 +38,7 @@ import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFedivers
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import ContentWarningDialog from '../../components/ContentWarningDialog';
-import WarningCover from '../../components/WarningCover';
+import WarningCover, { Blurred, useWarning } from '../../components/WarningCover';
 import warnings from '../../utils/warnings';
 import i18n from '../../languages';
 import thread from '../../utils/thread';
@@ -103,6 +103,10 @@ const ReplyItem = ({
   const [isWarning, setIsWarning] = useState(false);
   const [isSavingWarning, setIsSavingWarning] = useState(false);
   const report = useReport(viewer, reply);
+  // Its content warning (row 122), not over it while it is edited.
+  const cover = useWarning(reply);
+  const warned = isEditing ? { ...cover, hidden: false } : cover;
+  const media = warnings.hasMedia(reply);
   // Answering something from another server, and not on the fediverse:
   // said before it is sent.
   const staysHere = useReplyStaysHere(viewer, reply);
@@ -269,9 +273,9 @@ const ReplyItem = ({
               under them. 16 pixels show above and below: 8 above, since
               the line with the name is as tall as the picture beside it
               and already leaves some 8 under the name. */}
-          {/* Its content warning over its pictures and words, until View
-              is pressed (row 122). */}
-          <WarningCover post={isEditing ? null : reply}>
+          {/* Its content warning (row 122): over its pictures, video or
+              sound, its words shown; over its words when it has none. */}
+          <WarningCover state={warned} off={!media}>
             {Array.isArray(reply.files) && reply.files.length > 0 &&
             <Box sx={{
               mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
@@ -290,6 +294,8 @@ const ReplyItem = ({
             <Box sx={{ mt: 1, mb: 2 }}>
               <AudioPlayer audio={reply.audio} title={reply.title || ''} padded={false} />
             </Box>}
+          </WarningCover>
+          <WarningCover state={warned} off={media}>
             {!isEditing &&
             <Box sx={{ '& p:first-of-type': { mt: 0 } }}>
               <EntityBody contentFilter size="body2" lang={reply.language}>
@@ -297,7 +303,9 @@ const ReplyItem = ({
               </EntityBody>
             </Box>}
             {!isEditing && linkPreviews.isShown(reply.linkPreview) &&
-            <LinkPreviewCard preview={reply.linkPreview} />}
+            <Blurred state={warned} off={!media}>
+              <LinkPreviewCard preview={reply.linkPreview} />
+            </Blurred>}
           </WarningCover>
           {isEditing &&
             <ReplyForm

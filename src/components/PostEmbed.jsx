@@ -29,7 +29,7 @@ import linkPreviews from '../utils/linkPreviews';
 import plainText from '../utils/plainText';
 import utils from '../utils';
 import i18n from '../languages';
-import WarningCover from './WarningCover';
+import WarningCover, { useWarning } from './WarningCover';
 
 const {
   getAuthor,
@@ -428,6 +428,9 @@ const usePost = (at) => {
 
 const Post = ({ url, at }) => {
   const { post, failed } = usePost(at);
+  // Its content warning, over its picture, video or sound and not its
+  // caption, or over its words when it has nothing else (row 122).
+  const warned = useWarning(post);
 
   if (failed) {
     return <PlainLink url={url} />;
@@ -442,10 +445,10 @@ const Post = ({ url, at }) => {
   if (at.kind === 'photo') {
     return (
       <Box sx={SPACE}>
-        <WarningCover post={post}>
+        <WarningCover state={warned}>
           <PhotoSlides medium={post} size="large" natural />
-          <Caption post={post} />
         </WarningCover>
+        <Caption post={post} />
       </Box>
     );
   }
@@ -453,10 +456,10 @@ const Post = ({ url, at }) => {
   if (at.kind === 'video' && post.video) {
     return (
       <Box sx={SPACE}>
-        <WarningCover post={post}>
+        <WarningCover state={warned}>
           <VideoPlayer video={post.video} title={post.title} />
-          <Caption post={post} />
         </WarningCover>
+        <Caption post={post} />
       </Box>
     );
   }
@@ -464,17 +467,16 @@ const Post = ({ url, at }) => {
   if (at.kind === 'audio' && post.audio) {
     return (
       <Box sx={SPACE}>
-        <WarningCover post={post}>
+        <WarningCover state={warned}>
           <AudioPlayer audio={post.audio} title={post.title} />
-          <Caption post={post} />
         </WarningCover>
+        <Caption post={post} />
       </Box>
     );
   }
 
-  // Its content warning over it, as anywhere a post is drawn (row 122).
   return (
-    <WarningCover post={post}>
+    <WarningCover state={warned}>
       <Words post={post} />
     </WarningCover>
   );

@@ -15,7 +15,8 @@ import utils from '../utils';
 import quotes from '../utils/quotes';
 import timeAgo from '../utils/timeAgo';
 import excerptOf from '../utils/excerpt';
-import WarningCover from './WarningCover';
+import WarningCover, { useWarning } from './WarningCover';
+import warnings from '../utils/warnings';
 
 const { getURL, getPortraitURL } = utils.node;
 
@@ -39,6 +40,7 @@ const QuoteEmbed = ({
   detaching = false,
 }) => {
   const state = quotes.stateOf(quote);
+  const warned = useWarning(quote && quote.post);
 
   if (!state) {
     return null;
@@ -66,6 +68,8 @@ const QuoteEmbed = ({
   const author = post.author || {};
   const url = getURL(post);
   const image = getPortraitURL(post, 'medium');
+  // Its warning lies over its picture when there is one to show.
+  const media = Boolean(image) && warnings.hasMedia(post);
   // Its words, and its links drawn as links (utils/excerpt.js).
   const excerpt = excerptOf(post.content, EXCERPT);
   const createdAt = post.createdAt ? moment.utc(post.createdAt) : null;
@@ -95,9 +99,10 @@ const QuoteEmbed = ({
             {timeAgo(post.createdAt)}
           </Link>}
       />
-      {/* The quoted post's content warning, over its words and picture
-          (row 122). */}
-      <WarningCover post={post}>
+      {/* The quoted post's content warning (row 122): over its picture,
+          its words shown, when it has a photo, a GIF, a video or a sound;
+          over all of it when it has not. */}
+      <WarningCover state={warned} off={media}>
         <Box sx={{ p: 2 }}>
           {post.title &&
           <Typography variant="subtitle2" dir="auto">
@@ -123,20 +128,22 @@ const QuoteEmbed = ({
             {i18n.t('replies:quote.open')}
           </Link>}
         </Box>
-        {image &&
-        <Link href={url} sx={{ display: 'block', lineHeight: 0 }}>
-          <Box
-            component="img"
-            src={image}
-            alt={post.title || ''}
-            sx={{
-              width: '100%',
-              maxHeight: 320,
-              objectFit: 'cover',
-              display: 'block',
-            }}
-          />
-        </Link>}
+        <WarningCover state={warned} off={!media}>
+          {image &&
+          <Link href={url} sx={{ display: 'block', lineHeight: 0 }}>
+            <Box
+              component="img"
+              src={image}
+              alt={post.title || ''}
+              sx={{
+                width: '100%',
+                maxHeight: 320,
+                objectFit: 'cover',
+                display: 'block',
+              }}
+            />
+          </Link>}
+        </WarningCover>
       </WarningCover>
       {(onDetach || onRemove) &&
         <Box sx={{ p: 1, display: 'flex', justifyContent: 'flex-end' }}>

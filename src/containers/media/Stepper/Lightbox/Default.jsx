@@ -47,6 +47,7 @@ import styles from './styles';
 import PeopleInPost from '../../PeopleInPost';
 import timeAgo from '../../../../utils/timeAgo';
 import { Blurred, WarningVeil, useWarning } from '../../../../components/WarningCover';
+import warnings from '../../../../utils/warnings';
 
 const {
   getAuthor,
@@ -570,7 +571,9 @@ const MediumStepperLightboxDefault = ({
                     {/* A sound has no pane of its own: it plays here. */}
                     {medium.audio &&
                       <AudioPlayer audio={medium.audio} title={medium.title || ''} />}
-                    <Blurred state={warned}>
+                    {/* Its words are shown when the veil is over its
+                        picture (row 122). */}
+                    <Blurred state={warned} off={warnings.hasMedia(medium)}>
                       <CardContent component="article">
                         {medium.title &&
                         <Typography

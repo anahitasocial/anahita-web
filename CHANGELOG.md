@@ -9,7 +9,7 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ## Embryo
 
-Needs Anahita Services from `main` (Embryo), for content warnings.
+Needs Anahita Services v1.2.4 or later, for content warnings.
 
 ### Added
 
@@ -17,8 +17,10 @@ Needs Anahita Services from `main` (Embryo), for content warnings.
    say what it holds, Adult content, Sexually suggestive, Graphic media,
    Non-sexual nudity, or Other in its author's words, from Content warning
    among its choices, or later from its menu. Wherever it is drawn, it
-   shows the warning and View, the post blurred behind it, until the reader
-   chooses to see it.
+   shows the warning and View over its photo, GIF, video or sound, blurred
+   behind it, and its words as they are, until the reader chooses to see
+   it; a post of words alone, an article or a topic, has the warning over
+   all of it.
 
 2. **A GIF, a video or a sound in any note of a thread** (roadmap row 143),
    in the composer and in a reply: each note has GIF, Video and Audio

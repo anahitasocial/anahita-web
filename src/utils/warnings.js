@@ -7,6 +7,9 @@ import NudityIcon from '@mui/icons-material/AccessibilityNewOutlined';
 import OtherIcon from '@mui/icons-material/InfoOutlined';
 import WarningIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
+import photoFiles from './photoFiles';
+import videoElsewhere from './videoElsewhere';
+
 // A post's content warning (anahita-services row 122): its kind, and for
 // Other the author's words. The server sends it as `warning: { kind, text,
 // byModerator }`, or none; it takes `warning` and `warning_text`.
@@ -85,6 +88,19 @@ const toRequest = (warning) => {
   };
 };
 
+// Whether a post's warning lies over its pictures alone: a post with a
+// photo, a GIF, a video or a sound shows its words, and only what it shows
+// besides them is behind the warning, as Bluesky and Mastodon do (the user,
+// 2026-11-09). An article or a topic, whose words may hold pictures, and a
+// post of words alone, are behind it whole.
+const hasMedia = (post) => {
+  if (!post || /\.(article|topic)\.v1$/.test(post.type || '')) {
+    return false;
+  }
+  return Boolean(photoFiles.countOf(post) > 0 || post.video || post.audio
+    || post.mediaRemoved || videoElsewhere.of(post));
+};
+
 export default {
   KINDS,
   OTHER,
@@ -96,4 +112,5 @@ export default {
   isComplete,
   say,
   toRequest,
+  hasMedia,
 };

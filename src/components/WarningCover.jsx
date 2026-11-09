@@ -10,7 +10,8 @@ import warnings from '../utils/warnings';
 
 // What a post with a content warning shows until its reader chooses to see
 // it (anahita-services row 122): the warning, with its kind's icon, and
-// View. The post is drawn behind, blurred, so that the card is as tall as
+// View, over its pictures, or over all of it when it has none
+// (warnings.hasMedia). The post is drawn behind, blurred, so that the card is as tall as
 // it will be and nothing jumps when it is opened. View opens it for this
 // showing of the page.
 //
@@ -38,9 +39,10 @@ const blurred = {
   pointerEvents: 'none',
 };
 
-// A part of a card that is only blurred, with no warning of its own.
-export const Blurred = ({ state, children }) => {
-  if (!state.hidden) {
+// A part of a card that is only blurred, with no warning of its own. Off,
+// it is shown as it is: a part that is blurred only for some posts.
+export const Blurred = ({ state, off = false, children }) => {
+  if (off || !state.hidden) {
     return children;
   }
   return (
@@ -52,6 +54,7 @@ export const Blurred = ({ state, children }) => {
 
 Blurred.propTypes = {
   state: PropTypes.shape({ hidden: PropTypes.bool }).isRequired,
+  off: PropTypes.bool,
   children: PropTypes.node,
 };
 
@@ -140,12 +143,13 @@ WarningVeil.propTypes = {
 const WarningCover = ({
   post = null,
   state = null,
+  off = false,
   children,
 }) => {
   const own = useWarning(post);
   const { warning, hidden, show } = state || own;
 
-  if (!hidden) {
+  if (off || !hidden) {
     return children;
   }
 
@@ -188,6 +192,9 @@ WarningCover.propTypes = {
     hidden: PropTypes.bool,
     show: PropTypes.func,
   }),
+  // Shown as it is: the part of a post that is behind the warning only
+  // for some posts (its words, when it has no pictures).
+  off: PropTypes.bool,
   children: PropTypes.node,
 };
 

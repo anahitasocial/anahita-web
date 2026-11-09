@@ -33,7 +33,8 @@ import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
-import WarningCover from '../../../components/WarningCover';
+import WarningCover, { Blurred, useWarning } from '../../../components/WarningCover';
+import warnings from '../../../utils/warnings';
 import timeAgo from '../../../utils/timeAgo';
 
 const {
@@ -89,6 +90,8 @@ const FeedCardDefault = ({
   const title = node.title || '';
   const url = getURL(node);
   const long = isLong(node);
+  const warned = useWarning(node);
+  const media = warnings.hasMedia(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
   const creationTimeFromNow = timeAgo(node.createdAt);
 
@@ -134,9 +137,10 @@ const FeedCardDefault = ({
         }
         action={menu}
       />
-      {/* Its content warning: all of it behind the warning until View is
-          pressed (row 122), the notes after it in its thread too. */}
-      <WarningCover post={node}>
+      {/* Its content warning (row 122): over its pictures, its words shown;
+          over all of it, the notes after it in its thread too, when it has
+          none. One View opens both. */}
+      <WarningCover state={warned} off={!media}>
         {cover &&
         <Link href={url}>
           <CardMedia
@@ -179,6 +183,8 @@ const FeedCardDefault = ({
         </Box>}
         {node.video && !elsewhere && <VideoPlayer video={node.video} title={title} />}
         {node.audio && <AudioPlayer audio={node.audio} title={title} />}
+      </WarningCover>
+      <WarningCover state={warned} off={media}>
         {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
         <CardContent {...openOnClick.handlersFor(url, navigate)}>
@@ -194,7 +200,9 @@ const FeedCardDefault = ({
             {content}
           </ReadMore>}
           {linkPreviews.isShown(node.linkPreview) &&
-          <LinkPreviewCard preview={node.linkPreview} />}
+          <Blurred state={warned} off={!media}>
+            <LinkPreviewCard preview={node.linkPreview} />
+          </Blurred>}
           <QuoteEmbed quote={node.quote} />
         </CardContent>
         <ThreadNext thread={node.thread} next={node.threadNext} url={url} />

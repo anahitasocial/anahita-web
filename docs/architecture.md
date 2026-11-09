@@ -673,10 +673,13 @@ next note under it and "Show the thread" with how many notes it has
     (`controls/medium/ContentWarning.jsx`, `PATCH /…/:id/warning` through
     `api.warnings.edit`), and from a reply's menu for its writer. A draft
     keeps its warning when it is saved again. `components/WarningCover.jsx`
-    draws a post with one behind the warning and View, blurred so that it
-    keeps its height: `MediumCard`, the feed's card, a post's page (over its
-    pictures when it has any, else its words), replies, quotes and posts in an
-    article; `WarningVeil` lies over the photo theatre's picture. A profile's
+    draws the warning and View over a post's photo, GIF, video or sound,
+    blurred so that it keeps its height, its words shown, and over all of a
+    post of words alone, an article or a topic (`warnings.hasMedia`; the
+    `off` switch of `WarningCover` and `Blurred` says which part is
+    covered): `MediumCard`, the feed's card, a post's page, replies, quotes
+    and posts in an article; `WarningVeil` lies over the photo theatre's
+    picture. A profile's
     Photos card leaves such photos out. Everybody sees every kind behind its
     warning until each reader can choose.
 

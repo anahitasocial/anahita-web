@@ -39,6 +39,7 @@ import openOnClick from '../utils/openOnClick';
 import AltBadge from './AltBadge';
 import RemovedPictures from './RemovedPictures';
 import WarningCover, { Blurred, useWarning } from './WarningCover';
+import warnings from '../utils/warnings';
 import timeAgo from '../utils/timeAgo';
 
 const {
@@ -87,9 +88,10 @@ const MediumCard = ({
   const content = elsewhere ? elsewhere.content : medium.content;
 
   const [isPortraitLoaded, setIsPortraitLoaded] = useState(!portrait);
-  // Its content warning: its pictures, words and cover behind it until
-  // View is pressed (row 122).
+  // Its content warning (row 122): over its pictures, its words shown; over
+  // all of it, an article's cover too, when it has none. One View opens all.
   const warned = useWarning(medium);
+  const media = warnings.hasMedia(medium);
 
   useEffect(() => {
     if (portrait) {
@@ -151,7 +153,7 @@ const MediumCard = ({
         }
         action={menu}
       />
-      <WarningCover state={warned}>
+      <WarningCover state={warned} off={!media}>
         {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
         <RemovedPictures medium={medium} />}
         {hasSlides &&
@@ -232,6 +234,8 @@ const MediumCard = ({
         <VideoPlayer video={medium.video} title={medium.title} />}
         {/* A sound plays where it is, in a list too: it is small. */}
         {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
+      </WarningCover>
+      <WarningCover state={warned} off={media}>
         {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
         <CardContent
@@ -249,7 +253,9 @@ const MediumCard = ({
             {content}
           </ReadMore>}
           {linkPreviews.isShown(medium.linkPreview) &&
-          <LinkPreviewCard preview={medium.linkPreview} />}
+          <Blurred state={warned} off={!media}>
+            <LinkPreviewCard preview={medium.linkPreview} />
+          </Blurred>}
           <QuoteEmbed quote={medium.quote} />
           <SignInPrompt show={Boolean(medium.truncated)} />
         </CardContent>

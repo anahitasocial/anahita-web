@@ -37,6 +37,7 @@ import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
 import WarningCover, { Blurred, useWarning } from '../../../components/WarningCover';
+import warnings from '../../../utils/warnings';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
 import { useStickyColumn } from '../../../components/SideTabs';
@@ -90,14 +91,16 @@ const MediumReadDefault = ({
   const hasSlides = photoFiles.hasSeveral(medium);
 
   const [isLoaded, setIsLoaded] = useState(!portrait);
-  // Its content warning (row 122): said over its pictures when it has
-  // any, above its writer's name, and over its words when it has none;
-  // the other part only blurred.
+  // Its content warning (row 122). A post with a photo, a GIF, a video or a
+  // sound has the warning over that, said once, over the first part of it
+  // shown, and its words shown. Any other, an article with its cover too,
+  // has it over its words, and the rest only blurred. One View opens all.
   const warned = useWarning(medium);
+  const media = warnings.hasMedia(medium);
   const hasPictures = Boolean(cover || coverUrl || hasSlides || portrait || elsewhere ||
     (medium.mediaRemoved && photoFiles.countOf(medium) === 0));
-  const Top = hasPictures ? WarningCover : Blurred;
-  const Bottom = hasPictures ? Blurred : WarningCover;
+  const Top = media && hasPictures ? WarningCover : Blurred;
+  const Playing = media && !hasPictures ? WarningCover : Blurred;
 
   useEffect(() => {
     if (portrait) {
@@ -211,46 +214,52 @@ const MediumReadDefault = ({
       {header}
       {editing && form}
       {!editing &&
-      <Bottom state={warned}>
-        {medium.video && !elsewhere && <VideoPlayer video={medium.video} title={medium.title} />}
-        {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
-        {medium.video && <PeopleInPost medium={medium} />}
-        {/* The card is the <article>; this is its text. One article,
+      <>
+        <Playing state={warned}>
+          {medium.video && !elsewhere && <VideoPlayer video={medium.video} title={medium.title} />}
+          {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
+          {medium.video && <PeopleInPost medium={medium} />}
+        </Playing>
+        <WarningCover state={warned} off={media}>
+          {/* The card is the <article>; this is its text. One article,
             with an h1 and a byline, is what reading views (Safari's
             Reader, Firefox's) look for: an article within an article
             read as none. */}
-        <CardContent>
-          {medium.title &&
-          <Typography
-            variant="h2"
-            component="h1"
-            dir="auto"
-            lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
-            className={classes.title}
-          >
-            {medium.title}
-          </Typography>}
-          {content &&
-          <EntityBody
-            contentFilter
+          <CardContent>
+            {medium.title &&
+            <Typography
+              variant="h2"
+              component="h1"
+              dir="auto"
+              lang={medium.language && medium.language !== 'und' ? medium.language : undefined}
+              className={classes.title}
+            >
+              {medium.title}
+            </Typography>}
+            {content &&
+            <EntityBody
+              contentFilter
             // Long writing is read at length, in larger type.
-            size={/\.(article|topic)\.v1$/.test(medium.type || '') ? 'reading' : 'body1'}
-            lang={medium.language}
+              size={/\.(article|topic)\.v1$/.test(medium.type || '') ? 'reading' : 'body1'}
+              lang={medium.language}
             // Long writing shows what an address on a line of its own
             // is to: a post here as itself, a page by its card.
-            embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
-            cards={medium.linkPreviews || []}
-          >
-            {content}
-          </EntityBody>}
-          {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
+              embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
+              cards={medium.linkPreviews || []}
+            >
+              {content}
+            </EntityBody>}
+            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
             <Citations text={medium.content} cards={medium.linkPreviews || []} />}
-          {linkPreviews.isShown(medium.linkPreview) &&
-            <LinkPreviewCard preview={medium.linkPreview} />}
-          {quote}
-          <SignInPrompt show={Boolean(medium.truncated)} />
-        </CardContent>
-      </Bottom>}
+            {linkPreviews.isShown(medium.linkPreview) &&
+            <Blurred state={warned} off={!media}>
+              <LinkPreviewCard preview={medium.linkPreview} />
+            </Blurred>}
+            {quote}
+            <SignInPrompt show={Boolean(medium.truncated)} />
+          </CardContent>
+        </WarningCover>
+      </>}
       {!editing && <PostActionsRow actions={actions} stats={stats} />}
     </Card>
   );
