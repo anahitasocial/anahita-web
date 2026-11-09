@@ -1722,10 +1722,14 @@ draws nothing (`utils/federation.js#isAbsent`).
    after the first are not kept as a draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
    `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
    are shown as any replies are, each under the one before. Under each
-   note's words is its count against where the post goes (roadmap row 126,
-   `Composer/useThreadSplit.js`, `utils/threadSplit.js`): Bluesky's 300 when
-   it goes there, the fediverse's 500 when it goes only there, 8,000 when it
-   stays here (`FEDIVERSE_POST_MAX` in `constants/limits.js`). "Add to
+   note's words is how much room is left of its 500 (roadmap rows 126 and
+   144, `Composer/useThreadSplit.js`, `utils/threadSplit.js`), counted down
+   as Bluesky's app does, a number and a ring that fills (`CharacterCount`
+   in `Composer/ThreadParts.jsx`), as the services count it: a link 23
+   however long, a Markdown link its words (`POST_MAX` and `LINK_LENGTH` in
+   `constants/limits.js`). Where the post goes to Bluesky, the ring turns to
+   the warning's colour past 300, where Bluesky stops showing the words;
+   past 500 it is red, and Next, Post and an edit's Update stop. "Add to
    thread" is offered once the last note has words, wherever the post goes.
    Past the limit, "Split into a thread" breaks the words at paragraphs, then
    sentences, then spaces, never inside a link, into ten notes at most;

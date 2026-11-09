@@ -103,8 +103,12 @@ const ReplyForm = ({
   // row 143), not yet with a GIF or a video.
   const canThread = attachments && !video;
   const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
+  // Held back while a note's pictures are being sent, and while any note
+  // is longer than a note may be (roadmap row 144).
   const isHeldBack = (hasPhotos && !photosReady) || isSending ||
-    threadParts.some((note) => { return !threadNotes.isReady(note); });
+    threadParts.some((note) => { return !threadNotes.isReady(note); }) ||
+    threadSplit.lengthOf(text) > LIMITS.POST_MAX ||
+    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > LIMITS.POST_MAX; });
   // Where a reply's note ends: what the networks the viewer is on hold, as a
   // reply goes where the thread's writer and its readers are (roadmap row
   // 126). The count, and long words split into a thread, as in the composer.
@@ -273,7 +277,11 @@ const ReplyForm = ({
       />
       <HashtagSuggestions {...hashtags.overlay} />
       {canThread && !compact &&
-        <ThreadLine length={split.length} limit={noteLimit}>
+        <ThreadLine
+          length={split.length}
+          limit={noteLimit}
+          warnAt={onBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
+        >
           <SplitWords split={split} />
         </ThreadLine>}
       {/* A card for a link only where there is nothing else to show. */}
@@ -407,6 +415,7 @@ const ReplyForm = ({
           disabled={isSending}
           direction={direction}
           limit={noteLimit}
+          goesToBluesky={onBluesky}
           outlined
           uploader={viewer && viewer.id ? viewer : null}
           photosMax={attachments ? photoFiles.maxFiles(nodeInfo) : 0}

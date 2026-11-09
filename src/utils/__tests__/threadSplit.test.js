@@ -1,10 +1,26 @@
 import threadSplit from '../threadSplit';
 
 describe('a thread\'s limit (roadmap row 126)', () => {
-  it('is where the post goes: Bluesky first, then the fediverse, else a note\'s own', () => {
-    expect(threadSplit.limitFor({ goesToBluesky: true, goesToFediverse: true })).toBe(300);
-    expect(threadSplit.limitFor({ goesToFediverse: true })).toBe(500);
-    expect(threadSplit.limitFor({})).toBe(8000);
+  it('is 500 wherever the post goes (roadmap row 144)', () => {
+    expect(threadSplit.limitFor({ goesToBluesky: true, goesToFediverse: true })).toBe(500);
+    expect(threadSplit.limitFor({})).toBe(500);
+  });
+
+  it('counts a link as 23, and a Markdown link as its words, as the server does', () => {
+    const address = `https://example.org/${'a'.repeat(200)}`;
+    expect(threadSplit.lengthOf(`See ${address}`)).toBe(4 + 23);
+    expect(threadSplit.lengthOf('Read [the log](https://example.org/a/very/long/path) now')).toBe(5 + 7 + 4);
+  });
+
+  it('keeps a long link whole, and in the note it fits by its count', () => {
+    const address = `https://example.org/${'a'.repeat(300)}`;
+    const words = `${'Ceres station. '.repeat(20)}${address} and on.`;
+    const notes = threadSplit.split(words, 500);
+    expect(notes).toHaveLength(1);
+    const longer = `${'Tycho station. '.repeat(30)}${address} at the end.`;
+    const parts = threadSplit.split(longer, 300);
+    expect(parts.some((note) => { return note.includes(address); })).toBe(true);
+    parts.forEach((note) => { expect(threadSplit.lengthOf(note)).toBeLessThanOrEqual(300); });
   });
 
   it('counts an emoji as one', () => {

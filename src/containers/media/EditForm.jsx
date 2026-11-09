@@ -17,6 +17,8 @@ import { useOnBluesky } from './Composer/useOnFediverse';
 import utils from '../../utils';
 import MediumType from '../../proptypes/Medium';
 import { Medium as MEDIUM } from '../../constants';
+import LIMITS from '../../constants/limits';
+import threadSplit from '../../utils/threadSplit';
 
 import i18n from '../../languages';
 
@@ -62,7 +64,14 @@ const MediumFormEdit = (props) => {
 
   // A photo or a video is described; anything else has content.
   const bodyMissing = richText && !bodyOptional && !(medium.content || '').trim();
-  const bodyTooLong = (medium.content || '').trim().length > CONTENT.MAX_LENGTH;
+  // A short post holds 500, a link counted as 23 (roadmap row 144); an
+  // article or a topic, what the long editor takes. An edit is held to it
+  // too: a post longer already is shortened, or the edit cancelled.
+  const most = richText ? CONTENT.MAX_LENGTH : LIMITS.POST_MAX;
+  const length = richText ?
+    (medium.content || '').trim().length :
+    threadSplit.lengthOf((medium.content || '').trim());
+  const bodyTooLong = length > most;
 
   const viewer = useSelector((state) => { return state.session.viewer; });
   const onBluesky = useOnBluesky(viewer);
@@ -100,7 +109,7 @@ const MediumFormEdit = (props) => {
             label={i18n.t(bodyOptional ? 'composer:fields.description' : 'composer:fields.content')}
             required={!bodyOptional}
             error={bodyTooLong}
-            helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: CONTENT.MAX_LENGTH }) : ' '}
+            helperText={bodyTooLong ? i18n.t('composer:tooLong', { count: most }) : ' '}
             disabled={isFetching}
             minHeight={280}
             // Under the page's bar, which is 56 pixels tall on a mobile.
@@ -116,8 +125,9 @@ const MediumFormEdit = (props) => {
             onChange={handleOnChange}
             onPaste={onBodyPaste}
             label={i18n.t(bodyOptional ? 'composer:fields.description' : 'composer:fields.content')}
-            error={fields.content.error !== ''}
-            helperText={fields.content.error || ' '}
+            error={fields.content.error !== '' || bodyTooLong}
+            helperText={fields.content.error ||
+              (bodyTooLong ? i18n.t('composer:tooLong', { count: most }) : ' ')}
             multiline
             fullWidth
             margin="normal"

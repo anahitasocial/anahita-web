@@ -161,8 +161,12 @@ const ShortComposer = ({
     photosReady,
     hasVideo: Boolean(video),
   });
+  // Any note longer than a note may be (roadmap row 144): split, shortened,
+  // or made an article before it can go on.
+  const tooLong = threadSplit.lengthOf(text) > LIMITS.POST_MAX ||
+    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > LIMITS.POST_MAX; });
   // Held back too while a note's pictures are still being sent.
-  const isHeldBack = (hasPhotos && !photosReady) || busy ||
+  const isHeldBack = (hasPhotos && !photosReady) || busy || tooLong ||
     threadParts.some((note) => { return !threadNotes.isReady(note); });
 
   const linkPreview = useLinkPreview(body, canWords && !hasPhotos && !video);
@@ -181,7 +185,7 @@ const ShortComposer = ({
   // What other networks will show of it, said before it is posted (roadmap
   // row 100): the first 300 letters on Bluesky, the first four pictures on
   // Mastodon and Bluesky, with a link to the post here for the rest.
-  const cutForBluesky = goesToBluesky && [...body].length > LIMITS.BLUESKY_POST_MAX;
+  const cutForBluesky = goesToBluesky && threadSplit.lengthOf(body) > LIMITS.BLUESKY_POST_MAX;
   // Where a note of a thread ends, where the post goes (roadmap row 126),
   // the count against it, and long words split into a thread.
   const noteLimit = threadSplit.limitFor({ goesToBluesky, goesToFediverse: goesOut });
@@ -508,7 +512,7 @@ const ShortComposer = ({
 
   // On to the choices once there is something to post, photos still being
   // sent included: Post waits for them, on the next step.
-  const canGoOn = (hasSomething || hasPhotos) && !isSending;
+  const canGoOn = (hasSomething || hasPhotos) && !isSending && !tooLong;
 
   // What is written goes along to the extended composer, and is its draft
   // from then on.
@@ -709,7 +713,11 @@ const ShortComposer = ({
           </Stack>}
         {canWords &&
           <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-            <ThreadLine length={split.length} limit={noteLimit}>
+            <ThreadLine
+              length={split.length}
+              limit={noteLimit}
+              warnAt={goesToBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
+            >
               <SplitWords
                 split={split}
                 otherwise={cutForBluesky ?

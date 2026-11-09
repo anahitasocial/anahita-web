@@ -34,6 +34,12 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    words, in line with them, not at the foot of the composer, and each
    note says who writes it, with its place in the thread ("2/3"). The
    words are a step smaller, at 15 px.
+4. **Short posts of 500 characters** (roadmap row 144): a note, a reply and
+   a photo's, video's or sound's words hold 500, as on Mastodon and
+   Threads, a link counted as 23 however long; longer is a thread, an
+   article or a topic, which keep 8,000. The count goes down as Bluesky's
+   does, a number and a ring, which turns amber past 300 when the post goes
+   to Bluesky and red past 500. An edit is held to 500 too.
 
 ## v1.1.0 Birth, 2026-11-08
 

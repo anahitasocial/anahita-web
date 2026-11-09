@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
@@ -19,24 +20,74 @@ import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
 import AttachButtons from './AttachButtons';
 
+// How much room is left, as Bluesky counts it down (the user, 2026-11-08):
+// what is left, then a ring that fills. Ink as it fills; the warning's
+// colour past `warnAt`, where Bluesky stops showing the words; the error's
+// past the limit, where the post cannot go.
+export const CharacterCount = ({ length, limit, warnAt = 0 }) => {
+  const left = limit - length;
+  let color = 'primary';
+  if (left < 0) {
+    color = 'error';
+  } else if (warnAt > 0 && length > warnAt) {
+    color = 'warning';
+  }
+  return (
+    <Box
+      role="img"
+      aria-label={i18n.t('composer:thread.count', { count: length, max: limit })}
+      sx={{
+        display: 'flex', alignItems: 'center', gap: 1, flexShrink: 0,
+      }}
+    >
+      <Typography
+        variant="caption"
+        color={left < 0 ? 'error' : 'textSecondary'}
+        sx={{ fontVariantNumeric: 'tabular-nums' }}
+      >
+        {left}
+      </Typography>
+      <Box sx={{ position: 'relative', display: 'flex' }}>
+        <CircularProgress
+          variant="determinate"
+          value={100}
+          size={20}
+          thickness={5}
+          sx={{ color: 'divider' }}
+        />
+        <CircularProgress
+          variant="determinate"
+          value={Math.min(length / limit, 1) * 100}
+          size={20}
+          thickness={5}
+          color={color}
+          sx={{ position: 'absolute', left: 0 }}
+        />
+      </Box>
+    </Box>
+  );
+};
+
+CharacterCount.propTypes = {
+  length: PropTypes.number.isRequired,
+  limit: PropTypes.number.isRequired,
+  warnAt: PropTypes.number,
+};
+
 // The line under a note's words (roadmap row 126): what is to be said of
 // them on the left, one line, cut short rather than wrapped; on the right,
-// how many letters they have of the most a note holds where the post goes.
-// Its room is kept, so nothing moves as it changes.
-export const ThreadLine = ({ length = -1, limit = 0, children = ' ' }) => {
+// how much room is left of what a note holds. Its room is kept, so nothing
+// moves as it changes.
+export const ThreadLine = ({
+  length = -1, limit = 0, warnAt = 0, children = ' ',
+}) => {
   return (
-    <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between', alignItems: 'baseline' }}>
+    <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
       <Typography variant="caption" color="textSecondary" component="p" noWrap sx={{ minWidth: 0 }}>
         {children}
       </Typography>
       {length >= 0 && limit > 0 &&
-        <Typography
-          variant="caption"
-          color={length > limit ? 'textPrimary' : 'textSecondary'}
-          sx={{ flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}
-        >
-          {i18n.t('composer:thread.count', { count: length, max: limit })}
-        </Typography>}
+        <CharacterCount length={length} limit={limit} warnAt={warnAt} />}
     </Stack>
   );
 };
@@ -44,6 +95,8 @@ export const ThreadLine = ({ length = -1, limit = 0, children = ' ' }) => {
 ThreadLine.propTypes = {
   length: PropTypes.number,
   limit: PropTypes.number,
+  // Where Bluesky stops showing the words, when the post goes there.
+  warnAt: PropTypes.number,
   children: PropTypes.node,
 };
 
@@ -272,6 +325,7 @@ const ThreadNote = ({
               <ThreadLine
                 length={limit > 0 ? threadSplit.lengthOf(words) : -1}
                 limit={limit}
+                warnAt={goesToBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
               >
                 {goesToBluesky && threadSplit.lengthOf(words) > LIMITS.BLUESKY_POST_MAX ?
                   i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :

@@ -14,21 +14,24 @@ export default {
   BIO_MAX: 500,
   // A post's title.
   TITLE_MAX: 100,
-  // What a post says, a reply too; and an event's details.
+  // What an article or a topic says, and an event's details.
   POST_BODY_MAX: 8000,
   // A place's name.
   PLACE_NAME_MAX: 100,
   // An image's description, as written here: what Bluesky's app takes.
   ALT_TEXT_MAX: 2000,
+  // A short post: a note, a reply, a thread's note, and the words of a
+  // photo, video or audio post (posts.MaxLength, roadmap row 144), as on
+  // Mastodon and Threads; and what a link counts as in it, however long
+  // (posts.LinkLength), as Mastodon counts one. POST_BODY_MAX stays the
+  // most anything may hold: an article, a topic, an event's details.
+  POST_MAX: 500,
+  LINK_LENGTH: 23,
   // What other networks show of a post (bsky.PostMax and ap.PicturesShownMax
   // in the services): Bluesky's 300 letters, and the four pictures of a
   // stock Mastodon server and Bluesky. A post over either goes out with a
   // link to the rest here.
   BLUESKY_POST_MAX: 300,
-  // What people on Mastodon write in a note, and so where a thread's note
-  // ends when the post goes to the fediverse and not Bluesky (roadmap row
-  // 126). Mastodon shows a longer note from elsewhere whole.
-  FEDIVERSE_POST_MAX: 500,
   PICTURES_SHOWN_MAX: 4,
   // How many notes a thread written in one go may have: the services'
   // ThreadPartsMax (roadmap row 101).
