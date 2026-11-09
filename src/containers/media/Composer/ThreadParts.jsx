@@ -254,6 +254,23 @@ const ThreadNote = ({
     onChange(threadNotes.changeOne(note.key, changeNote));
   };
   const canPhotos = Boolean(uploader) && photosMax > 0;
+  const removeButton = (sx) => {
+    return (
+      <IconButton
+        size="small"
+        aria-label={i18n.t('composer:thread.remove')}
+        disabled={disabled}
+        onClick={() => {
+          onChange((notes) => {
+            return notes.filter((each) => { return each.key !== note.key; });
+          });
+        }}
+        sx={sx}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    );
+  };
 
   return (
     <Stack direction="row" spacing={writer ? 2 : 1} sx={{ mt: 2 }}>
@@ -272,7 +289,16 @@ const ThreadNote = ({
         }}
         />}
       <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-        {writerName && <NoteHead name={writerName} number={index + 2} count={count} />}
+        {/* With a head, its ✕ is on the name's line, as Threads has it, so
+            that the note has the whole width and its count lines up with
+            the first note's; the glyph at the edge, and the line no taller. */}
+        {writerName &&
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Box sx={{ flexGrow: 1, minWidth: 0 }}>
+              <NoteHead name={writerName} number={index + 2} count={count} />
+            </Box>
+            {removeButton({ my: '-6px', mr: '-5px' })}
+          </Box>}
         <TextField
           value={words}
           onChange={(event) => {
@@ -334,19 +360,7 @@ const ThreadNote = ({
             </Box>}
         </Box>
       </Box>
-      <IconButton
-        size="small"
-        aria-label={i18n.t('composer:thread.remove')}
-        disabled={disabled}
-        onClick={() => {
-          onChange((notes) => {
-            return notes.filter((each) => { return each.key !== note.key; });
-          });
-        }}
-        sx={{ alignSelf: 'flex-start' }}
-      >
-        <CloseIcon fontSize="small" />
-      </IconButton>
+      {!writerName && removeButton({ alignSelf: 'flex-start' })}
     </Stack>
   );
 };

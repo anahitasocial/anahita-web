@@ -7,6 +7,14 @@ as anahita-services on the same day, takes the Embryo section under its
 version and date. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Fixed
+
+1. **A thread's counts line up.** Each note's ✕ is on its name's line, as
+   on Threads, so every note has the composer's width and its count ends
+   where the first note's does.
+
 ## v1.2.0 Birth, 2026-11-08
 
 ### Added
