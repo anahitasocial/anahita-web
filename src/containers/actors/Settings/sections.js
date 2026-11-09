@@ -77,6 +77,8 @@ export const ITEMS = {
   // What the viewer chose about suggestions of who to follow.
   SUGGESTIONS: 'suggestions',
   FEDIVERSE: 'fediverse',
+  // Moving one's account here from elsewhere, or away (roadmap row 124).
+  MOVING: 'moving',
   BLUESKY: 'bluesky',
   // What the person is told about: eight kinds of thing, on or off.
   NOTIFICATIONS: 'notifications',
@@ -191,6 +193,8 @@ const ALL_SECTIONS = [
     items: [
       // Whether people on other servers can find and follow them.
       { key: ITEMS.FEDIVERSE, bare: false, viewerOnly: true },
+      // Moving their account here from another, or away to another.
+      { key: ITEMS.MOVING, bare: false, viewerOnly: true },
       // Their own Bluesky account, connected or not.
       { key: ITEMS.BLUESKY, bare: false, viewerOnly: true },
     ],

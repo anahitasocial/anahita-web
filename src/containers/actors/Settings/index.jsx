@@ -47,6 +47,7 @@ import DataImport from './DataImport';
 import ActorSuggestions from './Suggestions';
 import ActorNotificationChoices from './NotificationChoices';
 import ActorFediverse from './Fediverse';
+import ActorMoving from './Moving';
 import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
@@ -262,6 +263,7 @@ const ActorsSettings = ({
       [ITEMS.DATA_IMPORT]: <DataImport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
       [ITEMS.FEDIVERSE]: <ActorFediverse />,
+      [ITEMS.MOVING]: <ActorMoving />,
       [ITEMS.NOTIFICATIONS]: <ActorNotificationChoices />,
       [ITEMS.BLUESKY]: <ActorBluesky />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,

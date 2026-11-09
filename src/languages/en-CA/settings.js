@@ -12,6 +12,40 @@ export default {
     failed: 'That could not be done.',
   },
   // Bringing one's lists in from a file (roadmap row 124), under Your data.
+  // Moving one's account here or away (roadmap row 124, part 3).
+  moving: {
+    here: {
+      title: 'Moving here',
+      about: 'Coming from another account? Name it here first, then start the move there. Your followers there will follow you here.',
+      label: 'Old account',
+    },
+    away: {
+      title: 'Moving away',
+      about: 'Moving to another server? First name this account there as one of your old ones, then move from here. Your followers will follow you there, and your posts stay here. This account then shows where you went, and can no longer post, follow or like.',
+      label: 'New account',
+      move: 'Move',
+      done: 'Your account moved. Your followers are following you there.',
+      moved: 'This account moved to {{handle}} on {{day}}. It no longer posts, follows or likes. Come back to take the move back; then move from the new account to here to bring your followers with you.',
+      comeBack: 'Come back',
+      back: 'Your move is taken back. Move from the new account to here to bring your followers back.',
+      again: 'You can move again on {{day}}.',
+      confirmTitle: 'Move to {{handle}}?',
+      confirm: 'Your followers will follow your new account, your posts stay here, and this account will no longer post, follow or like. You cannot move again for thirty days.',
+    },
+    notOnFediverse: 'Turn the fediverse on above first.',
+    errors: {
+      lookup_not_found: 'Nobody was found at that handle.',
+      lookup_is_here: 'That is an account on this site. To be called something else here, change your username instead.',
+      lookup_not_a_person: 'That is not a person’s account.',
+      lookup_refused: 'This site refuses that server or account.',
+      lookup_unreadable: 'That is not a handle. Write it as ana@example.social.',
+      lookup_failed: 'That server could not be reached. Try again later.',
+      not_named_there: 'That account does not name this one yet. Add this account there as one of your old ones, then try again.',
+      moved_lately: 'You moved in the last thirty days.',
+      too_many_aliases: 'Five old accounts at most.',
+      failed: 'That did not work. Please try again.',
+    },
+  },
   dataImport: {
     title: 'Bring your lists in',
     about: 'Who you follow, block and mute, and what you saved, from another Anahita\'s download or a file from Mastodon or Misskey. Nothing you have now is removed.',

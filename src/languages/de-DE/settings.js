@@ -12,6 +12,40 @@ export default {
     failed: 'Das hat nicht geklappt.',
   },
   // Bringing one's lists in from a file (roadmap row 124), under Your data.
+  // Moving one's account here or away (roadmap row 124, part 3).
+  moving: {
+    here: {
+      title: 'Hierher umziehen',
+      about: 'Du kommst von einem anderen Konto? Nenne es zuerst hier und starte dann dort den Umzug. Deine Follower dort folgen dir dann hier.',
+      label: 'Altes Konto',
+    },
+    away: {
+      title: 'Wegziehen',
+      about: 'Du ziehst auf einen anderen Server? Nenne zuerst dieses Konto dort als eines deiner alten und ziehe dann von hier um. Deine Follower folgen dir dorthin, und deine Beiträge bleiben hier. Dieses Konto zeigt dann, wohin du gegangen bist, und kann nicht mehr posten, folgen oder liken.',
+      label: 'Neues Konto',
+      move: 'Umziehen',
+      done: 'Dein Konto ist umgezogen. Deine Follower folgen dir dort.',
+      moved: 'Dieses Konto ist am {{day}} zu {{handle}} umgezogen. Es postet, folgt und liked nicht mehr. Komm zurück, um den Umzug zurückzunehmen; ziehe dann vom neuen Konto hierher, um deine Follower mitzunehmen.',
+      comeBack: 'Zurückkommen',
+      back: 'Dein Umzug ist zurückgenommen. Ziehe vom neuen Konto hierher, um deine Follower zurückzuholen.',
+      again: 'Du kannst am {{day}} wieder umziehen.',
+      confirmTitle: 'Zu {{handle}} umziehen?',
+      confirm: 'Deine Follower folgen deinem neuen Konto, deine Beiträge bleiben hier, und dieses Konto kann nicht mehr posten, folgen oder liken. Dreißig Tage lang kannst du nicht wieder umziehen.',
+    },
+    notOnFediverse: 'Schalte zuerst oben das Fediverse ein.',
+    errors: {
+      lookup_not_found: 'Unter diesem Handle wurde niemand gefunden.',
+      lookup_is_here: 'Das ist ein Konto auf dieser Seite. Um hier anders zu heißen, ändere stattdessen deinen Benutzernamen.',
+      lookup_not_a_person: 'Das ist nicht das Konto einer Person.',
+      lookup_refused: 'Diese Seite lehnt diesen Server oder dieses Konto ab.',
+      lookup_unreadable: 'Das ist kein Handle. Schreibe es so: ana@example.social.',
+      lookup_failed: 'Dieser Server ist nicht erreichbar. Versuche es später noch einmal.',
+      not_named_there: 'Dieses Konto nennt dieses hier noch nicht. Füge dieses Konto dort als eines deiner alten hinzu und versuche es dann noch einmal.',
+      moved_lately: 'Du bist in den letzten dreißig Tagen umgezogen.',
+      too_many_aliases: 'Höchstens fünf alte Konten.',
+      failed: 'Das hat nicht geklappt. Bitte versuche es noch einmal.',
+    },
+  },
   dataImport: {
     title: 'Deine Listen mitbringen',
     about: 'Wem du folgst, wen du blockierst und stummschaltest und was du gespeichert hast, aus dem Download eines anderen Anahita oder einer Datei von Mastodon oder Misskey. Nichts, was du jetzt hast, wird entfernt.',

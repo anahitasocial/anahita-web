@@ -121,6 +121,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    somebody on another server who moved their account says "Moved to",
    with the new handle, and View new profile in place of + Follow. Whoever
    followed them is told they follow the new profile now, or asked to.
+5. **Moving one's account** (roadmap row 124, part 3), under Settings ›
+   Fediverse. Moving here: name the old accounts this one also is, then
+   move from there, and the followers follow you here. Moving away: to an
+   account that names this one, after proving who you are again; the
+   followers follow you there, the posts stay, and this account shows
+   where you went and no longer posts, follows or likes. Come back takes
+   it back.
 
 ### Removed
 

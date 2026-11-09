@@ -1751,7 +1751,13 @@ draws nothing (`utils/federation.js#isAbsent`).
    has the same effect,
    and when they cannot turn it on (their profile is not open to everybody,
    or the site does not federate) it is disabled with the server's reason
-   beside it.
+   beside it. Under it, two cards for moving one's account
+   (`actors/Settings/Moving.jsx`, roadmap row 124, part 3): **Moving here**,
+   the old accounts this one also is, named by handle and each removable;
+   and **Moving away**, a new account's handle and Move, confirmed and then
+   behind step-up (`auth/StepUp`), as the download is. Once moved, the card
+   says where to and when, with Come back; a profile that moved shows
+   "Moved to" as one from elsewhere does.
 9. **Closing a profile is the one way to leave by accident,** so the card
    where a profile's audience is chosen (`actors/Settings/Access.jsx`) asks
    whether the person is on the fediverse, warns beside the choice as soon

@@ -145,8 +145,43 @@ const letAccountBack = (id) => {
   return axios.delete(`/activitypub/refused-accounts/${encodeURIComponent(id)}`);
 };
 
+// Moving one's own account (roadmap row 124, part 3). The old accounts the
+// viewer's also is, which another server checks before it lets them move
+// here: `{ also_known_as: [{ uri, handle }] }`.
+const aliases = () => {
+  return axios.get('/activitypub/aliases');
+};
+
+// Names them, by handle, in place of those before. 404 with `alias`
+// naming one that could not be found.
+const setAliases = (handles) => {
+  return axios.put('/activitypub/aliases', { also_known_as: handles });
+};
+
+// Whether the viewer's account moved: `{ moved_to, moved_at, may_move_at }`.
+const moveStatus = () => {
+  return axios.get('/activitypub/move');
+};
+
+// Moves it to an account elsewhere that names it. 403 step_up_required
+// until the viewer has just proved who they are.
+const move = (to) => {
+  return axios.post('/activitypub/move', { to });
+};
+
+// Takes the viewer's move back: the account is whole again, and the new
+// account may then move back to it, bringing the followers.
+const comeBack = () => {
+  return axios.delete('/activitypub/move');
+};
+
 export default {
   settings,
+  comeBack,
+  aliases,
+  setAliases,
+  moveStatus,
+  move,
   setEnabled,
   setListing,
   knownProfiles,

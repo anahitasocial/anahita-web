@@ -12,6 +12,40 @@ export default {
     failed: 'Cela n’a pas pu être fait.',
   },
   // Bringing one's lists in from a file (roadmap row 124), under Your data.
+  // Moving one's account here or away (roadmap row 124, part 3).
+  moving: {
+    here: {
+      title: 'Arriver ici',
+      about: 'Vous venez d’un autre compte ? Indiquez-le ici d’abord, puis lancez le déménagement là-bas. Vos abonnés là-bas vous suivront ici.',
+      label: 'Ancien compte',
+    },
+    away: {
+      title: 'Partir',
+      about: 'Vous partez vers un autre serveur ? Indiquez d’abord ce compte là-bas comme l’un de vos anciens, puis déménagez d’ici. Vos abonnés vous suivront là-bas et vos publications restent ici. Ce compte indique alors où vous êtes allé·e, et ne peut plus publier, suivre ni aimer.',
+      label: 'Nouveau compte',
+      move: 'Déménager',
+      done: 'Votre compte a déménagé. Vos abonnés vous suivent là-bas.',
+      moved: 'Ce compte a déménagé vers {{handle}} le {{day}}. Il ne publie, ne suit et n’aime plus rien. Revenez pour annuler le déménagement, puis déménagez du nouveau compte vers celui-ci pour ramener vos abonnés.',
+      comeBack: 'Revenir',
+      back: 'Votre déménagement est annulé. Déménagez du nouveau compte vers celui-ci pour ramener vos abonnés.',
+      again: 'Vous pourrez déménager à nouveau le {{day}}.',
+      confirmTitle: 'Déménager vers {{handle}} ?',
+      confirm: 'Vos abonnés suivront votre nouveau compte, vos publications restent ici, et ce compte ne pourra plus publier, suivre ni aimer. Vous ne pourrez pas déménager à nouveau pendant trente jours.',
+    },
+    notOnFediverse: 'Activez d’abord le fédivers ci-dessus.',
+    errors: {
+      lookup_not_found: 'Personne n’a été trouvé à cette adresse.',
+      lookup_is_here: 'C’est un compte de ce site. Pour changer de nom ici, changez plutôt votre nom d’utilisateur.',
+      lookup_not_a_person: 'Ce n’est pas le compte d’une personne.',
+      lookup_refused: 'Ce site refuse ce serveur ou ce compte.',
+      lookup_unreadable: 'Ce n’est pas une adresse. Écrivez-la ainsi : ana@example.social.',
+      lookup_failed: 'Ce serveur est injoignable. Réessayez plus tard.',
+      not_named_there: 'Ce compte n’indique pas encore celui-ci. Ajoutez ce compte là-bas comme l’un de vos anciens, puis réessayez.',
+      moved_lately: 'Vous avez déménagé ces trente derniers jours.',
+      too_many_aliases: 'Cinq anciens comptes au plus.',
+      failed: 'Cela n’a pas fonctionné. Veuillez réessayer.',
+    },
+  },
   dataImport: {
     title: 'Importer vos listes',
     about: 'Les personnes que vous suivez, bloquez et mettez en sourdine, et ce que vous avez enregistré, depuis le téléchargement d\'un autre Anahita ou un fichier de Mastodon ou de Misskey. Rien de ce que vous avez n\'est retiré.',

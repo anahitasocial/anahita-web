@@ -12,6 +12,40 @@ export default {
     failed: 'Não foi possível fazer isso.',
   },
   // Bringing one's lists in from a file (roadmap row 124), under Your data.
+  // Moving one's account here or away (roadmap row 124, part 3).
+  moving: {
+    here: {
+      title: 'Mudar para cá',
+      about: 'Vem de outra conta? Indique-a aqui primeiro e depois inicie a mudança lá. Seus seguidores de lá vão seguir você aqui.',
+      label: 'Conta antiga',
+    },
+    away: {
+      title: 'Mudar daqui',
+      about: 'Vai para outro servidor? Primeiro indique esta conta lá como uma das suas antigas e depois mude daqui. Seus seguidores vão seguir você lá, e suas publicações ficam aqui. Esta conta passa a mostrar para onde você foi e não pode mais publicar, seguir nem curtir.',
+      label: 'Conta nova',
+      move: 'Mudar',
+      done: 'Sua conta mudou. Seus seguidores estão seguindo você lá.',
+      moved: 'Esta conta mudou para {{handle}} em {{day}}. Ela não publica, não segue e não curte mais. Volte para desfazer a mudança; depois mude da conta nova para esta para trazer seus seguidores.',
+      comeBack: 'Voltar',
+      back: 'Sua mudança foi desfeita. Mude da conta nova para esta para trazer seus seguidores de volta.',
+      again: 'Você pode mudar de novo em {{day}}.',
+      confirmTitle: 'Mudar para {{handle}}?',
+      confirm: 'Seus seguidores vão seguir sua conta nova, suas publicações ficam aqui, e esta conta não poderá mais publicar, seguir nem curtir. Você não poderá mudar de novo por trinta dias.',
+    },
+    notOnFediverse: 'Ative o fediverso acima primeiro.',
+    errors: {
+      lookup_not_found: 'Ninguém foi encontrado com esse identificador.',
+      lookup_is_here: 'Essa é uma conta deste site. Para ter outro nome aqui, mude seu nome de usuário.',
+      lookup_not_a_person: 'Essa não é a conta de uma pessoa.',
+      lookup_refused: 'Este site recusa esse servidor ou essa conta.',
+      lookup_unreadable: 'Isso não é um identificador. Escreva assim: ana@example.social.',
+      lookup_failed: 'Não foi possível alcançar esse servidor. Tente mais tarde.',
+      not_named_there: 'Essa conta ainda não indica esta. Adicione esta conta lá como uma das suas antigas e tente de novo.',
+      moved_lately: 'Você mudou nos últimos trinta dias.',
+      too_many_aliases: 'No máximo cinco contas antigas.',
+      failed: 'Isso não funcionou. Tente de novo.',
+    },
+  },
   dataImport: {
     title: 'Traga suas listas',
     about: 'Quem você segue, bloqueia e silencia, e o que você salvou, a partir do download de outro Anahita ou de um arquivo do Mastodon ou do Misskey. Nada do que você tem é removido.',

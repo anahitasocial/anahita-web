@@ -12,6 +12,40 @@ export default {
     failed: 'No se pudo hacer.',
   },
   // Bringing one's lists in from a file (roadmap row 124), under Your data.
+  // Moving one's account here or away (roadmap row 124, part 3).
+  moving: {
+    here: {
+      title: 'Mudarte aquí',
+      about: '¿Vienes de otra cuenta? Nómbrala aquí primero y luego inicia la mudanza allá. Tus seguidores de allá te seguirán aquí.',
+      label: 'Cuenta anterior',
+    },
+    away: {
+      title: 'Mudarte a otro lugar',
+      about: '¿Te mudas a otro servidor? Primero nombra esta cuenta allá como una de tus anteriores y luego múdate desde aquí. Tus seguidores te seguirán allá y tus publicaciones se quedan aquí. Esta cuenta mostrará adónde fuiste y ya no podrá publicar, seguir ni dar me gusta.',
+      label: 'Cuenta nueva',
+      move: 'Mudarme',
+      done: 'Tu cuenta se mudó. Tus seguidores te siguen allá.',
+      moved: 'Esta cuenta se mudó a {{handle}} el {{day}}. Ya no publica, sigue ni da me gusta. Vuelve para deshacer la mudanza; luego múdate de la cuenta nueva a esta para traer a tus seguidores.',
+      comeBack: 'Volver',
+      back: 'Tu mudanza se deshizo. Múdate de la cuenta nueva a esta para traer de vuelta a tus seguidores.',
+      again: 'Podrás mudarte de nuevo el {{day}}.',
+      confirmTitle: '¿Mudarte a {{handle}}?',
+      confirm: 'Tus seguidores seguirán tu cuenta nueva, tus publicaciones se quedan aquí y esta cuenta ya no podrá publicar, seguir ni dar me gusta. No podrás mudarte de nuevo durante treinta días.',
+    },
+    notOnFediverse: 'Primero activa el fediverso arriba.',
+    errors: {
+      lookup_not_found: 'No se encontró a nadie con ese identificador.',
+      lookup_is_here: 'Esa es una cuenta de este sitio. Para llamarte de otra forma aquí, cambia tu nombre de usuario.',
+      lookup_not_a_person: 'Esa no es la cuenta de una persona.',
+      lookup_refused: 'Este sitio rechaza ese servidor o esa cuenta.',
+      lookup_unreadable: 'Eso no es un identificador. Escríbelo así: ana@example.social.',
+      lookup_failed: 'No se pudo llegar a ese servidor. Inténtalo más tarde.',
+      not_named_there: 'Esa cuenta todavía no nombra a esta. Agrega esta cuenta allá como una de tus anteriores e inténtalo de nuevo.',
+      moved_lately: 'Te mudaste en los últimos treinta días.',
+      too_many_aliases: 'Cinco cuentas anteriores como máximo.',
+      failed: 'Eso no funcionó. Inténtalo de nuevo.',
+    },
+  },
   dataImport: {
     title: 'Trae tus listas',
     about: 'A quién sigues, bloqueas y silencias, y lo que guardaste, desde la descarga de otro Anahita o un archivo de Mastodon o Misskey. No se quita nada de lo que tienes.',
