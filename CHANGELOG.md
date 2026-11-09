@@ -19,6 +19,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    the post, with its cover beside it when the file has one, and a
    profile's audio posts are in its Audio tab.
 
+### Changed
+
+1. **A thread is written as it is read.** On a desktop, the composer joins
+   its notes with one line, from the writer's profile photo down through
+   each note's small one to Add to thread, and the composer's edges are an
+   even 16 px all round.
+
 ## v1.1.0 Birth, 2026-11-08
 
 ### Fixed

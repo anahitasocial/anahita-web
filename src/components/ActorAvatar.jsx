@@ -81,11 +81,13 @@ const ActorAvatar = ({
             {initials}
           </Avatar>
         </Link>}
+      {/* Unlinked, MUI's own 40 px unless a size is asked for. */}
       {!linked &&
         <Avatar
           aria-label={getActorName(actor)}
           alt={getActorName(actor)}
           src={avatar || undefined}
+          className={size === 'default' ? undefined : classes[`${size}Avatar`]}
         >
           {initials}
         </Avatar>}

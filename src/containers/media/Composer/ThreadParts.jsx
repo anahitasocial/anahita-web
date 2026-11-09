@@ -11,6 +11,7 @@ import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
 
+import ActorAvatar from '../../../components/ActorAvatar';
 import LIMITS from '../../../constants/limits';
 import threadSplit from '../../../utils/threadSplit';
 import i18n from '../../../languages';
@@ -91,6 +92,48 @@ SplitWords.propTypes = {
 //
 // `parts` is the words of each, in order. `goesToBluesky` keeps a line under
 // each for what Bluesky shows of it, as under the first.
+//
+// With `writer`, as in the composer on a desktop, each note has the
+// writer's small picture in the column under theirs on the first, and one
+// line runs down through them to "Add to thread", as a thread is shown in
+// its replies (ReplyItem.jsx) and as Threads writes one (the user,
+// 2026-11-08).
+// As wide as the first note's picture, MUI's 40 px.
+const COLUMN = 5;
+
+// The line from under a picture down to the next one's: 8 px clear of each.
+export const ThreadJoin = () => {
+  return (
+    <Box
+      aria-hidden
+      sx={{
+        flex: 1, width: 2, bgcolor: 'divider', borderRadius: 1, mt: 1, mb: -1,
+      }}
+    />
+  );
+};
+
+// The column a note's picture is in, as wide as the first note's.
+const Column = ({ children }) => {
+  return (
+    <Box sx={{
+      width: (theme) => { return theme.spacing(COLUMN); },
+      flexShrink: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      alignSelf: 'stretch',
+    }}
+    >
+      {children}
+    </Box>
+  );
+};
+
+Column.propTypes = {
+  children: PropTypes.node.isRequired,
+};
+
 const ThreadParts = ({
   parts,
   onChange,
@@ -101,6 +144,7 @@ const ThreadParts = ({
   goesToBluesky = false,
   outlined = false,
   limit = 0,
+  writer = null,
 }) => {
   const change = (index, value) => {
     onChange(parts.map((each, at) => { return at === index ? value : each; }));
@@ -114,12 +158,21 @@ const ThreadParts = ({
       {parts.map((words, index) => {
         return (
           // eslint-disable-next-line react/no-array-index-key
-          <Stack key={`thread-part-${index}`} direction="row" spacing={1} sx={{ mt: 2 }}>
-            {/* The line that joins it to the one before. */}
-            <Box sx={{
-              width: 2, borderRadius: 1, bgcolor: 'divider', flexShrink: 0,
-            }}
-            />
+          <Stack key={`thread-part-${index}`} direction="row" spacing={writer ? 2 : 1} sx={{ mt: 2 }}>
+            {writer ?
+              // Its picture, in the middle of the words' first line, and
+              // the line on to the next.
+              <Column>
+                <Box sx={{ mt: '2px' }}>
+                  <ActorAvatar actor={writer} size="small" />
+                </Box>
+                {(index < parts.length - 1 || parts.length + 1 < max) && <ThreadJoin />}
+              </Column> :
+              // The line that joins it to the one before.
+              <Box sx={{
+                width: 2, borderRadius: 1, bgcolor: 'divider', flexShrink: 0,
+              }}
+              />}
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
               <TextField
                 value={words}
@@ -164,11 +217,37 @@ const ThreadParts = ({
           </Stack>
         );
       })}
-      {parts.length + 1 < max &&
+      {parts.length + 1 < max && writer &&
+        // Where the line ends: the writer's picture, faint, beside the way
+        // to the next note, its words in line with theirs above.
+        <Box sx={{
+          display: 'flex', gap: 2, mt: 1, alignItems: 'center',
+        }}
+        >
+          <Column>
+            <Box sx={{ opacity: 0.5 }}>
+              <ActorAvatar actor={writer} size="small" />
+            </Box>
+          </Column>
+          <Button
+            size="small"
+            sx={{ ml: '-5px' }}
+            disabled={disabled || !canAdd}
+            onClick={() => {
+              onChange([...parts, '']);
+            }}
+          >
+            {i18n.t('composer:thread.add')}
+          </Button>
+        </Box>}
+      {parts.length + 1 < max && !writer &&
         <Box sx={{ mt: 1 }}>
+          {/* 8 px to the left, so that the plus, not the button's own
+              padding, lines up with the words above (the user, 2026-11-08). */}
           <Button
             size="small"
             startIcon={<AddIcon />}
+            sx={{ ml: -1 }}
             disabled={disabled || !canAdd}
             onClick={() => {
               onChange([...parts, '']);
@@ -195,6 +274,9 @@ ThreadParts.propTypes = {
   // Where a note ends, where the post goes: each note's count is shown
   // against it (roadmap row 126). None, no count.
   limit: PropTypes.number,
+  // Whose pictures go beside the notes, in a column as wide as the first
+  // note's; none, a line alone.
+  writer: PropTypes.object,
 };
 
 export default ThreadParts;

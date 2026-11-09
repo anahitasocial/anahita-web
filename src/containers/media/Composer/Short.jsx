@@ -30,7 +30,7 @@ import DetailRow from '../../../components/DetailRow';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import AttachButtons from './AttachButtons';
-import ThreadParts, { SplitWords, ThreadLine } from './ThreadParts';
+import ThreadParts, { SplitWords, ThreadJoin, ThreadLine } from './ThreadParts';
 import useThreadSplit from './useThreadSplit';
 import useDraft from './useDraft';
 import useLinkPreview from './useLinkPreview';
@@ -549,6 +549,25 @@ const ShortComposer = ({
     );
   };
 
+  // The notes after the first: beside the writer's small picture on a
+  // desktop, joined by one line to theirs on the first, as Threads writes a
+  // thread (the user, 2026-11-08); on a mobile, where the words have the
+  // width, a line alone.
+  const threadNotes = (
+    <ThreadParts
+      parts={moreParts}
+      onChange={setMoreParts}
+      canAdd={Boolean(text) && split.isFull &&
+        !moreParts.some((each) => { return !each.trim(); })}
+      max={LIMITS.THREAD_PARTS_MAX}
+      disabled={busy}
+      direction={choices.direction}
+      goesToBluesky={goesToBluesky}
+      limit={noteLimit}
+      writer={mobile ? null : viewer}
+    />
+  );
+
   // What is written and what goes with it, the same in place and full
   // screen.
   const content = (
@@ -565,9 +584,9 @@ const ShortComposer = ({
         disabled={busy}
         variant="standard"
         multiline
-        // Room to write in, until a photo or a video is the post's: then
-        // two lines, so that it sits close under the words.
-        minRows={hasPhotos || video ? 2 : 6}
+        // Room to write in, until a photo, a video or the next note of a
+        // thread is the post's: then two lines, so that it sits close.
+        minRows={hasPhotos || video || moreParts.length > 0 ? 2 : 6}
         fullWidth
         inputRef={hashtags.inputRef}
         slotProps={{
@@ -597,18 +616,7 @@ const ShortComposer = ({
           preview={linkPreview.preview}
           onRemove={busy ? null : linkPreview.remove}
         />}
-      {canThread &&
-        <ThreadParts
-          parts={moreParts}
-          onChange={setMoreParts}
-          canAdd={Boolean(text) && split.isFull &&
-            !moreParts.some((each) => { return !each.trim(); })}
-          max={LIMITS.THREAD_PARTS_MAX}
-          disabled={busy}
-          direction={choices.direction}
-          goesToBluesky={goesToBluesky}
-          limit={noteLimit}
-        />}
+      {canThread && mobile && threadNotes}
       {isAddingPhotos &&
         <Box sx={{ mt: 1 }}>
           <PhotoFilesEditor
@@ -701,10 +709,19 @@ const ShortComposer = ({
       >
         {/* Close, Long post and Post at the top, where a thumb finds
               them above the keyboard; on Details, Back in place of Close. */}
-        <Toolbar sx={{ gap: 1, px: 1 }}>
+        {/* What is seen sits 16 px from the edges, as the words below do,
+            at every width (the user, 2026-11-08): the X's glyph, inside its
+            button's own 8 px, and Next. MUI's Toolbar would pad 24 px and
+            stand 64 px tall from 600 px up. */}
+        <Toolbar
+          variant="dense"
+          disableGutters
+          sx={{
+            gap: 1, pl: 1, pr: 2, py: 1,
+          }}
+        >
           {onDetails ?
             <IconButton
-              edge="start"
               aria-label={i18n.t('composer:details.back')}
               onClick={() => {
                 setStep('write');
@@ -713,7 +730,6 @@ const ShortComposer = ({
               <BackIcon />
             </IconButton> :
             <IconButton
-              edge="start"
               aria-label={i18n.t('composer:close')}
               disabled={isSending}
               onClick={() => {
@@ -744,11 +760,19 @@ const ShortComposer = ({
               viewer, and their picture beside the box took a fifth of the
               screen (roadmap row 112). */}
           <Stack direction="row" spacing={2}>
-            {!mobile && <ActorAvatar actor={viewer} />}
+            {!mobile &&
+              <Box sx={{
+                display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0,
+              }}
+              >
+                <ActorAvatar actor={viewer} />
+                {canThread && <ThreadJoin />}
+              </Box>}
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
               {content}
             </Box>
           </Stack>
+          {canThread && !mobile && threadNotes}
         </Box>
         {!onDetails &&
           <>
@@ -759,7 +783,9 @@ const ShortComposer = ({
               direction="row"
               spacing={0.5}
               sx={{
-                alignItems: 'center', px: 1, pb: 1, overflowX: 'auto',
+                // Its icons 16 px from the edge, inside each button's own
+                // 8 px, and a step clear of the line above and the edge below.
+                alignItems: 'center', px: 1, py: 1, overflowX: 'auto',
               }}
             >
               {attachButtons}
