@@ -1,7 +1,7 @@
 {
   "name": "anahita-web",
   "description": "Front-end React application for Anahita",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "repository": {
     "type": "git",
     "url": "https://github.com/anahitasocial/anahita-web"
