@@ -38,6 +38,7 @@ import { Medium as MEDIUM } from '../../constants';
 import LIMITS from '../../constants/limits';
 import threadNotes from '../../utils/threadNotes';
 import threadSplit from '../../utils/threadSplit';
+import chosenMedia from '../../utils/chosenMedia';
 import warnings from '../../utils/warnings';
 
 const { CONTENT } = MEDIUM.FIELDS;
@@ -103,9 +104,9 @@ const ReplyForm = ({
   const canAddVideo = attachments && videos.isOn(nodeInfo);
   // Something to send: words, pictures that are all stored, or a video.
   const hasSomething = Boolean(text) || photosReady || Boolean(video);
-  // Only for a new reply, its notes with words, pictures or both (roadmap
-  // row 143), not yet with a GIF or a video.
-  const canThread = attachments && !video;
+  // Only for a new reply, its notes with words, pictures or both, or a GIF
+  // or a video (roadmap row 143).
+  const canThread = attachments;
   const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
   // Held back while a note's pictures are being sent, and while any note
   // is longer than a note may be (roadmap row 144).
@@ -176,6 +177,14 @@ const ReplyForm = ({
       attached = {
         thread: threadParts,
         ...(photosReady ? { uploads: photoFiles.toRequest(photoItems) } : {}),
+        // The first note as the others are, for a thread with a file in it,
+        // cut where its files are (threadNotes.cut).
+        firstNote: {
+          words: text,
+          photos: photosReady ? photoItems : [],
+          video,
+          linkPreviewUrl: !photosReady && !video ? card.url : '',
+        },
       };
     } else if (photosReady) {
       attached = { uploads: photoFiles.toRequest(photoItems) };
@@ -418,7 +427,7 @@ const ReplyForm = ({
         <ThreadParts
           parts={moreParts}
           onChange={setMoreParts}
-          canAdd={(Boolean(text) || photosReady) &&
+          canAdd={(Boolean(text) || photosReady || Boolean(video)) &&
             !moreParts.some((note) => { return !threadNotes.hasSomething(note); })}
           max={LIMITS.THREAD_PARTS_MAX}
           disabled={isSending}
@@ -428,6 +437,8 @@ const ReplyForm = ({
           outlined
           uploader={viewer && viewer.id ? viewer : null}
           photosMax={attachments ? photoFiles.maxFiles(nodeInfo) : 0}
+          videoOffers={{ video: canAddVideo, audio: false }}
+          checkVideo={(chosen) => { return chosenMedia.problemOf(chosen, nodeInfo, false); }}
         />}
       {hint &&
         <Typography variant="caption" color="textSecondary" component="p" sx={{ mt: 1 }}>

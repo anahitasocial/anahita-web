@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import AddIcon from '@mui/icons-material/Add';
 import CloseIcon from '@mui/icons-material/Close';
+import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
@@ -18,6 +19,7 @@ import PhotoFilesEditor from '../../../components/PhotoFilesEditor';
 import LIMITS from '../../../constants/limits';
 import threadNotes from '../../../utils/threadNotes';
 import threadSplit from '../../../utils/threadSplit';
+import videos from '../../../utils/videos';
 import i18n from '../../../languages';
 import AttachButtons from './AttachButtons';
 import useLinkPreview from './useLinkPreview';
@@ -253,10 +255,14 @@ const ThreadNote = ({
   writer,
   uploader,
   photosMax,
+  videoOffers,
+  checkVideo,
 }) => {
   // The photos just picked, for the editor to take as if dropped.
   const [incoming, setIncoming] = useState(null);
-  const { words, photos } = note;
+  // Why the file just chosen cannot be posted, in words.
+  const [videoProblem, setVideoProblem] = useState('');
+  const { words, photos, video } = note;
   const change = (changeNote) => {
     onChange(threadNotes.changeOne(note.key, changeNote));
   };
@@ -268,7 +274,16 @@ const ThreadNote = ({
       change((current) => { return { ...current, linkPreviewUrl: card.url }; });
     }
   }, [card.url]);
-  const canPhotos = Boolean(uploader) && photosMax > 0;
+  const canPhotos = Boolean(uploader) && photosMax > 0 && !video;
+  // A GIF, a video or a sound in place of photos (roadmap row 143).
+  const offersVideo = !video && photos.length === 0 && !incoming;
+  const takeVideo = (chosen) => {
+    const problem = checkVideo ? checkVideo(chosen) : '';
+    setVideoProblem(problem);
+    if (!problem) {
+      change((current) => { return { ...current, video: chosen }; });
+    }
+  };
   const removeButton = (sx) => {
     return (
       <IconButton
@@ -335,7 +350,7 @@ const ThreadNote = ({
             htmlInput: { dir: direction, maxLength: LIMITS.POST_BODY_MAX },
           }}
         />
-        {photos.length === 0 &&
+        {photos.length === 0 && !video &&
           <LinkPreviewCard
             preview={card.preview}
             onRemove={disabled ? null : card.remove}
@@ -354,17 +369,46 @@ const ThreadNote = ({
               onIncomingTaken={() => { setIncoming(null); }}
             />
           </Box>}
-        {/* Its Photo button, its glyph in line with the words as under the
-            first note, then what is said of it and its count. A Stack's
-            spacing would undo the button's own margin. */}
+        {/* Its file, by name and size, which can be taken off. */}
+        {video &&
+          <Box sx={{
+            display: 'flex', alignItems: 'center', gap: 1, mt: 1,
+          }}
+          >
+            <VideoIcon fontSize="small" color="action" />
+            <Typography variant="body2" sx={{ flexGrow: 1, minWidth: 0, overflowWrap: 'anywhere' }}>
+              {`${video.name} · ${videos.megabytes(video.size)}`}
+            </Typography>
+            <IconButton
+              size="small"
+              disabled={disabled}
+              aria-label={i18n.t('replies:attachments.removeVideo')}
+              title={i18n.t('replies:attachments.removeVideo')}
+              onClick={() => {
+                change((current) => { return { ...current, video: null }; });
+              }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </Box>}
+        {videoProblem &&
+          <Typography variant="caption" color="error" component="p" role="alert" sx={{ mt: 1 }}>
+            {videoProblem}
+          </Typography>}
+        {/* Its Photo, GIF, Video and Audio buttons, their glyphs in line
+            with the words as under the first note, then what is said of it
+            and its count. A Stack's spacing would undo the button's own
+            margin. */}
         <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
-          {canPhotos && photos.length === 0 && !incoming && !disabled &&
-            <Box sx={{ ml: -1, flexShrink: 0 }}>
+          {offersVideo && !disabled && (canPhotos || videoOffers.video || videoOffers.audio) &&
+            <Box sx={{ ml: -1, flexShrink: 0, display: 'flex' }}>
               <AttachButtons
                 mobile
-                photos
+                photos={canPhotos}
+                video={videoOffers.video}
+                audio={videoOffers.audio}
                 onPhotos={(files) => { setIncoming({ files }); }}
-                onVideo={() => {}}
+                onVideo={takeVideo}
               />
             </Box>}
           {(goesToBluesky || limit > 0) &&
@@ -391,6 +435,8 @@ const notePropType = PropTypes.shape({
   words: PropTypes.string.isRequired,
   linkPreviewUrl: PropTypes.string,
   photos: PropTypes.arrayOf(PropTypes.object).isRequired,
+  // A GIF, a video or a sound, the file chosen.
+  video: PropTypes.object,
 });
 
 ThreadNote.propTypes = {
@@ -409,6 +455,8 @@ ThreadNote.propTypes = {
   writer: PropTypes.object,
   uploader: PropTypes.object,
   photosMax: PropTypes.number.isRequired,
+  videoOffers: PropTypes.shape({ video: PropTypes.bool, audio: PropTypes.bool }).isRequired,
+  checkVideo: PropTypes.func,
 };
 
 const ThreadParts = ({
@@ -425,6 +473,8 @@ const ThreadParts = ({
   uploader = null,
   photosMax = 0,
   writerName = '',
+  videoOffers = { video: false, audio: false },
+  checkVideo = null,
 }) => {
   const add = () => {
     onChange((notes) => { return [...notes, threadNotes.make()]; });
@@ -451,6 +501,8 @@ const ThreadParts = ({
             writer={writer}
             uploader={uploader}
             photosMax={photosMax}
+            videoOffers={videoOffers}
+            checkVideo={checkVideo}
           />
         );
       })}
@@ -520,6 +572,10 @@ ThreadParts.propTypes = {
   // The writer's name, above each note with its place in the thread. None,
   // as in the reply form, none said.
   writerName: PropTypes.string,
+  // Whether a note may have a GIF or a video, or a sound (roadmap row 143),
+  // and what is wrong with a file chosen, in words, '' for nothing.
+  videoOffers: PropTypes.shape({ video: PropTypes.bool, audio: PropTypes.bool }),
+  checkVideo: PropTypes.func,
 };
 
 export default ThreadParts;

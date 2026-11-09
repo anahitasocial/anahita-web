@@ -31,6 +31,8 @@ export default {
     tooLong: 'Das ist zu lang zum Veröffentlichen: {{minutes}} Minuten für ein Video, {{seconds}} Sekunden für ein GIF.',
     still: 'Dieses Bild bewegt sich nicht. Veröffentliche es lieber als Foto.',
     closed: 'In diesem Thread kannst du nicht mehr antworten, deshalb wurde das Video nicht veröffentlicht.',
+    threadNotes: 'Die Beiträge nach dem Video konnten nicht veröffentlicht werden; der Thread endet dort.',
+    threadStopped: 'Etwas weiter oben im Thread konnte nicht veröffentlicht werden; der Thread endet dort.',
     tooMany: 'Du hast heute so viele Videos veröffentlicht, wie möglich sind.',
     off: 'Hier können keine Videos veröffentlicht werden.',
     encoding: 'Dieses Video konnte nicht vorbereitet werden.',

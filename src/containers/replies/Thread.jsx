@@ -128,6 +128,55 @@ const RepliesThread = ({
     // thread's is every note's.
     const warning = warnings.toRequest(attached.warning);
 
+    // A thread with a file in any note (roadmap row 143): the notes before
+    // the first file made now, as a thread; then each file sent, in turn,
+    // with the notes after it, which the server makes once it is ready.
+    const cut = attached.thread && attached.firstNote ?
+      threadNotes.cut([attached.firstNote, ...attached.thread]) : null;
+    if (cut) {
+      const partsOf = (notes) => {
+        return notes.map((note) => { return threadNotes.toPart(note, language); });
+      };
+      const [first, ...rest] = cut.segments;
+      const send = (answered) => {
+        setOnTheWay((current) => {
+          return [...current, {
+            key: `${Date.now()}-${current.length}`,
+            parent: answered,
+            body: first.note.words.trim(),
+            language,
+            warning,
+            threadAfter: partsOf(first.after),
+            more: rest.map((segment) => {
+              return {
+                body: segment.note.words.trim(),
+                threadAfter: partsOf(segment.after),
+                file: segment.note.video,
+              };
+            }),
+            file: first.note.video,
+          }];
+        });
+      };
+      if (cut.before.length === 0) {
+        send(parent);
+        return Promise.resolve();
+      }
+      return api.replies.addReplyThread(parent, partsOf(cut.before), warning).then((result) => {
+        const made = result.data.parts;
+        setReplies((current) => {
+          return made.reduce((list, part) => { return thread.add(list, part); }, current);
+        });
+        send(made[made.length - 1]);
+      }).catch((error) => {
+        const status = error && error.response && error.response.status;
+        alertError(i18n.t(status === 403 ?
+          'replies:prompts.notAllowed' :
+          'replies:prompts.notAdded'));
+        throw error;
+      });
+    }
+
     if (attached.video) {
       setOnTheWay((current) => {
         return [...current, {
@@ -496,6 +545,8 @@ const RepliesThread = ({
             body={each.body}
             language={each.language}
             warning={each.warning}
+            threadAfter={each.threadAfter}
+            more={each.more}
             file={each.file}
             onReady={load}
             onGone={() => {

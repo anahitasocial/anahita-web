@@ -1746,12 +1746,23 @@ draws nothing (`utils/federation.js#isAbsent`).
    words, and its own photos, uploaded for the writer; the first note's,
    from its own icons, for the profile it is on, with whether they may be
    downloaded and who is in them. A note with photos is posted as a photo
-   post in the thread. A GIF, a video or a sound hides Add to thread. On a
+   post in the thread. A note may have a GIF, a video or a sound instead,
+   from its own GIF, Video and Audio icons (`ThreadParts`'s `videoOffers`,
+   checked by `utils/chosenMedia.js`): the thread is cut where its files are
+   (`threadNotes.cut`), the notes before the first made at once as a
+   thread, and each file sent by the app's upload (`useVideoUpload`'s
+   `start` with `more`), one after another, each told the one before it
+   (`afterUpload`) and carrying the notes after it (`threadAfter`), which
+   the server makes once the file is ready. The + button's progress is
+   over all the files; a file that fails stops the thread there, and the
+   reason said is that file's. On a
    desktop the writer's small profile photo is beside each note, and one
    line runs from theirs on the first down to Add to thread. The notes
    after the first are not kept as a draft. A new reply can be a thread too (`replies/ReplyForm.jsx`, sent as
    `{ thread }` to `Thread.jsx`, `POST /notes/:id/replies/thread`); its notes
-   are shown as any replies are, each under the one before. Under each
+   are shown as any replies are, each under the one before. Its notes may
+   have a GIF or a video, sent the same way (`{ thread, firstNote }`,
+   `VideoReplyOnTheWay` with `threadAfter` and `more`). Under each
    note's words is how much room is left of its 500 (roadmap rows 126 and
    144, `Composer/useThreadSplit.js`, `utils/threadSplit.js`), counted down
    as Bluesky's app does, a number and a ring that fills (`CharacterCount`

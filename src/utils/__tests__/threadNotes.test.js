@@ -36,4 +36,25 @@ describe('threadNotes', () => {
       content: '', language: 'en', uploads: [{ uploadId: 7, altText: 'Ceres' }],
     });
   });
+
+  it('says something with a file alone', () => {
+    expect(threadNotes.hasSomething({ words: ' ', photos: [], video: { name: 'tycho.mp4' } })).toBe(true);
+  });
+
+  it('is cut where its files are', () => {
+    const words = (said) => { return { ...threadNotes.make(said) }; };
+    const clip = (said) => { return { ...threadNotes.make(said), video: { name: `${said}.mp4` } }; };
+    const [one, two, three, four, five] = [words('one'), words('two'), clip('three'), words('four'), clip('five')];
+
+    expect(threadNotes.cut([one, two])).toBeNull();
+    expect(threadNotes.cut([one, two, three, four, five])).toEqual({
+      before: [one, two],
+      segments: [{ note: three, after: [four] }, { note: five, after: [] }],
+    });
+    // A file in the first note: nothing is made before it.
+    expect(threadNotes.cut([three, one])).toEqual({
+      before: [],
+      segments: [{ note: three, after: [one] }],
+    });
+  });
 });

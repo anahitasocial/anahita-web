@@ -20,10 +20,18 @@ Needs Anahita Services from `main` (Embryo), for content warnings.
    shows the warning and View, the post blurred behind it, until the reader
    chooses to see it.
 
+2. **A GIF, a video or a sound in any note of a thread** (roadmap row 143),
+   in the composer and in a reply: each note has GIF, Video and Audio
+   beside Photo. The notes after a file are posted once it is ready, in
+   order; the + button shows the files' progress together, and a file that
+   cannot be posted stops the thread there, saying why.
+
 ### Fixed
 
 1. **A GIF or a video sent as a reply kept its words:** they were dropped
    on the way.
+2. **A thread with a photo in a note after the first** is shown in a list
+   as a thread, with all its notes counted.
 
 ## v1.2.3 Birth, 2026-11-09
 

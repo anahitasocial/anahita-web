@@ -26,6 +26,8 @@ const VideoReplyOnTheWay = ({
   body = '',
   language = '',
   warning = {},
+  threadAfter = [],
+  more = [],
   file,
   onReady,
   onGone,
@@ -40,9 +42,19 @@ const VideoReplyOnTheWay = ({
       return;
     }
     started.current = true;
+    // In a thread with files (roadmap row 143): the notes after this one,
+    // and the files after them, each with its own notes after it.
     upload.start(viewer, {
-      parentId: parent.id, content: body, language, ...warning,
-    }, file);
+      parentId: parent.id, content: body, language, ...warning, threadAfter,
+    }, file, more.map((step) => {
+      return {
+        owner: viewer,
+        post: {
+          content: step.body, language, ...warning, threadAfter: step.threadAfter,
+        },
+        file: step.file,
+      };
+    }));
   }, []);
 
   useEffect(() => {
@@ -101,6 +113,10 @@ VideoReplyOnTheWay.propTypes = {
   language: PropTypes.string,
   // Its content warning, as utils/warnings#toRequest makes it.
   warning: PropTypes.objectOf(PropTypes.string),
+  // The notes after it, as a thread's parts, made with it once it is ready;
+  // and the files after them, each { body, threadAfter, file }.
+  threadAfter: PropTypes.arrayOf(PropTypes.object),
+  more: PropTypes.arrayOf(PropTypes.object),
   file: PropTypes.object.isRequired,
   // When the reply has been made: read the thread again.
   onReady: PropTypes.func.isRequired,

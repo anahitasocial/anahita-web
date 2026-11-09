@@ -31,6 +31,8 @@ export default {
     tooLong: 'C’est plus long que ce qui peut être publié : {{minutes}} minutes pour une vidéo, {{seconds}} secondes pour un GIF.',
     still: 'Cette image ne bouge pas. Publiez-la plutôt comme photo.',
     closed: 'Cette discussion n’accepte plus vos réponses ; la vidéo n’a pas été publiée.',
+    threadNotes: 'Les notes après la vidéo n’ont pas pu être publiées ; le fil s’est arrêté là.',
+    threadStopped: 'Un élément plus haut dans le fil n’a pas pu être publié ; le fil s’est arrêté là.',
     tooMany: 'Vous avez publié autant de vidéos que possible aujourd’hui.',
     off: 'Les vidéos ne peuvent pas être publiées ici.',
     encoding: 'Cette vidéo n’a pas pu être préparée.',

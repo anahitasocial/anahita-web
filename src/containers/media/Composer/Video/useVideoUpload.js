@@ -49,6 +49,10 @@ const failureOf = (upload) => {
     still: 'still',
     closed: 'closed',
     encoding: 'encoding',
+    // In a thread (roadmap row 143): the notes after it could not be made,
+    // or one before it failed, so the thread stopped there.
+    thread_notes: 'threadNotes',
+    thread_stopped: 'threadStopped',
   }[upload && upload.error] || 'failed';
 };
 
@@ -130,6 +134,9 @@ const useVideoUpload = () => {
   const controller = useRef(null);
   // What was last begun, to begin again with Try again.
   const last = useRef(null);
+  // What was begun of a thread's uploads, to give them all up together,
+  // and to say why the thread stopped.
+  const begun = useRef([]);
   const alive = useRef(true);
   const awake = useWakeLock();
 
@@ -170,12 +177,32 @@ const useVideoUpload = () => {
     }
     if (current.status === 'ready') {
       set({ phase: 'ready', upload: current });
-    } else {
-      set({ phase: 'failed', upload: current, problem: failureOf(current) });
+      return;
     }
+    // In a thread, the last stops when one before it does: what is said is
+    // why that one did (roadmap row 143).
+    let why = current;
+    if (current.error === 'thread_stopped') {
+      // eslint-disable-next-line no-restricted-syntax
+      for (const each of begun.current) {
+        try {
+          // eslint-disable-next-line no-await-in-loop
+          const read = (await api.read(each.id)).data;
+          if (read.status === 'failed' && read.error !== 'thread_stopped') {
+            why = read;
+            break;
+          }
+        } catch (e) {
+          // Said as the last says it.
+        }
+      }
+    }
+    set({ phase: 'failed', upload: current, problem: failureOf(why) });
   };
 
-  const sendParts = async (upload, file, signal) => {
+  // `before` and `total` are the bytes of a thread's files sent before
+  // this one and of them all, so that the progress is the thread's.
+  const sendParts = async (upload, file, signal, before = 0, total = file.size) => {
     const parts = videos.partsOf(file.size, upload.partSize);
     const arrived = {};
     const began = Date.now();
@@ -184,8 +211,8 @@ const useVideoUpload = () => {
         return sum + bytes;
       }, 0);
       set({
-        percent: videos.percent(sent, file.size),
-        minutes: videos.minutesLeft(sent, file.size, Date.now() - began),
+        percent: videos.percent(before + sent, total),
+        minutes: videos.minutesLeft(sent, total - before, Date.now() - began),
       });
     };
 
@@ -236,8 +263,17 @@ const useVideoUpload = () => {
     }
   };
 
-  const start = async (owner, post, file) => {
-    last.current = { owner, post, file };
+  // Begins a post with a GIF, a video or a sound, and, in a thread written
+  // in one go (roadmap row 143), the uploads after it: `more`, each
+  // { owner, post, file }, sent one after another, each told the one before
+  // it (after_upload) so that the server makes them in order. What is
+  // followed is the last: it is ready when the whole thread is, and fails
+  // when any before it does.
+  const start = async (owner, post, file, more = []) => {
+    // Only a single upload is begun again with Try again: of a thread, some
+    // may be posted already.
+    last.current = more.length === 0 ? { owner, post, file } : null;
+    begun.current = [];
     controller.current = new AbortController();
     const { signal } = controller.current;
     set({
@@ -253,21 +289,34 @@ const useVideoUpload = () => {
     });
     awake.hold();
 
+    const steps = [{ owner, post, file }, ...more];
+    const total = steps.reduce((sum, step) => { return sum + step.file.size; }, 0);
     let upload = null;
+    let sent = 0;
     try {
-      upload = (await api.start(owner, post, file)).data;
-      set({ upload });
-      await sendParts(upload, file, signal);
-      upload = (await api.complete(upload)).data;
+      for (let at = 0; at < steps.length; at += 1) {
+        const step = steps[at];
+        const said = at > 0 ? { ...step.post, afterUpload: upload.id } : step.post;
+        // eslint-disable-next-line no-await-in-loop
+        upload = (await api.start(step.owner, said, step.file)).data;
+        begun.current.push(upload);
+        set({ upload });
+        // eslint-disable-next-line no-await-in-loop
+        await sendParts(upload, step.file, signal, sent, total);
+        // eslint-disable-next-line no-await-in-loop
+        upload = (await api.complete(upload)).data;
+        sent += step.file.size;
+      }
     } catch (error) {
       awake.release();
       if (signal.aborted) {
         return false;
       }
-      // What was begun is given up, so that it does not sit unfinished.
-      if (upload) {
-        api.cancel(upload).catch(() => {});
-      }
+      // What was begun is given up, so that it does not sit unfinished:
+      // the uploads after one given up stop with it on the server too.
+      begun.current.forEach((each) => {
+        api.cancel(each).catch(() => {});
+      });
       set({ phase: 'failed', problem: refusalOf(error) });
       return false;
     }
@@ -290,9 +339,14 @@ const useVideoUpload = () => {
     if (controller.current) {
       controller.current.abort();
     }
-    if (state.upload && videos.isInHand(state.upload)) {
-      api.cancel(state.upload).catch(() => {});
-    }
+    // A thread's uploads all, the one in hand among them.
+    const all = begun.current.length > 0 ? begun.current : [state.upload];
+    all.forEach((each) => {
+      if (each && videos.isInHand(each)) {
+        api.cancel(each).catch(() => {});
+      }
+    });
+    begun.current = [];
     last.current = null;
     set({
       phase: 'idle',

@@ -56,6 +56,8 @@ import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
 import threadNotes from '../../../utils/threadNotes';
 import threadSplit from '../../../utils/threadSplit';
+import chosenMedia from '../../../utils/chosenMedia';
+import warnings from '../../../utils/warnings';
 import i18n from '../../../languages';
 import useRulesFirst from '../../rules/useRulesFirst';
 import { TagPeoplePicker, tagPeople, tagOutcomeMessage } from '../TagPeopleDialog';
@@ -147,14 +149,16 @@ const ShortComposer = ({
 
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
-  // A thread is of notes, each with words, pictures or both (roadmap row
-  // 143); not yet with a GIF, a video or a sound.
-  const canThread = canWords && !video;
+  // A thread is of notes, each with words, pictures or both, or a GIF, a
+  // video or a sound (roadmap row 143).
+  const canThread = canWords;
   const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
   const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
   // A video on its way, being sent or prepared, which the app sends: one
   // at a time, so the Video button is off until it is posted.
   const videoBusy = upload.phase === 'uploading' || upload.phase === 'processing';
+  // A thread with a file in a note after the first, which the app sends too.
+  const threadHasVideo = threadParts.some(threadNotes.hasVideo);
   const busy = isSending;
   const hasSomething = composer.canPost({
     text,
@@ -168,7 +172,8 @@ const ShortComposer = ({
     threadParts.some((note) => { return threadSplit.lengthOf(note.words) > LIMITS.POST_MAX; });
   // Held back too while a note's pictures are still being sent.
   const isHeldBack = (hasPhotos && !photosReady) || busy || tooLong ||
-    threadParts.some((note) => { return !threadNotes.isReady(note); });
+    threadParts.some((note) => { return !threadNotes.isReady(note); }) ||
+    (threadHasVideo && videoBusy);
 
   const linkPreview = useLinkPreview(body, canWords && !hasPhotos && !video);
   // Hashtags in use offered as one is typed (roadmap row 78).
@@ -197,13 +202,6 @@ const ShortComposer = ({
     (goesOut && goesToBluesky && 'federation:composer.morePictures') ||
     (goesOut && 'federation:composer.morePicturesMastodon') ||
     (goesToBluesky && 'federation:composer.morePicturesBluesky'));
-
-  const limits = {
-    size: videos.megabytes(videos.maxBytes(nodeInfo)),
-    minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),
-    animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
-    seconds: videos.animationMaxSeconds(nodeInfo),
-  };
 
   const alertSuccess = (message) => {
     dispatch(actions.app.alert.success(message));
@@ -295,6 +293,71 @@ const ShortComposer = ({
     });
   };
 
+  // A thread whose notes have a GIF, a video or a sound (roadmap row 143),
+  // cut where its files are (threadNotes.cut). Every file is sent by the
+  // app, one after another; what was made is said as any video post is.
+  const sendThreadWithFiles = () => {
+    const { language } = choices.request();
+    const notes = [{
+      words: text,
+      photos: photosReady ? photoItems : [],
+      video,
+      linkPreviewUrl: !photosReady && !video ? linkPreview.url : '',
+    }, ...threadParts];
+    const { before, segments } = threadNotes.cut(notes);
+    // Each file's post: its note's words, the thread's warning, and the
+    // notes after it up to the next file.
+    const fileStep = (segment) => {
+      return {
+        title: '',
+        content: segment.note.words.trim(),
+        language,
+        ...warnings.toRequest(choices.warning),
+        threadAfter: segment.after.map((note) => { return threadNotes.toPart(note, language); }),
+      };
+    };
+    // The files after the first, each a reply by the writer on their own
+    // profile, after the one before.
+    const more = segments.slice(1).map((segment) => {
+      return { owner: viewer, post: fileStep(segment), file: segment.note.video };
+    });
+    const [first] = segments;
+
+    // The first note has the file: it is the post, with all a post takes.
+    if (before.length === 0) {
+      upload.start(actor, {
+        ...choices.request(),
+        ...fileStep(first),
+        allowDownload: choices.allowDownload,
+      }, first.note.video, more);
+      reset();
+      return;
+    }
+
+    // Otherwise the notes before it, as a thread, and the file answers the
+    // last of them.
+    const post = {
+      ...shared(),
+      ...(photosReady ? { allow_download: choices.allowDownload } : {}),
+    };
+    delete post.content;
+    const parts = before.map((note) => { return threadNotes.toPart(note, language); });
+    setIsSending(true);
+    api.replies.addThread(actor, post, parts).then((result) => {
+      const made = result.data.parts;
+      dispatch({ type: 'NOTES_ADD_SUCCESS', node: made[0] });
+      upload.start(viewer, {
+        ...fileStep(first),
+        parentId: made[made.length - 1].id,
+      }, first.note.video, more);
+      reset();
+    }).catch(() => {
+      alertError(i18n.t('prompts:posted.error'));
+    }).finally(() => {
+      setIsSending(false);
+    });
+  };
+
   const sendPost = () => {
     // A video goes in the background, as on other networks: the app sends
     // it, and the composer closes at once, empty, so that nothing of this
@@ -302,6 +365,15 @@ const ShortComposer = ({
     // 115). How it is getting on is at the head of the home feed and round
     // the + button; that it is posted, or why not, is said wherever the
     // viewer is.
+    // A thread with a file in any note (roadmap row 143): the notes before
+    // the first file made now; then each file sent, in turn, with the
+    // notes after it, which the server makes once it is ready.
+    if ((video && threadParts.length > 0) || threadHasVideo) {
+      // eslint-disable-next-line no-use-before-define
+      sendThreadWithFiles();
+      return;
+    }
+
     if (video) {
       upload.start(actor, {
         title: '',
@@ -383,20 +455,10 @@ const ShortComposer = ({
       setVideoProblem(onItsWay);
       return;
     }
-    if (audioFiles.isAudioType(chosen)) {
-      const problem = canAudio ? audioFiles.problem(chosen, nodeInfo) : 'notAudio';
-      if (problem) {
-        setVideoProblem(i18n.t(`audio:problems.${problem}`, {
-          size: videos.megabytes(audioFiles.maxBytes(nodeInfo)),
-        }));
-        return;
-      }
-    } else {
-      const problem = videos.problem(chosen, nodeInfo);
-      if (problem) {
-        setVideoProblem(i18n.t(`videos:problems.${problem}`, limits));
-        return;
-      }
+    const problem = chosenMedia.problemOf(chosen, nodeInfo, canAudio);
+    if (problem) {
+      setVideoProblem(problem);
+      return;
     }
     setVideoProblem('');
     setVideo(chosen);
@@ -621,7 +683,7 @@ const ShortComposer = ({
     <ThreadParts
       parts={moreParts}
       onChange={setMoreParts}
-      canAdd={(Boolean(text) || photosReady) &&
+      canAdd={(Boolean(text) || photosReady || Boolean(video)) &&
         !moreParts.some((note) => { return !threadNotes.hasSomething(note); })}
       max={LIMITS.THREAD_PARTS_MAX}
       disabled={busy}
@@ -632,6 +694,10 @@ const ShortComposer = ({
       uploader={viewer}
       writerName={writerName}
       photosMax={canPhotos ? photoFiles.maxFiles(nodeInfo) : 0}
+      // A GIF, a video or a sound in a note, while none is on its way: the
+      // app sends one thread's files at a time.
+      videoOffers={{ video: canVideo && !videoBusy, audio: canAudio && !videoBusy }}
+      checkVideo={(chosen) => { return chosenMedia.problemOf(chosen, nodeInfo, canAudio); }}
     />
   );
 

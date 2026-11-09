@@ -31,6 +31,8 @@ export default {
     tooLong: 'Esto dura más de lo que se puede publicar: {{minutes}} minutos para un video, {{seconds}} segundos para un GIF.',
     still: 'Esta imagen no se mueve. Publícala como foto.',
     closed: 'Este hilo ya no acepta tus respuestas, así que el video no se publicó.',
+    threadNotes: 'Las notas después del video no se pudieron publicar, así que el hilo se detuvo ahí.',
+    threadStopped: 'Algo anterior del hilo no se pudo publicar, así que el hilo se detuvo ahí.',
     tooMany: 'Ya publicaste todos los videos que puedes por hoy.',
     off: 'Aquí no se pueden publicar videos.',
     encoding: 'No se pudo preparar este video.',

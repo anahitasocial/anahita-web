@@ -31,6 +31,8 @@ export default {
     tooLong: 'This is longer than can be posted: {{minutes}} minutes for a video, {{seconds}} seconds for a GIF.',
     still: 'This picture does not move. Post it as a photo instead.',
     closed: 'This thread no longer takes your replies, so the video was not posted.',
+    threadNotes: 'The notes after the video could not be posted, so the thread stopped there.',
+    threadStopped: 'Something earlier in the thread could not be posted, so the thread stopped there.',
     tooMany: 'You have posted as many videos as you can today.',
     off: 'Videos cannot be posted here.',
     encoding: 'This video could not be prepared.',
