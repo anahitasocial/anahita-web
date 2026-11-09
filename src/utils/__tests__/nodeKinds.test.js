@@ -11,6 +11,7 @@ describe('the kinds of post', () => {
       'node.medium.text-service.topic.v1',
       'node.medium.photo-service.photo.v1',
       'node.medium.video-service.video.v1',
+      'node.medium.video-service.audio.v1',
     ].forEach((type) => {
       expect(utils.isSubscribable({ type })).toBe(true);
       expect(utils.isCommentable({ type })).toBe(true);

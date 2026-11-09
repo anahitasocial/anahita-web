@@ -7,8 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../../../actions';
 import api from '../../../../api';
 import i18n from '../../../../languages';
-import videos from '../../../../utils/videos';
-import useVideoUpload from './useVideoUpload';
+import useVideoUpload, { problemOf, wordsOf } from './useVideoUpload';
 
 const Shared = createContext(null);
 
@@ -37,8 +36,13 @@ const SharedVideoUpload = ({ children }) => {
   useEffect(() => {
     if (upload.phase === 'ready') {
       const id = upload.upload && upload.upload.nodeId;
-      // With View, to the post, wherever the viewer is.
-      dispatch(actions.app.alert.success(i18n.t('videos:upload.ready'), id ? `/videos/${id}/` : ''));
+      // With View, to the post, wherever the viewer is: a sound's at
+      // /audio/ (roadmap row 137).
+      const at = upload.kind === 'audio' ? 'audio' : 'videos';
+      dispatch(actions.app.alert.success(
+        i18n.t(wordsOf(upload.kind, 'upload.ready')),
+        id ? `/${at}/${id}/` : '',
+      ));
       if (id) {
         api.videos.read(id).then(({ data }) => {
           dispatch({ type: 'VIDEOS_ADD_SUCCESS', node: data });
@@ -48,12 +52,7 @@ const SharedVideoUpload = ({ children }) => {
       }
     }
     if (upload.phase === 'failed' && !onHome) {
-      dispatch(actions.app.alert.error(i18n.t(`videos:problems.${upload.problem || 'failed'}`, {
-        size: videos.megabytes(videos.maxBytes(nodeInfo)),
-        minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),
-        animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
-        seconds: videos.animationMaxSeconds(nodeInfo),
-      })));
+      dispatch(actions.app.alert.error(problemOf(upload.kind, upload.problem, nodeInfo)));
     }
   }, [upload.phase]);
 

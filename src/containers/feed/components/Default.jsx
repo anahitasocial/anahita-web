@@ -27,6 +27,7 @@ import PinnedLabel from '../../../components/PinnedLabel';
 import QuoteEmbed from '../../../components/QuoteEmbed';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
+import AudioPlayer from '../../../components/AudioPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
@@ -173,6 +174,7 @@ const FeedCardDefault = ({
           <AltBadge text={photoFiles.descriptionOf(node)} />
         </Box>}
       {node.video && !elsewhere && <VideoPlayer video={node.video} title={title} />}
+      {node.audio && <AudioPlayer audio={node.audio} title={title} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent {...openOnClick.handlersFor(url, navigate)}>

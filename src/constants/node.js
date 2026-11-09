@@ -14,6 +14,8 @@ export default {
       'node.medium.text-service.topic.v1',
       'node.medium.photo-service.photo.v1',
       'node.medium.video-service.video.v1',
+      // A sound, made by video-service as a video is (roadmap row 137).
+      'node.medium.video-service.audio.v1',
     ],
     FEED: [
       'node.base.feed-service.repost.v1',

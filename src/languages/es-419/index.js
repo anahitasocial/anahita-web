@@ -37,6 +37,7 @@ import people from './people';
 import notes from './notes';
 import photos from './photos';
 import videos from './videos';
+import audio from './audio';
 import media from './media';
 import topics from './topics';
 import articles from './articles';
@@ -91,6 +92,7 @@ export default {
   notes,
   photos,
   videos,
+  audio,
   media,
   topics,
   articles,

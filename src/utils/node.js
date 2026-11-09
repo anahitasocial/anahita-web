@@ -20,6 +20,25 @@ const {
   TYPES,
 } = NODE;
 
+// A kind's word in addresses and tab names: its plural, as inflection
+// makes it, but for a word that is the same in both. Audio is not counted:
+// a profile's Audio tab, and an audio post at /audio/12-a-title/ (roadmap
+// row 137), where inflection would say "audios".
+const SAME_IN_PLURAL = ['audio'];
+
+const pluralOf = (word) => {
+  return SAME_IN_PLURAL.includes(word) ? word : pluralize(word);
+};
+
+// What video-service makes: a video post, and an audio post, which is read,
+// edited and deleted at the same addresses of the API, under /videos/, and
+// kept in the app's store with the videos.
+const AUDIO_TYPE = 'node.medium.video-service.audio.v1';
+
+const isAudio = (node) => {
+  return Boolean(node) && node.type === AUDIO_TYPE;
+};
+
 const isActor = (node) => {
   return node.type ? node.type.includes('actor') : false;
 };
@@ -307,10 +326,10 @@ const readIdentifier = (node, namespace) => {
 // Its settings and the like are under this.
 const getKindURL = (node) => {
   if (node && node.id && node.type) {
-    const service = pluralize(node.type.split('.')[3]);
+    const service = pluralOf(node.type.split('.')[3]);
     let slug = '';
 
-    if (['people', 'hashtags'].includes(pluralize(service))) {
+    if (['people', 'hashtags'].includes(service)) {
       slug = node.alias;
     } else if (node.alias) {
       slug = `${node.id}-${slugify(node.alias)}`;
@@ -318,7 +337,7 @@ const getKindURL = (node) => {
       slug = node.id;
     }
 
-    return `/${pluralize(service)}/${slug}/`;
+    return `/${service}/${slug}/`;
   }
 
   return '/';
@@ -339,7 +358,12 @@ const getServiceName = (node) => {
   return node.type.split('.')[2];
 };
 
+// The namespace of the store and of the API a node is in. An audio post's is
+// video-service's, `videos` (see isAudio above).
 const getNamespace = (node) => {
+  if (isAudio(node)) {
+    return 'videos';
+  }
   const entityName = node.type.split('.')[3];
   return pluralize(entityName);
 };
@@ -427,7 +451,7 @@ const getActorFeatureTabs = (actor) => {
         return directMappings[feature.service];
       }
       return (feature.nodeTypes || []).map((nodeType) => {
-        return pluralize(nodeType);
+        return pluralOf(nodeType);
       });
     })
     .filter((tab) => {
@@ -446,6 +470,7 @@ const mergeNodes = (node, current, ignore) => {
 
 export default {
   isActor,
+  isAudio,
   isPerson,
   isSuperAdmin,
   isAdmin,
@@ -475,6 +500,7 @@ export default {
   getURL,
   readIdentifier,
   getNamespace,
+  pluralOf,
   getKindURL,
   getComposers,
   getEnabledNodeTypes,

@@ -200,6 +200,7 @@ export default {
       topic: 'tópicos',
       photo: 'fotos',
       video: 'vídeos',
+      audio: 'publicações de áudio',
     },
     actor: {
       person: 'perfis de pessoas',
@@ -235,6 +236,7 @@ export default {
     topic: 'Tópicos',
     photo: 'Fotos',
     video: 'Vídeos',
+    audio: 'Áudio',
     person: 'Pessoas',
     group: 'Grupos',
     event: 'Eventos',

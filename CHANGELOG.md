@@ -14,6 +14,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **Videos from Bluesky and the fediverse play here.** Pressing play on
    one has it copied to this site, "Getting the video…" for a few seconds
    the first time, then it plays in the post, never from the other server.
+2. **Audio posts.** An Audio button beside Video in the composer posts a
+   sound: MP3, M4A, AAC, Ogg, Opus, WAV or FLAC, up to an hour. It plays in
+   the post, with its cover beside it when the file has one, and a
+   profile's audio posts are in its Audio tab.
 
 ## v1.1.0 Birth, 2026-11-08
 

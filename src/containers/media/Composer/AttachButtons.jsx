@@ -4,10 +4,12 @@ import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import Tooltip from '@mui/material/Tooltip';
+import AudioIcon from '@mui/icons-material/HeadphonesOutlined';
 import GifIcon from '@mui/icons-material/GifBoxOutlined';
 import PhotoIcon from '@mui/icons-material/Photo';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
+import audioFiles from '../../../utils/audio';
 import videos from '../../../utils/videos';
 import i18n from '../../../languages';
 import { PHOTO_TYPES } from '../../../utils/preparePhoto';
@@ -17,20 +19,24 @@ import { PHOTO_TYPES } from '../../../utils/preparePhoto';
 const ANIMATIONS = videos.ANIMATION_TYPES.join(',');
 const { MOVIES } = videos;
 
-// Photo, GIF and Video, the same in the short box and the extended
+// Photo, GIF, Video and Audio, the same in the short box and the extended
 // composer: with their words beside them where there is room, the icons
-// alone on a mobile. A post holds photos or a GIF or a video, so the
-// composer says which are offered (`photos`, `video`).
+// alone on a mobile. A post holds photos or a GIF or a video or a sound, so
+// the composer says which are offered (`photos`, `video`, `audio`). A sound
+// is sent as a video is, by `onVideo`, and made an audio post by the server
+// (roadmap row 137).
 const AttachButtons = ({
   mobile,
   photos = false,
   video = false,
+  audio = false,
   onPhotos,
   onVideo,
 }) => {
   const photoPicker = useRef(null);
   const gifPicker = useRef(null);
   const videoPicker = useRef(null);
+  const audioPicker = useRef(null);
 
   const button = (label, tip, icon, onClick, pressed) => {
     // Coloured while what it opened is open, so it is clear that pressing
@@ -113,6 +119,15 @@ const AttachButtons = ({
             videoPicker.current.click();
           },
         )}
+      {audio &&
+        button(
+          i18n.t('composer:audio'),
+          i18n.t('composer:addAudio'),
+          <AudioIcon />,
+          () => {
+            audioPicker.current.click();
+          },
+        )}
       <input
         ref={photoPicker}
         type="file"
@@ -123,6 +138,7 @@ const AttachButtons = ({
       />
       <input ref={gifPicker} type="file" accept={ANIMATIONS} hidden onChange={choose} />
       <input ref={videoPicker} type="file" accept={MOVIES} hidden onChange={choose} />
+      <input ref={audioPicker} type="file" accept={audioFiles.PICKER} hidden onChange={choose} />
     </>
   );
 };
@@ -131,9 +147,10 @@ AttachButtons.propTypes = {
   mobile: PropTypes.bool.isRequired,
   photos: PropTypes.bool,
   video: PropTypes.bool,
+  audio: PropTypes.bool,
   // Called with the photos picked.
   onPhotos: PropTypes.func.isRequired,
-  // Called with the file picked, a GIF or a video.
+  // Called with the file picked, a GIF, a video or a sound.
   onVideo: PropTypes.func.isRequired,
 };
 

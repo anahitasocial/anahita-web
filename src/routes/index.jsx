@@ -154,6 +154,9 @@ const NotesRead = MediaRead('notes');
 
 const PhotosRead = MediaRead('photos');
 const VideosRead = MediaRead('videos');
+// An audio post is video-service's, read from its address (roadmap row
+// 137), at /audio/12-a-title/ here.
+const AudioRead = MediaRead('videos');
 
 const TopicsRead = MediaRead('topics');
 
@@ -501,6 +504,9 @@ const AppRoutes = () => {
               <Route path="/videos" element={<Navigate to="/" replace />} />
               <Route path="/videos/:id" element={<VideosRead />} />
 
+              <Route path="/audio" element={<Navigate to="/" replace />} />
+              <Route path="/audio/:id" element={<AudioRead />} />
+
               <Route path="/topics" element={<Navigate to="/" replace />} />
               <Route path="/topics/:id" element={<TopicsRead />} />
 
@@ -561,6 +567,7 @@ const AppRoutes = () => {
               <Route path="/notes/:id" element={<PostDialog><NotesRead /></PostDialog>} />
               <Route path="/photos/:id" element={<PostDialog><PhotosRead /></PostDialog>} />
               <Route path="/videos/:id" element={<PostDialog><VideosRead /></PostDialog>} />
+              <Route path="/audio/:id" element={<PostDialog><AudioRead /></PostDialog>} />
               <Route path="/topics/:id" element={<PostDialog><TopicsRead /></PostDialog>} />
             </Routes>}
         </OnboardingGate>

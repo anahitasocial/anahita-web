@@ -14,7 +14,7 @@ import useBrowse from '../../browse/useBrowse';
 //
 // No alert on an error: the list stays as it was, and does not call itself
 // empty (`isEmpty` below).
-const MediaBrowse = ({ namespace, queryFilters }) => {
+const MediaBrowse = ({ namespace, queryFilters, tab = '' }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
   const error = useSelector((state) => { return state[namespace].error || ''; });
 
@@ -69,6 +69,7 @@ const MediaBrowse = ({ namespace, queryFilters }) => {
       <MediaList
         items={items}
         namespace={namespace}
+        tab={tab}
         viewer={viewer}
         total={total}
         fetchList={next}
@@ -85,7 +86,12 @@ MediaBrowse.propTypes = {
   // has no list of every post of a type.
   queryFilters: PropTypes.shape({
     oid: PropTypes.number.isRequired,
+    // `audio`: a profile's audio posts, from its videos' address.
+    type: PropTypes.string,
   }).isRequired,
+  // The profile's tab it is listed in, where it is not the namespace's:
+  // `audio`, in `videos`.
+  tab: PropTypes.string,
 };
 
 // One component for each namespace, made once: callers ask for it while

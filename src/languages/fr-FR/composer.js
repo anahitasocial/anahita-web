@@ -19,6 +19,10 @@ export default {
   needsPicture: 'Ajoutez une image ou une vidéo pour publier ici.',
   video: 'Vidéo',
   addVideo: 'Ajouter une vidéo',
+  audio: 'Audio',
+  addAudio: 'Ajouter un son',
+  // Taking the sound picked out again.
+  removeAudio: 'Retirer le son',
   titleNeeded: 'Un titre est nécessaire.',
   bodyNeeded: 'Écrivez quelque chose d’abord.',
   removeCover: 'Retirer la couverture',
@@ -79,6 +83,7 @@ export default {
     topic: 'Sujet',
   },
   untitledVideo: 'Vidéo',
+  untitledAudio: 'Audio',
   hashtags: {
     label: 'Hashtags',
     suggested: 'Hashtags suggérés',
@@ -103,6 +108,7 @@ export default {
   // itself to the choices that go with it, each a row; back returns.
   // One video at a time: said by the Video button while one is sent.
   videoOnItsWay: 'Une vidéo est en route : une autre pourra être ajoutée une fois celle-ci publiée.',
+  audioOnItsWay: 'Un son est en route : un autre pourra être ajouté une fois celui-ci publié.',
   next: 'Suivant',
   details: {
     back: 'Retour',

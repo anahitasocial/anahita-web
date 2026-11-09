@@ -1,4 +1,4 @@
-// Downloading what a post holds: a photo, a video.
+// Downloading what a post holds: a photo, a video, a sound.
 //
 // Whoever posted it says whether it may be downloaded. The server answers
 // for each post and each viewer (`authorized.download`), and this only
@@ -6,6 +6,9 @@
 
 const PHOTO = 'node.medium.photo-service.photo.v1';
 const VIDEO = 'node.medium.video-service.video.v1';
+// An audio post: video-service's, downloaded from its address as a video
+// is, as an M4A (roadmap row 137).
+const AUDIO = 'node.medium.video-service.audio.v1';
 
 const isPhoto = (node) => {
   return Boolean(node) && node.type === PHOTO;
@@ -15,9 +18,18 @@ const isVideo = (node) => {
   return Boolean(node) && node.type === VIDEO;
 };
 
+const isAudio = (node) => {
+  return Boolean(node) && node.type === AUDIO;
+};
+
+// Whether a post is video-service's, downloaded from /videos/.
+const isVideoService = (node) => {
+  return isVideo(node) || isAudio(node);
+};
+
 // Whether a post is of a kind with a file to download.
 const holdsAFile = (node) => {
-  return isPhoto(node) || isVideo(node);
+  return isPhoto(node) || isVideoService(node);
 };
 
 // Whether a composer makes posts that hold one.
@@ -31,10 +43,13 @@ const canDownload = (node) => {
 };
 
 // What there is to download from a post: each image of a photo post, by
-// its place, or a video's one file, at its largest size.
+// its place, or a video's one file, at its largest size, or a sound's.
 const partsOf = (node) => {
   if (isVideo(node)) {
     return [{ key: 'video', query: '' }];
+  }
+  if (isAudio(node)) {
+    return [{ key: 'audio', query: '' }];
   }
   if (!isPhoto(node)) {
     return [];
@@ -52,7 +67,7 @@ const partsOf = (node) => {
 // The address a part is downloaded from: the API's, which asks who is
 // asking and sends the browser on to the file, to be saved.
 const urlOf = (node, part, base = process.env.REACT_APP_API_BASE_URL || '') => {
-  const namespace = isVideo(node) ? 'videos' : 'photos';
+  const namespace = isVideoService(node) ? 'videos' : 'photos';
   return `${String(base).replace(/\/+$/, '')}/${namespace}/${node.id}/download${(part && part.query) || ''}`;
 };
 
@@ -71,6 +86,8 @@ const start = (url) => {
 export default {
   isPhoto,
   isVideo,
+  isAudio,
+  isVideoService,
   holdsAFile,
   isForNamespace,
   canDownload,

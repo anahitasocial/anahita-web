@@ -8,7 +8,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import api from '../../../api/videos';
-import { failureOf } from './Video/useVideoUpload';
+import { failureOf, wordsOf } from './Video/useVideoUpload';
 import i18n from '../../../languages';
 
 // The videos somebody handed over that are still being prepared, or that
@@ -74,20 +74,22 @@ const VideoUploads = ({
             >
               <Stack sx={{ flex: 1, minWidth: 0 }}>
                 <Typography variant="body2" noWrap>
-                  {item.title || i18n.t('composer:untitledVideo')}
+                  {item.title || i18n.t(item.kind === 'audio' ? 'composer:untitledAudio' : 'composer:untitledVideo')}
                 </Typography>
                 <Typography
                   variant="body2"
                   color={item.status === 'failed' ? 'error' : 'textSecondary'}
                 >
-                  {item.status === 'processing' && i18n.t('videos:upload.processing')}
-                  {item.status === 'uploading' && i18n.t('videos:upload.interrupted')}
+                  {/* A sound says so (roadmap row 137): the server names its
+                      kind. */}
+                  {item.status === 'processing' && i18n.t(wordsOf(item.kind, 'upload.processing'))}
+                  {item.status === 'uploading' && i18n.t(wordsOf(item.kind, 'upload.interrupted'))}
                   {item.status === 'failed' &&
-                  i18n.t(`videos:problems.${failureOf(item)}`, limits)}
+                  i18n.t(wordsOf(item.kind, `problems.${failureOf(item)}`), limits)}
                 </Typography>
               </Stack>
               {item.status === 'ready' &&
-              <Link href={`/videos/${item.nodeId}`}>
+              <Link href={item.kind === 'audio' ? `/audio/${item.nodeId}` : `/videos/${item.nodeId}`}>
                 {i18n.t('videos:upload.view')}
               </Link>}
               <Button

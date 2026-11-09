@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 
 import api from '../../../../api/videos';
+import audio from '../../../../utils/audio';
 import videos from '../../../../utils/videos';
 import i18n from '../../../../languages';
 
@@ -113,8 +114,9 @@ const useWakeLock = () => {
 // 'processing', 'ready' or 'failed'), `percent` while uploading and
 // `minutes`, about how many are left (null until it can tell), `caption`,
 // the words of the post it is for, so that it can be told from another, the
-// `upload` as the server last described it, and `problem`, a key of
-// videos:problems, when it failed.
+// `upload` as the server last described it, `problem`, a key of
+// videos:problems, when it failed, and `kind`, `video` or `audio`, what the
+// file is.
 const useVideoUpload = () => {
   const [state, setState] = useState({
     phase: 'idle',
@@ -123,6 +125,7 @@ const useVideoUpload = () => {
     caption: '',
     upload: null,
     problem: '',
+    kind: 'video',
   });
   const controller = useRef(null);
   // What was last begun, to begin again with Try again.
@@ -244,6 +247,9 @@ const useVideoUpload = () => {
       caption: (post && post.content) || '',
       upload: null,
       problem: '',
+      // A sound is sent as a video is, and made an audio post by the
+      // server (roadmap row 137); what is said of it says so.
+      kind: audio.isAudioType(file) ? 'audio' : 'video',
     });
     awake.hold();
 
@@ -336,6 +342,27 @@ const progressOf = (upload) => {
   return i18n.t('videos:upload.uploading', { percent });
 };
 
-export { failureOf, progressOf };
+// What is said of an upload of this kind: a key of audio's words for a
+// sound, where there is one, and of videos' otherwise.
+const wordsOf = (kind, key) => {
+  const own = `audio:${key}`;
+  return kind === 'audio' && i18n.exists(own) ? own : `videos:${key}`;
+};
+
+// Why an upload failed, in words, with the limits of its kind.
+const problemOf = (kind, problem, nodeInfo) => {
+  const isAudio = kind === 'audio';
+  const key = isAudio && problem === 'notAVideo' ? 'notAudio' : (problem || 'failed');
+  return i18n.t(wordsOf(kind, `problems.${key}`), {
+    size: videos.megabytes(isAudio ? audio.maxBytes(nodeInfo) : videos.maxBytes(nodeInfo)),
+    minutes: Math.floor((isAudio ? audio.maxSeconds(nodeInfo) : videos.maxSeconds(nodeInfo)) / 60),
+    animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
+    seconds: videos.animationMaxSeconds(nodeInfo),
+  });
+};
+
+export {
+  failureOf, progressOf, problemOf, wordsOf,
+};
 
 export default useVideoUpload;

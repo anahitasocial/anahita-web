@@ -22,6 +22,7 @@ import LinkPreviewCard from './LinkPreviewCard';
 import PhotoSlides from './PhotoSlides';
 import SmartLink from './SmartLink';
 import VideoPlayer from './VideoPlayer';
+import AudioPlayer from './AudioPlayer';
 import api from '../api';
 import embeds from '../utils/embeds';
 import linkPreviews from '../utils/linkPreviews';
@@ -450,6 +451,15 @@ const Post = ({ url, at }) => {
     return (
       <Box sx={SPACE}>
         <VideoPlayer video={post.video} title={post.title} />
+        <Caption post={post} />
+      </Box>
+    );
+  }
+
+  if (at.kind === 'audio' && post.audio) {
+    return (
+      <Box sx={SPACE}>
+        <AudioPlayer audio={post.audio} title={post.title} />
         <Caption post={post} />
       </Box>
     );

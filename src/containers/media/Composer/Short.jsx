@@ -19,6 +19,7 @@ import BackIcon from '@mui/icons-material/ArrowBack';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
+import AudioIcon from '@mui/icons-material/HeadphonesOutlined';
 import TagPeopleIcon from '@mui/icons-material/PersonAddOutlined';
 import Chip from '@mui/material/Chip';
 
@@ -46,6 +47,7 @@ import composer from '../../../utils/composer';
 import photoFiles from '../../../utils/photoFiles';
 import utils from '../../../utils';
 import videos from '../../../utils/videos';
+import audioFiles from '../../../utils/audio';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import LIMITS from '../../../constants/limits';
@@ -74,9 +76,11 @@ const { isPerson } = utils.node;
 // out rather than hidden behind a link, so that they are used (the user,
 // 2026-10-28). Back returns to the words with everything kept.
 //
-// `kinds` is what this profile takes, of note, photo and video. A video
-// posted from it is the app's to send (Video/SharedVideoUpload), and the
-// + button says how far it has got once this is closed.
+// `kinds` is what this profile takes, of note, photo, video and audio. A
+// sound is sent as a video is, and made an audio post by the server
+// (roadmap row 137). A video or a sound posted from it is the app's to send
+// (Video/SharedVideoUpload), and the + button says how far it has got once
+// this is closed.
 const ShortComposer = ({
   actor,
   kinds,
@@ -122,6 +126,11 @@ const ShortComposer = ({
   const canWords = kinds.includes('note');
   const canPhotos = kinds.includes('photo');
   const canVideo = kinds.includes('video') && videos.isOn(nodeInfo);
+  const canAudio = kinds.includes('audio') && videos.isOn(nodeInfo);
+  // The file picked is a sound rather than a video.
+  const isSound = audioFiles.isAudioType(video);
+  // What is said while one is on its way: a sound's words for a sound.
+  const onItsWay = i18n.t(upload.kind === 'audio' ? 'composer:audioOnItsWay' : 'composer:videoOnItsWay');
 
   const choices = usePostChoices(actor, viewer);
   // Locations to tag the post with. Not with a video, whose post is made
@@ -344,13 +353,23 @@ const ShortComposer = ({
   // photos are.
   const takeVideo = (chosen) => {
     if (videoBusy) {
-      setVideoProblem(i18n.t('composer:videoOnItsWay'));
+      setVideoProblem(onItsWay);
       return;
     }
-    const problem = videos.problem(chosen, nodeInfo);
-    if (problem) {
-      setVideoProblem(i18n.t(`videos:problems.${problem}`, limits));
-      return;
+    if (audioFiles.isAudioType(chosen)) {
+      const problem = canAudio ? audioFiles.problem(chosen, nodeInfo) : 'notAudio';
+      if (problem) {
+        setVideoProblem(i18n.t(`audio:problems.${problem}`, {
+          size: videos.megabytes(audioFiles.maxBytes(nodeInfo)),
+        }));
+        return;
+      }
+    } else {
+      const problem = videos.problem(chosen, nodeInfo);
+      if (problem) {
+        setVideoProblem(i18n.t(`videos:problems.${problem}`, limits));
+        return;
+      }
     }
     setVideoProblem('');
     setVideo(chosen);
@@ -394,6 +413,7 @@ const ShortComposer = ({
       mobile={mobile}
       photos={canPhotos && !busy && !video && !hasPhotos}
       video={canVideo && !busy && !videoBusy && !hasPhotos && !video}
+      audio={canAudio && !busy && !videoBusy && !hasPhotos && !video}
       onPhotos={(files) => {
         setIsAddingPhotos(true);
         setIncoming({ files });
@@ -614,14 +634,16 @@ const ShortComposer = ({
         </Box>}
       {video &&
         <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mt: 1 }}>
-          <VideoIcon fontSize="small" color="action" />
+          {isSound ?
+            <AudioIcon fontSize="small" color="action" /> :
+            <VideoIcon fontSize="small" color="action" />}
           <Typography variant="body2" sx={{ flexGrow: 1, overflowWrap: 'anywhere' }}>
             {`${video.name} · ${videos.megabytes(video.size)}`}
           </Typography>
           {!busy &&
             <IconButton
               size="small"
-              aria-label={i18n.t('replies:attachments.removeVideo')}
+              aria-label={i18n.t(isSound ? 'composer:removeAudio' : 'replies:attachments.removeVideo')}
               onClick={() => {
                 setVideo(null);
               }}
@@ -742,14 +764,14 @@ const ShortComposer = ({
             >
               {attachButtons}
             </Stack>
-            {canVideo && videoBusy && !hasPhotos &&
+            {(canVideo || canAudio) && videoBusy && !hasPhotos &&
               <Typography
                 variant="caption"
                 color="textSecondary"
                 component="p"
                 sx={{ px: 2, pb: 1 }}
               >
-                {i18n.t('composer:videoOnItsWay')}
+                {onItsWay}
               </Typography>}
           </>}
       </Box>
@@ -766,7 +788,7 @@ const ShortComposer = ({
 
 ShortComposer.propTypes = {
   actor: ActorType.isRequired,
-  // What this profile takes, of `note`, `photo` and `video`.
+  // What this profile takes, of `note`, `photo`, `video` and `audio`.
   kinds: PropTypes.arrayOf(PropTypes.string).isRequired,
   // Opens the extended composer, with what was written so far. Not given
   // where the profile takes no articles or topics.

@@ -23,6 +23,7 @@ const useStyles = makeStyles()((theme) => {
 const MediaList = ({
   items,
   namespace,
+  tab = '',
   viewer,
   total,
   fetchList,
@@ -33,7 +34,7 @@ const MediaList = ({
   const hasMore = total > items.allIds.length;
 
   if (isEmpty) {
-    return <EmptyList icon={tabIcon(namespace)} />;
+    return <EmptyList icon={tabIcon(tab || namespace)} />;
   }
 
   return (
@@ -68,6 +69,8 @@ const MediaList = ({
 MediaList.propTypes = {
   items: MediaType.isRequired,
   namespace: PropTypes.string.isRequired,
+  // The profile's tab, where it is not the namespace's (`audio`).
+  tab: PropTypes.string,
   viewer: PersonType.isRequired,
   total: PropTypes.number.isRequired,
   fetchList: PropTypes.func.isRequired,

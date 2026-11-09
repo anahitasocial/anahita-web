@@ -8,11 +8,12 @@ import CardContent from '@mui/material/CardContent';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import AudioIcon from '@mui/icons-material/HeadphonesOutlined';
 import VideoIcon from '@mui/icons-material/VideocamOutlined';
 
 import VideoUploads from './VideoUploads';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
-import { progressOf } from './Video/useVideoUpload';
+import { problemOf, progressOf, wordsOf } from './Video/useVideoUpload';
 import i18n from '../../../languages';
 import videos from '../../../utils/videos';
 
@@ -55,10 +56,12 @@ const VideoOnItsWayCard = () => {
   if (isSending) {
     status = progressOf(upload);
   } else if (isPreparing) {
-    status = i18n.t('videos:upload.preparing');
+    status = i18n.t(wordsOf(upload.kind, 'upload.preparing'));
   } else if (failed) {
-    status = i18n.t(`videos:problems.${upload.problem || 'failed'}`, limits);
+    status = problemOf(upload.kind, upload.problem, nodeInfo);
   }
+  const isAudio = upload.kind === 'audio';
+  const KindIcon = isAudio ? AudioIcon : VideoIcon;
 
   return (
     <>
@@ -66,9 +69,9 @@ const VideoOnItsWayCard = () => {
         <Card sx={{ mb: 2 }} role="status">
           <CardContent sx={{ pb: 1 }}>
             <Stack direction="row" spacing={1} sx={{ alignItems: 'center', minWidth: 0 }}>
-              <VideoIcon fontSize="small" color="action" />
+              <KindIcon fontSize="small" color="action" />
               <Typography variant="subtitle1" noWrap sx={{ minWidth: 0 }}>
-                {upload.caption || i18n.t('composer:untitledVideo')}
+                {upload.caption || i18n.t(isAudio ? 'composer:untitledAudio' : 'composer:untitledVideo')}
               </Typography>
             </Stack>
             <Typography

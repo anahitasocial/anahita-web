@@ -1,11 +1,11 @@
 import axios from 'axios';
 import downloads from '../utils/downloads';
 
-// Whether whoever can see a photo or a video may download it.
+// Whether whoever can see a photo, a video or a sound may download it.
 
 // On one post.
 const setAllowed = (node, allow) => {
-  const namespace = downloads.isVideo(node) ? 'videos' : 'photos';
+  const namespace = downloads.isVideoService(node) ? 'videos' : 'photos';
   return axios.patch(`/${namespace}/${node.id}/download`, { allow: Boolean(allow) });
 };
 

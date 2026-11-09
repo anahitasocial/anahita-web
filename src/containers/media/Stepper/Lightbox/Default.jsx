@@ -38,6 +38,7 @@ import CardHeaderOwner from '../../../../components/MediumOwnerCardHeader';
 import { PhotoSlideImage } from '../../../../components/PhotoSlides';
 import CitedByTab from '../../Read/CitedByTab';
 import VideoPlayer from '../../../../components/VideoPlayer';
+import AudioPlayer from '../../../../components/AudioPlayer';
 import EntityBody from '../../../../components/NodeBody';
 import i18n from '../../../../languages';
 import utils from '../../../../utils';
@@ -559,6 +560,9 @@ const MediumStepperLightboxDefault = ({
                     {/* Who is in it (roadmap row 103), above the words, as
                         under the picture on its page. */}
                     <PeopleInPost medium={medium} />
+                    {/* A sound has no pane of its own: it plays here. */}
+                    {medium.audio &&
+                      <AudioPlayer audio={medium.audio} title={medium.title || ''} />}
                     <CardContent component="article">
                       {medium.title &&
                         <Typography

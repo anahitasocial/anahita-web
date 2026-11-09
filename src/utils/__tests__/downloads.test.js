@@ -54,3 +54,17 @@ describe('downloading what a post holds', () => {
     expect(downloads.isForNamespace('notes')).toBe(false);
   });
 });
+
+describe('downloading an audio post', () => {
+  const sound = (more = {}) => {
+    return { id: 31, type: 'node.medium.video-service.audio.v1', ...more };
+  };
+
+  it('has its one file, from video-service\'s address', () => {
+    expect(downloads.canDownload(sound({ authorized: { download: true } }))).toBe(true);
+    expect(downloads.partsOf(sound())).toEqual([{ key: 'audio', query: '' }]);
+    expect(downloads.urlOf(sound(), downloads.partsOf(sound())[0], 'https://api.example'))
+      .toBe('https://api.example/videos/31/download');
+    expect(downloads.hasSwitch(sound({ allowDownload: false }))).toBe(true);
+  });
+});

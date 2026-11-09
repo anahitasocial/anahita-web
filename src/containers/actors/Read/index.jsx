@@ -291,7 +291,18 @@ const ActorsRead = (props) => {
       );
     }
 
-    if (componentType === 'medium') {
+    // Audio posts are video-service's, listed from its address with
+    // ?type=audio and kept with the videos (roadmap row 137).
+    if (componentType === 'medium' && tab === 'audio') {
+      const MediaFeature = MediaBrowse('videos');
+      tabPanels[tab] = (
+        <MediaFeature
+          key={`medium-browse-${tab}`}
+          tab={tab}
+          queryFilters={{ oid: actor.id, type: 'audio' }}
+        />
+      );
+    } else if (componentType === 'medium') {
       const MediaFeature = MediaBrowse(tab);
       tabPanels[tab] = (
         <MediaFeature

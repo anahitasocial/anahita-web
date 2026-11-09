@@ -23,6 +23,10 @@ export default {
   addGif: 'Adicionar um GIF',
   video: 'Vídeo',
   addVideo: 'Adicionar um vídeo',
+  audio: 'Áudio',
+  addAudio: 'Adicionar um áudio',
+  // Taking the sound picked out again.
+  removeAudio: 'Remover o áudio',
   // The extended composer's heading, and the button where a profile takes
   // only long writing.
   // Said under the box where a profile takes pictures and videos but not
@@ -101,6 +105,7 @@ export default {
   // A video handed over without a title, in the list of those being
   // prepared.
   untitledVideo: 'Vídeo',
+  untitledAudio: 'Áudio',
   // Hashtags offered while writing (roadmap row 78).
   hashtags: {
     label: 'Hashtags',
@@ -127,6 +132,7 @@ export default {
   // itself to the choices that go with it, each a row; back returns.
   // One video at a time: said by the Video button while one is sent.
   videoOnItsWay: 'Um vídeo está a caminho: outro poderá ser adicionado quando ele for publicado.',
+  audioOnItsWay: 'Um áudio está a caminho: outro poderá ser adicionado quando ele for publicado.',
   next: 'Avançar',
   details: {
     back: 'Voltar',

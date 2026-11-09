@@ -31,6 +31,7 @@ import ReplyForm from './ReplyForm';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
 import PhotoSlides from '../../components/PhotoSlides';
 import VideoPlayer from '../../components/VideoPlayer';
+import AudioPlayer from '../../components/AudioPlayer';
 import linkPreviews from '../../utils/linkPreviews';
 import useReport from '../reports/useReport';
 import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFediverse';
@@ -270,6 +271,10 @@ const ReplyItem = ({
             }}
             >
               <VideoPlayer video={reply.video} title={reply.title || ''} />
+            </Box>}
+          {reply.audio &&
+            <Box sx={{ mt: 1, mb: 2 }}>
+              <AudioPlayer audio={reply.audio} title={reply.title || ''} padded={false} />
             </Box>}
           {!isEditing &&
             <Box sx={{ '& p:first-of-type': { mt: 0 } }}>

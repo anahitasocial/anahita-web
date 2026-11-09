@@ -1,6 +1,7 @@
 import React from 'react';
 
 import ArticleIcon from '@mui/icons-material/ArticleOutlined';
+import AudioIcon from '@mui/icons-material/HeadphonesOutlined';
 import EventIcon from '@mui/icons-material/EventOutlined';
 import FollowersIcon from '@mui/icons-material/PeopleOutlined';
 import GroupsIcon from '@mui/icons-material/GroupWorkOutlined';
@@ -17,6 +18,7 @@ import VideoIcon from '@mui/icons-material/VideoLibraryOutlined';
 // A reply and a repost have the icons their buttons have under a post.
 const ICONS = {
   articles: ArticleIcon,
+  audio: AudioIcon,
   events: EventIcon,
   feed: PostIcon,
   groups: GroupsIcon,

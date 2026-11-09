@@ -25,6 +25,7 @@ import PinnedLabel from './PinnedLabel';
 import QuoteEmbed from './QuoteEmbed';
 import LinkPreviewCard from './LinkPreviewCard';
 import VideoPlayer from './VideoPlayer';
+import AudioPlayer from './AudioPlayer';
 import videos from '../utils/videos';
 import i18n from '../languages';
 import linkPreviews from '../utils/linkPreviews';
@@ -222,6 +223,8 @@ const MediumCard = ({
         </ButtonBase>}
       {medium.video && !handleView && !elsewhere &&
         <VideoPlayer video={medium.video} title={medium.title} />}
+      {/* A sound plays where it is, in a list too: it is small. */}
+      {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent

@@ -8,7 +8,7 @@ import AddIcon from '@mui/icons-material/Add';
 
 import ShortComposer from './Short';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
-import { progressOf } from './Video/useVideoUpload';
+import { progressOf, wordsOf } from './Video/useVideoUpload';
 import LongComposer from './Long';
 import api from '../../../api';
 import i18n from '../../../languages';
@@ -17,7 +17,7 @@ import utils from '../../../utils';
 const { node } = utils;
 
 // What the short composer posts, and what the long one writes.
-const SHORT = ['note', 'photo', 'video'];
+const SHORT = ['note', 'photo', 'video', 'audio'];
 const LONG = ['article', 'topic'];
 
 // The + button (roadmap row 99, docs/plans/compose-button.md): a large round
@@ -107,7 +107,7 @@ const ComposeButton = () => {
             size={68}
             variant={isSending ? 'determinate' : 'indeterminate'}
             value={isSending ? upload.percent : undefined}
-            aria-label={isSending ? progressOf(upload) : i18n.t('videos:upload.processing')}
+            aria-label={isSending ? progressOf(upload) : i18n.t(wordsOf(upload.kind, 'upload.processing'))}
             sx={{
               position: 'absolute', top: -6, left: -6, pointerEvents: 'none',
             }}

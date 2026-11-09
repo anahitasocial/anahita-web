@@ -24,6 +24,7 @@ import videoElsewhere from '../../../utils/videoElsewhere';
 import PinnedLabel from '../../../components/PinnedLabel';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
+import AudioPlayer from '../../../components/AudioPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
 import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
@@ -201,6 +202,7 @@ const MediumReadDefault = ({
       {!editing &&
       <>
         {medium.video && !elsewhere && <VideoPlayer video={medium.video} title={medium.title} />}
+        {medium.audio && <AudioPlayer audio={medium.audio} title={medium.title} />}
         {medium.video && <PeopleInPost medium={medium} />}
         {/* The card is the <article>; this is its text. One article,
             with an h1 and a byline, is what reading views (Safari's

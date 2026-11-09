@@ -32,6 +32,13 @@ const KINDS = {
   notes: 'note',
   photos: 'photo',
   videos: 'video',
+  // An audio post, read from video-service's address (roadmap row 137).
+  audio: 'audio',
+};
+
+// Where a kind is read from, where it is not its own first part.
+const READ_FROM = {
+  audio: 'videos',
 };
 
 const POST_PATH = /^\/([a-z]+)\/([0-9]+)(?:-[^/]*)?\/?$/;
@@ -61,7 +68,7 @@ const postAt = (address) => {
   if (!id) {
     return null;
   }
-  return { namespace: match[1], kind: KINDS[match[1]], id };
+  return { namespace: READ_FROM[match[1]] || match[1], kind: KINDS[match[1]], id };
 };
 
 // A link whose words are its own address, as some editors write one:

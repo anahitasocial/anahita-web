@@ -31,5 +31,8 @@ export default {
     topics: 'medium',
     photos: 'medium',
     videos: 'medium',
+    // A profile's audio posts, listed with ?type=audio from its videos'
+    // address (roadmap row 137).
+    audio: 'medium',
   },
 };

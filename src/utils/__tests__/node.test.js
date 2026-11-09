@@ -209,3 +209,33 @@ describe('where something is read', () => {
     expect(node.getURL({ id: 4, type: 'node.actor.group-service.group.v1' })).toBe('/groups/4/');
   });
 });
+
+// An audio post (roadmap row 137) is at /audio/, as the services link to it,
+// not at the "audios" inflection makes of the word; and it is video-service's,
+// read and kept with the videos.
+describe('an audio post', () => {
+  const sound = { id: 21, type: 'node.medium.video-service.audio.v1', alias: 'Morning Show' };
+
+  it('is read at /audio/ with its slug', () => {
+    expect(node.getURL(sound)).toBe('/audio/21-Morning-Show/');
+    expect(node.getKindURL({ id: 21, type: sound.type })).toBe('/audio/21/');
+  });
+
+  it('is in the videos namespace of the store and the API', () => {
+    expect(node.isAudio(sound)).toBe(true);
+    expect(node.getNamespace(sound)).toBe('videos');
+    expect(node.getNamespace({ type: 'node.medium.video-service.video.v1' })).toBe('videos');
+  });
+
+  it('gives a profile an Audio tab, not an Audios one', () => {
+    const tabs = node.getActorFeatureTabs({
+      type: 'node.actor.person-service.person.v1',
+      features: [{
+        service: 'video-service', enabled: true, ordering: 1, nodeTypes: ['video', 'audio'],
+      }],
+    });
+
+    expect(tabs).toEqual(['videos', 'audio']);
+    expect(node.pluralOf('photo')).toBe('photos');
+  });
+});

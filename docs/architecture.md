@@ -205,7 +205,7 @@ history. The main paths:
 | `/groups/:id/settings` | A group's settings |
 | `/websites`, `/websites/:id`, `/websites/:id/settings` | Websites, a website (a site's feed as a profile), and its settings: Info, Admins, Blocked, On your site, Danger zone. Its page is at `/@alias` like any profile |
 | `/websites/connect` | Connecting a website: its address, the proof of its domain, then its name and handle. For those the installation's `websitesFrom` allows. See [Websites](https://github.com/anahitasocial/anahita-services/blob/main/docs/websites.md) in anahita-services |
-| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
+| `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id`, `/audio/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The Hashtags page has Trending and All; the hashtags one follows are the ones in one's custom feeds, read there, not listed here (`containers/hashtags`). The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
@@ -681,7 +681,7 @@ next note under it and "Show the thread" with how many notes it has
     whoever posted them (roadmap row 103). Only people reply, repost and are
     tagged, so a group has Posts alone. In the tabs of
     `containers/actors/Read/Body.jsx`, Posts and Reposts come first, what the
-    person chose to put out; then Notes, Articles, Photos and the rest; then
+    person chose to put out; then Notes, Articles, Photos, Videos, Audio and the rest; then
     Replies and Tagged. All four are the profile's feed asked
     for with a different `filter` (`containers/feed/Actor`); they share one
     place in the store, so each is keyed and read when its tab is opened.
@@ -716,7 +716,7 @@ viewer's own profile, from a profile to that one. It opens the short
 composer, "New post" (`Composer/Short.jsx`), whose Long post opens the
 long one (`Composer/Long.jsx`). The short composer is two steps in one
 dialog, walked through in turn (roadmap row 114): the post itself, its
-words and its photos, GIF or video, then **Next**; and every choice that
+words and its photos, GIF, video or sound, then **Next**; and every choice that
 goes with it, laid out rather than hidden behind a link so that they are
 used, each a row (`components/DetailRow.jsx`, the `row` form of the
 audience, language, reply and download buttons): who can see it, the
@@ -864,10 +864,27 @@ own, because a video is too big to be sent with the post (the services'
    corner.
 9. A video is a kind of post like the others: `/videos/:id`, the `videos`
    namespace in the store, and the kind `video` in custom feeds.
+10. **An audio post** (`node.medium.video-service.audio.v1`, roadmap row
+    137) is a sound, posted with the Audio button beside Video in the short
+    composer where the profile's `composers` has `audio`. Its file picker
+    takes the sounds the server takes (`utils/audio.js`: MP3, M4A, AAC, Ogg,
+    Opus, WAV, FLAC, WebM sound), and it is sent through the same upload as
+    a video (`useVideoUpload.js`, which keeps its `kind` so that what is said
+    of it says audio); the server makes it one M4A file. It plays in
+    `components/AudioPlayer.jsx`: the browser's own `<audio>`, full width,
+    with the cover the file carried, small, beside it, wherever a video's
+    player is drawn. It is at `/audio/:id` here, read, edited and deleted at
+    video-service's addresses, and kept in the `videos` namespace of the
+    store (`utils/node.js#getNamespace`); a profile's Audio tab lists them
+    with `GET /videos/:owner_id/?type=audio`. The kind word is `audio`
+    (`utils/node.js#pluralOf`, never "audios"), in tabs, addresses and
+    custom feeds. It is downloaded as a video is. Uploads the server lists
+    (`Composer/VideoUploads.jsx`) do not say their kind, so they are worded
+    as videos.
 
 ### Downloading
 
-A photo or a video has a Download button in the row under it on its own
+A photo, a video or an audio post has a Download button in the row under it on its own
 page, where the server said this viewer may download it
 (`authorized.download`; `utils/downloads.js`). Whoever posted it decides,
 and it is off until they say otherwise. It is not on a post's card in a
