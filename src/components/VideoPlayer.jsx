@@ -33,6 +33,7 @@ import videos from '../utils/videos';
 const SizedPlayer = ({
   video,
   title,
+  autoPlay = false,
 }) => {
   const files = useMemo(() => {
     return videos.filesOf(video);
@@ -117,7 +118,8 @@ const SizedPlayer = ({
           title={title || undefined}
           controls
           playsInline
-          preload={resume.current ? 'auto' : 'metadata'}
+          autoPlay={autoPlay}
+          preload={resume.current || autoPlay ? 'auto' : 'metadata'}
           onLoadedMetadata={handleLoaded}
           sx={{
             display: 'block',
@@ -195,11 +197,15 @@ SizedPlayer.propTypes = {
     files: PropTypes.arrayOf(PropTypes.object),
   }).isRequired,
   title: PropTypes.string.isRequired,
+  autoPlay: PropTypes.bool,
 };
 
 const VideoPlayer = ({
   video = null,
   title = '',
+  // Started at once: a video from elsewhere whose play was pressed before
+  // it was here (components/VideoElsewhere.jsx).
+  autoPlay = false,
 }) => {
   if (!video) {
     return null;
@@ -207,7 +213,7 @@ const VideoPlayer = ({
   if (videos.isLoop(video)) {
     return <LoopingClip video={video} title={title} />;
   }
-  return <SizedPlayer video={video} title={title} />;
+  return <SizedPlayer video={video} title={title} autoPlay={autoPlay} />;
 };
 
 VideoPlayer.propTypes = {
@@ -221,6 +227,7 @@ VideoPlayer.propTypes = {
     loop: PropTypes.bool,
   }),
   title: PropTypes.string,
+  autoPlay: PropTypes.bool,
 };
 
 export default VideoPlayer;

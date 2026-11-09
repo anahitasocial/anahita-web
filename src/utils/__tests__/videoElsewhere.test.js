@@ -11,7 +11,9 @@ describe('videoElsewhere', () => {
 
   it('finds the line, and leaves the words without it', () => {
     const found = videoElsewhere.of(post(`Threads, stop drunk-dialing your exes.\n\n▶︎ [bsky.app](${page})`));
-    expect(found).toEqual({ site: 'bsky.app', page, content: 'Threads, stop drunk-dialing your exes.' });
+    expect(found).toEqual({
+      kind: 'video', site: 'bsky.app', page, content: 'Threads, stop drunk-dialing your exes.',
+    });
   });
 
   it('takes a post that is only the video', () => {
@@ -28,5 +30,16 @@ describe('videoElsewhere', () => {
     expect(videoElsewhere.of(post(`▶︎ [bsky.app](${page})\n\nAnd more`))).toBeNull();
     expect(videoElsewhere.of(post(`See [bsky.app](${page})`))).toBeNull();
     expect(videoElsewhere.of(post('▶︎ [x](http://plain.example/a)'))).toBeNull();
+  });
+
+  it('takes a post that says what it carries, with no picture of its own', () => {
+    const said = {
+      content: `A clip\n\n\u25b6\ufe0e [mastodon.social](${page})`,
+      files: [],
+      mediaElsewhere: { kind: 'video', page, site: 'mastodon.social' },
+    };
+    expect(videoElsewhere.of(said)).toEqual({
+      kind: 'video', site: 'mastodon.social', page, content: 'A clip',
+    });
   });
 });

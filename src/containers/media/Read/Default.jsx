@@ -168,13 +168,14 @@ const MediumReadDefault = ({
       {/* One photo opens in the theatre too, as several do, to be seen
           larger and zoomed into (asked for again by the user on
           2026-10-17). */}
-      {elsewhere && portrait && isLoaded &&
+      {elsewhere &&
         <VideoElsewhere
-          poster={portrait}
-          page={elsewhere.page}
-          site={elsewhere.site}
+          node={medium}
+          elsewhere={elsewhere}
+          poster={photoFiles.hasSeveral(medium) ? '' : (portrait || '')}
           alt={photoFiles.altOf(medium)}
           description={photoFiles.descriptionOf(medium)}
+          title={medium.title || ''}
         />}
       {!hasSlides && portrait && isLoaded && !elsewhere &&
       <Box sx={{ position: 'relative' }}>
@@ -199,7 +200,7 @@ const MediumReadDefault = ({
       {editing && form}
       {!editing &&
       <>
-        {medium.video && <VideoPlayer video={medium.video} title={medium.title} />}
+        {medium.video && !elsewhere && <VideoPlayer video={medium.video} title={medium.title} />}
         {medium.video && <PeopleInPost medium={medium} />}
         {/* The card is the <article>; this is its text. One article,
             with an h1 and a byline, is what reading views (Safari's

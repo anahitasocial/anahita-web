@@ -151,13 +151,14 @@ const FeedCardDefault = ({
             navigate(url);
           }}
         />}
-      {elsewhere && portrait &&
+      {elsewhere &&
         <VideoElsewhere
-          poster={portrait}
-          page={elsewhere.page}
-          site={elsewhere.site}
+          node={node}
+          elsewhere={elsewhere}
+          poster={photoFiles.hasSeveral(node) ? '' : (portrait || '')}
           alt={photoFiles.altOf(node)}
           description={photoFiles.descriptionOf(node)}
+          title={title || ''}
         />}
       {!photoFiles.hasSeveral(node) && portrait && !elsewhere &&
         <Box sx={{ position: 'relative' }}>
@@ -171,7 +172,7 @@ const FeedCardDefault = ({
           </Link>
           <AltBadge text={photoFiles.descriptionOf(node)} />
         </Box>}
-      {node.video && <VideoPlayer video={node.video} title={title} />}
+      {node.video && !elsewhere && <VideoPlayer video={node.video} title={title} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
       <CardContent {...openOnClick.handlersFor(url, navigate)}>

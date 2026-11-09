@@ -19,6 +19,12 @@ export default {
   },
   // A video from elsewhere, not kept here: its poster leads to it.
   videoElsewhere: 'Lire sur {{site}}',
+  // Played here once asked for: what the poster says meanwhile.
+  elsewhere: {
+    play: 'Lire',
+    getting: 'Récupération de la vidéo…',
+    failed: 'Cette vidéo ne peut pas être lue ici.',
+  },
   stepper: {
     position: '{{index}} sur {{total}}',
     next: 'Publication suivante',

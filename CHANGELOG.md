@@ -7,6 +7,14 @@ as anahita-services on the same day, takes the Embryo section under its
 version and date. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Added
+
+1. **Videos from Bluesky and the fediverse play here.** Pressing play on
+   one has it copied to this site, "Getting the video…" for a few seconds
+   the first time, then it plays in the post, never from the other server.
+
 ## v1.1.0 Birth, 2026-11-08
 
 ### Fixed

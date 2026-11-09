@@ -61,7 +61,21 @@ const cancel = (upload) => {
   return axios.delete(`/videos/uploads/${upload.id}`);
 };
 
+// A video from another network, copied here the first time somebody plays
+// it (roadmap row 120): asked for when play is pressed, then asked after
+// until it is ready. `{ status, reason, video }`, status waiting, working,
+// ready, failed or removed.
+const askElsewhere = (postId) => {
+  return axios.post(`/videos/elsewhere/${postId}`);
+};
+
+const readElsewhere = (postId) => {
+  return axios.get(`/videos/elsewhere/${postId}`);
+};
+
 export default {
+  askElsewhere,
+  readElsewhere,
   start,
   parts,
   sendPart,

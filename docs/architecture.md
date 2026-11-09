@@ -462,11 +462,16 @@ Where a post's text is drawn, `components/NodeBody.jsx` puts the post's
 language on it as the `lang` attribute, so a screen reader reads each post in
 the right one. The line a post from elsewhere ends with to lead to its video
 (`▶ bsky.app`, from anahita-libs' `WithVideoLink`) is drawn with a light play
-icon before the link, not the heavy triangle. When the post's one picture is
-that video's poster, as a Bluesky video's is, the two are drawn as one
-(`components/VideoElsewhere.jsx`, `utils/videoElsewhere.js`): the poster
-with a play button and the site's name in its corner, opening the video
-there in a new tab, and the words without the line.
+icon before the link, not the heavy triangle. A post that carries a video
+from elsewhere (`media_elsewhere`, roadmap row 120) is drawn as the video
+(`components/VideoElsewhere.jsx`, `utils/videoElsewhere.js`): its poster,
+or a dark frame when it has none, with a play button and the site's name in
+its corner, which leads there; the words without the line. Pressing play,
+somebody signed in has it copied here (`POST /videos/elsewhere/:id`),
+"Getting the video…" while it comes, asked after every two seconds, and it
+then plays in place, from this site, with the post's picture as its poster;
+signed out, or when it cannot be had here, play leads to its page there.
+One copied already plays at once.
 
 **Right-to-left writing.** The interface is left to right and has no
 right-to-left layout. What people write is another matter: a post's title and

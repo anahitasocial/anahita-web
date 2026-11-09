@@ -22,6 +22,12 @@ export default {
   },
   // A video from elsewhere, not kept here: its poster leads to it.
   videoElsewhere: 'Auf {{site}} abspielen',
+  // Played here once asked for: what the poster says meanwhile.
+  elsewhere: {
+    play: 'Abspielen',
+    getting: 'Video wird geholt…',
+    failed: 'Dieses Video kann hier nicht abgespielt werden.',
+  },
   stepper: {
     position: '{{index}} von {{total}}',
     next: 'Nächster Beitrag',

@@ -156,13 +156,14 @@ const MediumCard = ({
             return navigate(url);
           }}
         />}
-      {elsewhere && portrait && isPortraitLoaded &&
+      {elsewhere &&
         <VideoElsewhere
-          poster={portrait}
-          page={elsewhere.page}
-          site={elsewhere.site}
+          node={medium}
+          elsewhere={elsewhere}
+          poster={photoFiles.hasSeveral(medium) ? '' : (portrait || '')}
           alt={photoFiles.altOf(medium)}
           description={photoFiles.descriptionOf(medium)}
+          title={medium.title || ''}
         />}
       {!hasSlides && portrait && isPortraitLoaded && !elsewhere &&
         <Box sx={{ position: 'relative' }}>
@@ -197,7 +198,7 @@ const MediumCard = ({
       {/* In a list that steps through its posts (a profile's Videos tab), a
           video is its poster, opened in the stepper to play; elsewhere it
           plays where it is. */}
-      {medium.video && handleView &&
+      {medium.video && handleView && !elsewhere &&
         <ButtonBase
           onClick={() => {
             return handleView(medium.id);
@@ -219,7 +220,7 @@ const MediumCard = ({
             }}
           />
         </ButtonBase>}
-      {medium.video && !handleView &&
+      {medium.video && !handleView && !elsewhere &&
         <VideoPlayer video={medium.video} title={medium.title} />}
       {/* The title and the text open the post when clicked, unless text
           is being selected or a link in it was clicked. */}
