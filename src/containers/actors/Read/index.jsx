@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { connect, useDispatch } from 'react-redux';
+import { connect, useDispatch, useSelector } from 'react-redux';
 import {
   Link as RouterLink, Navigate, useNavigate, useParams,
 } from 'react-router-dom';
@@ -44,6 +44,7 @@ import permissions from '../../../permissions/actor';
 import reportPermissions from '../../../permissions/report';
 import api from '../../../api';
 import utils from '../../../utils';
+import offers from '../../../utils/offers';
 import i18n from '../../../languages';
 import { Actor as ACTOR } from '../../../constants';
 
@@ -130,6 +131,11 @@ const ActorsRead = (props) => {
   const params = useParams();
   const navigate = useNavigate();
   const feedView = useFeedView(PROFILES);
+  // A group's events, where the site offers events (instance.json).
+  const offersEvents = useSelector((state) => {
+    const { nodeInfo } = state.app;
+    return offers.profile(nodeInfo && nodeInfo.metadata, 'event');
+  });
   const slug = routeId || params.id;
   const tab = routeId ? routeTab : params.tab;
   const subtab = routeId ? routeSubtab : params.subtab;
@@ -402,7 +408,7 @@ const ActorsRead = (props) => {
       <ActorBody
         actor={actor}
         feedView={feedView}
-        events={namespace === 'groups' && actor.id &&
+        events={namespace === 'groups' && actor.id && offersEvents &&
         <EventsHosted
           group={actor}
           canAdd={isAuthenticated && canAdminister}

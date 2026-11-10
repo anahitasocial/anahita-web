@@ -35,6 +35,7 @@ import AboutIcon from '@mui/icons-material/Info';
 
 import { Link, useLocation } from 'react-router-dom';
 
+import offers from '../../../utils/offers';
 import i18n from '../../../languages';
 import PersonType from '../../../proptypes/Person';
 import NodeInfoType from '../../../proptypes/NodeInfo';
@@ -164,6 +165,9 @@ const LeftMenu = ({
             </ListItemIcon>
             <ListItemText primary={i18n.t('people:cTitle')} />
           </ListItemButton>
+          {/* Groups, events and websites where the site offers them
+              (instance.json, roadmap row 139). */}
+          {offers.profile(inviteSettings, 'group') &&
           <ListItemButton
             component={Link}
             to="/groups/"
@@ -173,9 +177,10 @@ const LeftMenu = ({
               <GroupsIcon />
             </ListItemIcon>
             <ListItemText primary={i18n.t('groups:cTitle')} />
-          </ListItemButton>
+          </ListItemButton>}
           {/* Events, after the groups that host most of them: what is on,
               for everybody, and the viewer's own. */}
+          {offers.profile(inviteSettings, 'event') &&
           <ListItemButton
             component={Link}
             to="/events"
@@ -185,8 +190,9 @@ const LeftMenu = ({
               <EventsIcon />
             </ListItemIcon>
             <ListItemText primary={i18n.t('events:cTitle')} />
-          </ListItemButton>
+          </ListItemButton>}
           {/* Websites' feeds, to follow here and from the fediverse. */}
+          {offers.profile(inviteSettings, 'website') &&
           <ListItemButton
             component={Link}
             to="/websites/"
@@ -196,7 +202,7 @@ const LeftMenu = ({
               <WebsiteIcon />
             </ListItemIcon>
             <ListItemText primary={i18n.t('websites:cTitle')} />
-          </ListItemButton>
+          </ListItemButton>}
           <ListItemButton
             component={Link}
             to="/hashtags/"

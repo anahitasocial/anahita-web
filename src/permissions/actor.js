@@ -1,5 +1,6 @@
 import utils from '../utils';
 import meetsRoleLevel from './roleLevel';
+import offers from '../utils/offers';
 
 // Whether the viewer may create an actor — a group, today.
 //
@@ -16,8 +17,10 @@ import meetsRoleLevel from './roleLevel';
 //
 // Absent until NodeInfo answers, which ranks above every role, so nothing
 // offers to create a group before the server has said who may.
-const canAdd = (viewer, { groupsFrom = '' } = {}) => {
-  return meetsRoleLevel(viewer, groupsFrom);
+// Nor where the site does not offer groups (instance.json), as for events
+// and websites below.
+const canAdd = (viewer, settings = {}) => {
+  return meetsRoleLevel(viewer, settings.groupsFrom || '') && offers.profile(settings, 'group');
 };
 
 // Whether the viewer may make an event of their own: the installation's
@@ -27,15 +30,15 @@ const canAdd = (viewer, { groupsFrom = '' } = {}) => {
 // every role and nobody is offered the +.
 //
 // An event for a group is not this: that is for the group's administrators.
-const canAddEvent = (viewer, { eventsFrom = '' } = {}) => {
-  return meetsRoleLevel(viewer, eventsFrom);
+const canAddEvent = (viewer, settings = {}) => {
+  return meetsRoleLevel(viewer, settings.eventsFrom || '') && offers.profile(settings, 'event');
 };
 
 // Whether the viewer may connect a website as a website: the installation's
 // WEBSITES_FROM, published in NodeInfo as websitesFrom, administrators unless it
 // says otherwise. syndication-service enforces the same.
-const canConnect = (viewer, { websitesFrom = '' } = {}) => {
-  return meetsRoleLevel(viewer, websitesFrom);
+const canConnect = (viewer, settings = {}) => {
+  return meetsRoleLevel(viewer, settings.websitesFrom || '') && offers.profile(settings, 'website');
 };
 
 const canEdit = (actor) => {

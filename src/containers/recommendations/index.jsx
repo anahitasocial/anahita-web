@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { connect, useSelector } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
 import { useSearchParams } from 'react-router-dom';
 
@@ -28,6 +28,7 @@ import Masonry from '../../components/BreakpointMasonry';
 import Progress from '../../components/Progress';
 import ControlFollow from '../controls/Follow';
 import actions from '../../actions';
+import offers from '../../utils/offers';
 import i18n from '../../languages';
 import recommendations from '../../utils/recommendations';
 
@@ -137,7 +138,16 @@ SuggestionsList.propTypes = {
 const SuggestionsPage = ({ alertSuccess, alertError }) => {
   const [params, setParams] = useSearchParams();
   const asked = params.get('kind');
-  const kinds = [...recommendations.KINDS, FEED];
+  // The kinds of profile the site offers (instance.json): no tab for one
+  // it does not.
+  const metadata = useSelector((state) => {
+    const { nodeInfo } = state.app;
+    return nodeInfo && nodeInfo.metadata;
+  });
+  const offered = recommendations.KINDS.filter((each) => {
+    return offers.profile(metadata, each);
+  });
+  const kinds = [...offered, FEED];
   const kind = kinds.includes(asked) ? asked : 'person';
   // Five tabs and two buttons are more than a mobile's width: there they
   // slide, and never wrap (the user, 2026-10-29).

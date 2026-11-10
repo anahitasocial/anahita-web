@@ -848,7 +848,12 @@ own, because a video is too big to be sent with the post (the services'
    is no Video composer and no Videos tab, and nothing here has to hide
    them. NodeInfo's `videoUploads`, `videoMaxBytes`, `videoMaxSeconds`,
    `animationMaxBytes` and `animationMaxSeconds` say what is allowed
-   (`utils/videos.js`).
+   (`utils/videos.js`). The same holds for every kind a site may leave
+   out in its `instance.json` (anahita-services' `docs/instance-features.md`):
+   profile tabs and composers follow the features the server sends, and
+   NodeInfo's `offers` (`utils/offers.js`) takes Groups, Events and
+   Websites out of the menu, a group's Events tab, the recommendations'
+   tabs and the buttons that make them (`permissions/actor.js`).
 2. **Posting** (`containers/media/Composer/Video`): the file is refused at
    once if it is not a video or is too large. `useVideoUpload.js` then
    begins the upload, cuts the file into parts and sends them to storage

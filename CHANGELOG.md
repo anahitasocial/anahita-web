@@ -9,7 +9,7 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ## Embryo
 
-Needs Anahita Services v1.2.4 or later, for content warnings.
+Needs Anahita Services from `main` (Embryo), for what a site offers; v1.2.4 or later for the rest.
 
 ### Added
 
@@ -31,6 +31,12 @@ Needs Anahita Services v1.2.4 or later, for content warnings.
 3. **WebP, HEIC and AVIF photos** (roadmap row 135), in posts, replies and
    an article's cover: asked for by the pickers, and shown before they are
    posted, an iPhone's HEIC too where the browser cannot draw it.
+
+4. **A site that offers less** (roadmap row 139): where the services' new
+   `instance.json` leaves groups, events or websites out, they go from the
+   menu, a group's Events tab, the recommendations and the buttons that
+   make them; the kinds of post a site leaves out go from composers and
+   profile tabs, as video did. Needs Anahita Services from `main`.
 
 ### Changed
 
