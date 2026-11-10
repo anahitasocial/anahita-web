@@ -44,6 +44,10 @@ Needs Anahita Services from `main` (Embryo), for what a site offers; v1.2.4 or l
    columns on Home no longer lay profiles out in columns too. Profiles
    start in one column; the feeds keep what was chosen before.
 
+2. **Colors in the menu** shows the colours in use, the site's or those
+   chosen, in one circle, as the picker shows each palette, in place of a
+   palette's icon.
+
 ### Fixed
 
 1. **A GIF or a video sent as a reply kept its words:** they were dropped

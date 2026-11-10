@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import Box from '@mui/material/Box';
 import PropTypes from 'prop-types';
 
 import Badge from '@mui/material/Badge';
@@ -29,7 +30,6 @@ import AdminIcon from '@mui/icons-material/AdminPanelSettings';
 import SettingsIcon from '@mui/icons-material/Settings';
 import InvitesIcon from '@mui/icons-material/MailOutlined';
 import LegalIcon from '@mui/icons-material/MenuBook';
-import PaletteIcon from '@mui/icons-material/PaletteOutlined';
 import SupportIcon from '@mui/icons-material/ContactSupport';
 import AboutIcon from '@mui/icons-material/Info';
 
@@ -325,8 +325,23 @@ const LeftMenu = ({
             }
           }}
         >
+          {/* The colours in use, the site's or those chosen, in one circle,
+              as each palette is shown in the picker. */}
           <ListItemIcon>
-            <PaletteIcon />
+            <Box
+              component="span"
+              aria-hidden
+              sx={{
+                width: 22,
+                height: 22,
+                ml: '1px',
+                borderRadius: '50%',
+                background: (theme) => {
+                  return `linear-gradient(135deg, ${theme.palette.primary.main} 50%, ${theme.palette.secondary.main} 50%)`;
+                },
+                boxShadow: 'inset 0 0 0 1px rgba(0, 0, 0, 0.08)',
+              }}
+            />
           </ListItemIcon>
           <ListItemText primary={i18n.t('colours:title')} />
         </ListItemButton>}
