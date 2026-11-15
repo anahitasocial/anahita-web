@@ -156,6 +156,10 @@ Each milestone ends in a shippable state.
 | 147 | ⬜ | Websites become channels, asked for by the user on 2026-11-15 ("I want to post Anahita updates and pictures, and I don't want those pictures on my personal photo feed"): a profile for an organization, a brand or a project that only it posts on, its admins writing as it, who wrote each kept for them; notes, photos and videos, articles and topics off until its admins turn them on; private as a group may be; events as a group's; a website's feed one thing it may have. **Named Channel by the user on 2026-11-15,** a common word as person, group and event are, after Pulse, Space, Node, Hub, Page and Voice | [channels.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/channels.md) | services + web | 5–7 | 38, 146 |
 | 148 | ⬜ | Accessibility, asked for by the user on 2026-11-15 ("make use of MUI Accessibility features as much as possible"), from MUI's own conformance report (WCAG 2.2 A and AA): the theme's `focusVisible`, a ring on keyboard focus, which the app does not use yet; the palettes' contrast checked, light and dark; what MUI leaves to the app: a skip link to the content, the page's `lang` following the chosen language, `aria-live` for what changes silently (errors, loading, Undo); every icon-only button labelled; `prefers-reduced-motion` respected. With it, **the search options on a mobile,** which take a third of the screen (the user, 2026-11-15): either the tabs alone with a tune button opening Search options in a dialog, or a summary line above the tabs that opens it; its two choices as switches, the button's label saying when anything is set. **Both to be decided by the user when the row is reached** | — | web | 2–3 | — |
 | 149 | ⬜ | Custom feeds that match any or all, asked for by the user on 2026-11-15 ("any posts with these keywords or any posts from these profiles or these hashtags"): one choice for the whole feed over profiles, hashtags, keywords, locations and area, not AND and OR on each filter; kinds, language and origin always narrow, and Exclude always leaves out; new feeds start at Any, existing ones keep All | [feeds-any-or-all.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/feeds-any-or-all.md) | services + web | 1–2 | 19 |
+| 150 | ⬜ | Removing a follower, asked for by the user on 2026-11-15 ("very useful when we can remove a follower without having to block them"): the API lets a person remove one already (`DELETE /socialgraph/:id/followers/:follower`), and the web app offers Remove only to a group's admins (`SocialgraphDialog.jsx`, `!isPerson`). Remove in one's own followers list, with a confirmation that says they are not told and may follow again; a follower on another server is sent a `Reject` of their `Follow`, so that their server stops delivering | — | services + web | ½ | — |
+| 151 | ⬜ | Who sees your followers and who you follow, asked for by the user on 2026-11-15, without making a profile more private: one choice in Settings › Privacy over both lists, from the access levels a profile has (anyone, signed in, followers, people I follow, mutuals, only me), never wider than the profile; the counts stay; the fediverse's collections show their totals only | [who-sees-your-follows.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/who-sees-your-follows.md) | services + web | 1–2 | — |
+| 152 | ⬜ | Blocking a server yourself, asked for by the user on 2026-11-15 from FediDB's list: a person blocks a whole server for themselves, as a super administrator can for the site: its posts, replies and notifications out of their sight, follows with its people ended both ways and refused; Block server in a profile's menu, servers in Settings › Blocked; in the download as Mastodon's `domain_blocks.csv` | [blocking-a-server.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/blocking-a-server.md) | services + web | 2–3 | 133 |
+| 153 | ⬜ | Offering a passkey after signing in, asked for by the user on 2026-11-15: on a device with a built-in authenticator (`hasPlatformAuthenticator`), to somebody with no passkey who has not skipped it on that device, a dialog after signing in, after onboarding for a new account: "Sign in faster next time?", a line saying a fingerprint, face or device PIN takes the place of a password and a code, then Skip and Add passkey; Add runs the ceremony Settings › Security runs; Skip is kept on the device, and Settings still offers one | — | web | ½ | — |
 | **Kept for later** (not scheduled, not counted in the total) |  | | | | | |
 | 94 | ⬜ | 77 · An actor's own position, with consent, asked for by the user on 2026-10-18 as a plan of its own, for later: a profile that posts where it is, such as a device or an animal tracker, only with the consent of the person, or of the administrators of the profile. Everything row 82 left out belongs here: reading positions from posts, check-ins (`Arrive`), sending positions out, and the decisions row 82 listed on 2026-10-17 (whose positions, devices as accounts, consent per post, the operator's switch, precision and delays, who may see a trail and how long it is kept, readers hiding positions). Not planned yet | — | services + web | not estimated | 82 |
 | 61 | ✅ | 52 · Hashtags doubled by case: a hashtag arriving from another server in other capitals ("Anahita") is made anew beside the one there is ("anahita"), so its page and counts are split. Should find the existing one whatever its case, and the 14 doubles made on 2026-10-13 be merged. Found 2026-10-14 **Done 2026-10-14:** hashtags are matched whatever their capitals and their address kept in lower case; a migration merged the seven doubles that had an original and put the other seven's addresses in lower case | — | services | ½ | 25 |
@@ -228,6 +232,25 @@ or written, when it is reached.
     of people. Kept for later at the user's word on 2026-11-08: Anahita as it
     is can take tens of thousands, and no site is likely to pass several
     thousand people for a while.
+
+**Settled on 2026-11-15, before the rest of the list** (the user, "make it
+so"):
+
+1. **150,** removing a follower: mostly built, and wanted every day.
+2. **153,** offering a passkey after signing in.
+3. **122,** its phase of warnings from elsewhere: until then, a sensitive
+   post from another server is kept without its pictures.
+4. **151,** who sees your followers and who you follow.
+5. **152,** blocking a server yourself: safety before growth.
+6. **146,** whose notifications: channels need it.
+7. **147,** websites become channels; then anahita.io, the recipes, and a
+   recipe for a community's directory, still to be planned.
+8. **149,** custom feeds that match any or all.
+9. **148,** accessibility, with the search options on a mobile, once the
+   user has chosen between their two designs. Its first step, the theme's
+   `focusVisible`, may come at any time. Two ranking tests of search that
+   fail on a fresh schema (`TestMostRelevant` and the one after it) are
+   fixed whenever search's code is next opened.
 
 **Mastodon's features kept for later,** not planned:
 1. fetching the replies a conversation from elsewhere is missing;
