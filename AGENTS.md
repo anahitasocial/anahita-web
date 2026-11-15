@@ -92,6 +92,17 @@ tone made specific; where they are silent, follow it.
     `es-419` and `pt-BR`; in a layer (`en-US`, `fr-CA`) only when it differs there. `yarn test` fails on
     a base missing one. The translations are Claude's; the docs say so.
 
+## When something does not work
+
+Search the web for it early, as one of the first things to try, not the
+last: the error's own words, the software and its versions, the symptom.
+Somebody else has often met it already and found why (the user,
+2026-11-15: MySQL that never started on GitHub's runners was a known
+AppArmor bug in containerd, found by one search after six runs spent
+narrowing it down). Search with the error and the software's names, never
+with anything private: no domains, keys, addresses or people of ours. Then
+check what is found against the code and the logs before acting on it.
+
 ## Checking a change
 
 Look at every interface change yourself before handing it over: headless
