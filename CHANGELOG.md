@@ -7,9 +7,9 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
-## Embryo
+## v1.2.4 Birth, 2026-11-15
 
-Needs Anahita Services from `main` (Embryo), for what a site offers; v1.2.4 or later for the rest.
+Works with Anahita Services v1.2.6 or later.
 
 ### Added
 
@@ -36,7 +36,7 @@ Needs Anahita Services from `main` (Embryo), for what a site offers; v1.2.4 or l
    `instance.json` leaves groups, events or websites out, they go from the
    menu, a group's Events tab, the recommendations and the buttons that
    make them; the kinds of post a site leaves out go from composers and
-   profile tabs, as video did. Needs Anahita Services from `main`.
+   profile tabs, as video did. Needs Anahita Services v1.2.6 or later.
 
 ### Changed
 
