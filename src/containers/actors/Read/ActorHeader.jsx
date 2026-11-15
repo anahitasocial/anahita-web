@@ -41,6 +41,7 @@ const ActorHeader = ({
   headerActions = null,
   viewToggle = null,
   socialgraphOpenOn = '',
+  onSocialgraphChanged = () => {},
   muted = false,
 }) => {
   // A profile the viewer has blocked: its cover and picture blurred, so
@@ -160,7 +161,11 @@ const ActorHeader = ({
             gap: 2,
           }}
         >
-          <SocialgraphMeta actor={actor} openOn={socialgraphOpenOn} />
+          <SocialgraphMeta
+            actor={actor}
+            openOn={socialgraphOpenOn}
+            onChanged={onSocialgraphChanged}
+          />
           {viewToggle}
         </Box>
       </Box>
@@ -180,6 +185,8 @@ ActorHeader.propTypes = {
   viewToggle: PropTypes.node,
   // A list of followers to open on arriving. See SocialgraphMeta.
   socialgraphOpenOn: PropTypes.string,
+  // Told when somebody was removed from a list, so the profile is read again.
+  onSocialgraphChanged: PropTypes.func,
   // Drawn as a profile the viewer has blocked.
   muted: PropTypes.bool,
 };

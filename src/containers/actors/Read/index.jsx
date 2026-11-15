@@ -352,6 +352,9 @@ const ActorsRead = (props) => {
         // /people/ana/socialgraph/leaders was a tab of the profile. It now
         // opens the profile with that list showing.
         socialgraphOpenOn={tab === 'socialgraph' ? (subtab || 'followers') : ''}
+        onSocialgraphChanged={() => {
+          readItem(id);
+        }}
         muted={isBlocked}
         followAction={
           <>

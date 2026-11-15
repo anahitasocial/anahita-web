@@ -9,9 +9,21 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ## Embryo
 
+### Added
+
+1. **Removing a follower** (roadmap row 150): Remove beside each follower
+   in one's own list of followers, after a confirmation saying they are
+   not told and may follow again. The server of a follower elsewhere is
+   told to stop delivering.
+
 ### Fixed
 
-1. **Authentications, in Settings › Security, on a mobile:** Sign out no
+1. **Remove never worked,** for a group's administrators either: the
+   button sent nothing to the server. It removes now, the follower leaves
+   the list, and the counts follow.
+2. **A profile row with two buttons on a mobile** no longer squeezes the
+   name to a letter or two: the buttons move to a line of their own.
+3. **Authentications, in Settings › Security, on a mobile:** Sign out no
    longer sits over the words. Each sign-in shows the app and its status,
    then the browser, system and place, then when, with Sign out under them;
    this device is marked This device and comes first.

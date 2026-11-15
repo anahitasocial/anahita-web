@@ -15,7 +15,7 @@ import utils from '../../../utils';
 // Each opens the dialog of who they are, on that list. Following is for
 // people only, since only people follow; a group or an event has its
 // followers alone, as somebody on another server has.
-const SocialgraphMeta = ({ actor, openOn = '' }) => {
+const SocialgraphMeta = ({ actor, openOn = '', onChanged = () => {} }) => {
   const [startOn, setStartOn] = useState(openOn || '');
 
   // An address that named a list opens it: the old Social Graph tab's
@@ -68,6 +68,7 @@ const SocialgraphMeta = ({ actor, openOn = '' }) => {
         onClose={() => {
           setStartOn('');
         }}
+        onChanged={onChanged}
       />
     </>
   );
@@ -77,6 +78,8 @@ SocialgraphMeta.propTypes = {
   actor: ActorType.isRequired,
   // A list to open on arriving: followers, leaders or mutuals.
   openOn: PropTypes.string,
+  // Told when somebody was removed from a list.
+  onChanged: PropTypes.func,
 };
 
 export default SocialgraphMeta;

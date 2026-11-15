@@ -12,6 +12,11 @@ export default {
   blocks: 'Bloqués',
   mutes: 'En sourdine',
   followsYou: 'Vous suit',
+  // Removing a follower, which is not a block (roadmap row 150).
+  removeFollower: {
+    title: 'Retirer {{name}} ?',
+    message: 'Cette personne cesse d’être parmi vos abonné·es. Elle n’en est pas avertie et peut vous suivre à nouveau.',
+  },
   // Somebody from another server who moved their account.
   moved: {
     to: 'A déménagé vers',

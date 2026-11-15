@@ -30,12 +30,15 @@ const ProfileRow = ({
   children = null,
 }) => {
   return (
-    <ListItem divider sx={{ gap: 1 }}>
+    // The name keeps room for itself: when the actions do not fit beside
+    // it, as two buttons on a mobile, they wrap onto a line of their own,
+    // at the right, rather than squeezing the name to a letter or two.
+    <ListItem divider sx={{ gap: 1, flexWrap: 'wrap' }}>
       <ListItemAvatar>
         <ActorAvatar actor={actor} linked />
       </ListItemAvatar>
       <ListItemText
-        sx={{ minWidth: 0 }}
+        sx={{ minWidth: 0, flex: '1 1 120px' }}
         primary={
           <Link href={getURL(actor)} color="inherit" underline="hover" sx={{ display: 'block', ...oneLine }}>
             {getActorName(actor)}
@@ -59,7 +62,14 @@ const ProfileRow = ({
         slotProps={{ secondary: { component: 'div' } }}
       />
       {actions &&
-        <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
+        <Box
+          sx={{
+            flexShrink: 0,
+            display: 'flex',
+            alignItems: 'center',
+            ml: 'auto',
+          }}
+        >
           {actions}
         </Box>}
     </ListItem>

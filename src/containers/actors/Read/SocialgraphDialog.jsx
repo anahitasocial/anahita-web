@@ -35,7 +35,7 @@ import socialgraph from '../../../utils/socialgraph';
 import visitor from '../../../utils/visitor';
 import { App as APP } from '../../../constants';
 
-const { getActorName, isPerson } = utils.node;
+const { getActorName } = utils.node;
 const { LIMIT } = APP.BROWSE;
 
 // Who follows a profile, who it follows, and who the viewer has in common
@@ -49,6 +49,7 @@ const SocialgraphDialog = ({
   actor,
   open,
   onClose,
+  onChanged = () => {},
   startOn = socialgraph.FOLLOWERS,
   viewer,
   isAuthenticated,
@@ -104,9 +105,10 @@ const SocialgraphDialog = ({
   // What is in common is counted by the server when it is read, so its
   // number is on its tab once it has been opened.
   const counts = socialgraph.counts(actor, lists);
-  // A group's administrators can remove a follower from it.
+  // Whoever looks after a profile can remove a follower from it: a person
+  // their own, a group's administrators the group's (roadmap row 150). It
+  // is not a block: they are not told, and can follow again.
   const canRemove = kind === socialgraph.FOLLOWERS &&
-    !isPerson(actor) &&
     permissions.canAdminister(actor);
 
   return (
@@ -238,7 +240,23 @@ const SocialgraphDialog = ({
                     actions={(showFollow || showRemove) &&
                       <>
                         {showFollow && <ControlFollow actor={row} />}
-                        {showRemove && <ControlRemoveFollower actor={actor} follower={row} />}
+                        {showRemove &&
+                          <ControlRemoveFollower
+                            actor={actor}
+                            follower={row}
+                            confirmTitle={i18n.t('socialgraph:removeFollower.title', { name: row.name })}
+                            confirmMessage={i18n.t('socialgraph:removeFollower.message')}
+                            onRemoved={(follower) => {
+                              setLists((before) => {
+                                return {
+                                  ...before,
+                                  [kind]: socialgraph.without(before[kind], follower.id),
+                                };
+                              });
+                              // The profile is read again, for its counts.
+                              onChanged();
+                            }}
+                          />}
                       </>}
                   >
                     {row.deletedAt && <ScheduledDeletion actor={row} sx={{ mt: 0.5 }} />}
@@ -256,6 +274,8 @@ SocialgraphDialog.propTypes = {
   actor: ActorType.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  // Told when somebody was removed from a list.
+  onChanged: PropTypes.func,
   // Which list to open on: followers, leaders or mutuals.
   startOn: PropTypes.string,
   viewer: PersonType.isRequired,

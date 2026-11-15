@@ -18,6 +18,7 @@ const ControlsRemoveFollower = React.forwardRef(({
   alertError,
   confirmTitle = i18n.t('prompts:confirm.title'),
   confirmMessage = i18n.t('prompts:confirm.message'),
+  onRemoved = () => {},
 }, ref) => {
   const [waiting, setWaiting] = useState(false);
 
@@ -26,9 +27,12 @@ const ControlsRemoveFollower = React.forwardRef(({
     removefollower(actor, follower)
       .then(() => {
         alertSuccess(i18n.t('prompts:removed.success'));
+        onRemoved(follower);
       }).catch((err) => {
         console.error(err);
         alertError(i18n.t('prompts:removed.error'));
+        // It can be tried again.
+        setWaiting(false);
       });
   };
 
@@ -60,6 +64,8 @@ ControlsRemoveFollower.propTypes = {
   follower: PersonType.isRequired,
   confirmTitle: PropTypes.string,
   confirmMessage: PropTypes.string,
+  // Told once the follower is removed, so that a list can drop them.
+  onRemoved: PropTypes.func,
 };
 
 const mapStateToProps = () => {
@@ -68,8 +74,10 @@ const mapStateToProps = () => {
 
 const mapDispatchToProps = (dispatch) => {
   return {
+    // The action takes both in one object; given two arguments it read
+    // neither, and Remove never reached the server.
     removefollower: (actor, follower) => {
-      return dispatch(actions.socialgraph.removefollower(actor, follower));
+      return dispatch(actions.socialgraph.removefollower({ actor, follower }));
     },
     alertSuccess: (message) => {
       return dispatch(actions.app.alert.success(message));

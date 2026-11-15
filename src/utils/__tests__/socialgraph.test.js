@@ -99,3 +99,21 @@ describe('when a row says Follows you', () => {
     expect(socialgraph.saysFollowsYou(socialgraph.LEADERS, {}, false)).toBe(false);
   });
 });
+
+// THE RULE THIS GUARDS (roadmap row 150): a follower removed leaves the
+// list at once, and its count with them; removing nobody changes nothing.
+describe('without', () => {
+  const list = { rows: [{ id: 1 }, { id: 2 }, { id: 3 }], total: 40 };
+
+  it('takes the profile out and counts one fewer', () => {
+    expect(socialgraph.without(list, 2)).toEqual({ rows: [{ id: 1 }, { id: 3 }], total: 39 });
+  });
+
+  it('leaves a list without that profile as it was', () => {
+    expect(socialgraph.without(list, 9)).toBe(list);
+  });
+
+  it('leaves a list not read yet alone', () => {
+    expect(socialgraph.without(undefined, 2)).toBeUndefined();
+  });
+});

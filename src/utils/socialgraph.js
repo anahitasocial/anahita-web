@@ -86,6 +86,21 @@ const merge = (before, response = {}, start = 0) => {
   return { rows, total: page.length === 0 ? rows.length : total };
 };
 
+// A list without one profile, removed from it (a follower, roadmap row
+// 150): one fewer in its total too, so that the tab's count follows.
+const without = (list, id) => {
+  if (!list) {
+    return list;
+  }
+  const rows = list.rows.filter((row) => {
+    return row.id !== id;
+  });
+  if (rows.length === list.rows.length) {
+    return list;
+  }
+  return { rows, total: Math.max(rows.length, list.total - 1) };
+};
+
 // Whether a row in the followers dialog says "Follows you": a profile that
 // follows the viewer, but not in the list of followers, where all of them
 // would, nor beside a Follow back button, which says it already.
@@ -105,6 +120,7 @@ export default {
   known,
   counts,
   merge,
+  without,
   LATEST,
   OLDEST,
   ORDERS,

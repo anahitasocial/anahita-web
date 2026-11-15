@@ -1505,8 +1505,12 @@ read when first opened and more of it as its end is scrolled to, whoever
 followed most lately first. The order is a small menu at the right of the
 dialog's title, Latest or Oldest (`?dir=asc`); it was a row of its own under
 the tabs. Each tab's count is in grey after its name, as on the search
-page. A group's administrators can remove a follower
-there.
+page. Whoever looks after the profile can remove a follower there: a
+person their own, a group's administrators the group's (roadmap row 150),
+after a confirmation that says it is not a block. The row leaves the list
+and the profile is read again for its counts (`onChanged`, through
+`ActorHeader` and `SocialgraphMeta`). A row's buttons wrap onto a line of
+their own when they do not fit beside the name (`components/ProfileRow.jsx`).
 
 What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
