@@ -27,6 +27,7 @@ export default {
     cTitle: 'Inicios de sesión',
     cDesc: '{{ name }} en {{ device }} con {{ os }} desde {{ city }} {{ country }}',
     cActive: 'Activa ahora',
+    thisDevice: 'Este dispositivo',
     actions: {
       forceLogout: 'Forzar cierre de sesión',
     },

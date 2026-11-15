@@ -27,6 +27,7 @@ export default {
     cTitle: 'Authentifications',
     cDesc: '{{ name }} sur un {{ device }} sous {{ os }} depuis {{ city }} {{ country }}',
     cActive: 'Session active',
+    thisDevice: 'Cet appareil',
     actions: {
       forceLogout: 'Forcer la déconnexion',
     },

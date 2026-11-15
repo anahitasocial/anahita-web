@@ -27,6 +27,7 @@ export default {
     cTitle: 'Acessos',
     cDesc: '{{ name }} em um {{ device }} com {{ os }}, de {{ city }} {{ country }}',
     cActive: 'Ativo agora',
+    thisDevice: 'Este dispositivo',
     actions: {
       forceLogout: 'Forçar saída',
     },

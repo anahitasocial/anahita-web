@@ -27,6 +27,7 @@ export default {
     cTitle: 'Anmeldungen',
     cDesc: '{{ name }} auf {{ device }} mit {{ os }} aus {{ city }} {{ country }}',
     cActive: 'Gerade aktiv',
+    thisDevice: 'Dieses Gerät',
     actions: {
       forceLogout: 'Abmelden erzwingen',
     },

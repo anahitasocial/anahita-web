@@ -7,6 +7,15 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Fixed
+
+1. **Authentications, in Settings › Security, on a mobile:** Sign out no
+   longer sits over the words. Each sign-in shows the app and its status,
+   then the browser, system and place, then when, with Sign out under them;
+   this device is marked This device and comes first.
+
 ## v1.2.4 Birth, 2026-11-15
 
 Works with Anahita Services v1.2.6 or later.
