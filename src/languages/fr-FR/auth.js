@@ -33,6 +33,14 @@ export default {
     },
   },
   webauthn: {
+    // Offered once after signing in (roadmap row 153).
+    offer: {
+      title: 'Vous connecter plus vite la prochaine fois ?',
+      text: 'Utilisez votre empreinte, votre visage ou le code PIN de votre appareil au lieu d’un mot de passe et d’un code.',
+      skip: 'Passer',
+      add: 'Ajouter une passkey',
+      added: 'Passkey ajoutée',
+    },
     cTitle: 'Passkeys',
     cDesc: 'Connectez-vous avec votre empreinte, votre visage ou le code PIN de votre appareil au lieu de votre mot de passe',
     add: 'Ajouter',

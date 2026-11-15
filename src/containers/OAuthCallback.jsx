@@ -3,6 +3,7 @@ import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import actions from '../actions';
+import passkeyOffer from '../utils/passkeyOffer';
 
 const OAuthCallback = () => {
   const dispatch = useDispatch();
@@ -28,6 +29,8 @@ const OAuthCallback = () => {
 
     dispatch(actions.session.handleCallback(code))
       .then(() => {
+        // Signed in just now: a passkey may be offered (roadmap row 153).
+        passkeyOffer.markDue();
         navigate('/');
       })
       .catch(() => {

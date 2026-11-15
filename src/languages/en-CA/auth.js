@@ -33,6 +33,14 @@ export default {
     },
   },
   webauthn: {
+    // Offered once after signing in (roadmap row 153).
+    offer: {
+      title: 'Sign in faster next time?',
+      text: 'Use your fingerprint, face or device PIN instead of a password and a code.',
+      skip: 'Skip',
+      add: 'Add passkey',
+      added: 'Passkey added',
+    },
     cTitle: 'Passkeys',
     cDesc: 'Sign in with your fingerprint, face, or device PIN instead of your password',
     add: 'Add',

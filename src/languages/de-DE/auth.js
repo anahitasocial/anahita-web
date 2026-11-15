@@ -33,6 +33,14 @@ export default {
     },
   },
   webauthn: {
+    // Offered once after signing in (roadmap row 153).
+    offer: {
+      title: 'Beim nächsten Mal schneller anmelden?',
+      text: 'Nutze Fingerabdruck, Gesicht oder Geräte-PIN statt Passwort und Code.',
+      skip: 'Überspringen',
+      add: 'Passkey hinzufügen',
+      added: 'Passkey hinzugefügt',
+    },
     cTitle: 'Passkeys',
     cDesc: 'Melde dich mit Fingerabdruck, Gesicht oder Geräte-PIN an statt mit deinem Passwort',
     add: 'Hinzufügen',

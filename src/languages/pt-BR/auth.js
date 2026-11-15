@@ -33,6 +33,14 @@ export default {
     },
   },
   webauthn: {
+    // Offered once after signing in (roadmap row 153).
+    offer: {
+      title: 'Entrar mais rápido da próxima vez?',
+      text: 'Use sua digital, seu rosto ou o PIN do dispositivo em vez de senha e código.',
+      skip: 'Pular',
+      add: 'Adicionar chave',
+      added: 'Chave de acesso adicionada',
+    },
     cTitle: 'Chaves de acesso',
     cDesc: 'Entre com sua digital, seu rosto ou o PIN do dispositivo, em vez da senha',
     add: 'Adicionar',

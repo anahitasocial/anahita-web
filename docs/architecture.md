@@ -131,6 +131,17 @@ Four components guard routes (`src/routes/`):
 All four are gates on the interface. What may be read is decided by the
 server.
 
+**A passkey offered after signing in** (roadmap row 153). The callback
+marks the tab as just signed in (`passkeyOffer.due` in `sessionStorage`),
+and `containers/auth/WebAuthn/PasskeyOffer.jsx`, beside the cookie notice
+in `App.jsx`, asks once "Sign in faster next time?" with Skip and Add
+passkey, when the person is past onboarding, the device has an
+authenticator of its own (`hasPlatformAuthenticator`), they have no
+passkey, and they have not skipped it on this device
+(`passkeyOffer.skipped.<id>` in `localStorage`). Add runs the ceremony
+Settings › Security runs. What decides is `utils/passkeyOffer.js`
+(`decide`), tested on its own.
+
 ## State
 
 State is kept in Redux, with `redux-thunk` for asynchronous actions.

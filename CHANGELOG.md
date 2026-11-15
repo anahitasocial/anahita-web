@@ -11,7 +11,11 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Added
 
-1. **Removing a follower** (roadmap row 150): Remove beside each follower
+1. **A passkey offered after signing in** (roadmap row 153): once, on a
+   device that can hold one, to somebody who has none, "Sign in faster
+   next time?", with Skip and Add passkey. Skip is remembered on that
+   device; Settings › Security still offers one.
+2. **Removing a follower** (roadmap row 150): Remove beside each follower
    in one's own list of followers, after a confirmation saying they are
    not told and may follow again. The server of a follower elsewhere is
    told to stop delivering.

@@ -309,4 +309,8 @@ const WebAuthn = () => {
   );
 };
 
+// Also for the offer after signing in (PasskeyOffer.jsx), which says the
+// same thing when the same ceremony fails.
+export { ceremonyErrorKey };
+
 export default WebAuthn;

@@ -26,6 +26,7 @@ import NodeInfoType from '../proptypes/NodeInfo';
 import assets from '../assets';
 import Alerts from './Alerts';
 import CookieNotice from '../components/CookieNotice';
+import PasskeyOffer from './auth/WebAuthn/PasskeyOffer';
 import MenuLogo from '../components/Logo';
 import actions from '../actions';
 import NotificationButton from './notifications/Button';
@@ -211,6 +212,7 @@ const App = ({
       <CssBaseline />
       <Alerts />
       <CookieNotice />
+      <PasskeyOffer />
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
           {mobile && searching ?

@@ -33,6 +33,14 @@ export default {
     },
   },
   webauthn: {
+    // Offered once after signing in (roadmap row 153).
+    offer: {
+      title: '¿Iniciar sesión más rápido la próxima vez?',
+      text: 'Usa tu huella, tu rostro o el PIN de tu dispositivo en lugar de una contraseña y un código.',
+      skip: 'Omitir',
+      add: 'Agregar llave',
+      added: 'Llave de acceso agregada',
+    },
     cTitle: 'Llaves de acceso',
     cDesc: 'Inicia sesión con tu huella, tu rostro o el PIN de tu dispositivo en lugar de tu contraseña',
     add: 'Agregar',
