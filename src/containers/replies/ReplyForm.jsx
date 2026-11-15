@@ -29,6 +29,7 @@ import ThreadParts, { SplitWords, ThreadLine } from '../media/Composer/ThreadPar
 import useThreadSplit from '../media/Composer/useThreadSplit';
 import useOnFediverse, { useOnBluesky } from '../media/Composer/useOnFediverse';
 import linkPreviews from '../../utils/linkPreviews';
+import offers from '../../utils/offers';
 import photoFiles from '../../utils/photoFiles';
 import sendOnEnter from '../../utils/sendOnEnter';
 import videos from '../../utils/videos';
@@ -58,8 +59,9 @@ const { CONTENT } = MEDIUM.FIELDS;
 // or a video, one or the other, with words or without. A reply with
 // pictures is a photo post in the thread, and one with a video a video
 // post; who sees it, who may answer it and its language follow the
-// thread, so nothing about those is asked here. The GIF or video button is
-// there only where videos may be posted.
+// thread, so nothing about those is asked here. The pictures button is there
+// only where the site offers photo posts, and the GIF or video button only
+// where videos may be posted.
 //
 // `compact` is one line, for ReplyBox: Enter sends, on a touch screen too,
 // Shift and Enter make a new line, and the rest of the form is a step away,
@@ -101,6 +103,9 @@ const ReplyForm = ({
   const text = body.trim();
   const hasPhotos = photoItems.length > 0;
   const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
+  // Pictures only where the site offers photo posts: a reply with pictures
+  // is one (instance.json, anahita-services' docs/instance-features.md).
+  const canAddPhotos = attachments && offers.post(nodeInfo && nodeInfo.metadata, 'photo');
   const canAddVideo = attachments && videos.isOn(nodeInfo);
   // Something to send: words, pictures that are all stored, or a video.
   const hasSomething = Boolean(text) || photosReady || Boolean(video);
@@ -346,12 +351,12 @@ const ReplyForm = ({
         </Typography>}
       {/* Pictures or a video, one or the other: the button for the other
           goes while one is there. */}
-      {attachments && !compact && !isSending &&
+      {(canAddPhotos || canAddVideo) && !compact && !isSending &&
         <Box sx={{
           display: 'flex', gap: 0.5, mt: 0.5, ml: -1,
         }}
         >
-          {!video && !isAddingPhotos &&
+          {canAddPhotos && !video && !isAddingPhotos &&
             <Tooltip title={i18n.t('replies:attachments.addPhotos')}>
               <IconButton
                 size="small"
@@ -436,7 +441,7 @@ const ReplyForm = ({
           goesToBluesky={onBluesky}
           outlined
           uploader={viewer && viewer.id ? viewer : null}
-          photosMax={attachments ? photoFiles.maxFiles(nodeInfo) : 0}
+          photosMax={canAddPhotos ? photoFiles.maxFiles(nodeInfo) : 0}
           videoOffers={{ video: canAddVideo, audio: false }}
           checkVideo={(chosen) => { return chosenMedia.problemOf(chosen, nodeInfo, false); }}
         />}

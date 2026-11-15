@@ -54,6 +54,9 @@ Needs Anahita Services from `main` (Embryo), for what a site offers; v1.2.4 or l
    on the way.
 2. **A thread with a photo in a note after the first** is shown in a list
    as a thread, with all its notes counted.
+3. **No pictures in a reply where the site offers no photo posts:** the
+   whole reply form offered Add pictures on every site, and a reply with
+   pictures, a photo post, was refused where photos are off.
 
 ## v1.2.3 Birth, 2026-11-09
 
