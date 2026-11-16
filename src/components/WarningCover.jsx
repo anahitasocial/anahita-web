@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
 import i18n from '../languages';
+import contentChoices from '../utils/contentChoices';
 import warnings from '../utils/warnings';
 
 // What a post with a content warning shows until its reader chooses to see
@@ -20,17 +21,57 @@ import warnings from '../utils/warnings';
 //
 // What was opened is remembered by the post's id, so that a pane that
 // steps from post to post (the photo theatre) puts each behind its own.
+//
+// The reader's choice for the post's kind decides the rest (row 122, phase
+// 2): Show draws it as any other, Warn behind its warning, and Hide as one
+// line in a list (`collapsed`, HiddenLine). Where a post was opened on
+// purpose, its own page and the photo theatre, Hide is as Warn.
 export const useWarning = (post) => {
+  const choices = contentChoices.useContentChoices();
   const warning = warnings.of(post);
   const id = post ? post.id : null;
   const [shownId, setShownId] = useState(null);
+  const { hidden, collapsed } = contentChoices.coverOf(choices, warning.kind, shownId === id);
   return {
     warning,
-    hidden: warnings.has(warning) && shownId !== id,
+    hidden,
+    collapsed,
     show: () => {
       setShownId(id);
     },
   };
+};
+
+// A post the reader chose to hide, as one line where it would have been,
+// that opens it if pressed: it stays in the list, so the page holds as many
+// as it did.
+export const HiddenLine = ({ state }) => {
+  const { warning, show } = state;
+  return (
+    <Button
+      fullWidth
+      color="inherit"
+      onClick={(event) => {
+        event.stopPropagation();
+        show();
+      }}
+      startIcon={warnings.iconOf(warning.kind, { fontSize: 'small' })}
+      sx={{
+        justifyContent: 'flex-start', textTransform: 'none', color: 'text.secondary', px: 2, py: 1,
+      }}
+    >
+      <Typography variant="body2" noWrap component="span">
+        {i18n.t('warnings:hidden', { warning: warnings.say(warning, i18n.t.bind(i18n)) })}
+      </Typography>
+    </Button>
+  );
+};
+
+HiddenLine.propTypes = {
+  state: PropTypes.shape({
+    warning: PropTypes.object,
+    show: PropTypes.func,
+  }).isRequired,
 };
 
 const blurred = {

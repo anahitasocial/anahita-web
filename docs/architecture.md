@@ -703,8 +703,17 @@ next note under it and "Show the thread" with how many notes it has
     covered): `MediumCard`, the feed's card, a post's page, replies, quotes
     and posts in an article; `WarningVeil` lies over the photo theatre's
     picture. A profile's
-    Photos card leaves such photos out. Everybody sees every kind behind its
-    warning until each reader can choose.
+    Photos card leaves such photos out. **Each reader's choice** (row 122,
+    phase 2) of Show, Warn or Hide for each kind is in Settings › Content
+    (`actors/Settings/ContentChoices.jsx`), saved as it is chosen.
+    `utils/contentChoices.js` reads it once the viewer is signed in
+    (`Root.jsx`), keeps it in the browser so a page is drawn as chosen
+    before the server answers, and forgets it on signing out: everybody else
+    has Warn. `useWarning` follows it: Show draws the post as any other, and
+    Hide, in a list, is one line, `HiddenLine`, "Hidden: Graphic media",
+    that opens it (`MediumCard`, the feed's card, replies, quotes); on a
+    post's own page and in the photo theatre, opened on purpose, Hide is as
+    Warn.
 
 13. **A post's menu in a feed** has Edit and Delete where the server says the
     viewer may (`authorized.edit`, `authorized.delete`, sent with each feed

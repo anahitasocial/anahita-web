@@ -15,7 +15,7 @@ import utils from '../utils';
 import quotes from '../utils/quotes';
 import timeAgo from '../utils/timeAgo';
 import excerptOf from '../utils/excerpt';
-import WarningCover, { useWarning } from './WarningCover';
+import WarningCover, { HiddenLine, useWarning } from './WarningCover';
 import warnings from '../utils/warnings';
 
 const { getURL, getPortraitURL } = utils.node;
@@ -60,6 +60,15 @@ const QuoteEmbed = ({
         <Typography variant="body2" color="textSecondary">
           {i18n.t(`replies:quote.${state}`)}
         </Typography>
+      </Box>
+    );
+  }
+
+  // Of a kind the reader chose to hide: one line in its place.
+  if (warned.collapsed) {
+    return (
+      <Box sx={frame}>
+        <HiddenLine state={warned} />
       </Box>
     );
   }

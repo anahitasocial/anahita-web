@@ -25,4 +25,16 @@ export default {
   byModerator: 'Los administradores le dieron esta advertencia a la publicación, así que no se puede cambiar aquí.',
   saved: 'Advertencia guardada.',
   notSaved: 'No se pudo guardar la advertencia.',
+  // A post the reader chose to hide, as one line in a list.
+  hidden: 'Oculto: {{ warning }}',
+  // What each reader chooses, in their settings (row 122, phase 2).
+  choices: {
+    title: 'Advertencias',
+    help: 'Lo que ves de una publicación con una advertencia',
+    show: 'Mostrar',
+    warn: 'Advertir',
+    hide: 'Ocultar',
+    // Other's line, for a reader: the kinds' own lines say the rest.
+    otherLine: 'Con las palabras de quien la escribió: spoilers, duelo…',
+  },
 };

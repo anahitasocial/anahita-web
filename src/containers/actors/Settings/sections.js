@@ -36,6 +36,9 @@ export const SECTIONS = {
   FEDIVERSE: 'fediverse',
   // What the person is told about (roadmap row 97). Their own.
   NOTIFICATIONS: 'notifications',
+  // What they see of posts with a content warning (anahita-services row
+  // 122, phase 2). Their own.
+  CONTENT: 'content',
   // Their data, out and in: the download, and bringing their lists in
   // (roadmap row 124). "Your data", the user's word (2026-11-08), where
   // Mastodon says "Import and export".
@@ -84,6 +87,8 @@ export const ITEMS = {
   BLUESKY: 'bluesky',
   // What the person is told about: eight kinds of thing, on or off.
   NOTIFICATIONS: 'notifications',
+  // Show, Warn or Hide for each kind of content warning.
+  CONTENT_CHOICES: 'contentChoices',
   PERMISSIONS: 'permissions',
   // A group's or an event's rules, ticked before following or answering it
   // (roadmap row 102, part 5).
@@ -186,6 +191,13 @@ const ALL_SECTIONS = [
     // Theirs alone to choose.
     items: [
       { key: ITEMS.NOTIFICATIONS, bare: false, viewerOnly: true },
+    ],
+  },
+  {
+    key: SECTIONS.CONTENT,
+    // Theirs alone to choose.
+    items: [
+      { key: ITEMS.CONTENT_CHOICES, bare: false, viewerOnly: true },
     ],
   },
   {

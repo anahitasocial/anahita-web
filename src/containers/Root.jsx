@@ -9,6 +9,24 @@ import SharedVideoUpload from './media/Composer/Video/SharedVideoUpload';
 import Routes from '../routes';
 import styles from '../styles';
 import ColourPicker, { ColourPickerContext, savedPalette } from '../components/ColourPicker';
+import contentChoices from '../utils/contentChoices';
+
+// The viewer's choices for content warnings (anahita-services row 122,
+// phase 2), read once they are signed in, and forgotten when they sign
+// out: everybody else has Warn.
+const ContentChoices = () => {
+  const personId = useSelector((state) => {
+    return state.session.isAuthenticated ? state.session.viewer.id : null;
+  });
+  React.useEffect(() => {
+    if (personId) {
+      contentChoices.load(personId);
+    } else {
+      contentChoices.clear();
+    }
+  }, [personId]);
+  return null;
+};
 
 // The app in its colours: the site's, or for somebody signed in, the ones
 // they chose for themselves in this browser (components/ColourPicker). Signed
@@ -33,6 +51,7 @@ const Themed = ({ store }) => {
 
   return (
     <ThemeProvider theme={theme}>
+      <ContentChoices />
       <HelmetProvider>
         <ColourPickerContext.Provider value={picking ? openPicker : null}>
           {/* A video posted goes on being sent from page to page. */}

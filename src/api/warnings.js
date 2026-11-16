@@ -13,6 +13,19 @@ const edit = (medium, warning) => {
   });
 };
 
+// The viewer's choice of Show, Warn or Hide for each kind (row 122, phase
+// 2): every kind, Warn where they have not chosen.
+const preferences = (personId) => {
+  return axios.get(`/people/${personId}/content-preferences`);
+};
+
+// Changes the kinds named; the others stay as they were.
+const editPreferences = (personId, choices) => {
+  return axios.patch(`/people/${personId}/content-preferences`, { choices });
+};
+
 export default {
   edit,
+  preferences,
+  editPreferences,
 };

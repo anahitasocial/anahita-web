@@ -103,6 +103,7 @@ export default {
       permissions: 'Permissões',
       fediverse: 'Fediverso',
       notifications: 'Notificações',
+      content: 'Conteúdo',
       data: 'Seus dados',
       administration: 'Administração',
       danger: 'Zona de perigo',

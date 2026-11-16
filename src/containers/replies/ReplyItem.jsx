@@ -38,7 +38,7 @@ import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFedivers
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import ContentWarningDialog from '../../components/ContentWarningDialog';
-import WarningCover, { Blurred, useWarning } from '../../components/WarningCover';
+import WarningCover, { Blurred, HiddenLine, useWarning } from '../../components/WarningCover';
 import warnings from '../../utils/warnings';
 import i18n from '../../languages';
 import thread from '../../utils/thread';
@@ -106,7 +106,7 @@ const ReplyItem = ({
   const report = useReport(viewer, reply);
   // Its content warning (row 122), not over it while it is edited.
   const cover = useWarning(reply);
-  const warned = isEditing ? { ...cover, hidden: false } : cover;
+  const warned = isEditing ? { ...cover, hidden: false, collapsed: false } : cover;
   const media = warnings.hasMedia(reply);
   // Answering something from another server, and not on the fediverse:
   // said before it is sent.
@@ -166,6 +166,17 @@ const ReplyItem = ({
       })}
     </Box>
   );
+
+  // Of a kind the reader chose to hide: one line where it would be, and
+  // the replies to it as they are.
+  if (warned.collapsed && !reply.deleted) {
+    return (
+      <Box component="section" id={`reply-${reply.id}`}>
+        <HiddenLine state={warned} />
+        {under}
+      </Box>
+    );
+  }
 
   // Where a reply was removed and others still hang from it.
   if (reply.deleted) {

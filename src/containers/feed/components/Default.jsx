@@ -33,7 +33,7 @@ import utils from '../../../utils';
 import photoFiles from '../../../utils/photoFiles';
 import AltBadge from '../../../components/AltBadge';
 import RemovedPictures from '../../../components/RemovedPictures';
-import WarningCover, { Blurred, useWarning } from '../../../components/WarningCover';
+import WarningCover, { Blurred, HiddenLine, useWarning } from '../../../components/WarningCover';
 import warnings from '../../../utils/warnings';
 import timeAgo from '../../../utils/timeAgo';
 import WrittenBy from '../../../components/WrittenBy';
@@ -95,6 +95,15 @@ const FeedCardDefault = ({
   const media = warnings.hasMedia(node);
   const createdAt = moment.utc(node.createdAt).local().format('LLL').toString();
   const creationTimeFromNow = timeAgo(node.createdAt);
+
+  // Of a kind the reader chose to hide: one line where it would be.
+  if (warned.collapsed) {
+    return (
+      <Card className={classes.root} component="article">
+        <HiddenLine state={warned} />
+      </Card>
+    );
+  }
 
   return (
     <Card

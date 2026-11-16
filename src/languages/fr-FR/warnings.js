@@ -25,4 +25,16 @@ export default {
   byModerator: 'Les administrateurs ont donné cet avertissement à la publication : il ne peut pas être changé ici.',
   saved: 'Avertissement enregistré.',
   notSaved: 'L’avertissement n’a pas pu être enregistré.',
+  // A post the reader chose to hide, as one line in a list.
+  hidden: 'Masqué : {{ warning }}',
+  // What each reader chooses, in their settings (row 122, phase 2).
+  choices: {
+    title: 'Avertissements',
+    help: 'Ce que vous voyez d’une publication avec un avertissement',
+    show: 'Afficher',
+    warn: 'Avertir',
+    hide: 'Masquer',
+    // Other's line, for a reader: the kinds' own lines say the rest.
+    otherLine: 'Avec les mots de son auteur : divulgâcheurs, deuil…',
+  },
 };

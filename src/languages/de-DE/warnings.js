@@ -25,4 +25,16 @@ export default {
   byModerator: 'Die Administratoren haben dem Beitrag diese Warnung gegeben; sie kann hier nicht geändert werden.',
   saved: 'Inhaltswarnung gespeichert.',
   notSaved: 'Die Inhaltswarnung konnte nicht gespeichert werden.',
+  // A post the reader chose to hide, as one line in a list.
+  hidden: 'Ausgeblendet: {{ warning }}',
+  // What each reader chooses, in their settings (row 122, phase 2).
+  choices: {
+    title: 'Inhaltswarnungen',
+    help: 'Was du von einem Beitrag mit einer Warnung siehst',
+    show: 'Zeigen',
+    warn: 'Warnen',
+    hide: 'Ausblenden',
+    // Other's line, for a reader: the kinds' own lines say the rest.
+    otherLine: 'In den Worten der Person, die ihn schrieb: Spoiler, Trauer …',
+  },
 };

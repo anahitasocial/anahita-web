@@ -42,6 +42,7 @@ import ActorReports from './Reports';
 import RepostsOnProfile from './RepostsOnProfile';
 import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
+import ContentChoices from './ContentChoices';
 import GraphAccess from './GraphAccess';
 import BlockedServers from './BlockedServers';
 import ActorBlocked from './Blocked';
@@ -281,6 +282,7 @@ const ActorsSettings = ({
       [ITEMS.FEDIVERSE]: <ActorFediverse />,
       [ITEMS.MOVING]: <ActorMoving />,
       [ITEMS.NOTIFICATIONS]: <ActorNotificationChoices />,
+      [ITEMS.CONTENT_CHOICES]: <ContentChoices />,
       [ITEMS.BLUESKY]: <ActorBluesky />,
       [ITEMS.PERMISSIONS]: <ActorPermissions />,
       // Administration. Every one of these takes the actor being looked

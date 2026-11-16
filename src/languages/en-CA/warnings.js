@@ -29,4 +29,16 @@ export default {
   byModerator: 'The administrators gave this post its warning, so it cannot be changed here.',
   saved: 'Content warning saved.',
   notSaved: 'The content warning could not be saved.',
+  // A post the reader chose to hide, as one line in a list.
+  hidden: 'Hidden: {{ warning }}',
+  // What each reader chooses, in their settings (row 122, phase 2).
+  choices: {
+    title: 'Content warnings',
+    help: 'What you see of a post with a warning',
+    show: 'Show',
+    warn: 'Warn',
+    hide: 'Hide',
+    // Other's line, for a reader: the kinds' own lines say the rest.
+    otherLine: 'In their author\'s words: spoilers, grief…',
+  },
 };

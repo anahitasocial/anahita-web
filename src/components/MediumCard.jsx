@@ -38,7 +38,7 @@ import photoFiles from '../utils/photoFiles';
 import openOnClick from '../utils/openOnClick';
 import AltBadge from './AltBadge';
 import RemovedPictures from './RemovedPictures';
-import WarningCover, { Blurred, useWarning } from './WarningCover';
+import WarningCover, { Blurred, HiddenLine, useWarning } from './WarningCover';
 import warnings from '../utils/warnings';
 import timeAgo from '../utils/timeAgo';
 import WrittenBy from './WrittenBy';
@@ -106,6 +106,15 @@ const MediumCard = ({
       };
     }
   }, [portrait]);
+
+  // Of a kind the reader chose to hide: one line where it would be.
+  if (warned.collapsed) {
+    return (
+      <Card {...cardProps}>
+        <HiddenLine state={warned} />
+      </Card>
+    );
+  }
 
   return (
     <Card {...cardProps}>
