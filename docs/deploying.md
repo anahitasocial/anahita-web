@@ -16,9 +16,9 @@ Building the app and hosting it.
 
 The newest Birth release that works with the anahita-services a site runs:
 each release says which, at the top of its changelog section and its notes
-on GitHub ("Works with Anahita Services v1.2.3 or later"). The web app has
+on GitHub ("Works with Anahita Services v1.3.4 or later"). The web app has
 its own versions; the services lead, and it follows (the user, 2026-11-09).
-Build the tag, `v1.2.3` for example. The `main` branch goes with the
+Build the tag, `v1.3.4` for example. The `main` branch goes with the
 services' `main`, and may call routes that their last Birth release does
 not have. See
 [Releases](https://github.com/anahitasocial/anahita-services/blob/main/docs/releases.md#with-anahita-web).
