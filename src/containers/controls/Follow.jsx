@@ -2,7 +2,11 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import NotifyOnIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import NotifyOffIcon from '@mui/icons-material/NotificationsOffOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import FollowIcon from '@mui/icons-material/PersonAddAlt1Outlined';
 import UnfollowIcon from '@mui/icons-material/PersonRemoveOutlined';
@@ -49,6 +53,10 @@ const ControlsFollow = React.forwardRef((props, ref) => {
   // makes it a follow, shown the next time the profile is read.
   const asks = !leader && utils.federation.isRemote(actor) && Boolean(actor.allowFollowRequest);
   const [requested, setRequested] = useState(Boolean(actor.isFollowRequestedByViewer));
+  // Whether the viewer is told of its new posts (roadmap row 146): on with
+  // a follow, turned off and on from Following's menu.
+  const [subscribed, setSubscribed] = useState(Boolean(actor.isSubscribedByViewer));
+  const [menuAt, setMenuAt] = useState(null);
 
   // A follow or an unfollow that fails gives the button back and says so,
   // in a sentence (the user, 2026-10-19). It used to wait for ever: the
@@ -70,6 +78,8 @@ const ControlsFollow = React.forwardRef((props, ref) => {
         .then(() => {
           setWaiting(false);
           setLeader(true);
+          // A follow tells of the profile's posts from the start.
+          setSubscribed(true);
         })
         .catch(failed('followFailed'));
     });
@@ -116,6 +126,68 @@ const ControlsFollow = React.forwardRef((props, ref) => {
   let drawn = variant;
   if (prominent) {
     drawn = done ? 'outlined' : 'contained';
+  }
+
+  const toggleNotifications = () => {
+    setMenuAt(null);
+    setWaiting(true);
+    const call = subscribed ?
+      api.notificationsSub.deleteItem(actor) :
+      api.notificationsSub.add(actor);
+    call.then(() => {
+      setWaiting(false);
+      setSubscribed(!subscribed);
+    }).catch(() => {
+      setWaiting(false);
+      alertError(i18n.t('socialgraph:following.failed'));
+    });
+  };
+
+  // On a profile's header, once following: Following, whose menu turns its
+  // notifications off and on, and unfollows (roadmap row 146).
+  if (prominent && leader && !asks && component !== 'menuitem') {
+    return (
+      <>
+        <Button
+          onClick={(event) => {
+            setMenuAt(event.currentTarget);
+          }}
+          disabled={waiting}
+          color="inherit"
+          fullWidth={fullWidth}
+          variant="outlined"
+          endIcon={<ArrowDropDownIcon />}
+          aria-haspopup="menu"
+          aria-expanded={menuAt ? 'true' : undefined}
+          ref={ref}
+        >
+          {i18n.t('socialgraph:following.title')}
+        </Button>
+        <Menu
+          anchorEl={menuAt}
+          open={Boolean(menuAt)}
+          onClose={() => {
+            setMenuAt(null);
+          }}
+        >
+          <MenuItem onClick={toggleNotifications}>
+            <MenuItemLabel icon={subscribed ? <NotifyOffIcon fontSize="small" /> : <NotifyOnIcon fontSize="small" />}>
+              {i18n.t(subscribed ? 'socialgraph:following.notifyOff' : 'socialgraph:following.notifyOn')}
+            </MenuItemLabel>
+          </MenuItem>
+          <MenuItem
+            onClick={() => {
+              setMenuAt(null);
+              handleUnfollow();
+            }}
+          >
+            <MenuItemLabel icon={<UnfollowIcon fontSize="small" />}>
+              {unfollowLabel}
+            </MenuItemLabel>
+          </MenuItem>
+        </Menu>
+      </>
+    );
   }
 
   if (component === 'menuitem') {

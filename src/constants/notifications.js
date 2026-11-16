@@ -9,6 +9,7 @@ const KINDS = [
   'photo_add',
   'topic_add',
   'video_add',
+  'audio_add',
   'reply_add',
   'quote_add',
   'repost_add',

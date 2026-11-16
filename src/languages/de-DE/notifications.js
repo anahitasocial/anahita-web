@@ -26,6 +26,13 @@ export default {
   replyAdd: '<0>{{subject}}</0> hat auf einen <1>Beitrag</1> geantwortet',
   quoteAdd: '<0>{{subject}}</0> hat deinen Beitrag in einer <1>Notiz</1> zitiert',
   videoAdd: '<0>{{subject}}</0> hat ein <1>Video</1> veröffentlicht',
+  audioAdd: '<0>{{subject}}</0> hat einen <1>Ton</1> veröffentlicht',
+  // Turning off a profile's new posts from a notification of one
+  // (roadmap row 146).
+  turnOff: 'Ausschalten',
+  turnedOff: 'Benachrichtigungen über neue Beiträge von {{name}} sind aus. Sie bleiben in deinem Feed.',
+  turnOffFailed: 'Das ließ sich nicht ausschalten.',
+  undo: 'Rückgängig',
   adminAdd: '<0>{{subject}}</0> ist jetzt Admin von <2>{{target}}</2>',
   other: 'Neues von <0>{{subject}}</0>',
   bell_one: 'Benachrichtigungen, {{count}} ungelesen',

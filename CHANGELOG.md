@@ -11,36 +11,42 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Added
 
-1. **Blocking a server yourself** (roadmap row 152): Block server in the
+1. **Whose notifications** (roadmap row 146): Following on a profile you
+   follow opens a menu to turn its notifications off or on, or unfollow;
+   a new post's notification offers Turn off, with Undo. What you reply to
+   or repost tells you of what the people you follow do there, and what is
+   yours tells you of everyone.
+2. **Blocking a server yourself** (roadmap row 152): Block server in the
    menu of somebody on the fediverse, with a confirmation that says what it
    does, and Blocked servers in Settings › Access, beside who is blocked
    and muted, to list, add and unblock them. Nothing from the server is
    shown to you, nor its notifications, and your follows with people there
    end.
-2. **Who sees your followers and who you follow** (roadmap row 151), in
+3. **Who sees your followers and who you follow** (roadmap row 151), in
    Settings › Privacy, without making the profile more private: whoever can
    see it, or fewer, down to nobody else. The counts stay; a list kept from
    somebody says so calmly. For groups and events too.
-3. **A passkey offered after signing in** (roadmap row 153): once, on a
+4. **A passkey offered after signing in** (roadmap row 153): once, on a
    device that can hold one, to somebody who has none, "Sign in faster
    next time?", with Skip and Add passkey. Skip is remembered on that
    device; Settings › Security still offers one.
-4. **Removing a follower** (roadmap row 150): Remove beside each follower
+5. **Removing a follower** (roadmap row 150): Remove beside each follower
    in one's own list of followers, after a confirmation saying they are
    not told and may follow again. The server of a follower elsewhere is
    told to stop delivering.
 
 ### Fixed
 
-1. **Saving who may quote you, your reposts or your download default** no
+1. **A new sound posted** is told in words, not as "other".
+2. **Saving who may quote you, your reposts or your download default** no
    longer says it failed: the card read the person again by number, which
    people are not found by, and showed an error after every save.
-2. **Remove never worked,** for a group's administrators either: the
+3. **Remove never worked,** for a group's administrators either: the
    button sent nothing to the server. It removes now, the follower leaves
    the list, and the counts follow.
-3. **A profile row with two buttons on a mobile** no longer squeezes the
+4. **A profile row with two buttons on a mobile** no longer squeezes the
    name to a letter or two: the buttons move to a line of their own.
-4. **Authentications, in Settings › Security, on a mobile:** Sign out no
+5. **Authentications, in Settings › Security, on a mobile:** Sign out no
    longer sits over the words. Each sign-in shows the app and its status,
    then the browser, system and place, then when, with Sign out under them;
    this device is marked This device and comes first.

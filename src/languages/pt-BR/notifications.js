@@ -26,6 +26,13 @@ export default {
   replyAdd: '<0>{{subject}}</0> respondeu a uma <1>publicação</1>',
   quoteAdd: '<0>{{subject}}</0> citou a sua publicação em uma <1>nota</1>',
   videoAdd: '<0>{{subject}}</0> publicou um <1>vídeo</1>',
+  audioAdd: '<0>{{subject}}</0> publicou um <1>áudio</1>',
+  // Turning off a profile's new posts from a notification of one
+  // (roadmap row 146).
+  turnOff: 'Desativar',
+  turnedOff: 'As notificações de novas publicações de {{name}} estão desativadas. Elas continuam no seu feed.',
+  turnOffFailed: 'Não foi possível desativar.',
+  undo: 'Desfazer',
   adminAdd: '<0>{{subject}}</0> agora administra <2>{{target}}</2>',
   other: 'Novidades de <0>{{subject}}</0>',
   bell_one: 'Notificações, {{count}} não lida',

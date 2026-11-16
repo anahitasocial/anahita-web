@@ -12,6 +12,13 @@ export default {
   blocks: 'Blockiert',
   mutes: 'Stummgeschaltet',
   followsYou: 'Folgt dir',
+  // A profile's header, once following (roadmap row 146): its menu.
+  following: {
+    title: 'Gefolgt',
+    notifyOn: 'Benachrichtigungen an',
+    notifyOff: 'Benachrichtigungen aus',
+    failed: 'Das ließ sich nicht ändern.',
+  },
   // The servers the viewer blocked for themselves (roadmap row 152).
   servers: {
     title: 'Blockierte Server',

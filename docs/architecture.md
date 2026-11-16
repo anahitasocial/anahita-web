@@ -1533,6 +1533,14 @@ Settings › Access (`actors/Settings/BlockedServers.jsx`), a count and
 Manage, whose dialog lists them with Unblock and blocks another by its
 name, a handle or an address (`api/serverBlocks.js`).
 
+**Whose notifications** (roadmap row 146): on a profile one follows, the
+header's button is Following, whose menu turns its posts' notifications off
+or on (`api.notificationsSub`, reading `isSubscribedByViewer`) and
+unfollows (`containers/controls/Follow.jsx`); a post's notification offers
+Turn off in its menu when the server sends `notify_off`, with a snackbar and
+Undo drawn outside the row (`notifications/Browse/ListItem.jsx`). New sounds
+(`audio_add`) have their words.
+
 What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 

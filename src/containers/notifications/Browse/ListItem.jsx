@@ -9,11 +9,15 @@ import ListItemAvatar from '@mui/material/ListItemAvatar';
 import ListItemText from '@mui/material/ListItemText';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import Button from '@mui/material/Button';
+import Snackbar from '@mui/material/Snackbar';
 
 import DeleteIcon from '@mui/icons-material/DeleteOutlined';
 import MarkReadIcon from '@mui/icons-material/DoneAll';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import NotifyOffIcon from '@mui/icons-material/NotificationsOffOutlined';
 import i18n from '../../../languages';
+import api from '../../../api';
 
 import ActorAvatar from '../../../components/ActorAvatar';
 import MenuItemLabel from '../../../components/MenuItemLabel';
@@ -43,134 +47,184 @@ const NotificationListItem = ({
   const [anchorEl, setAnchorEl] = useState(null);
   const subject = item.subject || {};
   const target = item.target || {};
+  // Turn off, on news of a post on a profile the reader is told of (roadmap
+  // row 146): their subscription to it ends, the follow stays, and Undo
+  // makes it again.
+  const [isOff, setIsOff] = useState(false);
+  const [said, setSaid] = useState('');
+  const canTurnOff = !isOff && (item.actions || []).includes('notify_off') && target.id > 0;
+  const named = target.name || subject.name || '';
+  const turnOff = () => {
+    api.notificationsSub.deleteItem({ id: target.id }).then(() => {
+      setIsOff(true);
+      setSaid(i18n.t('notifications:turnedOff', { name: named }));
+    }).catch(() => {
+      setSaid(i18n.t('notifications:turnOffFailed'));
+    });
+  };
+  const undo = () => {
+    setSaid('');
+    api.notificationsSub.add({ id: target.id }).then(() => {
+      setIsOff(false);
+    }).catch(() => {
+      // It stays off; the profile's Following menu turns it on again.
+    });
+  };
 
   return (
-    <ListItem
-      divider
+    <>
+      <ListItem
+        divider
       // Opened, by any of its links, it is read (roadmap row 97): seeing it
       // in the list is not reading it.
-      onClickCapture={(event) => {
-        if (!item.isRead && event.target.closest && event.target.closest('a')) {
-          handleOpen(item);
-        }
-      }}
-      secondaryAction={
-        <>
-          <Badge
-            color="primary"
-            variant="dot"
-            invisible={item.isRead}
-            sx={{ mr: 2 }}
-          />
-          <IconButton
-            edge="end"
-            aria-label={i18n.t('actions:more')}
-            onClick={(event) => {
-              return setAnchorEl(event.currentTarget);
-            }}
-            size="large"
-          >
-            <MoreVertIcon />
-          </IconButton>
-          <Menu
-            anchorEl={anchorEl}
-            open={Boolean(anchorEl)}
-            onClose={() => {
-              return setAnchorEl(null);
-            }}
-          >
-            <MenuItem
-              onClick={() => {
-                setAnchorEl(null);
-                handleEdit(item);
-              }}
-              disabled={item.isRead}
-            >
-              <MenuItemLabel icon={<MarkReadIcon fontSize="small" />}>
-                {i18n.t('notifications:markRead')}
-              </MenuItemLabel>
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                setAnchorEl(null);
-                handleDelete(item);
-              }}
-            >
-              <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
-                {i18n.t('actions:delete')}
-              </MenuItemLabel>
-            </MenuItem>
-          </Menu>
-        </>
-      }
-      sx={{ pr: 13 }}
-    >
-      {/* Smaller on a mobile, where the words need the room (the user,
-          2026-10-19): 32 pixels, not 48. */}
-      <ListItemAvatar
-        sx={{
-          minWidth: { xs: 44, sm: 56 },
-          '& > .MuiAvatar-root, & > a > .MuiAvatar-root': {
-            width: { xs: 32, sm: 48 },
-            height: { xs: 32, sm: 48 },
-            fontSize: { xs: 14, sm: 20 },
-          },
+        onClickCapture={(event) => {
+          if (!item.isRead && event.target.closest && event.target.closest('a')) {
+            handleOpen(item);
+          }
         }}
+        secondaryAction={
+          <>
+            <Badge
+              color="primary"
+              variant="dot"
+              invisible={item.isRead}
+              sx={{ mr: 2 }}
+            />
+            <IconButton
+              edge="end"
+              aria-label={i18n.t('actions:more')}
+              onClick={(event) => {
+                return setAnchorEl(event.currentTarget);
+              }}
+              size="large"
+            >
+              <MoreVertIcon />
+            </IconButton>
+            <Menu
+              anchorEl={anchorEl}
+              open={Boolean(anchorEl)}
+              onClose={() => {
+                return setAnchorEl(null);
+              }}
+            >
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                  handleEdit(item);
+                }}
+                disabled={item.isRead}
+              >
+                <MenuItemLabel icon={<MarkReadIcon fontSize="small" />}>
+                  {i18n.t('notifications:markRead')}
+                </MenuItemLabel>
+              </MenuItem>
+              {canTurnOff &&
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                  turnOff();
+                }}
+              >
+                <MenuItemLabel icon={<NotifyOffIcon fontSize="small" />}>
+                  {i18n.t('notifications:turnOff')}
+                </MenuItemLabel>
+              </MenuItem>}
+              <MenuItem
+                onClick={() => {
+                  setAnchorEl(null);
+                  handleDelete(item);
+                }}
+              >
+                <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
+                  {i18n.t('actions:delete')}
+                </MenuItemLabel>
+              </MenuItem>
+            </Menu>
+          </>
+      }
+        sx={{ pr: 13 }}
       >
-        {item.others && item.others.length > 0 ?
+        {/* Smaller on a mobile, where the words need the room (the user,
+          2026-10-19): 32 pixels, not 48. */}
+        <ListItemAvatar
+          sx={{
+            minWidth: { xs: 44, sm: 56 },
+            '& > .MuiAvatar-root, & > a > .MuiAvatar-root': {
+              width: { xs: 32, sm: 48 },
+              height: { xs: 32, sm: 48 },
+              fontSize: { xs: 14, sm: 20 },
+            },
+          }}
+        >
+          {item.others && item.others.length > 0 ?
           // Several: in a row, each a little over the one after it, the
           // newest on top.
-          <Box sx={{ display: 'flex', pr: 1 }}>
-            {[subject, ...item.others].slice(0, 3).map((actor, index) => {
-              return (
-                <Box
-                  key={`grouped-${item.id}-${actor.id}`}
-                  sx={{
-                    position: 'relative',
-                    zIndex: 3 - index,
-                    ml: index === 0 ? 0 : -1,
-                    borderRadius: '50%',
-                    border: 2,
-                    borderColor: 'background.paper',
-                  }}
-                >
-                  <ActorAvatar actor={actor} linked={Boolean(actor.id)} size="small" />
-                </Box>
-              );
-            })}
-          </Box> :
-          <ActorAvatar
-            actor={subject}
-            linked={Boolean(subject.id)}
-          />}
-      </ListItemAvatar>
-      <ListItemText
-        primary={
-          <>
-            {!item.isRead &&
+            <Box sx={{ display: 'flex', pr: 1 }}>
+              {[subject, ...item.others].slice(0, 3).map((actor, index) => {
+                return (
+                  <Box
+                    key={`grouped-${item.id}-${actor.id}`}
+                    sx={{
+                      position: 'relative',
+                      zIndex: 3 - index,
+                      ml: index === 0 ? 0 : -1,
+                      borderRadius: '50%',
+                      border: 2,
+                      borderColor: 'background.paper',
+                    }}
+                  >
+                    <ActorAvatar actor={actor} linked={Boolean(actor.id)} size="small" />
+                  </Box>
+                );
+              })}
+            </Box> :
+            <ActorAvatar
+              actor={subject}
+              linked={Boolean(subject.id)}
+            />}
+        </ListItemAvatar>
+        <ListItemText
+          primary={
+            <>
+              {!item.isRead &&
               <Box component="span" sx={unseen}>
                 {`${i18n.t('notifications:unread')}: `}
               </Box>}
-            <NotificationMessage notification={item} />
-          </>
+              <NotificationMessage notification={item} />
+            </>
         }
-        secondary={
-          <>
-            {timeAgo(item.createdAt)}
-            {/* An invitation is answered from where it is read. */}
-            {item.type === 'actor_invite' && target.id &&
+          secondary={
+            <>
+              {timeAgo(item.createdAt)}
+              {/* An invitation is answered from where it is read. */}
+              {item.type === 'actor_invite' && target.id &&
               <Box component="span" sx={{ display: 'block', pt: 1, maxWidth: 320 }}>
                 <ControlInviteAnswer actor={target} />
               </Box>}
-            {/* And what else is still to be done from it. */}
-            <NotificationActions item={item} onActed={handleOpen} />
-          </>
+              {/* And what else is still to be done from it. */}
+              <NotificationActions item={item} onActed={handleOpen} />
+            </>
         }
         // The buttons are not text, so the line that holds them is not a
         // paragraph.
-        slotProps={{ secondary: { component: 'div' } }}
+          slotProps={{ secondary: { component: 'div' } }}
+        />
+      </ListItem>
+      {/* Outside the row, which would hold it in its corner. */}
+      <Snackbar
+        open={Boolean(said)}
+        autoHideDuration={6000}
+        onClose={() => {
+          setSaid('');
+        }}
+        message={said}
+        action={isOff ?
+          <Button color="inherit" size="small" onClick={undo}>
+            {i18n.t('notifications:undo')}
+          </Button> :
+          null}
       />
-    </ListItem>
+    </>
   );
 };
 

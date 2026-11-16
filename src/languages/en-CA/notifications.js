@@ -26,6 +26,13 @@ export default {
   replyAdd: '<0>{{subject}}</0> replied to a <1>post</1>',
   quoteAdd: '<0>{{subject}}</0> quoted your post in a <1>note</1>',
   videoAdd: '<0>{{subject}}</0> posted a <1>video</1>',
+  audioAdd: '<0>{{subject}}</0> posted a <1>sound</1>',
+  // Turning off a profile's new posts from a notification of one
+  // (roadmap row 146).
+  turnOff: 'Turn off',
+  turnedOff: 'Notifications of new posts from {{name}} are off. They stay in your feed.',
+  turnOffFailed: 'That could not be turned off.',
+  undo: 'Undo',
   adminAdd: '<0>{{subject}}</0> is now an admin of <2>{{target}}</2>',
   other: 'Something new from <0>{{subject}}</0>',
   bell_one: 'Notifications, {{count}} unread',
