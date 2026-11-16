@@ -10,6 +10,7 @@ export default {
     graphic: 'Imagens fortes',
     nudity: 'Nudez não sexual',
     other: 'Outro',
+    ai: 'Feito com IA',
   },
   lines: {
     adult: 'Imagens sexuais explícitas',
@@ -17,6 +18,7 @@ export default {
     graphic: 'Violência, sangue ou imagens perturbadoras',
     nudity: 'Nus artísticos, por exemplo',
     other: 'Com suas palavras: spoilers, luto…',
+    ai: 'Imagens ou vídeo feitos ou alterados com IA',
   },
   words: 'O que ela contém',
   wordsNeeded: 'Diga o que a publicação contém.',
@@ -25,6 +27,8 @@ export default {
   byModerator: 'Os administradores deram este aviso à publicação, então ele não pode ser mudado aqui.',
   // In the dialog, for an administrator giving one as the site's.
   moderatorHelp: 'Dado pelos administradores: quem escreveu é avisado, e não pode removê-lo.',
+  // A file chosen in the composer says it was made with AI.
+  aiFound: 'Este arquivo diz que foi feito com IA, então a publicação está marcada como Feito com IA.',
   saved: 'Aviso de conteúdo salvo.',
   notSaved: 'Não foi possível salvar o aviso de conteúdo.',
   // A post the reader chose to hide, as one line in a list.

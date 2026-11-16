@@ -10,6 +10,7 @@ export default {
     graphic: 'Drastische Bilder',
     nudity: 'Nicht sexuelle Nacktheit',
     other: 'Andere',
+    ai: 'Mit KI erstellt',
   },
   lines: {
     adult: 'Explizite sexuelle Bilder',
@@ -17,6 +18,7 @@ export default {
     graphic: 'Gewalt, Blut oder verstörende Bilder',
     nudity: 'Zum Beispiel künstlerische Akte',
     other: 'In eigenen Worten: Spoiler, Trauer …',
+    ai: 'Bilder oder Videos, die mit KI erstellt oder verändert wurden',
   },
   words: 'Was er enthält',
   wordsNeeded: 'Sag, was der Beitrag enthält.',
@@ -25,6 +27,8 @@ export default {
   byModerator: 'Die Administratoren haben dem Beitrag diese Warnung gegeben; sie kann hier nicht geändert werden.',
   // In the dialog, for an administrator giving one as the site's.
   moderatorHelp: 'Von den Administratoren gegeben: Die Person, die es schrieb, wird informiert und kann sie nicht entfernen.',
+  // A file chosen in the composer says it was made with AI.
+  aiFound: 'Diese Datei sagt, dass sie mit KI erstellt wurde, daher ist der Beitrag als „Mit KI erstellt“ markiert.',
   saved: 'Inhaltswarnung gespeichert.',
   notSaved: 'Die Inhaltswarnung konnte nicht gespeichert werden.',
   // A post the reader chose to hide, as one line in a list.

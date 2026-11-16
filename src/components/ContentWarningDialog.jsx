@@ -19,7 +19,7 @@ import i18n from '../languages';
 import warnings from '../utils/warnings';
 
 // A post's content warning (anahita-services row 122): none, or one of the
-// five kinds, each with a line saying what it is for; Other asks for the
+// six kinds, each with a line saying what it is for; Other asks for the
 // author's words, right under it.
 //
 // Used for a post being written, where Save only hands the warning back,

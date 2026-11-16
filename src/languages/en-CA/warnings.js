@@ -13,6 +13,7 @@ export default {
     graphic: 'Graphic media',
     nudity: 'Non-sexual nudity',
     other: 'Other',
+    ai: 'Made with AI',
   },
   lines: {
     adult: 'Explicit sexual images',
@@ -20,6 +21,7 @@ export default {
     graphic: 'Violence, gore or disturbing images',
     nudity: 'Artistic nudes, for example',
     other: 'In your own words: spoilers, grief…',
+    ai: 'Pictures or video made or changed by AI',
   },
   words: 'What it holds',
   wordsNeeded: 'Say what the post holds.',
@@ -29,6 +31,8 @@ export default {
   byModerator: 'The administrators gave this post its warning, so it cannot be changed here.',
   // In the dialog, for an administrator giving one as the site's.
   moderatorHelp: 'Given by the administrators: its author is told, and cannot take it off.',
+  // A file chosen in the composer says it was made with AI.
+  aiFound: 'This file says it was made with AI, so the post is marked Made with AI.',
   saved: 'Content warning saved.',
   notSaved: 'The content warning could not be saved.',
   // A post the reader chose to hide, as one line in a list.

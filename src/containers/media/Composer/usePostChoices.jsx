@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 
 import ContentWarningButton from '../../../components/ContentWarningButton';
 import DownloadOptionButton from '../../../components/DownloadOptionButton';
@@ -6,7 +7,10 @@ import LanguageButton from '../../../components/LanguageButton';
 import ReplyAccessButton from '../../../components/ReplyAccessButton';
 import ComposerAudience from './Audience';
 
+import actions from '../../../actions';
+import i18n from '../../../languages';
 import audience from '../../../utils/audience';
+import madeWithAI from '../../../utils/madeWithAI';
 import postLanguage from '../../../utils/postLanguage';
 import replyAccess from '../../../utils/replyAccess';
 import warnings from '../../../utils/warnings';
@@ -40,6 +44,7 @@ const usePostChoices = (actor, viewer) => {
   // Asked of each post, as who may reply is: what one post holds says
   // nothing of the next.
   const [warning, setWarning] = useState(warnings.NONE);
+  const dispatch = useDispatch();
   const [allowDownload, setAllowDownload] = useState(Boolean(actor.allowDownload));
   useEffect(() => {
     setAllowDownload(Boolean(actor.allowDownload));
@@ -52,6 +57,20 @@ const usePostChoices = (actor, viewer) => {
     warning,
     // A draft taken up again brings its own.
     setWarning,
+    // Pictures or a video chosen: one that says it was made with AI makes
+    // the post Made with AI, unless it has a warning already, and says why.
+    // Its author sees it and may take it off (row 122, phase 5).
+    noticeFiles: (files) => {
+      madeWithAI.any(files).then((found) => {
+        if (!found) {
+          return;
+        }
+        setWarning((current) => {
+          return warnings.has(current) ? current : { kind: warnings.AI, text: '' };
+        });
+        dispatch(actions.app.alert.info(i18n.t('warnings:aiFound')));
+      });
+    },
     direction: postLanguage.directionOf(language),
     // What goes with a post of any kind, as the server reads it.
     request: () => {

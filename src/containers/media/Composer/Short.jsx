@@ -462,6 +462,7 @@ const ShortComposer = ({
     }
     setVideoProblem('');
     setVideo(chosen);
+    choices.noticeFiles([chosen]);
     setIsAddingPhotos(false);
     // A video posted earlier that is done, or failed, is let go.
     if (upload.phase === 'ready' || upload.phase === 'failed') {
@@ -757,6 +758,7 @@ const ShortComposer = ({
             incoming={incoming}
             onIncomingTaken={() => { setIncoming(null); }}
             onPicked={(files) => {
+              choices.noticeFiles(files);
               if (!photoPoint) {
                 photoPosition.read(files).then((point) => {
                   if (point) {

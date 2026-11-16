@@ -686,7 +686,7 @@ next note under it and "Show the thread" with how many notes it has
 
 12. **A content warning** (anahita-services row 122) says what a post holds,
     so that a reader sees it first and chooses to view the post.
-    `components/ContentWarningDialog.jsx` offers None and the five kinds, each
+    `components/ContentWarningDialog.jsx` offers None and the six kinds, each
     with its line, and asks for the words of Other right under it;
     `utils/warnings.js` reads a post's `warning` and makes the request's
     `warning` and `warning_text`. The dialog opens from
@@ -720,7 +720,13 @@ next note under it and "Show the thread" with how many notes it has
     warning and closes the case as `warned` (`admin/Reports/Case.jsx`). The
     dialog then says its author is told and cannot take it off
     (`ContentWarningDialog`'s `moderator`), and the author's notification
-    is `medium_warned`.
+    is `medium_warned`. **Made with AI** (phase 5), the sixth kind, starts
+    at Show and is said in a quiet line under the post (`WarningCover`).
+    The short composer reads each photo or video chosen for IPTC's
+    `trainedAlgorithmicMedia` in its XMP or C2PA manifest
+    (`utils/madeWithAI.js`, both ends of a large file), and when it is
+    there chooses Made with AI, unless a warning is chosen already, and
+    says why (`usePostChoices`'s `noticeFiles`).
 
 13. **A post's menu in a feed** has Edit and Delete where the server says the
     viewer may (`authorized.edit`, `authorized.delete`, sent with each feed

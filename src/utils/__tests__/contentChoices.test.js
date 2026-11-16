@@ -7,6 +7,12 @@ describe('contentChoices.of', () => {
     expect(contentChoices.of({ graphic: 'blur' }, 'graphic')).toBe('warn');
   });
 
+  it('is Show for Made with AI, until the reader chooses', () => {
+    expect(contentChoices.of({}, 'ai')).toBe('show');
+    expect(contentChoices.of({ ai: 'warn' }, 'ai')).toBe('warn');
+    expect(contentChoices.coverOf({}, 'ai')).toEqual({ hidden: false, collapsed: false });
+  });
+
   it('is the reader\'s own choice', () => {
     expect(contentChoices.of({ graphic: 'hide' }, 'graphic')).toBe('hide');
     expect(contentChoices.of({ nudity: 'show' }, 'nudity')).toBe('show');

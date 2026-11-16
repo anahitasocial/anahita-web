@@ -71,10 +71,16 @@ const choose = (personId, kind, choice) => {
   });
 };
 
+// What a kind starts at: Warn, but Show for Made with AI, which says what
+// a post is, not what it holds.
+const defaultFor = (kind) => {
+  return kind === 'ai' ? SHOW : WARN;
+};
+
 // A reader's choice for a kind.
 const of = (choices, kind) => {
   const choice = choices && choices[kind];
-  return CHOICES.includes(choice) ? choice : WARN;
+  return CHOICES.includes(choice) ? choice : defaultFor(kind);
 };
 
 // What a post with this warning shows a reader with these choices: behind

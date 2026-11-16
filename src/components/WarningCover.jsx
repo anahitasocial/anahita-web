@@ -181,6 +181,21 @@ WarningVeil.propTypes = {
   }),
 };
 
+// The quiet line under a post made with AI.
+const MadeWithAI = () => {
+  return (
+    <Box sx={{
+      display: 'flex', alignItems: 'center', gap: 1, px: 2, py: 1, color: 'text.secondary',
+    }}
+    >
+      {warnings.iconOf(warnings.AI, { fontSize: 'small' })}
+      <Typography variant="caption">
+        {i18n.t('warnings:kinds.ai')}
+      </Typography>
+    </Box>
+  );
+};
+
 const WarningCover = ({
   post = null,
   state = null,
@@ -190,7 +205,19 @@ const WarningCover = ({
   const own = useWarning(post);
   const { warning, hidden, show } = state || own;
 
-  if (off || !hidden) {
+  if (off) {
+    return children;
+  }
+  if (!hidden) {
+    // Made with AI, shown: said in one quiet line under what it is about.
+    if (warning.kind === warnings.AI) {
+      return (
+        <>
+          {children}
+          <MadeWithAI />
+        </>
+      );
+    }
     return children;
   }
 

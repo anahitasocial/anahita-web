@@ -5,6 +5,7 @@ import SuggestiveIcon from '@mui/icons-material/LocalFireDepartmentOutlined';
 import GraphicIcon from '@mui/icons-material/HeartBrokenOutlined';
 import NudityIcon from '@mui/icons-material/AccessibilityNewOutlined';
 import OtherIcon from '@mui/icons-material/InfoOutlined';
+import AIIcon from '@mui/icons-material/AutoAwesomeOutlined';
 import WarningIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
 import photoFiles from './photoFiles';
@@ -14,8 +15,11 @@ import videoElsewhere from './videoElsewhere';
 // Other the author's words. The server sends it as `warning: { kind, text,
 // byModerator }`, or none; it takes `warning` and `warning_text`.
 
-const KINDS = ['adult', 'suggestive', 'graphic', 'nudity', 'other'];
+const KINDS = ['adult', 'suggestive', 'graphic', 'nudity', 'other', 'ai'];
 const OTHER = 'other';
+// Made with AI (row 122, phase 5): what a post is, not what it holds. It
+// starts at Show, and is said under the post rather than over it.
+const AI = 'ai';
 const TEXT_MAX = 100;
 
 // No warning.
@@ -27,6 +31,7 @@ const ICONS = {
   graphic: GraphicIcon,
   nudity: NudityIcon,
   other: OtherIcon,
+  ai: AIIcon,
 };
 
 // The icon of a kind, or of a warning in general.
@@ -104,6 +109,7 @@ const hasMedia = (post) => {
 export default {
   KINDS,
   OTHER,
+  AI,
   TEXT_MAX,
   NONE,
   iconOf,
