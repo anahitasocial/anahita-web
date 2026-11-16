@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
@@ -13,11 +12,11 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemText from '@mui/material/ListItemText';
 import ListSubheader from '@mui/material/ListSubheader';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
 import PermissionsIcon from '@mui/icons-material/Tune';
+import ApproveIcon from '@mui/icons-material/HowToVote';
+
+import AccessRow from '../../../components/AccessRow';
 
 import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
@@ -29,11 +28,15 @@ import {
   toValues,
 } from './featurePermissions';
 
+// Icons for the choices that are not access levels.
+const CHOICE_ICONS = {
+  approve: ApproveIcon,
+};
+
 const ActorsSettingsPermissions = (props) => {
   const {
     editFeatures,
     actor,
-    namespace,
   } = props;
 
   const isPerson = utils.node.isPerson(actor);
@@ -155,64 +158,30 @@ const ActorsSettingsPermissions = (props) => {
                   );
                 }
 
+                // The level chosen, opening the access dialog (roadmap row
+                // 155): each choice with its words, a row's own where it
+                // has them ("Nobody" may mention you).
                 return (
-                  <ListItem key={`${group.service}-${row.entity}`} divider>
-                    {/* Stacked on every screen, question above a full-width
-                        select. Side by side, a long question — or a longer
-                        translation — squeezed the select or wrapped it under
-                        the text at a width nobody chose; stacked, the
-                        question just wraps. Not the select's own floating
-                        label either: an outlined label that long is cut off
-                        in the border's notch. */}
-                    <Box sx={{ width: '100%', py: 1 }}>
-                      <Box sx={{ mb: 1 }}>
-                        <Typography variant="body1">{question}</Typography>
-                      </Box>
-                      {/* A select rather than radios: a person has five
-                          levels on most rows, which as radios made a wall of
-                          buttons. What the Access card gets from its radio
-                          list — a sentence per choice — each option here
-                          still carries, shown when the list is open. */}
-                      <TextField
-                        select
-                        variant="outlined"
-                        size="small"
-                        fullWidth
-                        value={value}
-                        onChange={(event) => {
-                          setAccess(group.service, row.entity, event.target.value);
-                        }}
-                        slotProps={{
-                          htmlInput: {
-                            // Namespaced per service: comment and like appear
-                            // under more than one service.
-                            name: `${namespace}-${group.service}-${row.entity}`,
-                            'aria-label': question,
-                          },
-
-                          select: {
-                            renderValue: label,
-                          },
-                        }}
-                      >
-                        {row.choices.map((choice) => {
-                          return (
-                            // A description wraps rather than being cut off
-                            // on a mobile.
-                            <MenuItem key={choice} value={choice} sx={{ whiteSpace: 'normal' }}>
-                              <ListItemText
-                                primary={label(choice)}
-                                secondary={i18n.t([
-                                  `actor:permissions.entities.${row.entity}.descriptions.${choice}`,
-                                  `actor:permissions.descriptions.${choiceLabels}.${choice}`,
-                                ], { defaultValue: '' })}
-                              />
-                            </MenuItem>
-                          );
-                        })}
-                      </TextField>
-                    </Box>
-                  </ListItem>
+                  <AccessRow
+                    key={`${group.service}-${row.entity}`}
+                    label={question}
+                    value={value}
+                    divider
+                    options={row.choices.map((choice) => {
+                      return {
+                        value: choice,
+                        name: label(choice),
+                        description: i18n.t([
+                          `actor:permissions.entities.${row.entity}.descriptions.${choice}`,
+                          `actor:permissions.descriptions.${choiceLabels}.${choice}`,
+                        ], { defaultValue: '', name: actor.name }),
+                        icon: CHOICE_ICONS[choice],
+                      };
+                    })}
+                    onChange={(choice) => {
+                      setAccess(group.service, row.entity, choice);
+                    }}
+                  />
                 );
               })}
             </List>
@@ -252,7 +221,6 @@ const ActorsSettingsPermissions = (props) => {
 ActorsSettingsPermissions.propTypes = {
   actor: ActorType.isRequired,
   editFeatures: PropTypes.func.isRequired,
-  namespace: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (namespace) => {
@@ -265,7 +233,6 @@ const mapStateToProps = (namespace) => {
 
     return {
       actor,
-      namespace,
     };
   };
 };

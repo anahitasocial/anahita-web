@@ -7,11 +7,6 @@ import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import Divider from '@mui/material/Divider';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import FollowsIcon from '@mui/icons-material/People';
 
 import ActorType from '../../../proptypes/Actor';
@@ -20,6 +15,9 @@ import api from '../../../api';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 import graphAccess from '../../../utils/graphAccess';
+import audience from '../../../utils/audience';
+import AccessRow from '../../../components/AccessRow';
+import PersonType from '../../../proptypes/Person';
 
 // Who may see a profile's followers and whom it follows (roadmap row 151),
 // without making the profile itself more private. Laid out as the Access
@@ -30,6 +28,7 @@ import graphAccess from '../../../utils/graphAccess';
 const ActorsSettingsGraphAccess = ({
   namespace,
   actor,
+  viewer,
   read,
   alertSuccess,
   alertError,
@@ -37,7 +36,6 @@ const ActorsSettingsGraphAccess = ({
   const [isSaving, setIsSaving] = useState(false);
   const isPerson = utils.node.isPerson(actor);
   const chosen = graphAccess.fromServer(actor.graphAccess, isPerson);
-  const choices = graphAccess.choicesFor(actor.access, isPerson);
 
   const choose = (level) => {
     if (level === chosen || isSaving) {
@@ -56,14 +54,23 @@ const ActorsSettingsGraphAccess = ({
       });
   };
 
-  const nameOf = (level) => {
-    return level ? i18n.t(`access:${level}`) : i18n.t('socialgraph:graphAccess.same');
-  };
-  const descriptionOf = (level) => {
-    return level ?
-      i18n.t(`actor:access.descriptions.${level}`) :
-      i18n.t('socialgraph:graphAccess.sameDescription');
-  };
+  const place = audience.placeOf(actor, viewer);
+  const options = graphAccess.optionsFor(actor.access, isPerson).map((option) => {
+    if (option.value === '') {
+      return {
+        value: '',
+        name: i18n.t('socialgraph:graphAccess.same'),
+        description: i18n.t('socialgraph:graphAccess.sameDescription'),
+      };
+    }
+    return {
+      value: option.value,
+      name: audience.nameOf(option.value, i18n.t),
+      description: audience.describe(option.value, place, actor.name, i18n.t),
+      disabled: !option.narrower,
+      reason: i18n.t('access:dialog.notNarrower'),
+    };
+  });
 
   return (
     <Card>
@@ -80,39 +87,15 @@ const ActorsSettingsGraphAccess = ({
         }}
       />
       <Divider />
-      <RadioGroup
-        name={`${namespace}-graph-access`}
-        aria-label={i18n.t('socialgraph:graphAccess.title')}
-        value={chosen}
-        onChange={(event) => {
-          choose(event.target.value);
-        }}
-      >
-        <List disablePadding>
-          {choices.map((level) => {
-            return (
-              <ListItemButton
-                key={`graph-access-${level || 'same'}`}
-                divider
-                disabled={isSaving}
-                onClick={() => {
-                  choose(level);
-                }}
-              >
-                <ListItemIcon>
-                  <Radio
-                    checked={chosen === level}
-                    value={level}
-                    color="primary"
-                    slotProps={{ input: { 'aria-label': nameOf(level) } }}
-                  />
-                </ListItemIcon>
-                <ListItemText primary={nameOf(level)} secondary={descriptionOf(level)} />
-              </ListItemButton>
-            );
-          })}
-        </List>
-      </RadioGroup>
+      <List disablePadding>
+        <AccessRow
+          label={i18n.t('socialgraph:graphAccess.whoCanSee')}
+          value={chosen}
+          options={options}
+          onChange={choose}
+          disabled={isSaving}
+        />
+      </List>
     </Card>
   );
 };
@@ -120,6 +103,7 @@ const ActorsSettingsGraphAccess = ({
 ActorsSettingsGraphAccess.propTypes = {
   namespace: PropTypes.string.isRequired,
   actor: ActorType.isRequired,
+  viewer: PersonType.isRequired,
   read: PropTypes.func.isRequired,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
@@ -130,6 +114,7 @@ const mapStateToProps = (namespace) => {
     return {
       namespace,
       actor: state[namespace][namespace].current,
+      viewer: state.session.viewer,
     };
   };
 };

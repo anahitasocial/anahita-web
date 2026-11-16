@@ -1,6 +1,6 @@
 export default {
   public: 'Público',
-  registered: 'Membros conectados',
+  registered: 'Pessoas conectadas',
   followers: 'Seguidores',
   leaders: 'Seguindo',
   mutuals: 'Mútuos',
@@ -26,7 +26,7 @@ export default {
       own: {
         followers: 'Pessoas que seguem você',
         leaders: 'Pessoas que você segue',
-        mutuals: 'Pessoas que você segue e que também seguem você',
+        mutuals: 'Vocês se seguem mutuamente',
         myself: 'Mais ninguém',
       },
       person: {
@@ -41,5 +41,10 @@ export default {
       },
     },
     capped: 'Indisponível aqui: {{ name }} não tem uma visibilidade tão ampla, então uma publicação nele também não pode ter.',
+  },
+  // The access dialog's reasons a level cannot be chosen (roadmap row 155).
+  dialog: {
+    notOnSite: 'Este site reserva o que é novo a pessoas conectadas',
+    notNarrower: 'Não mais restrito que este perfil',
   },
 };

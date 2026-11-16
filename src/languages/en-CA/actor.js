@@ -84,14 +84,14 @@ export default {
     // Per actor type, because "Admins" of a person is that person.
     choices: {
       person: {
-        registered: 'Anyone signed in',
+        registered: 'Signed-in people',
         followers: 'Followers',
         leaders: 'Following',
         mutuals: 'Mutuals',
         admins: 'Only me',
       },
       group: {
-        registered: 'Anyone signed in',
+        registered: 'Signed-in people',
         followers: 'Followers',
         admins: 'Admins',
       },
@@ -120,16 +120,16 @@ export default {
     },
     descriptions: {
       person: {
-        registered: 'Anyone with an account here.',
-        followers: 'People who follow you.',
-        leaders: 'People you follow.',
-        mutuals: 'People who follow you and whom you follow back.',
-        admins: 'Nobody else.',
+        registered: 'Anyone who is signed in',
+        followers: 'People who follow you',
+        leaders: 'People you follow',
+        mutuals: 'You and they follow each other',
+        admins: 'Nobody else',
       },
       group: {
-        registered: 'Anyone with an account here.',
-        followers: 'People who follow this group.',
-        admins: 'Admins of this group.',
+        registered: 'Anyone who is signed in',
+        followers: 'People who follow {{ name }}',
+        admins: 'The admins of {{ name }}',
       },
     },
     // Replies on a profile narrower than registered follow its access.

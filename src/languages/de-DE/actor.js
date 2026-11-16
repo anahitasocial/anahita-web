@@ -83,14 +83,14 @@ export default {
     // Per actor type, because "Admins" of a person is that person.
     choices: {
       person: {
-        registered: 'Alle Angemeldeten',
+        registered: 'Angemeldete Personen',
         followers: 'Follower',
         leaders: 'Gefolgt',
         mutuals: 'Gegenseitig',
         admins: 'Nur ich',
       },
       group: {
-        registered: 'Alle Angemeldeten',
+        registered: 'Angemeldete Personen',
         followers: 'Follower',
         admins: 'Admins',
       },
@@ -119,16 +119,16 @@ export default {
     },
     descriptions: {
       person: {
-        registered: 'Alle mit einem Konto hier.',
-        followers: 'Leute, die dir folgen.',
-        leaders: 'Leute, denen du folgst.',
-        mutuals: 'Leute, die dir folgen und denen du zurückfolgst.',
-        admins: 'Sonst niemand.',
+        registered: 'Alle, die angemeldet sind',
+        followers: 'Personen, die dir folgen',
+        leaders: 'Personen, denen du folgst',
+        mutuals: 'Ihr folgt einander',
+        admins: 'Sonst niemand',
       },
       group: {
-        registered: 'Alle mit einem Konto hier.',
-        followers: 'Leute, die dieser Gruppe folgen.',
-        admins: 'Admins dieser Gruppe.',
+        registered: 'Alle, die angemeldet sind',
+        followers: 'Personen, die {{ name }} folgen',
+        admins: 'Die Admins von {{ name }}',
       },
     },
     // Replies on a profile narrower than registered follow its access.

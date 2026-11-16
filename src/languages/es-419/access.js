@@ -1,6 +1,6 @@
 export default {
   public: 'Público',
-  registered: 'Miembros registrados',
+  registered: 'Miembros con sesión iniciada',
   followers: 'Seguidores',
   leaders: 'Seguidos',
   mutuals: 'Mutuos',
@@ -26,7 +26,7 @@ export default {
       own: {
         followers: 'Las personas que te siguen',
         leaders: 'Las personas que sigues',
-        mutuals: 'Las personas que sigues y que te siguen',
+        mutuals: 'Se siguen mutuamente',
         myself: 'Nadie más',
       },
       person: {
@@ -41,5 +41,10 @@ export default {
       },
     },
     capped: 'No disponible aquí: {{ name }} no es visible tan ampliamente, así que una publicación ahí tampoco puede serlo.',
+  },
+  // The access dialog's reasons a level cannot be chosen (roadmap row 155).
+  dialog: {
+    notOnSite: 'Este sitio reserva lo nuevo a quienes iniciaron sesión',
+    notNarrower: 'No más restringido que este perfil',
   },
 };

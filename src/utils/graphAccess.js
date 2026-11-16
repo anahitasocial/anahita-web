@@ -39,8 +39,20 @@ const choicesFor = (access, isPerson) => {
   }));
 };
 
+// Every choice for a profile, for the access dialog (roadmap row 155): ''
+// first, then each level of its kind, those no narrower than the profile's
+// own greyed rather than left out, since they would change nothing.
+const optionsFor = (access, isPerson) => {
+  const levels = Object.values(isPerson ? ACCESS.PEOPLE : ACCESS.ACTORS);
+  const own = RANK[access || 'public'] || 0;
+  return [{ value: '', narrower: true }].concat(levels.map((level) => {
+    return { value: level, narrower: RANK[level] > own };
+  }));
+};
+
 export default {
   toServer,
   fromServer,
   choicesFor,
+  optionsFor,
 };

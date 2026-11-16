@@ -1,6 +1,6 @@
 export default {
   public: 'Öffentlich',
-  registered: 'Angemeldete Mitglieder',
+  registered: 'Angemeldete Personen',
   followers: 'Follower',
   leaders: 'Gefolgt',
   mutuals: 'Gegenseitig',
@@ -26,7 +26,7 @@ export default {
       own: {
         followers: 'Personen, die dir folgen',
         leaders: 'Personen, denen du folgst',
-        mutuals: 'Personen, denen du folgst und die dir zurückfolgen',
+        mutuals: 'Ihr folgt einander',
         myself: 'Sonst niemand',
       },
       person: {
@@ -41,5 +41,10 @@ export default {
       },
     },
     capped: 'Hier nicht verfügbar: {{ name }} ist nicht so weit sichtbar, also kann es ein Beitrag darin auch nicht sein.',
+  },
+  // The access dialog's reasons a level cannot be chosen (roadmap row 155).
+  dialog: {
+    notOnSite: 'Diese Website zeigt Neues nur angemeldeten Personen',
+    notNarrower: 'Nicht enger als dieses Profil',
   },
 };

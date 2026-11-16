@@ -17,14 +17,13 @@ import Divider from '@mui/material/Divider';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
-import Radio from '@mui/material/Radio';
-import RadioGroup from '@mui/material/RadioGroup';
 import Switch from '@mui/material/Switch';
 
 import AccessIcon from '@mui/icons-material/Visibility';
+
+import AccessRow from '../../../components/AccessRow';
+import audience from '../../../utils/audience';
+import PersonType from '../../../proptypes/Person';
 import _ from '../../../utils/lodash';
 
 import ActorType from '../../../proptypes/Actor';
@@ -48,21 +47,28 @@ const ActorsSettingsAccess = (props) => {
     alertError,
     alertSuccess,
     actor,
-    namespace,
+    viewer,
     minContentAccess = ACCESS.ACTORS.PUBLIC,
   } = props;
 
   const actorType = utils.node.isPerson(actor) ? 'PEOPLE' : 'ACTORS';
 
   // An installation can rule out anything new being public
-  // (MIN_CONTENT_ACCESS on the server, published in NodeInfo). There the
-  // option is not offered, unless this profile is public already: it may
-  // stay so, and the menu has to be able to show where things stand. The
-  // server refuses the change either way.
+  // (MIN_CONTENT_ACCESS on the server, published in NodeInfo). There Public
+  // is shown greyed with why, unless this profile is public already: it may
+  // stay so. The server refuses the change either way.
   const publicAllowed = minContentAccess === ACCESS.ACTORS.PUBLIC ||
     actor.access === ACCESS.ACTORS.PUBLIC;
-  const accessOptions = _.values(ACCESS[actorType]).filter((option) => {
-    return publicAllowed || option !== ACCESS.ACTORS.PUBLIC;
+  const place = audience.placeOf(actor, viewer);
+  const accessOptions = _.values(ACCESS[actorType]).map((level) => {
+    const notHere = level === ACCESS.ACTORS.PUBLIC && !publicAllowed;
+    return {
+      value: level,
+      name: audience.nameOf(level, i18n.t),
+      description: audience.describe(level, place, actor.name, i18n.t),
+      disabled: notHere,
+      reason: notHere ? i18n.t('access:dialog.notOnSite') : '',
+    };
   });
 
   const [access, setAccess] = useState(actor.access || ACCESS.ACTORS.PUBLIC);
@@ -108,8 +114,8 @@ const ActorsSettingsAccess = (props) => {
   // No confirmation step.
   //
   // There was one, and it asked a question the page already answers:
-  // every level is on screen with a sentence saying who it admits, and
-  // the choice is a radio button next to that sentence. A dialog
+  // the access dialog shows every level with a line saying who it
+  // admits, and the choice is made beside that line. A dialog
   // repeating "are you sure" after somebody has read six options and
   // picked one teaches them to dismiss dialogs, which is worse than
   // not having asked.
@@ -168,53 +174,18 @@ const ActorsSettingsAccess = (props) => {
         />
         <Divider />
 
-        {/* A radio list rather than a select.
-            Each level needs a sentence to be chosen sensibly —
-            "Mutuals" does not tell somebody who that is — and a
-            dropdown can only show a sentence once it has been
-            opened, one option at a time. Laid out as rows, they can
-            be compared, which is the whole task. */}
-        <RadioGroup
-          // Namespaced, so the person and group forms cannot share a
-          // radio group name if both are ever on one page.
-          name={`${namespace}-access`}
-          aria-label={i18n.t('actor:access.labels.whoCanSee')}
-          value={access}
-          onChange={(event) => {
-            setAccess(event.target.value);
-          }}
-        >
-          <List disablePadding>
-            {accessOptions.map((option) => {
-              return (
-                <ListItemButton
-                  key={`access-${option}`}
-                  divider
-                  onClick={() => {
-                    setAccess(option);
-                  }}
-                >
-                  <ListItemIcon>
-                    <Radio
-                      checked={access === option}
-                      value={option}
-                      color="primary"
-                      slotProps={{
-                        input: {
-                          'aria-label': i18n.t(`access:${option}`),
-                        },
-                      }}
-                    />
-                  </ListItemIcon>
-                  <ListItemText
-                    primary={i18n.t(`access:${option}`)}
-                    secondary={i18n.t(`actor:access.descriptions.${option}`)}
-                  />
-                </ListItemButton>
-              );
-            })}
-          </List>
-        </RadioGroup>
+        {/* The level chosen, opening the access dialog: each level there
+            with who it admits, in the composer's words (roadmap row
+            155). */}
+        <List disablePadding>
+          <AccessRow
+            label={i18n.t('actor:access.labels.whoCanSee')}
+            value={access}
+            options={accessOptions}
+            onChange={setAccess}
+            divider
+          />
+        </List>
         {wouldLeave &&
           <Alert severity="warning" sx={{ m: 2 }}>
             {i18n.t('federation:leaving.byClosing')}
@@ -284,10 +255,11 @@ const ActorsSettingsAccess = (props) => {
 
 ActorsSettingsAccess.propTypes = {
   actor: ActorType.isRequired,
+  // Whose profile it is decides the words: "people who follow you".
+  viewer: PersonType.isRequired,
   editAccess: PropTypes.func.isRequired,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,
-  namespace: PropTypes.string.isRequired,
   // 'public' or 'registered': the widest anything new may be made here.
   minContentAccess: PropTypes.string,
 };
@@ -305,7 +277,7 @@ const mapStateToProps = (namespace) => {
 
     return {
       actor,
-      namespace,
+      viewer: state.session.viewer,
       minContentAccess: metadata.minContentAccess,
     };
   };

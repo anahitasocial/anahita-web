@@ -217,8 +217,24 @@ const newGroupLevels = (minContentAccess = PUBLIC) => {
     levels;
 };
 
+// What a level is called, and who it admits on this kind of place, in the
+// composer's words, which every chooser of a level uses (roadmap row 155):
+// "Signed-in people", "Only me", "People who follow you".
+const nameOf = (level, t) => {
+  return t(`access:audience.names.${level}`);
+};
+
+const describe = (level, place, name, t) => {
+  if (level === PUBLIC || level === REGISTERED) {
+    return t(`access:audience.descriptions.${level}`);
+  }
+  return t(`access:audience.descriptions.${place}.${level}`, { name, defaultValue: '' });
+};
+
 export default {
   PLACE,
+  nameOf,
+  describe,
   newGroupLevels,
   placeOf,
   levelsFor,

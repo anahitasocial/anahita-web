@@ -440,8 +440,20 @@ somebody who may change who sees it (`containers/controls/medium/Access.jsx`).
 A post carries its own `authorized.audiences` for that.
 
 In the composer, it names the current choice and
-opens a short menu; the choice is sent with the post as `access`, so a post is
-never public first and narrowed afterwards.
+opens the access dialog; the choice is sent with the post as `access`, so a
+post is never public first and narrowed afterwards.
+
+**The access dialog** (`components/AccessDialog.jsx`, roadmap row 155) is the
+one way to choose an access level, wherever one is chosen: a post's audience,
+a profile's Privacy, its Followers and following, and each of Settings ›
+Permissions. Every level has its icon (`components/accessIcons.js`), its
+name and a line saying whom it admits, in the same words everywhere
+(`audience.nameOf` and `audience.describe`): "Signed-in people", "Only me",
+"People who follow you" on one's own profile, "People who follow Naomi" on
+another's. A level that cannot be chosen there is shown disabled with the
+reason in place of that line, never hidden. In settings, a row
+(`components/AccessRow.jsx`) asks the question, shows the level chosen and
+opens the dialog.
 
 What it offers comes from the server: every person and group carries
 `authorized.audiences`, the audiences a new post there may have (the services'

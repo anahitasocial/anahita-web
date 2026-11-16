@@ -27,3 +27,13 @@ describe('myself and admins', () => {
     expect(graphAccess.fromServer(undefined, true)).toBe('');
   });
 });
+
+describe('every choice, for the access dialog (roadmap row 155)', () => {
+  it('offers the same as the profile first, then every level, the wider ones greyed', () => {
+    const options = graphAccess.optionsFor('followers', true);
+    expect(options[0]).toEqual({ value: '', narrower: true });
+    expect(options.map((o) => { return o.value; })).toEqual(['', 'public', 'registered', 'followers', 'leaders', 'mutuals', 'myself']);
+    const open = options.filter((o) => { return o.narrower; }).map((o) => { return o.value; });
+    expect(open).toEqual(['', 'leaders', 'mutuals', 'myself']);
+  });
+});

@@ -1,11 +1,11 @@
 export default {
   public: 'Public',
-  registered: 'Registered',
+  registered: 'Signed-in people',
   followers: 'Followers',
   leaders: 'Following',
   mutuals: 'Mutuals',
   admins: 'Admins',
-  myself: 'Myself',
+  myself: 'Only me',
   // Choosing who can see a post while writing it. Its own wording, not
   // the bare level names above: here each one has to say whose followers
   // and whose administrators are meant.
@@ -26,7 +26,7 @@ export default {
       own: {
         followers: 'People who follow you',
         leaders: 'People you follow',
-        mutuals: 'People you follow who follow you back',
+        mutuals: 'You and they follow each other',
         myself: 'Nobody else',
       },
       person: {
@@ -41,5 +41,10 @@ export default {
       },
     },
     capped: 'Not available here: {{ name }} is not visible that widely, so a post on it cannot be either.',
+  },
+  // The access dialog's reasons a level cannot be chosen (roadmap row 155).
+  dialog: {
+    notOnSite: 'This site keeps what is new to people who are signed in',
+    notNarrower: 'No narrower than this profile',
   },
 };

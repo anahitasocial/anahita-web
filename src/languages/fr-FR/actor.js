@@ -74,14 +74,14 @@ export default {
     restoreDefaults: 'Rétablir les valeurs par défaut',
     choices: {
       person: {
-        registered: 'Toute personne connectée',
+        registered: 'Personnes connectées',
         followers: 'Abonnés',
         leaders: 'Abonnements',
         mutuals: 'Relations mutuelles',
         admins: 'Moi uniquement',
       },
       group: {
-        registered: 'Toute personne connectée',
+        registered: 'Personnes connectées',
         followers: 'Abonnés',
         admins: 'Admins',
       },
@@ -108,16 +108,16 @@ export default {
     },
     descriptions: {
       person: {
-        registered: 'Toute personne ayant un compte ici.',
-        followers: 'Les personnes qui vous suivent.',
-        leaders: 'Les personnes que vous suivez.',
-        mutuals: 'Les personnes qui vous suivent et que vous suivez en retour.',
-        admins: 'Personne d’autre.',
+        registered: 'Toute personne connectée',
+        followers: 'Les personnes qui vous suivent',
+        leaders: 'Les personnes que vous suivez',
+        mutuals: 'Vous vous suivez mutuellement',
+        admins: 'Personne d’autre',
       },
       group: {
-        registered: 'Toute personne ayant un compte ici.',
-        followers: 'Les personnes abonnées à ce groupe.',
-        admins: 'Les admins de ce groupe.',
+        registered: 'Toute personne connectée',
+        followers: 'Les personnes qui suivent {{ name }}',
+        admins: 'Les admins de {{ name }}',
       },
     },
     commentLocked: {
