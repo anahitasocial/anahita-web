@@ -15,9 +15,9 @@ import events from '../../utils/events';
 
 const FILTERS = [events.UPCOMING, events.PAST];
 
-// The events a group hosts, on the group's page: the ones to come, or the
-// ones that are over. Whoever administers the group can add one from here,
-// which makes it the group's.
+// The events a group or a channel hosts, on its page: the ones to come, or
+// the ones that are over. Whoever administers it can add one from here,
+// which makes it its own.
 const EventsHosted = ({ group, canAdd = false }) => {
   const [filter, setFilter] = useState(events.UPCOMING);
 

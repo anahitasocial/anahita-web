@@ -7,9 +7,10 @@ import api from '../../api';
 import i18n from '../../languages';
 import PageColumn from '../../components/PageColumn';
 
-// Making an event. With ?host=<group id> in the address it is hosted by
-// that group, which is how "Add event" on a group's page arrives here. The
-// server checks that whoever is making it administers the group.
+// Making an event. With ?host=<id> in the address it is hosted by that
+// group or channel (roadmap row 147, phase 5), which is how "Add event" on
+// its page arrives here. The server checks that whoever is making it
+// administers it.
 const EventAdd = () => {
   const [searchParams] = useSearchParams();
   const hostId = Number(searchParams.get('host')) || 0;
@@ -21,7 +22,10 @@ const EventAdd = () => {
       return;
     }
 
-    api.groups.read(hostId).then((result) => {
+    // A group's id, or else a channel's.
+    api.groups.read(hostId).catch(() => {
+      return api.channels.read(hostId);
+    }).then((result) => {
       setHost(result.data);
     }).catch(() => {
       setHost(null);

@@ -37,14 +37,15 @@ const mine = ({ filter, start = 0, limit = 20 }) => {
   });
 };
 
-// The events a group hosts: upcoming or past.
+// The events a group, or a channel, hosts: upcoming or past.
 const hostedBy = ({
   group,
   filter,
   start = 0,
   limit = 20,
 }) => {
-  return axios.get(`/groups/${group.id}/events/`, {
+  const hosts = (group.type || '').includes('.channel.') ? 'channels' : 'groups';
+  return axios.get(`/${hosts}/${group.id}/events/`, {
     params: { filter, start, limit },
   });
 };

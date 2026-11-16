@@ -63,7 +63,7 @@ describe('why somebody is suggested', () => {
       .toBe('2 people you follow are going');
     expect(forEvent({ type: 'hosted_by_leader', count: 1, ids: [3] })).toBe('Hosted by Bo');
     expect(forEvent({ type: 'hosted_by_leader', count: 1, ids: [9] }))
-      .toBe('Hosted by a group you follow');
+      .toBe('Hosted by a group or channel you follow');
     expect(forEvent({ type: 'popular', count: 9 })).toBe('Many people answered lately');
   });
 

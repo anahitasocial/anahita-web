@@ -411,7 +411,8 @@ const ActorsRead = (props) => {
       <ActorBody
         actor={actor}
         feedView={feedView}
-        events={namespace === 'groups' && actor.id && offersEvents &&
+        // A group's events, and a channel's (roadmap row 147, phase 5).
+        events={['groups', 'channels'].includes(namespace) && actor.id && offersEvents &&
         <EventsHosted
           group={actor}
           canAdd={isAuthenticated && canAdminister}
