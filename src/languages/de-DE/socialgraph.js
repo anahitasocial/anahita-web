@@ -15,10 +15,9 @@ export default {
   // Who may see the lists (roadmap row 151).
   graphAccess: {
     title: 'Follower und Gefolgte',
-    label: 'Wer sie sehen kann',
-    same: 'Wer dein Profil sehen kann',
-    sameOf: 'Wer {{ name }} sehen kann',
-    help: 'Die Zahlen bleiben auf dem Profil. Nur die Listen sind diesen Personen vorbehalten und nie mehr Leuten sichtbar als das Profil.',
+    cDescription: 'Wer die Listen der Follower und Gefolgten sehen kann. Die Zahlen bleiben auf dem Profil.',
+    same: 'Wie dieses Profil',
+    sameDescription: 'Wer dieses Profil sehen kann.',
     saved: 'Gespeichert',
     notSaved: 'Konnte nicht gespeichert werden. Versuch es gleich noch einmal.',
   },

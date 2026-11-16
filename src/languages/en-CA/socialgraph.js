@@ -15,10 +15,9 @@ export default {
   // Who may see the lists (roadmap row 151).
   graphAccess: {
     title: 'Followers and following',
-    label: 'Who can see them',
-    same: 'Whoever can see your profile',
-    sameOf: 'Whoever can see {{ name }}',
-    help: 'The counts stay on the profile. Only the lists are kept to these people, and never shown to more people than can see the profile.',
+    cDescription: 'Who can see the lists of followers and following. The counts stay on the profile.',
+    same: 'Same as this profile',
+    sameDescription: 'Whoever can see this profile.',
     saved: 'Saved',
     notSaved: 'Couldn’t save that. Try again in a moment.',
   },

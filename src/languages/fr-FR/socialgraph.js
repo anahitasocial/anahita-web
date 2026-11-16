@@ -15,10 +15,9 @@ export default {
   // Who may see the lists (roadmap row 151).
   graphAccess: {
     title: 'Abonnés et abonnements',
-    label: 'Qui peut les voir',
-    same: 'Quiconque peut voir votre profil',
-    sameOf: 'Quiconque peut voir {{ name }}',
-    help: 'Les nombres restent sur le profil. Seules les listes sont réservées à ces personnes, et jamais montrées à plus de monde que le profil.',
+    cDescription: 'Qui peut voir les listes d’abonnés et d’abonnements. Les nombres restent sur le profil.',
+    same: 'Comme ce profil',
+    sameDescription: 'Quiconque peut voir ce profil.',
     saved: 'Enregistré',
     notSaved: 'Impossible d’enregistrer. Réessayez dans un instant.',
   },

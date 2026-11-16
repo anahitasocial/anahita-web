@@ -2,50 +2,31 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Avatar from '@mui/material/Avatar';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
-import MenuItem from '@mui/material/MenuItem';
-import TextField from '@mui/material/TextField';
+import Divider from '@mui/material/Divider';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FollowsIcon from '@mui/icons-material/People';
 
 import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
 import utils from '../../../utils';
-
-const { isPerson, getActorName } = utils.node;
+import graphAccess from '../../../utils/graphAccess';
 
 // Who may see a profile's followers and whom it follows (roadmap row 151),
-// without making the profile itself more private. Whoever may see the
-// profile, unless its owner or admins choose fewer; never more, which the
-// server sees to. Saved as soon as it is chosen, as who may quote is.
-//
-// A person has every level; a group or an event follows nobody, so people
-// it follows and mutuals are not offered.
-const levelsFor = (actor) => {
-  return isPerson(actor) ?
-    ['', 'public', 'registered', 'followers', 'leaders', 'mutuals', 'admins'] :
-    ['', 'public', 'registered', 'followers', 'admins'];
-};
-
-const labelOf = (actor, level) => {
-  const name = getActorName(actor);
-  const said = 'access:audience.descriptions';
-  if (level === '') {
-    return isPerson(actor) ?
-      i18n.t('socialgraph:graphAccess.same') :
-      i18n.t('socialgraph:graphAccess.sameOf', { name });
-  }
-  if (level === 'public' || level === 'registered') {
-    return i18n.t(`${said}.${level}`);
-  }
-  if (isPerson(actor)) {
-    return i18n.t(`${said}.own.${level === 'admins' ? 'myself' : level}`);
-  }
-  return i18n.t(`${said}.group.${level}`, { name });
-};
-
+// without making the profile itself more private. Laid out as the Access
+// card is, with its names and descriptions for the levels, so that nobody
+// learns them twice (the user, 2026-11-15); "Same as this profile" first,
+// then only the levels narrower than the profile's own
+// (utils/graphAccess.js). Saved as soon as it is chosen.
 const ActorsSettingsGraphAccess = ({
   namespace,
   actor,
@@ -54,10 +35,16 @@ const ActorsSettingsGraphAccess = ({
   alertError,
 }) => {
   const [isSaving, setIsSaving] = useState(false);
+  const isPerson = utils.node.isPerson(actor);
+  const chosen = graphAccess.fromServer(actor.graphAccess, isPerson);
+  const choices = graphAccess.choicesFor(actor.access, isPerson);
 
-  const handleChange = (event) => {
+  const choose = (level) => {
+    if (level === chosen || isSaving) {
+      return;
+    }
     setIsSaving(true);
-    api.graphAccess.edit(namespace, actor, event.target.value).then(() => {
+    api.graphAccess.edit(namespace, actor, graphAccess.toServer(level)).then(() => {
       return read(actor);
     }).then(() => {
       alertSuccess(i18n.t('socialgraph:graphAccess.saved'));
@@ -69,33 +56,63 @@ const ActorsSettingsGraphAccess = ({
       });
   };
 
+  const nameOf = (level) => {
+    return level ? i18n.t(`access:${level}`) : i18n.t('socialgraph:graphAccess.same');
+  };
+  const descriptionOf = (level) => {
+    return level ?
+      i18n.t(`actor:access.descriptions.${level}`) :
+      i18n.t('socialgraph:graphAccess.sameDescription');
+  };
+
   return (
     <Card>
       <CardHeader
+        avatar={
+          <Avatar>
+            <FollowsIcon />
+          </Avatar>
+        }
         title={i18n.t('socialgraph:graphAccess.title')}
-        slotProps={{ title: { variant: 'subtitle1' } }}
+        subheader={i18n.t('socialgraph:graphAccess.cDescription')}
+        slotProps={{
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
+        }}
       />
-      <CardContent sx={{ pt: 0 }}>
-        <TextField
-          select
-          fullWidth
-          id={`graph-access-${actor.id}`}
-          label={i18n.t('socialgraph:graphAccess.label')}
-          value={actor.graphAccess || ''}
-          onChange={handleChange}
-          disabled={isSaving}
-          helperText={i18n.t('socialgraph:graphAccess.help')}
-          slotProps={{ select: { displayEmpty: true }, inputLabel: { shrink: true } }}
-        >
-          {levelsFor(actor).map((level) => {
+      <Divider />
+      <RadioGroup
+        name={`${namespace}-graph-access`}
+        aria-label={i18n.t('socialgraph:graphAccess.title')}
+        value={chosen}
+        onChange={(event) => {
+          choose(event.target.value);
+        }}
+      >
+        <List disablePadding>
+          {choices.map((level) => {
             return (
-              <MenuItem key={level || 'same'} value={level}>
-                {labelOf(actor, level)}
-              </MenuItem>
+              <ListItemButton
+                key={`graph-access-${level || 'same'}`}
+                divider
+                disabled={isSaving}
+                onClick={() => {
+                  choose(level);
+                }}
+              >
+                <ListItemIcon>
+                  <Radio
+                    checked={chosen === level}
+                    value={level}
+                    color="primary"
+                    slotProps={{ input: { 'aria-label': nameOf(level) } }}
+                  />
+                </ListItemIcon>
+                <ListItemText primary={nameOf(level)} secondary={descriptionOf(level)} />
+              </ListItemButton>
             );
           })}
-        </TextField>
-      </CardContent>
+        </List>
+      </RadioGroup>
     </Card>
   );
 };
