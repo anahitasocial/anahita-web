@@ -5,7 +5,7 @@ export default {
   cTitle: 'Canais',
   mTitle: 'Canais',
   // What a website is here, where somebody meets the list.
-  description: 'O feed de um site como canal, para seguir aqui e do fediverso.',
+  description: 'Organizações e projetos que publicam em nome próprio para seus seguidores.',
   // Making one without a feed (roadmap row 147, phase 2), as a group is made.
   add: {
     cTitle: 'Criar canal',
@@ -117,7 +117,7 @@ export default {
       unavailable: {
         site_private: 'Este site reserva o que tem para os membros, então nenhum canal dele está no fediverso.',
         site_unreachable: 'Este site não tem um endereço que outros servidores consigam alcançar, então nenhum canal dele está no fediverso.',
-        profile_not_public: 'Enquanto o canal estiver desativado ou excluído, ele não pode estar no fediverso.',
+        profile_not_public: 'Enquanto o canal não for público, ou estiver desativado ou excluído, ele não pode estar no fediverso.',
       },
     },
     blueskyHelp: 'Conecte a conta do Bluesky do próprio canal, com o seu domínio como identificador se quiser (@example.com): as notas dele são publicadas lá também, e as pessoas no Bluesky o seguem por lá. Use uma senha criada para um app, não a senha da própria conta.',
@@ -126,7 +126,7 @@ export default {
     snippetLabel: 'Siga nosso canal no fediverso',
     disable: 'Desativar',
     disablePrompts: {
-      description: 'Desativar esconde este canal de todo mundo e faz as novas publicações do seu site pararem de aparecer aqui.',
+      description: 'Desativar esconde este canal de todo mundo, e nada de novo aparece nele, nem do feed do seu site.',
       descriptionDisabled: 'Este canal está desativado. Ele não aparece em lugar nenhum e não publica nada.',
       reversible: 'Isso pode ser desfeito a qualquer momento, e nada é excluído.',
       action: 'Desativar',
@@ -152,9 +152,9 @@ export default {
         followers_other: '{{ count }} seguidores',
         admins: '{{ count }} admin',
         admins_other: '{{ count }} admins',
-        memberSince: 'Conectado em {{ date }}.',
+        memberSince: 'Criado em {{ date }}.',
       },
-      description: 'Excluir remove este canal daqui, as publicações que ele fez a partir do feed do seu site e as respostas a elas. O seu site em si não é afetado.',
+      description: 'Excluir remove este canal daqui, as publicações dele e as respostas a elas. Um site cujo feed ele lê não é afetado.',
       reversible: 'Isso não é imediato. Ele fica oculto na hora e é apagado definitivamente depois de {{ count }} dias. Qualquer admin pode restaurá-lo nesta página antes disso.',
       revoked: 'Os seguidores dele aqui e no fediverso o perdem na hora.',
       handle: 'O identificador {{ alias }} continua reservado depois.',

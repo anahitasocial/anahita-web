@@ -214,8 +214,8 @@ history. The main paths:
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/channels`, `/channels/:id`, `/channels/:id/settings` | Channels, a channel (for now a website's feed as a profile, roadmap row 147), and its settings: Info, Admins, Blocked, On your site, Fediverse, Danger zone. Its page is at `/@alias` like any profile. The old `/websites…` addresses lead here |
-| `/channels/connect` | Connecting a website as a channel: its address, the proof of its domain, then its name and handle. For those the installation's `channelsFrom` allows. See [Channels](https://github.com/anahitasocial/anahita-services/blob/main/docs/channels.md) in anahita-services |
+| `/channels`, `/channels/:id`, `/channels/:id/settings` | Channels, a channel (a profile its admins post on as it, roadmap row 147), and its settings: Info, Admins, Privacy (as a group's), Posts (articles and topics turned on, `ChannelPostKinds.jsx`; downloads), On your site (its website's feed, `channels/FeedCard.jsx` and `ConnectFeedDialog.jsx`, and the lines for its site), Fediverse, Danger zone. A channel's page has an Events tab as a group's has; under its posts and replies, its admins see Written by (`components/WrittenBy.jsx`). Its page is at `/@alias` like any profile. The old `/websites…` addresses lead here |
+| `/channels/add` | Create channel, the group's form shared (`actors/Add`), for those the installation's `channelsFrom` allows; a website's feed is connected afterwards, in its settings. `/channels/connect`, where a channel was once made of a feed, leads here. See [Channels](https://github.com/anahitasocial/anahita-services/blob/main/docs/channels.md) in anahita-services |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id`, `/audio/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The Hashtags page has Trending and All; the hashtags one follows are the ones in one's custom feeds, read there, not listed here (`containers/hashtags`). The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
@@ -863,7 +863,7 @@ own, because a video is too big to be sent with the post (the services'
    out in its `instance.json` (anahita-services' `docs/instance-features.md`):
    profile tabs and composers follow the features the server sends, and
    NodeInfo's `offers` (`utils/offers.js`) takes Groups, Events and
-   Channels out of the menu, a group's Events tab, the recommendations'
+   Channels out of the menu, a group's and a channel's Events tab, the recommendations'
    tabs and the buttons that make them (`permissions/actor.js`).
 2. **Posting** (`containers/media/Composer/Video`): the file is refused at
    once if it is not a video or is too large. `useVideoUpload.js` then

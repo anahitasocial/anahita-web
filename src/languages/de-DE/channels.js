@@ -5,7 +5,7 @@ export default {
   cTitle: 'Kanäle',
   mTitle: 'Kanäle',
   // What a website is here, where somebody meets the list.
-  description: 'Der Feed einer Website als Kanal, dem man hier und aus dem Fediverse folgen kann.',
+  description: 'Organisationen und Projekte, die in eigenem Namen für ihre Follower veröffentlichen.',
   // Making one without a feed (roadmap row 147, phase 2), as a group is made.
   add: {
     cTitle: 'Kanal erstellen',
@@ -117,7 +117,7 @@ export default {
       unavailable: {
         site_private: 'Diese Website behält ihre Inhalte für ihre Mitglieder, deshalb ist kein Kanal hier im Fediverse.',
         site_unreachable: 'Diese Website hat keine Adresse, die andere Server erreichen können, deshalb ist kein Kanal hier im Fediverse.',
-        profile_not_public: 'Solange der Kanal ausgeschaltet oder gelöscht ist, kann er nicht im Fediverse sein.',
+        profile_not_public: 'Solange der Kanal nicht öffentlich, ausgeschaltet oder gelöscht ist, kann er nicht im Fediverse sein.',
       },
     },
     blueskyHelp: 'Verbinde das eigene Bluesky-Konto des Kanals, auf Wunsch mit deiner Domain als Handle (@example.com): Seine Notizen werden auch dort veröffentlicht, und Leute auf Bluesky folgen ihm dort. Verwende ein App-Passwort, nicht das Passwort des Kontos selbst.',
@@ -126,7 +126,7 @@ export default {
     snippetLabel: 'Folge unserem Kanal im Fediverse',
     disable: 'Ausschalten',
     disablePrompts: {
-      description: 'Ausschalten verbirgt diesen Kanal vor allen, und die neuen Beiträge deiner Website erscheinen hier nicht mehr.',
+      description: 'Ausschalten verbirgt diesen Kanal vor allen, und nichts Neues erscheint mehr darin, auch nicht aus dem Feed seiner Website.',
       descriptionDisabled: 'Dieser Kanal ist ausgeschaltet. Er erscheint nirgends und veröffentlicht nichts.',
       reversible: 'Das lässt sich jederzeit rückgängig machen, und nichts wird gelöscht.',
       action: 'Ausschalten',
@@ -152,9 +152,9 @@ export default {
         followers_other: '{{ count }} Follower',
         admins: '{{ count }} Admin',
         admins_other: '{{ count }} Admins',
-        memberSince: 'Verbunden am {{ date }}.',
+        memberSince: 'Erstellt am {{ date }}.',
       },
-      description: 'Beim Löschen werden dieser Kanal hier, die Beiträge aus dem Feed deiner Website und die Antworten darunter entfernt. Deine Website selbst bleibt unberührt.',
+      description: 'Beim Löschen werden dieser Kanal hier, seine Beiträge und die Antworten darunter entfernt. Eine Website, deren Feed er liest, bleibt unberührt.',
       reversible: 'Das passiert nicht sofort. Sie wird gleich verborgen und nach {{ count }} Tagen endgültig gelöscht. Bis dahin können alle Admins sie auf dieser Seite wiederherstellen.',
       revoked: 'Ihre Follower hier und im Fediverse verlieren sie sofort.',
       handle: 'Das Handle {{ alias }} bleibt danach reserviert.',

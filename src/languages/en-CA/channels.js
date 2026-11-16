@@ -1,11 +1,12 @@
-// A channel, as a kind of profile (roadmap row 147): for now a website's feed
-// to follow, here and from the fediverse (docs/channels.md in
-// anahita-services). It was a Website, and before that Pulse.
+// A channel, as a kind of profile (roadmap row 147): a profile for an
+// organization or a project that its admins post on as it, which may read a
+// website's feed (docs/channels.md in anahita-services). It was a Website,
+// and before that Pulse.
 export default {
   cTitle: 'Channels',
   mTitle: 'Channels',
-  // What a website is here, where somebody meets the list.
-  description: 'A website’s feed as a channel, to follow here and from the fediverse.',
+  // What a channel is here, where somebody meets the list.
+  description: 'Organizations and projects, posting as themselves for their followers.',
   // Making one without a feed (roadmap row 147, phase 2), as a group is made.
   add: {
     cTitle: 'Create channel',
@@ -117,7 +118,7 @@ export default {
       unavailable: {
         site_private: 'This site keeps what is on it to its members, so no channel on it is on the fediverse.',
         site_unreachable: 'This site has no address other servers can reach, so no channel on it is on the fediverse.',
-        profile_not_public: 'While the channel is switched off or deleted, it cannot be on the fediverse.',
+        profile_not_public: 'While the channel is not public, or is switched off or deleted, it cannot be on the fediverse.',
       },
     },
     blueskyHelp: 'Connect the channel’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
@@ -126,7 +127,7 @@ export default {
     snippetLabel: 'Follow our channel on the fediverse',
     disable: 'Disable',
     disablePrompts: {
-      description: 'Disabling hides this channel from everyone and stops your site’s new posts appearing here.',
+      description: 'Disabling hides this channel from everyone, and nothing new appears on it, its website’s feed included.',
       descriptionDisabled: 'This channel is disabled. It does not appear anywhere and posts nothing.',
       reversible: 'This can be undone at any time, and nothing is deleted.',
       action: 'Disable',
@@ -152,9 +153,9 @@ export default {
         followers_other: '{{ count }} followers',
         admins: '{{ count }} admin',
         admins_other: '{{ count }} admins',
-        memberSince: 'Connected {{ date }}.',
+        memberSince: 'Created {{ date }}.',
       },
-      description: 'Deleting removes this channel here, the posts it made of your site’s feed, and the replies under them. Your site itself is not touched.',
+      description: 'Deleting removes this channel here, its posts, and the replies under them. A website it reads is not touched.',
       reversible: 'This is not immediate. It is hidden straight away and permanently erased after {{ count }} days. Any admin can restore it from this page before then.',
       revoked: 'Its followers here and on the fediverse lose it at once.',
       handle: 'The handle {{ alias }} stays reserved afterwards.',

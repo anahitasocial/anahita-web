@@ -4,7 +4,7 @@
 export default {
   cTitle: 'Chaînes',
   mTitle: 'Chaînes',
-  description: 'Le fil d’un site web en chaîne, à suivre ici et depuis le fédivers.',
+  description: 'Des organisations et des projets, qui publient en leur nom pour leurs abonnés.',
   // Making one without a feed (roadmap row 147, phase 2), as a group is made.
   add: {
     cTitle: 'Créer une chaîne',
@@ -113,7 +113,7 @@ export default {
       unavailable: {
         site_private: 'Ce site réserve ce qu’il contient à ses membres : aucune chaîne n’y est sur le fédivers.',
         site_unreachable: 'Ce site n’a pas d’adresse que d’autres serveurs puissent joindre : aucune chaîne n’y est sur le fédivers.',
-        profile_not_public: 'Tant que la chaîne est désactivée ou supprimée, elle ne peut pas être sur le fédivers.',
+        profile_not_public: 'Tant que la chaîne n’est pas publique, ou qu’elle est désactivée ou supprimée, elle ne peut pas être sur le fédivers.',
       },
     },
     blueskyHelp: 'Connectez le compte Bluesky de la chaîne elle-même, avec votre domaine comme identifiant si vous voulez (@exemple.fr) : ses notes y sont publiées aussi, et les gens sur Bluesky la suivent là-bas. Utilisez un mot de passe d’application, pas celui du compte.',
@@ -122,7 +122,7 @@ export default {
     snippetLabel: 'Suivez notre chaîne sur le fédivers',
     disable: 'Désactiver',
     disablePrompts: {
-      description: 'Désactiver cache cette chaîne à tout le monde et arrête la parution des nouvelles publications de votre site.',
+      description: 'Désactiver cache cette chaîne à tout le monde, et plus rien de nouveau n’y paraît, le fil de son site compris.',
       descriptionDisabled: 'Cette chaîne est désactivée. Elle n’apparaît nulle part et ne publie rien.',
       reversible: 'Cela peut être annulé à tout moment, et rien n’est supprimé.',
       action: 'Désactiver',
@@ -148,9 +148,9 @@ export default {
         followers_other: '{{ count }} abonnés',
         admins: '{{ count }} admin',
         admins_other: '{{ count }} admins',
-        memberSince: 'Connecté le {{ date }}.',
+        memberSince: 'Créée le {{ date }}.',
       },
-      description: 'Supprimer retire cette chaîne d’ici, les publications qu’elle a faites du fil de votre site, et les réponses en dessous. Votre site lui-même n’est pas touché.',
+      description: 'Supprimer retire cette chaîne d’ici, ses publications et les réponses en dessous. Un site dont elle lit le fil n’est pas touché.',
       reversible: 'Ce n’est pas immédiat. Il est caché tout de suite et effacé définitivement après {{ count }} jours. Tout admin peut le restaurer depuis cette page d’ici là.',
       revoked: 'Ses abonnés ici et sur le fédivers le perdent aussitôt.',
       handle: 'L’identifiant {{ alias }} reste réservé ensuite.',

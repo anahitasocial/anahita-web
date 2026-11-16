@@ -54,10 +54,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Changed
 
-1. **Connect your website is now a step in a channel's settings**
+1. **A channel's words say what a channel is** (roadmap row 147, phase 6):
+   the Channels page, its Disable and Delete cards, and why a channel that
+   is not public is not on the fediverse.
+2. **Connect your website is now a step in a channel's settings**
    (roadmap row 147, phase 4): a channel is created first; the old
    /channels/connect address leads to Create channel.
-2. **Websites are channels** (roadmap row 147, phase 1): the same profiles
+3. **Websites are channels** (roadmap row 147, phase 1): the same profiles
    under a new name, at `/channels`, in the menu, recommendations, custom
    feeds, onboarding and the administrators' lists, in every language base.
    The old `/websites…` addresses lead to the new ones. Nothing else changes
