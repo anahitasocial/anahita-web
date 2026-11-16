@@ -83,6 +83,7 @@ export default {
     blocked: 'La personne a été bloquée',
     removed_as_spam: 'Supprimé comme spam',
     refused: 'Le compte a été refusé',
+    warned: 'Un avertissement lui a été donné',
     other: 'Autre chose',
   },
   list: {

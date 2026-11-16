@@ -34,6 +34,7 @@ export default {
   turnOffFailed: 'That could not be turned off.',
   undo: 'Undo',
   adminAdd: '<0>{{subject}}</0> is now an admin of <2>{{target}}</2>',
+  mediumWarned: 'The administrators gave your <1>post</1> a content warning',
   other: 'Something new from <0>{{subject}}</0>',
   bell_one: 'Notifications, {{count}} unread',
   bell_other: 'Notifications, {{count}} unread',

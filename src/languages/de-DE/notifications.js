@@ -34,6 +34,7 @@ export default {
   turnOffFailed: 'Das ließ sich nicht ausschalten.',
   undo: 'Rückgängig',
   adminAdd: '<0>{{subject}}</0> ist jetzt Admin von <2>{{target}}</2>',
+  mediumWarned: 'Die Administratoren haben deinem <1>Beitrag</1> eine Inhaltswarnung gegeben',
   other: 'Neues von <0>{{subject}}</0>',
   bell_one: 'Benachrichtigungen, {{count}} ungelesen',
   bell_other: 'Benachrichtigungen, {{count}} ungelesen',

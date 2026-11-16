@@ -34,6 +34,7 @@ export default {
   turnOffFailed: 'Impossible de désactiver.',
   undo: 'Annuler',
   adminAdd: '<0>{{subject}}</0> fait désormais partie des admins de <2>{{target}}</2>',
+  mediumWarned: 'Les administrateurs ont donné un avertissement à votre <1>publication</1>',
   other: 'Du nouveau de <0>{{subject}}</0>',
   bell_one: 'Notifications, {{count}} non lue',
   bell_other: 'Notifications, {{count}} non lues',

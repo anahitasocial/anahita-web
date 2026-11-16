@@ -35,6 +35,9 @@ const KINDS = [
   'event_changed',
   'event_cancelled',
   'event_reminder',
+  // The administrators gave the reader's post a content warning
+  // (anahita-services row 122, phase 4).
+  'medium_warned',
 ];
 
 export default {

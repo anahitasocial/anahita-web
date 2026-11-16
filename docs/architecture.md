@@ -713,7 +713,14 @@ next note under it and "Show the thread" with how many notes it has
     Hide, in a list, is one line, `HiddenLine`, "Hidden: Graphic media",
     that opens it (`MediumCard`, the feed's card, replies, quotes); on a
     post's own page and in the photo theatre, opened on purpose, Hide is as
-    Warn.
+    Warn. **A site administrator** (phase 4) gives a warning as a moderator
+    on any post or reply they did not write
+    (`permissions/medium.js`, `isWarningModerator`, `canSetWarning`): from
+    its menu, and from a reported post's case, whose ⋮ menu has Content
+    warning and closes the case as `warned` (`admin/Reports/Case.jsx`). The
+    dialog then says its author is told and cannot take it off
+    (`ContentWarningDialog`'s `moderator`), and the author's notification
+    is `medium_warned`.
 
 13. **A post's menu in a feed** has Edit and Delete where the server says the
     viewer may (`authorized.edit`, `authorized.delete`, sent with each feed

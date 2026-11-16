@@ -84,6 +84,7 @@ export default {
     blocked: 'The person was blocked',
     removed_as_spam: 'It was removed as spam',
     refused: 'The account was refused',
+    warned: 'It was given a content warning',
     other: 'Something else',
   },
   list: {

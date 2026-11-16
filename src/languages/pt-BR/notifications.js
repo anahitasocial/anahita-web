@@ -34,6 +34,7 @@ export default {
   turnOffFailed: 'Não foi possível desativar.',
   undo: 'Desfazer',
   adminAdd: '<0>{{subject}}</0> agora administra <2>{{target}}</2>',
+  mediumWarned: 'Os administradores deram um aviso de conteúdo à sua <1>publicação</1>',
   other: 'Novidades de <0>{{subject}}</0>',
   bell_one: 'Notificações, {{count}} não lida',
   bell_other: 'Notificações, {{count}} não lidas',

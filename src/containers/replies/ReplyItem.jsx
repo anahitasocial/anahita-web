@@ -38,6 +38,7 @@ import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFedivers
 import PersonType from '../../proptypes/Person';
 import MenuItemLabel from '../../components/MenuItemLabel';
 import ContentWarningDialog from '../../components/ContentWarningDialog';
+import mediumPermissions from '../../permissions/medium';
 import WarningCover, { Blurred, HiddenLine, useWarning } from '../../components/WarningCover';
 import warnings from '../../utils/warnings';
 import i18n from '../../languages';
@@ -129,10 +130,13 @@ const ReplyItem = ({
   // replies leave the thread when it is read again.
   const mute = useMute(reply.deleted ? null : viewer, author);
   // Its content warning, changed by its writer (row 122), but not one the
-  // administrators gave.
+  // administrators gave; or by a site administrator, as a moderator, on
+  // anybody's reply (phase 4).
   const warning = warnings.of(reply);
-  const canWarn = Boolean(authorized.edit && onWarning && !reply.deleted && !warning.byModerator);
-  const hasMenu = authorized.edit || authorized.delete || authorized.hide ||
+  const moderating = mediumPermissions.isWarningModerator(viewer, { ...reply, author });
+  const canWarn = Boolean(onWarning && !reply.deleted &&
+    (moderating || (authorized.edit && !warning.byModerator)));
+  const hasMenu = authorized.edit || canWarn || authorized.delete || authorized.hide ||
     canBlockFromOwner || mute.canMute || report.canReport || original;
 
   const under = children.length > 0 && (
@@ -494,6 +498,7 @@ const ReplyItem = ({
                 open={isWarning}
                 value={warning}
                 saving={isSavingWarning}
+                moderator={moderating}
                 onClose={() => {
                   setIsWarning(false);
                 }}

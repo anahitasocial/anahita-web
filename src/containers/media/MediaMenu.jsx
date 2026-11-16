@@ -76,9 +76,11 @@ const MediaMenu = ({
   // Not on a reply, which follows the post at the top of its thread.
   const canSetReplies = canEdit && isCommentable(medium) && !medium.rootId;
   // Its content warning (row 122), for whoever may edit it, on a post made
-  // here; not one the administrators gave.
+  // here, and not one the administrators gave; or for a site administrator,
+  // as a moderator, on any post (phase 4).
   const warning = warnings.of(medium);
-  const canSetWarning = canEdit && !utils.federation.isRemote(medium) && !warning.byModerator;
+  const canSetWarning = permissions.canSetWarning(viewer, medium);
+  const moderating = permissions.isWarningModerator(viewer, medium);
   // Pinning is the profile's: the server says whether this viewer may.
   const canPin = Boolean(medium.authorized && medium.authorized.pin);
   // Whoever runs the group it is in, or a site administrator, may block
@@ -275,6 +277,7 @@ const MediaMenu = ({
       {canSetWarning &&
         <ControlContentWarning
           medium={medium}
+          moderator={moderating}
           open={isSettingWarning}
           onClose={() => {
             setIsSettingWarning(false);

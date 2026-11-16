@@ -31,6 +31,7 @@ const ContentWarningDialog = ({
   onClose,
   onSave,
   saving = false,
+  moderator = false,
 }) => {
   const [kind, setKind] = useState(value.kind || '');
   const [text, setText] = useState(value.text || '');
@@ -123,7 +124,7 @@ const ContentWarningDialog = ({
               slotProps={{ htmlInput: { maxLength: warnings.TEXT_MAX } }}
             />}
           <Typography variant="body2" color="textSecondary">
-            {i18n.t('warnings:help')}
+            {i18n.t(moderator ? 'warnings:moderatorHelp' : 'warnings:help')}
           </Typography>
           <Stack direction="row" spacing={1}>
             <Button fullWidth disabled={saving} onClick={onClose}>
@@ -163,6 +164,9 @@ ContentWarningDialog.propTypes = {
   // Called with { kind, text }.
   onSave: PropTypes.func.isRequired,
   saving: PropTypes.bool,
+  // Given by a site administrator as the site's (row 122, phase 4): its
+  // help line says its author is told and may not take it off.
+  moderator: PropTypes.bool,
 };
 
 export default ContentWarningDialog;

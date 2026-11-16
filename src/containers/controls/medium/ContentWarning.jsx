@@ -17,6 +17,7 @@ const ControlsMediumContentWarning = ({
   medium,
   open,
   onClose,
+  moderator = false,
   read,
   alertSuccess,
   alertError,
@@ -46,6 +47,7 @@ const ControlsMediumContentWarning = ({
       onClose={onClose}
       onSave={handleSave}
       saving={isSaving}
+      moderator={moderator}
     />
   );
 };
@@ -54,6 +56,8 @@ ControlsMediumContentWarning.propTypes = {
   medium: MediumType.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
+  // Given by a site administrator as the site's.
+  moderator: PropTypes.bool,
   read: PropTypes.func.isRequired,
   alertSuccess: PropTypes.func.isRequired,
   alertError: PropTypes.func.isRequired,

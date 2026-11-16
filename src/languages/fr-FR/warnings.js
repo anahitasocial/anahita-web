@@ -23,6 +23,8 @@ export default {
   remove: 'Retirer l’avertissement',
   view: 'Afficher',
   byModerator: 'Les administrateurs ont donné cet avertissement à la publication : il ne peut pas être changé ici.',
+  // In the dialog, for an administrator giving one as the site's.
+  moderatorHelp: 'Donné par les administrateurs : son auteur en est informé, et ne peut pas le retirer.',
   saved: 'Avertissement enregistré.',
   notSaved: 'L’avertissement n’a pas pu être enregistré.',
   // A post the reader chose to hide, as one line in a list.

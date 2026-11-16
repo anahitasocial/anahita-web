@@ -15,47 +15,52 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    122, phase 2): Settings › Content has Show, Warn or Hide for each kind.
    Hidden, a post is one line in a list, "Hidden: Graphic media", which
    opens it. Every kind starts at Warn.
-2. **Custom feeds of any, or all** (roadmap row 149): "Show posts that
+2. **The administrators can give a post a content warning** (roadmap row
+   122, phase 4): "Should have a content warning" among the reasons to
+   report a post, and Content warning in its case's menu and in the menu
+   of any post or reply, for a site administrator. Its author is told, and
+   cannot take it off.
+3. **Custom feeds of any, or all** (roadmap row 149): "Show posts that
    match: Any of these, All of these", once a feed asks for two kinds of
    thing: posts from Naomi, or anything tagged #ceres. A new feed starts at
    Any; the feeds already made keep All. Its sentence says "or" between them.
-3. **Events hosted by a channel** (roadmap row 147, phase 5): a channel
+4. **Events hosted by a channel** (roadmap row 147, phase 5): a channel
    has an Events tab, as a group has, where its admins add one; "Hosted by
    a group or channel you follow" among the reasons an event is suggested.
-4. **A channel's website feed in its settings** (roadmap row 147, phase
+5. **A channel's website feed in its settings** (roadmap row 147, phase
    4): On your site › Your website's feed, with Connect, which proves the
    site is yours in a dialog, and Disconnect, which keeps the posts it
    brought.
-5. **Posting as a channel** (roadmap row 147, phase 3): a channel's admins
+6. **Posting as a channel** (roadmap row 147, phase 3): a channel's admins
    post notes, photos, videos and sounds on it with the + button, as the
    channel; they alone see "Written by" and the admin's name under its
    posts and replies. Its Posts tab turns articles and topics on, and
    holds the downloads choice.
-6. **Create channel** (roadmap row 147, phase 2): from + on the Channels
+7. **Create channel** (roadmap row 147, phase 2): from + on the Channels
    page, as a group is made, with or without a website's feed (connecting
    one is a link on the form, for now). A channel's Privacy tab has a
    group's: who can see it, follow requests, who sees its followers, and
    whom it blocked; and it can be archived.
-7. **Whose notifications** (roadmap row 146): Following on a profile you
+8. **Whose notifications** (roadmap row 146): Following on a profile you
    follow opens a menu to turn its notifications off or on, or unfollow;
    a new post's notification offers Turn off, with Undo. What you reply to
    or repost tells you of what the people you follow do there, and what is
    yours tells you of everyone.
-8. **Blocking a server yourself** (roadmap row 152): Block server in the
+9. **Blocking a server yourself** (roadmap row 152): Block server in the
    menu of somebody on the fediverse, with a confirmation that says what it
    does, and Blocked servers in Settings › Access, beside who is blocked
    and muted, to list, add and unblock them. Nothing from the server is
    shown to you, nor its notifications, and your follows with people there
    end.
-9. **Who sees your followers and who you follow** (roadmap row 151), in
+10. **Who sees your followers and who you follow** (roadmap row 151), in
    Settings › Privacy, without making the profile more private: whoever can
    see it, or fewer, down to nobody else. The counts stay; a list kept from
    somebody says so calmly. For groups and events too.
-10. **A passkey offered after signing in** (roadmap row 153): once, on a
+11. **A passkey offered after signing in** (roadmap row 153): once, on a
    device that can hold one, to somebody who has none, "Sign in faster
    next time?", with Skip and Add passkey. Skip is remembered on that
    device; Settings › Security still offers one.
-11. **Removing a follower** (roadmap row 150): Remove beside each follower
+12. **Removing a follower** (roadmap row 150): Remove beside each follower
    in one's own list of followers, after a confirmation saying they are
    not told and may follow again. The server of a follower elsewhere is
    told to stop delivering.

@@ -33,6 +33,8 @@ import i18n from '../../../languages';
 import utils from '../../../utils';
 
 import ResolveDialog from './ResolveDialog';
+import ContentWarningDialog from '../../../components/ContentWarningDialog';
+import warnings from '../../../utils/warnings';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
 import useRefuseAccount, { canRefuseAccount } from '../../moderation/useRefuseAccount';
@@ -166,6 +168,29 @@ const ReportsCase = ({
       });
   };
 
+  // A post reported, given a content warning by the administrators (row
+  // 122, phase 4): saved on the post, where its author is told, and the
+  // case closed as warned. Taking a warning off decides nothing.
+  const [isWarning, setIsWarning] = useState(false);
+  const [savingWarning, setSavingWarning] = useState(false);
+  const canWarn = Boolean(reported && utils.node.isMedium(reported));
+  const handleWarn = (warning) => {
+    setSavingWarning(true);
+    api.warnings.edit(reported, warning).then(() => {
+      setIsWarning(false);
+      if (warnings.has(warning)) {
+        handleResolve({ status: 'actioned', action: 'warned', note: '' });
+        return;
+      }
+      alertSuccess(i18n.t('warnings:saved'));
+      refresh();
+    }).catch(() => {
+      alertError(i18n.t('warnings:notSaved'));
+    }).finally(() => {
+      setSavingWarning(false);
+    });
+  };
+
   const handleReopen = () => {
     setSubmitting(true);
 
@@ -250,7 +275,7 @@ const ReportsCase = ({
                 />
                 {/* What else an administrator may do about it: the third
                     action and after go in a menu (AGENTS.md, rule 2). */}
-                {targetUrl && (spam.canRemove || refuse.canRefuse) &&
+                {targetUrl && (spam.canRemove || refuse.canRefuse || canWarn) &&
                   <IconButton
                     size="small"
                     aria-label={i18n.t('actions:more')}
@@ -299,6 +324,18 @@ const ReportsCase = ({
                 open={Boolean(menuAnchor)}
                 onClose={() => { setMenuAnchor(null); }}
               >
+                {canWarn &&
+                  <MenuItem
+                    disabled={submitting}
+                    onClick={() => {
+                      setMenuAnchor(null);
+                      setIsWarning(true);
+                    }}
+                  >
+                    <MenuItemLabel icon={warnings.iconOf(warnings.of(reported).kind, { fontSize: 'small' })}>
+                      {i18n.t('warnings:label')}
+                    </MenuItemLabel>
+                  </MenuItem>}
                 {spam.canRemove &&
                   <MenuItem
                     disabled={submitting}
@@ -487,6 +524,15 @@ const ReportsCase = ({
         />}
       {spam.dialog}
       {refuse.dialog}
+      {canWarn &&
+        <ContentWarningDialog
+          open={isWarning}
+          value={warnings.of(reported)}
+          saving={savingWarning}
+          moderator
+          onClose={() => { setIsWarning(false); }}
+          onSave={handleWarn}
+        />}
     </>
   );
 };

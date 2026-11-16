@@ -23,6 +23,8 @@ export default {
   remove: 'Inhaltswarnung entfernen',
   view: 'Ansehen',
   byModerator: 'Die Administratoren haben dem Beitrag diese Warnung gegeben; sie kann hier nicht geändert werden.',
+  // In the dialog, for an administrator giving one as the site's.
+  moderatorHelp: 'Von den Administratoren gegeben: Die Person, die es schrieb, wird informiert und kann sie nicht entfernen.',
   saved: 'Inhaltswarnung gespeichert.',
   notSaved: 'Die Inhaltswarnung konnte nicht gespeichert werden.',
   // A post the reader chose to hide, as one line in a list.

@@ -23,6 +23,8 @@ export default {
   remove: 'Remover o aviso',
   view: 'Ver',
   byModerator: 'Os administradores deram este aviso à publicação, então ele não pode ser mudado aqui.',
+  // In the dialog, for an administrator giving one as the site's.
+  moderatorHelp: 'Dado pelos administradores: quem escreveu é avisado, e não pode removê-lo.',
   saved: 'Aviso de conteúdo salvo.',
   notSaved: 'Não foi possível salvar o aviso de conteúdo.',
   // A post the reader chose to hide, as one line in a list.

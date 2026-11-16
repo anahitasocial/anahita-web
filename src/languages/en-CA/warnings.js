@@ -27,6 +27,8 @@ export default {
   // On a post that has one.
   view: 'View',
   byModerator: 'The administrators gave this post its warning, so it cannot be changed here.',
+  // In the dialog, for an administrator giving one as the site's.
+  moderatorHelp: 'Given by the administrators: its author is told, and cannot take it off.',
   saved: 'Content warning saved.',
   notSaved: 'The content warning could not be saved.',
   // A post the reader chose to hide, as one line in a list.
