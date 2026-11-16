@@ -6,6 +6,26 @@ export default {
   mTitle: 'Canais',
   // What a website is here, where somebody meets the list.
   description: 'O feed de um site como canal, para seguir aqui e do fediverso.',
+  // Making one without a feed (roadmap row 147, phase 2), as a group is made.
+  add: {
+    cTitle: 'Criar canal',
+    mTitle: 'Criar canal',
+    subheader: 'Você vai administrá-lo desde o começo. Só o canal publica nele; os seguidores respondem.',
+    nameHelp: 'O identificador dele é formado a partir do nome.',
+    bodyHelp: 'Do que se trata, no cartão Sobre.',
+    websiteHelp: 'Um link, no cartão Sobre.',
+    access: 'Quem pode ver?',
+    accessHelp: 'Você pode mudar isso depois nas configurações dele.',
+    accessOptions: {
+      public: 'Qualquer pessoa',
+      registered: 'Qualquer pessoa conectada',
+      followers: 'Só os seguidores dele',
+      admins: 'Só os admins dele, por enquanto',
+    },
+    failed: 'Não foi possível criar o canal. Tente de novo.',
+    orConnect: 'Tem um site com feed?',
+    connect: 'Conecte-o em vez disso',
+  },
   connect: {
     cTitle: 'Conecte seu site',
     mTitle: 'Conecte seu site',
@@ -69,7 +89,7 @@ export default {
   settings: {
     info: 'Informações',
     admins: 'Admins',
-    access: 'Bloqueados',
+    access: 'Privacidade',
     website: 'No seu site',
     fediverse: 'Fediverso',
     // Its card under Fediverse: off until one of its administrators turns

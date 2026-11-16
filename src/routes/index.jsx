@@ -344,6 +344,14 @@ const AppRoutes = () => {
               {/* Channels — static paths before parameterized */}
               <Route path="/channels" element={<ChannelsBrowse />} />
               <Route
+                path="/channels/add"
+                element={
+                  <AuthenticatedRoute>
+                    <GroupsAdd namespace="channels" />
+                  </AuthenticatedRoute>
+          }
+              />
+              <Route
                 path="/channels/connect"
                 element={
                   <AuthenticatedRoute>

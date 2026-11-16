@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -17,7 +18,10 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import ChannelIcon from '@mui/icons-material/RssFeed';
 
 import PageColumn from '../../../components/PageColumn';
 import actions from '../../../actions';
@@ -39,7 +43,7 @@ const { NAME, BODY } = ACTOR.FIELDS;
 // group's settings. Where the installation allows nothing new to be public,
 // Anyone is not offered (`minContentAccess` in NodeInfo); the server refuses
 // it either way.
-const GroupAdd = () => {
+const ActorAdd = ({ namespace = 'groups' }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
@@ -67,7 +71,7 @@ const GroupAdd = () => {
     }
 
     setIsSaving(true);
-    api.groups.add({
+    api[namespace].add({
       name: values.name.trim(),
       body: values.body.trim(),
       websiteUrl: values.websiteUrl.trim(),
@@ -75,7 +79,7 @@ const GroupAdd = () => {
     }).then((result) => {
       navigate(getURL(result.data));
     }).catch(() => {
-      dispatch(actions.app.alert.error(i18n.t('groups:add.failed')));
+      dispatch(actions.app.alert.error(i18n.t(`${namespace}:add.failed`)));
       setIsSaving(false);
     });
   };
@@ -83,14 +87,14 @@ const GroupAdd = () => {
   return (
     <>
       <Helmet>
-        <title>{i18n.t('groups:add.cTitle')}</title>
+        <title>{i18n.t(`${namespace}:add.cTitle`)}</title>
       </Helmet>
       <PageColumn>
         <Card component="form" onSubmit={handleSubmit} noValidate>
           <CardHeader
-            avatar={<GroupAddIcon color="action" />}
-            title={i18n.t('groups:add.cTitle')}
-            subheader={i18n.t('groups:add.subheader')}
+            avatar={namespace === 'channels' ? <ChannelIcon color="action" /> : <GroupAddIcon color="action" />}
+            title={i18n.t(`${namespace}:add.cTitle`)}
+            subheader={i18n.t(`${namespace}:add.subheader`)}
             slotProps={{ title: { variant: 'h6', component: 'h1' } }}
           />
           <CardContent sx={{ pt: 0 }}>
@@ -100,7 +104,7 @@ const GroupAdd = () => {
                 fullWidth
                 autoFocus
                 label={i18n.t('actor:name')}
-                helperText={i18n.t('groups:add.nameHelp')}
+                helperText={i18n.t(`${namespace}:add.nameHelp`)}
                 value={values.name}
                 onChange={set('name')}
                 disabled={isSaving}
@@ -111,7 +115,7 @@ const GroupAdd = () => {
                 multiline
                 minRows={3}
                 label={i18n.t('actor:body')}
-                helperText={i18n.t('groups:add.bodyHelp')}
+                helperText={i18n.t(`${namespace}:add.bodyHelp`)}
                 value={values.body}
                 onChange={set('body')}
                 disabled={isSaving}
@@ -120,7 +124,7 @@ const GroupAdd = () => {
               <TextField
                 fullWidth
                 label={i18n.t('actor:website')}
-                helperText={i18n.t('groups:add.websiteHelp')}
+                helperText={i18n.t(`${namespace}:add.websiteHelp`)}
                 placeholder="example.com"
                 value={values.websiteUrl}
                 onChange={set('websiteUrl')}
@@ -132,7 +136,7 @@ const GroupAdd = () => {
               />
               <FormControl disabled={isSaving}>
                 <FormLabel id="group-access">
-                  {i18n.t('groups:add.access')}
+                  {i18n.t(`${namespace}:add.access`)}
                 </FormLabel>
                 <RadioGroup
                   aria-labelledby="group-access"
@@ -146,15 +150,25 @@ const GroupAdd = () => {
                         key={level}
                         value={level}
                         control={<Radio />}
-                        label={i18n.t(`groups:add.accessOptions.${level}`)}
+                        label={i18n.t(`${namespace}:add.accessOptions.${level}`)}
                       />
                     );
                   })}
                 </RadioGroup>
                 <FormHelperText sx={{ mx: 0 }}>
-                  {i18n.t('groups:add.accessHelp')}
+                  {i18n.t(`${namespace}:add.accessHelp`)}
                 </FormHelperText>
               </FormControl>
+              {/* A channel can also be made from a website's feed, until
+                  connecting one moves to its settings (row 147, phase 4). */}
+              {namespace === 'channels' &&
+                <Typography variant="body2" color="text.secondary">
+                  {i18n.t('channels:add.orConnect')}
+                  {' '}
+                  <Link component={RouterLink} to="/channels/connect">
+                    {i18n.t('channels:add.connect')}
+                  </Link>
+                </Typography>}
             </Stack>
           </CardContent>
           {/* Side by side, each half the width: Cancel, then the one that
@@ -164,7 +178,7 @@ const GroupAdd = () => {
               fullWidth
               disabled={isSaving}
               onClick={() => {
-                navigate('/groups/');
+                navigate(`/${namespace}/`);
               }}
             >
               {i18n.t('actions:cancel')}
@@ -185,4 +199,9 @@ const GroupAdd = () => {
   );
 };
 
-export default GroupAdd;
+ActorAdd.propTypes = {
+  // What is made: a group, or a channel (roadmap row 147).
+  namespace: PropTypes.oneOf(['groups', 'channels']),
+};
+
+export default ActorAdd;

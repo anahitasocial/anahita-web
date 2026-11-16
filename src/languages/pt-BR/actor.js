@@ -62,7 +62,7 @@ export default {
       followers: 'Pessoas que seguem este perfil.',
       leaders: 'Pessoas que este perfil segue.',
       mutuals: 'Pessoas que seguem este perfil e são seguidas de volta.',
-      admins: 'Os admins deste grupo.',
+      admins: 'Os admins deste perfil.',
       myself: 'Mais ninguém.',
     },
     labels: {

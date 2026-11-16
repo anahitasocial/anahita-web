@@ -367,7 +367,7 @@ const ActorsSettings = ({
     isAdmin,
     isSuperAdmin,
     canCancel,
-    canArchive: !isChannel,
+    canArchive: true,
     isDeleted: Boolean(actor.deletedAt),
   });
 
@@ -383,9 +383,9 @@ const ActorsSettings = ({
     [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
     [ITEMS.ADMINS]: <ActorAdmins />,
     // Who can see it, and who it has blocked: one of its administrators
-    // blocks somebody from the menu on what they wrote in it.
-    // A website is public: only who it has blocked.
-    [ITEMS.ACCESS]: isChannel ? <ActorBlocked actor={actor} /> : (
+    // blocks somebody from the menu on what they wrote in it. A channel's
+    // too (roadmap row 147, phase 2).
+    [ITEMS.ACCESS]: (
       <Stack spacing={2}>
         <ActorAccess />
         <ActorGraphAccess />

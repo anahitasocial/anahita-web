@@ -5,6 +5,26 @@ export default {
   cTitle: 'Chaînes',
   mTitle: 'Chaînes',
   description: 'Le fil d’un site web en chaîne, à suivre ici et depuis le fédivers.',
+  // Making one without a feed (roadmap row 147, phase 2), as a group is made.
+  add: {
+    cTitle: 'Créer une chaîne',
+    mTitle: 'Créer une chaîne',
+    subheader: 'Vous l’administrerez dès sa création. Seule la chaîne y publie ; ses abonnés répondent.',
+    nameHelp: 'Son identifiant est formé à partir de son nom.',
+    bodyHelp: 'Ce dont elle traite, dans sa carte À propos.',
+    websiteHelp: 'Un lien, dans sa carte À propos.',
+    access: 'Qui peut la voir ?',
+    accessHelp: 'Vous pourrez changer cela plus tard dans ses paramètres.',
+    accessOptions: {
+      public: 'Tout le monde',
+      registered: 'Toute personne connectée',
+      followers: 'Seulement ses abonnés',
+      admins: 'Seulement ses admins, pour l’instant',
+    },
+    failed: 'La chaîne n’a pas pu être créée. Veuillez réessayer.',
+    orConnect: 'Vous avez un site avec un flux ?',
+    connect: 'Connectez-le plutôt',
+  },
   connect: {
     cTitle: 'Connecter votre site',
     mTitle: 'Connecter votre site',
@@ -67,7 +87,7 @@ export default {
   settings: {
     info: 'Infos',
     admins: 'Admins',
-    access: 'Bloqués',
+    access: 'Confidentialité',
     website: 'Sur votre site',
     fediverse: 'Fédivers',
     fediverseCard: {

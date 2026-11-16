@@ -6,6 +6,26 @@ export default {
   mTitle: 'Kanäle',
   // What a website is here, where somebody meets the list.
   description: 'Der Feed einer Website als Kanal, dem man hier und aus dem Fediverse folgen kann.',
+  // Making one without a feed (roadmap row 147, phase 2), as a group is made.
+  add: {
+    cTitle: 'Kanal erstellen',
+    mTitle: 'Kanal erstellen',
+    subheader: 'Du verwaltest ihn von Anfang an. Nur der Kanal veröffentlicht dort; seine Follower antworten.',
+    nameHelp: 'Sein Handle wird aus seinem Namen gebildet.',
+    bodyHelp: 'Worum es geht, auf seiner Über-Karte.',
+    websiteHelp: 'Ein Link, auf seiner Über-Karte.',
+    access: 'Wer kann ihn sehen?',
+    accessHelp: 'Du kannst das später in seinen Einstellungen ändern.',
+    accessOptions: {
+      public: 'Alle',
+      registered: 'Alle, die angemeldet sind',
+      followers: 'Nur seine Follower',
+      admins: 'Vorerst nur seine Admins',
+    },
+    failed: 'Der Kanal konnte nicht erstellt werden. Bitte versuche es erneut.',
+    orConnect: 'Du hast eine Website mit Feed?',
+    connect: 'Verbinde sie stattdessen',
+  },
   connect: {
     cTitle: 'Verbinde deine Website',
     mTitle: 'Verbinde deine Website',
@@ -69,7 +89,7 @@ export default {
   settings: {
     info: 'Infos',
     admins: 'Admins',
-    access: 'Blockiert',
+    access: 'Privatsphäre',
     website: 'Auf deiner Website',
     fediverse: 'Fediverse',
     // Its card under Fediverse: off until one of its administrators turns

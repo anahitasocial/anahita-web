@@ -44,14 +44,15 @@ const BROWSE_ICONS = {
   channels: <WebsiteIcon />,
 };
 
-// What the header offers to add, for those who may: a group is made, a
-// Website is connected, from a website.
+// What the header offers to add, for those who may: a group or a channel
+// is made (a channel without a feed, roadmap row 147; its form leads to
+// connecting a website's feed instead).
 const addActionOf = (namespace, owner, actorSettings) => {
   if (namespace === 'groups' && permissions.actor.canAdd(owner, actorSettings)) {
     return { to: '/groups/add', label: i18n.t('groups:add.cTitle') };
   }
   if (namespace === 'channels' && permissions.actor.canConnect(owner, actorSettings)) {
-    return { to: '/channels/connect', label: i18n.t('channels:connect.cTitle') };
+    return { to: '/channels/add', label: i18n.t('channels:add.cTitle') };
   }
   return { to: '', label: '' };
 };

@@ -6,6 +6,26 @@ export default {
   mTitle: 'Channels',
   // What a website is here, where somebody meets the list.
   description: 'A website’s feed as a channel, to follow here and from the fediverse.',
+  // Making one without a feed (roadmap row 147, phase 2), as a group is made.
+  add: {
+    cTitle: 'Create channel',
+    mTitle: 'Create channel',
+    subheader: 'You will be its first admin. Only the channel posts on it; its followers reply.',
+    nameHelp: 'Its handle is made from its name.',
+    bodyHelp: 'What it is about, on its About card.',
+    websiteHelp: 'One link, on its About card.',
+    access: 'Who can see it?',
+    accessHelp: 'You can change this later in its settings.',
+    accessOptions: {
+      public: 'Anyone',
+      registered: 'Anyone signed in',
+      followers: 'Only its followers',
+      admins: 'Only its admins, for now',
+    },
+    failed: 'The channel could not be created. Please try again.',
+    orConnect: 'Have a website with a feed?',
+    connect: 'Connect it instead',
+  },
   connect: {
     cTitle: 'Connect your website',
     mTitle: 'Connect your website',
@@ -69,7 +89,7 @@ export default {
   settings: {
     info: 'Info',
     admins: 'Admins',
-    access: 'Blocked',
+    access: 'Privacy',
     website: 'On your site',
     fediverse: 'Fediverse',
     // Its card under Fediverse: off until one of its administrators turns
