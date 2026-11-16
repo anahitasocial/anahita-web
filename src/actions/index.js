@@ -17,8 +17,8 @@ const namespaces = {
     'groups',
     // An event is an actor like a group, with a time and a place.
     'events',
-    // A website is a website's feed as a profile, read and looked after as a
-    // group is. It is made by connecting a website: see api/channelConnect.
+    // A channel: a profile its admins post on, looked after as a group is,
+    // which may read a website's feed (api/channelConnect).
     'channels',
     'people',
   ],

@@ -23,18 +23,12 @@ export default {
       admins: 'Só os admins dele, por enquanto',
     },
     failed: 'Não foi possível criar o canal. Tente de novo.',
-    orConnect: 'Tem um site com feed?',
-    connect: 'Conecte-o em vez disso',
+    feedLater: 'Depois de criado, você pode conectar o feed do seu site a ele nas configurações.',
   },
   connect: {
     cTitle: 'Conecte seu site',
     mTitle: 'Conecte seu site',
     intro: 'Qualquer site com um feed RSS, Atom ou JSON pode ser seguido aqui: um site WordPress ou outro, um site estático, o histórico de mudanças de um app, um podcast. As publicações dele chegam às pessoas aqui e no fediverso, e as trazem de volta ao seu site.',
-    steps: {
-      site: 'Seu site',
-      proof: 'Prove que é seu',
-      website: 'O canal dele aqui',
-    },
     site: {
       label: 'O endereço do seu site',
       placeholder: 'example.com',
@@ -58,17 +52,9 @@ export default {
       },
       again: 'A verificação é refeita todos os dias. Se o token sumir por uma semana, as publicações param até ele voltar.',
     },
-    website: {
-      name: 'Nome',
-      alias: 'Identificador',
-      aliasHelp: 'O endereço dele aqui e no fediverso: {{ handle }}. Letras, algarismos, - e _.',
-      body: 'Descrição',
-      connect: 'Conectar',
-      seen: 'Suas dez publicações mais recentes aparecem na hora; o que você publicar a partir de agora vem em seguida.',
-    },
+    seen: 'Suas dez publicações mais recentes aparecem na hora; o que você publicar a partir de agora vem em seguida.',
     copy: 'Copiar',
     copied: 'Copiado',
-    done: 'Seu site está conectado.',
     errors: {
       not_a_domain: 'Isso não é o endereço de um site.',
       no_feed: 'Nenhum feed foi encontrado ali. Informe o endereço do próprio feed se o site não o indicar.',
@@ -76,11 +62,25 @@ export default {
       feed_not_on_domain: 'O feed está em outro domínio, que você não tem como provar que é seu.',
       private_feed: 'Esse feed é privado: ele exige login, ou o endereço dele contém um segredo. As publicações de um canal são públicas, então só um feed público pode ser conectado.',
       feed_taken: 'Esse feed já está conectado.',
-      handle_taken: 'Esse identificador já está em uso.',
+      has_feed: 'O canal já lê um feed. Desconecte-o primeiro.',
       not_proved: 'Primeiro prove que o domínio é seu.',
       tooMany: 'Tentativas demais. Tente de novo daqui a uma hora.',
       generic: 'Algo deu errado. Tente de novo.',
     },
+  },
+  // A channel's website feed in its settings (roadmap row 147, phase 4).
+  feed: {
+    title: 'O feed do seu site',
+    none: 'Publique o que o seu site publica, à medida que publica, a partir do feed RSS, Atom ou JSON dele. Primeiro você comprova que o site é seu.',
+    connect: 'Conectar',
+    disconnect: 'Desconectar',
+    read: 'Lido {{when}}',
+    notYet: 'Ainda não lido',
+    paused: 'Pausado: a comprovação do site sumiu, ou o canal está desativado.',
+    connected: 'O feed dele está conectado.',
+    disconnected: 'O feed dele está desconectado.',
+    disconnectTitle: 'Desconectar o feed dele?',
+    disconnectText: 'O que o site publicar deixa de chegar aqui. As publicações que ele já trouxe ficam.',
   },
   // In its About card.
   about: {
@@ -122,6 +122,7 @@ export default {
     },
     blueskyHelp: 'Conecte a conta do Bluesky do próprio canal, com o seu domínio como identificador se quiser (@example.com): as notas dele são publicadas lá também, e as pessoas no Bluesky o seguem por lá. Use uma senha criada para um app, não a senha da própria conta.',
     websiteIntro: 'Cole isto no seu site para trazer seus leitores até ele aqui.',
+    snippetTitle: 'Um link no seu site',
     snippetLabel: 'Siga nosso canal no fediverso',
     disable: 'Desativar',
     disablePrompts: {

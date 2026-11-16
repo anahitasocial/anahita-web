@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { Helmet } from 'react-helmet-async';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
@@ -18,7 +18,6 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 import GroupAddIcon from '@mui/icons-material/GroupAdd';
 import ChannelIcon from '@mui/icons-material/RssFeed';
@@ -159,15 +158,11 @@ const ActorAdd = ({ namespace = 'groups' }) => {
                   {i18n.t(`${namespace}:add.accessHelp`)}
                 </FormHelperText>
               </FormControl>
-              {/* A channel can also be made from a website's feed, until
-                  connecting one moves to its settings (row 147, phase 4). */}
+              {/* A website's feed is connected once it is made, in its
+                  settings (row 147, phase 4). */}
               {namespace === 'channels' &&
-                <Typography variant="body2" color="text.secondary">
-                  {i18n.t('channels:add.orConnect')}
-                  {' '}
-                  <Link component={RouterLink} to="/channels/connect">
-                    {i18n.t('channels:add.connect')}
-                  </Link>
+                <Typography variant="body2" color="textSecondary">
+                  {i18n.t('channels:add.feedLater')}
                 </Typography>}
             </Stack>
           </CardContent>

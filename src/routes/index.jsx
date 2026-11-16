@@ -69,7 +69,6 @@ const InvitesRedirect = lazy(() => {
   });
 });
 const StaticPage = lazy(() => { return import('../containers/page'); });
-const ChannelConnect = lazy(() => { return import('../containers/channels/Connect'); });
 
 // Each page's code is fetched the first time it is opened, not with the app
 // (roadmap row 128): the feed, the home page and a post are what nearly every
@@ -351,14 +350,9 @@ const AppRoutes = () => {
                   </AuthenticatedRoute>
           }
               />
-              <Route
-                path="/channels/connect"
-                element={
-                  <AuthenticatedRoute>
-                    <ChannelConnect />
-                  </AuthenticatedRoute>
-          }
-              />
+              {/* A website's feed is connected in its channel's settings
+                  (roadmap row 147, phase 4): the channel is created first. */}
+              <Route path="/channels/connect" element={<Navigate to="/channels/add" replace />} />
               <Route
                 path="/channels/:id/settings"
                 element={

@@ -55,6 +55,7 @@ import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
 import WebsiteFollowSnippet from '../../channels/FollowSnippet';
+import ChannelFeedCard from '../../channels/FeedCard';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonAccountType from '../../people/Settings/AccountType';
@@ -395,7 +396,15 @@ const ActorsSettings = ({
         <ActorBlocked actor={actor} />
       </Stack>
     ),
-    [ITEMS.WEBSITE]: <WebsiteFollowSnippet actor={actor} />,
+    // Its website's feed (phase 4), then the lines its site pastes in.
+    [ITEMS.WEBSITE]: (
+      <Stack spacing={2}>
+        <ChannelFeedCard channel={actor} />
+        <SettingsItem bare title={i18n.t('channels:settings.snippetTitle')} icon={<WebsiteIcon />}>
+          <WebsiteFollowSnippet actor={actor} />
+        </SettingsItem>
+      </Stack>
+    ),
     [ITEMS.RULES]: <ActorRules actor={actor} />,
     [ITEMS.REPORTS]: <ActorReports actor={actor} />,
     // Whether it is on the fediverse, and its own Bluesky account, as a

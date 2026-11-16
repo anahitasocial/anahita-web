@@ -11,43 +11,50 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Added
 
-1. **Posting as a channel** (roadmap row 147, phase 3): a channel's admins
+1. **A channel's website feed in its settings** (roadmap row 147, phase
+   4): On your site › Your website's feed, with Connect, which proves the
+   site is yours in a dialog, and Disconnect, which keeps the posts it
+   brought.
+2. **Posting as a channel** (roadmap row 147, phase 3): a channel's admins
    post notes, photos, videos and sounds on it with the + button, as the
    channel; they alone see "Written by" and the admin's name under its
    posts and replies. Its Posts tab turns articles and topics on, and
    holds the downloads choice.
-2. **Create channel** (roadmap row 147, phase 2): from + on the Channels
+3. **Create channel** (roadmap row 147, phase 2): from + on the Channels
    page, as a group is made, with or without a website's feed (connecting
    one is a link on the form, for now). A channel's Privacy tab has a
    group's: who can see it, follow requests, who sees its followers, and
    whom it blocked; and it can be archived.
-3. **Whose notifications** (roadmap row 146): Following on a profile you
+4. **Whose notifications** (roadmap row 146): Following on a profile you
    follow opens a menu to turn its notifications off or on, or unfollow;
    a new post's notification offers Turn off, with Undo. What you reply to
    or repost tells you of what the people you follow do there, and what is
    yours tells you of everyone.
-4. **Blocking a server yourself** (roadmap row 152): Block server in the
+5. **Blocking a server yourself** (roadmap row 152): Block server in the
    menu of somebody on the fediverse, with a confirmation that says what it
    does, and Blocked servers in Settings › Access, beside who is blocked
    and muted, to list, add and unblock them. Nothing from the server is
    shown to you, nor its notifications, and your follows with people there
    end.
-5. **Who sees your followers and who you follow** (roadmap row 151), in
+6. **Who sees your followers and who you follow** (roadmap row 151), in
    Settings › Privacy, without making the profile more private: whoever can
    see it, or fewer, down to nobody else. The counts stay; a list kept from
    somebody says so calmly. For groups and events too.
-6. **A passkey offered after signing in** (roadmap row 153): once, on a
+7. **A passkey offered after signing in** (roadmap row 153): once, on a
    device that can hold one, to somebody who has none, "Sign in faster
    next time?", with Skip and Add passkey. Skip is remembered on that
    device; Settings › Security still offers one.
-7. **Removing a follower** (roadmap row 150): Remove beside each follower
+8. **Removing a follower** (roadmap row 150): Remove beside each follower
    in one's own list of followers, after a confirmation saying they are
    not told and may follow again. The server of a follower elsewhere is
    told to stop delivering.
 
 ### Changed
 
-1. **Websites are channels** (roadmap row 147, phase 1): the same profiles
+1. **Connect your website is now a step in a channel's settings**
+   (roadmap row 147, phase 4): a channel is created first; the old
+   /channels/connect address leads to Create channel.
+2. **Websites are channels** (roadmap row 147, phase 1): the same profiles
    under a new name, at `/channels`, in the menu, recommendations, custom
    feeds, onboarding and the administrators' lists, in every language base.
    The old `/websites…` addresses lead to the new ones. Nothing else changes

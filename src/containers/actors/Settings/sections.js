@@ -394,7 +394,8 @@ export const getGroupTabs = ({
       { key: ITEMS.ADMINS, bare: true },
       { key: ITEMS.ACCESS, bare: false },
       { key: ITEMS.PERMISSIONS, bare: false },
-      { key: ITEMS.WEBSITE, bare: true },
+      // Its feed and the lines for its site, each a Card of its own.
+      { key: ITEMS.WEBSITE, bare: false },
       // Named and laid out as a person's network tab is: whether it is on
       // the fediverse, off until turned on, and its own Bluesky account,
       // where its notes are posted too. Both bring their own Card.

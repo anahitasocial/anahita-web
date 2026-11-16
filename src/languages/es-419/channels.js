@@ -23,18 +23,12 @@ export default {
       admins: 'Solo sus admins, por ahora',
     },
     failed: 'No se pudo crear el canal. Inténtalo de nuevo.',
-    orConnect: '¿Tienes un sitio web con un feed?',
-    connect: 'Conéctalo en su lugar',
+    feedLater: 'Una vez creado, puedes conectarle el feed de tu sitio web en su configuración.',
   },
   connect: {
     cTitle: 'Conecta tu sitio web',
     mTitle: 'Conecta tu sitio web',
     intro: 'Cualquier sitio con un feed RSS, Atom o JSON se puede seguir aquí: un sitio de WordPress u otro, un sitio estático, el registro de cambios de una app, un pódcast. Sus publicaciones llegan a las personas de aquí y del fediverso, y las llevan de vuelta a tu sitio.',
-    steps: {
-      site: 'Tu sitio web',
-      proof: 'Demuestra que es tuyo',
-      website: 'Su canal aquí',
-    },
     site: {
       label: 'La dirección de tu sitio web',
       placeholder: 'example.com',
@@ -58,17 +52,9 @@ export default {
       },
       again: 'Se vuelve a comprobar cada día. Si desaparece durante una semana, deja de publicar hasta que vuelva.',
     },
-    website: {
-      name: 'Nombre',
-      alias: 'Identificador',
-      aliasHelp: 'Su dirección aquí y en el fediverso: {{ handle }}. Letras, dígitos, - y _.',
-      body: 'Descripción',
-      connect: 'Conectar',
-      seen: 'Tus diez publicaciones más recientes aparecen de inmediato; lo que publiques a partir de ahora llegará después.',
-    },
+    seen: 'Tus diez publicaciones más recientes aparecen de inmediato; lo que publiques a partir de ahora llegará después.',
     copy: 'Copiar',
     copied: 'Copiado',
-    done: 'Tu sitio web está conectado.',
     errors: {
       not_a_domain: 'Esa no es la dirección de un sitio web.',
       no_feed: 'No se encontró ningún feed ahí. Indica la dirección del feed si el sitio no la menciona.',
@@ -76,11 +62,25 @@ export default {
       feed_not_on_domain: 'El feed está en otro dominio, y no puedes demostrar que es tuyo.',
       private_feed: 'Ese feed es privado: requiere iniciar sesión, o su dirección lleva un secreto. Las publicaciones de un canal son públicas, así que solo se puede conectar un feed público.',
       feed_taken: 'Ese feed ya está conectado.',
-      handle_taken: 'Ese identificador ya está en uso.',
+      has_feed: 'El canal ya lee un feed. Desconéctalo primero.',
       not_proved: 'Primero demuestra que el dominio es tuyo.',
       tooMany: 'Demasiados intentos. Inténtalo de nuevo en una hora.',
       generic: 'Algo salió mal. Inténtalo de nuevo.',
     },
+  },
+  // A channel's website feed in its settings (roadmap row 147, phase 4).
+  feed: {
+    title: 'El feed de tu sitio web',
+    none: 'Publica lo que tu sitio web publica, a medida que lo publica, desde su feed RSS, Atom o JSON. Primero demuestras que el sitio es tuyo.',
+    connect: 'Conectar',
+    disconnect: 'Desconectar',
+    read: 'Leído {{when}}',
+    notYet: 'Aún no se ha leído',
+    paused: 'En pausa: la prueba del sitio ya no está, o el canal está desactivado.',
+    connected: 'Su feed está conectado.',
+    disconnected: 'Su feed está desconectado.',
+    disconnectTitle: '¿Desconectar su feed?',
+    disconnectText: 'Lo que el sitio publique dejará de llegar aquí. Las publicaciones que ya trajo se quedan.',
   },
   // In its About card.
   about: {
@@ -122,6 +122,7 @@ export default {
     },
     blueskyHelp: 'Conecta la cuenta de Bluesky del propio canal, con tu dominio como identificador si quieres (@example.com): sus notas también se publican ahí, y las personas de Bluesky lo siguen ahí. Usa una contraseña creada para una app, no la de la cuenta.',
     websiteIntro: 'Pega esto en tu sitio para llevar hasta aquí a quienes te leen.',
+    snippetTitle: 'Un enlace en tu sitio',
     snippetLabel: 'Sigue nuestro canal en el fediverso',
     disable: 'Desactivar',
     disablePrompts: {

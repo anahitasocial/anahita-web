@@ -23,18 +23,12 @@ export default {
       admins: 'Only its admins, for now',
     },
     failed: 'The channel could not be created. Please try again.',
-    orConnect: 'Have a website with a feed?',
-    connect: 'Connect it instead',
+    feedLater: 'Once it is made, you can connect your website’s feed to it in its settings.',
   },
   connect: {
     cTitle: 'Connect your website',
     mTitle: 'Connect your website',
     intro: 'Any site with an RSS, Atom or JSON feed can be followed here: a WordPress or other site, a static site, an app’s changelog, a podcast. Its posts reach people here and on the fediverse, and lead them back to your site.',
-    steps: {
-      site: 'Your website',
-      proof: 'Prove it is yours',
-      website: 'Its channel here',
-    },
     site: {
       label: 'Your website’s address',
       placeholder: 'example.com',
@@ -58,17 +52,9 @@ export default {
       },
       again: 'It is checked again every day. If it is gone for a week, posting stops until it is back.',
     },
-    website: {
-      name: 'Name',
-      alias: 'Handle',
-      aliasHelp: 'Its address here and on the fediverse: {{ handle }}. Letters, digits, - and _.',
-      body: 'Description',
-      connect: 'Connect',
-      seen: 'Your ten newest posts appear at once; what you publish from now on follows.',
-    },
+    seen: 'Your ten newest posts appear at once; what you publish from now on follows.',
     copy: 'Copy',
     copied: 'Copied',
-    done: 'Your website is connected.',
     errors: {
       not_a_domain: 'That is not a website’s address.',
       no_feed: 'No feed was found there. Give the feed’s own address if the site does not name it.',
@@ -76,11 +62,25 @@ export default {
       feed_not_on_domain: 'The feed is on another domain, which you cannot prove is yours.',
       private_feed: 'That feed is private: it needs a login, or its address carries a secret. A channel’s posts are public, so only a public feed can be connected.',
       feed_taken: 'That feed is already connected.',
-      handle_taken: 'That handle is taken.',
+      has_feed: 'The channel reads a feed already. Disconnect it first.',
       not_proved: 'Prove the domain is yours first.',
       tooMany: 'Too many tries. Try again in an hour.',
       generic: 'Something went wrong. Please try again.',
     },
+  },
+  // A channel's website feed in its settings (roadmap row 147, phase 4).
+  feed: {
+    title: 'Your website’s feed',
+    none: 'Post what your website publishes, as it publishes it, from its RSS, Atom or JSON feed. You prove the site is yours first.',
+    connect: 'Connect',
+    disconnect: 'Disconnect',
+    read: 'Read {{when}}',
+    notYet: 'Not read yet',
+    paused: 'Paused: the site’s proof is gone, or the channel is switched off.',
+    connected: 'Its feed is connected.',
+    disconnected: 'Its feed is disconnected.',
+    disconnectTitle: 'Disconnect its feed?',
+    disconnectText: 'What the site publishes will stop coming here. The posts it brought stay.',
   },
   // In its About card.
   about: {
@@ -122,6 +122,7 @@ export default {
     },
     blueskyHelp: 'Connect the channel’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
     websiteIntro: 'Paste this into your site to lead your readers to it here.',
+    snippetTitle: 'A link on your site',
     snippetLabel: 'Follow our channel on the fediverse',
     disable: 'Disable',
     disablePrompts: {

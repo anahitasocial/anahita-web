@@ -23,18 +23,12 @@ export default {
       admins: 'Vorerst nur seine Admins',
     },
     failed: 'Der Kanal konnte nicht erstellt werden. Bitte versuche es erneut.',
-    orConnect: 'Du hast eine Website mit Feed?',
-    connect: 'Verbinde sie stattdessen',
+    feedLater: 'Sobald er erstellt ist, kannst du in seinen Einstellungen den Feed deiner Website mit ihm verbinden.',
   },
   connect: {
     cTitle: 'Verbinde deine Website',
     mTitle: 'Verbinde deine Website',
     intro: 'Jeder Website mit einem RSS-, Atom- oder JSON-Feed kann man hier folgen: einer WordPress- oder anderen Website, einer statischen Website, dem Changelog einer App, einem Podcast. Ihre Beiträge erreichen Leute hier und im Fediverse und führen sie zurück zu deiner Website.',
-    steps: {
-      site: 'Deine Website',
-      proof: 'Zeig, dass sie dir gehört',
-      website: 'Ihr Kanal hier',
-    },
     site: {
       label: 'Adresse deiner Website',
       placeholder: 'example.com',
@@ -58,17 +52,9 @@ export default {
       },
       again: 'Das wird jeden Tag erneut geprüft. Fehlt es eine Woche lang, wird nichts mehr veröffentlicht, bis es wieder da ist.',
     },
-    website: {
-      name: 'Name',
-      alias: 'Handle',
-      aliasHelp: 'Ihre Adresse hier und im Fediverse: {{ handle }}. Buchstaben, Ziffern, - und _.',
-      body: 'Beschreibung',
-      connect: 'Verbinden',
-      seen: 'Deine zehn neuesten Beiträge erscheinen sofort; was du ab jetzt veröffentlichst, folgt.',
-    },
+    seen: 'Deine zehn neuesten Beiträge erscheinen sofort; was du ab jetzt veröffentlichst, folgt.',
     copy: 'Kopieren',
     copied: 'Kopiert',
-    done: 'Deine Website ist verbunden.',
     errors: {
       not_a_domain: 'Das ist keine Adresse einer Website.',
       no_feed: 'Dort wurde kein Feed gefunden. Gib die Adresse des Feeds selbst an, wenn die Website sie nicht nennt.',
@@ -76,11 +62,25 @@ export default {
       feed_not_on_domain: 'Der Feed liegt auf einer anderen Domain, und du kannst nicht nachweisen, dass sie dir gehört.',
       private_feed: 'Dieser Feed ist privat: Er braucht eine Anmeldung, oder seine Adresse enthält ein Geheimnis. Die Beiträge eines Kanals sind öffentlich, deshalb kann nur ein öffentlicher Feed verbunden werden.',
       feed_taken: 'Dieser Feed ist schon verbunden.',
-      handle_taken: 'Dieses Handle ist schon vergeben.',
+      has_feed: 'Der Kanal liest schon einen Feed. Trenne ihn zuerst.',
       not_proved: 'Weise zuerst nach, dass die Domain dir gehört.',
       tooMany: 'Zu viele Versuche. Versuch es in einer Stunde noch einmal.',
       generic: 'Etwas ist schiefgelaufen. Bitte versuch es noch einmal.',
     },
+  },
+  // A channel's website feed in its settings (roadmap row 147, phase 4).
+  feed: {
+    title: 'Der Feed deiner Website',
+    none: 'Veröffentliche hier, was deine Website veröffentlicht, sobald sie es tut, aus ihrem RSS-, Atom- oder JSON-Feed. Zuerst weist du nach, dass die Website dir gehört.',
+    connect: 'Verbinden',
+    disconnect: 'Trennen',
+    read: 'Gelesen {{when}}',
+    notYet: 'Noch nicht gelesen',
+    paused: 'Pausiert: Der Nachweis der Website fehlt, oder der Kanal ist ausgeschaltet.',
+    connected: 'Sein Feed ist verbunden.',
+    disconnected: 'Sein Feed ist getrennt.',
+    disconnectTitle: 'Seinen Feed trennen?',
+    disconnectText: 'Was die Website veröffentlicht, kommt nicht mehr hierher. Die Beiträge, die schon da sind, bleiben.',
   },
   // In its About card.
   about: {
@@ -122,6 +122,7 @@ export default {
     },
     blueskyHelp: 'Verbinde das eigene Bluesky-Konto des Kanals, auf Wunsch mit deiner Domain als Handle (@example.com): Seine Notizen werden auch dort veröffentlicht, und Leute auf Bluesky folgen ihm dort. Verwende ein App-Passwort, nicht das Passwort des Kontos selbst.',
     websiteIntro: 'Füge das in deine Website ein, um deine Leser:innen hierher zu führen.',
+    snippetTitle: 'Ein Link auf deiner Website',
     snippetLabel: 'Folge unserem Kanal im Fediverse',
     disable: 'Ausschalten',
     disablePrompts: {
