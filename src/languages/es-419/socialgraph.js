@@ -12,6 +12,23 @@ export default {
   blocks: 'Bloqueados',
   mutes: 'Silenciados',
   followsYou: 'Te sigue',
+  // The servers the viewer blocked for themselves (roadmap row 152).
+  servers: {
+    title: 'Servidores bloqueados',
+    count_one: '1 servidor',
+    count_other: '{{count}} servidores',
+    none: 'No has bloqueado ningún servidor.',
+    add: 'Bloquear un servidor',
+    placeholder: 'mastodon.example',
+    block: 'Bloquear',
+    invalid: 'No es un nombre de servidor.',
+    bluesky: 'Los servidores de Bluesky no se distinguen. Bloquea las cuentas de allí una por una.',
+    failed: 'No se pudo hacer.',
+    menu: 'Bloquear servidor',
+    confirmTitle: '¿Bloquear {{domain}}?',
+    confirmText: 'No verás publicaciones, respuestas ni notificaciones de nadie en {{domain}}, y tus seguimientos con esas personas terminan. Nadie allí recibe aviso.',
+    done: '{{domain}} está bloqueado',
+  },
   // Who may see the lists (roadmap row 151).
   graphAccess: {
     title: 'Seguidores y seguidos',

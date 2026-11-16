@@ -12,6 +12,7 @@ import RefuseIcon from '@mui/icons-material/BlockOutlined';
 import MenuItemLabel from '../../../components/MenuItemLabel';
 import ControlBlock from '../../controls/Block';
 import useMute from '../../controls/useMute';
+import useBlockServer from '../../controls/useBlockServer';
 import ControlFeature from '../../controls/Feature';
 import { ShareMenuItem, ofNode } from '../../controls/Share';
 import useReport from '../../reports/useReport';
@@ -50,6 +51,8 @@ const ActorsReadControls = ({
       onChanged();
     }
   });
+  // Its server, for a profile on the fediverse (roadmap row 152).
+  const server = useBlockServer(isAuthenticated ? viewer : null, actor, onChanged);
   const showEdit = perms.canEdit(actor);
   const showFeature = isAuthenticated && perms.canFeature(actor, viewer);
   const report = useReport(viewer, actor);
@@ -117,6 +120,18 @@ const ActorsReadControls = ({
               {mute.label}
             </MenuItemLabel>
           </MenuItem>}
+        {server.canBlock &&
+          <MenuItem
+            key="actor-block-server"
+            onClick={() => {
+              handleClose();
+              server.ask();
+            }}
+          >
+            <MenuItemLabel icon={server.icon}>
+              {server.label}
+            </MenuItemLabel>
+          </MenuItem>}
         {showFeature &&
           <ControlFeature
             actor={actor}
@@ -174,6 +189,7 @@ const ActorsReadControls = ({
           </MenuItem>}
       </Menu>
       {mute.dialog}
+      {server.dialog}
       {report.dialog}
       {spam.dialog}
       {refuse.dialog}

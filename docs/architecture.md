@@ -1526,6 +1526,13 @@ and the dialog says so in grey, not as a failure: "Naomi keeps this list to
 some people." What keeps it is Settings › Privacy's Followers and following
 card (`actors/Settings/GraphAccess.jsx`), for people, groups and events.
 
+**Blocking a server** (roadmap row 152): Block server in the menu of a
+profile on the fediverse (`containers/controls/useBlockServer.jsx`, beside
+Mute, not for Bluesky), with a confirmation; and Blocked servers in
+Settings › Access (`actors/Settings/BlockedServers.jsx`), a count and
+Manage, whose dialog lists them with Unblock and blocks another by its
+name, a handle or an address (`api/serverBlocks.js`).
+
 What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.
 

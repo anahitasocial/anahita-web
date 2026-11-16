@@ -74,6 +74,8 @@ export const ITEMS = {
   BLOCKED: 'blocked',
   // The people the viewer has muted (roadmap row 133).
   MUTED: 'muted',
+  // The servers the viewer has blocked for themselves (roadmap row 152).
+  BLOCKED_SERVERS: 'blockedServers',
   // What the viewer chose about suggestions of who to follow.
   SUGGESTIONS: 'suggestions',
   FEDIVERSE: 'fediverse',
@@ -162,6 +164,7 @@ const ALL_SECTIONS = [
       // Who you have blocked, and muted, is yours alone to see and to undo.
       { key: ITEMS.BLOCKED, bare: false, viewerOnly: true },
       { key: ITEMS.MUTED, bare: false, viewerOnly: true },
+      { key: ITEMS.BLOCKED_SERVERS, bare: false, viewerOnly: true },
       { key: ITEMS.SUGGESTIONS, bare: false, viewerOnly: true },
     ],
   },

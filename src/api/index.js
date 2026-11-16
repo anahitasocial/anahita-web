@@ -14,6 +14,7 @@ import citations from './citations';
 import searchPreferences from './searchPreferences';
 import reposts from './reposts';
 import graphAccess from './graphAccess';
+import serverBlocks from './serverBlocks';
 
 import agreements from './agreements';
 import site from './site';
@@ -178,6 +179,7 @@ const apis = {
   searchPreferences,
   reposts,
   graphAccess,
+  serverBlocks,
   session,
   socialgraph,
   inbounds,

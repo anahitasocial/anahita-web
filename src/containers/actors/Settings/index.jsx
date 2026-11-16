@@ -42,6 +42,7 @@ import RepostsOnProfile from './RepostsOnProfile';
 import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
 import GraphAccess from './GraphAccess';
+import BlockedServers from './BlockedServers';
 import ActorBlocked from './Blocked';
 import DataExport from './DataExport';
 import DataImport from './DataImport';
@@ -269,6 +270,7 @@ const ActorsSettings = ({
       [ITEMS.DOWNLOADS]: <ActorDownloads />,
       [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
       [ITEMS.MUTED]: <ActorBlocked actor={actor} kind="mutes" />,
+      [ITEMS.BLOCKED_SERVERS]: <BlockedServers />,
       [ITEMS.DATA_EXPORT]: <DataExport />,
       [ITEMS.DATA_IMPORT]: <DataImport />,
       [ITEMS.SUGGESTIONS]: <ActorSuggestions />,

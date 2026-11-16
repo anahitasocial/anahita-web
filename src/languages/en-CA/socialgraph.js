@@ -12,6 +12,23 @@ export default {
   blocks: 'Blocked',
   mutes: 'Muted',
   followsYou: 'Follows you',
+  // The servers the viewer blocked for themselves (roadmap row 152).
+  servers: {
+    title: 'Blocked servers',
+    count_one: '1 server',
+    count_other: '{{count}} servers',
+    none: 'You have not blocked any server.',
+    add: 'Block a server',
+    placeholder: 'mastodon.example',
+    block: 'Block',
+    invalid: 'Not a server name.',
+    bluesky: 'Servers on Bluesky cannot be told apart. Block accounts there one by one.',
+    failed: 'That could not be done.',
+    menu: 'Block server',
+    confirmTitle: 'Block {{domain}}?',
+    confirmText: 'You will not see posts, replies or notifications from anybody on {{domain}}, and your follows with people there end. Nobody there is told.',
+    done: '{{domain}} is blocked',
+  },
   // Who may see the lists (roadmap row 151).
   graphAccess: {
     title: 'Followers and following',
