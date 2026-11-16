@@ -83,6 +83,14 @@ export default {
     ownerFollows: 'Beiträge von Profilen, die du ohnehin sehen kannst: Ein Feed zeigt nie mehr, als du sehen darfst.',
   },
   form: {
+    // Any or all, once two kinds of thing are asked for (roadmap row 149).
+    match: {
+      label: 'Beiträge zeigen, die passen zu',
+      any: 'Einem davon',
+      all: 'Allen davon',
+      anyHelp: 'Ein Beitrag erscheint, sobald er zu einem davon passt.',
+      allHelp: 'Ein Beitrag erscheint nur, wenn er zu jedem davon passt.',
+    },
     titleAdd: 'Eigenen Feed erstellen',
     titleEdit: 'Feed bearbeiten',
     name: 'Name',
@@ -171,6 +179,8 @@ export default {
   summary: {
     list: '{{ first }} und {{ last }}',
     or: ' oder ',
+    // Before each thing matched after the first, in a feed of any.
+    orThat: 'oder {{part}}',
     from: '{{ kinds }} von {{ from }}',
     following: 'Profilen, denen du folgst',
     followingOwner: 'Profilen, denen die Ersteller:in folgt',

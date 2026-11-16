@@ -24,6 +24,9 @@ const LIMITS = {
   radiusMax: 500,
 };
 
+const MATCH_ALL = 'all';
+const MATCH_ANY = 'any';
+
 const list = (value) => {
   return Array.isArray(value) ? value : [];
 };
@@ -66,12 +69,17 @@ const complete = (definition) => {
     },
     includeReplies: Boolean(given.includeReplies),
     order: given.order || 'newest',
+    // Whether a post must match every kind of thing asked for, or one of
+    // them (anahita-services roadmap row 149). A feed that says nothing is
+    // all, as every feed saved before was.
+    match: given.match === MATCH_ANY ? MATCH_ANY : MATCH_ALL,
   };
 };
 
-// What a new feed starts as: whoever the viewer follows.
+// What a new feed starts as: whoever the viewer follows, and, once more is
+// asked for, a post matching any of it (the user, 2026-11-15).
 const starting = () => {
-  return complete({ sources: { following: true } });
+  return complete({ sources: { following: true }, match: MATCH_ANY });
 };
 
 // A feed of one hashtag, over the whole site.
@@ -102,6 +110,26 @@ const hasSources = (definition) => {
   const { sources } = complete(definition);
 
   return sources.following || sources.actors.length > 0;
+};
+
+// How many kinds of thing a post is asked to match: where it comes from,
+// its hashtags, its words, its locations and its area. Any or all is a
+// choice from two.
+const matchingKinds = (definition) => {
+  const { filters } = complete(definition);
+
+  return [
+    hasSources(definition),
+    filters.hashtagsAny.length > 0,
+    filters.keywordsAny.length > 0,
+    filters.locationsAny.length > 0,
+    Boolean(filters.near),
+  ].filter(Boolean).length;
+};
+
+// Whether a post matching one of what is asked for is in.
+const matchesAny = (definition) => {
+  return complete(definition).match === MATCH_ANY && matchingKinds(definition) > 1;
 };
 
 const narrows = (definition) => {
@@ -150,7 +178,12 @@ const problem = (definition) => {
 
 // A definition as one string, to tell whether two show the same thing.
 const fingerprint = (definition) => {
-  return JSON.stringify(complete(definition));
+  const whole = complete(definition);
+  // With one kind of thing to match, any and all show the same.
+  if (matchingKinds(whole) < 2) {
+    whole.match = MATCH_ALL;
+  }
+  return JSON.stringify(whole);
 };
 
 const joined = (words, t) => {
@@ -204,32 +237,52 @@ const summary = (definition, t, { names = {}, isOwn = true } = {}) => {
 
   const parts = [t('customFeeds:summary.from', { kinds, from: joined(from, t) })];
 
-  if (filters.actorTypes.length > 0) {
-    parts.push(t('customFeeds:summary.on', {
-      kinds: joined(filters.actorTypes.map((kind) => {
-        return t(`customFeeds:summary.actor.${kind}`);
-      }), t),
-    }));
-  }
+  // What a post is asked to match. With any (anahita-services roadmap row
+  // 149), "or" between them: "from Naomi, or tagged #ceres".
+  const matching = [];
   if (filters.hashtagsAny.length > 0) {
-    parts.push(t('customFeeds:summary.tagged', {
+    matching.push(t('customFeeds:summary.tagged', {
       tags: filters.hashtagsAny.map((tag) => { return `#${tag}`; }).join(t('customFeeds:summary.or')),
     }));
   }
   if (filters.keywordsAny.length > 0) {
-    parts.push(t('customFeeds:summary.mentioning', {
+    matching.push(t('customFeeds:summary.mentioning', {
       words: filters.keywordsAny.map((word) => { return `“${word}”`; }).join(t('customFeeds:summary.or')),
     }));
   }
   if (filters.locationsAny.length > 0) {
-    parts.push(t('customFeeds:summary.at', {
+    matching.push(t('customFeeds:summary.at', {
       places: named(filters.locationsAny, 'customFeeds:summary.places'),
     }));
   }
   if (filters.near) {
-    parts.push(t(filters.near.live ? 'customFeeds:summary.nearLive' : 'customFeeds:summary.near', {
+    matching.push(t(filters.near.live ? 'customFeeds:summary.nearLive' : 'customFeeds:summary.near', {
       count: filters.near.radiusKm,
     }));
+  }
+
+  const on = filters.actorTypes.length > 0 ?
+    t('customFeeds:summary.on', {
+      kinds: joined(filters.actorTypes.map((kind) => {
+        return t(`customFeeds:summary.actor.${kind}`);
+      }), t),
+    }) :
+    '';
+
+  if (matchesAny(definition)) {
+    // From everyone, the first of them reads on from "from everyone".
+    const fromSomebody = hasSources(definition);
+    matching.forEach((part, index) => {
+      parts.push(index === 0 && !fromSomebody ? part : t('customFeeds:summary.orThat', { part }));
+    });
+    if (on) {
+      parts.push(on);
+    }
+  } else {
+    if (on) {
+      parts.push(on);
+    }
+    parts.push(...matching);
   }
   if (filters.origin) {
     parts.push(t(`customFeeds:summary.origin.${filters.origin}`));
@@ -354,6 +407,8 @@ export default {
   ACTOR_TYPES,
   ACCESS,
   LIMITS,
+  MATCH_ALL,
+  MATCH_ANY,
   complete,
   starting,
   ofHashtag,
@@ -362,6 +417,8 @@ export default {
   cleanHashtag,
   cleanKeyword,
   hasSources,
+  matchingKinds,
+  matchesAny,
   narrows,
   problem,
   fingerprint,

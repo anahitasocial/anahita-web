@@ -83,6 +83,14 @@ export default {
     ownerFollows: 'Des publications de profils que vous pouviez déjà voir : un fil ne montre jamais plus que ce que vous avez le droit de voir.',
   },
   form: {
+    // Any or all, once two kinds of thing are asked for (roadmap row 149).
+    match: {
+      label: 'Afficher les publications qui correspondent à',
+      any: 'L’un de ces critères',
+      all: 'Tous ces critères',
+      anyHelp: 'Une publication y figure dès qu’elle correspond à l’un d’eux.',
+      allHelp: 'Une publication n’y figure que si elle correspond à chacun d’eux.',
+    },
     titleAdd: 'Créer un fil personnalisé',
     titleEdit: 'Modifier le fil',
     name: 'Nom',
@@ -167,6 +175,8 @@ export default {
   summary: {
     list: '{{ first }} et {{ last }}',
     or: ' ou ',
+    // Before each thing matched after the first, in a feed of any.
+    orThat: 'ou {{part}}',
     from: '{{ kinds }} de {{ from }}',
     following: 'profils que vous suivez',
     followingOwner: 'profils que suit son auteur',

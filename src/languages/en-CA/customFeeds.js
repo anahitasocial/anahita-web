@@ -83,6 +83,14 @@ export default {
     ownerFollows: 'Posts from profiles you could see anyway: a feed never shows more than you are allowed to see.',
   },
   form: {
+    // Any or all, once two kinds of thing are asked for (roadmap row 149).
+    match: {
+      label: 'Show posts that match',
+      any: 'Any of these',
+      all: 'All of these',
+      anyHelp: 'A post is in when it matches one of them.',
+      allHelp: 'A post is in only when it matches every one of them.',
+    },
     titleAdd: 'Create a custom feed',
     titleEdit: 'Edit feed',
     name: 'Name',
@@ -168,6 +176,8 @@ export default {
   summary: {
     list: '{{ first }} and {{ last }}',
     or: ' or ',
+    // Before each thing matched after the first, in a feed of any.
+    orThat: 'or {{part}}',
     from: '{{ kinds }} from {{ from }}',
     following: 'profiles you follow',
     followingOwner: 'profiles its owner follows',

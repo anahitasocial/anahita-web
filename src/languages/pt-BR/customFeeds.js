@@ -83,6 +83,14 @@ export default {
     ownerFollows: 'Publicações de perfis que você já poderia ver: um feed nunca mostra mais do que você tem permissão para ver.',
   },
   form: {
+    // Any or all, once two kinds of thing are asked for (roadmap row 149).
+    match: {
+      label: 'Mostrar publicações que correspondam a',
+      any: 'Qualquer um destes',
+      all: 'Todos estes',
+      anyHelp: 'Uma publicação aparece quando corresponde a um deles.',
+      allHelp: 'Uma publicação só aparece quando corresponde a todos eles.',
+    },
     titleAdd: 'Criar um feed personalizado',
     titleEdit: 'Editar feed',
     name: 'Nome',
@@ -168,6 +176,8 @@ export default {
   summary: {
     list: '{{ first }} e {{ last }}',
     or: ' ou ',
+    // Before each thing matched after the first, in a feed of any.
+    orThat: 'ou {{part}}',
     from: '{{ kinds }} de {{ from }}',
     following: 'perfis que você segue',
     followingOwner: 'perfis que o dono do feed segue',

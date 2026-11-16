@@ -577,6 +577,38 @@ const CustomFeedForm = ({
                 i18n.t('customFeeds:form.nearHelp')}
             </FormHelperText>
           </FormControl>
+          {/* Any or all (anahita-services roadmap row 149), once two kinds
+              of thing are asked for: from these profiles, these hashtags,
+              these words, these places, this area. One choice for the
+              whole feed; a new feed starts at Any. */}
+          {customFeeds.matchingKinds(definition) > 1 &&
+          <FormControl component="fieldset" disabled={isSaving}>
+            <FormLabel component="legend" id="feed-match">
+              {i18n.t('customFeeds:form.match.label')}
+            </FormLabel>
+            <RadioGroup
+              row
+              aria-labelledby="feed-match"
+              value={definition.match}
+              onChange={(event) => {
+                setValues({ ...values, definition: { ...definition, match: event.target.value } });
+              }}
+            >
+              {[customFeeds.MATCH_ANY, customFeeds.MATCH_ALL].map((choice) => {
+                return (
+                  <FormControlLabel
+                    key={choice}
+                    value={choice}
+                    control={<Radio />}
+                    label={i18n.t(`customFeeds:form.match.${choice}`)}
+                  />
+                );
+              })}
+            </RadioGroup>
+            <FormHelperText sx={{ ml: 0 }}>
+              {i18n.t(`customFeeds:form.match.${definition.match}Help`)}
+            </FormHelperText>
+          </FormControl>}
           <TextField
             select
             fullWidth

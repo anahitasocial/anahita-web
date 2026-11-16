@@ -26,6 +26,7 @@ describe('a custom feed\'s definition', () => {
       exclude: { hashtags: [], keywords: [], actors: [] },
       includeReplies: false,
       order: 'newest',
+      match: 'all',
     });
     expect(feeds.complete({ filters: { hashtagsAny: ['garden'] } }).filters.hashtagsAny).toEqual(['garden']);
     expect(feeds.starting().sources.following).toBe(true);
@@ -117,6 +118,38 @@ describe('a custom feed\'s definition', () => {
     expect(feeds.fingerprint({ sources: { following: true } }))
       .toBe(feeds.fingerprint(feeds.starting()));
     expect(feeds.fingerprint(feeds.starting())).not.toBe(feeds.fingerprint(feeds.ofHashtag('garden')));
+  });
+});
+
+describe('any or all (roadmap row 149)', () => {
+  it('starts a new feed at any, and keeps what a saved one says', () => {
+    expect(feeds.starting().match).toBe('any');
+    expect(feeds.complete({ sources: { following: true } }).match).toBe('all');
+    expect(feeds.complete({ match: 'any' }).match).toBe('any');
+    expect(feeds.complete({ match: 'some' }).match).toBe('all');
+  });
+
+  it('is a choice once two kinds of thing are asked for', () => {
+    expect(feeds.matchingKinds(feeds.starting())).toBe(1);
+    expect(feeds.matchesAny(feeds.starting())).toBe(false);
+    const both = { sources: { actors: [4] }, filters: { hashtagsAny: ['ceres'] }, match: 'any' };
+    expect(feeds.matchingKinds(both)).toBe(2);
+    expect(feeds.matchesAny(both)).toBe(true);
+    expect(feeds.matchesAny({ ...both, match: 'all' })).toBe(false);
+  });
+
+  it('says or between what a post may match', () => {
+    const anyOf = {
+      sources: { actors: [4] },
+      filters: { hashtagsAny: ['ceres'], keywordsAny: ['dock'] },
+      match: 'any',
+    };
+    expect(feeds.summary(anyOf, t, { names: { 4: 'Naomi' } }))
+      .toBe('Posts from Naomi, or tagged #ceres, or mentioning “dock”, without replies, newest first.');
+    expect(feeds.summary({ filters: { hashtagsAny: ['ceres'], keywordsAny: ['dock'] }, match: 'any' }, t))
+      .toBe('Posts from everyone, tagged #ceres, or mentioning “dock”, without replies, newest first.');
+    expect(feeds.summary({ ...anyOf, match: 'all' }, t, { names: { 4: 'Naomi' } }))
+      .toBe('Posts from Naomi, tagged #ceres, mentioning “dock”, without replies, newest first.');
   });
 });
 
