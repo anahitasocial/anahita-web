@@ -13,7 +13,7 @@ const useFediverseHandle = (actor) => {
   const type = (actor && actor.type) || '';
   const alias = (actor && actor.alias) || '';
   const asked = alias && !federation.isRemote(actor) &&
-    (type.includes('.person-service.person.') || type.includes('.website.'));
+    (type.includes('.person-service.person.') || type.includes('.channel.'));
 
   useEffect(() => {
     setHandle('');

@@ -34,7 +34,7 @@ export default {
     inviter: 'Te invitó',
     person: 'Persona',
     group: 'Grupo',
-    website: 'Sitio web',
+    channel: 'Canal',
     event: 'Evento',
     following: 'Siguiendo',
   },

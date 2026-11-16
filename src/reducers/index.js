@@ -29,7 +29,7 @@ const namespaces = {
     'people',
     'groups',
     'events',
-    'websites',
+    'channels',
   ],
   media: [
     'articles',

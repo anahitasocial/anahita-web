@@ -89,8 +89,8 @@ const ActorBodyAbout = (props) => {
     actor.websiteUrl;
   // A website's site is the domain proved for it: shown as that domain,
   // verified, which is what says who is behind it.
-  const isWebsite = (actor.type || '').includes('.website.');
-  const siteShown = isWebsite ? hostOf(websiteUrl) : websiteUrl;
+  const isChannel = (actor.type || '').includes('.channel.');
+  const siteShown = isChannel ? hostOf(websiteUrl) : websiteUrl;
 
   // Its handle on the fediverse, copied when pressed, for somebody on
   // Mastodon to follow it by: a person's or a website's that is on it.
@@ -173,11 +173,11 @@ const ActorBodyAbout = (props) => {
                       sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
                     >
                       {siteShown}
-                      {isWebsite &&
+                      {isChannel &&
                         <VerifiedIcon
                           fontSize="small"
                           color="primary"
-                          titleAccess={i18n.t('websites:about.verified')}
+                          titleAccess={i18n.t('channels:about.verified')}
                         />}
                     </Typography>
                   }

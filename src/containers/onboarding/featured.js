@@ -6,7 +6,7 @@ import { Onboarding as ONBOARDING } from '../../constants';
 const { STEPS } = ONBOARDING;
 
 // The featured accounts step's list: the inviter first, then the people,
-// groups, websites and events the installation features.
+// groups, channels and events the installation features.
 //
 // Each source can fail on its own and counts as empty when it does. Blocks and
 // disabled accounts are the server's business — browse leaves them out, and
@@ -20,14 +20,14 @@ const mergeFeatured = ({
   inviter = null,
   people = [],
   groups = [],
-  websites = [],
+  channels = [],
   events = [],
   viewer,
 }) => {
   const seen = new Set([viewer && viewer.id]);
   const list = [];
 
-  [inviter, ...people, ...groups, ...websites, ...events].forEach((actor) => {
+  [inviter, ...people, ...groups, ...channels, ...events].forEach((actor) => {
     if (!actor || !actor.id || seen.has(actor.id)) {
       return;
     }
@@ -65,16 +65,16 @@ const loadFeatured = (viewer) => {
     readInviter(),
     browseFeatured('people'),
     browseFeatured('groups'),
-    browseFeatured('websites'),
+    browseFeatured('channels'),
     browseFeatured('events'),
-  ]).then(([inviter, people, groups, websites, events]) => {
+  ]).then(([inviter, people, groups, channels, events]) => {
     return {
       inviterId: (settledValue(inviter, null) || {}).id || null,
       actors: mergeFeatured({
         inviter: settledValue(inviter, null),
         people: settledValue(people, []),
         groups: settledValue(groups, []),
-        websites: settledValue(websites, []),
+        channels: settledValue(channels, []),
         events: settledValue(events, []),
         viewer,
       }),

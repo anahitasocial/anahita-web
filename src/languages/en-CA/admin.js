@@ -20,7 +20,7 @@ export default {
       person: 'Person',
       group: 'Group',
       event: 'Event',
-      website: 'Website',
+      channel: 'Channel',
     },
   },
 };

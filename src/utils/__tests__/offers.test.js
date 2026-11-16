@@ -22,7 +22,7 @@ describe('what the site offers', () => {
 
   it('offers no + for a kind the site does not, whoever may make one', () => {
     const admin = { id: 1, type: 'super-administrator', personType: 'super-administrator' };
-    const settings = { ...coffeehouse, eventsFrom: 'registered', websitesFrom: 'registered' };
+    const settings = { ...coffeehouse, eventsFrom: 'registered', channelsFrom: 'registered' };
     expect(actor.canAddEvent(admin, settings)).toBe(false);
     expect(actor.canConnect(admin, settings)).toBe(false);
   });

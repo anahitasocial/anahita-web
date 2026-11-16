@@ -381,12 +381,12 @@ export const getGroupTabs = ({
   isAdmin,
   infoHasCard = false,
   canCancel = false,
-  isWebsite = false,
+  isChannel = false,
 }) => {
   // A website is public, and nobody posts on it, so it has no audience and no
   // permissions to choose: its Privacy tab is who it has blocked. In their
   // place, the lines its site pastes in to lead people to it.
-  if (isWebsite) {
+  if (isChannel) {
     return [
       { key: ITEMS.INFO, bare: true },
       { key: ITEMS.ADMINS, bare: true },

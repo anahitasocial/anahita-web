@@ -1,11 +1,11 @@
-// A website, as a kind of profile: a site's feed to follow, here and from
-// the fediverse (docs/websites.md in anahita-services). Named Website on
-// 2026-10-16, a plain word for the thing, for trademarks; it was Pulse.
+// A channel, as a kind of profile (roadmap row 147): for now a website's feed
+// to follow, here and from the fediverse (docs/channels.md in
+// anahita-services). It was a Website, and before that Pulse.
 export default {
-  cTitle: 'Websites',
-  mTitle: 'Websites',
+  cTitle: 'Kanäle',
+  mTitle: 'Kanäle',
   // What a website is here, where somebody meets the list.
-  description: 'Der Feed einer Website, dem man hier und aus dem Fediverse folgen kann.',
+  description: 'Der Feed einer Website als Kanal, dem man hier und aus dem Fediverse folgen kann.',
   connect: {
     cTitle: 'Verbinde deine Website',
     mTitle: 'Verbinde deine Website',
@@ -13,7 +13,7 @@ export default {
     steps: {
       site: 'Deine Website',
       proof: 'Zeig, dass sie dir gehört',
-      website: 'Ihr Profil hier',
+      website: 'Ihr Kanal hier',
     },
     site: {
       label: 'Adresse deiner Website',
@@ -54,7 +54,7 @@ export default {
       no_feed: 'Dort wurde kein Feed gefunden. Gib die Adresse des Feeds selbst an, wenn die Website sie nicht nennt.',
       unreadable: 'Die Website konnte nicht gelesen werden. Prüf die Adresse und versuch es noch einmal.',
       feed_not_on_domain: 'Der Feed liegt auf einer anderen Domain, und du kannst nicht nachweisen, dass sie dir gehört.',
-      private_feed: 'Dieser Feed ist privat: Er braucht eine Anmeldung, oder seine Adresse enthält ein Geheimnis. Die Beiträge einer Website sind öffentlich, deshalb kann nur ein öffentlicher Feed verbunden werden.',
+      private_feed: 'Dieser Feed ist privat: Er braucht eine Anmeldung, oder seine Adresse enthält ein Geheimnis. Die Beiträge eines Kanals sind öffentlich, deshalb kann nur ein öffentlicher Feed verbunden werden.',
       feed_taken: 'Dieser Feed ist schon verbunden.',
       handle_taken: 'Dieses Handle ist schon vergeben.',
       not_proved: 'Weise zuerst nach, dass die Domain dir gehört.',
@@ -76,32 +76,32 @@ export default {
     // it on, as a person's is.
     fediverseCard: {
       enable: 'Leute auf anderen Servern sie finden und ihr folgen lassen',
-      help: 'Leute auf Mastodon und anderen Servern des Fediverse können die Website dann über ihr Handle finden und ihr folgen, und ihre Notizen werden an sie geschickt.',
+      help: 'Leute auf Mastodon und anderen Servern des Fediverse können den Kanal dann über sein Handle finden und ihm folgen, und seine Notizen werden an sie geschickt.',
       handle: 'Ihr Handle',
-      leavesWhenPrivate: 'Wird die Website ausgeschaltet oder gelöscht, verlässt sie auch das Fediverse, als hättest du das hier ausgeschaltet.',
+      leavesWhenPrivate: 'Wird der Kanal ausgeschaltet oder gelöscht, verlässt er auch das Fediverse, als hättest du das hier ausgeschaltet.',
       leave: {
-        title: 'Die Website aus dem Fediverse nehmen?',
-        body: 'Jeder Server, der die Website kennt, wird gebeten, sie, ihre Notizen und ihre Follower dort zu entfernen. Das lässt sich hier nicht rückgängig machen: Schaltest du es später wieder ein, nehmen Server, die sie entfernt haben, sie vielleicht nicht wieder auf, und niemand, der ihr gefolgt ist, folgt ihr dann noch.',
+        title: 'Den Kanal aus dem Fediverse nehmen?',
+        body: 'Jeder Server, der den Kanal kennt, wird gebeten, ihn, seine Notizen und seine Follower dort zu entfernen. Das lässt sich hier nicht rückgängig machen: Schaltest du es später wieder ein, nehmen Server, die ihn entfernt haben, ihn vielleicht nicht wieder auf, und niemand, der ihm gefolgt ist, folgt ihm dann noch.',
         confirm: 'Herausnehmen',
       },
       unavailable: {
-        site_private: 'Diese Website behält ihre Inhalte für ihre Mitglieder, deshalb ist keine Website hier im Fediverse.',
-        site_unreachable: 'Diese Website hat keine Adresse, die andere Server erreichen können, deshalb ist keine Website hier im Fediverse.',
-        profile_not_public: 'Solange die Website ausgeschaltet oder gelöscht ist, kann sie nicht im Fediverse sein.',
+        site_private: 'Diese Website behält ihre Inhalte für ihre Mitglieder, deshalb ist kein Kanal hier im Fediverse.',
+        site_unreachable: 'Diese Website hat keine Adresse, die andere Server erreichen können, deshalb ist kein Kanal hier im Fediverse.',
+        profile_not_public: 'Solange der Kanal ausgeschaltet oder gelöscht ist, kann er nicht im Fediverse sein.',
       },
     },
-    blueskyHelp: 'Verbinde das eigene Bluesky-Konto der Website, auf Wunsch mit deiner Domain als Handle (@example.com): Ihre Notizen werden auch dort veröffentlicht, und Leute auf Bluesky folgen ihr dort. Verwende ein App-Passwort, nicht das Passwort des Kontos selbst.',
+    blueskyHelp: 'Verbinde das eigene Bluesky-Konto des Kanals, auf Wunsch mit deiner Domain als Handle (@example.com): Seine Notizen werden auch dort veröffentlicht, und Leute auf Bluesky folgen ihm dort. Verwende ein App-Passwort, nicht das Passwort des Kontos selbst.',
     websiteIntro: 'Füge das in deine Website ein, um deine Leser:innen hierher zu führen.',
-    snippetLabel: 'Folge unserer Website im Fediverse',
+    snippetLabel: 'Folge unserem Kanal im Fediverse',
     disable: 'Ausschalten',
     disablePrompts: {
-      description: 'Ausschalten verbirgt diese Website vor allen, und die neuen Beiträge deiner Website erscheinen hier nicht mehr.',
-      descriptionDisabled: 'Diese Website ist ausgeschaltet. Sie erscheint nirgends und veröffentlicht nichts.',
+      description: 'Ausschalten verbirgt diesen Kanal vor allen, und die neuen Beiträge deiner Website erscheinen hier nicht mehr.',
+      descriptionDisabled: 'Dieser Kanal ist ausgeschaltet. Er erscheint nirgends und veröffentlicht nichts.',
       reversible: 'Das lässt sich jederzeit rückgängig machen, und nichts wird gelöscht.',
       action: 'Ausschalten',
       actionEnable: 'Einschalten',
-      disabled: 'Diese Website wurde ausgeschaltet.',
-      enabled: 'Diese Website wurde eingeschaltet.',
+      disabled: 'Dieser Kanal wurde ausgeschaltet.',
+      enabled: 'Dieser Kanal wurde eingeschaltet.',
       errors: {
         forbidden: 'Du darfst das nicht ändern.',
         lastSuperAdmin: 'Das ist die einzige Super-Administrator:in und kann nicht ausgeschaltet werden.',
@@ -112,7 +112,7 @@ export default {
     purge: 'Endgültig löschen',
     deletePrompts: {
       counts: {
-        intro: 'Auf dieser Website hier, gerade jetzt:',
+        intro: 'In diesem Kanal, gerade jetzt:',
         posts: '{{ count }} Beitrag',
         posts_other: '{{ count }} Beiträge',
         replies: '{{ count }} Antwort',
@@ -123,15 +123,15 @@ export default {
         admins_other: '{{ count }} Admins',
         memberSince: 'Verbunden am {{ date }}.',
       },
-      description: 'Beim Löschen werden das Profil dieser Website hier, die Beiträge aus dem Feed deiner Website und die Antworten darunter entfernt. Deine Website selbst bleibt unberührt.',
+      description: 'Beim Löschen werden dieser Kanal hier, die Beiträge aus dem Feed deiner Website und die Antworten darunter entfernt. Deine Website selbst bleibt unberührt.',
       reversible: 'Das passiert nicht sofort. Sie wird gleich verborgen und nach {{ count }} Tagen endgültig gelöscht. Bis dahin können alle Admins sie auf dieser Seite wiederherstellen.',
       revoked: 'Ihre Follower hier und im Fediverse verlieren sie sofort.',
       handle: 'Das Handle {{ alias }} bleibt danach reserviert.',
-      scheduled: 'Diese Website ist zum Löschen vorgemerkt und wird am {{ date }} gelöscht.',
-      restore: 'Diese Website wiederherstellen',
-      restored: 'Diese Website wurde wiederhergestellt.',
+      scheduled: 'Dieser Kanal ist zum Löschen vorgemerkt und wird am {{ date }} gelöscht.',
+      restore: 'Diesen Kanal wiederherstellen',
+      restored: 'Dieser Kanal wurde wiederhergestellt.',
       errors: {
-        restoreFailed: 'Diese Website konnte nicht wiederhergestellt werden. Vielleicht wurde sie schon endgültig gelöscht.',
+        restoreFailed: 'Dieser Kanal konnte nicht wiederhergestellt werden. Vielleicht wurde er schon endgültig gelöscht.',
       },
     },
     sections: {

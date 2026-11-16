@@ -18,7 +18,7 @@ import offers from '../utils/offers';
 // Absent until NodeInfo answers, which ranks above every role, so nothing
 // offers to create a group before the server has said who may.
 // Nor where the site does not offer groups (instance.json), as for events
-// and websites below.
+// and channels below.
 const canAdd = (viewer, settings = {}) => {
   return meetsRoleLevel(viewer, settings.groupsFrom || '') && offers.profile(settings, 'group');
 };
@@ -34,11 +34,11 @@ const canAddEvent = (viewer, settings = {}) => {
   return meetsRoleLevel(viewer, settings.eventsFrom || '') && offers.profile(settings, 'event');
 };
 
-// Whether the viewer may connect a website as a website: the installation's
-// WEBSITES_FROM, published in NodeInfo as websitesFrom, administrators unless it
+// Whether the viewer may connect a website as a channel: the installation's
+// WEBSITES_FROM, published in NodeInfo as channelsFrom, administrators unless it
 // says otherwise. syndication-service enforces the same.
 const canConnect = (viewer, settings = {}) => {
-  return meetsRoleLevel(viewer, settings.websitesFrom || '') && offers.profile(settings, 'website');
+  return meetsRoleLevel(viewer, settings.channelsFrom || '') && offers.profile(settings, 'channel');
 };
 
 const canEdit = (actor) => {

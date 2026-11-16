@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Connecting a website, from syndication-service: its feed found, its
 // domain proved, and the website made. A website once made is a profile like a
-// group, read and changed under /websites/ (api/create, the `websites`
+// group, read and changed under /channels/ (api/create, the `channels`
 // namespace).
 //
 // Refusals say why as `error`: not_a_domain, no_feed, unreadable,
@@ -10,17 +10,17 @@ import axios from 'axios';
 
 // The site's feed, and the token to prove its domain with.
 const start = (siteUrl) => {
-  return axios.post('/websites/_connect', { siteUrl });
+  return axios.post('/channels/_connect', { siteUrl });
 };
 
 // Whether the token is in the TXT record or the file: { proved, method }.
 const check = (connection) => {
-  return axios.post(`/websites/_connect/${connection.id}/check`);
+  return axios.post(`/channels/_connect/${connection.id}/check`);
 };
 
 // The website, once the domain is proved: { id, alias }.
 const add = (connection, { name, alias, body }) => {
-  return axios.post(`/websites/_connect/${connection.id}`, {
+  return axios.post(`/channels/_connect/${connection.id}`, {
     feedUrl: connection.feedUrl,
     name,
     alias,

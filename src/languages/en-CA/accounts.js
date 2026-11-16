@@ -8,7 +8,7 @@ export default {
     person: 'People',
     group: 'Groups',
     event: 'Events',
-    website: 'Websites',
+    channel: 'Channels',
   },
   filters: {
     kind: 'Show',

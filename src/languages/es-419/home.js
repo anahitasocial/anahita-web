@@ -44,7 +44,7 @@ export default {
     places: {
       people: 'Personas',
       groups: 'Grupos',
-      websites: 'Sitios web',
+      channels: 'Canales',
       hashtags: 'Hashtags',
       locations: 'Lugares',
       about: 'Acerca de este sitio',

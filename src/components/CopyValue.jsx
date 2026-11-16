@@ -61,11 +61,11 @@ const CopyValue = ({ label, value, multiline = false }) => {
           {value}
         </Typography>
         {canCopy &&
-          <Tooltip title={i18n.t(copied ? 'websites:connect.copied' : 'websites:connect.copy')}>
+          <Tooltip title={i18n.t(copied ? 'channels:connect.copied' : 'channels:connect.copy')}>
             <IconButton
               size="small"
               onClick={copy}
-              aria-label={i18n.t('websites:connect.copy')}
+              aria-label={i18n.t('channels:connect.copy')}
             >
               {copied ? <DoneIcon fontSize="small" /> : <CopyIcon fontSize="small" />}
             </IconButton>

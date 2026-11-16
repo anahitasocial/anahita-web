@@ -41,7 +41,7 @@ const useStyles = makeStyles()({
 const BROWSE_ICONS = {
   groups: <GroupsIcon />,
   people: <PeopleIcon />,
-  websites: <WebsiteIcon />,
+  channels: <WebsiteIcon />,
 };
 
 // What the header offers to add, for those who may: a group is made, a
@@ -50,8 +50,8 @@ const addActionOf = (namespace, owner, actorSettings) => {
   if (namespace === 'groups' && permissions.actor.canAdd(owner, actorSettings)) {
     return { to: '/groups/add', label: i18n.t('groups:add.cTitle') };
   }
-  if (namespace === 'websites' && permissions.actor.canConnect(owner, actorSettings)) {
-    return { to: '/websites/connect', label: i18n.t('websites:connect.cTitle') };
+  if (namespace === 'channels' && permissions.actor.canConnect(owner, actorSettings)) {
+    return { to: '/channels/connect', label: i18n.t('channels:connect.cTitle') };
   }
   return { to: '', label: '' };
 };
@@ -87,7 +87,7 @@ const Actors = ({
 
   const ActorsBrowse = Browse(namespace);
 
-  // /groups and /websites route here — /people has its own browse container.
+  // /groups and /channels route here — /people has its own browse container.
   //
   // Gated on GROUPS_FROM and WEBSITES_FROM rather than on being signed in,
   // which is all the routes themselves require. The services enforce the
@@ -104,7 +104,7 @@ const Actors = ({
           icon={BROWSE_ICONS[namespace]}
           title={i18n.t(`${namespace}:cTitle`)}
           // A word most people have not met here: what it is.
-          subheader={namespace === 'websites' ? i18n.t('websites:description') : ''}
+          subheader={namespace === 'channels' ? i18n.t('channels:description') : ''}
           actionTo={add.to}
           actionLabel={add.label}
         />

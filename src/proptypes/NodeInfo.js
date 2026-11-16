@@ -63,7 +63,7 @@ export default shape({
     // it so the web app knows whether to offer a + on the groups page.
     groupsFrom: string,
     // The same for connecting a website. syndication-service enforces it.
-    websitesFrom: string,
+    channelsFrom: string,
     // The same for adding a location. location-service enforces it.
     locationsFrom: string,
     supportEmail: string,

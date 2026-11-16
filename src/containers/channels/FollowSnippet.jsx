@@ -37,12 +37,12 @@ const WebsiteFollowSnippet = ({ actor }) => {
 
   const handle = served || utils.federation.siteHandle(actor.alias);
   const page = `${window.location.origin}/@${actor.alias}`;
-  const snippet = `<a href="${page}" rel="me">\n  ${i18n.t('websites:settings.snippetLabel')}: ${handle}\n</a>`;
+  const snippet = `<a href="${page}" rel="me">\n  ${i18n.t('channels:settings.snippetLabel')}: ${handle}\n</a>`;
 
   return (
     <CardContent>
       <Typography variant="body2" sx={{ mb: 2 }}>
-        {i18n.t('websites:settings.websiteIntro')}
+        {i18n.t('channels:settings.websiteIntro')}
       </Typography>
       <CopyValue value={snippet} multiline />
     </CardContent>

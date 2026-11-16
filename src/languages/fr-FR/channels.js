@@ -1,10 +1,10 @@
-// Un site web, comme sorte de profil : le fil d’un site, à suivre ici et
-// depuis le fédivers (docs/websites.md dans anahita-services). Nommé ainsi
-// le 2026-10-16, un mot ordinaire pour la chose, à cause des marques ; c’était Pulse.
+// Une chaîne, comme sorte de profil (feuille de route, ligne 147) : pour
+// l’instant le fil d’un site web, à suivre ici et depuis le fédivers
+// (docs/channels.md dans anahita-services). C’était un site web, et avant cela Pulse.
 export default {
-  cTitle: 'Sites web',
-  mTitle: 'Sites web',
-  description: 'Le fil d’un site web, à suivre ici et depuis le fédivers.',
+  cTitle: 'Chaînes',
+  mTitle: 'Chaînes',
+  description: 'Le fil d’un site web en chaîne, à suivre ici et depuis le fédivers.',
   connect: {
     cTitle: 'Connecter votre site',
     mTitle: 'Connecter votre site',
@@ -12,7 +12,7 @@ export default {
     steps: {
       site: 'Votre site',
       proof: 'Prouvez qu’il est à vous',
-      website: 'Son profil ici',
+      website: 'Sa chaîne ici',
     },
     site: {
       label: 'L’adresse de votre site',
@@ -53,7 +53,7 @@ export default {
       no_feed: 'Aucun fil n’a été trouvé. Donnez l’adresse du fil lui-même si le site ne l’indique pas.',
       unreadable: 'Le site n’a pas pu être lu. Vérifiez l’adresse et réessayez.',
       feed_not_on_domain: 'Le fil est sur un autre domaine, que vous ne pouvez pas prouver être à vous.',
-      private_feed: 'Ce fil est privé : il demande une connexion, ou son adresse porte un secret. Les publications d’un site web sont publiques ; seul un fil public peut être connecté.',
+      private_feed: 'Ce fil est privé : il demande une connexion, ou son adresse porte un secret. Les publications d’une chaîne sont publiques ; seul un fil public peut être connecté.',
       feed_taken: 'Ce fil est déjà connecté.',
       handle_taken: 'Cet identifiant est déjà pris.',
       not_proved: 'Prouvez d’abord que le domaine est à vous.',
@@ -72,32 +72,32 @@ export default {
     fediverse: 'Fédivers',
     fediverseCard: {
       enable: 'Laisser les gens d’autres serveurs le trouver et le suivre',
-      help: 'Les gens sur Mastodon et d’autres serveurs du fédivers peuvent alors trouver le site par son identifiant et le suivre, et ses notes leur sont envoyées.',
+      help: 'Les gens sur Mastodon et d’autres serveurs du fédivers peuvent alors trouver la chaîne par son identifiant et la suivre, et ses notes leur sont envoyées.',
       handle: 'Son identifiant',
-      leavesWhenPrivate: 'Si le site est désactivé ou supprimé, il quitte aussi le fédivers, comme si vous aviez désactivé ceci.',
+      leavesWhenPrivate: 'Si la chaîne est désactivée ou supprimée, elle quitte aussi le fédivers, comme si vous aviez désactivé ceci.',
       leave: {
-        title: 'Retirer le site du fédivers ?',
-        body: 'Chaque serveur qui connaît le site sera prié de le retirer, avec ses notes et ses abonnés là-bas. Cela ne peut pas être annulé d’ici : si vous réactivez ceci plus tard, les serveurs qui l’ont retiré pourraient ne pas le reprendre, et personne de ceux qui le suivaient ne le suivra plus.',
+        title: 'Retirer la chaîne du fédivers ?',
+        body: 'Chaque serveur qui connaît la chaîne sera prié de la retirer, avec ses notes et ses abonnés là-bas. Cela ne peut pas être annulé d’ici : si vous réactivez ceci plus tard, les serveurs qui l’ont retirée pourraient ne pas la reprendre, et personne de ceux qui la suivaient ne la suivra plus.',
         confirm: 'Le retirer',
       },
       unavailable: {
-        site_private: 'Ce site réserve ce qu’il contient à ses membres : aucun site web n’y est sur le fédivers.',
-        site_unreachable: 'Ce site n’a pas d’adresse que d’autres serveurs puissent joindre : aucun site web n’y est sur le fédivers.',
-        profile_not_public: 'Tant que le site est désactivé ou supprimé, il ne peut pas être sur le fédivers.',
+        site_private: 'Ce site réserve ce qu’il contient à ses membres : aucune chaîne n’y est sur le fédivers.',
+        site_unreachable: 'Ce site n’a pas d’adresse que d’autres serveurs puissent joindre : aucune chaîne n’y est sur le fédivers.',
+        profile_not_public: 'Tant que la chaîne est désactivée ou supprimée, elle ne peut pas être sur le fédivers.',
       },
     },
-    blueskyHelp: 'Connectez le compte Bluesky du site lui-même, avec votre domaine comme identifiant si vous voulez (@exemple.fr) : ses notes y sont publiées aussi, et les gens sur Bluesky le suivent là-bas. Utilisez un mot de passe d’application, pas celui du compte.',
+    blueskyHelp: 'Connectez le compte Bluesky de la chaîne elle-même, avec votre domaine comme identifiant si vous voulez (@exemple.fr) : ses notes y sont publiées aussi, et les gens sur Bluesky la suivent là-bas. Utilisez un mot de passe d’application, pas celui du compte.',
     websiteIntro: 'Collez ceci dans votre site pour mener vos lecteurs jusqu’ici.',
-    snippetLabel: 'Suivez notre site sur le fédivers',
+    snippetLabel: 'Suivez notre chaîne sur le fédivers',
     disable: 'Désactiver',
     disablePrompts: {
-      description: 'Désactiver cache ce site web à tout le monde et arrête la parution des nouvelles publications de votre site.',
-      descriptionDisabled: 'Ce site web est désactivé. Il n’apparaît nulle part et ne publie rien.',
+      description: 'Désactiver cache cette chaîne à tout le monde et arrête la parution des nouvelles publications de votre site.',
+      descriptionDisabled: 'Cette chaîne est désactivée. Elle n’apparaît nulle part et ne publie rien.',
       reversible: 'Cela peut être annulé à tout moment, et rien n’est supprimé.',
       action: 'Désactiver',
       actionEnable: 'Activer',
-      disabled: 'Ce site web a été désactivé.',
-      enabled: 'Ce site web a été activé.',
+      disabled: 'Cette chaîne a été désactivée.',
+      enabled: 'Cette chaîne a été activée.',
       errors: {
         forbidden: 'Vous n’avez pas la permission de modifier ceci.',
         lastSuperAdmin: 'C’est le seul super-administrateur ; il ne peut pas être désactivé.',
@@ -108,7 +108,7 @@ export default {
     purge: 'Supprimer définitivement',
     deletePrompts: {
       counts: {
-        intro: 'Sur ce site web ici en ce moment :',
+        intro: 'Sur cette chaîne en ce moment :',
         posts: '{{ count }} publication',
         posts_other: '{{ count }} publications',
         replies: '{{ count }} réponse',
@@ -119,15 +119,15 @@ export default {
         admins_other: '{{ count }} admins',
         memberSince: 'Connecté le {{ date }}.',
       },
-      description: 'Supprimer retire le profil de ce site ici, les publications qu’il a faites du fil de votre site, et les réponses en dessous. Votre site lui-même n’est pas touché.',
+      description: 'Supprimer retire cette chaîne d’ici, les publications qu’elle a faites du fil de votre site, et les réponses en dessous. Votre site lui-même n’est pas touché.',
       reversible: 'Ce n’est pas immédiat. Il est caché tout de suite et effacé définitivement après {{ count }} jours. Tout admin peut le restaurer depuis cette page d’ici là.',
       revoked: 'Ses abonnés ici et sur le fédivers le perdent aussitôt.',
       handle: 'L’identifiant {{ alias }} reste réservé ensuite.',
-      scheduled: 'Ce site web doit être supprimé et sera effacé le {{ date }}.',
-      restore: 'Restaurer ce site web',
-      restored: 'Ce site web a été restauré.',
+      scheduled: 'Cette chaîne doit être supprimée et sera effacée le {{ date }}.',
+      restore: 'Restaurer cette chaîne',
+      restored: 'Cette chaîne a été restaurée.',
       errors: {
-        restoreFailed: 'Impossible de restaurer ce site web. Il a peut-être déjà été effacé définitivement.',
+        restoreFailed: 'Impossible de restaurer cette chaîne. Elle a peut-être déjà été effacée définitivement.',
       },
     },
     sections: {

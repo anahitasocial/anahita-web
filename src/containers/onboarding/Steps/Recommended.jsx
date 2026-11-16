@@ -24,7 +24,7 @@ const { getActorName } = utils.node;
 // How many of each kind are asked for.
 const EACH = 5;
 
-// People, groups and websites recommended to somebody who has just joined,
+// People, groups and channels recommended to somebody who has just joined,
 // each with the reason, asked of the recommendation service as for a
 // newcomer (`context=onboarding`): by who invited them, the hashtags they
 // picked a step before, what is popular and what is featured. Asked when the step is
@@ -62,11 +62,11 @@ const OnboardingRecommended = ({
       });
     };
 
-    Promise.all([ask('person'), ask('group'), ask('website')]).then(([people, groups, websites]) => {
+    Promise.all([ask('person'), ask('group'), ask('channel')]).then(([people, groups, channels]) => {
       if (!current) {
         return;
       }
-      const found = people.concat(groups, websites);
+      const found = people.concat(groups, channels);
       if (found.length === 0) {
         onNext();
         return;

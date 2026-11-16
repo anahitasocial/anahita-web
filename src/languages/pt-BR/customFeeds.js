@@ -206,7 +206,7 @@ export default {
       person: 'perfis de pessoas',
       group: 'grupos',
       event: 'eventos',
-      website: 'sites',
+      channel: 'canais',
     },
   },
   icons: {
@@ -240,6 +240,6 @@ export default {
     person: 'Pessoas',
     group: 'Grupos',
     event: 'Eventos',
-    website: 'Sites',
+    channel: 'Canais',
   },
 };

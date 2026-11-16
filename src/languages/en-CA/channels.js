@@ -1,11 +1,11 @@
-// A website, as a kind of profile: a site's feed to follow, here and from
-// the fediverse (docs/websites.md in anahita-services). Named Website on
-// 2026-10-16, a plain word for the thing, for trademarks; it was Pulse.
+// A channel, as a kind of profile (roadmap row 147): for now a website's feed
+// to follow, here and from the fediverse (docs/channels.md in
+// anahita-services). It was a Website, and before that Pulse.
 export default {
-  cTitle: 'Websites',
-  mTitle: 'Websites',
+  cTitle: 'Channels',
+  mTitle: 'Channels',
   // What a website is here, where somebody meets the list.
-  description: 'A website’s feed, to follow here and from the fediverse.',
+  description: 'A website’s feed as a channel, to follow here and from the fediverse.',
   connect: {
     cTitle: 'Connect your website',
     mTitle: 'Connect your website',
@@ -13,7 +13,7 @@ export default {
     steps: {
       site: 'Your website',
       proof: 'Prove it is yours',
-      website: 'Its profile here',
+      website: 'Its channel here',
     },
     site: {
       label: 'Your website’s address',
@@ -54,7 +54,7 @@ export default {
       no_feed: 'No feed was found there. Give the feed’s own address if the site does not name it.',
       unreadable: 'The site could not be read. Check the address and try again.',
       feed_not_on_domain: 'The feed is on another domain, which you cannot prove is yours.',
-      private_feed: 'That feed is private: it needs a login, or its address carries a secret. A website’s posts are public, so only a public feed can be connected.',
+      private_feed: 'That feed is private: it needs a login, or its address carries a secret. A channel’s posts are public, so only a public feed can be connected.',
       feed_taken: 'That feed is already connected.',
       handle_taken: 'That handle is taken.',
       not_proved: 'Prove the domain is yours first.',
@@ -76,32 +76,32 @@ export default {
     // it on, as a person's is.
     fediverseCard: {
       enable: 'Let people on other servers find and follow it',
-      help: 'People on Mastodon and other servers of the fediverse can then find the website by its handle and follow it, and its notes are sent to them.',
+      help: 'People on Mastodon and other servers of the fediverse can then find the channel by its handle and follow it, and its notes are sent to them.',
       handle: 'Its handle',
-      leavesWhenPrivate: 'If the website is switched off or deleted, it leaves the fediverse as well, as if you had turned this off.',
+      leavesWhenPrivate: 'If the channel is switched off or deleted, it leaves the fediverse as well, as if you had turned this off.',
       leave: {
-        title: 'Take the website off the fediverse?',
-        body: 'Every server that knows the website will be told to remove it, its notes and its followers there. This cannot be undone from here: if you turn this on again later, servers that removed it may not take it back, and nobody who followed it will be following it.',
+        title: 'Take the channel off the fediverse?',
+        body: 'Every server that knows the channel will be told to remove it, its notes and its followers there. This cannot be undone from here: if you turn this on again later, servers that removed it may not take it back, and nobody who followed it will be following it.',
         confirm: 'Take it off',
       },
       unavailable: {
-        site_private: 'This site keeps what is on it to its members, so no website on it is on the fediverse.',
-        site_unreachable: 'This site has no address other servers can reach, so no website on it is on the fediverse.',
-        profile_not_public: 'While the website is switched off or deleted, it cannot be on the fediverse.',
+        site_private: 'This site keeps what is on it to its members, so no channel on it is on the fediverse.',
+        site_unreachable: 'This site has no address other servers can reach, so no channel on it is on the fediverse.',
+        profile_not_public: 'While the channel is switched off or deleted, it cannot be on the fediverse.',
       },
     },
-    blueskyHelp: 'Connect the website’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
+    blueskyHelp: 'Connect the channel’s own Bluesky account, with your domain as its handle if you like (@example.com): its notes are posted there too, and people on Bluesky follow it there. Use a password made for an app, not the account’s own.',
     websiteIntro: 'Paste this into your site to lead your readers to it here.',
-    snippetLabel: 'Follow our website on the fediverse',
+    snippetLabel: 'Follow our channel on the fediverse',
     disable: 'Disable',
     disablePrompts: {
-      description: 'Disabling hides this website from everyone and stops your site’s new posts appearing here.',
-      descriptionDisabled: 'This website is disabled. It does not appear anywhere and posts nothing.',
+      description: 'Disabling hides this channel from everyone and stops your site’s new posts appearing here.',
+      descriptionDisabled: 'This channel is disabled. It does not appear anywhere and posts nothing.',
       reversible: 'This can be undone at any time, and nothing is deleted.',
       action: 'Disable',
       actionEnable: 'Enable',
-      disabled: 'This website has been disabled.',
-      enabled: 'This website has been enabled.',
+      disabled: 'This channel has been disabled.',
+      enabled: 'This channel has been enabled.',
       errors: {
         forbidden: 'You do not have permission to change this.',
         lastSuperAdmin: 'This is the only super administrator and cannot be disabled.',
@@ -112,7 +112,7 @@ export default {
     purge: 'Delete permanently',
     deletePrompts: {
       counts: {
-        intro: 'On this website here right now:',
+        intro: 'On this channel right now:',
         posts: '{{ count }} post',
         posts_other: '{{ count }} posts',
         replies: '{{ count }} reply',
@@ -123,15 +123,15 @@ export default {
         admins_other: '{{ count }} admins',
         memberSince: 'Connected {{ date }}.',
       },
-      description: 'Deleting removes this website’s profile here, the posts it made of your site’s feed, and the replies under them. Your site itself is not touched.',
+      description: 'Deleting removes this channel here, the posts it made of your site’s feed, and the replies under them. Your site itself is not touched.',
       reversible: 'This is not immediate. It is hidden straight away and permanently erased after {{ count }} days. Any admin can restore it from this page before then.',
       revoked: 'Its followers here and on the fediverse lose it at once.',
       handle: 'The handle {{ alias }} stays reserved afterwards.',
-      scheduled: 'This website is scheduled for deletion and will be erased on {{ date }}.',
-      restore: 'Restore this website',
-      restored: 'This website has been restored.',
+      scheduled: 'This channel is scheduled for deletion and will be erased on {{ date }}.',
+      restore: 'Restore this channel',
+      restored: 'This channel has been restored.',
       errors: {
-        restoreFailed: 'Could not restore this website. It may already have been permanently erased.',
+        restoreFailed: 'Could not restore this channel. It may already have been permanently erased.',
       },
     },
     sections: {

@@ -37,7 +37,7 @@ import PurgeDialog from './PurgeDialog';
 const PAGE_SIZE = 50;
 // Events too (the user, 2026-10-18), so a super administrator can find a
 // deleted one, which no other list shows them.
-const KINDS = ['person', 'group', 'event', 'website'];
+const KINDS = ['person', 'group', 'event', 'channel'];
 const TIERS = ['empty', 'dormant', 'active'];
 const STATES = ['active', 'disabled', 'archived', 'deleted'];
 
@@ -71,7 +71,7 @@ const profilePath = (account) => {
   if (account.kind === 'group') {
     return `/groups/${account.id}/`;
   }
-  if (account.kind === 'event' || account.kind === 'website') {
+  if (account.kind === 'event' || account.kind === 'channel') {
     return `/@${account.alias}/`;
   }
   return `/people/${account.alias}/`;
@@ -124,8 +124,8 @@ const Accounts = ({
   const isGroup = kind === 'group';
   // An event or a website is removed for good one at a time, from its
   // settings: there is no batch purge of them, so the list offers no ticks.
-  const oneAtATime = kind === 'event' || kind === 'website';
-  // What groups, events and websites share: content posted in them, and
+  const oneAtATime = kind === 'event' || kind === 'channel';
+  // What groups, events and channels share: content posted in them, and
   // administrators of their own.
   const hasAdmins = isGroup || oneAtATime;
 
@@ -181,7 +181,7 @@ const Accounts = ({
   }, [fetchPage]);
 
   const canSelect = (account) => {
-    return account.kind !== 'event' && account.kind !== 'website' &&
+    return account.kind !== 'event' && account.kind !== 'channel' &&
       account.id !== viewer.id &&
       !PROTECTED_TYPES.includes(account.personType) &&
       permissions.account.canBrowse(viewer);

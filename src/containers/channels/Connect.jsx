@@ -35,18 +35,18 @@ const WEBSITE = 2;
 const refusalOf = (failure) => {
   const response = failure && failure.response;
   if (response && response.status === 429) {
-    return i18n.t('websites:connect.errors.tooMany');
+    return i18n.t('channels:connect.errors.tooMany');
   }
   const reason = response && response.data && response.data.error;
-  const key = `websites:connect.errors.${reason}`;
-  return reason && i18n.exists(key) ? i18n.t(key) : i18n.t('websites:connect.errors.generic');
+  const key = `channels:connect.errors.${reason}`;
+  return reason && i18n.exists(key) ? i18n.t(key) : i18n.t('channels:connect.errors.generic');
 };
 
 // Connecting a website: "Connect your website", never "create".
 // The site's address, to find its feed; the token, put in a DNS record or a
 // file on the site, and checked; then the website's name, handle and
 // description. Only somebody WEBSITES_FROM allows is offered it.
-const WebsiteConnect = () => {
+const ChannelConnect = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const viewer = useSelector((state) => { return state.session.viewer; });
@@ -69,7 +69,7 @@ const WebsiteConnect = () => {
   }
 
   const cancel = () => {
-    navigate('/websites/');
+    navigate('/channels/');
   };
 
   const find = (event) => {
@@ -79,7 +79,7 @@ const WebsiteConnect = () => {
     }
     setBusy(true);
     setSiteError('');
-    api.websiteConnect.start(siteUrl.trim()).then((result) => {
+    api.channelConnect.start(siteUrl.trim()).then((result) => {
       const found = result.data;
       setConnection(found);
       setName(found.suggestedName || '');
@@ -96,15 +96,15 @@ const WebsiteConnect = () => {
 
   const check = () => {
     setBusy(true);
-    api.websiteConnect.check(connection).then((result) => {
+    api.channelConnect.check(connection).then((result) => {
       const { proved, method } = result.data;
       if (proved) {
-        setProof(i18n.t('websites:connect.proof.proved', {
-          method: i18n.t(`websites:connect.proof.methods.${method}`),
+        setProof(i18n.t('channels:connect.proof.proved', {
+          method: i18n.t(`channels:connect.proof.methods.${method}`),
         }));
         setStep(WEBSITE);
       } else {
-        setProof(i18n.t('websites:connect.proof.notYet'));
+        setProof(i18n.t('channels:connect.proof.notYet'));
       }
     }).catch((failure) => {
       setProof(refusalOf(failure));
@@ -120,12 +120,12 @@ const WebsiteConnect = () => {
     }
     setBusy(true);
     setWebsiteError({ field: '', message: '' });
-    api.websiteConnect.add(connection, {
+    api.channelConnect.add(connection, {
       name: name.trim(),
       alias: alias.trim(),
       body: body.trim(),
     }).then((result) => {
-      dispatch(actions.app.alert.success(i18n.t('websites:connect.done')));
+      dispatch(actions.app.alert.success(i18n.t('channels:connect.done')));
       navigate(`/@${result.data.alias}/`);
     }).catch((failure) => {
       const { data } = (failure && failure.response) || {};
@@ -154,18 +154,18 @@ const WebsiteConnect = () => {
   return (
     <>
       <Helmet>
-        <title>{i18n.t('websites:connect.cTitle')}</title>
+        <title>{i18n.t('channels:connect.cTitle')}</title>
       </Helmet>
       <PageColumn>
         <Card>
           <CardHeader
             avatar={<WebsiteIcon />}
-            title={i18n.t('websites:connect.cTitle')}
+            title={i18n.t('channels:connect.cTitle')}
             slotProps={{ title: { variant: 'h6', component: 'h1' } }}
           />
           <CardContent>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 2 }}>
-              {i18n.t('websites:connect.intro')}
+              {i18n.t('channels:connect.intro')}
             </Typography>
             <Stepper activeStep={step} orientation="vertical">
               <Step>
@@ -173,18 +173,18 @@ const WebsiteConnect = () => {
                   optional={connection && step > SITE &&
                     <Typography variant="caption">{connection.feedUrl}</Typography>}
                 >
-                  {i18n.t('websites:connect.steps.site')}
+                  {i18n.t('channels:connect.steps.site')}
                 </StepLabel>
                 <StepContent>
                   <form onSubmit={find} noValidate>
                     <TextField
                       variant="standard"
-                      label={i18n.t('websites:connect.site.label')}
-                      placeholder={i18n.t('websites:connect.site.placeholder')}
+                      label={i18n.t('channels:connect.site.label')}
+                      placeholder={i18n.t('channels:connect.site.placeholder')}
                       value={siteUrl}
                       onChange={(event) => { setSiteUrl(event.target.value); }}
                       error={siteError !== ''}
-                      helperText={siteError || i18n.t('websites:connect.site.help')}
+                      helperText={siteError || i18n.t('channels:connect.site.help')}
                       disabled={busy}
                       fullWidth
                       autoFocus
@@ -197,7 +197,7 @@ const WebsiteConnect = () => {
                         fullWidth
                         disabled={busy || !siteUrl.trim()}
                       >
-                        {i18n.t('websites:connect.site.find')}
+                        {i18n.t('channels:connect.site.find')}
                       </Button>,
                     )}
                   </form>
@@ -205,30 +205,30 @@ const WebsiteConnect = () => {
               </Step>
 
               <Step>
-                <StepLabel>{i18n.t('websites:connect.steps.proof')}</StepLabel>
+                <StepLabel>{i18n.t('channels:connect.steps.proof')}</StepLabel>
                 <StepContent>
                   {connection &&
                     <>
                       {connection.feedTitle &&
                         <Typography variant="body2" sx={{ mb: 1 }}>
-                          {i18n.t('websites:connect.found', { title: connection.feedTitle })}
+                          {i18n.t('channels:connect.found', { title: connection.feedTitle })}
                         </Typography>}
                       <Typography variant="body2" sx={{ mb: 2 }}>
-                        {i18n.t('websites:connect.proof.intro', { domain: connection.domain })}
+                        {i18n.t('channels:connect.proof.intro', { domain: connection.domain })}
                       </Typography>
-                      <CopyValue label={i18n.t('websites:connect.proof.token')} value={connection.token} />
+                      <CopyValue label={i18n.t('channels:connect.proof.token')} value={connection.token} />
                       <Typography variant="subtitle2">
-                        {i18n.t('websites:connect.proof.dnsTitle')}
+                        {i18n.t('channels:connect.proof.dnsTitle')}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {i18n.t('websites:connect.proof.dns')}
+                        {i18n.t('channels:connect.proof.dns')}
                       </Typography>
                       <CopyValue value={connection.recordName} />
                       <Typography variant="subtitle2">
-                        {i18n.t('websites:connect.proof.fileTitle')}
+                        {i18n.t('channels:connect.proof.fileTitle')}
                       </Typography>
                       <Typography variant="body2" color="textSecondary">
-                        {i18n.t('websites:connect.proof.file')}
+                        {i18n.t('channels:connect.proof.file')}
                       </Typography>
                       <CopyValue value={connection.fileUrl} />
                       {/* The line the answer is written on is kept, so the
@@ -238,7 +238,7 @@ const WebsiteConnect = () => {
                       </Typography>
                       {actionsRow(
                         <Button variant="contained" fullWidth onClick={check} disabled={busy}>
-                          {i18n.t('websites:connect.proof.check')}
+                          {i18n.t('channels:connect.proof.check')}
                         </Button>,
                       )}
                     </>}
@@ -246,7 +246,7 @@ const WebsiteConnect = () => {
               </Step>
 
               <Step>
-                <StepLabel>{i18n.t('websites:connect.steps.website')}</StepLabel>
+                <StepLabel>{i18n.t('channels:connect.steps.website')}</StepLabel>
                 <StepContent>
                   <form onSubmit={make} noValidate>
                     <Typography variant="body2" color="textSecondary">
@@ -254,7 +254,7 @@ const WebsiteConnect = () => {
                     </Typography>
                     <TextField
                       variant="standard"
-                      label={i18n.t('websites:connect.website.name')}
+                      label={i18n.t('channels:connect.website.name')}
                       value={name}
                       onChange={(event) => { setName(event.target.value); }}
                       helperText=" "
@@ -266,13 +266,13 @@ const WebsiteConnect = () => {
                     />
                     <TextField
                       variant="standard"
-                      label={i18n.t('websites:connect.website.alias')}
+                      label={i18n.t('channels:connect.website.alias')}
                       value={alias}
                       onChange={(event) => { setAlias(event.target.value); }}
                       error={websiteError.field === 'alias'}
                       helperText={websiteError.field === 'alias' ?
                         websiteError.message :
-                        i18n.t('websites:connect.website.aliasHelp', { handle: utils.federation.siteHandle(alias || 'example') })}
+                        i18n.t('channels:connect.website.aliasHelp', { handle: utils.federation.siteHandle(alias || 'example') })}
                       margin="normal"
                       fullWidth
                       required
@@ -281,10 +281,10 @@ const WebsiteConnect = () => {
                     />
                     <TextField
                       variant="standard"
-                      label={i18n.t('websites:connect.website.body')}
+                      label={i18n.t('channels:connect.website.body')}
                       value={body}
                       onChange={(event) => { setBody(event.target.value); }}
-                      helperText={(websiteError.field === '' && websiteError.message) || i18n.t('websites:connect.website.seen')}
+                      helperText={(websiteError.field === '' && websiteError.message) || i18n.t('channels:connect.website.seen')}
                       error={websiteError.field === '' && websiteError.message !== ''}
                       margin="normal"
                       fullWidth
@@ -299,7 +299,7 @@ const WebsiteConnect = () => {
                         fullWidth
                         disabled={busy || !name.trim() || alias.trim().length < 3}
                       >
-                        {i18n.t('websites:connect.website.connect')}
+                        {i18n.t('channels:connect.website.connect')}
                       </Button>,
                     )}
                   </form>
@@ -313,4 +313,4 @@ const WebsiteConnect = () => {
   );
 };
 
-export default WebsiteConnect;
+export default ChannelConnect;

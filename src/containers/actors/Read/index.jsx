@@ -277,7 +277,7 @@ const ActorsRead = (props) => {
     canRefuseAccount(viewer, actor)
   );
   // A website is public and followed outright: nobody asks.
-  const showFollowRequests = isAuthenticated && canAdminister && namespace !== 'websites';
+  const showFollowRequests = isAuthenticated && canAdminister && namespace !== 'channels';
   const FollowRequests = ActorsFollowRequests(namespace);
   const featureTabs = getActorFeatureTabs(actor);
 

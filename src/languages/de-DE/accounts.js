@@ -8,7 +8,7 @@ export default {
     person: 'Personen',
     group: 'Gruppen',
     event: 'Veranstaltungen',
-    website: 'Websites',
+    channel: 'Kanäle',
   },
   filters: {
     kind: 'Anzeigen',

@@ -10,11 +10,11 @@ const { mergeFeatured } = featured;
 const viewer = { id: 1 };
 
 describe('mergeFeatured', () => {
-  it('puts websites, then events, after people and groups', () => {
+  it('puts channels, then events, after people and groups', () => {
     const list = mergeFeatured({
       people: [{ id: 2 }],
       groups: [{ id: 3 }],
-      websites: [{ id: 4 }],
+      channels: [{ id: 4 }],
       events: [{ id: 5 }],
       viewer,
     });

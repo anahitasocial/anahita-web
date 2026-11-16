@@ -165,7 +165,7 @@ const LeftMenu = ({
             </ListItemIcon>
             <ListItemText primary={i18n.t('people:cTitle')} />
           </ListItemButton>
-          {/* Groups, events and websites where the site offers them
+          {/* Groups, events and channels where the site offers them
               (instance.json, roadmap row 139). */}
           {offers.profile(inviteSettings, 'group') &&
           <ListItemButton
@@ -191,17 +191,17 @@ const LeftMenu = ({
             </ListItemIcon>
             <ListItemText primary={i18n.t('events:cTitle')} />
           </ListItemButton>}
-          {/* Websites' feeds, to follow here and from the fediverse. */}
-          {offers.profile(inviteSettings, 'website') &&
+          {/* Channels, to follow here and from the fediverse. */}
+          {offers.profile(inviteSettings, 'channel') &&
           <ListItemButton
             component={Link}
-            to="/websites/"
-            selected={pathname === '/websites/'}
+            to="/channels/"
+            selected={pathname === '/channels/'}
           >
             <ListItemIcon>
               <WebsiteIcon />
             </ListItemIcon>
-            <ListItemText primary={i18n.t('websites:cTitle')} />
+            <ListItemText primary={i18n.t('channels:cTitle')} />
           </ListItemButton>}
           <ListItemButton
             component={Link}

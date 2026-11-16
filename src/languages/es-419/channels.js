@@ -1,11 +1,11 @@
-// A website, as a kind of profile: a site's feed to follow, here and from
-// the fediverse (docs/websites.md in anahita-services). Named Website on
-// 2026-10-16, a plain word for the thing, for trademarks; it was Pulse.
+// A channel, as a kind of profile (roadmap row 147): for now a website's feed
+// to follow, here and from the fediverse (docs/channels.md in
+// anahita-services). It was a Website, and before that Pulse.
 export default {
-  cTitle: 'Sitios web',
-  mTitle: 'Sitios web',
+  cTitle: 'Canales',
+  mTitle: 'Canales',
   // What a website is here, where somebody meets the list.
-  description: 'El feed de un sitio web, para seguirlo aquí y desde el fediverso.',
+  description: 'El feed de un sitio web como canal, para seguirlo aquí y desde el fediverso.',
   connect: {
     cTitle: 'Conecta tu sitio web',
     mTitle: 'Conecta tu sitio web',
@@ -13,7 +13,7 @@ export default {
     steps: {
       site: 'Tu sitio web',
       proof: 'Demuestra que es tuyo',
-      website: 'Su perfil aquí',
+      website: 'Su canal aquí',
     },
     site: {
       label: 'La dirección de tu sitio web',
@@ -54,7 +54,7 @@ export default {
       no_feed: 'No se encontró ningún feed ahí. Indica la dirección del feed si el sitio no la menciona.',
       unreadable: 'No se pudo leer el sitio. Revisa la dirección e inténtalo de nuevo.',
       feed_not_on_domain: 'El feed está en otro dominio, y no puedes demostrar que es tuyo.',
-      private_feed: 'Ese feed es privado: requiere iniciar sesión, o su dirección lleva un secreto. Las publicaciones de un sitio web son públicas, así que solo se puede conectar un feed público.',
+      private_feed: 'Ese feed es privado: requiere iniciar sesión, o su dirección lleva un secreto. Las publicaciones de un canal son públicas, así que solo se puede conectar un feed público.',
       feed_taken: 'Ese feed ya está conectado.',
       handle_taken: 'Ese identificador ya está en uso.',
       not_proved: 'Primero demuestra que el dominio es tuyo.',
@@ -76,32 +76,32 @@ export default {
     // it on, as a person's is.
     fediverseCard: {
       enable: 'Permitir que personas de otros servidores lo encuentren y lo sigan',
-      help: 'Así, las personas de Mastodon y de otros servidores del fediverso pueden encontrar el sitio web por su identificador y seguirlo, y les llegan sus notas.',
+      help: 'Así, las personas de Mastodon y de otros servidores del fediverso pueden encontrar el canal por su identificador y seguirlo, y les llegan sus notas.',
       handle: 'Su identificador',
-      leavesWhenPrivate: 'Si el sitio web se desactiva o se elimina, también sale del fediverso, como si hubieras desactivado esto.',
+      leavesWhenPrivate: 'Si el canal se desactiva o se elimina, también sale del fediverso, como si hubieras desactivado esto.',
       leave: {
-        title: '¿Sacar el sitio web del fediverso?',
-        body: 'Se pedirá a cada servidor que conoce el sitio web que lo elimine, junto con sus notas y sus seguidores allí. Esto no se puede deshacer desde aquí: si vuelves a activarlo más adelante, puede que los servidores que lo eliminaron no lo acepten de nuevo, y nadie que lo seguía lo seguirá.',
+        title: '¿Sacar el canal del fediverso?',
+        body: 'Se pedirá a cada servidor que conoce el canal que lo elimine, junto con sus notas y sus seguidores allí. Esto no se puede deshacer desde aquí: si vuelves a activarlo más adelante, puede que los servidores que lo eliminaron no lo acepten de nuevo, y nadie que lo seguía lo seguirá.',
         confirm: 'Sacarlo',
       },
       unavailable: {
-        site_private: 'Este sitio reserva su contenido a sus miembros, así que ningún sitio web de aquí está en el fediverso.',
-        site_unreachable: 'Este sitio no tiene una dirección a la que otros servidores puedan llegar, así que ningún sitio web de aquí está en el fediverso.',
-        profile_not_public: 'Mientras el sitio web esté desactivado o eliminado, no puede estar en el fediverso.',
+        site_private: 'Este sitio reserva su contenido a sus miembros, así que ningún canal de aquí está en el fediverso.',
+        site_unreachable: 'Este sitio no tiene una dirección a la que otros servidores puedan llegar, así que ningún canal de aquí está en el fediverso.',
+        profile_not_public: 'Mientras el canal esté desactivado o eliminado, no puede estar en el fediverso.',
       },
     },
-    blueskyHelp: 'Conecta la cuenta de Bluesky del propio sitio web, con tu dominio como identificador si quieres (@example.com): sus notas también se publican ahí, y las personas de Bluesky lo siguen ahí. Usa una contraseña creada para una app, no la de la cuenta.',
+    blueskyHelp: 'Conecta la cuenta de Bluesky del propio canal, con tu dominio como identificador si quieres (@example.com): sus notas también se publican ahí, y las personas de Bluesky lo siguen ahí. Usa una contraseña creada para una app, no la de la cuenta.',
     websiteIntro: 'Pega esto en tu sitio para llevar hasta aquí a quienes te leen.',
-    snippetLabel: 'Sigue nuestro sitio web en el fediverso',
+    snippetLabel: 'Sigue nuestro canal en el fediverso',
     disable: 'Desactivar',
     disablePrompts: {
-      description: 'Al desactivarlo, este sitio web queda oculto para todo el mundo y las nuevas publicaciones de tu sitio dejan de aparecer aquí.',
-      descriptionDisabled: 'Este sitio web está desactivado. No aparece en ningún lugar y no publica nada.',
+      description: 'Al desactivarlo, este canal queda oculto para todo el mundo y las nuevas publicaciones de tu sitio dejan de aparecer aquí.',
+      descriptionDisabled: 'Este canal está desactivado. No aparece en ningún lugar y no publica nada.',
       reversible: 'Se puede deshacer en cualquier momento, y no se elimina nada.',
       action: 'Desactivar',
       actionEnable: 'Activar',
-      disabled: 'Se desactivó este sitio web.',
-      enabled: 'Se activó este sitio web.',
+      disabled: 'Se desactivó este canal.',
+      enabled: 'Se activó este canal.',
       errors: {
         forbidden: 'No tienes permiso para cambiar esto.',
         lastSuperAdmin: 'Es la única persona con rol de superadmin y no se puede desactivar.',
@@ -112,7 +112,7 @@ export default {
     purge: 'Eliminar definitivamente',
     deletePrompts: {
       counts: {
-        intro: 'En este sitio web, aquí y ahora:',
+        intro: 'En este canal, ahora:',
         posts: '{{ count }} publicación',
         posts_other: '{{ count }} publicaciones',
         replies: '{{ count }} respuesta',
@@ -123,15 +123,15 @@ export default {
         admins_other: '{{ count }} admins',
         memberSince: 'Conectado el {{ date }}.',
       },
-      description: 'Al eliminarlo, se borran el perfil de este sitio web aquí, las publicaciones que hizo a partir del feed de tu sitio y las respuestas que tienen. Tu sitio en sí no se toca.',
+      description: 'Al eliminarlo, se borran este canal aquí, las publicaciones que hizo a partir del feed de tu sitio y las respuestas que tienen. Tu sitio en sí no se toca.',
       reversible: 'No es inmediato. Se oculta enseguida y se borra definitivamente después de {{ count }} días. Antes de eso, cualquier admin puede restaurarlo desde esta página.',
       revoked: 'Sus seguidores de aquí y del fediverso lo pierden de inmediato.',
       handle: 'El identificador {{ alias }} queda reservado después.',
-      scheduled: 'Este sitio web está programado para eliminarse y se borrará el {{ date }}.',
-      restore: 'Restaurar este sitio web',
-      restored: 'Se restauró este sitio web.',
+      scheduled: 'Este canal está programado para eliminarse y se borrará el {{ date }}.',
+      restore: 'Restaurar este canal',
+      restored: 'Se restauró este canal.',
       errors: {
-        restoreFailed: 'No se pudo restaurar este sitio web. Puede que ya se haya borrado definitivamente.',
+        restoreFailed: 'No se pudo restaurar este canal. Puede que ya se haya borrado definitivamente.',
       },
     },
     sections: {

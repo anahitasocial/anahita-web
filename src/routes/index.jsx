@@ -69,7 +69,7 @@ const InvitesRedirect = lazy(() => {
   });
 });
 const StaticPage = lazy(() => { return import('../containers/page'); });
-const WebsiteConnect = lazy(() => { return import('../containers/websites/Connect'); });
+const ChannelConnect = lazy(() => { return import('../containers/channels/Connect'); });
 
 // Each page's code is fetched the first time it is opened, not with the app
 // (roadmap row 128): the feed, the home page and a post are what nearly every
@@ -119,11 +119,21 @@ const EventEditRedirect = () => {
   return <Navigate to={`/events/${id}/settings`} replace />;
 };
 
-// A website is a website's feed as a profile, read and looked after as a
-// group is. It is made by connecting a website, not by a form of its own.
-const WebsitesBrowse = lazyMade(() => { return import('../containers/actors'); }, 'websites');
-const WebsitesRead = lazyMade(() => { return import('../containers/actors/Read'); }, 'websites');
-const WebsitesSettings = lazyMade(() => { return import('../containers/actors/Settings'); }, 'websites');
+// Websites became channels (roadmap row 147). The old addresses lead to the
+// new ones, whatever followed /websites, with the query, for links already
+// made and shared.
+const WebsitesMoved = () => {
+  const { pathname, search } = useLocation();
+
+  return <Navigate to={`${pathname.replace(/^\/websites/, '/channels')}${search}`} replace />;
+};
+
+// A channel is, for now, a website's feed as a profile, read and looked
+// after as a group is. It is made by connecting a website, not by a form of
+// its own.
+const ChannelsBrowse = lazyMade(() => { return import('../containers/actors'); }, 'channels');
+const ChannelsRead = lazyMade(() => { return import('../containers/actors/Read'); }, 'channels');
+const ChannelsSettings = lazyMade(() => { return import('../containers/actors/Settings'); }, 'channels');
 
 const EventsRead = lazyMade(() => { return import('../containers/actors/Read'); }, 'events');
 const EventsSettings = lazyMade(() => { return import('../containers/actors/Settings'); }, 'events');
@@ -331,27 +341,29 @@ const AppRoutes = () => {
               <Route path="/events/:id/:tab" element={<EventsRead />} />
               <Route path="/events/:id" element={<EventsRead />} />
 
-              {/* Websites — static paths before parameterized */}
-              <Route path="/websites" element={<WebsitesBrowse />} />
+              {/* Channels — static paths before parameterized */}
+              <Route path="/channels" element={<ChannelsBrowse />} />
               <Route
-                path="/websites/connect"
+                path="/channels/connect"
                 element={
                   <AuthenticatedRoute>
-                    <WebsiteConnect />
+                    <ChannelConnect />
                   </AuthenticatedRoute>
           }
               />
               <Route
-                path="/websites/:id/settings"
+                path="/channels/:id/settings"
                 element={
                   <AuthenticatedRoute>
-                    <WebsitesSettings />
+                    <ChannelsSettings />
                   </AuthenticatedRoute>
           }
               />
-              <Route path="/websites/:id/:tab/:subtab" element={<WebsitesRead />} />
-              <Route path="/websites/:id/:tab" element={<WebsitesRead />} />
-              <Route path="/websites/:id" element={<WebsitesRead />} />
+              <Route path="/channels/:id/:tab/:subtab" element={<ChannelsRead />} />
+              <Route path="/channels/:id/:tab" element={<ChannelsRead />} />
+              <Route path="/channels/:id" element={<ChannelsRead />} />
+              <Route path="/websites" element={<WebsitesMoved />} />
+              <Route path="/websites/*" element={<WebsitesMoved />} />
 
               <Route path="/groups/:id/:tab/:subtab" element={<GroupsRead />} />
               <Route path="/groups/:id/:tab" element={<GroupsRead />} />

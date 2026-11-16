@@ -205,7 +205,7 @@ history. The main paths:
 | `/people`, `/people/:id` | People. A person's old address, `/people/:id` and its tabs, sends to `/@:id` |
 | `/people/:id/:tab`, `/groups/:id/:tab` | A group's page opened on one of its tabs at its address by kind, which still works; for a person, sent to `/@:id/:tab` |
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
-| `/recommendations` | People, groups, events and websites the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
+| `/recommendations` | People, groups, events and channels the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/add`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
 | `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
@@ -214,8 +214,8 @@ history. The main paths:
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/websites`, `/websites/:id`, `/websites/:id/settings` | Websites, a website (a site's feed as a profile), and its settings: Info, Admins, Blocked, On your site, Danger zone. Its page is at `/@alias` like any profile |
-| `/websites/connect` | Connecting a website: its address, the proof of its domain, then its name and handle. For those the installation's `websitesFrom` allows. See [Websites](https://github.com/anahitasocial/anahita-services/blob/main/docs/websites.md) in anahita-services |
+| `/channels`, `/channels/:id`, `/channels/:id/settings` | Channels, a channel (for now a website's feed as a profile, roadmap row 147), and its settings: Info, Admins, Blocked, On your site, Fediverse, Danger zone. Its page is at `/@alias` like any profile. The old `/websites…` addresses lead here |
+| `/channels/connect` | Connecting a website as a channel: its address, the proof of its domain, then its name and handle. For those the installation's `channelsFrom` allows. See [Channels](https://github.com/anahitasocial/anahita-services/blob/main/docs/channels.md) in anahita-services |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id`, `/audio/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The Hashtags page has Trending and All; the hashtags one follows are the ones in one's custom feeds, read there, not listed here (`containers/hashtags`). The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
@@ -315,7 +315,7 @@ failure is left to be seen.
 | Accounts | `/admin/accounts` | Super administrators only |
 
 **Scheduled for deletion** (`containers/admin/Scheduled`) lists every profile
-on its way out, people, groups, events and websites together, soonest first,
+on its way out, people, groups, events and channels together, soonest first,
 each with its days left and a Settings button to restore it or remove it for
 good. It asks `GET /accounts` for the deleted of each kind.
 
@@ -324,14 +324,14 @@ looks after the people on it, so they keep their own page (`/settings`) and
 menu entry.
 
 **Accounts** (`containers/admin/Accounts`) lists every person, group, event or
-website, least recently active first, with filters for finding the ones nobody
+channel, least recently active first, with filters for finding the ones nobody
 uses: an activity tier (empty, dormant, active), a state (active, disabled,
 archived, deleted), dates, never verified, never onboarded, nothing written,
-and for groups, events and websites, no administrator. A deleted group, event
-or website's Deleted chip leads to its settings, to restore it or remove it
+and for groups, events and channels, no administrator. A deleted group, event
+or channel's Deleted chip leads to its settings, to restore it or remove it
 for good. Accounts are ticked, or all
 that match are selected at once, up to 500 (people and groups; events and
-websites are removed one at a time, from their settings), and "Delete permanently" opens a
+channels are removed one at a time, from their settings), and "Delete permanently" opens a
 dialog that says what will go, asks for the count to be typed (`PURGE 37`) and
 for a proof of identity, then shows the progress. The server answers a purge
 before the work is done, so `usePurgeProgress` asks how the batch is doing
@@ -343,7 +343,7 @@ deletion · N days left** label (`components/ScheduledDeletion.jsx`,
 `utils/deletion.js`) on its page and in the lists of who somebody follows,
 which keep it for its followers and administrators only (graph-grpc-service,
 `setLiveNeighboursQuery`). Its Danger zone offers only Restore, for a group,
-an event or a website, and Delete permanently.
+an event or a channel, and Delete permanently.
 
 The same purge for one account is the last card in a profile's Danger zone,
 "Delete permanently" (`containers/actors/Settings/Purge.jsx`), offered to
@@ -809,10 +809,10 @@ a request that fails as it does without the service
    browser (`utils/recommendations.js#hide`); Reset on the Recommendations
    page brings it back.
 2. **The page** at `/recommendations` (`containers/recommendations/index.jsx`):
-   People, Groups, Events and Websites (roadmap row 111), the open tab in
+   People, Groups, Events and Channels (roadmap rows 111 and 147), the open tab in
    the address (`?kind=group`), as cards with the reason inside each, under
    the name; on a mobile the tabs slide, never wrap. The onboarding's
-   Recommended step offers people, groups and websites. An event is drawn with the event's
+   Recommended step offers people, groups and channels. An event is drawn with the event's
    own card and is not followed from here. It is in the left menu as
    **Recommendations**, where the installation has the service
    (`useHasSuggestions.js` asks once).
@@ -863,7 +863,7 @@ own, because a video is too big to be sent with the post (the services'
    out in its `instance.json` (anahita-services' `docs/instance-features.md`):
    profile tabs and composers follow the features the server sends, and
    NodeInfo's `offers` (`utils/offers.js`) takes Groups, Events and
-   Websites out of the menu, a group's Events tab, the recommendations'
+   Channels out of the menu, a group's Events tab, the recommendations'
    tabs and the buttons that make them (`permissions/actor.js`).
 2. **Posting** (`containers/media/Composer/Video`): the file is refused at
    once if it is not a video or is too large. `useVideoUpload.js` then
@@ -1493,9 +1493,9 @@ What the profile says of itself, then one list (`actors/Read/About.jsx`):
 
 | Row | Shown for |
 | --- | --- |
-| Website, or the network somebody from elsewhere is on | A profile with a website; a website's is its verified domain |
-| Fediverse, the handle whole, `@ana@banu.io`, copied when pressed | A person or a website here that is on the fediverse. Whether they are is asked of WebFinger, as another server would ask (`actors/Read/useFediverseHandle.js`): it answers for those who turned federation on and for nobody else, so nothing in the profile says it |
-| Joined, or Created for a group or a website, as month and year | Every profile here but an event, whose own date is what matters; not somebody from elsewhere, who joined their own server |
+| Website, or the network somebody from elsewhere is on | A profile with a website; a channel's is its verified domain |
+| Fediverse, the handle whole, `@ana@banu.io`, copied when pressed | A person or a channel here that is on the fediverse. Whether they are is asked of WebFinger, as another server would ask (`actors/Read/useFediverseHandle.js`): it answers for those who turned federation on and for nobody else, so nothing in the profile says it |
+| Joined, or Created for a group or a channel, as month and year | Every profile here but an event, whose own date is what matters; not somebody from elsewhere, who joined their own server |
 | Where, with the maps it opens in | An event with an address |
 
 Then its rules, and an event's map.

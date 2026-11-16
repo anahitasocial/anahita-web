@@ -62,7 +62,7 @@ const networksKey = (networks) => {
 const PLACES = [
   { key: 'people', to: '/people', Icon: PeopleIcon },
   { key: 'groups', to: '/groups', Icon: GroupsIcon },
-  { key: 'websites', to: '/websites', Icon: WebsitesIcon },
+  { key: 'channels', to: '/channels', Icon: WebsitesIcon },
   { key: 'hashtags', to: '/hashtags', Icon: HashtagsIcon },
   { key: 'locations', to: '/locations', Icon: LocationsIcon },
   { key: 'about', to: '/about', Icon: AboutIcon },

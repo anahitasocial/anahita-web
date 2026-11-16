@@ -69,7 +69,7 @@ const importChoices = (preview) => {
 //
 // Given a website, it is that website's own account, connected by one of
 // its administrators: its notes are posted there too, so that people on
-// Bluesky follow it there (docs/websites.md). A website follows nobody, and
+// Bluesky follow it there (docs/channels.md). A channel follows nobody, and
 // answers from here only as itself, so there is no following to bring here
 // and nothing for the viewer's own reply box to say.
 const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => {
@@ -188,7 +188,7 @@ const ActorsSettingsBluesky = ({ alertSuccess, alertError, profile = null }) => 
       <Divider />
       <CardContent>
         <Typography variant="body2" color="textSecondary">
-          {i18n.t(profile ? 'websites:settings.blueskyHelp' : 'federation:bluesky.help')}
+          {i18n.t(profile ? 'channels:settings.blueskyHelp' : 'federation:bluesky.help')}
         </Typography>
 
         {settings.connected &&

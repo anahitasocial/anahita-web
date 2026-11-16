@@ -35,6 +35,14 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    not told and may follow again. The server of a follower elsewhere is
    told to stop delivering.
 
+### Changed
+
+1. **Websites are channels** (roadmap row 147, phase 1): the same profiles
+   under a new name, at `/channels`, in the menu, recommendations, custom
+   feeds, onboarding and the administrators' lists, in every language base.
+   The old `/websites…` addresses lead to the new ones. Nothing else changes
+   yet: a channel is still made by connecting a website.
+
 ### Fixed
 
 1. **A new sound posted** is told in words, not as "other".

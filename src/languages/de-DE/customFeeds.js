@@ -209,7 +209,7 @@ export default {
       person: 'Personen',
       group: 'Gruppen',
       event: 'Veranstaltungen',
-      website: 'Websites',
+      channel: 'Kanäle',
     },
   },
   icons: {
@@ -243,6 +243,6 @@ export default {
     person: 'Personen',
     group: 'Gruppen',
     event: 'Veranstaltungen',
-    website: 'Websites',
+    channel: 'Kanäle',
   },
 };

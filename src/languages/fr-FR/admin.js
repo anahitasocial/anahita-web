@@ -19,7 +19,7 @@ export default {
       person: 'Personne',
       group: 'Groupe',
       event: 'Événement',
-      website: 'Site web',
+      channel: 'Chaîne',
     },
   },
 };

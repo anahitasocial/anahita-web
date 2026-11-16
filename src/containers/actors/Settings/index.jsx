@@ -53,7 +53,7 @@ import ActorMoving from './Moving';
 import ActorBluesky from './Bluesky';
 import EventForm from '../../events/Form';
 import EventCancelSetting from '../../events/CancelSetting';
-import WebsiteFollowSnippet from '../../websites/FollowSnippet';
+import WebsiteFollowSnippet from '../../channels/FollowSnippet';
 import Progress from '../../../components/Progress';
 import PersonAgreements from '../../people/Settings/Agreements';
 import PersonAccountType from '../../people/Settings/AccountType';
@@ -347,7 +347,7 @@ const ActorsSettings = ({
   // tab groups never render, which handed MUI a Tabs value it could not match —
   // a console warning and an empty body on every /groups/:id/settings load.
   const isEvent = namespace === 'events';
-  const isWebsite = namespace === 'websites';
+  const isChannel = namespace === 'channels';
   // Whoever can open an event's settings looks after it, and may call it
   // off. The server decides.
   const canCancel = isEvent;
@@ -356,7 +356,7 @@ const ActorsSettings = ({
     isAdmin,
     infoHasCard: isEvent,
     canCancel,
-    isWebsite,
+    isChannel,
   });
   const activeTab = groupTabs.find((entry) => {
     return entry.key === tab;
@@ -367,7 +367,7 @@ const ActorsSettings = ({
     isAdmin,
     isSuperAdmin,
     canCancel,
-    canArchive: !isWebsite,
+    canArchive: !isChannel,
     isDeleted: Boolean(actor.deletedAt),
   });
 
@@ -385,7 +385,7 @@ const ActorsSettings = ({
     // Who can see it, and who it has blocked: one of its administrators
     // blocks somebody from the menu on what they wrote in it.
     // A website is public: only who it has blocked.
-    [ITEMS.ACCESS]: isWebsite ? <ActorBlocked actor={actor} /> : (
+    [ITEMS.ACCESS]: isChannel ? <ActorBlocked actor={actor} /> : (
       <Stack spacing={2}>
         <ActorAccess />
         <ActorGraphAccess />

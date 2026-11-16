@@ -34,7 +34,7 @@ const KINDS = {
   person: <PersonIcon />,
   group: <GroupIcon />,
   event: <EventIcon />,
-  website: <WebsiteIcon />,
+  channel: <WebsiteIcon />,
 };
 
 // As many of each kind as one request lists. A site with more on their way

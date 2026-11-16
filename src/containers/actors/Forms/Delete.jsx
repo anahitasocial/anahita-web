@@ -62,7 +62,7 @@ const ActorDeleteForm = (props) => {
   // Events too (the user, 2026-10-18): POST /events/:id/restore was there
   // and its strings were, but an event's administrators were never offered
   // it.
-  const canRestore = ['groups', 'websites', 'events'].includes(namespace);
+  const canRestore = ['groups', 'channels', 'events'].includes(namespace);
 
   if (actor.deletedAt && canRestore) {
     const purgeDate = new Date(actor.deletedAt);

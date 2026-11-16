@@ -43,7 +43,7 @@ export default {
     places: {
       people: 'Personnes',
       groups: 'Groupes',
-      websites: 'Sites web',
+      channels: 'Chaînes',
       hashtags: 'Hashtags',
       locations: 'Lieux',
       about: 'À propos de ce site',

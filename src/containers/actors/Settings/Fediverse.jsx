@@ -61,7 +61,7 @@ const ActorsSettingsFediverse = ({ profile = null, alertSuccess, alertError }) =
   }
 
   // A person's words, or a website's.
-  const words = profile ? 'websites:settings.fediverseCard' : 'federation:settings';
+  const words = profile ? 'channels:settings.fediverseCard' : 'federation:settings';
 
   const save = (enabled) => {
     setIsSaving(true);
