@@ -13,6 +13,7 @@ import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
+import utils from '../../../utils';
 
 // Whether what this person reposts is also shown among the posts on their
 // profile. For people only: nothing else reposts.
@@ -91,7 +92,7 @@ const mapDispatchToProps = (namespace) => {
   return (dispatch) => {
     return {
       read: (actor) => {
-        return dispatch(actions[namespace].read(actor.id, namespace));
+        return dispatch(actions[namespace].read(utils.node.readKeyOf(actor), namespace));
       },
       alertSuccess: (message) => {
         return dispatch(actions.app.alert.success(message));

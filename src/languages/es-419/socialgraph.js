@@ -12,6 +12,18 @@ export default {
   blocks: 'Bloqueados',
   mutes: 'Silenciados',
   followsYou: 'Te sigue',
+  // Who may see the lists (roadmap row 151).
+  graphAccess: {
+    title: 'Seguidores y seguidos',
+    label: 'Quién puede verlos',
+    same: 'Quien pueda ver tu perfil',
+    sameOf: 'Quien pueda ver {{ name }}',
+    help: 'Las cifras siguen en el perfil. Solo las listas quedan para estas personas, y nunca las ve más gente que el perfil.',
+    saved: 'Guardado',
+    notSaved: 'No se pudo guardar. Inténtalo de nuevo en un momento.',
+  },
+  // A list its profile keeps to some people.
+  hidden: '{{ name }} muestra esta lista solo a algunas personas.',
   // Removing a follower, which is not a block (roadmap row 150).
   removeFollower: {
     title: '¿Quitar a {{name}}?',

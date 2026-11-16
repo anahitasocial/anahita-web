@@ -15,6 +15,7 @@ import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
+import utils from '../../../utils';
 import quotes from '../../../utils/quotes';
 
 // Who can quote this person's posts, for the posts that do not say
@@ -94,7 +95,7 @@ const mapDispatchToProps = (namespace) => {
   return (dispatch) => {
     return {
       read: (actor) => {
-        return dispatch(actions[namespace].read(actor.id, namespace));
+        return dispatch(actions[namespace].read(utils.node.readKeyOf(actor), namespace));
       },
       alertSuccess: (message) => {
         return dispatch(actions.app.alert.success(message));

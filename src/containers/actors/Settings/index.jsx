@@ -41,6 +41,7 @@ import ActorReports from './Reports';
 import RepostsOnProfile from './RepostsOnProfile';
 import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
+import GraphAccess from './GraphAccess';
 import ActorBlocked from './Blocked';
 import DataExport from './DataExport';
 import DataImport from './DataImport';
@@ -132,6 +133,7 @@ const cardsFor = (namespace) => {
       ActorAdmins: Admins(namespace),
       ActorInfo: Info(namespace),
       ActorAccess: Access(namespace),
+      ActorGraphAccess: GraphAccess(namespace),
       ActorPermissions: Permissions(namespace),
       ActorReposts: RepostsOnProfile(namespace),
       ActorDownloads: DownloadDefault(namespace),
@@ -205,6 +207,7 @@ const ActorsSettings = ({
     ActorAdmins,
     ActorInfo,
     ActorAccess,
+    ActorGraphAccess,
     ActorPermissions,
     ActorDelete,
     ActorPurge,
@@ -253,7 +256,14 @@ const ActorsSettings = ({
       [ITEMS.TOTP]: <Totp viewer={viewer} />,
       [ITEMS.WEBAUTHN]: <WebAuthn />,
       [ITEMS.AUTHLOGS]: <AuthLogs personId={actor.id} />,
-      [ITEMS.ACCESS]: <ActorAccess />,
+      // Who can see the profile, then who can see its followers and whom
+      // it follows (roadmap row 151).
+      [ITEMS.ACCESS]: (
+        <Stack spacing={2}>
+          <ActorAccess />
+          <ActorGraphAccess />
+        </Stack>
+      ),
       [ITEMS.REPOSTS]: <ActorReposts />,
       [ITEMS.QUOTES]: <ActorQuotes />,
       [ITEMS.DOWNLOADS]: <ActorDownloads />,
@@ -376,6 +386,7 @@ const ActorsSettings = ({
     [ITEMS.ACCESS]: isWebsite ? <ActorBlocked actor={actor} /> : (
       <Stack spacing={2}>
         <ActorAccess />
+        <ActorGraphAccess />
         <ActorBlocked actor={actor} />
       </Stack>
     ),

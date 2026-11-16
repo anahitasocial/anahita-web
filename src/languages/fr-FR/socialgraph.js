@@ -12,6 +12,18 @@ export default {
   blocks: 'Bloqués',
   mutes: 'En sourdine',
   followsYou: 'Vous suit',
+  // Who may see the lists (roadmap row 151).
+  graphAccess: {
+    title: 'Abonnés et abonnements',
+    label: 'Qui peut les voir',
+    same: 'Quiconque peut voir votre profil',
+    sameOf: 'Quiconque peut voir {{ name }}',
+    help: 'Les nombres restent sur le profil. Seules les listes sont réservées à ces personnes, et jamais montrées à plus de monde que le profil.',
+    saved: 'Enregistré',
+    notSaved: 'Impossible d’enregistrer. Réessayez dans un instant.',
+  },
+  // A list its profile keeps to some people.
+  hidden: '{{ name }} réserve cette liste à certaines personnes.',
   // Removing a follower, which is not a block (roadmap row 150).
   removeFollower: {
     title: 'Retirer {{name}} ?',

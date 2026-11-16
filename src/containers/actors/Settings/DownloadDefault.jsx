@@ -13,6 +13,7 @@ import ActorType from '../../../proptypes/Actor';
 import actions from '../../../actions';
 import api from '../../../api/downloads';
 import i18n from '../../../languages';
+import utils from '../../../utils';
 
 // Whether the photos and videos posted on this profile start out
 // downloadable: a person's own, or what is posted in a group.
@@ -91,7 +92,7 @@ const mapDispatchToProps = (namespace) => {
   return (dispatch) => {
     return {
       read: (actor) => {
-        return dispatch(actions[namespace].read(actor.id, namespace));
+        return dispatch(actions[namespace].read(utils.node.readKeyOf(actor), namespace));
       },
       alertSuccess: (message) => {
         return dispatch(actions.app.alert.success(message));

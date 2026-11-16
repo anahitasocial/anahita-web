@@ -78,9 +78,12 @@ const SocialgraphDialog = ({
           [which]: socialgraph.merge(before[which], result.data, start),
         };
       });
-    }).catch(() => {
+    }).catch((error) => {
+      // Refused: the profile keeps this list to some people (roadmap row
+      // 151), which is said calmly, not as a failure.
+      const refused = Boolean(error && error.response && error.response.status === 403);
       setFailed((before) => {
-        return { ...before, [which]: true };
+        return { ...before, [which]: refused ? 'hidden' : true };
       });
     });
   };
@@ -210,7 +213,11 @@ const SocialgraphDialog = ({
             <SignInPrompt what="followers" />
           </Box>}
         {!heldBack && !list && !failed[kind] && <Progress />}
-        {failed[kind] &&
+        {failed[kind] === 'hidden' &&
+          <Typography variant="body2" color="textSecondary" sx={{ p: 2 }}>
+            {i18n.t('socialgraph:hidden', { name: getActorName(actor) })}
+          </Typography>}
+        {failed[kind] === true &&
           <Typography variant="body2" color="error" role="alert" sx={{ p: 2 }}>
             {i18n.t('socialgraph:failed')}
           </Typography>}

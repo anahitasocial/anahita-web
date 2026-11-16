@@ -1521,7 +1521,10 @@ person their own, a group's administrators the group's (roadmap row 150),
 after a confirmation that says it is not a block. The row leaves the list
 and the profile is read again for its counts (`onChanged`, through
 `ActorHeader` and `SocialgraphMeta`). A row's buttons wrap onto a line of
-their own when they do not fit beside the name (`components/ProfileRow.jsx`).
+their own when they do not fit beside the name (`components/ProfileRow.jsx`). A list the profile keeps to some people (roadmap row 151) answers 403,
+and the dialog says so in grey, not as a failure: "Naomi keeps this list to
+some people." What keeps it is Settings › Privacy's Followers and following
+card (`actors/Settings/GraphAccess.jsx`), for people, groups and events.
 
 What is in common is found by one query in the graph, so it is whole, paged
 and counted; its number is on its tab once the tab has been opened.

@@ -11,23 +11,30 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Added
 
-1. **A passkey offered after signing in** (roadmap row 153): once, on a
+1. **Who sees your followers and who you follow** (roadmap row 151), in
+   Settings › Privacy, without making the profile more private: whoever can
+   see it, or fewer, down to nobody else. The counts stay; a list kept from
+   somebody says so calmly. For groups and events too.
+2. **A passkey offered after signing in** (roadmap row 153): once, on a
    device that can hold one, to somebody who has none, "Sign in faster
    next time?", with Skip and Add passkey. Skip is remembered on that
    device; Settings › Security still offers one.
-2. **Removing a follower** (roadmap row 150): Remove beside each follower
+3. **Removing a follower** (roadmap row 150): Remove beside each follower
    in one's own list of followers, after a confirmation saying they are
    not told and may follow again. The server of a follower elsewhere is
    told to stop delivering.
 
 ### Fixed
 
-1. **Remove never worked,** for a group's administrators either: the
+1. **Saving who may quote you, your reposts or your download default** no
+   longer says it failed: the card read the person again by number, which
+   people are not found by, and showed an error after every save.
+2. **Remove never worked,** for a group's administrators either: the
    button sent nothing to the server. It removes now, the follower leaves
    the list, and the counts follow.
-2. **A profile row with two buttons on a mobile** no longer squeezes the
+3. **A profile row with two buttons on a mobile** no longer squeezes the
    name to a letter or two: the buttons move to a line of their own.
-3. **Authentications, in Settings › Security, on a mobile:** Sign out no
+4. **Authentications, in Settings › Security, on a mobile:** Sign out no
    longer sits over the words. Each sign-in shows the app and its status,
    then the browser, system and place, then when, with Sign out under them;
    this device is marked This device and comes first.

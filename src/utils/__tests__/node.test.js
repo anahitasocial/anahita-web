@@ -239,3 +239,12 @@ describe('an audio post', () => {
     expect(node.pluralOf('photo')).toBe('photos');
   });
 });
+
+// THE RULE THIS GUARDS: a person is read again by their handle, a group or
+// an event by its id, as their addresses take them.
+describe('readKeyOf', () => {
+  it('reads a person by handle and anything else by id', () => {
+    expect(node.readKeyOf({ id: 7, alias: 'naomi', type: 'node.actor.person-service.person.v1' })).toBe('naomi');
+    expect(node.readKeyOf({ id: 12, alias: 'belters', type: 'node.actor.group-service.group.v1' })).toBe(12);
+  });
+});

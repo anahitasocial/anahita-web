@@ -47,6 +47,14 @@ const isPerson = (node) => {
   return node.type && node.type.includes('person');
 };
 
+// What a profile is read again by: a person by their handle, which is all
+// GET /people/:username takes; a group or an event by its id. Settings
+// cards that read a person by id were told 404 after every save, and said
+// it had failed.
+const readKeyOf = (actor) => {
+  return isPerson(actor) ? actor.alias : actor.id;
+};
+
 // `personType`, camelCase, NOT the `person_type` the API sends.
 //
 // api/index.js camel-cases every response key on the way in and snake-cases
@@ -476,6 +484,7 @@ export default {
   isActor,
   isAudio,
   isPerson,
+  readKeyOf,
   isSuperAdmin,
   isAdmin,
   isRegistered,
