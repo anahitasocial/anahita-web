@@ -7,7 +7,9 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
-## Embryo
+## v1.3.6 Birth, 2026-11-16
+
+Works with Anahita Services v1.3.4 or later.
 
 ### Fixed
 
