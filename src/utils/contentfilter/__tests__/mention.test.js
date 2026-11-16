@@ -3,10 +3,14 @@ import mention from '../mention';
 
 const origin = window.location.origin.toString();
 const link = (name) => {
-  return `[@${name}](${origin}/people/${name.toLowerCase()}/)`;
+  return `[@${name}](${origin}/@${name.toLowerCase()}/)`;
 };
 
 describe('the mention filter', () => {
+  it('links to the name, whichever kind of profile it is', () => {
+    expect(mention('@anahita')).toBe(`[@anahita](${origin}/@anahita/)`);
+  });
+
   it('links somebody here', () => {
     expect(mention('@ana hello')).toBe(`${link('ana')} hello`);
     expect(mention('hello @Ana, and @bob-b.')).toBe(`hello ${link('Ana')}, and ${link('bob-b')}.`);
