@@ -1,4 +1,7 @@
 export default {
+  // Before the name of the admin who wrote a channel's post, which only
+  // the channel's admins see.
+  writtenBy: 'Écrit par',
   summary: {
     photos_one: '{{count}} photo',
     photos_other: '{{count}} photos',

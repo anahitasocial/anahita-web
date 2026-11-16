@@ -86,10 +86,20 @@ export default {
   about: {
     verified: 'Verificado',
   },
+  // Its Posts tab (roadmap row 147, phase 3): the kinds its admins turn on.
+  postKinds: {
+    title: 'Lo que publica',
+    subheader: 'Las notas, las fotos y los videos siempre están activados. Activa los tipos más largos cuando el canal los necesite.',
+    article: 'Artículos',
+    articleHelp: 'Textos largos, con título y portada.',
+    topic: 'Temas',
+    topicHelp: 'Una pregunta o un tema, para que sus seguidores lo conversen.',
+  },
   settings: {
     info: 'Información',
     admins: 'Admins',
     access: 'Privacidad',
+    permissions: 'Publicaciones',
     website: 'En tu sitio',
     fediverse: 'Fediverso',
     // Its card under Fediverse: off until one of its administrators turns

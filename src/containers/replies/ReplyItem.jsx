@@ -45,6 +45,7 @@ import thread from '../../utils/thread';
 import utils from '../../utils';
 import timeAgo from '../../utils/timeAgo';
 import useMute from '../controls/useMute';
+import WrittenBy from '../../components/WrittenBy';
 
 const { getActorName, getAuthor, getURL } = utils.node;
 
@@ -269,6 +270,7 @@ const ReplyItem = ({
             {reply.hidden &&
               <Chip size="small" label={i18n.t('replies:hidden.badge')} sx={{ flexShrink: 0 }} />}
           </Box>
+          <WrittenBy node={reply} />
           {/* A reply with pictures or a video shows them first, its words
               under them. 16 pixels show above and below: 8 above, since
               the line with the name is as tall as the picture beside it

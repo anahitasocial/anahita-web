@@ -51,7 +51,12 @@ const ActorsSettingsDownloadDefault = ({
 
   return (
     <Card>
-      <CardHeader title={i18n.t('media:download.default.title')} />
+      <CardHeader
+        title={i18n.t('media:download.default.title')}
+        slotProps={{
+          title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
+        }}
+      />
       <CardContent sx={{ pt: 0 }}>
         <FormControlLabel
           control={

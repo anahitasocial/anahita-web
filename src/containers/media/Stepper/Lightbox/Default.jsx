@@ -48,6 +48,7 @@ import PeopleInPost from '../../PeopleInPost';
 import timeAgo from '../../../../utils/timeAgo';
 import { Blurred, WarningVeil, useWarning } from '../../../../components/WarningCover';
 import warnings from '../../../../utils/warnings';
+import WrittenBy from '../../../../components/WrittenBy';
 
 const {
   getAuthor,
@@ -553,12 +554,15 @@ const MediumStepperLightboxDefault = ({
                     />
                   }
                   subheader={
-                    <Link
-                      href={url}
-                      title={createdAt}
-                    >
-                      {timeAgo(medium.createdAt)}
-                    </Link>
+                    <>
+                      <Link
+                        href={url}
+                        title={createdAt}
+                      >
+                        {timeAgo(medium.createdAt)}
+                      </Link>
+                      <WrittenBy node={medium} />
+                    </>
                   }
                   action={menu}
                 />

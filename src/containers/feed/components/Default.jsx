@@ -36,6 +36,7 @@ import RemovedPictures from '../../../components/RemovedPictures';
 import WarningCover, { Blurred, useWarning } from '../../../components/WarningCover';
 import warnings from '../../../utils/warnings';
 import timeAgo from '../../../utils/timeAgo';
+import WrittenBy from '../../../components/WrittenBy';
 
 const {
   getURL,
@@ -128,12 +129,15 @@ const FeedCardDefault = ({
           </Box>
         }
         subheader={
-          <Link
-            href={url}
-            title={createdAt}
-          >
-            {creationTimeFromNow}
-          </Link>
+          <>
+            <Link
+              href={url}
+              title={createdAt}
+            >
+              {creationTimeFromNow}
+            </Link>
+            <WrittenBy node={node} />
+          </>
         }
         action={menu}
       />

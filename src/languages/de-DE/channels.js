@@ -86,10 +86,20 @@ export default {
   about: {
     verified: 'Bestätigt',
   },
+  // Its Posts tab (roadmap row 147, phase 3): the kinds its admins turn on.
+  postKinds: {
+    title: 'Was er veröffentlicht',
+    subheader: 'Notizen, Fotos und Videos sind immer an. Schalte die längeren Arten ein, wenn der Kanal sie braucht.',
+    article: 'Artikel',
+    articleHelp: 'Lange Texte, mit Titel und Titelbild.',
+    topic: 'Themen',
+    topicHelp: 'Eine Frage oder ein Thema, über das seine Follower sprechen.',
+  },
   settings: {
     info: 'Infos',
     admins: 'Admins',
     access: 'Privatsphäre',
+    permissions: 'Beiträge',
     website: 'Auf deiner Website',
     fediverse: 'Fediverse',
     // Its card under Fediverse: off until one of its administrators turns

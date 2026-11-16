@@ -36,6 +36,7 @@ import Info from './Info';
 import PersonInfo from '../../people/Settings/Info';
 import Access from './Access';
 import Permissions from './Permissions';
+import PostKinds from './ChannelPostKinds';
 import ActorRules from './Rules';
 import ActorReports from './Reports';
 import RepostsOnProfile from './RepostsOnProfile';
@@ -136,6 +137,7 @@ const cardsFor = (namespace) => {
       ActorAccess: Access(namespace),
       ActorGraphAccess: GraphAccess(namespace),
       ActorPermissions: Permissions(namespace),
+      ActorPostKinds: PostKinds(namespace),
       ActorReposts: RepostsOnProfile(namespace),
       ActorDownloads: DownloadDefault(namespace),
       ActorQuotes: QuotePolicy(namespace),
@@ -210,6 +212,7 @@ const ActorsSettings = ({
     ActorAccess,
     ActorGraphAccess,
     ActorPermissions,
+    ActorPostKinds,
     ActorDelete,
     ActorPurge,
     ActorArchive,
@@ -405,9 +408,10 @@ const ActorsSettings = ({
     ),
     // Who can do what in the group, and with what is posted in it: whether
     // its new photos and videos start out downloadable. Not an event's.
+    // A channel's says what it posts: its admins alone write on it.
     [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (
       <Stack spacing={2}>
-        <ActorPermissions />
+        {isChannel ? <ActorPostKinds /> : <ActorPermissions />}
         <ActorDownloads />
       </Stack>
     ),

@@ -1,4 +1,7 @@
 export default {
+  // Before the name of the admin who wrote a channel's post, which only
+  // the channel's admins see.
+  writtenBy: 'Escrito por',
   // What an article or a topic holds, under its opening in a list.
   summary: {
     photos_one: '{{count}} foto',

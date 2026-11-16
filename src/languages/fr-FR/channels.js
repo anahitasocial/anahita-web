@@ -84,10 +84,20 @@ export default {
   about: {
     verified: 'Vérifié',
   },
+  // Its Posts tab (roadmap row 147, phase 3): the kinds its admins turn on.
+  postKinds: {
+    title: 'Ce qu’elle publie',
+    subheader: 'Les notes, les photos et les vidéos sont toujours activées. Activez les formes plus longues quand la chaîne en a besoin.',
+    article: 'Articles',
+    articleHelp: 'Des textes longs, avec un titre et une image de couverture.',
+    topic: 'Sujets',
+    topicHelp: 'Une question ou un thème, dont ses abonnés discutent.',
+  },
   settings: {
     info: 'Infos',
     admins: 'Admins',
     access: 'Confidentialité',
+    permissions: 'Publications',
     website: 'Sur votre site',
     fediverse: 'Fédivers',
     fediverseCard: {

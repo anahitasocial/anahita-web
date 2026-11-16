@@ -43,6 +43,7 @@ import PageColumn from '../../../components/PageColumn';
 import { useStickyColumn } from '../../../components/SideTabs';
 import PeopleInPost from '../PeopleInPost';
 import InPostDialog from '../../../routes/postDialogContext';
+import WrittenBy from '../../../components/WrittenBy';
 
 const {
   getAuthor,
@@ -145,6 +146,7 @@ const MediumReadDefault = ({
         <>
           <time dateTime={moment.utc(medium.createdAt).toISOString()}>{createdAt}</time>
           {access}
+          <WrittenBy node={medium} />
         </>
         }
       action={menu}

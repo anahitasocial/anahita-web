@@ -385,13 +385,15 @@ export const getGroupTabs = ({
 }) => {
   // A channel (roadmap row 147, phase 2) has a group's privacy: who sees it
   // and may ask to follow it, who sees its followers, and whom it blocked.
-  // Nobody but it posts on it, so no permissions or rules; in their place,
-  // the lines its site pastes in to lead people to it.
+  // Nobody but it posts on it, so no rules, and its Posts tab says what it
+  // posts (phase 3) rather than who may; then the lines its site pastes in
+  // to lead people to it.
   if (isChannel) {
     return [
       { key: ITEMS.INFO, bare: true },
       { key: ITEMS.ADMINS, bare: true },
       { key: ITEMS.ACCESS, bare: false },
+      { key: ITEMS.PERMISSIONS, bare: false },
       { key: ITEMS.WEBSITE, bare: true },
       // Named and laid out as a person's network tab is: whether it is on
       // the fediverse, off until turned on, and its own Bluesky account,

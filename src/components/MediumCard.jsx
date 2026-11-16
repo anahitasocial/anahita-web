@@ -41,6 +41,7 @@ import RemovedPictures from './RemovedPictures';
 import WarningCover, { Blurred, useWarning } from './WarningCover';
 import warnings from '../utils/warnings';
 import timeAgo from '../utils/timeAgo';
+import WrittenBy from './WrittenBy';
 
 const {
   getAuthor,
@@ -149,6 +150,7 @@ const MediumCard = ({
               {creationTimeFromNow}
             </Link>
             {access}
+            <WrittenBy node={medium} />
           </>
         }
         action={menu}
