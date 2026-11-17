@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import moment from 'moment';
 
 import Box from '@mui/material/Box';
@@ -45,6 +46,7 @@ import i18n from '../../languages';
 import thread from '../../utils/thread';
 import utils from '../../utils';
 import timeAgo from '../../utils/timeAgo';
+import openOnClick from '../../utils/openOnClick';
 import useMute from '../controls/useMute';
 import WrittenBy from '../../components/WrittenBy';
 
@@ -102,6 +104,9 @@ const ReplyItem = ({
   const [menuAnchor, setMenuAnchor] = useState(null);
   const [isReplying, setIsReplying] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  const navigate = useNavigate();
+  // The reply's own page: what it answers above it, its replies under it.
+  const page = getURL(reply);
   const [isWarning, setIsWarning] = useState(false);
   const [isSavingWarning, setIsSavingWarning] = useState(false);
   const report = useReport(viewer, reply);
@@ -274,14 +279,19 @@ const ReplyItem = ({
               <Typography variant="caption" color="textSecondary" sx={{ flexShrink: 0 }}>
                 {i18n.t('replies:writer')}
               </Typography>}
-            <Typography
+            {/* When, a link to the reply's own page, where its replies are
+                under it: one that can be opened in a new tab or copied. */}
+            <Link
+              component={RouterLink}
+              to={page}
               variant="caption"
               color="textSecondary"
+              underline="hover"
               title={moment.utc(reply.createdAt).local().format('LLL').toString()}
               sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}
             >
               {timeAgo(reply.createdAt)}
-            </Typography>
+            </Link>
             {reply.hidden &&
               <Chip size="small" label={i18n.t('replies:hidden.badge')} sx={{ flexShrink: 0 }} />}
           </Box>
@@ -313,8 +323,13 @@ const ReplyItem = ({
             </Box>}
           </WarningCover>
           <WarningCover state={warned} off={media}>
+            {/* A click on its words opens its page too, as a post's card
+                does, but for a selection, a link or a button in them. */}
             {!isEditing &&
-            <Box sx={{ '& p:first-of-type': { mt: 0 } }}>
+            <Box
+              sx={{ '& p:first-of-type': { mt: 0 } }}
+              {...openOnClick.handlersFor(page, navigate)}
+            >
               <EntityBody contentFilter size="body2" lang={reply.language}>
                 {reply.content || ''}
               </EntityBody>

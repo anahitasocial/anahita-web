@@ -7,6 +7,16 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Added
+
+1. **A reply opens its own page,** with what it answers above it and its
+   replies under it: from its time, a link that can be opened in a new tab
+   or copied, and from a click on its words, as a post's card opens.
+   Selecting its words to copy them opens nothing, nor does a click on a
+   link, a name or a button in it.
+
 ## v1.3.6 Birth, 2026-11-16
 
 Works with Anahita Services v1.3.4 or later.

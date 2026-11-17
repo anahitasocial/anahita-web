@@ -742,6 +742,9 @@ next note under it and "Show the thread" with how many notes it has
     (`containers/replies/ReplyContext.jsx`) and below it the part of the thread
     that is under it: the thread is read whole for the post at the top, and
     `utils/thread.js` picks out the branch. Replying there answers that reply.
+    A reply's time is a link to it, and a click on its words opens it, as on
+    a post's card (`utils/openOnClick.js`): not a click that ends a
+    selection, nor one on a link, a name or a button in it.
 16. **Where a reply was said** is shown above it wherever it is away from its
     thread: the profile the thread is on, a person, a group or any other actor,
     from `root.owner`. A reply is owned by whoever wrote it, so its own owner
