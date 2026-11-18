@@ -18,6 +18,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    link, a name or a button in it.
 2. **Admins' usernames:** under each name in a profile's admins card and
    in Settings › Admins.
+3. **Likes, on your own profile:** a tab after Tagged with the posts you
+   liked, the latest liked first, seen by you alone, as on Bluesky. Needs
+   Anahita Services from `main` (Embryo) or the next release.
 
 ## v1.3.6 Birth, 2026-11-16
 

@@ -28,6 +28,8 @@ export const FILTER = {
   REPOSTS: 'reposts',
   // The photos and videos a person is in (roadmap row 103).
   TAGGED: 'tagged',
+  // The posts a person liked, on their own profile, for them alone.
+  LIKED: 'liked',
 };
 
 // The cards of one of a profile's lists: it draws what it is given, and

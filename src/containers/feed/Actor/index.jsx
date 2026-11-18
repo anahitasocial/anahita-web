@@ -31,6 +31,8 @@ const select = (state) => {
 //             answers. A reply links to its own page, where its thread is.
 //   reposts   what its owner reposted.
 //   tagged    the photos and videos the person is in.
+//   liked     the posts the person liked, on their own profile, for them
+//             alone: the server sends it to nobody else.
 //
 // The lists share one place in the store, so the page shows one at a time
 // and gives each its own key: changing tab empties the list and reads the
@@ -65,7 +67,8 @@ const FeedActorBrowse = ({
   // A list with nothing in it says so. An empty tab with nothing to see
   // reads as one that failed to load.
   if (isEmpty) {
-    return <EmptyList icon={tabIcon(filter === FILTER.POSTS ? 'feed' : filter)} />;
+    const tab = { [FILTER.POSTS]: 'feed', [FILTER.LIKED]: 'likes' }[filter] || filter;
+    return <EmptyList icon={tabIcon(tab)} />;
   }
 
   return (

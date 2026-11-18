@@ -45,6 +45,7 @@ const ActorBody = ({
   replies = null,
   reposts = null,
   tagged = null,
+  likes = null,
   events = null,
   onTabChange = null,
   locations = null,
@@ -67,7 +68,9 @@ const ActorBody = ({
   // 103), which are other people's posts (the user, 2026-10-28). Only
   // people reply, repost and are tagged, so a group or any other kind of
   // actor has Posts alone. Nor somebody on another server: their replies
-  // and reposts are not taken in from there.
+  // and reposts are not taken in from there. Last, on a person's own
+  // profile, what they liked: theirs alone, as on Bluesky (the user,
+  // 2026-11-18).
   const hasOwnWords = utils.node.isPerson(actor) && !utils.federation.isRemote(actor);
   const featureList = getActorFeatureTabs(actor);
   const ownTabs = hasOwnWords && featureList.includes('feed') ?
@@ -75,6 +78,7 @@ const ActorBody = ({
       ...featureList.flatMap((tab) => { return tab === 'feed' ? ['feed', 'reposts'] : [tab]; }),
       'replies',
       'tagged',
+      ...(likes && actor.id === viewer.id ? ['likes'] : []),
     ] :
     featureList;
   // A group has the events it hosts, after what it has posted.
@@ -107,7 +111,7 @@ const ActorBody = ({
     if (tab === 'feed') {
       return i18n.t('replies:tabs.posts');
     }
-    if (tab === 'replies' || tab === 'reposts' || tab === 'tagged') {
+    if (['replies', 'reposts', 'tagged', 'likes'].includes(tab)) {
       return i18n.t(`replies:tabs.${tab}`);
     }
     return i18n.t(`${tab}:mTitle`);
@@ -176,6 +180,7 @@ const ActorBody = ({
       {value === 'replies' && replies}
       {value === 'reposts' && reposts}
       {value === 'tagged' && tagged}
+      {value === 'likes' && actor.id === viewer.id && likes}
       {value === 'events' && events}
 
       {tabPanels[value] && tabPanels[value]}
@@ -266,6 +271,8 @@ ActorBody.propTypes = {
   reposts: PropTypes.node,
   // On a person: the photos and videos they are in.
   tagged: PropTypes.node,
+  // On the viewer's own profile: what they liked.
+  likes: PropTypes.node,
   // On a group: the events it hosts.
   events: PropTypes.node,
   // Called with the tab chosen, '' for the first one.

@@ -79,12 +79,13 @@ export default {
     saved: 'Se actualizó quién puede responder.',
     notSaved: 'No se pudo actualizar quién puede responder.',
   },
-  // The three lists on a profile.
+  // The lists on a profile.
   tabs: {
     posts: 'Publicaciones',
     replies: 'Respuestas',
     reposts: 'Reposts',
     tagged: 'Etiquetado',
+    likes: 'Me gusta',
   },
   // What a reply is a reply to, where it is shown away from its thread.
   context: {

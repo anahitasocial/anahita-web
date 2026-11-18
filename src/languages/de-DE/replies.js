@@ -79,12 +79,13 @@ export default {
     saved: 'Wer antworten kann, wurde geändert.',
     notSaved: 'Wer antworten kann, konnte nicht geändert werden.',
   },
-  // The three lists on a profile.
+  // The lists on a profile.
   tabs: {
     posts: 'Beiträge',
     replies: 'Antworten',
     reposts: 'Reposts',
     tagged: 'Markiert',
+    likes: 'Gefällt mir',
   },
   // What a reply is a reply to, where it is shown away from its thread.
   context: {

@@ -5,6 +5,7 @@ import AudioIcon from '@mui/icons-material/HeadphonesOutlined';
 import EventIcon from '@mui/icons-material/EventOutlined';
 import FollowersIcon from '@mui/icons-material/PeopleOutlined';
 import GroupsIcon from '@mui/icons-material/GroupWorkOutlined';
+import LikeIcon from '@mui/icons-material/FavoriteBorder';
 import NoteIcon from '@mui/icons-material/NotesOutlined';
 import PhotoIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import PostIcon from '@mui/icons-material/ViewStreamOutlined';
@@ -15,13 +16,15 @@ import TopicIcon from '@mui/icons-material/ForumOutlined';
 import VideoIcon from '@mui/icons-material/VideoLibraryOutlined';
 
 // The icon of each of a profile's tabs, as `getActorFeatureTabs` names them.
-// A reply and a repost have the icons their buttons have under a post.
+// A reply, a repost and a like have the icons their buttons have under a
+// post.
 const ICONS = {
   articles: ArticleIcon,
   audio: AudioIcon,
   events: EventIcon,
   feed: PostIcon,
   groups: GroupsIcon,
+  likes: LikeIcon,
   notes: NoteIcon,
   people: FollowersIcon,
   photos: PhotoIcon,

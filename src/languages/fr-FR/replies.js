@@ -85,6 +85,7 @@ export default {
     replies: 'Réponses',
     reposts: 'Repartages',
     tagged: 'Identifié',
+    likes: 'J’aime',
   },
   // Ce à quoi une réponse répond, quand elle est affichée hors de son fil.
   context: {

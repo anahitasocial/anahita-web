@@ -450,6 +450,13 @@ const ActorsRead = (props) => {
           filter="tagged"
           key={`feed-tagged-${actor.id}`}
         />}
+        // What the viewer liked, on their own profile only.
+        likes={actor.id && actor.id === viewer.id &&
+        <FeedActorBrowse
+          actor={actor}
+          filter="liked"
+          key={`feed-liked-${actor.id}`}
+        />}
           // A profile from another server too (the user, 2026-10-19): the
           // site's administrators may say where an organisation there is,
           // as they may for any profile here. Nobody else sees an empty card.

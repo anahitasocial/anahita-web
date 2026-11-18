@@ -79,12 +79,13 @@ export default {
     saved: 'Who can reply was updated.',
     notSaved: 'Who can reply could not be updated.',
   },
-  // The three lists on a profile.
+  // The lists on a profile.
   tabs: {
     posts: 'Posts',
     replies: 'Replies',
     reposts: 'Reposts',
     tagged: 'Tagged',
+    likes: 'Likes',
   },
   // What a reply is a reply to, where it is shown away from its thread.
   context: {
