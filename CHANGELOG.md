@@ -7,7 +7,9 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
-## Embryo
+## v1.3.7 Birth, 2026-11-18
+
+Works with Anahita Services v1.4.0 or later.
 
 ### Added
 
@@ -20,7 +22,7 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    in Settings › Admins.
 3. **Likes, on your own profile:** a tab after Tagged with the posts you
    liked, the latest liked first, seen by you alone, as on Bluesky. Needs
-   Anahita Services from `main` (Embryo) or the next release.
+   Anahita Services v1.4.0.
 4. **A site's own layout of feeds and profiles:** `REACT_APP_FEED_VIEW=columns`
    starts them in columns on a wide screen, until a visitor chooses.
 5. **Your own theme, step by step,** in `docs/customising.md`: your logo,
