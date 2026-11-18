@@ -78,17 +78,14 @@ tone made specific; where they are silent, follow it.
 11. Nothing jumps: a form or dialog keeps its height as somebody types.
     Reserve the error line (`helperText={error || ' '}`), or put what appears
     where it moves nothing.
-12. A profile's tab row is for content. Lists about a profile open in a
-    dialog from a count; what is private to the viewer goes in the left menu
-    or settings. Prefer dialogs to new tabs.
-13. Facts about a profile go in its About card, not in a wide banner.
-14. A card's main action goes in its action area at the bottom:
+12. Facts about a profile go in its About card, not in a wide banner.
+13. A card's main action goes in its action area at the bottom:
     `CardActions`, after `CardContent`, never inside it. Keep a list
     card's action row short: Download only on a post's own page. Share is
     always the last action, after Download.
-15. No Delete inside an edit form when the list or page has one already.
-16. A person's settings have a Fediverse tab for network settings.
-17. Every string is in every base, `src/languages/en-CA`, `fr-FR`, `de-DE`,
+14. No Delete inside an edit form when the list or page has one already.
+15. A person's settings have a Fediverse tab for network settings.
+16. Every string is in every base, `src/languages/en-CA`, `fr-FR`, `de-DE`,
     `es-419` and `pt-BR`; in a layer (`en-US`, `fr-CA`) only when it differs there. `yarn test` fails on
     a base missing one. The translations are Claude's; the docs say so.
 
