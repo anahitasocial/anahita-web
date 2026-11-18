@@ -12,6 +12,7 @@ import ControlEditAccess from '../../controls/medium/Access';
 import Progress from '../../../components/Progress';
 import MediumStepper from '../Stepper';
 import MediaReadView from './MediaRead';
+import kinds from '../../../utils/postKinds';
 import useLinkPreview from '../Composer/useLinkPreview';
 import linkPreviews from '../../../utils/linkPreviews';
 
@@ -37,10 +38,7 @@ const MediaRead = ({
   const { id } = useParams();
 
   const formFields = useMemo(() => {
-    let names = ['title', 'content'];
-    if (namespace === 'notes') {
-      names = ['content'];
-    }
+    const names = kinds.byNamespace(namespace).titled ? ['title', 'content'] : ['content'];
     return utils.form.createFormFields(names);
   }, [namespace]);
 
@@ -130,7 +128,7 @@ const MediaRead = ({
   }, [medium && medium.id, medium && medium.linkPreview, medium && medium.content]);
   const linkPreview = useLinkPreview(
     isEditing ? current.content : '',
-    isEditing && namespace === 'notes',
+    isEditing && Boolean(kinds.byNamespace(namespace).linkCard),
     knownCard,
   );
 

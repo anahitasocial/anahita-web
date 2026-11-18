@@ -22,6 +22,7 @@ import MediumMenu from '../MediaMenu';
 import MediumForm from '../EditForm';
 
 import utils from '../../../utils';
+import kinds from '../../../utils/postKinds';
 
 const { getPortraitURL, getCoverURL } = utils.node;
 
@@ -60,13 +61,15 @@ const MediaReadView = ({
     />
   ) : null;
 
+  const kind = kinds.byNamespace(namespace);
+
   const mediumProps = {
     medium,
     handleView: portrait ? handleView : null,
     access: canEdit && medium.access && <Access medium={medium} />,
     editing: isEditing,
     // Only an article has a cover its author chooses.
-    cover: namespace === 'articles' ? (
+    cover: kind.withCover ? (
       <Cover
         node={medium}
         canEdit={canEdit}
@@ -84,11 +87,11 @@ const MediaReadView = ({
         onLinkPreviewRemove={linkPreview ? linkPreview.remove : null}
         onBodyPaste={linkPreview ? linkPreview.onPaste : null}
         // A photo or video post needs neither a title nor words.
-        bodyOptional={namespace === 'videos' || namespace === 'photos'}
-        nameOptional={namespace === 'videos' || namespace === 'photos'}
+        bodyOptional={Boolean(kind.wordsOptional)}
+        nameOptional={Boolean(kind.wordsOptional)}
         // Long writing in the editor it was written in.
-        richText={namespace === 'articles' || namespace === 'topics'}
-        withMedia={namespace === 'articles'}
+        richText={Boolean(kind.richText)}
+        withMedia={Boolean(kind.withMedia)}
       />
     ),
     menu: isAuthenticated && (
@@ -142,7 +145,7 @@ const MediaReadView = ({
   };
 
   // Long writing is an article to whatever reads the page's head.
-  const isLong = /\.(article|topic)\.v1$/.test(medium.type || '');
+  const isLong = kinds.isLong(medium);
 
   return (
     <>

@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import { useSelector } from 'react-redux';
 import PropTypes from 'prop-types';
-import { EditorContent, useEditor, useEditorState } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Placeholder from '@tiptap/extension-placeholder';
-import { Markdown } from '@tiptap/markdown';
+import { EditorContent } from '@tiptap/react';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -14,30 +11,13 @@ import InputLabel from '@mui/material/InputLabel';
 import Popover from '@mui/material/Popover';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
-import ToggleButton from '@mui/material/ToggleButton';
-import Tooltip from '@mui/material/Tooltip';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import BoldIcon from '@mui/icons-material/FormatBold';
-import ItalicIcon from '@mui/icons-material/FormatItalic';
-import HeadingIcon from '@mui/icons-material/Title';
-import BulletsIcon from '@mui/icons-material/FormatListBulleted';
-import NumbersIcon from '@mui/icons-material/FormatListNumbered';
-import QuoteIcon from '@mui/icons-material/FormatQuote';
-import CodeIcon from '@mui/icons-material/Code';
-import LinkIcon from '@mui/icons-material/Link';
-import MediaIcon from '@mui/icons-material/PermMediaOutlined';
-import PhotoIcon from '@mui/icons-material/Photo';
-import GifIcon from '@mui/icons-material/GifBoxOutlined';
-import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 
-import EmbedNode from './EmbedNode';
+import EditorToolbar from './EditorToolbar';
 import MediaLibrary from './MediaLibrary';
-import { useOffer, samePlace } from './useHashtagSuggestions';
+import useLongEditor from './useLongEditor';
 import HashtagSuggestions from '../../../components/HashtagSuggestions';
-import embeds from '../../../utils/embeds';
-import { hashtagsIn } from '../../../utils/contentfilter/hashtag';
-import { typedHashtag, isFullAmong } from '../../../utils/hashtagTyping';
 import videos from '../../../utils/videos';
 import i18n from '../../../languages';
 
@@ -51,16 +31,78 @@ import i18n from '../../../languages';
 // their label sitting on the border, a line under it for what is wrong. It
 // starts `minHeight` tall and grows as somebody writes, and its corner can
 // be dragged to make it taller or shorter, with a finger as with a mouse.
-// The least the text can be dragged down to: a few lines.
-const MIN_HEIGHT = 96;
 
-// Not typing a hashtag.
-const NOT_TYPING = { typed: null, full: false, rect: null };
+// The text as the article reads once it is posted, at least `height` tall.
+const textSx = (theme, height) => {
+  return {
+    ...theme.typography.body1,
+    // 8px more than an outlined field's own 14px, so the text
+    // and what is embedded in it start where the B of the bold
+    // button does (the user, 2026-10-17).
+    px: '22px',
+    py: 2,
+    cursor: 'text',
+    '& .ProseMirror': {
+      outline: 'none',
+      minHeight: height,
+      wordWrap: 'break-word',
+    },
+    // A line's space under each paragraph, heading, list or
+    // quote, as the article reads once it is posted, and none
+    // under the last.
+    '& .ProseMirror h2': { ...theme.typography.h5 },
+    '& .ProseMirror h3': { ...theme.typography.h6 },
+    '& .ProseMirror ul, & .ProseMirror ol': { pl: 3 },
+    '& .ProseMirror > *': { mt: 0, mb: 2 },
+    '& .ProseMirror > *:last-child': { mb: 0 },
+    '& .ProseMirror li p': { m: 0 },
+    // As a quotation is shown once posted (NodeBody).
+    '& .ProseMirror blockquote': {
+      mx: 0,
+      my: 2,
+      px: 2,
+      py: 1,
+      borderInlineStart: 4,
+      borderColor: 'primary.main',
+      borderStartEndRadius: 8,
+      borderEndEndRadius: 8,
+      bgcolor: 'action.hover',
+      color: 'text.secondary',
+    },
+    '& .ProseMirror blockquote > :first-child': { mt: 0 },
+    '& .ProseMirror blockquote > :last-child': { mb: 0 },
+    '& .ProseMirror a': { color: 'primary.main' },
+    '& .ProseMirror pre': {
+      p: 1.5,
+      bgcolor: 'background.default',
+      overflowX: 'auto',
+      fontFamily: 'monospace',
+      fontSize: '0.875rem',
+      whiteSpace: 'pre',
+      tabSize: 4,
+    },
+    // What it says while it is empty. Emotion warns of
+    // :first-child because of server rendering, which this app
+    // does not do, so the warning is switched off for it.
+    '& .ProseMirror p.is-editor-empty:first-child/* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason */::before': {
+      content: 'attr(data-placeholder)',
+      color: 'text.disabled',
+      float: 'left',
+      height: 0,
+      pointerEvents: 'none',
+    },
+  };
+};
 
-// What the GIF and Video buttons open the file window on.
-const ANIMATIONS = videos.ANIMATION_TYPES.join(',');
-const { MOVIES } = videos;
+// The border's own grey, as an outlined field's.
+const borderGrey = (theme) => {
+  return theme.palette.mode === 'dark' ?
+    'rgba(255, 255, 255, 0.23)' :
+    'rgba(0, 0, 0, 0.23)';
+};
 
+// What it holds and does is useLongEditor's; this draws it, its buttons
+// (EditorToolbar), the library and the window for a link.
 const LongEditor = ({
   value,
   onChange,
@@ -76,235 +118,15 @@ const LongEditor = ({
   uploadAccess = 'public',
   withMedia = true,
 }) => {
-  // What this editor last said the text was, so that a value coming back
-  // the same is not put in again, which would move the caret.
-  const said = useRef(value);
-  // How tall the text is at least: where it started, or where its corner
-  // was dragged to. It grows past it as somebody writes.
-  const [height, setHeight] = useState(minHeight);
-  useEffect(() => {
-    setHeight(minHeight);
-  }, [minHeight]);
-  const drag = useRef(null);
   const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
   const canVideo = videos.isOn(nodeInfo);
-  const gifPicker = useRef(null);
-  const videoPicker = useRef(null);
-  const [linkAnchor, setLinkAnchor] = useState(null);
-  const [isLibraryOpen, setIsLibraryOpen] = useState(false);
-  // How the library opens: on which tab, and with a GIF or a video picked
-  // outside it to put up at once.
-  const [libraryStart, setLibraryStart] = useState({});
-
-  const [linkAddress, setLinkAddress] = useState('');
-
-  // A hashtag being typed where the caret is, and hashtags in use offered
-  // for it (roadmap row 78), as in the short box. The keys the list takes
-  // are passed to it before the editor's own.
   const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const [typing, setTyping] = useState(NOT_TYPING);
-  const listKeys = useRef(() => { return false; });
-  const handleKeyDown = (view, event) => {
-    if (listKeys.current(event)) {
-      event.preventDefault();
-      return true;
-    }
-    return false;
-  };
-
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({
-        heading: { levels: [2, 3] },
-        link: {
-          openOnClick: false,
-          autolink: true,
-          defaultProtocol: 'https',
-        },
-      }),
-      Placeholder.configure({ placeholder }),
-      EmbedNode,
-      Markdown,
-    ],
-    content: value,
-    contentType: 'markdown',
-    editable: !disabled,
-    editorProps: {
-      attributes: {
-        dir,
-        'aria-label': label,
-        'aria-multiline': 'true',
-        role: 'textbox',
-      },
-      handleKeyDown,
-    },
-    onUpdate: ({ editor: current }) => {
-      // A link that reads as its own address is kept as the bare address:
-      // on a line of its own, an embed (utils/embeds).
-      const markdown = embeds.tidy(current.getMarkdown());
-      said.current = markdown;
-      onChange(markdown);
-    },
+  const editing = useLongEditor({
+    value, onChange, label, placeholder, disabled, dir, minHeight, mobile,
   });
-
-  // A value from outside: the text carried from the short box, a draft, or
-  // nothing once it is posted.
-  useEffect(() => {
-    if (editor && value !== said.current) {
-      said.current = value;
-      editor.commands.setContent(value || '', { contentType: 'markdown', emitUpdate: false });
-    }
-  }, [editor, value]);
-
-  useEffect(() => {
-    if (editor) {
-      editor.setEditable(!disabled);
-    }
-  }, [editor, disabled]);
-
-  // The direction of the post's language, through the editor's own
-  // options: its view is not there to be touched until it is mounted.
-  useEffect(() => {
-    if (editor) {
-      editor.setOptions({
-        editorProps: {
-          attributes: {
-            dir,
-            'aria-label': label,
-            'aria-multiline': 'true',
-            role: 'textbox',
-          },
-          handleKeyDown,
-        },
-      });
-    }
-  }, [editor, dir, label]);
-
-  // Whether a hashtag is being typed, and where, as the caret moves, the
-  // text changes and what is around it scrolls.
-  useEffect(() => {
-    if (!editor) {
-      return undefined;
-    }
-    const look = () => {
-      const { selection } = editor.state;
-      if (!editor.isFocused || !selection.empty) {
-        setTyping(NOT_TYPING);
-        return;
-      }
-      const { $from } = selection;
-      const typed = typedHashtag($from.parent.textBetween(0, $from.parentOffset, null, '\ufffc'));
-      if (typed === null) {
-        setTyping(NOT_TYPING);
-        return;
-      }
-      const others = hashtagsIn(editor.getText()).filter((alias) => {
-        return alias !== typed.toLowerCase();
-      });
-      const at = editor.view.coordsAtPos(selection.from);
-      setTyping((was) => {
-        const rect = samePlace(was.rect, { top: at.top, bottom: at.bottom, left: at.left });
-        const full = isFullAmong(others, typed);
-        if (was.typed === typed && was.full === full && was.rect === rect) {
-          return was;
-        }
-        return { typed, full, rect };
-      });
-    };
-    editor.on('selectionUpdate', look);
-    editor.on('update', look);
-    editor.on('focus', look);
-    editor.on('blur', look);
-    window.addEventListener('scroll', look, true);
-    return () => {
-      editor.off('selectionUpdate', look);
-      editor.off('update', look);
-      editor.off('focus', look);
-      editor.off('blur', look);
-      window.removeEventListener('scroll', look, true);
-    };
-  }, [editor]);
-
-  // The hashtag picked in place of what was typed after the #, and a space.
-  const pickHashtag = (item) => {
-    const { from } = editor.state.selection;
-    editor.chain()
-      .focus()
-      .insertContentAt(
-        { from: from - typing.typed.length - 1, to: from },
-        { type: 'text', text: `#${item.name} ` },
-      )
-      .run();
-  };
-  const offer = useOffer({
-    typed: typing.typed,
-    full: typing.full,
-    mobile,
-    onPick: pickHashtag,
-  });
-  listKeys.current = offer.onKey;
-
-  // Which buttons are on where the caret is.
-  const on = useEditorState({
-    editor,
-    selector: ({ editor: current }) => {
-      if (!current) {
-        return {};
-      }
-      return {
-        bold: current.isActive('bold'),
-        italic: current.isActive('italic'),
-        heading: current.isActive('heading'),
-        bullets: current.isActive('bulletList'),
-        numbers: current.isActive('orderedList'),
-        quote: current.isActive('blockquote'),
-        code: current.isActive('codeBlock'),
-        link: current.isActive('link'),
-      };
-    },
-  }) || {};
-
-  const button = (name, icon, title, run) => {
-    return (
-      <Tooltip title={title} key={name}>
-        <ToggleButton
-          value={name}
-          selected={Boolean(on[name])}
-          size="small"
-          aria-label={title}
-          disabled={disabled || !editor}
-          // The caret stays in the text: a button that took the focus would
-          // lose the selection it is to act on.
-          onMouseDown={(event) => {
-            event.preventDefault();
-          }}
-          onChange={run}
-          sx={{ border: 0, borderRadius: 1, flexShrink: 0 }}
-        >
-          {icon}
-        </ToggleButton>
-      </Tooltip>
-    );
-  };
-
-  const chain = () => {
-    return editor.chain().focus();
-  };
-
-  const openLink = (event) => {
-    setLinkAddress(editor.getAttributes('link').href || '');
-    setLinkAnchor(event.currentTarget);
-  };
-
-  const applyLink = () => {
-    const address = linkAddress.trim();
-    if (!address) {
-      chain().extendMarkRange('link').unsetLink().run();
-    } else {
-      chain().extendMarkRange('link').setLink({ href: address }).run();
-    }
-    setLinkAnchor(null);
-  };
+  const {
+    editor, typing, offer, link, library,
+  } = editing;
 
   return (
     <Box sx={{ position: 'relative', mb: 0.5 }}>
@@ -335,9 +157,7 @@ const LongEditor = ({
             if (error) {
               return theme.palette.error.main;
             }
-            return theme.palette.mode === 'dark' ?
-              'rgba(255, 255, 255, 0.23)' :
-              'rgba(0, 0, 0, 0.23)';
+            return borderGrey(theme);
           },
           '&:hover': disabled || error ? {} : { borderColor: 'text.primary' },
           // Focused, a second line inside the first, so the width of the
@@ -350,158 +170,16 @@ const LongEditor = ({
           },
         }}
       >
-        {/* The buttons stay in sight above the text as it scrolls, and
-            scroll sideways on a mobile rather than wrapping. */}
-        <Stack
-          direction="row"
-          spacing={0.5}
-          sx={{
-            position: 'sticky',
-            top: stickyTop,
-            // Over what scrolls under it, an embed's own buttons too.
-            zIndex: 3,
-            px: 1,
-            pt: 1.5,
-            pb: 0.5,
-            overflowX: 'auto',
-            bgcolor: 'background.paper',
-            borderTopLeftRadius: 4,
-            borderTopRightRadius: 4,
-          }}
-        >
-          {button('bold', <BoldIcon />, i18n.t('composer:editor.bold'), () => {
-            chain().toggleBold().run();
-          })}
-          {button('italic', <ItalicIcon />, i18n.t('composer:editor.italic'), () => {
-            chain().toggleItalic().run();
-          })}
-          {button('heading', <HeadingIcon />, i18n.t('composer:editor.heading'), () => {
-            chain().toggleHeading({ level: 2 }).run();
-          })}
-          {button('bullets', <BulletsIcon />, i18n.t('composer:editor.bullets'), () => {
-            chain().toggleBulletList().run();
-          })}
-          {button('numbers', <NumbersIcon />, i18n.t('composer:editor.numbers'), () => {
-            chain().toggleOrderedList().run();
-          })}
-          {button('quote', <QuoteIcon />, i18n.t('composer:editor.quote'), () => {
-            chain().toggleBlockquote().run();
-          })}
-          {/* Code kept as it was written: pasted into a code block, its
-              lines and indentation stay. No colours: they would add to
-              what the page loads (the user, 2026-10-16). */}
-          {button('code', <CodeIcon />, i18n.t('composer:editor.code'), () => {
-            chain().toggleCodeBlock().run();
-          })}
-          {button('link', <LinkIcon />, i18n.t('composer:editor.link'), openLink)}
-          {/* Photo, GIF and Video put one in where the caret is, as the
-              library's Upload does, the same in writing and in editing
-              (the user, 2026-10-16); the library, what is there already. */}
-          {withMedia &&
-            button('photo', <PhotoIcon />, i18n.t('composer:photo'), () => {
-              setLibraryStart({ tab: 'upload' });
-              setIsLibraryOpen(true);
-            })}
-          {withMedia && canVideo &&
-            button('gif', <GifIcon />, i18n.t('composer:gif'), () => {
-              gifPicker.current.click();
-            })}
-          {withMedia && canVideo &&
-            button('video', <VideoIcon />, i18n.t('composer:video'), () => {
-              videoPicker.current.click();
-            })}
-          {withMedia &&
-            button('media', <MediaIcon />, i18n.t('composer:editor.media'), () => {
-              setLibraryStart({});
-              setIsLibraryOpen(true);
-            })}
-          {withMedia && canVideo &&
-            [
-              [gifPicker, ANIMATIONS],
-              [videoPicker, MOVIES],
-            ].map(([picker, accept]) => {
-              return (
-                <input
-                  key={accept}
-                  ref={picker}
-                  type="file"
-                  accept={accept}
-                  hidden
-                  onChange={(event) => {
-                    const file = event.target.files && event.target.files[0];
-                    // eslint-disable-next-line no-param-reassign
-                    event.target.value = '';
-                    if (file) {
-                      setLibraryStart({ tab: 'upload', file });
-                      setIsLibraryOpen(true);
-                    }
-                  }}
-                />
-              );
-            })}
-        </Stack>
+        <EditorToolbar
+          editing={editing}
+          disabled={disabled}
+          withMedia={withMedia}
+          canVideo={canVideo}
+          stickyTop={stickyTop}
+        />
         <Divider />
         <Box
-          sx={(theme) => {
-            return {
-              ...theme.typography.body1,
-              // 8px more than an outlined field's own 14px, so the text
-              // and what is embedded in it start where the B of the bold
-              // button does (the user, 2026-10-17).
-              px: '22px',
-              py: 2,
-              cursor: 'text',
-              '& .ProseMirror': {
-                outline: 'none',
-                minHeight: height,
-                wordWrap: 'break-word',
-              },
-              // A line's space under each paragraph, heading, list or
-              // quote, as the article reads once it is posted, and none
-              // under the last.
-              '& .ProseMirror h2': { ...theme.typography.h5 },
-              '& .ProseMirror h3': { ...theme.typography.h6 },
-              '& .ProseMirror ul, & .ProseMirror ol': { pl: 3 },
-              '& .ProseMirror > *': { mt: 0, mb: 2 },
-              '& .ProseMirror > *:last-child': { mb: 0 },
-              '& .ProseMirror li p': { m: 0 },
-              // As a quotation is shown once posted (NodeBody).
-              '& .ProseMirror blockquote': {
-                mx: 0,
-                my: 2,
-                px: 2,
-                py: 1,
-                borderInlineStart: 4,
-                borderColor: 'primary.main',
-                borderStartEndRadius: 8,
-                borderEndEndRadius: 8,
-                bgcolor: 'action.hover',
-                color: 'text.secondary',
-              },
-              '& .ProseMirror blockquote > :first-child': { mt: 0 },
-              '& .ProseMirror blockquote > :last-child': { mb: 0 },
-              '& .ProseMirror a': { color: 'primary.main' },
-              '& .ProseMirror pre': {
-                p: 1.5,
-                bgcolor: 'background.default',
-                overflowX: 'auto',
-                fontFamily: 'monospace',
-                fontSize: '0.875rem',
-                whiteSpace: 'pre',
-                tabSize: 4,
-              },
-              // What it says while it is empty. Emotion warns of
-              // :first-child because of server rendering, which this app
-              // does not do, so the warning is switched off for it.
-              '& .ProseMirror p.is-editor-empty:first-child/* emotion-disable-server-rendering-unsafe-selector-warning-please-do-not-use-this-the-warning-exists-for-a-reason */::before': {
-                content: 'attr(data-placeholder)',
-                color: 'text.disabled',
-                float: 'left',
-                height: 0,
-                pointerEvents: 'none',
-              },
-            };
-          }}
+          sx={(theme) => { return textSx(theme, editing.height); }}
           onClick={() => {
             if (editor && !editor.isFocused) {
               editor.commands.focus();
@@ -516,37 +194,18 @@ const LongEditor = ({
           notice={offer.notice}
           active={offer.active}
           mobile={mobile}
-          onPick={pickHashtag}
+          onPick={editing.pickHashtag}
         />
         {/* The handle to drag, in the middle of the bottom edge, set into
             the border as the label is into the top one, and the border's
             own grey (the user, 2026-10-17, in place of a corner of slanted
-            lines). A finger's width, and it takes the drag for itself, so
-            on a mobile moving it does not scroll the page instead. Pointer
-            events are a mouse's and a finger's alike. */}
+            lines). A finger's width. */}
         <Box sx={{ position: 'relative', height: 0 }}>
           <Box
             role="separator"
             aria-orientation="horizontal"
             aria-label={i18n.t('composer:editor.resize')}
-            onPointerDown={(event) => {
-              event.preventDefault();
-              event.currentTarget.setPointerCapture(event.pointerId);
-              drag.current = { from: event.clientY, height };
-            }}
-            onPointerMove={(event) => {
-              if (!drag.current) {
-                return;
-              }
-              const moved = event.clientY - drag.current.from;
-              setHeight(Math.max(MIN_HEIGHT, Math.round(drag.current.height + moved)));
-            }}
-            onPointerUp={() => {
-              drag.current = null;
-            }}
-            onPointerCancel={() => {
-              drag.current = null;
-            }}
+            {...editing.resize}
             sx={{
               position: 'absolute',
               left: '50%',
@@ -562,11 +221,7 @@ const LongEditor = ({
               bgcolor: 'background.paper',
               cursor: 'ns-resize',
               touchAction: 'none',
-              color: (theme) => {
-                return theme.palette.mode === 'dark' ?
-                  'rgba(255, 255, 255, 0.23)' :
-                  'rgba(0, 0, 0, 0.23)';
-              },
+              color: borderGrey,
               '&:hover, &:active': { color: 'text.secondary' },
             }}
           >
@@ -580,28 +235,17 @@ const LongEditor = ({
       {/* A photo or a video of one's own, put in where the caret is, as an
           embed: what pasting its address on a line of its own does. */}
       <MediaLibrary
-        open={isLibraryOpen}
+        open={library.isOpen}
         access={uploadAccess}
-        initialTab={libraryStart.tab}
-        file={libraryStart.file}
-        onClose={() => {
-          setIsLibraryOpen(false);
-        }}
-        onPick={(url) => {
-          setIsLibraryOpen(false);
-          // After what is selected, never in its place: an embed just put
-          // in is selected, and the next would take its place.
-          chain()
-            .insertContentAt(editor.state.selection.to, { type: 'embed', attrs: { url } })
-            .run();
-        }}
+        initialTab={library.start.tab}
+        file={library.start.file}
+        onClose={library.close}
+        onPick={library.pick}
       />
       <Popover
-        open={Boolean(linkAnchor)}
-        anchorEl={linkAnchor}
-        onClose={() => {
-          setLinkAnchor(null);
-        }}
+        open={Boolean(link.anchor)}
+        anchorEl={link.anchor}
+        onClose={link.close}
         anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       >
         <Box
@@ -609,14 +253,14 @@ const LongEditor = ({
           onSubmit={(event) => {
             event.preventDefault();
             event.stopPropagation();
-            applyLink();
+            link.apply();
           }}
           sx={{ p: 2, width: 320, maxWidth: '100vw' }}
         >
           <TextField
-            value={linkAddress}
+            value={link.address}
             onChange={(event) => {
-              setLinkAddress(event.target.value);
+              link.setAddress(event.target.value);
             }}
             label={i18n.t('composer:editor.linkAddress')}
             placeholder="https://"
@@ -626,13 +270,7 @@ const LongEditor = ({
             slotProps={{ inputLabel: { shrink: true }, htmlInput: { dir: 'ltr' } }}
           />
           <Stack direction="row" spacing={1} sx={{ mt: 2, justifyContent: 'flex-end' }}>
-            <Button
-              onClick={() => {
-                setLinkAddress('');
-                chain().extendMarkRange('link').unsetLink().run();
-                setLinkAnchor(null);
-              }}
-            >
+            <Button onClick={link.remove}>
               {i18n.t('composer:editor.unlink')}
             </Button>
             <Button type="submit" variant="contained">

@@ -1,10 +1,7 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useDispatch, useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from '@mui/material/Dialog';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
@@ -14,49 +11,25 @@ import Tabs from '@mui/material/Tabs';
 import TextField from '@mui/material/TextField';
 import Toolbar from '@mui/material/Toolbar';
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import CloseIcon from '@mui/icons-material/Close';
 
-import actions from '../../../actions';
-import api from '../../../api';
-import coverApi from '../../../api/cover';
-import linkPreviewsApi from '../../../api/linkPreviews';
 import CoverPicker from './CoverPicker';
 import DraftsMenu from './DraftsMenu';
 import LongEditor from './LazyLongEditor';
+import ProgressButton from './ProgressButton';
 import SuggestedHashtags from './SuggestedHashtags';
-import useDraft from './useDraft';
-import useKeyboardRoom from './useKeyboardRoom';
-import useOnFediverse from './useOnFediverse';
-import usePostChoices from './usePostChoices';
-import warnings from '../../../utils/warnings';
-import usePostLocations from './usePostLocations';
+import useLongComposer from './useLongComposer';
 
-import embeds from '../../../utils/embeds';
 import { appendHashtag } from '../../../utils/hashtagTyping';
-import uploads from '../../../utils/upload';
 import ActorType from '../../../proptypes/Actor';
 import { Medium as MEDIUM } from '../../../constants';
 import i18n from '../../../languages';
-import useRulesFirst from '../../rules/useRulesFirst';
 
-const { TITLE, CONTENT } = MEDIUM.FIELDS;
+const { TITLE } = MEDIUM.FIELDS;
 
-// The words of the title and the content, as each kind of writing has them.
-const WORDS = {
-  article: {
-    namespace: 'articles',
-    body: 'composer:fields.content',
-    titlePlaceholder: 'articles:composer.titlePlaceholder',
-    bodyPlaceholder: 'articles:composer.bodyPlaceholder',
-  },
-  topic: {
-    namespace: 'topics',
-    body: 'composer:fields.content',
-    titlePlaceholder: 'topics:composer.titlePlaceholder',
-    bodyPlaceholder: 'topics:composer.bodyPlaceholder',
-  },
-};
+// The text starts a few lines tall, and grows as somebody writes or as its
+// corner is dragged (LongEditor).
+const BODY_ROWS = 8;
 
 // The extended composer: writing at length, with a title, in a dialog as
 // tall as the screen allows and full screen on a mobile.
@@ -66,12 +39,13 @@ const WORDS = {
 // video go into the content as blocks where the caret is, from the
 // editor's library or the buttons at the bottom alike, and it may have a
 // cover; a topic is talked about, with links pasted in, a post here or a
-// page elsewhere, and has neither (the user, 2026-10-16). A photo or video
-// post of its own, with a title, is the short box's.
+// page elsewhere, and has neither (the user, 2026-10-16; kinds.js). A photo
+// or video post of its own, with a title, is the short box's.
 //
 // `kinds` is what this profile takes of article and topic. `body` is what
 // was written in the short box before it was expanded. The title and the
-// content are kept as a draft of their own.
+// content are kept as a draft of their own. What it holds, its rules and
+// its sending are useLongComposer's; this only draws them.
 const LongComposer = ({
   actor,
   kinds,
@@ -79,240 +53,17 @@ const LongComposer = ({
   onClose,
   body: carried = '',
 }) => {
-  const dispatch = useDispatch();
-  const viewer = useSelector((state) => { return state.session.viewer; });
-  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const choices = usePostChoices(actor, viewer);
-  // Locations to tag it with, the same list as the short box's, so they
-  // come along when it becomes this.
-  const postLocations = usePostLocations(actor.id);
-  // Sent with the post, to be tied as it is made.
-  const locationIds = () => {
-    return postLocations.locations.length > 0 ? { location_ids: postLocations.ids() } : {};
-  };
-  // An article open to everybody on the writer's own profile goes to their
-  // followers on other servers, as a note does; said before posting when it
-  // will not. A topic stays here, and is said nothing of.
-  const onFediverse = useOnFediverse(viewer);
-
-  const [tab, setTab] = useState(kinds[0]);
-  useEffect(() => {
-    if (kinds.length > 0 && !kinds.includes(tab)) {
-      setTab(kinds[0]);
-    }
-  }, [kinds]);
-
-  const [title, setTitle, clearTitle] = useDraft(actor.id, 'long-title');
-  const [body, setBody, clearBody] = useDraft(actor.id, 'long-body');
-  // The draft kept on the server that this is, as `<kind>:<id>`, when it
-  // is one: saved with Save draft, or taken up again from Drafts.
-  const [draftRef, setDraftRef, clearDraftRef] = useDraft(actor.id, 'long-draft');
-  const [draftKind, draftNumber] = draftRef.split(':');
-  const draftId = Number(draftNumber) || 0;
-  const [isSaving, setIsSaving] = useState(false);
-  // A draft is of the kind it was begun as.
-  useEffect(() => {
-    if (draftKind && kinds.includes(draftKind) && tab !== draftKind) {
-      setTab(draftKind);
-    }
-  }, [draftKind]);
-  const [cover, setCover] = useState(null);
-  const [isSending, setIsSending] = useState(false);
-  const [tried, setTried] = useState(false);
-
-  // What was written in the short box comes along, after what is here
-  // already.
-  useEffect(() => {
-    if (open && carried && !body.includes(carried)) {
-      setBody(body ? `${body}\n\n${carried}` : carried);
-    }
-    if (open) {
-      postLocations.reload();
-    }
-  }, [open]);
-
-  // Above the keyboard on a mobile, as in the short box.
-  const room = useKeyboardRoom(mobile && open);
-
-  // The text starts a few lines tall, and grows as somebody writes or as
-  // its corner is dragged (LongEditor).
-  const bodyRows = 8;
-
-  const busy = isSending || isSaving;
-  const kind = tab;
-  const words = WORDS[kind] || WORDS.article;
-
-  // A page elsewhere on a line of its own is shown by its card. Its preview
-  // is asked for while the text is written, once each, so that it is there
-  // to keep when the post is saved: the server keeps only what
-  // link-preview-service has read. Nothing is shown here for it.
-  const asked = useRef(new Set());
-  useEffect(() => {
-    if (!open) {
-      return undefined;
-    }
-    const timer = setTimeout(() => {
-      embeds.pagesIn(body).forEach((page) => {
-        if (!asked.current.has(page)) {
-          asked.current.add(page);
-          linkPreviewsApi.read(page).catch(() => {});
-        }
-      });
-    }, 800);
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [body, open]);
-
-  const name = title.trim();
-  const text = body.trim();
-  // A title is needed, of any length (the user, 2026-10-17: "Pulse" is a
-  // title; nobody else asks for ten letters).
-  const titleShort = name.trim() === '';
-  const bodyMissing = !text;
-  // The editor has no limit of its own, as a text box had: said as soon as
-  // it is passed, since the server would refuse it.
-  const bodyTooLong = text.length > CONTENT.MAX_LENGTH;
-  const ready = !titleShort && !bodyMissing && !bodyTooLong;
-  let bodyError = '';
-  if (bodyTooLong) {
-    bodyError = i18n.t('composer:tooLong', { count: CONTENT.MAX_LENGTH });
-  } else if (tried && bodyMissing) {
-    bodyError = i18n.t('composer:bodyNeeded');
-  }
-
-  const alertSuccess = (message) => {
-    dispatch(actions.app.alert.success(message));
-  };
-  const alertError = (message) => {
-    dispatch(actions.app.alert.error(message));
-  };
-
-  // Everything back to empty, closed. The choices of audience and language
-  // stay, as in the short box.
-  const reset = () => {
-    clearTitle();
-    clearBody();
-    clearDraftRef();
-    setCover(null);
-    setTried(false);
-    choices.posted();
-    postLocations.clear();
-    onClose();
-  };
-
-  // An article's cover goes once the article exists. Should it not be
-  // taken, the article is posted all the same, and the cover can be added
-  // on its page. A draft's goes when it is published.
-  const withCover = (node) => {
-    if (kind !== 'article' || !cover || !node || !node.id) {
-      return Promise.resolve(true);
-    }
-    return coverApi.add(node, cover).then(() => {
-      return true;
-    }).catch((failure) => {
-      alertError(`${i18n.t(uploads.refusalKey(failure))} ${i18n.t('composer:coverRefused')}`);
-      return false;
-    });
-  };
-
-  const { namespace } = words;
-
-  // What a draft says now, saved over what it said.
-  const saveOver = () => {
-    return api[namespace].edit({
-      id: draftId, title: name, content: text, language: choices.language,
-    }).then((result) => {
-      // Its content warning has an address of its own.
-      return api.warnings.edit(result.data, choices.warning);
-    });
-  };
-
-  // Kept on the server as a draft, seen by nobody else, to be taken up
-  // again here or on another device (the user, 2026-10-16).
-  const saveDraft = () => {
-    setTried(true);
-    if (!ready || busy) {
-      return;
-    }
-    setIsSaving(true);
-    const saving = draftId ?
-      saveOver() :
-      api[namespace].add({
-        title: name, content: text, ...choices.request(), draft: true, ...locationIds(),
-      }, actor).then((result) => {
-        setDraftRef(`${kind}:${result.data.id}`);
-      });
-    saving.then(() => {
-      setTried(false);
-      alertSuccess(i18n.t('composer:drafts.saved'));
-    }).catch(() => {
-      alertError(i18n.t('composer:drafts.notSaved'));
-    }).finally(() => {
-      setIsSaving(false);
-    });
-  };
-
-  const posted = (node) => {
-    return withCover(node).then((ok) => {
-      if (ok) {
-        alertSuccess(i18n.t('prompts:posted.success'));
-      }
-      reset();
-    });
-  };
-
-  // Posting on a group or an event whose rules changed since the writer
-  // agreed: agreed to again first (roadmap row 102, part 5c).
-  const rules = useRulesFirst(actor, 'post');
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    setTried(true);
-    if (!ready || busy) {
-      return;
-    }
-    rules.run(() => {
-      // eslint-disable-next-line no-use-before-define
-      sendPost();
-    });
-  };
-
-  const sendPost = () => {
-    setIsSending(true);
-    // A draft taken up again: what it says now, then published, a post
-    // from now and announced as one.
-    // Its locations tied before it is published, as a new one's are as it
-    // is made, so that it goes to other servers with them.
-    const posting = draftId ?
-      saveOver().then(() => {
-        return postLocations.tag({ id: draftId });
-      }).then(() => {
-        return api[namespace].publish({ id: draftId }, choices.access);
-      }).then((result) => {
-        return posted(result.data);
-      }) :
-      dispatch(actions[namespace].add({
-        title: name, content: text, ...choices.request(), ...locationIds(),
-      }, actor))
-        .then(posted);
-    posting.catch(() => {
-      // What was written stays, to post again.
-      alertError(i18n.t('prompts:posted.error'));
-    }).finally(() => {
-      setIsSending(false);
-    });
-  };
+  const composer = useLongComposer({
+    actor, kinds, open, onClose, carried,
+  });
+  const {
+    mobile, room, choices, postLocations, kind, about, words, title, body, busy,
+    isSaving, isSending, tried, titleShort, bodyError, draftId, close,
+  } = composer;
 
   // As tall as the screen allows on a desktop, less the dialog's margins;
   // on a mobile, what the keyboard leaves.
   const paper = mobile ? room.paper : { height: 'calc(100% - 64px)' };
-
-  const close = () => {
-    if (!busy) {
-      onClose();
-    }
-  };
 
   return (
     <Dialog
@@ -325,7 +76,7 @@ const LongComposer = ({
     >
       <Box
         component="form"
-        onSubmit={handleSubmit}
+        onSubmit={composer.submit}
         noValidate
         sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
       >
@@ -352,51 +103,37 @@ const LongComposer = ({
             currentId={draftId}
             disabled={busy}
             saving={isSaving}
-            onSave={mobile ? saveDraft : undefined}
-            onOpen={(draft) => {
-              setTab(draft.kind);
-              setTitle(draft.title || '');
-              setBody(draft.content || '');
-              setDraftRef(`${draft.kind}:${draft.id}`);
-              choices.setWarning(warnings.of(draft));
-              setTried(false);
-            }}
-            onNew={() => {
-              clearTitle();
-              clearBody();
-              clearDraftRef();
-              setCover(null);
-              setTried(false);
-            }}
+            onSave={mobile ? composer.saveDraft : undefined}
+            onOpen={composer.openDraft}
+            onNew={composer.newDraft}
           />
           {/* Beside Drafts where there is room; in its menu on a mobile. */}
           {!mobile &&
-            <Button
+            <ProgressButton
               variant="outlined"
-              onClick={saveDraft}
+              onClick={composer.saveDraft}
               disabled={busy}
+              busy={isSaving}
               sx={{ minWidth: 88, flexShrink: 0 }}
             >
-              {!isSaving && i18n.t('composer:drafts.save')}
-              {isSaving && <CircularProgress size={20} />}
-            </Button>}
-          <Button
+              {i18n.t('composer:drafts.save')}
+            </ProgressButton>}
+          <ProgressButton
             type="submit"
             variant="contained"
             color="primary"
             disabled={busy}
-            sx={{ minWidth: 88 }}
+            busy={isSending}
           >
-            {!isSending && i18n.t('actions:post')}
-            {isSending && <CircularProgress size={20} />}
-          </Button>
+            {i18n.t('actions:post')}
+          </ProgressButton>
         </Toolbar>
         {/* Article or Topic, where the profile takes both. */}
         {kinds.length > 1 &&
           <Tabs
-            value={tab}
+            value={kind}
             onChange={(event, value) => {
-              setTab(value);
+              composer.setTab(value);
             }}
             variant="fullWidth"
           >
@@ -407,7 +144,7 @@ const LongComposer = ({
                   value={each}
                   label={i18n.t(`composer:kinds.${each}`)}
                   // A draft is of the kind it was begun as.
-                  disabled={busy || (draftId > 0 && each !== tab)}
+                  disabled={busy || (draftId > 0 && each !== kind)}
                 />
               );
             })}
@@ -418,14 +155,14 @@ const LongComposer = ({
             flexGrow: 1, overflowY: 'auto', px: 2, pt: 3,
           }}
         >
-          {kind === 'article' &&
-            <CoverPicker file={cover} onChange={setCover} disabled={busy} />}
+          {about.withCover &&
+            <CoverPicker file={composer.cover} onChange={composer.setCover} disabled={busy} />}
           {/* Each field keeps a line under it for what is wrong, so
               nothing moves when it is said. */}
           <TextField
             value={title}
             onChange={(event) => {
-              setTitle(event.target.value);
+              composer.setTitle(event.target.value);
             }}
             label={i18n.t('composer:fields.title')}
             placeholder={i18n.t(words.titlePlaceholder)}
@@ -443,35 +180,35 @@ const LongComposer = ({
           />
           <LongEditor
             value={body}
-            onChange={setBody}
-            label={i18n.t(words.body)}
+            onChange={composer.setBody}
+            label={i18n.t('composer:fields.content')}
             placeholder={i18n.t(words.bodyPlaceholder)}
             error={bodyError !== ''}
             helperText={bodyError || ' '}
             required
             disabled={busy}
             dir={choices.direction}
-            minHeight={bodyRows * 23}
+            minHeight={BODY_ROWS * 23}
             // Flush with the top of the dialog's scrolling part, over its
             // padding.
             stickyTop={-24}
             uploadAccess={choices.access}
-            withMedia={kind === 'article'}
+            withMedia={Boolean(about.withMedia)}
           />
           <SuggestedHashtags
             title={title}
             body={body}
             disabled={busy}
             onAdd={(hashtag) => {
-              setBody(appendHashtag(body, hashtag));
+              composer.setBody(appendHashtag(body, hashtag));
             }}
           />
           {postLocations.chips({
             disabled: busy,
-            goesOut: kind === 'article' && onFediverse && actor.id === viewer.id && choices.access === 'public',
+            goesOut: composer.goesOut,
           })}
         </Box>
-        {kind === 'article' && onFediverse && actor.id === viewer.id && choices.access !== 'public' &&
+        {composer.staysHere &&
           <Typography variant="caption" color="textSecondary" component="p" sx={{ px: 2, pb: 1 }}>
             {i18n.t('federation:composer.articleStaysHere')}
           </Typography>}
@@ -490,7 +227,7 @@ const LongComposer = ({
           {choices.render({ busy })}
         </Stack>
       </Box>
-      {rules.dialog}
+      {composer.rules.dialog}
     </Dialog>
   );
 };

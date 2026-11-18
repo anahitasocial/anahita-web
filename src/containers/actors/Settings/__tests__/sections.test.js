@@ -27,7 +27,7 @@ import {
 // panels means a store, a router and a session. The question here is only
 // whether the two lists agree.
 const indexSource = fs.readFileSync(
-  path.join(__dirname, '..', 'index.jsx'),
+  path.join(__dirname, '..', 'panels.jsx'),
   'utf8',
 );
 
@@ -35,7 +35,7 @@ const indexSource = fs.readFileSync(
 const panelKeysIn = (source, mapName) => {
   const start = source.indexOf(`const ${mapName} = {`);
   if (start === -1) {
-    throw new Error(`could not find ${mapName} in index.jsx`);
+    throw new Error(`could not find ${mapName} in panels.jsx`);
   }
   const end = source.indexOf('};', start);
   const body = source.slice(start, end);

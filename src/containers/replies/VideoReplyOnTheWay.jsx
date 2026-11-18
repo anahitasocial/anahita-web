@@ -7,10 +7,9 @@ import Button from '@mui/material/Button';
 import LinearProgress from '@mui/material/LinearProgress';
 import Typography from '@mui/material/Typography';
 
-import useVideoUpload, { progressOf } from '../media/Composer/Video/useVideoUpload';
+import useVideoUpload, { problemOf, progressOf } from '../media/Composer/Video/useVideoUpload';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
-import videos from '../../utils/videos';
 
 // A reply with a GIF or a video, on its way into the thread.
 //
@@ -64,13 +63,6 @@ const VideoReplyOnTheWay = ({
     }
   }, [upload.phase]);
 
-  const limits = {
-    size: videos.megabytes(videos.maxBytes(nodeInfo)),
-    minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),
-    animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
-    seconds: videos.animationMaxSeconds(nodeInfo),
-  };
-
   return (
     <Box sx={{ px: 2, pb: 2 }} role="status">
       {upload.phase === 'uploading' &&
@@ -93,7 +85,7 @@ const VideoReplyOnTheWay = ({
       {upload.phase === 'failed' &&
         <>
           <Typography variant="body2" color="error" role="alert">
-            {i18n.t(`videos:problems.${upload.problem || 'failed'}`, limits)}
+            {problemOf('video', upload.problem, nodeInfo)}
           </Typography>
           <Button size="small" onClick={onGone} sx={{ ml: -1 }}>
             {i18n.t('videos:upload.dismiss')}

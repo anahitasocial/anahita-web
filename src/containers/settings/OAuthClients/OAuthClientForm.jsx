@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -14,36 +14,15 @@ import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
 import { makeStyles } from 'tss-react/mui';
 
-import api from '../../../api';
 import i18n from '../../../languages';
-import utils from '../../../utils';
 import OAuthClientType from '../../../proptypes/OAuthClient';
-import DEFAULT_CLIENT from '../../../proptypes/OAuthClientDefault';
-
-const { form } = utils;
+import useOAuthClientForm from './useOAuthClientForm';
 
 // The client_id slug, as the database CHECK constraint spells it. Kept
 // on the input as a `pattern` so the browser refuses it before the
 // round trip — a violation server-side is a bare 400 with nothing in
 // the body to say which field was wrong.
 const CLIENT_ID_PATTERN = '[a-z0-9][a-z0-9_-]{1,63}';
-
-// Only ever a fallback, for when the discovery document cannot be read.
-// Safe to hard-code because these three are fixed by a `oneof` tag on
-// the request struct rather than by configuration — the list cannot
-// vary between installations the way the scope catalog can.
-const FALLBACK_GRANT_TYPES = [
-  'authorization_code',
-  'refresh_token',
-  'client_credentials',
-];
-
-const TEXT_FIELDS = [
-  'clientId',
-  'name',
-  'redirectUris',
-  'tokenExpiry',
-];
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -70,31 +49,118 @@ const useStyles = makeStyles()((theme) => {
   };
 });
 
-// One URI per line is the friendliest shape for a list in a text area,
-// and blank lines are what happen when somebody presses return twice.
-// Dropped rather than sent, because the server validates every entry as
-// a URL and an empty string is not one — which would fail the whole
-// save over a stray newline.
-const linesToList = (value) => {
-  return value
-    .split('\n')
-    .map((line) => {
-      return line.trim();
-    })
-    .filter(Boolean);
+// A line under a field, in the caption's small type: what a switch means,
+// or why the form will not be sent.
+const Caption = ({ color = 'textSecondary', children }) => {
+  return (
+    <Typography
+      variant="caption"
+      color={color}
+      gutterBottom
+      sx={{ display: 'block' }}
+    >
+      {children}
+    </Typography>
+  );
 };
 
-const clientToFieldValues = (client) => {
-  const source = client || DEFAULT_CLIENT;
-
-  return {
-    clientId: source.clientId || '',
-    name: source.name || '',
-    redirectUris: (source.redirectUris || []).join('\n'),
-    tokenExpiry: source.tokenExpiry || DEFAULT_CLIENT.tokenExpiry,
-  };
+Caption.propTypes = {
+  color: PropTypes.string,
+  children: PropTypes.node.isRequired,
 };
 
+// A heading, then a chip for each value that may be chosen, filled when it
+// is: the grant types and the scopes. Under them, why none chosen will not
+// do.
+const ChipChoices = ({
+  label,
+  values,
+  chosen,
+  onToggle,
+  missing,
+  size = 'medium',
+}) => {
+  const { classes } = useStyles();
+
+  return (
+    <>
+      <Typography variant="subtitle2" className={classes.section}>
+        {label}
+      </Typography>
+      <Box className={classes.chips}>
+        {values.map((value) => {
+          const selected = chosen.includes(value);
+          return (
+            <Chip
+              key={value}
+              label={value}
+              size={size}
+              className={classes.chip}
+              color={selected ? 'primary' : 'default'}
+              variant={selected ? 'default' : 'outlined'}
+              onClick={() => {
+                return onToggle(value);
+              }}
+            />
+          );
+        })}
+      </Box>
+      {missing &&
+        <Caption color="error">
+          {missing}
+        </Caption>}
+    </>
+  );
+};
+
+ChipChoices.propTypes = {
+  label: PropTypes.string.isRequired,
+  values: PropTypes.arrayOf(PropTypes.string).isRequired,
+  chosen: PropTypes.arrayOf(PropTypes.string).isRequired,
+  onToggle: PropTypes.func.isRequired,
+  // Why the form will not be sent with none chosen, or '' while some are.
+  missing: PropTypes.string.isRequired,
+  size: PropTypes.string,
+};
+
+// A switch with its label, and what it means under it.
+const SwitchField = ({
+  label,
+  hint = '',
+  checked,
+  onChange,
+}) => {
+  return (
+    <>
+      <FormControlLabel
+        control={
+          <Switch
+            checked={checked}
+            color="primary"
+            onChange={(event) => {
+              onChange(event.target.checked);
+            }}
+          />
+        }
+        label={label}
+      />
+      {hint &&
+        <Caption>
+          {hint}
+        </Caption>}
+    </>
+  );
+};
+
+SwitchField.propTypes = {
+  label: PropTypes.string.isRequired,
+  hint: PropTypes.string,
+  checked: PropTypes.bool.isRequired,
+  onChange: PropTypes.func.isRequired,
+};
+
+// Registering an OAuth client, or changing one, in a dialog. What the form
+// holds and sends is useOAuthClientForm.js's.
 const OAuthClientForm = ({
   open,
   client = null,
@@ -102,159 +168,27 @@ const OAuthClientForm = ({
   onSave,
 }) => {
   const { classes } = useStyles();
-  const isEdit = Boolean(client);
-
-  const [fields, setFields] = useState(() => {
-    return form.createFormFields(TEXT_FIELDS, clientToFieldValues(client));
-  });
-  const [grantTypes, setGrantTypes] = useState([]);
-  const [scopes, setScopes] = useState([]);
-  const [confidential, setConfidential] = useState(false);
-  const [skipConsent, setSkipConsent] = useState(false);
-  const [active, setActive] = useState(true);
-  const [submitting, setSubmitting] = useState(false);
-
-  // What the server says it supports, rather than a list maintained in
-  // the browser. Both are validated on every save — grant types against
-  // a `oneof` tag, scopes against the catalog in anahita-libs — so a
-  // local copy can only drift, and the form this replaces had: it
-  // offered a `password` grant auth-service has never accepted.
-  const [supported, setSupported] = useState(null);
-
-  useEffect(() => {
-    if (!open || supported) {
-      return undefined;
-    }
-
-    let cancelled = false;
-
-    api.openidConfiguration.read()
-      .then(({ data }) => {
-        if (!cancelled) {
-          setSupported({
-            grantTypes: data.grantTypesSupported || FALLBACK_GRANT_TYPES,
-            scopes: data.scopesSupported || [],
-          });
-        }
-      })
-      .catch(() => {
-        // Degrade rather than block. Grant types are safe to assume;
-        // the scope list is not, so it falls back to whatever this
-        // client already holds. An edit then round-trips without
-        // silently dropping scopes, and an add has nothing to offer —
-        // correctly, since scopes are required and inventing them here
-        // would just produce an invalid_scope from the server.
-        if (!cancelled) {
-          setSupported({
-            grantTypes: FALLBACK_GRANT_TYPES,
-            scopes: (client && client.scopes) || [],
-          });
-        }
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [open, supported, client]);
-
-  // Re-seed every time the dialog opens, so editing one client and then
-  // another does not show the first one's values.
-  useEffect(() => {
-    if (!open) {
-      return;
-    }
-
-    setFields(form.createFormFields(TEXT_FIELDS, clientToFieldValues(client)));
-    setGrantTypes((client && client.grantTypes) || []);
-    setScopes((client && client.scopes) || []);
-    setConfidential(Boolean(client && client.confidential));
-    setSkipConsent(Boolean(client && client.skipConsent));
-    setActive(client ? client.active !== false : DEFAULT_CLIENT.active);
-  }, [open, client]);
-
-  const toggle = (list, setList) => {
-    return (value) => {
-      setList(list.includes(value) ?
-        list.filter((entry) => {
-          return entry !== value;
-        }) :
-        [...list, value]);
-    };
-  };
-
-  const toggleGrantType = toggle(grantTypes, setGrantTypes);
-  const toggleScope = toggle(scopes, setScopes);
-
-  // The server requires at least one of each, and says so with a bare
-  // 400. Checked here so the refusal names the field.
-  const grantTypesMissing = grantTypes.length === 0;
-  const scopesMissing = scopes.length === 0;
-
-  const handleChange = (event) => {
-    const { target } = event;
-    // Checked now, while the field holds what was just typed: an updater
-    // runs later, and read then, the message can be a keystroke behind
-    // the value. Only the result is merged in.
-    const checked = form.validateField(target, { [target.name]: fields[target.name] }, ['clientId', 'name']);
-    setFields((previous) => {
-      return { ...previous, ...checked };
-    });
-  };
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    const validated = form.validateForm(event.target, fields);
-    setFields(validated);
-
-    if (!form.isValid(validated) || grantTypesMissing || scopesMissing) {
-      return;
-    }
-
-    const values = form.fieldsToData(validated);
-
-    setSubmitting(true);
-
-    Promise.resolve(onSave({
-      // Sent on add only. clientId is immutable, and the edit endpoint
-      // ignores it — including it would look like a rename that did
-      // nothing.
-      ...(isEdit ? {} : { clientId: values.clientId.trim() }),
-      name: values.name.trim(),
-      redirectUris: linesToList(values.redirectUris),
-      grantTypes,
-      scopes,
-      tokenExpiry: Number(values.tokenExpiry) || DEFAULT_CLIENT.tokenExpiry,
-      confidential,
-      skipConsent,
-      active,
-      // firstParty is not sent. The handler assigns it true on both add
-      // and edit whatever the body says, so a control for it would be a
-      // switch that does nothing.
-    }))
-      .catch(() => {
-        // Already reported by the container, which keeps the dialog
-        // open with the typed values intact.
-      })
-      .finally(() => {
-        setSubmitting(false);
-      });
-  };
-
-  const availableScopes = useMemo(() => {
-    const catalog = (supported && supported.scopes) || [];
-
-    // A scope the client holds but the catalog no longer lists still
-    // has to be visible — otherwise it disappears from the form and is
-    // dropped by the next save without anybody being told.
-    const extras = scopes.filter((scope) => {
-      return !catalog.includes(scope);
-    });
-
-    return [...catalog, ...extras];
-  }, [supported, scopes]);
-
-  const availableGrantTypes = (supported && supported.grantTypes) || FALLBACK_GRANT_TYPES;
+  const {
+    isEdit,
+    fields,
+    handleChange,
+    handleSubmit,
+    submitting,
+    grantTypes,
+    availableGrantTypes,
+    grantTypesMissing,
+    toggleGrantType,
+    scopes,
+    availableScopes,
+    scopesMissing,
+    toggleScope,
+    confidential,
+    setConfidential,
+    skipConsent,
+    setSkipConsent,
+    active,
+    setActive,
+  } = useOAuthClientForm({ open, client, onSave });
 
   const {
     clientId,
@@ -342,75 +276,26 @@ const OAuthClientForm = ({
             minRows={2}
           />
 
-          <Typography variant="subtitle2" className={classes.section}>
-            {i18n.t('settings:oauthClients.fields.grantTypes')}
-          </Typography>
-          <Box className={classes.chips}>
-            {availableGrantTypes.map((grant) => {
-              const selected = grantTypes.includes(grant);
-              return (
-                <Chip
-                  key={grant}
-                  label={grant}
-                  className={classes.chip}
-                  color={selected ? 'primary' : 'default'}
-                  variant={selected ? 'default' : 'outlined'}
-                  onClick={() => {
-                    return toggleGrantType(grant);
-                  }}
-                />
-              );
-            })}
-          </Box>
-          {grantTypesMissing &&
-            <Typography
-              variant="caption"
-              color="error"
-              gutterBottom
-              sx={{ display: 'block' }}
-            >
-              {i18n.t('settings:oauthClients.form.grantTypesRequired')}
-            </Typography>}
+          <ChipChoices
+            label={i18n.t('settings:oauthClients.fields.grantTypes')}
+            values={availableGrantTypes}
+            chosen={grantTypes}
+            onToggle={toggleGrantType}
+            missing={grantTypesMissing ? i18n.t('settings:oauthClients.form.grantTypesRequired') : ''}
+          />
 
-          <Typography variant="subtitle2" className={classes.section}>
-            {i18n.t('settings:oauthClients.fields.scopes')}
-          </Typography>
-          <Box className={classes.chips}>
-            {availableScopes.map((scope) => {
-              const selected = scopes.includes(scope);
-              return (
-                <Chip
-                  key={scope}
-                  label={scope}
-                  size="small"
-                  className={classes.chip}
-                  color={selected ? 'primary' : 'default'}
-                  variant={selected ? 'default' : 'outlined'}
-                  onClick={() => {
-                    return toggleScope(scope);
-                  }}
-                />
-              );
-            })}
-          </Box>
-          {scopesMissing &&
-            <Typography
-              variant="caption"
-              color="error"
-              gutterBottom
-              sx={{ display: 'block' }}
-            >
-              {i18n.t('settings:oauthClients.form.scopesRequired')}
-            </Typography>}
+          <ChipChoices
+            label={i18n.t('settings:oauthClients.fields.scopes')}
+            values={availableScopes}
+            chosen={scopes}
+            onToggle={toggleScope}
+            missing={scopesMissing ? i18n.t('settings:oauthClients.form.scopesRequired') : ''}
+            size="small"
+          />
           {availableScopes.length === 0 &&
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              gutterBottom
-              sx={{ display: 'block' }}
-            >
+            <Caption>
               {i18n.t('settings:oauthClients.form.scopesUnavailable')}
-            </Typography>}
+            </Caption>}
 
           <TextField
             variant="standard"
@@ -428,59 +313,22 @@ const OAuthClientForm = ({
             }}
           />
 
-          <FormControlLabel
-            control={
-              <Switch
-                checked={confidential}
-                color="primary"
-                onChange={(event) => {
-                  setConfidential(event.target.checked);
-                }}
-              />
-            }
+          <SwitchField
             label={i18n.t('settings:oauthClients.fields.confidential')}
+            hint={i18n.t('settings:oauthClients.form.confidentialHint')}
+            checked={confidential}
+            onChange={setConfidential}
           />
-          <Typography
-            variant="caption"
-            color="textSecondary"
-            gutterBottom
-            sx={{ display: 'block' }}
-          >
-            {i18n.t('settings:oauthClients.form.confidentialHint')}
-          </Typography>
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={skipConsent}
-                color="primary"
-                onChange={(event) => {
-                  setSkipConsent(event.target.checked);
-                }}
-              />
-            }
+          <SwitchField
             label={i18n.t('settings:oauthClients.fields.skipConsent')}
+            hint={i18n.t('settings:oauthClients.form.skipConsentHint')}
+            checked={skipConsent}
+            onChange={setSkipConsent}
           />
-          <Typography
-            variant="caption"
-            color="textSecondary"
-            gutterBottom
-            sx={{ display: 'block' }}
-          >
-            {i18n.t('settings:oauthClients.form.skipConsentHint')}
-          </Typography>
-
-          <FormControlLabel
-            control={
-              <Switch
-                checked={active}
-                color="primary"
-                onChange={(event) => {
-                  setActive(event.target.checked);
-                }}
-              />
-            }
+          <SwitchField
             label={i18n.t('settings:oauthClients.fields.active')}
+            checked={active}
+            onChange={setActive}
           />
         </DialogContent>
         <DialogActions>

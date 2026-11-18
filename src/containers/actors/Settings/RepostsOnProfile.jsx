@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -9,11 +8,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
-import ActorType from '../../../proptypes/Actor';
-import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
-import utils from '../../../utils';
+import useSaveSetting, { forNamespace } from './useSaveSetting';
 
 // Whether what this person reposts is also shown among the posts on their
 // profile. For people only: nothing else reposts.
@@ -22,31 +19,20 @@ import utils from '../../../utils';
 //
 // Saved as soon as it is switched: one choice, with nothing else to send
 // along with it.
-const ActorsSettingsRepostsOnProfile = ({
-  actor,
-  namespace,
-  read,
-  alertSuccess,
-  alertError,
-}) => {
-  const [isSaving, setIsSaving] = useState(false);
+const ActorsSettingsRepostsOnProfile = ({ namespace }) => {
+  const { actor, isSaving, save } = useSaveSetting(namespace);
 
   const shown = Boolean(actor.showRepostsOnProfile);
 
   const handleChange = (event) => {
     const show = event.target.checked;
 
-    setIsSaving(true);
-    api.reposts.setOnProfile(namespace, actor, show).then(() => {
-      return read(actor);
-    }).then(() => {
-      alertSuccess(i18n.t('replies:repostsOnProfile.saved'));
-    }).catch(() => {
-      alertError(i18n.t('replies:repostsOnProfile.notSaved'));
-    })
-      .finally(() => {
-        setIsSaving(false);
-      });
+    save(() => {
+      return api.reposts.setOnProfile(namespace, actor, show);
+    }, {
+      saved: 'replies:repostsOnProfile.saved',
+      notSaved: 'replies:repostsOnProfile.notSaved',
+    });
   };
 
   return (
@@ -72,41 +58,7 @@ const ActorsSettingsRepostsOnProfile = ({
 };
 
 ActorsSettingsRepostsOnProfile.propTypes = {
-  actor: ActorType.isRequired,
   namespace: PropTypes.string.isRequired,
-  read: PropTypes.func.isRequired,
-  alertSuccess: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (namespace) => {
-  return (state) => {
-    return {
-      actor: state[namespace][namespace].current,
-      namespace,
-    };
-  };
-};
-
-const mapDispatchToProps = (namespace) => {
-  return (dispatch) => {
-    return {
-      read: (actor) => {
-        return dispatch(actions[namespace].read(utils.node.readKeyOf(actor), namespace));
-      },
-      alertSuccess: (message) => {
-        return dispatch(actions.app.alert.success(message));
-      },
-      alertError: (message) => {
-        return dispatch(actions.app.alert.error(message));
-      },
-    };
-  };
-};
-
-export default (namespace) => {
-  return connect(
-    mapStateToProps(namespace),
-    mapDispatchToProps(namespace),
-  )(ActorsSettingsRepostsOnProfile);
-};
+export default forNamespace(ActorsSettingsRepostsOnProfile);

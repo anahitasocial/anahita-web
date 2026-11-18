@@ -50,6 +50,40 @@ const usePostChoices = (actor, viewer) => {
     setAllowDownload(Boolean(actor.allowDownload));
   }, [actor.id, actor.allowDownload]);
 
+  // Each choice's own control, the same whether as a row or as a button.
+  const controls = ({ busy, withDownload, row }) => {
+    return (
+      <>
+        <ComposerAudience
+          actor={actor}
+          viewer={viewer}
+          value={access}
+          onChange={setAccess}
+          disabled={busy}
+          row={row}
+        />
+        <LanguageButton value={language} onChange={setLanguage} disabled={busy} row={row} />
+        <ReplyAccessButton
+          value={whoReplies}
+          onChange={setWhoReplies}
+          quotePolicy={whoQuotes}
+          defaultQuotePolicy={viewer.quotePolicy}
+          onQuotePolicyChange={setWhoQuotes}
+          disabled={busy}
+          row={row}
+        />
+        <ContentWarningButton value={warning} onChange={setWarning} disabled={busy} row={row} />
+        {withDownload &&
+          <DownloadOptionButton
+            value={allowDownload}
+            onChange={setAllowDownload}
+            disabled={busy}
+            row={row}
+          />}
+      </>
+    );
+  };
+
   return {
     access,
     language,
@@ -90,69 +124,14 @@ const usePostChoices = (actor, viewer) => {
       setWhoQuotes('');
       setWarning(warnings.NONE);
     },
-    // The same choices as rows, one beneath another, on the short composer's
-    // second step (roadmap row 114).
+    // The choices as rows, one beneath another, on the short composer's
+    // second step (roadmap row 114), with `row`; without it, the buttons
+    // beside each other, as in the extended composer.
     rows: ({ busy = false, withDownload = false } = {}) => {
-      return (
-        <>
-          <ComposerAudience
-            actor={actor}
-            viewer={viewer}
-            value={access}
-            onChange={setAccess}
-            disabled={busy}
-            row
-          />
-          <LanguageButton value={language} onChange={setLanguage} disabled={busy} row />
-          <ReplyAccessButton
-            value={whoReplies}
-            onChange={setWhoReplies}
-            quotePolicy={whoQuotes}
-            defaultQuotePolicy={viewer.quotePolicy}
-            onQuotePolicyChange={setWhoQuotes}
-            disabled={busy}
-            row
-          />
-          <ContentWarningButton value={warning} onChange={setWarning} disabled={busy} row />
-          {withDownload &&
-            <DownloadOptionButton
-              value={allowDownload}
-              onChange={setAllowDownload}
-              disabled={busy}
-              row
-            />}
-        </>
-      );
+      return controls({ busy, withDownload, row: true });
     },
-    // The buttons, beside each other.
     render: ({ busy = false, withDownload = false } = {}) => {
-      return (
-        <>
-          <ComposerAudience
-            actor={actor}
-            viewer={viewer}
-            value={access}
-            onChange={setAccess}
-            disabled={busy}
-          />
-          <LanguageButton value={language} onChange={setLanguage} disabled={busy} />
-          <ReplyAccessButton
-            value={whoReplies}
-            onChange={setWhoReplies}
-            quotePolicy={whoQuotes}
-            defaultQuotePolicy={viewer.quotePolicy}
-            onQuotePolicyChange={setWhoQuotes}
-            disabled={busy}
-          />
-          <ContentWarningButton value={warning} onChange={setWarning} disabled={busy} />
-          {withDownload &&
-            <DownloadOptionButton
-              value={allowDownload}
-              onChange={setAllowDownload}
-              disabled={busy}
-            />}
-        </>
-      );
+      return controls({ busy, withDownload });
     },
   };
 };

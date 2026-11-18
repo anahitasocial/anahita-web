@@ -1,8 +1,8 @@
 # Logic apart from presentation
 
 *Roadmap row 140. Planned on 2026-11-07, at the user's word; this plan
-written 2026-11-08, when stage 1 was reached. See the
-[roadmap](roadmap.md) for order.*
+written 2026-11-08, when stage 1 was reached; done 2026-11-18. See the
+[roadmap](../roadmap.md) for order.*
 
 ## Contents
 
@@ -11,7 +11,8 @@ written 2026-11-08, when stage 1 was reached. See the
 3. [Decisions](#decisions)
 4. [Stage 1: the lists](#stage-1-the-lists)
 5. [The stages after](#the-stages-after)
-6. [Status](#status)
+6. [From here on](#from-here-on)
+7. [Status](#status)
 
 ## Why
 
@@ -85,18 +86,47 @@ About two sessions.
 
 ## The stages after
 
-Each when the features after it need it, as the roadmap's order says:
+Planned one at a time between the features; done together on 2026-11-18,
+at the user's word ("for what we have now do your best and we can check
+this row green"): the four areas at once, each apart, then put together and
+checked as one.
 
-1. **The composer** (`media/Composer/Short.jsx`, 778 lines;
-   `LongEditor.jsx`, `Long.jsx`): before the next change to posting.
+1. **The composer** (`media/Composer/Short.jsx`, 1009 lines by then;
+   `LongEditor.jsx`, `Long.jsx`, `ThreadParts.jsx`).
 2. **The photo and video pages** (`media/Stepper/Lightbox/Default.jsx`,
-   `components/PhotoFilesEditor.jsx`).
+   `components/PhotoFilesEditor.jsx`, `PhotoSlides.jsx`, `PostEmbed.jsx`,
+   `media/Read/Default.jsx`).
 3. **Replies** (`replies/Thread.jsx`, `ReplyItem.jsx`, `ReplyForm.jsx`).
-4. **Settings** (`actors/Settings`, `admin/Accounts`, `feeds/Form.jsx`).
+4. **Settings** (`actors/Settings`, `admin/Accounts`, `admin/Reports/Case.jsx`,
+   `feeds/Form.jsx`, `feeds/Browse.jsx`, `settings/OAuthClients`).
+
+In each, as in stage 1: a hook holds what the part reads, keeps and sends,
+tested on its own; the components only draw; a file is a few hundred lines
+at most; and what was written twice is written once. Where each part is now
+is in [architecture.md](../../architecture.md#hooks-and-drawing). Two tables
+came of it, so that a site offering some kinds of post and profile is a
+list away: the kinds of post, `utils/postKinds.js`, read by the composers
+and a post's page; and what each kind of profile has in its settings,
+`actors/Settings/items.js` and `groupTabs.js`.
+
+Nothing changed for people. Each area's old and new components were drawn
+side by side from the same data and their HTML compared, the same at every
+step; then the pages, before and after, in screenshots at both sizes, and
+posting, replying and the lightbox tried in headless Chrome.
+
+## From here on
+
+The user, 2026-11-18: "This will be an ongoing process." The direction is
+BREAD that is modular and flexible, so that anahita-web is set up for each
+recipe rather than changed for it. A part that grows past a few hundred
+lines, or mixes what it reads with how it draws, is split the same way when
+it is next changed; a choice made by kind of post or profile goes in the
+two tables above, not in a component.
 
 ## Status
 
 | Item | State |
 | --- | --- |
 | Plan | written 2026-11-08 |
+| Stages 2 to 5, the composer, the photo and video pages, replies and settings | done 2026-11-18: each split into hooks and the parts that draw, 203 new tests (879 in all); `utils/postKinds.js`; each area the same before and after |
 | Stage 1, the lists | done 2026-11-08: `useBrowse` and its twelve tests; the seven lists on it, one commit each, each the same before and after in screenshots at both sizes; `feed/components/ActorItems.jsx` drawing a profile's cards. On the way: a profile's lists no longer skip their second page, a redraw of a profile no longer asks again for its notes or photos, and the blogs page, which the server no longer had, removed |

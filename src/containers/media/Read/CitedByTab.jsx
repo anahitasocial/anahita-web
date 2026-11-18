@@ -11,7 +11,7 @@ import CitedByIcon from '@mui/icons-material/FormatQuote';
 
 import EmptyList from '../../../components/EmptyList';
 import Progress from '../../../components/Progress';
-import { PostRow } from '../../../components/PostEmbed';
+import { PostRow } from '../../../components/Citations';
 import api from '../../../api';
 import i18n from '../../../languages';
 

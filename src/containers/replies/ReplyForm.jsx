@@ -1,8 +1,5 @@
-import React, {
-  useEffect, useMemo, useRef, useState,
-} from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useSelector } from 'react-redux';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
@@ -10,37 +7,20 @@ import CircularProgress from '@mui/material/CircularProgress';
 import IconButton from '@mui/material/IconButton';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import PhotoIcon from '@mui/icons-material/Photo';
-import GifIcon from '@mui/icons-material/GifBoxOutlined';
-import VideoIcon from '@mui/icons-material/VideocamOutlined';
 import RemoveIcon from '@mui/icons-material/Close';
 import ExpandIcon from '@mui/icons-material/OpenInFull';
 
-import ContentWarningButton from '../../components/ContentWarningButton';
 import LinkPreviewCard from '../../components/LinkPreviewCard';
-import PhotoFilesEditor from '../../components/PhotoFilesEditor';
-import useLinkPreview from '../media/Composer/useLinkPreview';
-import useTextareaHashtags from '../media/Composer/useHashtagSuggestions';
 import HashtagSuggestions from '../../components/HashtagSuggestions';
 import ThreadParts, { SplitWords, ThreadLine } from '../media/Composer/ThreadParts';
-import useThreadSplit from '../media/Composer/useThreadSplit';
-import useOnFediverse, { useOnBluesky } from '../media/Composer/useOnFediverse';
-import linkPreviews from '../../utils/linkPreviews';
-import offers from '../../utils/offers';
-import photoFiles from '../../utils/photoFiles';
+import ReplyAttachments from './ReplyAttachments';
+import useReplyForm from './useReplyForm';
+import chosenMedia from '../../utils/chosenMedia';
 import sendOnEnter from '../../utils/sendOnEnter';
-import videos from '../../utils/videos';
-import { PHOTO_TYPES } from '../../utils/preparePhoto';
 import i18n from '../../languages';
 import { Medium as MEDIUM } from '../../constants';
 import LIMITS from '../../constants/limits';
-import threadNotes from '../../utils/threadNotes';
-import threadSplit from '../../utils/threadSplit';
-import chosenMedia from '../../utils/chosenMedia';
-import warnings from '../../utils/warnings';
 
 const { CONTENT } = MEDIUM.FIELDS;
 
@@ -52,7 +32,8 @@ const { CONTENT } = MEDIUM.FIELDS;
 // one the same way. `linkPreview` is the card of a reply being changed.
 // Sending is the caller's: it returns a promise, and the box empties itself
 // only when that succeeds, so a reply that could not be posted is still
-// there to send again.
+// there to send again. What it holds and the rules for sending are
+// useReplyForm's; this draws them.
 //
 // With `attachments`, a new reply can carry pictures (up to four, each
 // with what it shows, uploaded at once for the person replying) or a GIF
@@ -82,157 +63,30 @@ const ReplyForm = ({
   onExpand = null,
   onDraft = null,
 }) => {
-  const [body, setBody] = useState(initial);
-  const [isSending, setIsSending] = useState(false);
-  const [isAddingPhotos, setIsAddingPhotos] = useState(false);
-  const [photoItems, setPhotoItems] = useState([]);
-  // The photos just picked, for the editor to take as if dropped.
-  const [incoming, setIncoming] = useState(null);
-  // A thread written in one go, under a new reply: the notes after the
-  // first (roadmap row 101).
-  const [moreParts, setMoreParts] = useState([]);
-  const [video, setVideo] = useState(null);
-  const [videoProblem, setVideoProblem] = useState('');
-  // Its content warning (anahita-services row 122), for a new reply.
-  const [warning, setWarning] = useState(warnings.NONE);
-  const picker = useRef(null);
-  const photoPicker = useRef(null);
-  const viewer = useSelector((state) => { return state.session.viewer; });
-  const nodeInfo = useSelector((state) => { return state.app.nodeInfo; });
-
-  const text = body.trim();
-  const hasPhotos = photoItems.length > 0;
-  const photosReady = hasPhotos && photoFiles.canSubmit(photoItems);
-  // Pictures only where the site offers photo posts: a reply with pictures
-  // is one (instance.json, anahita-services' docs/instance-features.md).
-  const canAddPhotos = attachments && offers.post(nodeInfo && nodeInfo.metadata, 'photo');
-  const canAddVideo = attachments && videos.isOn(nodeInfo);
-  // Something to send: words, pictures that are all stored, or a video.
-  const hasSomething = Boolean(text) || photosReady || Boolean(video);
-  // Only for a new reply, its notes with words, pictures or both, or a GIF
-  // or a video (roadmap row 143).
-  const canThread = attachments;
-  const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
-  // Held back while a note's pictures are being sent, and while any note
-  // is longer than a note may be (roadmap row 144).
-  const isHeldBack = (hasPhotos && !photosReady) || isSending ||
-    threadParts.some((note) => { return !threadNotes.isReady(note); }) ||
-    threadSplit.lengthOf(text) > LIMITS.POST_MAX ||
-    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > LIMITS.POST_MAX; });
-  // Where a reply's note ends: what the networks the viewer is on hold, as a
-  // reply goes where the thread's writer and its readers are (roadmap row
-  // 126). The count, and long words split into a thread, as in the composer.
-  const onFediverse = useOnFediverse(viewer);
-  const onBluesky = useOnBluesky(viewer);
-  const noteLimit = threadSplit.limitFor({
-    goesToBluesky: onBluesky, goesToFediverse: onFediverse,
+  const form = useReplyForm({
+    onSubmit, initial, linkPreview, autoFocus, attachments, compact, onDraft,
   });
-  const split = useThreadSplit({
-    body, setBody, moreParts, setMoreParts, limit: noteLimit, canThread: canThread && !compact,
-  });
-
-  const known = useMemo(() => {
-    return linkPreview ?
-      { url: linkPreviews.urlToPreview(initial), preview: linkPreview } :
-      null;
-  }, [linkPreview, initial]);
-  const card = useLinkPreview(body, true, known);
-  // Hashtags in use offered as one is typed (roadmap row 78).
-  const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
-  const hashtags = useTextareaHashtags({ value: body, onChange: setBody, mobile });
+  const {
+    body, card, hashtags, isSending, viewer, nodeInfo,
+  } = form;
   const { onKeyDown: keyForHashtags, ...hashtagHandlers } = hashtags.handlers;
-
-  // Words carried over from the line or the dialog go on from their end.
-  useEffect(() => {
-    const field = hashtags.inputRef.current;
-    if (autoFocus && field && initial) {
-      field.setSelectionRange(initial.length, initial.length);
-    }
-    // Only as it opens.
-  }, []);
-
-  // What is written, for a dialog to hand back to the line it came from.
-  useEffect(() => {
-    if (onDraft) {
-      onDraft(body);
-    }
-  }, [body, onDraft]);
-
-  // The photos go when the last is taken out; there is no other button to
-  // close them (roadmap row 112).
-  const hadPhotos = useRef(false);
-  useEffect(() => {
-    if (photoItems.length > 0) {
-      hadPhotos.current = true;
-    } else if (hadPhotos.current) {
-      hadPhotos.current = false;
-      setIsAddingPhotos(false);
-    }
-  }, [photoItems.length]);
-
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    if (!hasSomething || isHeldBack) {
-      return;
-    }
-
-    // A thread's first note may have pictures as well (roadmap row 143).
-    let attached = {};
-    if (threadParts.length > 0) {
-      attached = {
-        thread: threadParts,
-        ...(photosReady ? { uploads: photoFiles.toRequest(photoItems) } : {}),
-        // The first note as the others are, for a thread with a file in it,
-        // cut where its files are (threadNotes.cut).
-        firstNote: {
-          words: text,
-          photos: photosReady ? photoItems : [],
-          video,
-          linkPreviewUrl: !photosReady && !video ? card.url : '',
-        },
-      };
-    } else if (photosReady) {
-      attached = { uploads: photoFiles.toRequest(photoItems) };
-    } else if (video) {
-      attached = { video };
-    }
-    if (warnings.has(warning)) {
-      attached = { ...attached, warning };
-    }
-
-    setIsSending(true);
-    onSubmit(text, {
-      ...(card.url ? { linkPreviewUrl: card.url } : {}),
-      ...(card.isRemoved ? { linkPreviewRemove: true } : {}),
-    }, attached).then(() => {
-      card.reset();
-      setBody('');
-      setPhotoItems([]);
-      setMoreParts([]);
-      setIsAddingPhotos(false);
-      setIncoming(null);
-      setVideo(null);
-      setWarning(warnings.NONE);
-    }).catch(() => {
-      // The caller has said what went wrong. The text stays.
-    }).finally(() => {
-      setIsSending(false);
-    });
-  };
+  // A new reply in the whole form can be a thread: its first note's count,
+  // and the notes after it.
+  const isThreaded = form.canThread && !compact;
 
   return (
     // Spacing here and through the thread is in whole steps of the theme's
     // 8 pixels: 8, 16, 24. Nothing in between.
     <Box
       component="form"
-      onSubmit={handleSubmit}
+      onSubmit={form.submit}
       noValidate
       sx={{ p: flush ? 0 : 2, mt: flush ? 1 : 0 }}
     >
       <TextField
         value={body}
         onChange={(event) => {
-          setBody(event.target.value);
+          form.setBody(event.target.value);
         }}
         onPaste={card.onPaste}
         placeholder={placeholder}
@@ -256,7 +110,7 @@ const ReplyForm = ({
               keyForHashtags(event);
               // Enter that chose a hashtag has been used.
               if (compact && !event.defaultPrevented && sendOnEnter(event)) {
-                handleSubmit(event);
+                form.submit(event);
               }
             },
           },
@@ -298,151 +152,37 @@ const ReplyForm = ({
         }}
       />
       <HashtagSuggestions {...hashtags.overlay} />
-      {canThread && !compact &&
+      {isThreaded &&
         <ThreadLine
-          length={split.length}
-          limit={noteLimit}
-          warnAt={onBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
+          length={form.split.length}
+          limit={form.noteLimit}
+          warnAt={form.onBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
         >
-          <SplitWords split={split} />
+          <SplitWords split={form.split} />
         </ThreadLine>}
       {/* A card for a link only where there is nothing else to show. */}
-      {!hasPhotos && !video &&
+      {!form.hasPhotos && !form.video &&
         <LinkPreviewCard
           preview={card.preview}
           onRemove={isSending ? null : card.remove}
         />}
-      {attachments && isAddingPhotos && viewer && viewer.id &&
-        <Box sx={{ mt: 1 }}>
-          <PhotoFilesEditor
-            owner={viewer}
-            items={photoItems}
-            incoming={incoming}
-            onIncomingTaken={() => { setIncoming(null); }}
-            onChange={setPhotoItems}
-            max={photoFiles.maxFiles(nodeInfo)}
-            disabled={isSending}
-          />
-        </Box>}
-      {video &&
-        <Box sx={{
-          display: 'flex', alignItems: 'center', gap: 1, mt: 1,
-        }}
-        >
-          <VideoIcon fontSize="small" color="action" />
-          <Typography variant="body2" sx={{ flexGrow: 1, overflowWrap: 'anywhere' }}>
-            {`${video.name} · ${videos.megabytes(video.size)}`}
-          </Typography>
-          <IconButton
-            size="small"
-            disabled={isSending}
-            aria-label={i18n.t('replies:attachments.removeVideo')}
-            title={i18n.t('replies:attachments.removeVideo')}
-            onClick={() => {
-              setVideo(null);
-            }}
-          >
-            <RemoveIcon fontSize="small" />
-          </IconButton>
-        </Box>}
-      {videoProblem &&
-        <Typography variant="caption" color="error" component="p" role="alert" sx={{ mt: 1 }}>
-          {videoProblem}
-        </Typography>}
-      {/* Pictures or a video, one or the other: the button for the other
-          goes while one is there. */}
-      {(canAddPhotos || canAddVideo) && !compact && !isSending &&
-        <Box sx={{
-          display: 'flex', gap: 0.5, mt: 0.5, ml: -1,
-        }}
-        >
-          {canAddPhotos && !video && !isAddingPhotos &&
-            <Tooltip title={i18n.t('replies:attachments.addPhotos')}>
-              <IconButton
-                size="small"
-                aria-label={i18n.t('replies:attachments.addPhotos')}
-                onClick={() => {
-                  // One tap to the mobile's own picker, for several.
-                  photoPicker.current.click();
-                }}
-              >
-                <PhotoIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>}
-          {canAddVideo && !hasPhotos && !isAddingPhotos && !video &&
-            <Tooltip title={i18n.t('replies:attachments.addVideo')}>
-              <IconButton
-                size="small"
-                aria-label={i18n.t('replies:attachments.addVideo')}
-                onClick={() => {
-                  setVideoProblem('');
-                  picker.current.click();
-                }}
-              >
-                <GifIcon fontSize="small" />
-              </IconButton>
-            </Tooltip>}
-          <ContentWarningButton value={warning} onChange={setWarning} disabled={isSending} />
-          <input
-            ref={photoPicker}
-            type="file"
-            accept={PHOTO_TYPES.join(',')}
-            multiple
-            hidden
-            onChange={(event) => {
-              const chosen = Array.from(event.target.files || []);
-              // eslint-disable-next-line no-param-reassign
-              event.target.value = '';
-              if (chosen.length > 0) {
-                setIsAddingPhotos(true);
-                setIncoming({ files: chosen });
-              }
-            }}
-          />
-          <input
-            ref={picker}
-            type="file"
-            accept={videos.PICKER}
-            hidden
-            onChange={(event) => {
-              const chosen = event.target.files && event.target.files[0];
-              // The same file can be chosen again after it is taken off.
-              // eslint-disable-next-line no-param-reassign
-              event.target.value = '';
-              if (!chosen) {
-                return;
-              }
-              const problem = videos.problem(chosen, nodeInfo);
-              if (problem) {
-                setVideoProblem(i18n.t(`videos:problems.${problem}`, {
-                  size: videos.megabytes(videos.maxBytes(nodeInfo)),
-                  minutes: Math.floor(videos.maxSeconds(nodeInfo) / 60),
-                  animationSize: videos.megabytes(videos.animationMaxBytes(nodeInfo)),
-                  seconds: videos.animationMaxSeconds(nodeInfo),
-                }));
-                return;
-              }
-              setVideo(chosen);
-            }}
-          />
-        </Box>}
+      <ReplyAttachments form={form} attachments={attachments} compact={compact} />
       {/* The notes after the first, under its pictures and its buttons
           (roadmap row 143). */}
-      {canThread && !compact &&
+      {isThreaded &&
         <ThreadParts
-          parts={moreParts}
-          onChange={setMoreParts}
-          canAdd={(Boolean(text) || photosReady || Boolean(video)) &&
-            !moreParts.some((note) => { return !threadNotes.hasSomething(note); })}
+          parts={form.moreParts}
+          onChange={form.setMoreParts}
+          canAdd={form.canAddNote}
           max={LIMITS.THREAD_PARTS_MAX}
           disabled={isSending}
           direction={direction}
-          limit={noteLimit}
-          goesToBluesky={onBluesky}
+          limit={form.noteLimit}
+          goesToBluesky={form.onBluesky}
           outlined
           uploader={viewer && viewer.id ? viewer : null}
-          photosMax={canAddPhotos ? photoFiles.maxFiles(nodeInfo) : 0}
-          videoOffers={{ video: canAddVideo, audio: false }}
+          photosMax={form.canAddPhotos ? form.photosMax : 0}
+          videoOffers={{ video: form.canAddVideo, audio: false }}
           checkVideo={(chosen) => { return chosenMedia.problemOf(chosen, nodeInfo, false); }}
         />}
       {hint &&
@@ -466,7 +206,7 @@ const ReplyForm = ({
           type="submit"
           variant="contained"
           color="primary"
-          disabled={!hasSomething || isHeldBack}
+          disabled={!form.hasSomething || form.isHeldBack}
           sx={{ minWidth: 88 }}
         >
           {!isSending && submitLabel}

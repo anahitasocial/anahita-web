@@ -1,31 +1,19 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { useDropzone } from 'react-dropzone';
 import { makeStyles } from 'tss-react/mui';
 
 import Button from '@mui/material/Button';
-import CircularProgress from '@mui/material/CircularProgress';
-import IconButton from '@mui/material/IconButton';
-import MobileStepper from '@mui/material/MobileStepper';
-import TextField from '@mui/material/TextField';
-import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 
 import AddIcon from '@mui/icons-material/AddPhotoAlternate';
-import AltIcon from '@mui/icons-material/SubtitlesOutlined';
-import EarlierIcon from '@mui/icons-material/ArrowBack';
-import LaterIcon from '@mui/icons-material/ArrowForward';
-import RemoveIcon from '@mui/icons-material/Close';
-import RetryIcon from '@mui/icons-material/Refresh';
-import NextIcon from '@mui/icons-material/NavigateNext';
-import PrevIcon from '@mui/icons-material/NavigateBefore';
 
-import api from '../api';
 import i18n from '../languages';
 import photoFiles from '../utils/photoFiles';
-import { PHOTO_TYPES, preparePhoto } from '../utils/preparePhoto';
-
-const { STATUS } = photoFiles;
+import { PHOTO_TYPES } from '../utils/preparePhoto';
+import PhotoFileSlide from './PhotoFileSlide';
+import { rowStyles, SlideArrows, SlideDots } from './SlideRow';
+import usePhotoUploads from './usePhotoUploads';
+import useSlideRow from './useSlideRow';
 
 const useStyles = makeStyles()((theme) => {
   return {
@@ -35,156 +23,20 @@ const useStyles = makeStyles()((theme) => {
     frame: {
       position: 'relative',
     },
-    // A row of photos, each as wide as the editor, that the browser itself
-    // scrolls sideways and brings to rest on a photo: the same as the
-    // slides a reader swipes through (PhotoSlides).
-    scroller: {
-      display: 'flex',
-      overflowX: 'auto',
-      overflowY: 'hidden',
-      scrollSnapType: 'x mandatory',
-      overscrollBehaviorX: 'contain',
-      WebkitOverflowScrolling: 'touch',
-      scrollbarWidth: 'none',
-      '&::-webkit-scrollbar': {
-        display: 'none',
-      },
-    },
-    slide: {
-      flex: '0 0 100%',
-      minWidth: 0,
-      scrollSnapAlign: 'center',
-      scrollSnapStop: 'always',
-    },
-    photo: {
-      position: 'relative',
-      height: 240,
-      borderRadius: theme.shape.borderRadius,
-      overflow: 'hidden',
-      backgroundColor: theme.palette.action.hover,
-    },
-    image: {
-      width: '100%',
-      height: '100%',
-      // The whole photo, as it will be seen.
-      objectFit: 'contain',
-      display: 'block',
-      userSelect: 'none',
-    },
-    dimmed: {
-      opacity: 0.4,
-    },
-    // Over the image, so it reads on any photo.
-    over: {
-      position: 'absolute',
-      color: theme.palette.common.white,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.8)',
-      },
-    },
-    remove: {
-      top: 8,
-      right: 8,
-      padding: 4,
-    },
-    label: {
-      position: 'absolute',
-      top: 8,
-      left: 8,
-      padding: '0 8px',
-      borderRadius: 12,
-      fontSize: 12,
-      lineHeight: '24px',
-      color: theme.palette.common.white,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      pointerEvents: 'none',
-    },
-    centre: {
-      position: 'absolute',
-      inset: 0,
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      gap: theme.spacing(1),
-    },
-    // Why a photo was not taken, over it, in white on a dark band.
-    failed: {
-      color: theme.palette.common.white,
-      backgroundColor: 'rgba(0, 0, 0, 0.6)',
-      borderRadius: theme.shape.borderRadius,
-      padding: theme.spacing(0.5, 1),
-      maxWidth: '80%',
-      textAlign: 'center',
-    },
-    // To the photo before and after, where there is a pointer to press
-    // them with. A finger swipes.
-    nav: {
-      position: 'absolute',
-      top: 120,
-      transform: 'translateY(-50%)',
-      color: theme.palette.common.white,
-      backgroundColor: 'rgba(0, 0, 0, 0.5)',
-      '&:hover': {
-        backgroundColor: 'rgba(0, 0, 0, 0.7)',
-      },
-      '@media (hover: none)': {
-        display: 'none',
-      },
-    },
-    prev: {
-      left: theme.spacing(1),
-    },
-    next: {
-      right: theme.spacing(1),
-    },
-    order: {
-      display: 'flex',
-      justifyContent: 'center',
-      gap: theme.spacing(1),
-      margin: theme.spacing(1, 0),
-    },
-    field: {
-      marginTop: theme.spacing(1.5),
-    },
-    // The words that ask for a description, as wide as the photo and set
-    // out as a sentence, not as a shouted label.
-    ask: {
-      marginTop: theme.spacing(1.5),
-      justifyContent: 'flex-start',
-      textAlign: 'left',
-      textTransform: 'none',
-      fontWeight: 400,
-      lineHeight: 1.4,
-      padding: theme.spacing(1, 2),
-    },
+    // A row of photos, each as wide as the editor: the same as the slides a
+    // reader swipes through (PhotoSlides).
+    scroller: rowStyles(),
     // Clear of the last photo's description.
     add: {
       marginTop: theme.spacing(2),
     },
-    dots: {
-      justifyContent: 'center',
-      background: 'none',
-      padding: theme.spacing(0.5),
-    },
   };
 });
 
-// Why an upload was refused, in words. The server sends a short code.
-const failureText = (error) => {
-  const response = (error && error.response) || {};
-  // Too large for the gateway is refused there, before the photo service
-  // sees it, with the status and no code.
-  const code = (response.data && response.data.error) ||
-    (response.status === 413 ? 'file_too_large' : '');
-  const known = {
-    file_unsupported: 'photos:editor.unsupported',
-    file_too_large: 'photos:editor.tooLarge',
-    file_unreadable: 'photos:editor.unreadable',
-  };
-  return i18n.t(known[code] || 'photos:editor.failed');
-};
+// The arrows to the photo before and after sit at the middle of the photo,
+// which is 240 pixels high (PhotoFileSlide), not of the row, which holds
+// its description too.
+const ARROWS_TOP = 120;
 
 // The images of a photo post while somebody arranges them: picking, putting
 // in order, describing, removing.
@@ -210,181 +62,39 @@ const PhotoFilesEditor = ({
   incoming = null,
   onIncomingTaken = null,
 }) => {
-  const { classes, cx } = useStyles();
-  // Which photo is on show, read from where the row has been scrolled to.
-  const [index, setIndex] = useState(0);
-  const scroller = useRef(null);
-  // The photos whose description was asked to be written, by key.
-  const [describing, setDescribing] = useState({});
-  // How many photos of the last pick did not fit. The system's own file
-  // window cannot be told how many to allow, so somebody can pick more
-  // than a post holds; the extra ones are left out and this says so.
-  const [leftOut, setLeftOut] = useState(0);
-
-  // The browser's own addresses for the picked files, let go of when this
-  // goes away so the files are not held in memory.
-  const previews = useRef([]);
-  useEffect(() => {
-    return () => {
-      previews.current.forEach((url) => {
-        URL.revokeObjectURL(url);
-      });
-    };
-  }, []);
-
-  const room = photoFiles.room(items, max);
-
-  // Before any photo is in, a video may be picked or dropped here too where
-  // the post can take one: it is the composer's to take (`onVideo`), as a
-  // post holds photos or a video, not both. A photo among what was dropped
-  // decides it.
-  const takesVideo = Boolean(onVideo) && videoMimetypes.length > 0 && items.length === 0;
-
-  // Each picked file as it was picked, by its item's key, to send again
-  // when its upload failed.
-  const originals = useRef({});
-
-  // Whether this browser can draw the file as it was picked: not a HEIC,
-  // anywhere but Safari, which preparePhoto has then made a JPEG.
-  const canShow = (file) => {
-    return !/^image\/hei[cf]/.test(file.type || '') && !/\.hei[cf]$/i.test(file.name || '');
-  };
-
-  // A photo made ready (utils/preparePhoto: no larger than is kept, upright,
-  // a JPEG or a PNG), then sent, saying how far it has got. Its preview is
-  // the one made ready, which every browser can show, an iPhone's HEIC
-  // included.
-  const send = (key, file) => {
-    onChange((current) => {
-      return photoFiles.update(current, key, { status: STATUS.UPLOADING, progress: 0, error: '' });
-    });
-    preparePhoto(file).then((prepared) => {
-      if (prepared !== file) {
-        const previewUrl = URL.createObjectURL(prepared);
-        previews.current.push(previewUrl);
-        onChange((current) => {
-          return photoFiles.update(current, key, { previewUrl });
-        });
-      }
-      return api.photos.upload(owner, prepared, (progress) => {
-        onChange((current) => {
-          return photoFiles.update(current, key, { progress });
-        });
-      });
-    }).then((result) => {
-      delete originals.current[key];
-      // A HEIC this browser could not read was sent as it is (roadmap row
-      // 135): its preview is the size the server made of it.
-      const urls = result.data.urls || {};
-      const made = !canShow(file) && (urls.medium || urls.large || urls.original);
-      onChange((current) => {
-        return photoFiles.update(current, key, {
-          status: STATUS.READY,
-          uploadId: result.data.uploadId,
-          ...(made && made.url ? { previewUrl: made.url } : {}),
-        });
-      });
-    }).catch((error) => {
-      onChange((current) => {
-        return photoFiles.update(current, key, {
-          status: STATUS.FAILED,
-          error: failureText(error),
-        });
-      });
-    });
-  };
-
-  // A photo, by what it says it is or, where a browser says nothing of an
-  // iPhone's HEIC, by its name.
-  const isPhoto = (file) => {
-    return supportedMimetypes.includes(file.type) ||
-      (supportedMimetypes.includes('image/heic') && /\.hei[cf]$/i.test(file.name || ''));
-  };
-
-  const handleDrop = (dropped) => {
-    const files = dropped.filter(isPhoto);
-    if (files.length === 0) {
-      if (takesVideo && dropped.length > 0) {
-        onVideo(dropped[0]);
-      }
-      return;
-    }
-
-    // No more than there is room for; the rest are left out, not queued.
-    setLeftOut(Math.max(files.length - room, 0));
-
-    // The files themselves, to whoever wants to read something of them in
-    // this browser: the composer, for where a photo was taken (part 5).
-    if (onPicked) {
-      onPicked(files.slice(0, room));
-    }
-
-    files.slice(0, room).forEach((file) => {
-      const previewUrl = URL.createObjectURL(file);
-      previews.current.push(previewUrl);
-
-      const item = photoFiles.picked(file, previewUrl);
-      originals.current[item.key] = file;
-      onChange((current) => {
-        return [...current, item];
-      });
-
-      // Sent straight away, so by the time the post is written the images
-      // are already stored.
-      send(item.key, file);
-    });
-  };
-
-  // Files picked outside, by the composer's own photo button, which opens
-  // the system's picker in one tap: taken as if dropped here, then said to
-  // be taken, so that the editor drawn again, when the composer is opened
-  // again, does not take them a second time.
-  useEffect(() => {
-    if (incoming && incoming.files && incoming.files.length > 0) {
-      handleDrop(incoming.files);
-      if (onIncomingTaken) {
-        onIncomingTaken();
-      }
-    }
-  }, [incoming]);
-
-  const { getRootProps, getInputProps } = useDropzone({
-    // react-dropzone takes a map of MIME type to file extensions.
-    accept: Object.fromEntries([
-      ...supportedMimetypes,
-      ...(takesVideo ? videoMimetypes : []),
-    ].map((type) => {
-      return [type, []];
-    })),
-    multiple: true,
-    disabled: disabled || room === 0,
-    onDrop: handleDrop,
+  const { classes } = useStyles();
+  const {
+    room,
+    takesVideo,
+    leftOut,
+    setLeftOut,
+    getRootProps,
+    getInputProps,
+    canRetry,
+    retry,
+  } = usePhotoUploads({
+    owner,
+    items,
+    onChange,
+    max,
+    supportedMimetypes,
+    disabled,
+    videoMimetypes,
+    onVideo,
+    onPicked,
+    incoming,
+    onIncomingTaken,
   });
 
   const undescribed = photoFiles.undescribed(items);
   const count = items.length;
-
-  const show = (to, smooth = true) => {
-    const row = scroller.current;
-    if (!row) {
-      return;
-    }
-    const still = window.matchMedia &&
-      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    row.scrollTo({
-      left: Math.min(Math.max(to, 0), Math.max(count - 1, 0)) * row.clientWidth,
-      behavior: smooth && !still ? 'smooth' : 'auto',
-    });
-  };
-
-  const handleScroll = () => {
-    const row = scroller.current;
-    if (!row || !row.clientWidth) {
-      return;
-    }
-    const at = Math.round(Math.abs(row.scrollLeft) / row.clientWidth);
-    setIndex(Math.min(Math.max(at, 0), Math.max(count - 1, 0)));
-  };
+  // Which photo is on show, read from where the row has been scrolled to.
+  const {
+    scroller,
+    index,
+    show,
+    handleScroll,
+  } = useSlideRow(count);
 
   // A photo that was just picked is the one shown: it is the one to
   // describe. And when one is removed, the row comes to rest on what is
@@ -420,201 +130,38 @@ const PhotoFilesEditor = ({
             onScroll={handleScroll}
           >
             {items.map((item, at) => {
-              const position = i18n.t('photos:slides.position', {
-                index: at + 1,
-                total: count,
-              });
-              const isReady = item.status === STATUS.READY;
-              const described = (item.altText || '').length;
-
               return (
-                <div
-                  className={classes.slide}
+                <PhotoFileSlide
                   key={item.key}
-                  role="group"
-                  aria-roledescription="slide"
-                  aria-label={position}
-                >
-                  <div className={classes.photo}>
-                    <img
-                      className={cx(classes.image, !isReady && classes.dimmed)}
-                      src={item.previewUrl}
-                      alt={item.altText || position}
-                      draggable={false}
-                    />
-                    <span className={classes.label}>
-                      {at === 0 && count > 1 ?
-                        `${i18n.t('photos:editor.first')} · ${position}` :
-                        position}
-                    </span>
-                    {item.status === STATUS.UPLOADING &&
-                      <div className={classes.centre}>
-                        <CircularProgress
-                          size={32}
-                          variant={item.progress ? 'determinate' : 'indeterminate'}
-                          value={item.progress || 0}
-                          aria-label={i18n.t('photos:editor.uploading')}
-                        />
-                      </div>}
-                    {/* Why it failed, and sending it again where it can be. */}
-                    {item.status === STATUS.FAILED &&
-                      <div className={classes.centre} role="alert">
-                        <Typography variant="body2" className={classes.failed}>
-                          {item.error || i18n.t('photos:editor.failed')}
-                        </Typography>
-                        {originals.current[item.key] &&
-                          <Button
-                            size="small"
-                            variant="contained"
-                            startIcon={<RetryIcon />}
-                            onClick={() => {
-                              send(item.key, originals.current[item.key]);
-                            }}
-                            disabled={disabled}
-                          >
-                            {i18n.t('photos:editor.retry')}
-                          </Button>}
-                      </div>}
-                    <Tooltip title={i18n.t('photos:editor.remove')}>
-                      <IconButton
-                        className={cx(classes.over, classes.remove)}
-                        aria-label={`${i18n.t('photos:editor.remove')} (${position})`}
-                        onClick={() => {
-                          setLeftOut(0);
-                          onChange((current) => {
-                            return photoFiles.remove(current, item.key);
-                          });
-                        }}
-                        disabled={disabled}
-                        size="small"
-                      >
-                        <RemoveIcon fontSize="small" />
-                      </IconButton>
-                    </Tooltip>
-                  </div>
-                  {count > 1 &&
-                    <div className={classes.order}>
-                      <Button
-                        size="small"
-                        startIcon={<EarlierIcon fontSize="small" />}
-                        onClick={() => {
-                          move(item.key, -1);
-                        }}
-                        disabled={disabled || at === 0}
-                      >
-                        {i18n.t('photos:editor.earlier')}
-                      </Button>
-                      <Button
-                        size="small"
-                        endIcon={<LaterIcon fontSize="small" />}
-                        onClick={() => {
-                          move(item.key, 1);
-                        }}
-                        disabled={disabled || at === count - 1}
-                      >
-                        {i18n.t('photos:editor.later')}
-                      </Button>
-                    </div>}
-                  {/* Its description for people who cannot see it. Asked
-                      for in words that say why, and opened by pressing
-                      them: the post has a description of its own just
-                      below, and two fields called the same were taken
-                      for one thing. Open already when it has one. */}
-                  {!(described > 0 || describing[item.key]) &&
-                    <Button
-                      className={classes.ask}
-                      variant="outlined"
-                      color="inherit"
-                      fullWidth
-                      startIcon={<AltIcon />}
-                      onClick={() => {
-                        setDescribing((open) => {
-                          return { ...open, [item.key]: true };
-                        });
-                      }}
-                      disabled={disabled}
-                    >
-                      <span>
-                        <strong>{i18n.t('photos:editor.askAlt')}</strong>
-                        <br />
-                        {i18n.t('photos:editor.askAltWhy')}
-                      </span>
-                    </Button>}
-                  {(described > 0 || describing[item.key]) &&
-                    <TextField
-                      className={classes.field}
-                      fullWidth
-                      multiline
-                      minRows={2}
-                      maxRows={6}
-                      size="small"
-                      variant="outlined"
-                      // Put to work at once when it was asked for.
-                      autoFocus={Boolean(describing[item.key]) && described === 0}
-                      label={i18n.t('photos:editor.altLabel')}
-                      placeholder={i18n.t('photos:editor.altHelp')}
-                      // Why it is asked for, and how long it is once it
-                      // is getting long.
-                      helperText={described > photoFiles.ALT_TEXT_MAX_LENGTH * 0.8 ?
-                        `${described} / ${photoFiles.ALT_TEXT_MAX_LENGTH}` :
-                        i18n.t('photos:editor.altWhy')}
-                      value={item.altText || ''}
-                      onChange={(event) => {
-                        const altText = event.target.value;
-                        onChange((current) => {
-                          return photoFiles.update(current, item.key, { altText });
-                        });
-                      }}
-                      disabled={disabled}
-                      slotProps={{
-                        inputLabel: { shrink: true },
-                        htmlInput: {
-                          dir: 'auto',
-                          maxLength: photoFiles.ALT_TEXT_MAX_LENGTH,
-                          'aria-label': `${i18n.t('photos:editor.altLabel')} (${position})`,
-                          // Only the photo on show takes the keyboard.
-                          tabIndex: at === index ? 0 : -1,
-                        },
-                      }}
-                    />}
-                </div>
+                  item={item}
+                  at={at}
+                  count={count}
+                  isShown={at === index}
+                  disabled={disabled}
+                  canRetry={canRetry(item.key)}
+                  onRetry={() => {
+                    retry(item.key);
+                  }}
+                  onRemove={() => {
+                    setLeftOut(0);
+                    onChange((current) => {
+                      return photoFiles.remove(current, item.key);
+                    });
+                  }}
+                  onMove={(delta) => {
+                    move(item.key, delta);
+                  }}
+                  onAltText={(altText) => {
+                    onChange((current) => {
+                      return photoFiles.update(current, item.key, { altText });
+                    });
+                  }}
+                />
               );
             })}
           </div>
-          {index > 0 &&
-            <IconButton
-              className={cx(classes.nav, classes.prev)}
-              aria-label={i18n.t('photos:slides.previous')}
-              onClick={() => {
-                show(index - 1);
-              }}
-              size="small"
-            >
-              <PrevIcon />
-            </IconButton>}
-          {index < count - 1 &&
-            <IconButton
-              className={cx(classes.nav, classes.next)}
-              aria-label={i18n.t('photos:slides.next')}
-              onClick={() => {
-                show(index + 1);
-              }}
-              size="small"
-            >
-              <NextIcon />
-            </IconButton>}
-          {count > 1 &&
-            <MobileStepper
-              className={classes.dots}
-              variant="dots"
-              position="static"
-              steps={count}
-              activeStep={Math.min(index, count - 1)}
-              backButton={null}
-              nextButton={null}
-              elevation={0}
-              aria-hidden
-            />}
+          <SlideArrows index={index} count={count} show={show} top={ARROWS_TOP} />
+          {count > 1 && <SlideDots steps={count} activeStep={Math.min(index, count - 1)} />}
         </div>}
       {room > 0 &&
         <Button

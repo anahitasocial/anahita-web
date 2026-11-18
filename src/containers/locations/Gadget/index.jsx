@@ -150,7 +150,6 @@ const LocationsGadget = ({
               }}
               variant="outlined"
               aria-label={i18n.t('locations:add.cTitle')}
-              fullWidth
             >
               <AddIcon />
             </Button>

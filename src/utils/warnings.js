@@ -9,6 +9,7 @@ import AIIcon from '@mui/icons-material/AutoAwesomeOutlined';
 import WarningIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
 import photoFiles from './photoFiles';
+import postKinds from './postKinds';
 import videoElsewhere from './videoElsewhere';
 
 // A post's content warning (anahita-services row 122): its kind, and for
@@ -99,7 +100,7 @@ const toRequest = (warning) => {
 // 2026-11-09). An article or a topic, whose words may hold pictures, and a
 // post of words alone, are behind it whole.
 const hasMedia = (post) => {
-  if (!post || /\.(article|topic)\.v1$/.test(post.type || '')) {
+  if (!post || postKinds.isLong(post)) {
     return false;
   }
   return Boolean(photoFiles.countOf(post) > 0 || post.video || post.audio

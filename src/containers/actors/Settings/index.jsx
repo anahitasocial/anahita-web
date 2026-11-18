@@ -1,111 +1,27 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import { connect } from 'react-redux';
 
 import Box from '@mui/material/Box';
-import Stack from '@mui/material/Stack';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 
-import InfoIcon from '@mui/icons-material/Info';
-import AdminsIcon from '@mui/icons-material/SupervisorAccount';
-import DisableIcon from '@mui/icons-material/Block';
-import ArchiveIcon from '@mui/icons-material/Archive';
-import CancelIcon from '@mui/icons-material/EventBusy';
-import DeleteIcon from '@mui/icons-material/DeleteForever';
-import PurgeIcon from '@mui/icons-material/DeleteSweep';
-import DangerIcon from '@mui/icons-material/Warning';
-import WebsiteIcon from '@mui/icons-material/Code';
-import RulesIcon from '@mui/icons-material/Rule';
-import ReportsIcon from '@mui/icons-material/OutlinedFlag';
 import ActorSettingCard from '../../../components/ActorSetting';
-
-import Admins from './admins/Browse';
-import AuthLogs from '../../auth/AuthLogs';
-import Password from '../../auth/Password';
-import Username from '../../auth/Username';
-import WebAuthn from '../../auth/WebAuthn';
-import Email from '../../auth/Email';
-import Totp from '../../auth/Totp';
-import Delete from './Delete';
-import Purge from './Purge';
-import Archive from './Archive';
-import Disable from './Disable';
-import Info from './Info';
-import PersonInfo from '../../people/Settings/Info';
-import Access from './Access';
-import Permissions from './Permissions';
-import PostKinds from './ChannelPostKinds';
-import ActorRules from './Rules';
-import ActorReports from './Reports';
-import RepostsOnProfile from './RepostsOnProfile';
-import DownloadDefault from './DownloadDefault';
-import QuotePolicy from './QuotePolicy';
-import ContentChoices from './ContentChoices';
-import GraphAccess from './GraphAccess';
-import BlockedServers from './BlockedServers';
-import ActorBlocked from './Blocked';
-import DataExport from './DataExport';
-import DataImport from './DataImport';
-import ActorSuggestions from './Suggestions';
-import ActorNotificationChoices from './NotificationChoices';
-import ActorFediverse from './Fediverse';
-import ActorMoving from './Moving';
-import ActorBluesky from './Bluesky';
-import EventForm from '../../events/Form';
-import EventCancelSetting from '../../events/CancelSetting';
-import WebsiteFollowSnippet from '../../channels/FollowSnippet';
-import ChannelFeedCard from '../../channels/FeedCard';
 import Progress from '../../../components/Progress';
-import PersonAgreements from '../../people/Settings/Agreements';
-import PersonAccountType from '../../people/Settings/AccountType';
-import PersonMetadata from '../../people/Settings/Metadata';
-import PersonRevokePasskeys from '../../people/Settings/RevokePasskeys';
-import PersonRevokeTotp from '../../people/Settings/RevokeTotp';
 
 import SettingsItem from './SettingsItem';
-import {
-  getPersonSections,
-  getGroupTabs,
-  getGroupDangerItems,
-  resolveSection,
-  ITEMS,
-} from './sections';
+import { ITEMS } from './sections';
+import { ITEM_ICONS, panelsOfPerson, panelsOfGroup } from './panels';
+import useActorSettings from './useActorSettings';
 
-import actions from '../../../actions';
-import permissions from '../../../permissions/actor';
-import utils from '../../../utils';
+import i18n from '../../../languages';
 import ActorType from '../../../proptypes/Actor';
 import PersonType from '../../../proptypes/Person';
-import i18n from '../../../languages';
 
-// The avatar for each item whose header SettingsItem supplies.
-//
-// Only the bare ones need an entry: a component that brings its own Card
-// brings its own avatar with it, and a key missing here renders a header
-// with no avatar rather than breaking.
-//
-// Separate from sections.js on purpose — that module is JSX-free so it can
-// be read and tested as plain data, and an icon is JSX.
-const ITEM_ICONS = {
-  [ITEMS.INFO]: <InfoIcon />,
-  [ITEMS.ADMINS]: <AdminsIcon />,
-  [ITEMS.DISABLE]: <DisableIcon />,
-  [ITEMS.CANCEL]: <CancelIcon />,
-  [ITEMS.ARCHIVE]: <ArchiveIcon />,
-  [ITEMS.DELETE]: <DeleteIcon />,
-  [ITEMS.PURGE]: <PurgeIcon />,
-  [ITEMS.DANGER]: <DangerIcon />,
-  [ITEMS.WEBSITE]: <WebsiteIcon />,
-  [ITEMS.RULES]: <RulesIcon />,
-  [ITEMS.REPORTS]: <ReportsIcon />,
-};
+// A profile's settings: a row of tabs, a header naming the open one, and
+// what is in it. What there is and who sees it comes from
+// useActorSettings.js, and what each item draws from panels.jsx; this file
+// only lays them out.
 
-// Tabs for the GROUPS namespace, which stays flat apart from the Danger zone.
-// See sections.js: a group has no account or security items, so there is
-// nothing else to group — but the three lifecycle actions belong together,
-// because choosing between them means comparing them.
 // The Danger tab reads "Danger zone" while the cards inside it read "Disable",
 // "Archive" and "Delete" — the section names the risk, each card names its
 // action. Every other tab is labelled by its own key.
@@ -121,451 +37,202 @@ const tabLabelKey = (namespace, key) => {
   return `${namespace}:settings.${key}`;
 };
 
-// The cards for one namespace, built once and kept.
-//
-// Each factory returns a new connected component, and these were called in
-// the render body. A new component type on every render means React discards
-// the old card and mounts a fresh one — so any store update, such as the
-// delete request itself, reset every card's local state. The Delete card set
-// "open the step-up dialog" on a card that was replaced a moment later, and
-// deleting a profile failed with a generic error and no dialog.
-const cardsByNamespace = {};
-
-const cardsFor = (namespace) => {
-  if (!cardsByNamespace[namespace]) {
-    cardsByNamespace[namespace] = {
-      ActorAdmins: Admins(namespace),
-      ActorInfo: Info(namespace),
-      ActorAccess: Access(namespace),
-      ActorGraphAccess: GraphAccess(namespace),
-      ActorPermissions: Permissions(namespace),
-      ActorPostKinds: PostKinds(namespace),
-      ActorReposts: RepostsOnProfile(namespace),
-      ActorDownloads: DownloadDefault(namespace),
-      ActorQuotes: QuotePolicy(namespace),
-      ActorDelete: Delete(namespace),
-      ActorPurge: Purge(namespace),
-      ActorArchive: Archive(namespace),
-      ActorDisable: Disable(namespace),
-    };
-  }
-
-  return cardsByNamespace[namespace];
-};
-
-const ActorsSettings = ({
-  readActor,
+// The tabs and the header under them, the same for every kind of profile.
+// Header only — the open tab's cards stack underneath rather than inside, or
+// every card would sit within another card's border. Matching the gap
+// SettingsItem puts below each card, so the header does not sit flush
+// against the first one.
+const SettingsTabs = ({
   actor,
-  viewer,
-  alertSuccess,
-  alertError,
-  namespace,
-  selectedTab = ITEMS.INFO,
-  isFetching,
-  error,
-  success,
+  tabs,
+  value,
+  onChange,
+  children,
 }) => {
-  const params = useParams();
-  const navigate = useNavigate();
-  const isPerson = namespace === 'people';
-
-  // People are addressed by their username, everything else by `<id>-<slug>`
-  // — see utils/node.getURL, which builds the two differently.
-  //
-  // Splitting on the first hyphen is right for a group (`42-my-group` -> 42)
-  // and wrong for a person: the username validator allows hyphens, so
-  // `john-doe` resolved as `john` and anyone with a hyphen in their handle
-  // could not open their own settings.
-  const id = isPerson ? params.id : params.id.split('-')[0];
-
-  // Groups only. People take their section from the URL below, which is what
-  // makes it shareable and back-buttonable; this local state is the older
-  // behaviour, kept for the namespace that is not being regrouped.
-  // A link may say which tab to open on, as the About card's "Add rules"
-  // does; one the page does not have falls back below.
-  const location = useLocation();
-  const [tab, setTab] = useState((location.state && location.state.tab) || selectedTab);
-
-  useEffect(() => {
-    if (id && !actor.id) {
-      readActor(id, namespace);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (error) {
-      alertError(i18n.t('prompts:updated.error'));
-    }
-
-    if (success) {
-      alertSuccess(i18n.t('prompts:updated.success'));
-    }
-  }, [error, success]);
-
-  if (!actor.id && isFetching) {
-    return (
-      <Progress />
-    );
-  }
-
-  const {
-    ActorAdmins,
-    ActorInfo,
-    ActorAccess,
-    ActorGraphAccess,
-    ActorPermissions,
-    ActorPostKinds,
-    ActorDelete,
-    ActorPurge,
-    ActorArchive,
-    ActorDisable,
-    ActorReposts,
-    ActorQuotes,
-    ActorDownloads,
-  } = cardsFor(namespace);
-
-  const canDelete = permissions.canDelete(actor);
-
-  // Site administrator, from the VIEWER rather than from the actor's
-  // authorized block. Disabling is a moderation action taken against somebody,
-  // so it is the viewer's standing that decides it — actor.authorized answers
-  // "may this viewer act on this actor", which a group's own administrators
-  // satisfy and who should not be able to suspend it.
-  const isAdmin = utils.node.isAdmin(viewer);
-
-  // Removing an account for good is a super administrator's alone.
-  const isSuperAdmin = utils.node.isSuperAdmin(viewer);
-
-  // WebAuthn credentials belong to the current session's own account —
-  // the endpoints are viewer-scoped and take no actor id — so the tab
-  // only makes sense on the viewer's own profile.
-  const isViewer = namespace === 'people' && actor.id === viewer.id;
-
-  if (!actor.id) {
-    return null;
-  }
-
-  if (isPerson) {
-    const sections = getPersonSections({
-      isViewer, canDelete, isAdmin, isSuperAdmin,
-    });
-    const section = resolveSection(params.section, sections);
-
-    // What each item key renders. Built here rather than in sections.js so that
-    // module stays JSX-free and testable, and so the props these components
-    // need — which differ per item — live next to the components.
-    const panels = {
-      [ITEMS.INFO]: <PersonInfo />,
-      [ITEMS.EMAIL]: <Email />,
-      [ITEMS.USERNAME]: <Username />,
-      [ITEMS.PASSWORD]: <Password />,
-      [ITEMS.TOTP]: <Totp viewer={viewer} />,
-      [ITEMS.WEBAUTHN]: <WebAuthn />,
-      [ITEMS.AUTHLOGS]: <AuthLogs personId={actor.id} />,
-      // Who can see the profile, then who can see its followers and whom
-      // it follows (roadmap row 151).
-      [ITEMS.ACCESS]: (
-        <Stack spacing={2}>
-          <ActorAccess />
-          <ActorGraphAccess />
-        </Stack>
-      ),
-      [ITEMS.REPOSTS]: <ActorReposts />,
-      [ITEMS.QUOTES]: <ActorQuotes />,
-      [ITEMS.DOWNLOADS]: <ActorDownloads />,
-      [ITEMS.BLOCKED]: <ActorBlocked actor={actor} />,
-      [ITEMS.MUTED]: <ActorBlocked actor={actor} kind="mutes" />,
-      [ITEMS.BLOCKED_SERVERS]: <BlockedServers />,
-      [ITEMS.DATA_EXPORT]: <DataExport />,
-      [ITEMS.DATA_IMPORT]: <DataImport />,
-      [ITEMS.SUGGESTIONS]: <ActorSuggestions />,
-      [ITEMS.FEDIVERSE]: <ActorFediverse />,
-      [ITEMS.MOVING]: <ActorMoving />,
-      [ITEMS.NOTIFICATIONS]: <ActorNotificationChoices />,
-      [ITEMS.CONTENT_CHOICES]: <ContentChoices />,
-      [ITEMS.BLUESKY]: <ActorBluesky />,
-      [ITEMS.PERMISSIONS]: <ActorPermissions />,
-      // Administration. Every one of these takes the actor being looked
-      // at rather than the viewer — the endpoints behind them are the
-      // admin counterparts of the viewer-scoped ones in Security, and
-      // sections.js keeps them off the viewer's own profile.
-      [ITEMS.ACCOUNT_TYPE]: <PersonAccountType person={actor} />,
-      [ITEMS.AGREEMENTS]: <PersonAgreements personId={actor.id} />,
-      [ITEMS.METADATA]: <PersonMetadata person={actor} />,
-      [ITEMS.REVOKE_PASSKEYS]: <PersonRevokePasskeys person={actor} />,
-      [ITEMS.REVOKE_TOTP]: <PersonRevokeTotp person={actor} />,
-      [ITEMS.DISABLE]: <ActorDisable />,
-      [ITEMS.ARCHIVE]: <ActorArchive />,
-      [ITEMS.DELETE]: <ActorDelete />,
-      [ITEMS.PURGE]: <ActorPurge />,
-    };
-
-    return (
-      <>
-        <Tabs
-          variant="scrollable"
-          scrollButtons
-          value={section.key}
-          onChange={(e, newSection) => {
-            // push, not replace: the back button should walk the sections the
-            // person visited rather than leaving the page entirely.
-            navigate(`/people/${params.id}/settings/${newSection}`);
-          }}
-          aria-label={i18n.t('commons:settings')}
-        >
-          {sections.map((entry) => {
-            return (
-              <Tab
-                key={entry.key}
-                label={i18n.t(`people:settings.sections.${entry.key}`)}
-                value={entry.key}
-              />
-            );
-          })}
-        </Tabs>
-        {/* Header only — the section's cards stack underneath rather than
-            inside, or every card would sit within another card's border.
-            Matching the gap SettingsItem puts below each card, so the header
-            does not sit flush against the first one. */}
-        <Box sx={{ mb: 2 }}>
-          <ActorSettingCard
-            actor={actor}
-            subheader={i18n.t(`people:settings.sections.${section.key}`)}
-          />
-        </Box>
-        {section.items.map((item) => {
-          return (
-            <SettingsItem
-              key={item.key}
-              bare={item.bare}
-              icon={ITEM_ICONS[item.key]}
-              title={i18n.t(`people:settings.${item.key}`)}
-            >
-              {panels[item.key]}
-            </SettingsItem>
-          );
-        })}
-      </>
-    );
-  }
-
-  // Falls back rather than trusting the stored value. The default used to be a
-  // tab groups never render, which handed MUI a Tabs value it could not match —
-  // a console warning and an empty body on every /groups/:id/settings load.
-  const isEvent = namespace === 'events';
-  const isChannel = namespace === 'channels';
-  // Whoever can open an event's settings looks after it, and may call it
-  // off. The server decides.
-  const canCancel = isEvent;
-  const groupTabs = getGroupTabs({
-    canDelete,
-    isAdmin,
-    infoHasCard: isEvent,
-    canCancel,
-    isChannel,
+  const open = tabs.find((entry) => {
+    return entry.key === value;
   });
-  const activeTab = groupTabs.find((entry) => {
-    return entry.key === tab;
-  }) || groupTabs[0];
-
-  const groupDangerItems = getGroupDangerItems({
-    canDelete,
-    isAdmin,
-    isSuperAdmin,
-    canCancel,
-    canArchive: true,
-    isDeleted: Boolean(actor.deletedAt),
-  });
-
-  // Every key getGroupTabs can return needs an entry here, or selecting that
-  // tab renders undefined — a tab that opens onto nothing, with no error.
-  //
-  // The Danger tab is the one that is not a single panel: it stacks its
-  // actions the way the person page stacks a section's items, so the three can
-  // be compared rather than hunted for.
-  const groupPanels = {
-    // An event's name is saved with when it is and how many may go, so
-    // its Info is the event's own form and not the one a group has.
-    [ITEMS.INFO]: isEvent ? <EventForm actor={actor} /> : <ActorInfo />,
-    [ITEMS.ADMINS]: <ActorAdmins />,
-    // Who can see it, and who it has blocked: one of its administrators
-    // blocks somebody from the menu on what they wrote in it. A channel's
-    // too (roadmap row 147, phase 2).
-    [ITEMS.ACCESS]: (
-      <Stack spacing={2}>
-        <ActorAccess />
-        <ActorGraphAccess />
-        <ActorBlocked actor={actor} />
-      </Stack>
-    ),
-    // Its website's feed (phase 4), then the lines its site pastes in.
-    [ITEMS.WEBSITE]: (
-      <Stack spacing={2}>
-        <ChannelFeedCard channel={actor} />
-        <SettingsItem bare title={i18n.t('channels:settings.snippetTitle')} icon={<WebsiteIcon />}>
-          <WebsiteFollowSnippet actor={actor} />
-        </SettingsItem>
-      </Stack>
-    ),
-    [ITEMS.RULES]: <ActorRules actor={actor} />,
-    [ITEMS.REPORTS]: <ActorReports actor={actor} />,
-    // Whether it is on the fediverse, and its own Bluesky account, as a
-    // person's tab holds both.
-    [ITEMS.FEDIVERSE]: (
-      <Stack spacing={2}>
-        <ActorFediverse profile={actor} />
-        <ActorBluesky profile={actor} />
-      </Stack>
-    ),
-    // Who can do what in the group, and with what is posted in it: whether
-    // its new photos and videos start out downloadable. Not an event's.
-    // A channel's says what it posts: its admins alone write on it.
-    [ITEMS.PERMISSIONS]: isEvent ? <ActorPermissions /> : (
-      <Stack spacing={2}>
-        {isChannel ? <ActorPostKinds /> : <ActorPermissions />}
-        <ActorDownloads />
-      </Stack>
-    ),
-    [ITEMS.DANGER]: (
-      <>
-        {groupDangerItems.map((item) => {
-          return (
-            <SettingsItem
-              key={item.key}
-              bare={item.bare}
-              icon={ITEM_ICONS[item.key]}
-              title={i18n.t(`${namespace}:settings.${item.key}`)}
-            >
-              {{
-                [ITEMS.CANCEL]: <EventCancelSetting />,
-                [ITEMS.DISABLE]: <ActorDisable />,
-                [ITEMS.ARCHIVE]: <ActorArchive />,
-                [ITEMS.DELETE]: <ActorDelete />,
-                [ITEMS.PURGE]: <ActorPurge />,
-              }[item.key]}
-            </SettingsItem>
-          );
-        })}
-      </>
-    ),
-  };
 
   return (
     <>
       <Tabs
         variant="scrollable"
         scrollButtons
-        value={activeTab.key}
-        onChange={(e, newTab) => {
-          setTab(newTab);
+        value={value}
+        onChange={(e, key) => {
+          onChange(key);
         }}
         aria-label={i18n.t('commons:settings')}
       >
-        {groupTabs.map((entry) => {
+        {tabs.map((entry) => {
           return (
             <Tab
               key={entry.key}
-              label={i18n.t(tabLabelKey(namespace, entry.key))}
+              label={entry.label}
               value={entry.key}
             />
           );
         })}
       </Tabs>
-      {/* Header only, with the panel stacked underneath — the same layout the
-          person page uses, so a group's Danger zone looks like a person's
-          rather than like a different application. */}
       <Box sx={{ mb: 2 }}>
         <ActorSettingCard
           actor={actor}
-          subheader={i18n.t(tabLabelKey(namespace, activeTab.key))}
+          subheader={open.label}
         />
       </Box>
-      {/* The Danger panel supplies its own SettingsItem per action, so
-          wrapping it in another would put three cards inside a fourth. Every
-          other tab is a single panel that needs the wrapper. */}
-      {activeTab.key === ITEMS.DANGER ? groupPanels[activeTab.key] : (
-        <SettingsItem
-          bare={activeTab.bare}
-          icon={ITEM_ICONS[activeTab.key]}
-          title={i18n.t(`${namespace}:settings.${activeTab.key}`)}
-        >
-          {groupPanels[activeTab.key]}
-        </SettingsItem>
-      )}
+      {children}
     </>
   );
 };
 
-ActorsSettings.propTypes = {
-  readActor: PropTypes.func.isRequired,
+SettingsTabs.propTypes = {
+  actor: ActorType.isRequired,
+  // Each tab's key and what it reads.
+  tabs: PropTypes.arrayOf(PropTypes.shape({
+    key: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
+  })).isRequired,
+  value: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
+  children: PropTypes.node.isRequired,
+};
+
+// A person's settings: their sections, and the items of the open one stacked
+// one under another.
+const PersonSettings = ({
+  actor,
+  viewer,
+  sections,
+  section,
+  chooseSection,
+}) => {
+  const panels = panelsOfPerson({ actor, viewer });
+
+  return (
+    <SettingsTabs
+      actor={actor}
+      tabs={sections.map((entry) => {
+        return { key: entry.key, label: i18n.t(`people:settings.sections.${entry.key}`) };
+      })}
+      value={section.key}
+      onChange={chooseSection}
+    >
+      {section.items.map((item) => {
+        return (
+          <SettingsItem
+            key={item.key}
+            bare={item.bare}
+            icon={ITEM_ICONS[item.key]}
+            title={i18n.t(`people:settings.${item.key}`)}
+          >
+            {panels[item.key]}
+          </SettingsItem>
+        );
+      })}
+    </SettingsTabs>
+  );
+};
+
+PersonSettings.propTypes = {
   actor: ActorType.isRequired,
   viewer: PersonType.isRequired,
-  alertSuccess: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
+  sections: PropTypes.arrayOf(PropTypes.object).isRequired,
+  section: PropTypes.object.isRequired,
+  chooseSection: PropTypes.func.isRequired,
+};
+
+// A group's, an event's or a website's settings: one panel per tab. The same
+// layout the person page uses, so a group's Danger zone looks like a
+// person's rather than like a different application.
+const GroupSettings = ({
+  namespace,
+  actor,
+  tabs,
+  tab,
+  dangerItems,
+  chooseTab,
+}) => {
+  const panels = panelsOfGroup({
+    actor,
+    namespace,
+    isEvent: namespace === 'events',
+    isChannel: namespace === 'channels',
+    dangerItems,
+  });
+
+  return (
+    <SettingsTabs
+      actor={actor}
+      tabs={tabs.map((entry) => {
+        return { key: entry.key, label: i18n.t(tabLabelKey(namespace, entry.key)) };
+      })}
+      value={tab.key}
+      onChange={chooseTab}
+    >
+      {/* The Danger panel supplies its own SettingsItem per action, so
+          wrapping it in another would put three cards inside a fourth. Every
+          other tab is a single panel that needs the wrapper. */}
+      {tab.key === ITEMS.DANGER ? panels[tab.key] : (
+        <SettingsItem
+          bare={tab.bare}
+          icon={ITEM_ICONS[tab.key]}
+          title={i18n.t(`${namespace}:settings.${tab.key}`)}
+        >
+          {panels[tab.key]}
+        </SettingsItem>
+      )}
+    </SettingsTabs>
+  );
+};
+
+GroupSettings.propTypes = {
   namespace: PropTypes.string.isRequired,
-  isFetching: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
-  success: PropTypes.bool.isRequired,
-  // Groups only. People no longer take a tab as a prop — their section comes
-  // from the URL, so it survives a reload and the back button, which a value
-  // read once into useState never did.
-  // Drawn from ITEMS rather than a second list beside it. The local TABS
-  // constant this replaced named `delete` as a tab, which stopped being true
-  // when the three lifecycle actions moved inside one Danger tab — so the prop
-  // still advertised a value the page could no longer render.
-  selectedTab: PropTypes.oneOf([
-    ITEMS.ADMINS,
-    ITEMS.INFO,
-    ITEMS.ACCESS,
-    ITEMS.PERMISSIONS,
-    ITEMS.WEBSITE,
-    ITEMS.DANGER,
-  ]),
+  actor: ActorType.isRequired,
+  tabs: PropTypes.arrayOf(PropTypes.object).isRequired,
+  tab: PropTypes.object.isRequired,
+  dangerItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  chooseTab: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (namespace) => {
-  return (state) => {
-    const {
-      [namespace]: {
-        current: actor,
-      },
-      isFetching,
-      error,
-      success,
-    } = state[namespace];
-
-    const { viewer } = state.session;
-
-    return {
-      actor,
-      viewer,
-      namespace,
-      isFetching,
-      error,
-      success,
-    };
-  };
-};
-
-const mapDispatchToProps = (namespace) => {
-  return (dispatch) => {
-    return {
-      readActor: (id) => {
-        return dispatch(actions[namespace].read(id, namespace));
-      },
-      alertSuccess: (message) => {
-        return dispatch(actions.app.alert.success(message));
-      },
-      alertError: (message) => {
-        return dispatch(actions.app.alert.error(message));
-      },
-    };
-  };
-};
-
+// The page for one namespace: people, groups, events or channels.
 export default (namespace) => {
-  return connect(
-    mapStateToProps(namespace),
-    mapDispatchToProps(namespace),
-  )(ActorsSettings);
+  const ActorsSettings = ({ selectedTab = ITEMS.INFO }) => {
+    const settings = useActorSettings(namespace, selectedTab);
+
+    if (settings.isLoading) {
+      return (
+        <Progress />
+      );
+    }
+
+    if (!settings.actor.id) {
+      return null;
+    }
+
+    if (namespace === 'people') {
+      return <PersonSettings {...settings} />;
+    }
+
+    return <GroupSettings namespace={namespace} {...settings} />;
+  };
+
+  ActorsSettings.propTypes = {
+    // Groups only. People no longer take a tab as a prop — their section
+    // comes from the URL, so it survives a reload and the back button, which
+    // a value read once into useState never did.
+    // Drawn from ITEMS rather than a second list beside it. The local TABS
+    // constant this replaced named `delete` as a tab, which stopped being
+    // true when the three lifecycle actions moved inside one Danger tab — so
+    // the prop still advertised a value the page could no longer render.
+    selectedTab: PropTypes.oneOf([
+      ITEMS.ADMINS,
+      ITEMS.INFO,
+      ITEMS.ACCESS,
+      ITEMS.PERMISSIONS,
+      ITEMS.WEBSITE,
+      ITEMS.DANGER,
+    ]),
+  };
+
+  return ActorsSettings;
 };

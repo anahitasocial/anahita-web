@@ -13,6 +13,15 @@
 // Keys, not elements. This module stays free of JSX so the page owns rendering
 // and this owns what exists and when. Same split as utils.node's
 // getActorFeatureTabs, which containers/actors/Read/Body.jsx consumes.
+//
+// The items themselves, and the rule that says who is offered each, are in
+// items.js; a group's tabs are in groupTabs.js. Both are exported from here
+// too, so that the page and its tests read one module.
+
+import { ITEMS, isOffered } from './items';
+import { getGroupTabs, getGroupDangerItems } from './groupTabs';
+
+export { ITEMS, getGroupTabs, getGroupDangerItems };
 
 export const SECTIONS = {
   ACCOUNT: 'account',
@@ -51,67 +60,6 @@ export const SECTIONS = {
 
 // Landing section when the URL names none, or names one the viewer cannot see.
 export const DEFAULT_SECTION = SECTIONS.ACCOUNT;
-
-// Item keys. These double as i18n lookups and as React keys.
-export const ITEMS = {
-  INFO: 'info',
-  ADMINS: 'admins',
-  EMAIL: 'email',
-  USERNAME: 'username',
-  PASSWORD: 'password',
-  TOTP: 'totp',
-  WEBAUTHN: 'webauthn',
-  AUTHLOGS: 'authLogs',
-  ACCESS: 'access',
-  // Whether reposts show among the posts on the profile.
-  REPOSTS: 'reposts',
-  // Who can quote this person's posts.
-  QUOTES: 'quotes',
-  // Whether new photos and videos start out downloadable.
-  DOWNLOADS: 'downloads',
-  // A copy of everything the viewer put here, as one file.
-  DATA_EXPORT: 'dataExport',
-  // Who they follow, block and mute, and what they saved, from a file.
-  DATA_IMPORT: 'dataImport',
-  // The people the viewer has blocked.
-  BLOCKED: 'blocked',
-  // The people the viewer has muted (roadmap row 133).
-  MUTED: 'muted',
-  // The servers the viewer has blocked for themselves (roadmap row 152).
-  BLOCKED_SERVERS: 'blockedServers',
-  // What the viewer chose about suggestions of who to follow.
-  SUGGESTIONS: 'suggestions',
-  FEDIVERSE: 'fediverse',
-  // Moving one's account here from elsewhere, or away (roadmap row 124).
-  MOVING: 'moving',
-  BLUESKY: 'bluesky',
-  // What the person is told about: eight kinds of thing, on or off.
-  NOTIFICATIONS: 'notifications',
-  // Show, Warn or Hide for each kind of content warning.
-  CONTENT_CHOICES: 'contentChoices',
-  PERMISSIONS: 'permissions',
-  // A group's or an event's rules, ticked before following or answering it
-  // (roadmap row 102, part 5).
-  RULES: 'rules',
-  // A group's or an event's reports against its rules.
-  REPORTS: 'reports',
-  AGREEMENTS: 'agreements',
-  // A person's account type: registered, administrator or super
-  // administrator, and changing it.
-  ACCOUNT_TYPE: 'accountType',
-  METADATA: 'metadata',
-  REVOKE_PASSKEYS: 'revokePasskeys',
-  REVOKE_TOTP: 'revokeTotp',
-  DANGER: 'danger',
-  // A website's: the few lines of HTML its site pastes in to lead to it.
-  WEBSITE: 'website',
-  DISABLE: 'disable',
-  // Calling an event off. Events only.
-  CANCEL: 'cancel',
-  ARCHIVE: 'archive',
-  DELETE: 'delete',
-  PURGE: 'purge',
-};
 
 // `bare` says the item's component does NOT render its own MUI Card, so the
 // page has to supply one or it sits flush against its neighbours with no title.
@@ -313,37 +261,20 @@ const ALL_SECTIONS = [
 // applying it uniformly is what closes the sign-in-activity hole the flat
 // layout had: its Tab was gated on the viewer but its panel only on the
 // namespace, so loading somebody else's settings requested their session list.
+//
+// The flags each item carries are read by isOffered (items.js), which is also
+// what a group's Danger zone is filtered by.
 export const getPersonSections = ({
   isViewer, canDelete, isAdmin, isSuperAdmin = false,
 }) => {
+  const can = {
+    isViewer, canDelete, isAdmin, isSuperAdmin,
+  };
+
   return ALL_SECTIONS
     .map((section) => {
       const items = section.items.filter((item) => {
-        if (item.viewerOnly && !isViewer) {
-          return false;
-        }
-
-        if (item.requiresDelete && !canDelete) {
-          return false;
-        }
-
-        if (item.requiresAdmin && !isAdmin) {
-          return false;
-        }
-
-        if (item.requiresSuperAdmin && !isSuperAdmin) {
-          return false;
-        }
-
-        // The mirror of viewerOnly: an item that only makes sense when
-        // looking at SOMEBODY ELSE. Without it the Administration
-        // section would appear on an admin's own profile offering
-        // actions the server deliberately treats as self-service.
-        if (item.notViewer && isViewer) {
-          return false;
-        }
-
-        return true;
+        return isOffered(item, can);
       });
 
       return { ...section, items };
@@ -377,133 +308,3 @@ export const resolveSection = (requested, sections) => {
 };
 
 export default getPersonSections;
-
-// getGroupTabs returns the flat tabs for the groups namespace.
-//
-// Not sections: four tabs do not need grouping. The shape matches a section's
-// items so both namespaces can share one renderer, which is what makes a
-// group's Danger zone identical to a person's — the alternative was one tab on
-// the page drawn differently from its neighbours, which reads as a bug.
-//
-// `bare` follows the same rule as everywhere else: true when the component does
-// not render its own Card. Verified per component — Access brings one, Info,
-// Admins and Delete do not.
-export const getGroupTabs = ({
-  canDelete,
-  isAdmin,
-  infoHasCard = false,
-  canCancel = false,
-  isChannel = false,
-}) => {
-  // A channel (roadmap row 147, phase 2) has a group's privacy: who sees it
-  // and may ask to follow it, who sees its followers, and whom it blocked.
-  // Nobody but it posts on it, so no rules, and its Posts tab says what it
-  // posts (phase 3) rather than who may; then the lines its site pastes in
-  // to lead people to it.
-  if (isChannel) {
-    return [
-      { key: ITEMS.INFO, bare: true },
-      { key: ITEMS.ADMINS, bare: true },
-      { key: ITEMS.ACCESS, bare: false },
-      { key: ITEMS.PERMISSIONS, bare: false },
-      // Its feed and the lines for its site, each a Card of its own.
-      { key: ITEMS.WEBSITE, bare: false },
-      // Named and laid out as a person's network tab is: whether it is on
-      // the fediverse, off until turned on, and its own Bluesky account,
-      // where its notes are posted too. Both bring their own Card.
-      { key: ITEMS.FEDIVERSE, bare: false },
-      { key: ITEMS.DANGER, bare: true, requiresDanger: true },
-    ].filter((item) => {
-      return !item.requiresDanger || canDelete || isAdmin;
-    });
-  }
-
-  return [
-    // An event's Info is the event form, which brings its own Card.
-    { key: ITEMS.INFO, bare: !infoHasCard },
-    { key: ITEMS.ADMINS, bare: true },
-    { key: ITEMS.ACCESS, bare: false },
-    // Brings its own Card, like Access.
-    { key: ITEMS.PERMISSIONS, bare: false },
-    // What somebody agrees to before following it or answering it. A form
-    // of its own, in the Card the page supplies.
-    { key: ITEMS.RULES, bare: true },
-    // What was reported against those rules, for its administrators to act
-    // on where it is.
-    { key: ITEMS.REPORTS, bare: true },
-    // ONE Danger zone tab holding the three lifecycle actions, rather than
-    // three tabs of their own.
-    //
-    // A tab strip reads as a list of equals, so "Disable" sitting between
-    // "Access" and "Archive" made a suspension look like another setting. It
-    // also spread the three actions that need comparing across three places:
-    // choosing between disable, archive and delete means weighing what each
-    // does to the content, and you cannot weigh things you cannot see at once.
-    //
-    // Matches the person page, which has had a Danger section from the start.
-    { key: ITEMS.DANGER, bare: true, requiresDanger: true },
-  ].filter((item) => {
-    // The Danger tab earns its place if ANY of the actions inside it does.
-    // Hiding it when only one applies would leave that action unreachable.
-    if (item.requiresDanger && !canDelete && !isAdmin && !canCancel) {
-      return false;
-    }
-
-    return true;
-  });
-};
-
-// The lifecycle actions inside a group's Danger zone, in the same order and by
-// the same rules as the person page: the reversible one first, then the two
-// that are not.
-//
-// An event has one more, first: calling it off, for whoever looks after it.
-export const getGroupDangerItems = ({
-  canDelete,
-  isAdmin,
-  isSuperAdmin = false,
-  canCancel = false,
-  // Not a website: one is deleted, not archived, since its posts are a
-  // website's and the site keeps them.
-  canArchive = true,
-  // Scheduled for deletion: only the way back is offered, the Delete card
-  // showing Restore, and removing it for good (the user, 2026-10-18).
-  // Calling it off, disabling it and archiving it are for a live one, and
-  // its Disable card would read "disabled" with an Enable that is refused.
-  isDeleted = false,
-}) => {
-  return [
-    { key: ITEMS.CANCEL, bare: true, requiresCancel: true },
-    { key: ITEMS.DISABLE, bare: true, requiresAdmin: true },
-    { key: ITEMS.ARCHIVE, bare: true, requiresDelete: true },
-    { key: ITEMS.DELETE, bare: true, requiresDelete: true },
-    // Delete permanently, with no thirty days. Super administrators only.
-    { key: ITEMS.PURGE, bare: true, requiresSuperAdmin: true },
-  ].filter((item) => {
-    if (isDeleted && item.key !== ITEMS.DELETE && item.key !== ITEMS.PURGE) {
-      return false;
-    }
-
-    if (item.requiresSuperAdmin && !isSuperAdmin) {
-      return false;
-    }
-
-    if (item.requiresCancel && !canCancel) {
-      return false;
-    }
-
-    if (item.key === ITEMS.ARCHIVE && !canArchive) {
-      return false;
-    }
-
-    if (item.requiresDelete && !canDelete) {
-      return false;
-    }
-
-    if (item.requiresAdmin && !isAdmin) {
-      return false;
-    }
-
-    return true;
-  });
-};

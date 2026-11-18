@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -9,11 +8,9 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Switch from '@mui/material/Switch';
 import Typography from '@mui/material/Typography';
 
-import ActorType from '../../../proptypes/Actor';
-import actions from '../../../actions';
 import api from '../../../api/downloads';
 import i18n from '../../../languages';
-import utils from '../../../utils';
+import useSaveSetting, { forNamespace } from './useSaveSetting';
 
 // Whether the photos and videos posted on this profile start out
 // downloadable: a person's own, or what is posted in a group.
@@ -24,29 +21,18 @@ import utils from '../../../utils';
 //
 // Saved as soon as it is switched: one choice, with nothing else to send
 // along with it.
-const ActorsSettingsDownloadDefault = ({
-  actor,
-  namespace,
-  read,
-  alertSuccess,
-  alertError,
-}) => {
-  const [isSaving, setIsSaving] = useState(false);
+const ActorsSettingsDownloadDefault = ({ namespace }) => {
+  const { actor, isSaving, save } = useSaveSetting(namespace);
 
   const handleChange = (event) => {
     const allow = event.target.checked;
 
-    setIsSaving(true);
-    api.setDefault(namespace, actor, allow).then(() => {
-      return read(actor);
-    }).then(() => {
-      alertSuccess(i18n.t('media:download.default.saved'));
-    }).catch(() => {
-      alertError(i18n.t('media:download.default.notSaved'));
-    })
-      .finally(() => {
-        setIsSaving(false);
-      });
+    save(() => {
+      return api.setDefault(namespace, actor, allow);
+    }, {
+      saved: 'media:download.default.saved',
+      notSaved: 'media:download.default.notSaved',
+    });
   };
 
   return (
@@ -77,41 +63,7 @@ const ActorsSettingsDownloadDefault = ({
 };
 
 ActorsSettingsDownloadDefault.propTypes = {
-  actor: ActorType.isRequired,
   namespace: PropTypes.string.isRequired,
-  read: PropTypes.func.isRequired,
-  alertSuccess: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (namespace) => {
-  return (state) => {
-    return {
-      actor: state[namespace][namespace].current,
-      namespace,
-    };
-  };
-};
-
-const mapDispatchToProps = (namespace) => {
-  return (dispatch) => {
-    return {
-      read: (actor) => {
-        return dispatch(actions[namespace].read(utils.node.readKeyOf(actor), namespace));
-      },
-      alertSuccess: (message) => {
-        return dispatch(actions.app.alert.success(message));
-      },
-      alertError: (message) => {
-        return dispatch(actions.app.alert.error(message));
-      },
-    };
-  };
-};
-
-export default (namespace) => {
-  return connect(
-    mapStateToProps(namespace),
-    mapDispatchToProps(namespace),
-  )(ActorsSettingsDownloadDefault);
-};
+export default forNamespace(ActorsSettingsDownloadDefault);

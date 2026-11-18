@@ -166,7 +166,7 @@ DevTools browser extension when it is installed.
 
 A list read from the server a page at a time, as a feed or a profile's
 photos, is two things: a hook that holds it, and components that draw it
-(roadmap row 140, [the plan](plans/logic-and-presentation.md)).
+(roadmap row 140, [the plan](plans/done/logic-and-presentation.md)).
 
 `containers/browse/useBrowse.js` holds a list: given its `browse`, `reset`
 and `prepend` actions and its place in the store, it asks for the first page,
@@ -191,6 +191,40 @@ empty only then. Its test is `containers/browse/__tests__/useBrowse.test.jsx`.
 A component that draws takes what to draw and never fetches, so that a list
 can be drawn another way, a grid or a column, without touching how it is
 read.
+
+### Hooks and drawing
+
+The rest of the large parts are built the same way (roadmap row 140): a
+hook, `useSomething.js`, holds what the part reads, keeps and sends, and the
+rules for what may be done, tested on its own in `__tests__` beside it; the
+components beside it only draw what they are given. A long way of sending,
+with several kinds of post to choose between, is a plain function
+(`sendShort.js`, `sendReply.js`).
+
+| Part | Holds it | Draws it |
+| --- | --- | --- |
+| The short composer | `media/Composer/useComposer.js` (what both composers share), `useShortComposer.js`, `useShortFiles.js`, `sendShort.js` | `Short.jsx`, `ShortWords.jsx`, `ShortDetails.jsx` |
+| The long composer and its editor | `useComposer.js`, `useLongComposer.js`, `useLongEditor.js` | `Long.jsx`, `LongEditor.jsx`, `EditorToolbar.jsx` |
+| A thread being written | `media/Composer/useThreadNote.js` | `ThreadParts.jsx`, `ThreadNote.jsx`, `NoteParts.jsx` |
+| A post's page | `media/Read/useMediumRead.js` | `media/Read/Default.jsx`, `Pictures.jsx` |
+| The lightbox | `media/Stepper/Lightbox/usePortrait.js`, `useSwipe.js` | `Default.jsx`, `MediaPane.jsx`, `Details.jsx` |
+| A row of photos, and editing them | `components/useSlideRow.js`, `usePhotoUploads.js` | `PhotoSlides.jsx`, `SlideRow.jsx`, `PhotoFilesEditor.jsx`, `PhotoFileSlide.jsx` |
+| A post or a profile shown in another | `components/useEmbedded.js` | `PostEmbed.jsx`, `EmbedParts.jsx`, `Citations.jsx` |
+| Replies | `replies/useThread.js`, `useReplyItem.js`, `useReplyForm.js`, `sendReply.js` | `Thread.jsx`, `Conversation.jsx`, `ReplyItem.jsx`, `ReplyContent.jsx`, `ReplyMenu.jsx`, `ReplyForm.jsx`, `ReplyAttachments.jsx` |
+| A profile's settings | `actors/Settings/useActorSettings.js`, `useSaveSetting.js` (a choice saved as it is made); what each kind of profile has, `sections.js`, `items.js`, `groupTabs.js` | `index.jsx`, `panels.jsx` |
+| Accounts, in the administration | `admin/Accounts/useAccounts.js` | `index.jsx`, `Filters.jsx`, `AccountItem.jsx` |
+| A report's case | `admin/Reports/useCase.js` | `Case.jsx`, `CaseTarget.jsx`, `CaseRecord.jsx` |
+| Custom feeds, and the form | `feeds/useFeedsBrowse.js`, `useFeedForm.js` | `Browse.jsx`, `FeedRow.jsx`, `Form.jsx`, `FormFilters.jsx` |
+| An app, in settings | `settings/OAuthClients/useOAuthClientForm.js` | `OAuthClientForm.jsx` |
+
+**The kinds of post** are one table, `utils/postKinds.js`: for each (note,
+photo, video, audio, article, topic), which composer writes it, its
+namespace, whether the server may have it off, its placeholders, and what
+its page and editor do (a title, a card for a link, a cover, pictures among
+its words). The composers, the compose button and a post's page read it
+rather than naming kinds themselves, so that a new kind is one row, and a
+site that offers only some kinds (`utils/offers.js`, the server's to say)
+changes nothing in them.
 
 ## Routes
 
@@ -717,7 +751,7 @@ next note under it and "Show the thread" with how many notes it has
     on any post or reply they did not write
     (`permissions/medium.js`, `isWarningModerator`, `canSetWarning`): from
     its menu, and from a reported post's case, whose ⋮ menu has Content
-    warning and closes the case as `warned` (`admin/Reports/Case.jsx`). The
+    warning and closes the case as `warned` (`admin/Reports/useCase.js`). The
     dialog then says its author is told and cannot take it off
     (`ContentWarningDialog`'s `moderator`), and the author's notification
     is `medium_warned`. **Made with AI** (phase 5), the sixth kind, starts
@@ -801,7 +835,7 @@ language, who can reply, whether photos may be downloaded, the location
 and who is tagged, what is chosen in chips under its row, then **Post**.
 The words step is written as Threads writes a post (the user,
 2026-11-08): the writer's name above the words, in bold, and, in a thread,
-where each note is in it ("2/3", `NoteHead` in `Composer/ThreadParts.jsx`);
+where each note is in it ("2/3", `NoteHead` in `Composer/NoteParts.jsx`);
 the words at 15 px, 16 on a touch screen, where Safari zooms into a smaller field (`WORDS`); and under them one line, with the Photo,
 GIF, Video and Audio icons, their glyphs in line with the words, and the
 count, in place of a row at the dialog's foot.
@@ -1859,7 +1893,7 @@ draws nothing (`utils/federation.js#isAbsent`).
    note's words is how much room is left of its 500 (roadmap rows 126 and
    144, `Composer/useThreadSplit.js`, `utils/threadSplit.js`), counted down
    as Bluesky's app does, a number and a ring that fills (`CharacterCount`
-   in `Composer/ThreadParts.jsx`), as the services count it: a link 23
+   in `Composer/NoteParts.jsx`), as the services count it: a link 23
    however long, a Markdown link its words (`POST_MAX` and `LINK_LENGTH` in
    `constants/limits.js`). Where the post goes to Bluesky, the ring turns to
    the warning's colour past 300, where Bluesky stops showing the words;
@@ -1869,7 +1903,8 @@ draws nothing (`utils/federation.js#isAbsent`).
    sentences, then spaces, never inside a link, into ten notes at most;
    "Undo" puts them back while the first note is as the split left it.
 3. **What other networks will show** of a public post on the viewer's own
-   profile is said in a line under it (roadmap row 100, `Composer/Short.jsx`):
+   profile is said in a line under it (roadmap row 100, `Composer/ShortWords.jsx`,
+   `blueskyCut` in `Composer/NoteParts.jsx`):
    past 300 characters, when their Bluesky account is connected, that
    Bluesky shows the first 300 with a link to the rest; with more than four
    photos, that Mastodon, Bluesky or both show the first four with a link to

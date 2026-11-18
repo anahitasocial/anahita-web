@@ -10,15 +10,12 @@ import ShortComposer from './Short';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
 import { progressOf, wordsOf } from './Video/useVideoUpload';
 import LongComposer from './Long';
+import kinds from '../../../utils/postKinds';
 import api from '../../../api';
 import i18n from '../../../languages';
 import utils from '../../../utils';
 
 const { node } = utils;
-
-// What the short composer posts, and what the long one writes.
-const SHORT = ['note', 'photo', 'video', 'audio'];
-const LONG = ['article', 'topic'];
 
 // The + button (roadmap row 99, docs/plans/compose-button.md): a large round
 // button at the bottom right of the home page, which posts to the viewer's
@@ -67,8 +64,9 @@ const ComposeButton = () => {
   }
 
   const composers = node.getComposers(target);
-  const short = SHORT.filter((kind) => { return composers.includes(kind); });
-  const long = LONG.filter((kind) => { return composers.includes(kind); });
+  // What the short composer posts, and what the long one writes (kinds.js).
+  const short = kinds.forComposer('short', composers);
+  const long = kinds.forComposer('long', composers);
   if (short.length === 0 && long.length === 0) {
     return null;
   }

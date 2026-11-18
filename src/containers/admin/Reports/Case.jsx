@@ -1,66 +1,26 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect, useSelector } from 'react-redux';
+import { connect } from 'react-redux';
 import { Link as RouterLink } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Chip from '@mui/material/Chip';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
 import LinearProgress from '@mui/material/LinearProgress';
-import Link from '@mui/material/Link';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
 import BackIcon from '@mui/icons-material/ArrowBack';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-import RefuseIcon from '@mui/icons-material/BlockOutlined';
-import SpamIcon from '@mui/icons-material/ReportGmailerrorredOutlined';
 
 import actions from '../../../actions';
-import api from '../../../api';
 import i18n from '../../../languages';
-import utils from '../../../utils';
 
 import ResolveDialog from './ResolveDialog';
 import ContentWarningDialog from '../../../components/ContentWarningDialog';
 import warnings from '../../../utils/warnings';
-import MenuItemLabel from '../../../components/MenuItemLabel';
-import useRemoveAsSpam from '../../moderation/useRemoveAsSpam';
-import useRefuseAccount, { canRefuseAccount } from '../../moderation/useRefuseAccount';
-import target from './target';
-
-const { getURL } = utils.node;
-
-const formatDateTime = (value) => {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? '—' : date.toLocaleString(i18n.language);
-};
-
-const resolveError = (err, fallbackKey) => {
-  const code = err && err.response && err.response.data && err.response.data.error;
-
-  switch (code) {
-    case 'already_decided':
-      return i18n.t('abuseReports:adminErrors.alreadyDecided');
-    case 'newer_case_open':
-      return i18n.t('abuseReports:adminErrors.newerCaseOpen');
-    case 'already_open':
-      return i18n.t('abuseReports:adminErrors.alreadyOpen');
-    default:
-      return i18n.t(fallbackKey);
-  }
-};
+import CaseTarget from './CaseTarget';
+import { CaseDecision, CaseReports } from './CaseRecord';
+import useCase from './useCase';
 
 // One case: what was reported, who reported it and why, what was decided,
 // and the earlier cases the same thing has had.
@@ -69,143 +29,29 @@ const resolveError = (err, fallbackKey) => {
 // itself, where the controls that do that live, with their own
 // confirmations and their own rules about who may use them. This page
 // records the decision.
+//
+// The case and every decision on it are useCase.js's; CaseTarget.jsx draws
+// what was reported, and CaseRecord.jsx the decision and the reports. This
+// file lays them out, with the dialogs that confirm a choice.
 const ReportsCase = ({
   id,
   alertError,
   alertSuccess,
   readAdminCounts,
 }) => {
-  const [item, setItem] = useState(null);
-  const [isFetching, setIsFetching] = useState(true);
-  const [notFound, setNotFound] = useState(false);
-  const [resolving, setResolving] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  // The menu of what else an administrator may do, at the case's head.
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const viewer = useSelector((state) => { return state.session.viewer; });
-  // A person or a group reported as spam, removed from here at once (roadmap
-  // row 102); the case is then closed as removed as spam.
-  const spam = useRemoveAsSpam(
-    viewer,
-    item && item.status === 'open' && !item.targetGone ? item.target : null,
-    () => {
-      // eslint-disable-next-line no-use-before-define
-      handleResolve({ status: 'actioned', action: 'removed_as_spam', note: '' });
-    },
-  );
-
-  // An account from another network, reported or the author of what was
-  // reported, refused for the whole site from here; the case is then
-  // closed as refused. If the account's going closed it first, it stays
-  // as that left it.
-  const reported = item && item.status === 'open' && !item.targetGone ? item.target : null;
-  const author = reported && (reported.author || reported.owner);
-  const refusee = (canRefuseAccount(viewer, reported) && reported) ||
-    (canRefuseAccount(viewer, author) && author) || null;
-  const refuse = useRefuseAccount(viewer, refusee, () => {
-    api.abuseReports.resolve(id, { status: 'actioned', action: 'refused', note: '' })
-      .catch((err) => {
-        const status = err && err.response && err.response.status;
-        if (status !== 409) {
-          alertError(resolveError(err, 'abuseReports:adminErrors.resolve'));
-        }
-      })
-      // eslint-disable-next-line no-use-before-define
-      .then(refresh);
+  const report = useCase({
+    id, alertError, alertSuccess, readAdminCounts,
   });
-
-  const fetchCase = useCallback(() => {
-    setIsFetching(true);
-
-    return api.abuseReports.readCase(id, i18n.language)
-      .then(({ data }) => {
-        setItem(data);
-      })
-      .catch((err) => {
-        const status = err && err.response && err.response.status;
-        if (status === 404 || status === 400) {
-          setNotFound(true);
-          return;
-        }
-        alertError(i18n.t('abuseReports:case.loadError'));
-      })
-      .finally(() => {
-        setIsFetching(false);
-      });
-  }, [alertError, id]);
-
-  useEffect(() => {
-    setItem(null);
-    setNotFound(false);
-    fetchCase();
-  }, [fetchCase]);
-
-  // After any decision: the page, and the number on the menu and the tab.
-  const refresh = () => {
-    readAdminCounts();
-    return fetchCase();
-  };
-
-  const handleResolve = (decision) => {
-    setSubmitting(true);
-
-    api.abuseReports.resolve(id, decision)
-      .then(() => {
-        setResolving('');
-        alertSuccess(decision.status === 'dismissed' ?
-          i18n.t('abuseReports:adminAlerts.dismissed') :
-          i18n.t('abuseReports:adminAlerts.actioned'));
-      })
-      .catch((err) => {
-        setResolving('');
-        alertError(resolveError(err, 'abuseReports:adminErrors.resolve'));
-      })
-      // Either way the page may be out of date: somebody else may have
-      // decided it first.
-      .then(refresh)
-      .finally(() => {
-        setSubmitting(false);
-      });
-  };
-
-  // A post reported, given a content warning by the administrators (row
-  // 122, phase 4): saved on the post, where its author is told, and the
-  // case closed as warned. Taking a warning off decides nothing.
-  const [isWarning, setIsWarning] = useState(false);
-  const [savingWarning, setSavingWarning] = useState(false);
-  const canWarn = Boolean(reported && utils.node.isMedium(reported));
-  const handleWarn = (warning) => {
-    setSavingWarning(true);
-    api.warnings.edit(reported, warning).then(() => {
-      setIsWarning(false);
-      if (warnings.has(warning)) {
-        handleResolve({ status: 'actioned', action: 'warned', note: '' });
-        return;
-      }
-      alertSuccess(i18n.t('warnings:saved'));
-      refresh();
-    }).catch(() => {
-      alertError(i18n.t('warnings:notSaved'));
-    }).finally(() => {
-      setSavingWarning(false);
-    });
-  };
-
-  const handleReopen = () => {
-    setSubmitting(true);
-
-    api.abuseReports.reopen(id)
-      .then(() => {
-        alertSuccess(i18n.t('abuseReports:adminAlerts.reopened'));
-      })
-      .catch((err) => {
-        alertError(resolveError(err, 'abuseReports:adminErrors.reopen'));
-      })
-      .then(refresh)
-      .finally(() => {
-        setSubmitting(false);
-      });
-  };
+  const {
+    item,
+    isFetching,
+    notFound,
+    resolving,
+    submitting,
+    reported,
+    canWarn,
+    warning,
+  } = report;
 
   const back = (
     <Box sx={{ mb: 1 }}>
@@ -239,299 +85,32 @@ const ReportsCase = ({
     );
   }
 
-  const isOpen = item.status === 'open';
-  const targetUrl = target.url(item);
-  const body = target.body(item);
-  const statusLabel = i18n.t(`abuseReports:statuses.${item.status}`);
-
   return (
     <>
       {back}
       {isFetching && <LinearProgress />}
 
-      {/* What was reported */}
-      <Box sx={{ mb: 2 }}>
-        <Card>
-          <CardHeader
-            title={target.title(item)}
-            subheader={
-              <>
-                {target.kind(item.targetType)}
-                {item.targetOwner && item.targetOwner.id !== item.targetId &&
-                  <>
-                    {' · '}
-                    <Link component={RouterLink} to={getURL(item.targetOwner)}>
-                      {i18n.t('abuseReports:list.by', { name: item.targetOwner.name })}
-                    </Link>
-                  </>}
-              </>
-            }
-            action={
-              <>
-                <Chip
-                  size="small"
-                  label={statusLabel}
-                  color={isOpen ? 'primary' : 'default'}
-                />
-                {/* What else an administrator may do about it: the third
-                    action and after go in a menu (AGENTS.md, rule 2). */}
-                {targetUrl && (spam.canRemove || refuse.canRefuse || canWarn) &&
-                  <IconButton
-                    size="small"
-                    aria-label={i18n.t('actions:more')}
-                    onClick={(event) => { setMenuAnchor(event.currentTarget); }}
-                    sx={{ ml: 1 }}
-                  >
-                    <MoreVertIcon fontSize="small" />
-                  </IconButton>}
-              </>
-            }
-            // The text wraps beside the status, never under it.
-            sx={{
-              '& .MuiCardHeader-content': { minWidth: 0, overflowWrap: 'anywhere' },
-              '& .MuiCardHeader-action': { alignSelf: 'flex-start', m: 0, ml: 2 },
-            }}
-            slotProps={{
-              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
-            }}
-          />
-          {(body || item.targetGone) &&
-            <CardContent>
-              {body &&
-                <Typography variant="body1" sx={{ whiteSpace: 'pre-wrap' }}>
-                  {body}
-                </Typography>}
-              {item.targetGone &&
-                <Typography variant="body2" color="textSecondary">
-                  {i18n.t('abuseReports:case.targetGoneHint')}
-                </Typography>}
-            </CardContent>}
-          {targetUrl &&
-            <>
-              <Divider />
-              <CardContent>
-                <Typography variant="body2" color="textSecondary">
-                  {i18n.t('abuseReports:case.openHint')}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button fullWidth component={RouterLink} to={targetUrl} color="primary">
-                  {i18n.t('abuseReports:case.open')}
-                </Button>
-              </CardActions>
-              <Menu
-                anchorEl={menuAnchor}
-                open={Boolean(menuAnchor)}
-                onClose={() => { setMenuAnchor(null); }}
-              >
-                {canWarn &&
-                  <MenuItem
-                    disabled={submitting}
-                    onClick={() => {
-                      setMenuAnchor(null);
-                      setIsWarning(true);
-                    }}
-                  >
-                    <MenuItemLabel icon={warnings.iconOf(warnings.of(reported).kind, { fontSize: 'small' })}>
-                      {i18n.t('warnings:label')}
-                    </MenuItemLabel>
-                  </MenuItem>}
-                {spam.canRemove &&
-                  <MenuItem
-                    disabled={submitting}
-                    onClick={() => {
-                      setMenuAnchor(null);
-                      spam.open();
-                    }}
-                  >
-                    <MenuItemLabel icon={<SpamIcon fontSize="small" />}>
-                      {i18n.t('abuseReports:spam.action')}
-                    </MenuItemLabel>
-                  </MenuItem>}
-                {refuse.canRefuse &&
-                  <MenuItem
-                    disabled={submitting}
-                    onClick={() => {
-                      setMenuAnchor(null);
-                      refuse.open();
-                    }}
-                  >
-                    <MenuItemLabel icon={<RefuseIcon fontSize="small" />}>
-                      {i18n.t('abuseReports:refuse.caseAction')}
-                    </MenuItemLabel>
-                  </MenuItem>}
-              </Menu>
-            </>}
-        </Card>
-      </Box>
-
-      {/* The decision, or the buttons that make one */}
-      <Box sx={{ mb: 2 }}>
-        <Card>
-          <CardHeader
-            title={i18n.t('abuseReports:case.decision')}
-            slotProps={{
-              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
-            }}
-          />
-          {!isOpen &&
-            <CardContent>
-              <Typography variant="body2">
-                {item.decidedBy ?
-                  i18n.t('abuseReports:case.decidedBy', {
-                    status: statusLabel,
-                    name: item.decidedBy.name,
-                    date: formatDateTime(item.decidedAt),
-                  }) :
-                  i18n.t('abuseReports:case.decidedAutomatically', {
-                    status: statusLabel,
-                    date: formatDateTime(item.decidedAt),
-                  })}
-              </Typography>
-              {item.decisionAction &&
-                <Typography variant="body2" color="textSecondary">
-                  {i18n.t(`abuseReports:actions.${item.decisionAction}`)}
-                </Typography>}
-              {item.decisionNote &&
-                <Typography variant="body2" sx={{ mt: 1, whiteSpace: 'pre-wrap' }}>
-                  {`${i18n.t('abuseReports:case.note')}: ${item.decisionNote}`}
-                </Typography>}
-            </CardContent>}
-          {/* What each choice means, beside two short buttons. */}
-          {isOpen &&
-            <CardContent sx={{ pt: 0 }}>
-              <Typography variant="body2" color="textSecondary">
-                {i18n.t('abuseReports:resolve.hint')}
-              </Typography>
-            </CardContent>}
-          <CardActions sx={{ justifyContent: 'flex-end' }}>
-            {isOpen &&
-              <>
-                <Button
-                  fullWidth
-                  disabled={submitting}
-                  onClick={() => {
-                    setResolving('dismissed');
-                  }}
-                >
-                  {i18n.t('abuseReports:resolve.dismiss')}
-                </Button>
-                <Button
-                  fullWidth
-                  color="primary"
-                  variant="contained"
-                  disabled={submitting}
-                  onClick={() => {
-                    setResolving('actioned');
-                  }}
-                >
-                  {i18n.t('abuseReports:resolve.action')}
-                </Button>
-              </>}
-            {/* Nothing to reopen once the thing itself is gone. */}
-            {!isOpen && !item.targetGone &&
-              <Button fullWidth disabled={submitting} onClick={handleReopen}>
-                {i18n.t('abuseReports:resolve.reopen')}
-              </Button>}
-          </CardActions>
-        </Card>
-      </Box>
-
-      {/* Who reported it, and why */}
-      <Box sx={{ mb: 2 }}>
-        <Card>
-          <CardHeader
-            title={i18n.t('abuseReports:case.reports')}
-            subheader={i18n.t('abuseReports:list.reports', { count: item.reportCount })}
-            slotProps={{
-              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
-            }}
-          />
-          <Divider />
-          <List disablePadding>
-            {(item.reports || []).map((report) => {
-              return (
-                <ListItem key={report.id} divider alignItems="flex-start">
-                  <ListItemText
-                    disableTypography
-                    primary={
-                      <Typography variant="subtitle2">
-                        {report.reporter ?
-                          <Link component={RouterLink} to={getURL(report.reporter)}>
-                            {report.reporter.name || `@${report.reporter.alias}`}
-                          </Link> :
-                          `#${report.reporterId}`}
-                        {` · ${target.reasonOf(report)}`}
-                      </Typography>
-                    }
-                    secondary={
-                      <>
-                        <Typography variant="body2" sx={{ whiteSpace: 'pre-wrap' }}>
-                          {report.details || i18n.t('abuseReports:case.noDetails')}
-                        </Typography>
-                        <Typography variant="caption" color="textSecondary">
-                          {i18n.t('abuseReports:case.reportedOn', {
-                            date: formatDateTime(report.createdAt),
-                          })}
-                        </Typography>
-                      </>
-                    }
-                  />
-                </ListItem>
-              );
-            })}
-          </List>
-        </Card>
-      </Box>
-
-      {/* The same thing, reported before */}
-      {item.previous && item.previous.length > 0 &&
-        <Card>
-          <CardHeader
-            title={i18n.t('abuseReports:case.previous')}
-            slotProps={{
-              title: { variant: 'subtitle1', sx: { fontWeight: 500 } },
-            }}
-          />
-          <Divider />
-          <List disablePadding>
-            {item.previous.map((earlier) => {
-              return (
-                <ListItemButton
-                  key={earlier.id}
-                  component={RouterLink}
-                  to={`/admin/reports/${earlier.id}`}
-                  divider
-                >
-                  <ListItemText
-                    primary={`${i18n.t(`abuseReports:statuses.${earlier.status}`)} · ${i18n.t('abuseReports:list.reports', { count: earlier.reportCount })}`}
-                    secondary={formatDateTime(earlier.firstReportedAt)}
-                  />
-                </ListItemButton>
-              );
-            })}
-          </List>
-        </Card>}
+      <CaseTarget report={report} />
+      <CaseDecision report={report} />
+      <CaseReports item={item} />
 
       {resolving &&
         <ResolveDialog
           status={resolving}
           submitting={submitting}
-          onClose={() => {
-            setResolving('');
-          }}
-          onConfirm={handleResolve}
+          onClose={report.cancel}
+          onConfirm={report.resolve}
         />}
-      {spam.dialog}
-      {refuse.dialog}
+      {report.spam.dialog}
+      {report.refuse.dialog}
       {canWarn &&
         <ContentWarningDialog
-          open={isWarning}
+          open={warning.isOpen}
           value={warnings.of(reported)}
-          saving={savingWarning}
+          saving={warning.saving}
           moderator
-          onClose={() => { setIsWarning(false); }}
-          onSave={handleWarn}
+          onClose={warning.close}
+          onSave={warning.save}
         />}
     </>
   );

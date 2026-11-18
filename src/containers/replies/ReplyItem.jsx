@@ -1,72 +1,20 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
-import moment from 'moment';
 
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
-import IconButton from '@mui/material/IconButton';
-import Link from '@mui/material/Link';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import EditIcon from '@mui/icons-material/EditOutlined';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import HideIcon from '@mui/icons-material/VisibilityOffOutlined';
-import ShowIcon from '@mui/icons-material/VisibilityOutlined';
-import DeleteIcon from '@mui/icons-material/DeleteOutlined';
-import ReportIcon from '@mui/icons-material/FlagOutlined';
-import BlockIcon from '@mui/icons-material/BlockOutlined';
 import Typography from '@mui/material/Typography';
 
-import LikeIcon from '@mui/icons-material/FavoriteBorder';
-import LikedIcon from '@mui/icons-material/Favorite';
-import ReplyIcon from '@mui/icons-material/ModeCommentOutlined';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
-
 import ActorAvatar from '../../components/ActorAvatar';
-import ActorHandle from '../../components/ActorHandle';
-import EntityBody from '../../components/NodeBody';
+import { HiddenLine } from '../../components/WarningCover';
+import ReplyActions from './ReplyActions';
 import ReplyBox from './ReplyBox';
+import ReplyContent, { HEAD } from './ReplyContent';
 import ReplyForm from './ReplyForm';
-import LinkPreviewCard from '../../components/LinkPreviewCard';
-import PhotoSlides from '../../components/PhotoSlides';
-import VideoPlayer from '../../components/VideoPlayer';
-import AudioPlayer from '../../components/AudioPlayer';
-import linkPreviews from '../../utils/linkPreviews';
-import useReport from '../reports/useReport';
-import { useOnBluesky, useReplyStaysHere } from '../media/Composer/useOnFediverse';
+import ReplyMenu from './ReplyMenu';
+import useReplyItem from './useReplyItem';
 import PersonType from '../../proptypes/Person';
-import MenuItemLabel from '../../components/MenuItemLabel';
-import ContentWarningDialog from '../../components/ContentWarningDialog';
-import mediumPermissions from '../../permissions/medium';
-import WarningCover, { Blurred, HiddenLine, useWarning } from '../../components/WarningCover';
-import warnings from '../../utils/warnings';
 import i18n from '../../languages';
 import thread from '../../utils/thread';
-import utils from '../../utils';
-import timeAgo from '../../utils/timeAgo';
-import openOnClick from '../../utils/openOnClick';
-import useMute from '../controls/useMute';
-import WrittenBy from '../../components/WrittenBy';
-
-const { getActorName, getAuthor, getURL } = utils.node;
-
-// One line, cut short where it does not fit.
-const oneLine = {
-  minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
-};
-
-// A reply's buttons: an icon and its number, as small as the text, close
-// together at the left (after Threads, the user, 2026-11-07). A number shown
-// where the button cannot be pressed is in grey, not faded.
-const action = {
-  minWidth: 0,
-  px: 1,
-  gap: 0.5,
-  '& .MuiButton-startIcon': { m: 0 },
-  '&.Mui-disabled': { color: 'text.secondary' },
-};
 
 // How far each level of a thread is set in from the one above: 24 pixels.
 // Every space in a thread is a whole number of the theme's 8-pixel steps.
@@ -76,13 +24,8 @@ const EDGE = { xs: 1, sm: 2 };
 
 // One reply, and under it the replies made to it.
 //
-// Everything it can do is handed to it: it draws, and asks. What a viewer
-// may do with a reply comes from the server, in `authorized`, so a control
-// is here only when it will work.
-// How tall the line with somebody's name on it is, which their picture
-// is centred on.
-const HEAD = 32;
-
+// It draws, and asks: what it holds and may do is useReplyItem's, and what
+// it does is the thread's, handed to it.
 const ReplyItem = ({
   node,
   viewer,
@@ -101,48 +44,16 @@ const ReplyItem = ({
   writerId = 0,
 }) => {
   const { reply, children } = node;
-  const [menuAnchor, setMenuAnchor] = useState(null);
-  const [isReplying, setIsReplying] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const navigate = useNavigate();
-  // The reply's own page: what it answers above it, its replies under it.
-  const page = getURL(reply);
-  const [isWarning, setIsWarning] = useState(false);
-  const [isSavingWarning, setIsSavingWarning] = useState(false);
-  const report = useReport(viewer, reply);
-  // Its content warning (row 122), not over it while it is edited.
-  const cover = useWarning(reply);
-  const warned = isEditing ? { ...cover, hidden: false, collapsed: false } : cover;
-  const media = warnings.hasMedia(reply);
-  // Answering something from another server, and not on the fediverse:
-  // said before it is sent.
-  const staysHere = useReplyStaysHere(viewer, reply);
-  // Whether the viewer's posts go to Bluesky, where a change does not follow.
-  const onBluesky = useOnBluesky(viewer);
-
-  const authorized = reply.authorized || {};
-  const author = reply.deleted ? {} : getAuthor(reply);
-  const isWriter = Boolean(writerId) && author.id === writerId;
-  const closeMenu = () => {
-    setMenuAnchor(null);
+  const item = useReplyItem({
+    reply, viewer, writerId, onReply, onEdit, onWarning, onBlockFromOwner,
+  });
+  const {
+    author, warned, media, isEditing,
+  } = item;
+  // What is done with a reply, handed down to the replies under it.
+  const handlers = {
+    onReply, onEdit, onDelete, onHide, onLike, onWarning, onBlockFromOwner, blockFromOwnerLabel,
   };
-
-  // A reply from another server can be read where it was written.
-  const original = utils.federation.isRemote(reply) ? utils.federation.pageOf(reply) : '';
-  // Whoever runs the group the thread is in may block its writer from there.
-  const canBlockFromOwner = Boolean(authorized.blockFromOwner && onBlockFromOwner);
-  // Whoever wrote it, unless it is the viewer (roadmap row 133). Their
-  // replies leave the thread when it is read again.
-  const mute = useMute(reply.deleted ? null : viewer, author);
-  // Its content warning, changed by its writer (row 122), but not one the
-  // administrators gave; or by a site administrator, as a moderator, on
-  // anybody's reply (phase 4).
-  const warning = warnings.of(reply);
-  const moderating = mediumPermissions.isWarningModerator(viewer, { ...reply, author });
-  const canWarn = Boolean(onWarning && !reply.deleted &&
-    (moderating || (authorized.edit && !warning.byModerator)));
-  const hasMenu = authorized.edit || canWarn || authorized.delete || authorized.hide ||
-    canBlockFromOwner || mute.canMute || report.canReport || original;
 
   const under = children.length > 0 && (
     <Box
@@ -161,14 +72,7 @@ const ReplyItem = ({
             node={child}
             viewer={viewer}
             depth={depth + 1}
-            onReply={onReply}
-            onEdit={onEdit}
-            onDelete={onDelete}
-            onHide={onHide}
-            onLike={onLike}
-            onWarning={onWarning}
-            onBlockFromOwner={onBlockFromOwner}
-            blockFromOwnerLabel={blockFromOwnerLabel}
+            {...handlers}
             writerId={writerId}
           />
         );
@@ -252,301 +156,56 @@ const ReplyItem = ({
             '& p': { mt: 1, mb: 1 },
           }}
         >
-          {/* Name, handle and when, on one line, the handle cut short
-              before anything wraps; the words right under it. */}
-          <Box sx={{
-            display: 'flex', alignItems: 'center', gap: 1, minHeight: HEAD, minWidth: 0,
-          }}
-          >
-            <Typography
-              component="span"
-              variant="subtitle2"
-              sx={{ ...oneLine, flexShrink: 0, maxWidth: '60%' }}
-            >
-              {author.id ?
-                <Link href={getURL(author)} color="inherit" underline="hover">
-                  {getActorName(author)}
-                </Link> :
-                getActorName(author)}
-            </Typography>
-            {/* Their handle in grey: @ana here, and the whole handle for
-                somebody on another server, which says where they are. */}
-            <Box component="span" sx={{ ...oneLine, flexShrink: 1 }}>
-              <ActorHandle actor={author} />
-            </Box>
-            {/* The post's writer, among the replies to it. */}
-            {isWriter &&
-              <Typography variant="caption" color="textSecondary" sx={{ flexShrink: 0 }}>
-                {i18n.t('replies:writer')}
-              </Typography>}
-            {/* When, a link to the reply's own page, where its replies are
-                under it: one that can be opened in a new tab or copied. */}
-            <Link
-              component={RouterLink}
-              to={page}
-              variant="caption"
-              color="textSecondary"
-              underline="hover"
-              title={moment.utc(reply.createdAt).local().format('LLL').toString()}
-              sx={{ flexShrink: 0, whiteSpace: 'nowrap' }}
-            >
-              {timeAgo(reply.createdAt)}
-            </Link>
-            {reply.hidden &&
-              <Chip size="small" label={i18n.t('replies:hidden.badge')} sx={{ flexShrink: 0 }} />}
-          </Box>
-          <WrittenBy node={reply} />
-          {/* A reply with pictures or a video shows them first, its words
-              under them. 16 pixels show above and below: 8 above, since
-              the line with the name is as tall as the picture beside it
-              and already leaves some 8 under the name. */}
-          {/* Its content warning (row 122): over its pictures, video or
-              sound, its words shown; over its words when it has none. */}
-          <WarningCover state={warned} off={!media}>
-            {Array.isArray(reply.files) && reply.files.length > 0 &&
-            <Box sx={{
-              mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
-            }}
-            >
-              <PhotoSlides medium={reply} size="medium" />
-            </Box>}
-            {reply.video &&
-            <Box sx={{
-              mt: 1, mb: 2, borderRadius: 1, overflow: 'hidden',
-            }}
-            >
-              <VideoPlayer video={reply.video} title={reply.title || ''} />
-            </Box>}
-            {reply.audio &&
-            <Box sx={{ mt: 1, mb: 2 }}>
-              <AudioPlayer audio={reply.audio} title={reply.title || ''} padded={false} />
-            </Box>}
-          </WarningCover>
-          <WarningCover state={warned} off={media}>
-            {/* A click on its words opens its page too, as a post's card
-                does, but for a selection, a link or a button in them. */}
-            {!isEditing &&
-            <Box
-              sx={{ '& p:first-of-type': { mt: 0 } }}
-              {...openOnClick.handlersFor(page, navigate)}
-            >
-              <EntityBody contentFilter size="body2" lang={reply.language}>
-                {reply.content || ''}
-              </EntityBody>
-            </Box>}
-            {!isEditing && linkPreviews.isShown(reply.linkPreview) &&
-            <Blurred state={warned} off={!media}>
-              <LinkPreviewCard preview={reply.linkPreview} />
-            </Blurred>}
-          </WarningCover>
+          <ReplyContent
+            reply={reply}
+            author={author}
+            isWriter={item.isWriter}
+            warned={warned}
+            media={media}
+            isEditing={isEditing}
+          />
           {isEditing &&
             <ReplyForm
               initial={reply.content || ''}
               flush
               submitLabel={i18n.t('actions:save')}
               autoFocus
-              onCancel={() => {
-                setIsEditing(false);
-              }}
+              onCancel={item.stopEditing}
               linkPreview={reply.linkPreview}
-              hint={onBluesky ? i18n.t('federation:composer.editStaysHereBluesky') : ''}
-              onSubmit={(body, card) => {
-                return onEdit(reply, body, card).then(() => {
-                  setIsEditing(false);
-                });
-              }}
+              hint={item.onBluesky ? i18n.t('federation:composer.editStaysHereBluesky') : ''}
+              onSubmit={item.saveEdit}
             />}
           {!isEditing &&
-            <Box sx={{
-              display: 'flex', alignItems: 'center', gap: 1, ml: -1,
-            }}
-            >
-              {(authorized.like || reply.likesCount > 0) &&
-                <Button
-                  size="small"
-                  color={reply.isLikedByViewer ? 'primary' : 'inherit'}
-                  disabled={!authorized.like}
-                  startIcon={reply.isLikedByViewer ?
-                    <LikedIcon fontSize="small" /> :
-                    <LikeIcon fontSize="small" />}
-                  aria-label={i18n.t(reply.isLikedByViewer ?
-                    'replies:actions.unlike' :
-                    'replies:actions.like')}
-                  aria-pressed={Boolean(reply.isLikedByViewer)}
-                  sx={action}
-                  onClick={() => {
-                    onLike(reply);
-                  }}
-                >
-                  {reply.likesCount > 0 ? reply.likesCount : ''}
-                </Button>}
-              {(authorized.comment || reply.commentCount > 0) &&
-                <Button
-                  size="small"
-                  color="inherit"
-                  disabled={!authorized.comment}
-                  startIcon={<ReplyIcon fontSize="small" />}
-                  aria-label={i18n.t('replies:reply')}
-                  title={i18n.t('replies:reply')}
-                  aria-expanded={authorized.comment ? isReplying : undefined}
-                  sx={action}
-                  onClick={() => {
-                    setIsReplying(!isReplying);
-                  }}
-                >
-                  {reply.commentCount > 0 ? reply.commentCount : ''}
-                </Button>}
-            </Box>}
+            <ReplyActions
+              reply={reply}
+              authorized={item.authorized}
+              isReplying={item.isReplying}
+              onLike={onLike}
+              onToggleReplying={item.toggleReplying}
+            />}
           {footer}
         </Box>
-        {hasMenu &&
-          <>
-            <IconButton
-              aria-label={i18n.t('replies:actions.menu')}
-              aria-haspopup="true"
-              onClick={(event) => {
-                setMenuAnchor(event.currentTarget);
-              }}
-              size="small"
-            >
-              <MoreVertIcon fontSize="small" />
-            </IconButton>
-            <Menu
-              anchorEl={menuAnchor}
-              open={Boolean(menuAnchor)}
-              onClose={closeMenu}
-            >
-              {original &&
-                <MenuItem
-                  component="a"
-                  href={original}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={closeMenu}
-                >
-                  <MenuItemLabel icon={<OpenInNewIcon fontSize="small" />}>
-                    {i18n.t('federation:remote.viewOriginal', { domain: utils.federation.domainOf(reply) })}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {authorized.edit &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    setIsEditing(true);
-                  }}
-                >
-                  <MenuItemLabel icon={<EditIcon fontSize="small" />}>
-                    {i18n.t('replies:actions.edit')}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {canWarn &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    setIsWarning(true);
-                  }}
-                >
-                  <MenuItemLabel icon={warnings.iconOf(warning.kind, { fontSize: 'small' })}>
-                    {i18n.t('warnings:label')}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {authorized.hide &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    onHide(reply, !reply.hidden);
-                  }}
-                >
-                  <MenuItemLabel icon={reply.hidden ? <ShowIcon fontSize="small" /> : <HideIcon fontSize="small" />}>
-                    {i18n.t(reply.hidden ? 'replies:actions.show' : 'replies:actions.hide')}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {authorized.delete &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    onDelete(reply);
-                  }}
-                >
-                  <MenuItemLabel icon={<DeleteIcon fontSize="small" />}>
-                    {i18n.t('replies:actions.delete')}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {canBlockFromOwner &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    onBlockFromOwner(reply);
-                  }}
-                >
-                  <MenuItemLabel icon={<BlockIcon fontSize="small" />}>
-                    {blockFromOwnerLabel}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {mute.canMute &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    mute.toggle();
-                  }}
-                >
-                  <MenuItemLabel icon={mute.icon}>
-                    {mute.label}
-                  </MenuItemLabel>
-                </MenuItem>}
-              {report.canReport &&
-                <MenuItem
-                  onClick={() => {
-                    closeMenu();
-                    report.open();
-                  }}
-                >
-                  <MenuItemLabel icon={<ReportIcon fontSize="small" />}>
-                    {i18n.t('abuseReports:report')}
-                  </MenuItemLabel>
-                </MenuItem>}
-            </Menu>
-            {report.dialog}
-            {mute.dialog}
-            {canWarn &&
-              <ContentWarningDialog
-                open={isWarning}
-                value={warning}
-                saving={isSavingWarning}
-                moderator={moderating}
-                onClose={() => {
-                  setIsWarning(false);
-                }}
-                onSave={(chosen) => {
-                  setIsSavingWarning(true);
-                  onWarning(reply, chosen).then(() => {
-                    setIsWarning(false);
-                  }).catch(() => {
-                    // Said by the thread; the dialog stays.
-                  }).finally(() => {
-                    setIsSavingWarning(false);
-                  });
-                }}
-              />}
-          </>}
+        {item.hasMenu &&
+          <ReplyMenu
+            reply={reply}
+            item={item}
+            onDelete={onDelete}
+            onHide={onHide}
+            onBlockFromOwner={onBlockFromOwner}
+            blockFromOwnerLabel={blockFromOwnerLabel}
+          />}
       </Box>
-      {isReplying &&
+      {item.isReplying &&
         <Box sx={{ ml: STEP }}>
           <ReplyBox
             autoFocus
-            hint={staysHere ? i18n.t(staysHere) : ''}
+            hint={item.staysHere ? i18n.t(item.staysHere) : ''}
             placeholder={author.name ?
               i18n.t('replies:placeholderTo', { name: author.name }) :
               i18n.t('replies:placeholder')}
-            onCancel={() => {
-              setIsReplying(false);
-            }}
+            onCancel={item.stopReplying}
             attachments
-            onSubmit={(body, card, attached) => {
-              return onReply(reply, body, card, attached).then(() => {
-                setIsReplying(false);
-              });
-            }}
+            onSubmit={item.sendReply}
           />
         </Box>}
       {under}

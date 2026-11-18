@@ -7,6 +7,7 @@ import Link from '@mui/material/Link';
 import Typography from '@mui/material/Typography';
 
 import { usePost } from './PostEmbed';
+import postKinds from '../utils/postKinds';
 import summary from '../utils/summary';
 import utils from '../utils';
 import i18n from '../languages';
@@ -15,9 +16,7 @@ const { getPortraitURL } = utils.node;
 
 // Whether a post is long writing, an article or a topic, which a list shows
 // by its summary and not in full (the user, 2026-10-16).
-const isLong = (node) => {
-  return /\.(article|topic)\.v1$/.test((node && node.type) || '');
-};
+const { isLong } = postKinds;
 
 // The picture of an article that has no cover: the first photo it shows,
 // as WordPress takes a featured image.

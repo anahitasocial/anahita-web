@@ -1,14 +1,12 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import moment from 'moment';
 import { withStyles } from 'tss-react/mui';
 
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
-import CardMedia from '@mui/material/CardMedia';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import ButtonBase from '@mui/material/ButtonBase';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -18,39 +16,32 @@ import MediumType from '../../../proptypes/Medium';
 import ActorTitle from '../../../components/ActorTitle';
 import ActorAvatar from '../../../components/ActorAvatar';
 import CardHeaderOwner from '../../../components/MediumOwnerCardHeader';
-import PhotoSlides from '../../../components/PhotoSlides';
-import VideoElsewhere from '../../../components/VideoElsewhere';
-import videoElsewhere from '../../../utils/videoElsewhere';
 import PinnedLabel from '../../../components/PinnedLabel';
 import LinkPreviewCard from '../../../components/LinkPreviewCard';
 import VideoPlayer from '../../../components/VideoPlayer';
 import AudioPlayer from '../../../components/AudioPlayer';
 import linkPreviews from '../../../utils/linkPreviews';
-import Progress from '../../../components/Progress';
 import EntityBody from '../../../components/NodeBody';
-import { Citations } from '../../../components/PostEmbed';
+import Citations from '../../../components/Citations';
 import CitedByTab from './CitedByTab';
 import SignInPrompt from '../../../components/SignInPrompt';
-import i18n from '../../../languages';
 import utils from '../../../utils';
-import photoFiles from '../../../utils/photoFiles';
-import AltBadge from '../../../components/AltBadge';
-import RemovedPictures from '../../../components/RemovedPictures';
-import WarningCover, { Blurred, useWarning } from '../../../components/WarningCover';
-import warnings from '../../../utils/warnings';
+import WarningCover, { Blurred } from '../../../components/WarningCover';
 import styles from './styles';
 import PageColumn from '../../../components/PageColumn';
 import { useStickyColumn } from '../../../components/SideTabs';
 import PeopleInPost from '../PeopleInPost';
 import InPostDialog from '../../../routes/postDialogContext';
 import WrittenBy from '../../../components/WrittenBy';
+import Pictures from './Pictures';
+import useMediumRead from './useMediumRead';
 
-const {
-  getAuthor,
-  getPortraitURL,
-  getCoverURL,
-} = utils.node;
+const { getAuthor } = utils.node;
 
+// A post on its own page: its pictures, who wrote it, its words, what it
+// plays and its buttons, in a card; then its replies, and what it is tied
+// to, beside them on a wide screen. What it shows of the post is worked out
+// by useMediumRead.
 const MediumReadDefault = ({
   classes,
   medium,
@@ -79,51 +70,18 @@ const MediumReadDefault = ({
   const [postRef, postTop] = useStickyColumn(isWide, 64);
   const [talkRef, talkTop] = useStickyColumn(isWide, 64);
 
-  const portrait = getPortraitURL(medium, 'original');
-  // A video from elsewhere shows as its poster, leading to it, and its
-  // words without the line that did.
-  const elsewhere = videoElsewhere.of(medium);
-  const content = elsewhere ? elsewhere.content : medium.content;
-  const coverUrl = getCoverURL(medium, 'large');
+  const read = useMediumRead(medium, cover);
+  const {
+    elsewhere,
+    content,
+    warned,
+    media,
+    isLong,
+  } = read;
+  const Top = read.coversPictures ? WarningCover : Blurred;
+  const Playing = read.coversPlaying ? WarningCover : Blurred;
   const author = getAuthor(medium);
   const createdAt = moment.utc(medium.createdAt).local().format('LLL').toString();
-
-  // A post with several images is drawn as slides, which load their own.
-  const hasSlides = photoFiles.hasSeveral(medium);
-
-  const [isLoaded, setIsLoaded] = useState(!portrait);
-  // Its content warning (row 122). A post with a photo, a GIF, a video or a
-  // sound has the warning over that, said once, over the first part of it
-  // shown, and its words shown. Any other, an article with its cover too,
-  // has it over its words, and the rest only blurred. One View opens all.
-  const warned = useWarning(medium);
-  const media = warnings.hasMedia(medium);
-  const hasPictures = Boolean(cover || coverUrl || hasSlides || portrait || elsewhere ||
-    (medium.mediaRemoved && photoFiles.countOf(medium) === 0));
-  const Top = media && hasPictures ? WarningCover : Blurred;
-  const Playing = media && !hasPictures ? WarningCover : Blurred;
-
-  useEffect(() => {
-    if (portrait) {
-      // eslint-disable-next-line no-undef
-      const image = new Image();
-
-      image.src = portrait;
-
-      image.onload = () => {
-        setIsLoaded(true);
-      };
-    }
-  }, [portrait]);
-
-  const portraitMedia = (
-    <CardMedia
-      component="img"
-      title={medium.title}
-      alt={photoFiles.altOf(medium)}
-      image={portrait}
-    />
-  );
 
   // Who wrote it.
   const header = (
@@ -163,55 +121,13 @@ const MediumReadDefault = ({
       {!context && medium.owner && medium.owner.id !== author.id &&
       <CardHeaderOwner owner={medium.owner} author={medium.author} roomy />}
       <Top state={warned}>
-        {cover}
-        {!cover && coverUrl &&
-        <CardMedia
-          className={classes.cover}
-          title={medium.title}
-          image={coverUrl}
-          src="picture"
-        />}
-        {medium.mediaRemoved && photoFiles.countOf(medium) === 0 &&
-        <RemovedPictures medium={medium} auto />}
-        {hasSlides &&
-        <PhotoSlides
+        <Pictures
+          classes={classes}
           medium={medium}
-          size="large"
-          onOpen={handleView ? () => {
-            handleView();
-          } : null}
-        />}
-        {/* One photo opens in the theatre too, as several do, to be seen
-          larger and zoomed into (asked for again by the user on
-          2026-10-17). */}
-        {elsewhere &&
-        <VideoElsewhere
-          node={medium}
-          elsewhere={elsewhere}
-          poster={photoFiles.hasSeveral(medium) ? '' : (portrait || '')}
-          alt={photoFiles.altOf(medium)}
-          description={photoFiles.descriptionOf(medium)}
-          title={medium.title || ''}
-        />}
-        {!hasSlides && portrait && isLoaded && !elsewhere &&
-        <Box sx={{ position: 'relative' }}>
-          {handleView ?
-            <ButtonBase
-              onClick={handleView}
-              aria-label={i18n.t('media:stepper.open')}
-              sx={{ display: 'block', width: '100%' }}
-            >
-              {portraitMedia}
-            </ButtonBase> :
-            portraitMedia}
-          <AltBadge text={photoFiles.descriptionOf(medium)} />
-        </Box>}
-        {!hasSlides && !isLoaded &&
-        <CardContent>
-          <Progress />
-        </CardContent>}
-        {/* Who is in it, right under the picture (roadmap row 103). */}
-        {!medium.video && <PeopleInPost medium={medium} />}
+          read={read}
+          cover={cover}
+          handleView={handleView}
+        />
       </Top>
       {header}
       {editing && form}
@@ -242,16 +158,16 @@ const MediumReadDefault = ({
             <EntityBody
               contentFilter
             // Long writing is read at length, in larger type.
-              size={/\.(article|topic)\.v1$/.test(medium.type || '') ? 'reading' : 'body1'}
+              size={isLong ? 'reading' : 'body1'}
               lang={medium.language}
             // Long writing shows what an address on a line of its own
             // is to: a post here as itself, a page by its card.
-              embeds={/\.(article|topic)\.v1$/.test(medium.type || '')}
+              embeds={isLong}
               cards={medium.linkPreviews || []}
             >
               {content}
             </EntityBody>}
-            {/\.(article|topic)\.v1$/.test(medium.type || '') && medium.content &&
+            {isLong && medium.content &&
             <Citations text={medium.content} cards={medium.linkPreviews || []} />}
             {linkPreviews.isShown(medium.linkPreview) &&
             <Blurred state={warned} off={!media}>

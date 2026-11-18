@@ -1,3 +1,5 @@
+import { rowStyles, slideStyles } from '../../../../components/SlideRow';
+
 // The dense toolbar the stepper puts above us, plus its divider.
 const HEADER_HEIGHT = 49;
 const PANE_HEIGHT = `calc(100vh - ${HEADER_HEIGHT}px)`;
@@ -52,28 +54,16 @@ export default (theme) => {
     // The images of a post with several, side by side in a row the browser
     // scrolls sideways and brings to rest on one, as on the post's card.
     fileRow: {
-      display: 'flex',
+      ...rowStyles(),
       width: '100%',
       height: '100%',
-      overflowX: 'auto',
-      overflowY: 'hidden',
-      scrollSnapType: 'x mandatory',
-      overscrollBehaviorX: 'contain',
-      WebkitOverflowScrolling: 'touch',
-      scrollbarWidth: 'none',
-      '&::-webkit-scrollbar': {
-        display: 'none',
-      },
     },
     fileSlide: {
-      flex: '0 0 100%',
-      minWidth: 0,
+      ...slideStyles(),
       height: '100%',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      scrollSnapAlign: 'center',
-      scrollSnapStop: 'always',
     },
     fileImage: {
       display: 'block',

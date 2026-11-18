@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
@@ -11,38 +10,28 @@ import Radio from '@mui/material/Radio';
 import RadioGroup from '@mui/material/RadioGroup';
 import Typography from '@mui/material/Typography';
 
-import ActorType from '../../../proptypes/Actor';
-import actions from '../../../actions';
 import api from '../../../api';
 import i18n from '../../../languages';
-import utils from '../../../utils';
 import quotes from '../../../utils/quotes';
+import useSaveSetting, { forNamespace } from './useSaveSetting';
 
 // Who can quote this person's posts, for the posts that do not say
 // themselves. Anyone unless they choose otherwise.
 //
 // For people only: it is the setting of a post's author, and authors are
 // people. Saved as soon as it is chosen.
-const ActorsSettingsQuotePolicy = ({
-  actor,
-  read,
-  alertSuccess,
-  alertError,
-}) => {
-  const [isSaving, setIsSaving] = useState(false);
+const ActorsSettingsQuotePolicy = ({ namespace }) => {
+  const { actor, isSaving, save } = useSaveSetting(namespace);
 
   const handleChange = (event) => {
-    setIsSaving(true);
-    api.quotes.setPersonPolicy(actor, event.target.value).then(() => {
-      return read(actor);
-    }).then(() => {
-      alertSuccess(i18n.t('replies:quote.policy.saved'));
-    }).catch(() => {
-      alertError(i18n.t('replies:quote.policy.notSaved'));
-    })
-      .finally(() => {
-        setIsSaving(false);
-      });
+    const policy = event.target.value;
+
+    save(() => {
+      return api.quotes.setPersonPolicy(actor, policy);
+    }, {
+      saved: 'replies:quote.policy.saved',
+      notSaved: 'replies:quote.policy.notSaved',
+    });
   };
 
   return (
@@ -77,39 +66,7 @@ const ActorsSettingsQuotePolicy = ({
 };
 
 ActorsSettingsQuotePolicy.propTypes = {
-  actor: ActorType.isRequired,
-  read: PropTypes.func.isRequired,
-  alertSuccess: PropTypes.func.isRequired,
-  alertError: PropTypes.func.isRequired,
+  namespace: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (namespace) => {
-  return (state) => {
-    return {
-      actor: state[namespace][namespace].current,
-    };
-  };
-};
-
-const mapDispatchToProps = (namespace) => {
-  return (dispatch) => {
-    return {
-      read: (actor) => {
-        return dispatch(actions[namespace].read(utils.node.readKeyOf(actor), namespace));
-      },
-      alertSuccess: (message) => {
-        return dispatch(actions.app.alert.success(message));
-      },
-      alertError: (message) => {
-        return dispatch(actions.app.alert.error(message));
-      },
-    };
-  };
-};
-
-export default (namespace) => {
-  return connect(
-    mapStateToProps(namespace),
-    mapDispatchToProps(namespace),
-  )(ActorsSettingsQuotePolicy);
-};
+export default forNamespace(ActorsSettingsQuotePolicy);
