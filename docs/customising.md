@@ -8,10 +8,11 @@ documents.
 ## Contents
 
 1. [Name, description and logo](#name-description-and-logo)
-2. [Themes](#themes)
-3. [Languages](#languages)
-4. [Terms of Service and Privacy Policy](#terms-of-service-and-privacy-policy)
-5. [Where the code is](#where-the-code-is)
+2. [Your own theme, step by step](#your-own-theme-step-by-step)
+3. [Themes](#themes)
+4. [Languages](#languages)
+5. [Terms of Service and Privacy Policy](#terms-of-service-and-privacy-policy)
+6. [Where the code is](#where-the-code-is)
 
 ## Name, description and logo
 
@@ -40,6 +41,129 @@ does):
 | `icon-180.png` | On an iPhone's or an iPad's home screen |
 | `icon-192.png`, `icon-512.png` | On an Android home screen, and for the installed app, named in `manifest.json` |
 | `manifest.json` | The installed app's name and icons |
+
+## Your own theme, step by step
+
+A theme of your own changes the logo, the colours, and the words of the
+home, join and contact pages, and takes everything else from the default
+theme, so that it keeps up with anahita-web. These steps make one called
+`mysite`; [Themes](#themes) below has each part in full.
+
+With a recipe from Anahita Recipes, the theme is the recipe's `web/theme/`
+in place of `src/assets/mysite`, its logo and pictures go in `web/brand/`,
+and `make web` builds it.
+
+1. **A directory of its own,** with an `index.js` that takes the default
+   theme and replaces only what is yours. Begin with nothing replaced, and
+   add each part as you make it:
+
+   ```sh
+   mkdir -p src/assets/mysite/media/logo src/assets/mysite/pages src/assets/mysite/styles
+   ```
+
+   ```js
+   // src/assets/mysite/index.js
+   import base from '../default';
+   import logo from './media/logo';
+   import pages from './pages';
+   import styles from './styles';
+
+   export default {
+     ...base,
+     logo,
+     pages,
+     styles,
+   };
+   ```
+
+2. **The logo,** an SVG if you have one, in `media/logo/`, with an
+   `index.js` naming it for light mode (`color`) and dark (`white`). One
+   file can serve both when it reads on either: a thin white ring keeps a
+   dark drawing clear on a dark page.
+
+   ```js
+   // src/assets/mysite/media/logo/index.js
+   import logo from './logo.svg';
+
+   export default {
+     color: logo,
+     white: logo,
+   };
+   ```
+
+3. **The colours:** `styles/index.js` takes the default theme's styles and
+   replaces the two main colours, one pair for light mode and one for dark.
+   Choose a `primary` that white text reads on, at 4.5 to 1 or more; dark
+   mode's are light mode's, lightened until they read on a dark page. The
+   pairs in `src/styles/palettes.js` have been tried. People can still
+   choose another palette for themselves, under Colours.
+
+   ```js
+   // src/assets/mysite/styles/index.js
+   import base from '../../default/styles';
+
+   const COLOURS = {
+     light: { primary: '#0F5257', secondary: '#B87333' },
+     dark: { primary: '#20B0BB', secondary: '#CA8240' },
+   };
+
+   const global = (params) => {
+     const styles = base.global(params);
+     const { primary, secondary } = COLOURS[params.prefersDarkMode ? 'dark' : 'light'];
+     return {
+       ...styles,
+       palette: {
+         ...styles.palette,
+         primary: { main: primary },
+         secondary: { main: secondary },
+       },
+     };
+   };
+
+   export default { global };
+   ```
+
+4. **The home page's words,** in `pages/home.md`: what the site is for and
+   who looks after it. A line of `---` puts what follows in a narrow column
+   beside it, where a list of handles becomes rows with the networks' icons
+   ([A home page of your own](#a-home-page-of-your-own)).
+
+   ```markdown
+   # Hello there!
+
+   This site is for the people of our library: its readers, its staff and
+   its friends. You need an invitation to join; anybody may follow its
+   public profiles from Mastodon or Bluesky.
+
+   ---
+
+   ## Stay in touch
+
+   - **Fediverse** [@library@example.org](/@library)
+   - **Bluesky** [@example.org](https://bsky.app/profile/example.org)
+   ```
+
+5. **The join and contact pages:** copy `join.md` and `contact.md` from
+   `src/assets/default/pages/`, say in them how your site is joined and
+   reached, and name all three pages in `pages/index.js`:
+
+   ```js
+   // src/assets/mysite/pages/index.js
+   import contact from './contact.md';
+   import join from './join.md';
+   import home from './home.md';
+
+   export default { contact, join, home };
+   ```
+
+6. **The picture of a shared link:** your own
+   `public/statics/media/ogimage.jpg`, 1200 by 630 pixels. With a recipe,
+   `web/brand/og.jpg`.
+7. **Build it, and look at it:** set `REACT_APP_ASSETS=mysite` in
+   `.env.local` and run `yarn start`. Look at the home page signed out, in
+   light and dark mode (your system's setting) and as narrow as a mobile.
+   Then build it for the site with the same setting
+   ([Building](deploying.md#building)).
 
 ## Themes
 
@@ -102,7 +226,9 @@ a line that links to a handle is a row with the network's icon:
 ```markdown
 - **Fediverse** [@ana@example.org](/@ana)
 - **Bluesky** [@example.org](https://bsky.app/profile/example.org)
-``` A theme can take everything else from the default one and change only what is
+```
+
+A theme can take everything else from the default one and change only what is
 its own:
 
 ```js

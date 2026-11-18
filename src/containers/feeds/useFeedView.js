@@ -4,8 +4,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 // How a feed is laid out on a wide screen: one post under another, or in
 // columns. The choice is the viewer's, kept in their browser, one for the
 // feeds and another for profiles, so that columns on Home leave profiles in
-// one (the user, 2026-11-09). Each starts as one column. On a narrow screen
-// there is one column either way.
+// one (the user, 2026-11-09). Each starts as the site's choice,
+// REACT_APP_FEED_VIEW (`stream` or `columns`), one column when it has made
+// none (roadmap row 139). On a narrow screen there is one column either way.
 export const STREAM = 'stream';
 export const COLUMNS = 'columns';
 export const FEEDS = 'feeds';
@@ -16,11 +17,18 @@ const VIEW_KEYS = {
   [PROFILES]: 'profile.feedView',
 };
 
+// The site's default, read when a view is first needed, so that a test can
+// set it.
+export const siteView = () => {
+  return process.env.REACT_APP_FEED_VIEW === COLUMNS ? COLUMNS : STREAM;
+};
+
 const rememberedView = (key) => {
   try {
-    return window.localStorage.getItem(key) === COLUMNS ? COLUMNS : STREAM;
+    const kept = window.localStorage.getItem(key);
+    return kept === COLUMNS || kept === STREAM ? kept : siteView();
   } catch (e) {
-    return STREAM;
+    return siteView();
   }
 };
 

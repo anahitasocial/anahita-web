@@ -65,6 +65,23 @@ describe('the views of a feed', () => {
       expect(seen.columns).toBe(false);
     });
 
+    it('starts in columns where the site chose them', () => {
+      vi.stubEnv('REACT_APP_FEED_VIEW', 'columns');
+      wide(true);
+      draw(<Probe />);
+      expect(seen.columns).toBe(true);
+      vi.unstubAllEnvs();
+    });
+
+    it('keeps the viewer\'s one column over the site\'s columns', () => {
+      vi.stubEnv('REACT_APP_FEED_VIEW', 'columns');
+      window.localStorage.setItem('home.feedView', STREAM);
+      wide(true);
+      draw(<Probe />);
+      expect(seen.view).toBe(STREAM);
+      vi.unstubAllEnvs();
+    });
+
     it('keeps the choice for next time', () => {
       wide(true);
       draw(<Probe />);

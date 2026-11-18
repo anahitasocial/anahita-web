@@ -1350,7 +1350,8 @@ are about, what to leave out. The server's side is in the services'
    vertical tabs on Home and in the header on a profile, lays posts out one
    under another or in columns. The choice is kept in the browser, one for
    the feeds (`home.feedView`) and one for profiles (`profile.feedView`), so
-   that columns on Home leave profiles in one; each starts as one column
+   that columns on Home leave profiles in one; each starts as the site
+   chose, `REACT_APP_FEED_VIEW`, one column unless it chose columns
    (`containers/feeds/useFeedView.js`). On a narrow screen there is one
    column, and no buttons.
 4. **One set of cards.** `containers/feed/components/Items.jsx` draws a feed's

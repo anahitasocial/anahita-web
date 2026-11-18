@@ -21,6 +21,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 3. **Likes, on your own profile:** a tab after Tagged with the posts you
    liked, the latest liked first, seen by you alone, as on Bluesky. Needs
    Anahita Services from `main` (Embryo) or the next release.
+4. **A site's own layout of feeds and profiles:** `REACT_APP_FEED_VIEW=columns`
+   starts them in columns on a wide screen, until a visitor chooses.
+5. **Your own theme, step by step,** in `docs/customising.md`: your logo,
+   colours, home page and join and contact pages, then build.
 
 ## v1.3.6 Birth, 2026-11-16
 
