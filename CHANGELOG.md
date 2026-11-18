@@ -16,6 +16,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    or copied, and from a click on its words, as a post's card opens.
    Selecting its words to copy them opens nothing, nor does a click on a
    link, a name or a button in it.
+2. **Admins' usernames:** under each name in a profile's admins card and
+   in Settings › Admins.
 
 ## v1.3.6 Birth, 2026-11-16
 

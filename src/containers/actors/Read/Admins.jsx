@@ -13,6 +13,7 @@ import utils from '../../../utils';
 import i18n from '../../../languages';
 
 const { getActorName, getURL } = utils.node;
+const { displayHandle } = utils.federation;
 
 const ActorBodyAdmins = (props) => {
   const {
@@ -55,6 +56,11 @@ const ActorBodyAdmins = (props) => {
               </ListItemAvatar>
               <ListItemText
                 primary={getActorName(admin)}
+                secondary={displayHandle(admin)}
+                slotProps={{
+                  primary: { noWrap: true },
+                  secondary: { noWrap: true },
+                }}
               />
             </ListItemButton>
           );

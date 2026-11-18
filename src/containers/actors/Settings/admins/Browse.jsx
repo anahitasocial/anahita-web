@@ -22,6 +22,7 @@ import i18n from '../../../../languages';
 import utils from '../../../../utils';
 
 const { getActorName } = utils.node;
+const { displayHandle } = utils.federation;
 
 const ActorsSettingsAdminsBrowse = ({
   browseList,
@@ -84,6 +85,11 @@ const ActorsSettingsAdminsBrowse = ({
               </ListItemAvatar>
               <ListItemText
                 primary={getActorName(admin)}
+                secondary={displayHandle(admin)}
+                slotProps={{
+                  primary: { noWrap: true },
+                  secondary: { noWrap: true },
+                }}
               />
               <ListItemSecondaryAction>
                 <IconButton
