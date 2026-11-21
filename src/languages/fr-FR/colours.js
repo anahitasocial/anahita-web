@@ -4,4 +4,7 @@ export default {
   open: 'Couleurs',
   reset: 'Réinitialiser',
   site: 'Les couleurs du site',
+  corners: 'Coins',
+  square: 'Carrés',
+  cornersOf: 'Coins de {{radius}} pixels',
 };

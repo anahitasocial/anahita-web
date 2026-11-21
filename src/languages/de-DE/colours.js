@@ -4,4 +4,7 @@ export default {
   open: 'Farben',
   reset: 'Zurücksetzen',
   site: 'Die Farben dieser Website',
+  corners: 'Ecken',
+  square: 'Eckig',
+  cornersOf: 'Ecken mit {{radius}} Pixeln',
 };

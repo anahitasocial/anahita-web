@@ -11,6 +11,7 @@ import AsideIcon from '@mui/icons-material/AlternateEmail';
 import FediverseIcon from '@mui/icons-material/Hub';
 
 import BlueskyIcon from '../../../components/BlueskyIcon';
+import rounder from '../../../utils/corners';
 
 // Which network a link to a handle is on, by its picture, or none.
 const networkIcon = (address = '') => {
@@ -77,7 +78,7 @@ const Part = ({
           '& p, & li': { typography: 'body2', color: 'text.secondary' },
           '& p': { mt: 0, mb: 2 },
           '& a': { color: 'primary.main', overflowWrap: 'anywhere' },
-          '& img': { maxWidth: '100%', borderRadius: 2 },
+          '& img': { maxWidth: '100%', borderRadius: rounder(2) },
           ...(rows && {
             '& ul': { listStyle: 'none', p: 0, m: 0 },
             '& li strong': {

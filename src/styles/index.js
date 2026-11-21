@@ -123,7 +123,13 @@ const ofChosen = (palette, prefersDarkMode) => {
     {};
 };
 
-export default (prefersDarkMode, palette) => {
+// How round the corners are, in pixels: somebody's own choice or the
+// site's (roadmap row 168); undefined leaves the theme's, Material UI's 4.
+const ofCorners = (radius) => {
+  return typeof radius === 'number' && radius >= 0 ? { shape: { borderRadius: radius } } : {};
+};
+
+export default (prefersDarkMode, palette, corners) => {
   const style = styles.global({
     colors: {
       red,
@@ -142,5 +148,6 @@ export default (prefersDarkMode, palette) => {
     ...style,
     palette: { ...base.palette, ...style.palette, ...ofChosen(palette, prefersDarkMode) },
     components,
+    ...ofCorners(corners),
   });
 };

@@ -8,7 +8,7 @@ import App from './App';
 import SharedVideoUpload from './media/Composer/Video/SharedVideoUpload';
 import Routes from '../routes';
 import styles from '../styles';
-import ColourPicker, { ColourPickerContext, savedPalette } from '../components/ColourPicker';
+import ColourPicker, { ColourPickerContext, savedCorners, savedPalette } from '../components/ColourPicker';
 import contentChoices from '../utils/contentChoices';
 
 // The viewer's choices for content warnings (anahita-services row 122,
@@ -37,6 +37,14 @@ const Themed = ({ store }) => {
   const picking = useSelector((state) => { return state.session.isAuthenticated; });
   const [chosen, setChosen] = React.useState(savedPalette);
   const palette = picking ? chosen : undefined;
+  // How round the corners are: the ones this person chose, as their colours
+  // are, or the site's (CORNER_RADIUS, through NodeInfo; roadmap row 168).
+  const [chosenCorners, setChosenCorners] = React.useState(savedCorners);
+  const siteCorners = useSelector((state) => {
+    const { metadata } = state.app.nodeInfo;
+    return metadata && typeof metadata.cornerRadius === 'number' ? metadata.cornerRadius : undefined;
+  });
+  const corners = picking && chosenCorners !== undefined ? chosenCorners : siteCorners;
   // Where the picker opens from: the Colours item, which its popup opens
   // beside on a wider screen; null while it is closed.
   const [picker, setPicker] = React.useState(null);
@@ -44,9 +52,9 @@ const Themed = ({ store }) => {
 
   const theme = React.useMemo(
     () => {
-      return styles(prefersDarkMode, palette);
+      return styles(prefersDarkMode, palette, corners);
     },
-    [prefersDarkMode, palette],
+    [prefersDarkMode, palette, corners],
   );
 
   return (
@@ -64,7 +72,9 @@ const Themed = ({ store }) => {
         {picking && (
         <ColourPicker
           current={palette}
+          corners={chosenCorners}
           onChoose={setChosen}
+          onChooseCorners={setChosenCorners}
           open={Boolean(picker)}
           anchorEl={picker}
           onClose={() => { setPicker(null); }}

@@ -7,6 +7,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 import i18n from '../languages';
+import rounder from '../utils/corners';
 
 const KEY = 'anahita-cookie-notice';
 
@@ -60,7 +61,7 @@ const CookieNotice = () => {
         gap: 2,
         px: 2,
         py: 1,
-        borderRadius: 2,
+        borderRadius: rounder(2),
       }}
     >
       <Typography variant="body2" sx={{ flex: 1, minWidth: 0 }}>

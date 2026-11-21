@@ -4,4 +4,7 @@ export default {
   open: 'Cores',
   reset: 'Redefinir',
   site: 'As cores do site',
+  corners: 'Cantos',
+  square: 'Retos',
+  cornersOf: 'Cantos de {{radius}} pixels',
 };

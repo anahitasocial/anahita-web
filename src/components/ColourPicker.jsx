@@ -15,6 +15,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import palettes from '../styles/palettes';
 import i18n from '../languages';
+import rounder from '../utils/corners';
 
 // The palettes under their groups (Bauhaus, Mid-Century…), in the order of
 // the list.
@@ -46,6 +47,36 @@ const save = (id) => {
       window.localStorage.setItem(KEY, id);
     } else {
       window.localStorage.removeItem(KEY);
+    }
+  } catch {
+    // Not remembered, which is all.
+  }
+};
+
+// How round the corners are, for somebody who chose (roadmap row 168): five
+// steps of four pixels, square to round. The site's own (CORNER_RADIUS) may
+// be any of 0 to 24, and is what everybody else sees.
+export const CORNER_STEPS = [0, 4, 8, 12, 16];
+
+const CORNERS_KEY = 'anahita-corners';
+
+// The corners chosen in this browser, or undefined for the site's own.
+export const savedCorners = () => {
+  try {
+    const radius = Number(window.localStorage.getItem(CORNERS_KEY));
+    const kept = window.localStorage.getItem(CORNERS_KEY) !== null;
+    return kept && CORNER_STEPS.includes(radius) ? radius : undefined;
+  } catch {
+    return undefined;
+  }
+};
+
+const saveCorners = (radius) => {
+  try {
+    if (radius === undefined) {
+      window.localStorage.removeItem(CORNERS_KEY);
+    } else {
+      window.localStorage.setItem(CORNERS_KEY, String(radius));
     }
   } catch {
     // Not remembered, which is all.
@@ -87,7 +118,7 @@ Swatch.propTypes = {
 // above it shows what each palette does; on a wider screen, a small card
 // beside the left menu, where each swatch says its name when pointed at.
 const Palettes = ({
-  current = undefined, choose, onClose, mobile,
+  current = undefined, corners = undefined, choose, chooseCorners, onClose, mobile,
 }) => {
   const size = mobile ? 40 : 32;
   return (
@@ -154,11 +185,69 @@ const Palettes = ({
           );
         })}
       </Box>
+      {/* The corners, under the colours: a square drawn with each, the
+          chosen one ringed as a palette is. None is while the site's own
+          are kept. */}
+      <Box sx={{ px: 2, mt: 1 }}>
+        <Typography variant="overline" color="text.secondary" component="p" sx={{ lineHeight: 2 }}>
+          {i18n.t('colours:corners')}
+        </Typography>
+        <Box sx={{
+          display: 'flex', gap: 2, justifyContent: 'space-between', py: 1, px: 1,
+        }}
+        >
+          {CORNER_STEPS.map((radius) => {
+            const selected = corners === radius;
+            const label = radius === 0 ?
+              i18n.t('colours:square') :
+              i18n.t('colours:cornersOf', { radius });
+            const step = (
+              <ButtonBase
+                key={radius}
+                aria-label={label}
+                aria-pressed={selected}
+                onClick={() => { chooseCorners(radius); }}
+                sx={{
+                  borderRadius: `${radius}px`,
+                  flexShrink: 0,
+                  outline: selected ? 2 : 0,
+                  outlineColor: 'text.primary',
+                  outlineOffset: 3,
+                }}
+              >
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'block',
+                    width: size,
+                    height: size,
+                    borderRadius: `${radius}px`,
+                    border: 2,
+                    borderColor: 'primary.main',
+                  }}
+                />
+              </ButtonBase>
+            );
+            return mobile ? step : (
+              <Tooltip key={radius} title={label} placement="top">
+                {step}
+              </Tooltip>
+            );
+          })}
+        </Box>
+      </Box>
       <Box sx={{
         display: 'flex', justifyContent: 'flex-end', px: 1, py: 1,
       }}
       >
-        <Button size="small" onClick={() => { choose(undefined); }} disabled={!current}>
+        <Button
+          size="small"
+          onClick={() => {
+            choose(undefined);
+            chooseCorners(undefined);
+          }}
+          disabled={!current && corners === undefined}
+        >
           {i18n.t('colours:reset')}
         </Button>
       </Box>
@@ -168,7 +257,9 @@ const Palettes = ({
 
 Palettes.propTypes = {
   current: PropTypes.object,
+  corners: PropTypes.number,
   choose: PropTypes.func.isRequired,
+  chooseCorners: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   mobile: PropTypes.bool.isRequired,
 };
@@ -176,15 +267,26 @@ Palettes.propTypes = {
 // Colours of one's own, for somebody signed in: Colours in the left menu
 // opens the palettes (docs/plans/colours.md), and the one chosen is the
 // app's colours at once, in light mode and dark, kept in this browser.
-// Reset goes back to the site's own. It does not dim or hold the page, which can be scrolled
+// Under them, how round the corners are. Reset goes back to the site's own,
+// colours and corners. It does not dim or hold the page, which can be scrolled
 // with it open; a click or a tap outside it closes it.
 const ColourPicker = ({
-  current = undefined, onChoose, open, anchorEl = null, onClose,
+  current = undefined,
+  corners = undefined,
+  onChoose,
+  onChooseCorners,
+  open,
+  anchorEl = null,
+  onClose,
 }) => {
   const mobile = useMediaQuery((theme) => { return theme.breakpoints.down('sm'); });
   const choose = (palette) => {
     save(palette && palette.id);
     onChoose(palette);
+  };
+  const chooseCorners = (radius) => {
+    saveCorners(radius);
+    onChooseCorners(radius);
   };
   // Outside clicks close it from just after it opens: the click that opened
   // it is still on its way to the page when it opens, and would close it.
@@ -202,7 +304,14 @@ const ColourPicker = ({
   const body = (
     <ClickAwayListener onClickAway={listening ? onClose : () => {}}>
       <Box sx={{ display: 'contents' }}>
-        <Palettes current={current} choose={choose} onClose={onClose} mobile={mobile} />
+        <Palettes
+          current={current}
+          corners={corners}
+          choose={choose}
+          chooseCorners={chooseCorners}
+          onClose={onClose}
+          mobile={mobile}
+        />
       </Box>
     </ClickAwayListener>
   );
@@ -243,7 +352,7 @@ const ColourPicker = ({
       <Paper
         elevation={0}
         sx={{
-          borderRadius: 3,
+          borderRadius: rounder(3),
           border: 1,
           borderColor: 'divider',
           boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)',
@@ -257,7 +366,10 @@ const ColourPicker = ({
 
 ColourPicker.propTypes = {
   current: PropTypes.object,
+  // The corners chosen, in pixels, or undefined for the site's own.
+  corners: PropTypes.number,
   onChoose: PropTypes.func.isRequired,
+  onChooseCorners: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   // The Colours item it opens beside, on a wider screen.
   anchorEl: PropTypes.object,

@@ -5,6 +5,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 import i18n from '../../../languages';
+import rounder from '../../../utils/corners';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
 import { progressOf, wordsOf } from './Video/useVideoUpload';
 
@@ -33,7 +34,7 @@ const VideoOnItsWay = () => {
         gap: 1,
         px: 2,
         py: 1,
-        borderRadius: 3,
+        borderRadius: rounder(3),
         maxWidth: 'calc(100vw - 32px)',
       }}
     >

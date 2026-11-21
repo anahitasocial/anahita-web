@@ -31,6 +31,7 @@ import BlueskyIcon from '../../../components/BlueskyIcon';
 import HeaderMeta from '../../../components/HeaderMeta';
 import i18n from '../../../languages';
 import siteLogo from '../../../utils/siteLogo';
+import rounder from '../../../utils/corners';
 import Hero from './Hero';
 import Welcome from './Welcome';
 
@@ -137,7 +138,7 @@ const AnahitasOwn = ({ reasons, ruled }) => {
                     py: 2,
                     border: 1,
                     borderColor: 'divider',
-                    borderRadius: 3,
+                    borderRadius: rounder(3),
                     color: 'text.primary',
                     transition: 'border-color 150ms',
                     '&:hover': { borderColor: 'text.secondary' },

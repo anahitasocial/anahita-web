@@ -9,6 +9,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ## Embryo
 
+### Added
+
+1. **Rounder or squarer corners.** The site's corners follow
+   `CORNER_RADIUS` in anahita-services, and under Colours somebody signed in
+   may choose their own: square, or 4, 8, 12 or 16 pixels. Reset goes back to
+   the site's.
+
 ### Fixed
 
 1. **A post on the screen twice shows one like.** Liking a post in a repost

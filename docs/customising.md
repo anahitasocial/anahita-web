@@ -256,6 +256,15 @@ kept in their browser, and Reset goes back to the theme's. A palette chosen
 replaces the theme's `primary` and `secondary` only
 ([Anahita's colours](plans/colours.md#the-colour-picker-2026-10-26)).
 
+**Corners.** How round the corners of cards, dialogs, menus, fields and
+buttons are is the site's, set in anahita-services by `CORNER_RADIUS`, any
+whole number of pixels from 0 (square) to 24, and read from NodeInfo as
+`cornerRadius`; unset, it is 4, Material UI's own, and the theme's
+`shape.borderRadius` stands. Under the palettes in Colours, somebody signed in
+may choose their own of five, 0, 4, 8, 12 or 16, kept in their browser as
+the palette is; Reset goes back to the site's, colours and corners. Profile
+photos stay round, and chips and the small labels on photos stay pills.
+
 ## Languages
 
 The app is in seven languages. Five are bases, with every string; two are

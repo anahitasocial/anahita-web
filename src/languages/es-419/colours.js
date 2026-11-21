@@ -4,4 +4,7 @@ export default {
   open: 'Colores',
   reset: 'Restablecer',
   site: 'Los colores del sitio',
+  corners: 'Esquinas',
+  square: 'Rectas',
+  cornersOf: 'Esquinas de {{radius}} píxeles',
 };
