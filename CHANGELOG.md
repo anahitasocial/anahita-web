@@ -11,7 +11,11 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Added
 
-1. **Rounder or squarer corners.** The site's corners follow
+1. **A bar at the foot of the screen on a mobile:** Home, Search, a new
+   post, Notifications and your profile photo. The top bar keeps the menu
+   and the site's logo. + posts to the profile on the screen when you may
+   post there, and else to your own.
+2. **Rounder or squarer corners.** The site's corners follow
    `CORNER_RADIUS` in anahita-services, and under Colours somebody signed in
    may choose their own: square, or 4, 8, 12 or 16 pixels. Reset goes back to
    the site's.

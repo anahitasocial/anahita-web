@@ -47,7 +47,7 @@ const NotificationButton = ({ count, setUnread, resetUnread }) => {
 
   if (mobile) {
     return (
-      <IconButton component={Link} to="/notifications" color="inherit" size="small" aria-label={label}>
+      <IconButton component={Link} to="/notifications" color="inherit" aria-label={label}>
         {bell}
       </IconButton>
     );

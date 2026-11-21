@@ -4,7 +4,9 @@ import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Fab from '@mui/material/Fab';
+import IconButton from '@mui/material/IconButton';
 import AddIcon from '@mui/icons-material/Add';
+import PropTypes from 'prop-types';
 
 import ShortComposer from './Short';
 import { useSharedVideoUpload } from './Video/SharedVideoUpload';
@@ -25,7 +27,12 @@ const { node } = utils;
 // the long one; a profile that takes only long writing opens the long one at
 // once. What either offers is what that profile takes from the viewer
 // (`authorized.composers`).
-const ComposeButton = () => {
+//
+// On a mobile it is the + in the middle of the bar at the foot of the
+// screen instead (`inBar`, roadmap row 166), on every page: it posts to the
+// profile on the screen when the viewer may post to it, and else to their
+// own.
+const ComposeButton = ({ inBar = false }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
   const onScreen = useSelector((state) => { return state.composeTarget; });
 
@@ -57,17 +64,20 @@ const ComposeButton = () => {
   const isSending = upload && upload.phase === 'uploading';
   const isPreparing = upload && upload.phase === 'processing';
 
-  const target = onScreen && onScreen.home ? own : onScreen;
-
-  if (!target || !target.id) {
-    return null;
+  let target = onScreen && onScreen.home ? own : onScreen;
+  if (inBar && (!target || !target.id)) {
+    target = own;
   }
 
-  const composers = node.getComposers(target);
+  const composers = target && target.id ? node.getComposers(target) : [];
   // What the short composer posts, and what the long one writes (kinds.js).
   const short = kinds.forComposer('short', composers);
   const long = kinds.forComposer('long', composers);
-  if (short.length === 0 && long.length === 0) {
+  const nothing = short.length === 0 && long.length === 0;
+
+  // The bar keeps its + while its profile is read, so that its five stay
+  // where they are.
+  if (nothing && !inBar) {
     return null;
   }
 
@@ -76,41 +86,16 @@ const ComposeButton = () => {
     setIsLongOpen(true);
   };
 
-  return (
+  const open = () => {
+    if (short.length > 0) {
+      setIsShortOpen(true);
+    } else {
+      expand();
+    }
+  };
+
+  const composersOf = !nothing && (
     <>
-      <Box
-        sx={{
-          position: 'fixed',
-          right: { xs: 16, sm: 24 },
-          bottom: { xs: 'calc(16px + env(safe-area-inset-bottom))', sm: 24 },
-          zIndex: (theme) => { return theme.zIndex.speedDial; },
-        }}
-      >
-        <Fab
-          color="primary"
-          size="large"
-          aria-label={i18n.t('composer:newPost')}
-          onClick={() => {
-            if (short.length > 0) {
-              setIsShortOpen(true);
-            } else {
-              expand();
-            }
-          }}
-        >
-          <AddIcon fontSize="large" />
-        </Fab>
-        {(isSending || isPreparing) &&
-          <CircularProgress
-            size={68}
-            variant={isSending ? 'determinate' : 'indeterminate'}
-            value={isSending ? upload.percent : undefined}
-            aria-label={isSending ? progressOf(upload) : i18n.t(wordsOf(upload.kind, 'upload.processing'))}
-            sx={{
-              position: 'absolute', top: -6, left: -6, pointerEvents: 'none',
-            }}
-          />}
-      </Box>
       {short.length > 0 &&
         <ShortComposer
           key={`compose-short-${target.id}`}
@@ -135,6 +120,73 @@ const ComposeButton = () => {
         />}
     </>
   );
+
+  if (inBar) {
+    return (
+      <>
+        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
+          <IconButton
+            color="inherit"
+            disabled={nothing}
+            aria-label={i18n.t('composer:newPost')}
+            onClick={open}
+          >
+            <AddIcon />
+          </IconButton>
+          {(isSending || isPreparing) &&
+            <CircularProgress
+              size={40}
+              variant={isSending ? 'determinate' : 'indeterminate'}
+              value={isSending ? upload.percent : undefined}
+              aria-label={isSending ? progressOf(upload) : i18n.t(wordsOf(upload.kind, 'upload.processing'))}
+              sx={{
+                position: 'absolute', top: 0, left: 0, pointerEvents: 'none',
+              }}
+            />}
+        </Box>
+        {composersOf}
+      </>
+    );
+  }
+
+  return (
+    <>
+      <Box
+        sx={{
+          position: 'fixed',
+          right: { xs: 16, sm: 24 },
+          bottom: { xs: 'calc(16px + env(safe-area-inset-bottom))', sm: 24 },
+          zIndex: (theme) => { return theme.zIndex.speedDial; },
+        }}
+      >
+        <Fab
+          color="primary"
+          size="large"
+          aria-label={i18n.t('composer:newPost')}
+          onClick={open}
+        >
+          <AddIcon fontSize="large" />
+        </Fab>
+        {(isSending || isPreparing) &&
+          <CircularProgress
+            size={68}
+            variant={isSending ? 'determinate' : 'indeterminate'}
+            value={isSending ? upload.percent : undefined}
+            aria-label={isSending ? progressOf(upload) : i18n.t(wordsOf(upload.kind, 'upload.processing'))}
+            sx={{
+              position: 'absolute', top: -6, left: -6, pointerEvents: 'none',
+            }}
+          />}
+      </Box>
+      {composersOf}
+    </>
+  );
+};
+
+ComposeButton.propTypes = {
+  // The + in the bar at the foot of a mobile's screen, not the round
+  // button at the bottom right.
+  inBar: PropTypes.bool,
 };
 
 export default ComposeButton;

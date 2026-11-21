@@ -823,7 +823,10 @@ tabs after it.
 [plans/done/compose-button.md](plans/done/compose-button.md)), on the home page and on
 a profile the viewer may post to, and nowhere else. The page says where it
 posts while it is open (`reducers/composeTarget.js`): from home to the
-viewer's own profile, from a profile to that one. It opens the short
+viewer's own profile, from a profile to that one. On a mobile it is the +
+in the middle of the bar at the foot of the screen, on every page: to the
+profile on the screen when the viewer may post to it, and else to their
+own. It opens the short
 composer, "New post" (`Composer/Short.jsx`), whose Long post opens the
 long one (`Composer/Long.jsx`). The short composer is two steps in one
 dialog, walked through in turn (roadmap row 114): the post itself, its
@@ -1302,8 +1305,8 @@ feed).
 
 ### Notifications
 
-The bell in the top bar says how many notifications are unread, and leads
-to `/notifications`, the list of them. What the services tell, and to
+The bell in the top bar, on a mobile in the bar at its foot, says how many
+notifications are unread, and leads to `/notifications`, the list of them. What the services tell, and to
 whom, is in anahita-services' `docs/notifications.md`; none is ever
 emailed.
 
@@ -2053,10 +2056,11 @@ draws nothing (`utils/federation.js#isAbsent`).
 1. **The box in the top bar** (`components/SearchBox.jsx`) is an MUI
    `Autocomplete` in free-solo mode. Searching opens the search page
    through the router, without reloading the app, and marks the search as
-   typed (see Looking somebody up, above). **On a mobile** it is a
-   magnifying glass beside the bell (`containers/App.jsx`), which opens the
-   box across the bar, focused, with Back in place of the menu; the bell and
-   the profile photo come back when the search page is left.
+   typed (see Looking somebody up, above). **On a mobile** it is the
+   magnifying glass in the bar at the foot of the screen (see The bar on a
+   mobile, below), which opens the box across the top bar, focused, with
+   Back in place of the menu; the logo comes back when the search page is
+   left.
 2. **Recent searches** (`utils/recentSearches.js`): focused while empty,
    the box lists the last ten searches, newest first, each with the tab it
    was run under; typing narrows them; each can be forgotten, or all at
@@ -2152,6 +2156,21 @@ place.
 
 Every item in the menus on posts, feed items, replies and profiles has an
 icon before its words, through `components/MenuItemLabel.jsx`.
+
+### The bar on a mobile
+
+Below 600 pixels (`breakpoints.down('sm')`), the app's main places are in a
+bar at the foot of the screen (`containers/MobileBar.jsx`, roadmap row 166):
+Home, Search, + (a new post), Notifications and the viewer's own profile
+photo, five, with + in the middle. Icons alone, each with its name for a
+screen reader; the one for the page that is open is in the text's colour,
+the others quieter. A visitor has Home, Search and Sign in; a visitor on a
+members-only site has no bar, only the way in. The top bar keeps ≡, the
+whole menu, and the site's logo in its middle. The bar leaves room under it
+for the phone's home bar (`env(safe-area-inset-bottom)`), as anahita-mobile
+needs, and the page leaves room for both at its foot. From 600 pixels up,
+the top bar holds the search box, the bell and the profile photo, and + is
+the round button at the bottom right.
 
 ### Quote posts
 

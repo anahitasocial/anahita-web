@@ -32,6 +32,7 @@ import actions from '../actions';
 import NotificationButton from './notifications/Button';
 import ComposeButton from './media/Composer/ComposeButton';
 import VideoOnItsWay from './media/Composer/VideoOnItsWay';
+import MobileBar, { MOBILE_BAR_HEIGHT } from './MobileBar';
 import adminTabs from './admin/tabs';
 import visitor from '../utils/visitor';
 import { Admin as ADMIN } from '../constants';
@@ -96,6 +97,17 @@ const useStyles = makeStyles()((theme) => {
     contentUnderButton: {
       paddingBottom: theme.spacing(12),
     },
+    // Room for the bar at the foot of a mobile's screen, and the phone's
+    // home bar under it.
+    contentAboveBar: {
+      paddingBottom: `calc(${MOBILE_BAR_HEIGHT}px + ${theme.spacing(2)} + env(safe-area-inset-bottom))`,
+    },
+    // The site's logo in the middle of a mobile's top bar.
+    centredLogo: {
+      position: 'absolute',
+      left: '50%',
+      transform: 'translateX(-50%)',
+    },
     // Below lg the page runs edge to edge; from lg up the Container's own
     // maxWidth and gutters take over.
     container: {
@@ -150,6 +162,11 @@ const App = ({
   // On the home page and a profile the viewer may post to (roadmap row 99).
   const composeTarget = useSelector((state) => { return state.composeTarget; });
   const hasComposeButton = isAuthenticated && Boolean(composeTarget);
+  // On a mobile, Home, Search, +, the bell and the viewer are in a bar at the
+  // foot of the screen (roadmap row 166), and the top bar keeps the menu and
+  // the logo. Not for a visitor on a members-only site, who has only the way
+  // in.
+  const hasBar = mobile && !isShutOut;
 
   useEffect(() => {
     if (!hasAdminArea) {
@@ -250,7 +267,11 @@ const App = ({
           {!isShutOut && (!mobile || searching) &&
             <SearchBox autoFocus={mobile && !onSearchPage} />}
           {!(mobile && searching) && <div className={classes.grow} />}
-          {!isShutOut && mobile && !searching &&
+          {hasBar && !searching &&
+            <div className={classes.centredLogo}>
+              <MenuLogo />
+            </div>}
+          {!isShutOut && mobile && !searching && !hasBar &&
             <IconButton
               color="inherit"
               aria-label={i18n.t('search:cTitle')}
@@ -258,8 +279,8 @@ const App = ({
             >
               <SearchIcon />
             </IconButton>}
-          {!(mobile && searching) && isAuthenticated && <NotificationButton />}
-          {!(mobile && searching) &&
+          {!mobile && isAuthenticated && <NotificationButton />}
+          {!(mobile && searching) && !hasBar &&
             <Viewer
               viewer={viewer}
               isAuthenticated={isAuthenticated}
@@ -294,7 +315,13 @@ const App = ({
           {drawer()}
         </Drawer>
       </nav>
-      <main className={`${classes.content} ${hasComposeButton ? classes.contentUnderButton : ''}`}>
+      <main
+        className={[
+          classes.content,
+          hasComposeButton && !hasBar ? classes.contentUnderButton : '',
+          hasBar ? classes.contentAboveBar : '',
+        ].join(' ')}
+      >
         <div className={classes.appBarSpacer} />
         {/*
           `children` must be rendered exactly once. Selecting the layout with
@@ -307,8 +334,15 @@ const App = ({
           {children}
         </Container>
       </main>
-      {hasComposeButton && <ComposeButton />}
-      {!hasComposeButton && <VideoOnItsWay />}
+      {hasComposeButton && !hasBar && <ComposeButton />}
+      {!hasComposeButton && !hasBar && <VideoOnItsWay />}
+      {hasBar &&
+        <MobileBar
+          isAuthenticated={isAuthenticated}
+          viewer={viewer}
+          searching={searching}
+          onSearch={() => { setSearchOpen(true); }}
+        />}
     </div>
   );
 };

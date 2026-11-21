@@ -61,4 +61,8 @@ export default {
     404: '404: Seite nicht gefunden!',
   },
   openMenu: 'Menü öffnen',
+  // The bar at the foot of the screen on a mobile (containers/MobileBar.jsx):
+  // what it is called, and the way to one's own profile.
+  mainNavigation: 'Hauptnavigation',
+  yourProfile: 'Dein Profil',
 };
