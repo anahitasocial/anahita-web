@@ -122,6 +122,18 @@ const add = (namespace) => {
               }));
               return resolve();
             }, (response) => {
+              // 409 is the server saying the viewer likes it already: liked
+              // in another tab, or on a copy of the post this page had not
+              // heard of. The button says so, with no request more
+              // (roadmap row 167).
+              if (response && response.response && response.response.status === 409) {
+                dispatch(addSuccess(namespace)({
+                  results: { data: {} },
+                  child,
+                  node,
+                }));
+                return resolve();
+              }
               dispatch(addFailure(namespace)(response));
               return reject(response);
             }).catch((error) => {

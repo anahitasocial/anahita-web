@@ -82,3 +82,38 @@ describe('a feed when its head is read again', () => {
     expect(prepend(undefined)).toBe(state);
   });
 });
+
+describe('a feed after a like', () => {
+  const original = {
+    id: 1, type: 'node.medium.text-service.note.v1', isLikedByViewer: false, likesCount: 4,
+  };
+  const state = stateWith([
+    original,
+    { id: 2, type: 'node.base.repost-service.repost.v1', parent: { ...original } },
+  ]);
+
+  it('likes the post wherever it is, when it was liked through its repost', () => {
+    const next = feed(state, {
+      type: 'FEED_ACTOR_LIKES_ADD_SUCCESS',
+      node: { ...original, isLikedByViewer: true, likesCount: 5 },
+      child: state.feed_actor.byId[2],
+    });
+
+    expect(next.feed_actor.byId[2].parent).toMatchObject({ isLikedByViewer: true, likesCount: 5 });
+    expect(next.feed_actor.byId[1]).toMatchObject({ isLikedByViewer: true, likesCount: 5 });
+  });
+
+  it('unlikes the repost\'s copy when the post itself was unliked', () => {
+    const liked = feed(state, {
+      type: 'FEED_ACTOR_LIKES_ADD_SUCCESS',
+      node: { ...original, isLikedByViewer: true, likesCount: 5 },
+    });
+    const next = feed(liked, {
+      type: 'FEED_ACTOR_LIKES_DELETE_SUCCESS',
+      node: { ...original, isLikedByViewer: false, likesCount: 4 },
+    });
+
+    expect(next.feed_actor.byId[1]).toMatchObject({ isLikedByViewer: false, likesCount: 4 });
+    expect(next.feed_actor.byId[2].parent).toMatchObject({ isLikedByViewer: false, likesCount: 4 });
+  });
+});

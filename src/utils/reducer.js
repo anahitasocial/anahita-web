@@ -126,6 +126,62 @@ const savedChanged = (list, id, saved) => {
   return { ...list, byId, current };
 };
 
+// The list after the viewer liked a post, or took the like back: the mark
+// and the count on every copy of that post in the list, the post itself and
+// a post a feed item reposts. One post shows twice when it is in the feed
+// and reposted in it too; liking one copy left the other unliked, and
+// liking that one was then refused as liked already (roadmap row 167).
+// Returns the same list when nothing in it changes.
+const likeChanged = (list, node) => {
+  if (!list || !list.byId || !node || !node.id) {
+    return list;
+  }
+
+  const liked = Boolean(node.isLikedByViewer);
+  const marks = { isLikedByViewer: liked };
+  if (typeof node.likesCount === 'number') {
+    marks.likesCount = node.likesCount;
+  }
+  const differs = (copy) => {
+    return Boolean(copy.isLikedByViewer) !== liked ||
+      (marks.likesCount !== undefined && copy.likesCount !== marks.likesCount);
+  };
+
+  const byId = { ...list.byId };
+  let changed = false;
+
+  Object.keys(byId).forEach((key) => {
+    const item = byId[key];
+    if (!item) {
+      return;
+    }
+
+    if (item.id === node.id && differs(item)) {
+      byId[key] = { ...item, ...marks };
+      changed = true;
+    }
+
+    const { parent } = item;
+    if (parent && parent.id === node.id && differs(parent)) {
+      byId[key] = {
+        ...byId[key],
+        parent: { ...parent, ...marks },
+      };
+      changed = true;
+    }
+  });
+
+  if (!changed) {
+    return list;
+  }
+
+  const current = list.current && list.current.id === node.id ?
+    { ...list.current, ...marks } :
+    list.current;
+
+  return { ...list, byId, current };
+};
+
 const deleteItem = (list, item, defaultItem) => {
   const items = {
     ...emptyList(),
@@ -146,4 +202,5 @@ export default {
   deleteItem,
   pinChanged,
   savedChanged,
+  likeChanged,
 };

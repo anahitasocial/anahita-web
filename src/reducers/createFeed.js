@@ -6,6 +6,7 @@ import { Socialgraph as SOCIALGRAPH } from '../constants';
 
 const {
   editItem,
+  likeChanged,
 } = utils.reducer;
 
 export default (namespace) => {
@@ -130,12 +131,17 @@ export default (namespace) => {
         if (hasChild) {
           child.parent = node;
         }
+        // Every other copy of the post too: on its own and reposted, one
+        // post is in a feed twice (roadmap row 167).
         return {
           ...state,
-          [namespace]: editItem(
-            state[namespace],
-            hasChild ? child : node,
-            NODE_DEFAULT,
+          [namespace]: likeChanged(
+            editItem(
+              state[namespace],
+              hasChild ? child : node,
+              NODE_DEFAULT,
+            ),
+            node,
           ),
           isFetching: false,
           success: false,

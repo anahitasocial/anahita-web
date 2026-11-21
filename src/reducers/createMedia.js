@@ -4,6 +4,7 @@ import utils from '../utils';
 
 const {
   editItem,
+  likeChanged,
 } = utils.reducer;
 
 export default (namespace) => {
@@ -23,10 +24,13 @@ export default (namespace) => {
       case `${namespace.toUpperCase()}_LIKES_DELETE_SUCCESS`:
         return {
           ...state,
-          [namespace]: editItem(
-            state[namespace],
+          [namespace]: likeChanged(
+            editItem(
+              state[namespace],
+              action.node,
+              MEDIUM_DEFAULT,
+            ),
             action.node,
-            MEDIUM_DEFAULT,
           ),
           isFetching: false,
           success: false,

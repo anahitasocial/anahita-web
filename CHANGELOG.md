@@ -7,6 +7,15 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Fixed
+
+1. **A post on the screen twice shows one like.** Liking a post in a repost
+   left the same post below it unliked, and liking that one then failed. A
+   like or an unlike now changes every copy of the post, and one the server
+   already has is shown as liked.
+
 ## v1.3.7 Birth, 2026-11-18
 
 Works with Anahita Services v1.4.0 or later.

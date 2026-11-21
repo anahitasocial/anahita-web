@@ -131,3 +131,39 @@ describe('savedChanged', () => {
     expect(reducer.savedChanged(undefined, 1, true)).toBe(undefined);
   });
 });
+
+describe('likeChanged', () => {
+  const list = {
+    byId: {
+      1: { id: 1, isLikedByViewer: false, likesCount: 2 },
+      2: { id: 2, type: 'repost', parent: { id: 1, isLikedByViewer: false, likesCount: 2 } },
+      3: { id: 3, likesCount: 0 },
+    },
+    allIds: [1, 2, 3],
+    current: { id: 1, isLikedByViewer: false, likesCount: 2 },
+  };
+
+  it('marks every copy of the post: itself, and under a repost of it', () => {
+    const next = reducer.likeChanged(list, { id: 1, isLikedByViewer: true, likesCount: 3 });
+
+    expect(next.byId[1]).toMatchObject({ isLikedByViewer: true, likesCount: 3 });
+    expect(next.byId[2].parent).toMatchObject({ isLikedByViewer: true, likesCount: 3 });
+    expect(next.byId[3]).toEqual({ id: 3, likesCount: 0 });
+    expect(next.current).toMatchObject({ isLikedByViewer: true, likesCount: 3 });
+    // The list it was given is not written through.
+    expect(list.byId[1].isLikedByViewer).toBe(false);
+    expect(list.byId[2].parent.likesCount).toBe(2);
+  });
+
+  it('leaves the count alone when it is not known', () => {
+    const next = reducer.likeChanged(list, { id: 1, isLikedByViewer: true });
+
+    expect(next.byId[1]).toMatchObject({ isLikedByViewer: true, likesCount: 2 });
+  });
+
+  it('gives back the same list when nothing in it changes', () => {
+    expect(reducer.likeChanged(list, { id: 99, isLikedByViewer: true })).toBe(list);
+    expect(reducer.likeChanged(list, { id: 1, isLikedByViewer: false, likesCount: 2 })).toBe(list);
+    expect(reducer.likeChanged(undefined, { id: 1 })).toBe(undefined);
+  });
+});
