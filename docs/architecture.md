@@ -2067,11 +2067,15 @@ draws nothing (`utils/federation.js#isAbsent`).
    they do not follow somebody to another device. A search is remembered
    when it is run, however it was reached. Each stays on one line, a long
    handle cut short with its whole on hover.
-3. **The controls:** the order as a small menu with, beside it, the two
-   choices below as chips; the row wraps on a narrow screen. The distance
-   is a slider on a line of its own under them (25 to 100 km, or anywhere),
-   written to the address when it is let go.
-4. **Two choices for "Most relevant"** (`utils/searchChoices.js`), chips
+3. **The controls are in one dialog** (`search/Browse/OptionsDialog.jsx`,
+   roadmap row 164): above the tabs, one button says how the search is set,
+   "Most relevant · Anywhere", and opens it, full screen on a mobile. In it,
+   the order as two choices, the two choices below as switches, Adjust, and
+   the distance as a slider (25 to 100 km, or anywhere). Nothing changes
+   until Done; Cancel leaves the search as it was. Adjust is a step of its
+   own, the weights (`search/Browse/WeightsDialog.jsx`) in the dialog's
+   place, and back to it after.
+4. **Two choices for "Most relevant"** (`utils/searchChoices.js`), switches
    shown only with that order and only to somebody signed in: **Profiles I
    follow first** (people, groups and events they follow, and what is
    posted on them, before everything else) and **Newer results first** (the

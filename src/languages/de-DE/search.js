@@ -31,6 +31,14 @@ export default {
   anywhere: 'Überall',
   within: 'Im Umkreis von {{ radius }} km',
   km: '{{ radius }} km',
+  // The dialog the bar's one button opens: order, choices and distance
+  // (roadmap row 164). `open` is what the button says to a screen reader.
+  options: {
+    title: 'Suchoptionen',
+    open: 'Suchoptionen: {{summary}}',
+    cancel: 'Abbrechen',
+    done: 'Fertig',
+  },
   choices: {
     followedFirst: 'Profile, denen ich folge, zuerst',
     followedFirstHelp: 'Die Personen, Gruppen und Veranstaltungen, denen du folgst, und was dort veröffentlicht wird, vor allem anderen',

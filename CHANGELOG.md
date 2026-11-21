@@ -16,6 +16,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    may choose their own: square, or 4, 8, 12 or 16 pixels. Reset goes back to
    the site's.
 
+### Changed
+
+1. **Search's choices are in one dialog.** Above the results, one button
+   says how the search is set and opens the order, the choices for "Most
+   relevant" and the distance, full screen on a mobile, where they took a
+   third of the screen.
+
 ### Fixed
 
 1. **A post on the screen twice shows one like.** Liking a post in a repost

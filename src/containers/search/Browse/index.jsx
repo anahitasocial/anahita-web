@@ -8,22 +8,16 @@ import { makeStyles } from 'tss-react/mui';
 import Alert from '@mui/material/Alert';
 import Box from '@mui/material/Box';
 import AppBar from '@mui/material/AppBar';
-import Chip from '@mui/material/Chip';
-import MenuItem from '@mui/material/MenuItem';
-import Slider from '@mui/material/Slider';
-import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 
-import AllInclusiveIcon from '@mui/icons-material/AllInclusive';
 import TuneIcon from '@mui/icons-material/Tune';
 
 import SearchList from './SearchList';
 import RecentSearches from './RecentSearches';
 import useScopeCounts from './useScopeCounts';
-import SearchWeightsDialog from './WeightsDialog';
+import SearchOptionsDialog from './OptionsDialog';
 import shortCount from '../../../utils/shortCount';
 import RemoteLookup from '../RemoteLookup';
 import Progress from '../../../components/Progress';
@@ -47,10 +41,6 @@ const useStyles = makeStyles()(() => {
     },
   };
 });
-
-const marks = [25, 50, 75, 100].map((radius) => {
-  return { value: radius, label: i18n.t('search:km', { radius }) };
-}).concat([{ value: 125, label: <AllInclusiveIcon fontSize="small" /> }]);
 
 const Search = ({ viewerId }) => {
   const { classes } = useStyles();
@@ -93,13 +83,6 @@ const Search = ({ viewerId }) => {
     }), { replace: true });
   };
 
-  // The slider moves as it is dragged and is written to the address when
-  // let go, so that a drag is one search and not five.
-  const [range, setRange] = useState(searchRange);
-  useEffect(() => {
-    setRange(searchRange);
-  }, [searchRange]);
-
   const changeScope = (event, value) => {
     change({ scope: value });
   };
@@ -124,15 +107,18 @@ const Search = ({ viewerId }) => {
   useEffect(() => {
     setChoices(searchChoices.read(viewerId));
   }, [viewerId]);
-  const choose = (what) => {
-    setChoices(searchChoices.write(viewerId, { ...choices, ...what }));
-  };
-
-  // Their own weights for "Most relevant", kept on the server: the dialog
-  // to change them, and how many times they have, so the results are read
-  // again after each.
-  const [isWeighing, setIsWeighing] = useState(false);
+  // The order, the distance and the choices, in one dialog (roadmap row
+  // 164); and how many times the viewer's weights for "Most relevant",
+  // kept on the server, were saved, so the results are read again after
+  // each.
+  const [isChoosing, setIsChoosing] = useState(false);
   const [weighed, setWeighed] = useState(0);
+  const optionsSummary = [
+    i18n.t(`search:sortOptions.${sort === SORTING.RECENT ? 'recent' : 'relevant'}`),
+    searchRange === searchAddress.ANYWHERE ?
+      i18n.t('search:anywhere') :
+      i18n.t('search:km', { radius: searchRange }),
+  ].join(' · ');
 
   // Somebody found on another server, drawn first among the results.
   const [found, setFound] = useState(null);
@@ -235,117 +221,54 @@ const Search = ({ viewerId }) => {
         className={classes.root}
         elevation={1}
       >
-        {/* A row of compact controls, which wraps on a narrow screen: the
-            order as a small menu, and the searcher's own choices for "Most
-            relevant" as chips. */}
-        <Stack
-          direction="row"
-          useFlexGap
-          sx={{
-            flexWrap: 'wrap',
-            alignItems: 'center',
-            gap: 2,
-            px: 2,
-            pt: 2,
-            pb: 1,
-          }}
-        >
-          <TextField
-            select
+        {/* One button that says how the search is set, and opens the
+            dialog to change it: the order, the choices for "Most
+            relevant" and the distance (roadmap row 164). */}
+        <Box sx={{ px: 1, pt: 1 }}>
+          <Button
+            color="inherit"
             size="small"
-            id="search-sort"
-            label={i18n.t('search:sort')}
-            value={sort}
-            onChange={(event) => {
-              change({ sort: event.target.value });
+            startIcon={<TuneIcon />}
+            aria-haspopup="dialog"
+            aria-label={i18n.t('search:options.open', { summary: optionsSummary })}
+            onClick={() => {
+              setIsChoosing(true);
             }}
-            sx={{ minWidth: 180, flex: { xs: '1 1 140px', sm: '0 0 auto' } }}
+            sx={{
+              maxWidth: '100%',
+              whiteSpace: 'nowrap',
+              textTransform: 'none',
+              color: 'text.secondary',
+              '& .MuiButton-startIcon': { flexShrink: 0 },
+            }}
           >
-            <MenuItem value={SORTING.RELEVANT}>
-              {i18n.t('search:sortOptions.relevant')}
-            </MenuItem>
-            <MenuItem value={SORTING.RECENT}>
-              {i18n.t('search:sortOptions.recent')}
-            </MenuItem>
-          </TextField>
-          {/* The searcher's own choices for "Most relevant", for somebody
-              signed in: a visitor follows nobody, and has nowhere to keep
-              them. */}
-          {sort === SORTING.RELEVANT && viewerId > 0 &&
-            <Stack direction="row" useFlexGap sx={{ flexWrap: 'wrap', gap: 1 }}>
-              {[
-                ['followedFirst', choices.followedFirst],
-                ['recentFirst', choices.recentFirst],
-              ].map(([which, isOn]) => {
-                return (
-                  <Chip
-                    key={which}
-                    label={i18n.t(`search:choices.${which}`)}
-                    title={i18n.t(`search:choices.${which}Help`)}
-                    color={isOn ? 'primary' : 'default'}
-                    variant={isOn ? 'filled' : 'outlined'}
-                    aria-pressed={isOn}
-                    onClick={() => {
-                      choose({ [which]: !isOn });
-                    }}
-                  />
-                );
-              })}
-              <Chip
-                icon={<TuneIcon />}
-                label={i18n.t('search:weights.open')}
-                title={i18n.t('search:weights.openHelp')}
-                variant="outlined"
-                aria-haspopup="dialog"
-                onClick={() => {
-                  setIsWeighing(true);
-                }}
-              />
-            </Stack>}
-        </Stack>
-        {isWeighing &&
-          <SearchWeightsDialog
-            onClose={() => {
-              setIsWeighing(false);
-            }}
-            onSaved={() => {
-              setIsWeighing(false);
-              setWeighed(weighed + 1);
-            }}
-          />}
-        {/* The distance, on a line of its own so that the slider has room,
-            and padded so that the marks at its ends are not cut off. */}
-        <Box sx={{ px: 4, pb: 1 }}>
-          <Typography
-            id="search-range-label"
-            variant="caption"
-            color="textSecondary"
-            component="div"
-            sx={{ ml: -2 }}
-          >
-            {i18n.t('search:distanceLabel')}
-          </Typography>
-          <Slider
-            value={range}
-            getAriaValueText={(value) => {
-              return value === searchAddress.ANYWHERE ?
-                i18n.t('search:anywhere') :
-                i18n.t('search:within', { radius: value });
-            }}
-            onChange={(event, value) => {
-              setRange(value);
-            }}
-            onChangeCommitted={(event, value) => {
-              change({ km: value });
-            }}
-            aria-labelledby="search-range-label"
-            min={25}
-            max={searchAddress.ANYWHERE}
-            step={25}
-            marks={marks}
-            size="small"
-          />
+            <Box component="span" sx={{ overflow: 'hidden', textOverflow: 'ellipsis' }}>
+              {optionsSummary}
+            </Box>
+          </Button>
         </Box>
+        <SearchOptionsDialog
+          open={isChoosing}
+          signedIn={viewerId > 0}
+          sort={sort}
+          km={searchRange}
+          choices={choices}
+          onCancel={() => {
+            setIsChoosing(false);
+          }}
+          onDone={(chosen) => {
+            setIsChoosing(false);
+            if (viewerId > 0) {
+              setChoices(searchChoices.write(viewerId, { ...choices, ...chosen.choices }));
+            }
+            if (chosen.sort !== sort || chosen.km !== searchRange) {
+              change({ sort: chosen.sort, km: chosen.km });
+            }
+          }}
+          onWeighed={() => {
+            setWeighed(weighed + 1);
+          }}
+        />
         <Tabs
           value={scope}
           onChange={changeScope}

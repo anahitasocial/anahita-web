@@ -31,6 +31,14 @@ export default {
   anywhere: 'En cualquier lugar',
   within: 'A menos de {{ radius }} km',
   km: '{{ radius }} km',
+  // The dialog the bar's one button opens: order, choices and distance
+  // (roadmap row 164). `open` is what the button says to a screen reader.
+  options: {
+    title: 'Opciones de búsqueda',
+    open: 'Opciones de búsqueda: {{summary}}',
+    cancel: 'Cancelar',
+    done: 'Listo',
+  },
   choices: {
     followedFirst: 'Primero los perfiles que sigo',
     followedFirstHelp: 'Las personas, los grupos y los eventos que sigues, y lo que se publica en ellos, antes que todo lo demás',
