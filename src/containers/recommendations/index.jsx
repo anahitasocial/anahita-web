@@ -88,7 +88,7 @@ const SuggestionsList = ({ kind, alertSuccess, alertError }) => {
         );
 
         return (
-          <Box key={`suggestion-${actor.id}`} sx={{ mb: 2 }}>
+          <Box key={`suggestion-${actor.id}`} sx={{ mb: { xs: 0, sm: 2 } }}>
             {/* Why is said inside the card, under the name. An event has
                 its own card, which leads to where it is answered, and is
                 not followed from here. */}
@@ -175,7 +175,7 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
           alignItems: 'center',
           borderBottom: 1,
           borderColor: 'divider',
-          mb: 2,
+          mb: { xs: 0, sm: 2 },
         }}
       >
         <Tabs

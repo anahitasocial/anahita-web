@@ -47,7 +47,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    screen. In Customize, Reset is at the top beside Close, once
    something is chosen, and the sheet stays clear of the phone's home bar. Lists of people,
    groups, events, hashtags, locations, feeds and saved posts have no gap
-   under their heading or between their cards, only the cards' lines.
+   under their heading or between their cards, only the cards' lines; so do
+   search's results, a hashtag's and a location's posts, recommendations,
+   and every tab of a profile, and the cards run to both edges of the
+   screen. The filters of Events keep the cards' 16 pixels from its sides.
 
 ### Fixed
 

@@ -17,13 +17,19 @@ const {
   },
 } = APP.BROWSE;
 
-const useStyles = makeStyles()({
-  root: {
-    marginBottom: 8 * 2,
-    position: 'sticky',
-    top: 8 * 7,
-    zIndex: 8,
-  },
+const useStyles = makeStyles()((theme) => {
+  return {
+    root: {
+      marginBottom: 8 * 2,
+      position: 'sticky',
+      top: 8 * 7,
+      zIndex: 8,
+      // On a mobile the posts start right under the tabs.
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: 0,
+      },
+    },
+  };
 });
 
 // A hashtag's or a place's posts: newest first by default, as every list of

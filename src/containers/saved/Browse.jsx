@@ -98,7 +98,7 @@ const SavedBrowse = () => {
       <Masonry>
         {posts.map((post) => {
           return (
-            <Box key={`saved-${post.id}`} sx={{ mb: 2 }}>
+            <Box key={`saved-${post.id}`} sx={{ mb: { xs: 0, sm: 2 } }}>
               <MediumCard
                 medium={post}
                 stats={

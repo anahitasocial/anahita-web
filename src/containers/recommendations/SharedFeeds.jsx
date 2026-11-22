@@ -83,7 +83,7 @@ const SharedFeeds = ({ viewer }) => {
       <Masonry>
         {feeds.map((feed) => {
           return (
-            <Box key={`shared-feed-${feed.id}`} sx={{ mb: 2 }}>
+            <Box key={`shared-feed-${feed.id}`} sx={{ mb: { xs: 0, sm: 2 } }}>
               <CustomFeedSearchCard feed={feed} />
             </Box>
           );

@@ -30,7 +30,7 @@ import searchAddress from '../../../utils/searchAddress';
 
 const { SCOPE, SORTING } = SEARCH;
 
-const useStyles = makeStyles()(() => {
+const useStyles = makeStyles()((theme) => {
   return {
     root: {
       marginBottom: 8 * 2,
@@ -38,6 +38,10 @@ const useStyles = makeStyles()(() => {
       top: 8 * 7,
       zIndex: 8,
       width: '100%',
+      // On a mobile the results start right under the tabs.
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: 0,
+      },
     },
   };
 });

@@ -27,13 +27,19 @@ const { FILTER } = ACTOR;
 const ALL = '';
 const AUTH_FILTERS = [FILTER.FOLLOWING, FILTER.ADMINISTERING];
 
-const useStyles = makeStyles()({
-  root: {
-    marginBottom: 8 * 2,
-    position: 'sticky',
-    top: 8 * 7,
-    zIndex: 8,
-  },
+const useStyles = makeStyles()((theme) => {
+  return {
+    root: {
+      marginBottom: 8 * 2,
+      position: 'sticky',
+      top: 8 * 7,
+      zIndex: 8,
+      // On a mobile the list starts right under the tabs.
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: 0,
+      },
+    },
+  };
 });
 
 // The avatar each namespace wears in its header, matching the left menu so the

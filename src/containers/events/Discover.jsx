@@ -53,7 +53,7 @@ const ForYou = ({ span, online, empty }) => {
       {shown.map((item) => {
         const { actor } = item;
         return (
-          <Box key={`suggested-event-${actor.id}`} sx={{ mb: 2 }}>
+          <Box key={`suggested-event-${actor.id}`} sx={{ mb: { xs: 0, sm: 2 } }}>
             <EventCard
               actor={actor}
               note={recommendations.reasonText(item, related, i18n.t.bind(i18n), 'event')}
@@ -140,6 +140,9 @@ const DiscoverEvents = ({ isAuthenticated }) => {
         select
         size="small"
         fullWidth
+        // On a mobile, in the room the cards' margins leave, the choice in
+        // the body's smaller size, so that "Anywhere" is not cut short.
+        sx={{ '& .MuiSelect-select': { fontSize: { xs: 14, sm: 'inherit' } } }}
         label={i18n.t(`events:discover.${name}.label`)}
         value={value}
         onChange={choose(name, options)}
@@ -157,7 +160,9 @@ const DiscoverEvents = ({ isAuthenticated }) => {
 
   return (
     <section aria-label={i18n.t('events:discover.title')}>
-      <Stack direction="row" spacing={1} sx={{ mb: 2, pt: 1 }}>
+      {/* On a mobile, where the cards run edge to edge, the filters keep
+          the cards' own 16 pixels from the screen's sides. */}
+      <Stack direction="row" spacing={1} sx={{ mb: 2, pt: 1, px: { xs: 2, sm: 0 } }}>
         {select('when', when, events.WHEN)}
         {select('where', where, events.WHERE)}
         {isAuthenticated && select('who', who, whoOptions)}

@@ -32,8 +32,13 @@ const {
 
 const useStyles = makeStyles()((theme) => {
   return {
+    // On a mobile no gap between them, only the cards' own lines, as the
+    // feed has them (the user, 2026-11-21).
     card: {
       marginBottom: theme.spacing(2),
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: 0,
+      },
     },
   };
 });

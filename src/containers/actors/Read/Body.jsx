@@ -37,6 +37,10 @@ const styles = (theme) => {
     },
     appBar: {
       marginBottom: theme.spacing(2),
+      // On a mobile what the tab shows starts right under it.
+      [theme.breakpoints.down('sm')]: {
+        marginBottom: 0,
+      },
     },
   };
 };
@@ -241,7 +245,7 @@ const ActorBody = ({
       </AppBar>
 
       {value === 'feed' && !columns && details.length > 0 && (
-        <Stack spacing={2} sx={{ mb: 2 }}>{details}</Stack>
+        <Stack spacing={{ xs: 0, sm: 2 }} sx={{ mb: { xs: 0, sm: 2 } }}>{details}</Stack>
       )}
       <Box ref={listRef} sx={listSx}>
         {besidePosts ?

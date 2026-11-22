@@ -70,7 +70,7 @@ const EventsList = ({ read, empty }) => {
       <Masonry>
         {list.rows.map((actor) => {
           return (
-            <Box key={`event-${actor.id}`} sx={{ mb: 2 }}>
+            <Box key={`event-${actor.id}`} sx={{ mb: { xs: 0, sm: 2 } }}>
               <EventCard actor={actor} />
             </Box>
           );

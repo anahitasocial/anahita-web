@@ -10,10 +10,19 @@ const useStyles = makeStyles()((theme) => {
       display: 'flex',
       marginLeft: theme.spacing(-2),
       width: 'inherit',
+      // One column on a mobile, edge to edge, with no gutter to make room
+      // for: drawn 16 pixels to the left of where it was laid out, a list
+      // fell 16 short of the right edge (the user, 2026-11-21).
+      [theme.breakpoints.down('sm')]: {
+        marginLeft: 0,
+      },
     },
     masonryColumn: {
       paddingLeft: theme.spacing(2),
       backgroundClip: 'padding-box',
+      [theme.breakpoints.down('sm')]: {
+        paddingLeft: 0,
+      },
     },
   };
 });
