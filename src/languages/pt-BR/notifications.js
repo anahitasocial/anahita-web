@@ -68,7 +68,6 @@ export default {
   decline: 'Recusar',
   accepted: 'Aceita',
   declined: 'Recusada',
-  replied: 'Respondida',
   answerFailed: 'Não foi possível responder. Tente de novo.',
   markAllRead: 'Marcar tudo como lido',
   allMarkedRead: 'Tudo marcado como lido',

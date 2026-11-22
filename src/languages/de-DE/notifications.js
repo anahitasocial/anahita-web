@@ -68,7 +68,6 @@ export default {
   decline: 'Ablehnen',
   accepted: 'Angenommen',
   declined: 'Abgelehnt',
-  replied: 'Beantwortet',
   answerFailed: 'Das konnte nicht beantwortet werden. Versuch es noch einmal.',
   markAllRead: 'Alle als gelesen markieren',
   allMarkedRead: 'Alle als gelesen markiert',

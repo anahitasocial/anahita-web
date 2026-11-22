@@ -7,6 +7,13 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Changed
+
+1. **Reply on a notification leads to the post,** to be read before it is
+   answered, and no longer opens a reply form under the notification.
+
 ## v1.3.9 Birth, 2026-11-22
 
 Works with Anahita Services v1.4.0 or later.

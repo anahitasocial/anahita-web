@@ -68,7 +68,6 @@ export default {
   decline: 'Decline',
   accepted: 'Accepted',
   declined: 'Declined',
-  replied: 'Replied',
   answerFailed: 'That could not be answered. Try again.',
   markAllRead: 'Mark all read',
   allMarkedRead: 'All marked as read',
