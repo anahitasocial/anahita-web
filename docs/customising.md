@@ -257,17 +257,16 @@ replaces the theme's `primary` and `secondary` only
 ([Anahita's colours](plans/colours.md#the-colour-picker-2026-10-26)).
 
 **Corners.** How round the corners of cards, dialogs, menus, fields and
-buttons are is the site's, set in anahita-services by `CORNER_RADIUS` with
-Material UI's names for its shape tokens: `none` (square), `sm` (4 pixels),
-`md` (8), `lg` (16) or `xl` (24). The app reads it from NodeInfo, in pixels,
-as `cornerRadius`; unset, it is `sm`, Material UI's own 4, and the theme's
-`shape.borderRadius` stands. Below 600 pixels the site's are
-`CORNER_RADIUS_MOBILE`'s, `cornerRadiusMobile`: `md`, 8 pixels, unless set,
-and `md` too from a server that does not say. The theme carries the four as
-`shape.borderRadiusSm` to `shape.borderRadiusXl` (`utils/corners.js`), for
-what is to be as round whatever is chosen. Under the palettes in Customize,
-somebody signed in may choose their own of the five on a slider, which
-stands at the site's until it is moved, kept in their browser by name as the
+buttons are is the app's, set when it is built, with Material UI's names for
+its shape tokens: `none` (square), `sm` (4 pixels), `md` (8), `lg` (16) or
+`xl` (24). `REACT_APP_CORNER_RADIUS` is for a wider screen, `sm` unless set;
+`REACT_APP_CORNER_RADIUS_MOBILE` is for below 600 pixels, `md` unless set
+(`utils/corners.js`; [Configuration](configuration.md#variables)).
+The theme carries the four as `shape.borderRadiusSm` to
+`shape.borderRadiusXl`, for what is to be as round whatever is chosen. Under
+the palettes in Customize, somebody signed in may choose their own of the
+five on a slider, which stands at the site's until it is moved, kept in their
+browser by name as the
 palette is; Reset goes back to the site's, colours and corners. Profile
 photos stay round, and chips and the small labels on photos stay pills. On
 a mobile, cards are square and flat whatever is chosen

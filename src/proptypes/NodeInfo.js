@@ -69,11 +69,6 @@ export default shape({
     supportEmail: string,
     supportPhone: string,
     supportWebsite: string,
-    // How round the app's corners are, in pixels (CORNER_RADIUS), for
-    // whoever has not chosen their own.
-    cornerRadius: number,
-    // The same below 600 pixels (CORNER_RADIUS_MOBILE).
-    cornerRadiusMobile: number,
     termsOfServiceUrl: string,
     privacyPolicyUrl: string,
   }),

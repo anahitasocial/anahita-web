@@ -2183,7 +2183,7 @@ the profile photo, and + is the round button at the bottom right.
 shadow, and a line under each, as Bluesky and Threads have them, with no gap
 between two: the line is the gap. The page is the cards' own colour
 (`MuiCard` and `MuiCssBaseline` in `styles/index.js`). How round corners
-are (`CORNER_RADIUS`, or one's own) is for a wider screen. On a profile,
+are (`REACT_APP_CORNER_RADIUS_MOBILE`, or one's own) is for what is not a card. On a profile,
 the buttons beside the picture are small, and ⋮ is against the card's
 edge.
 

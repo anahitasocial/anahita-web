@@ -58,6 +58,8 @@ Vite reads these files, highest priority first. No other file name is read:
 | `REACT_APP_LANGUAGE` | The language for a visitor whose browser asks for none the app has: `en-CA`, `en-US`, `fr-FR`, `fr-CA`, `de-DE`, `es-419` or `pt-BR`. Unset, or anything else, is `en-CA`. See [Languages](customising.md#languages) |
 | `REACT_APP_ASSETS` | The theme to use: the name of a directory under `src/assets/`. Unset uses `src/assets/default`. See [Themes](customising.md#themes) |
 | `REACT_APP_FEED_VIEW` | How feeds and profiles are laid out on a wide screen until a visitor chooses: `stream`, one post under another, or `columns`. Unset, or anything else, is `stream`. A visitor's own choice, kept in their browser, comes first |
+| `REACT_APP_CORNER_RADIUS` | How round corners are on a wider screen, for whoever has not chosen their own under Customize: `none`, `sm` (4 pixels), `md` (8), `lg` (16) or `xl` (24). Unset, or anything else, is `sm`. See [Themes](customising.md#themes) |
+| `REACT_APP_CORNER_RADIUS_MOBILE` | The same below 600 pixels wide. Unset, or anything else, is `md` |
 | `REACT_APP_ANALYTICS` | Page-view analytics: `plausible`, `umami` or `matomo`. Unset means off: no script is loaded and nothing leaves the browser |
 | `REACT_APP_ANALYTICS_URL` | Where that analytics service is, for example `https://stats.example.org` |
 | `REACT_APP_ANALYTICS_SITE_ID` | The site as that service knows it: the domain for Plausible, the website id for Umami, the numeric site id for Matomo |
@@ -99,7 +101,6 @@ server's NodeInfo document (`/.well-known/nodeinfo`):
 | --- | --- |
 | Whether people can sign up, and how | `REGISTRATION_MODE` |
 | Support email, phone and website | `SUPPORT_EMAIL`, `SUPPORT_PHONE`, `SUPPORT_WEBSITE` |
-| How round the corners are, `none`, `sm`, `md`, `lg` or `xl`, for whoever has not chosen their own | `CORNER_RADIUS`, and `CORNER_RADIUS_MOBILE` below 600 pixels |
 | Who may create groups and send invitations | `GROUPS_FROM`, `INVITES_FROM` |
 | What people who are not signed in can read | `SITE_READ_ACCESS`: everything public, only the start of it, or nothing. The app shows them a notice, or on a members-only site a way in, in place of every page |
 | Whether anything new may be public | `MIN_CONTENT_ACCESS`. The app stops offering "Public" where it may not |

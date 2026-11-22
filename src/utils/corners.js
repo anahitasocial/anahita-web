@@ -13,6 +13,22 @@ export const CORNER_RADII = {
 // The most a corner is rounded, in pixels: xl.
 export const MAX_CORNER = CORNER_RADII.xl;
 
+// The site's own corners, in pixels, for whoever has not chosen theirs: the
+// app's own to say, set when it is built (the user, 2026-11-21: a matter of
+// how it looks, not of the server). REACT_APP_CORNER_RADIUS on a wider
+// screen, sm unless set; REACT_APP_CORNER_RADIUS_MOBILE below 600 pixels,
+// md unless set. A name it does not know is the default.
+const named = (value, fallback) => {
+  const name = String(value || '').trim().toLowerCase();
+  return Object.hasOwn(CORNER_RADII, name) ? CORNER_RADII[name] : CORNER_RADII[fallback];
+};
+
+export const siteCorners = (narrow) => {
+  return narrow ?
+    named(process.env.REACT_APP_CORNER_RADIUS_MOBILE, 'md') :
+    named(process.env.REACT_APP_CORNER_RADIUS, 'sm');
+};
+
 // A corner a few times rounder than the theme's, for a card that floats
 // over the page (the cookie notice, the colour picker), for `sx`. Kept to
 // MAX_CORNER: drawn at Material UI's 4 pixels, three times was 12, but at 16

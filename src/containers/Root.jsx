@@ -10,7 +10,7 @@ import Routes from '../routes';
 import styles from '../styles';
 import ColourPicker, { ColourPickerContext, savedCorners, savedPalette } from '../components/ColourPicker';
 import contentChoices from '../utils/contentChoices';
-import { CORNER_RADII } from '../utils/corners';
+import { siteCorners as siteCornersFor } from '../utils/corners';
 
 // Material UI's sm breakpoint as the theme has it (styles/index.js): below
 // it is a mobile.
@@ -43,20 +43,12 @@ const Themed = ({ store }) => {
   const [chosen, setChosen] = React.useState(savedPalette);
   const palette = picking ? chosen : undefined;
   // How round the corners are: the ones this person chose, as their colours
-  // are, on every screen; or the site's, which has its own for a mobile
-  // (CORNER_RADIUS and CORNER_RADIUS_MOBILE, through NodeInfo; roadmap row
-  // 168). Below 600 pixels they are md unless the site says otherwise, sm
-  // above (the user, 2026-11-21).
+  // are, on every screen; or the site's, set when the app is built, one for
+  // a wider screen and one below 600 pixels (utils/corners.js; roadmap row
+  // 168).
   const [chosenCorners, setChosenCorners] = React.useState(savedCorners);
   const narrow = useMediaQuery(`(max-width:${BREAKPOINT_SM - 0.05}px)`);
-  const siteCorners = useSelector((state) => {
-    const { metadata } = state.app.nodeInfo;
-    const key = narrow ? 'cornerRadiusMobile' : 'cornerRadius';
-    if (metadata && typeof metadata[key] === 'number') {
-      return metadata[key];
-    }
-    return narrow ? CORNER_RADII.md : undefined;
-  });
+  const siteCorners = siteCornersFor(narrow);
   const corners = picking && chosenCorners !== undefined ? chosenCorners : siteCorners;
   // Where the picker opens from: the Customize item, which its popup opens
   // beside on a wider screen; null while it is closed.

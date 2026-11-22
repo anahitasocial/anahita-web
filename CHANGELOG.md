@@ -15,10 +15,11 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    post, Notifications and your profile photo. The top bar keeps the menu
    and the site's logo. + posts to the profile on the screen when you may
    post there, and else to your own.
-2. **Rounder or squarer corners.** The site's corners follow
-   `CORNER_RADIUS` in anahita-services, and under Customize somebody signed
-   in may choose their own on a slider, by Material UI's names: none, sm,
-   md, lg or xl (0, 4, 8, 16 or 24 pixels). Reset goes back to the site's.
+2. **Rounder or squarer corners.** The site's corners are set when the app
+   is built, `REACT_APP_CORNER_RADIUS` and `REACT_APP_CORNER_RADIUS_MOBILE`,
+   and under Customize somebody signed in may choose their own on a slider,
+   by Material UI's names: none, sm, md, lg or xl (0, 4, 8, 16 or 24
+   pixels). Reset goes back to the site's.
 
 ### Changed
 
@@ -42,8 +43,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    profile's tabs sit right under its header. Notifications run edge to
    edge. The dots of a post's photos are on the photo, not under it.
 5. **Rounder corners on a mobile.** Below 600 pixels the site's corners are
-   `md`, 8 pixels, while a wider screen keeps `sm`; anahita-services'
-   `CORNER_RADIUS_MOBILE` changes them. One's own choice is for every
+   `md`, 8 pixels, while a wider screen keeps `sm`;
+   `REACT_APP_CORNER_RADIUS_MOBILE` changes them. One's own choice is for every
    screen. In Customize, Reset is at the top beside Close, once
    something is chosen, and the sheet stays clear of the phone's home bar. Lists of people,
    groups, events, hashtags, locations, feeds and saved posts have no gap
