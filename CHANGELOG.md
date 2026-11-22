@@ -33,6 +33,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    says how the search is set and opens the order, the choices for "Most
    relevant" and the distance, full screen on a mobile, where they took a
    third of the screen.
+3. **The layout buttons are plainer.** One column or several are two icons,
+   the chosen one darker, with no outline beside the tabs' line.
 
 ### Fixed
 
