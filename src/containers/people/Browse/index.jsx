@@ -53,7 +53,7 @@ const People = ({ viewer, inviteSettings }) => {
 
   return (
     <>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: { xs: 0, sm: 2 } }}>
         <BrowseHeader
           icon={<PeopleIcon />}
           title={i18n.t('people:browse.title')}

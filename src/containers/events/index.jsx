@@ -47,7 +47,7 @@ const EventsPage = ({ viewer, isAuthenticated, actorSettings = {} }) => {
       <Helmet>
         <title>{i18n.t('events:cTitle')}</title>
       </Helmet>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: { xs: 0, sm: 2 } }}>
         <BrowseHeader
           icon={<EventsIcon />}
           title={i18n.t('events:cTitle')}

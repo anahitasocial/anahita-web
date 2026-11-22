@@ -22,7 +22,7 @@ const SavedPage = () => {
       <Helmet>
         <title>{i18n.t('media:saved.title')}</title>
       </Helmet>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: { xs: 0, sm: 2 } }}>
         <BrowseHeader
           icon={<SavedIcon />}
           title={i18n.t('media:saved.title')}

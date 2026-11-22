@@ -72,7 +72,7 @@ const CustomFeedsBrowse = ({
       {/* As wide as a post's page: room for a feed's name and what it is
           for, on one line each. */}
       <PageColumn width={800}>
-        <Box sx={{ mb: 2 }}>
+        <Box sx={{ mb: { xs: 0, sm: 2 } }}>
           <BrowseHeader
             icon={<FeedIcon />}
             title={i18n.t('customFeeds:cTitle')}

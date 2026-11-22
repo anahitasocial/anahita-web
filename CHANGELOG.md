@@ -45,7 +45,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    `md`, 8 pixels, while a wider screen keeps `sm`; anahita-services'
    `CORNER_RADIUS_MOBILE` changes them. One's own choice is for every
    screen. In Customize, Reset is at the top beside Close, once
-   something is chosen, and the sheet stays clear of the phone's home bar.
+   something is chosen, and the sheet stays clear of the phone's home bar. Lists of people,
+   groups, events, hashtags, locations, feeds and saved posts have no gap
+   under their heading or between their cards, only the cards' lines.
 
 ### Fixed
 

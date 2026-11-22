@@ -162,7 +162,7 @@ const SuggestionsPage = ({ alertSuccess, alertError }) => {
       <Helmet>
         <title>{i18n.t('recommendations:cTitle')}</title>
       </Helmet>
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: { xs: 0, sm: 2 } }}>
         <BrowseHeader
           icon={<RecommendationsIcon />}
           title={i18n.t('recommendations:cTitle')}

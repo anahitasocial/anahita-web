@@ -112,7 +112,7 @@ const Hashtags = () => {
     <>
       {/* No action. A hashtag is not created here — it comes into being when
           somebody uses it in a post — so there is nothing for a + to open. */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: { xs: 0, sm: 2 } }}>
         <BrowseHeader
           icon={<HashtagsIcon />}
           title={i18n.t('hashtags:cTitle')}

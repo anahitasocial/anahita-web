@@ -100,7 +100,7 @@ const Actors = ({
     <>
       {/* Above the filters, not inside them: the header says what the page is,
           the tabs narrow it, and the tabs are the half worth pinning. */}
-      <Box sx={{ mb: 2 }}>
+      <Box sx={{ mb: { xs: 0, sm: 2 } }}>
         <BrowseHeader
           icon={BROWSE_ICONS[namespace]}
           title={i18n.t(`${namespace}:cTitle`)}
