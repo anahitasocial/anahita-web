@@ -176,7 +176,9 @@ const NotificationsBrowse = ({
   const empty = answered && !isFetching && items.allIds.length === 0;
 
   return (
-    <Container maxWidth="md">
+    // Edge to edge on a mobile, as the feed's cards are: the container's
+    // gutters were a margin on both sides (the user, 2026-11-21).
+    <Container maxWidth="md" disableGutters={mobile}>
       <Card>
         <CardHeader
           avatar={

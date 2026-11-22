@@ -80,6 +80,25 @@ const useStyles = makeStyles()((theme, { top }) => {
       background: 'none',
       padding: theme.spacing(0.5),
     },
+    // On the photo, at its foot, on a soft dark pill so that they read on
+    // any picture (the user, 2026-11-21): the one on show white, the rest
+    // half so.
+    dotsOver: {
+      position: 'absolute',
+      left: '50%',
+      bottom: theme.spacing(1),
+      transform: 'translateX(-50%)',
+      padding: '4px 8px',
+      borderRadius: 12,
+      backgroundColor: 'rgba(0, 0, 0, 0.4)',
+      pointerEvents: 'none',
+      '& .MuiMobileStepper-dot': {
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+      },
+      '& .MuiMobileStepper-dotActive': {
+        backgroundColor: theme.palette.common.white,
+      },
+    },
   };
 });
 
@@ -132,11 +151,11 @@ SlideArrows.propTypes = {
 
 // The dots under a row of several, one for each photo, the one on show
 // filled. Only for the eye: "2 of 4" says it in words.
-const SlideDots = ({ steps, activeStep }) => {
-  const { classes } = useStyles({ top: '50%' });
+const SlideDots = ({ steps, activeStep, over = false }) => {
+  const { classes, cx } = useStyles({ top: '50%' });
   return (
     <MobileStepper
-      className={classes.dots}
+      className={cx(classes.dots, over && classes.dotsOver)}
       variant="dots"
       position="static"
       steps={steps}
@@ -152,6 +171,8 @@ const SlideDots = ({ steps, activeStep }) => {
 SlideDots.propTypes = {
   steps: PropTypes.number.isRequired,
   activeStep: PropTypes.number.isRequired,
+  // On the photo, at its foot, rather than under it.
+  over: PropTypes.bool,
 };
 
 export {

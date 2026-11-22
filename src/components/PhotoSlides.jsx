@@ -256,8 +256,8 @@ const PhotoSlides = ({
           </span>}
         <AltBadge text={photoFiles.descriptionOf(medium, index)} />
         <SlideArrows index={index} count={count} show={show} />
+        {several && <SlideDots steps={count} activeStep={index} over />}
       </div>
-      {several && <SlideDots steps={count} activeStep={index} />}
     </div>
   );
 };

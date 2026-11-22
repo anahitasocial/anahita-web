@@ -54,7 +54,12 @@ const ActorHeader = ({
 
   return (
     <Card
-      sx={!actor.enabled ? { border: 1, borderColor: 'warning.light' } : undefined}
+      sx={{
+        // On a mobile no line under it: the tabs right under it are its
+        // edge (the user, 2026-11-21).
+        borderBottom: { xs: 0 },
+        ...(!actor.enabled ? { border: 1, borderColor: 'warning.light' } : {}),
+      }}
     >
       <Box sx={{ overflow: 'hidden', '& > *': blurred(16) }}>{cover}</Box>
       <Box sx={{ px: { xs: 2, sm: 3 }, pb: 2 }}>

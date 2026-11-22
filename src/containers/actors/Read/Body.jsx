@@ -29,6 +29,11 @@ const styles = (theme) => {
     root: {
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
+      // On a mobile the tabs sit right under the profile's header, with no
+      // gap between them (the user, 2026-11-21).
+      [theme.breakpoints.down('sm')]: {
+        marginTop: 0,
+      },
     },
     appBar: {
       marginBottom: theme.spacing(2),

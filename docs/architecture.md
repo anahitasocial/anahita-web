@@ -581,8 +581,8 @@ then a small JSON request naming the uploads.
 **Showing one.** A post with more than one image is drawn by
 `components/PhotoSlides.jsx` on the post card, in the feed and on the photo's
 page. Material UI has no carousel, so this is one made for this one job from
-its small parts (`ButtonBase`, `IconButton`, `MobileStepper` for the dots)
-with no other library. The photos sit side by side in a row that the browser
+its small parts (`ButtonBase`, `IconButton`, `MobileStepper` for the dots,
+on the photo at its foot, on a soft dark pill) with no other library. The photos sit side by side in a row that the browser
 scrolls sideways and brings to rest on one photo (CSS scroll snap), so on a
 mobile a photo follows the finger and carries on with the flick. Where there
 is a mouse there are arrows, and the left and right keys work on the focused
