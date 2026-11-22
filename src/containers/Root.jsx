@@ -10,6 +10,11 @@ import Routes from '../routes';
 import styles from '../styles';
 import ColourPicker, { ColourPickerContext, savedCorners, savedPalette } from '../components/ColourPicker';
 import contentChoices from '../utils/contentChoices';
+import { CORNER_RADII } from '../utils/corners';
+
+// Material UI's sm breakpoint as the theme has it (styles/index.js): below
+// it is a mobile.
+const BREAKPOINT_SM = 600;
 
 // The viewer's choices for content warnings (anahita-services row 122,
 // phase 2), read once they are signed in, and forgotten when they sign
@@ -38,11 +43,19 @@ const Themed = ({ store }) => {
   const [chosen, setChosen] = React.useState(savedPalette);
   const palette = picking ? chosen : undefined;
   // How round the corners are: the ones this person chose, as their colours
-  // are, or the site's (CORNER_RADIUS, through NodeInfo; roadmap row 168).
+  // are, on every screen; or the site's, which has its own for a mobile
+  // (CORNER_RADIUS and CORNER_RADIUS_MOBILE, through NodeInfo; roadmap row
+  // 168). Below 600 pixels they are md unless the site says otherwise, sm
+  // above (the user, 2026-11-21).
   const [chosenCorners, setChosenCorners] = React.useState(savedCorners);
+  const narrow = useMediaQuery(`(max-width:${BREAKPOINT_SM - 0.05}px)`);
   const siteCorners = useSelector((state) => {
     const { metadata } = state.app.nodeInfo;
-    return metadata && typeof metadata.cornerRadius === 'number' ? metadata.cornerRadius : undefined;
+    const key = narrow ? 'cornerRadiusMobile' : 'cornerRadius';
+    if (metadata && typeof metadata[key] === 'number') {
+      return metadata[key];
+    }
+    return narrow ? CORNER_RADII.md : undefined;
   });
   const corners = picking && chosenCorners !== undefined ? chosenCorners : siteCorners;
   // Where the picker opens from: the Customize item, which its popup opens

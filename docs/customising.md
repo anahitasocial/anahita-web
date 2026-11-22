@@ -261,7 +261,9 @@ buttons are is the site's, set in anahita-services by `CORNER_RADIUS` with
 Material UI's names for its shape tokens: `none` (square), `sm` (4 pixels),
 `md` (8), `lg` (16) or `xl` (24). The app reads it from NodeInfo, in pixels,
 as `cornerRadius`; unset, it is `sm`, Material UI's own 4, and the theme's
-`shape.borderRadius` stands. The theme carries the four as
+`shape.borderRadius` stands. Below 600 pixels the site's are
+`CORNER_RADIUS_MOBILE`'s, `cornerRadiusMobile`: `md`, 8 pixels, unless set,
+and `md` too from a server that does not say. The theme carries the four as
 `shape.borderRadiusSm` to `shape.borderRadiusXl` (`utils/corners.js`), for
 what is to be as round whatever is chosen. Under the palettes in Customize,
 somebody signed in may choose their own of the five on a slider, which

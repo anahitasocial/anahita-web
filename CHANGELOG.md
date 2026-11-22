@@ -41,6 +41,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    with a plain + Add, and its rows have no line under the last. A
    profile's tabs sit right under its header. Notifications run edge to
    edge. The dots of a post's photos are on the photo, not under it.
+5. **Rounder corners on a mobile.** Below 600 pixels the site's corners are
+   `md`, 8 pixels, while a wider screen keeps `sm`; anahita-services'
+   `CORNER_RADIUS_MOBILE` changes them. One's own choice is for every
+   screen.
 
 ### Fixed
 
