@@ -20,8 +20,8 @@ on GitHub ("Works with Anahita Services v1.3.4 or later"). The web app has
 its own versions; the services lead, and it follows (the user, 2026-11-09).
 Every release, with its notes, is on
 [www.anahita.io/releases](https://www.anahita.io/releases/), read from the
-changelogs by their headings (`## v1.3.8 Birth, 2026-11-21`), so those keep
-their form. Build the tag, `v1.3.8` for example. The `main` branch goes with the
+changelogs by their headings (`## v1.3.9 Birth, 2026-11-22`), so those keep
+their form. Build the tag, `v1.3.9` for example. The `main` branch goes with the
 services' `main`, and may call routes that their last Birth release does
 not have. See
 [Releases](https://github.com/anahitasocial/anahita-services/blob/main/docs/releases.md#with-anahita-web).
