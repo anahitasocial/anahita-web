@@ -4,13 +4,14 @@ import { connect } from 'react-redux';
 import { Link, useLocation } from 'react-router-dom';
 
 import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import Paper from '@mui/material/Paper';
+import { alpha } from '@mui/material/styles';
 
 import HomeIcon from '@mui/icons-material/Home';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import LoginIcon from '@mui/icons-material/Login';
 import SearchIcon from '@mui/icons-material/Search';
 
 import ComposeButton from './media/Composer/ComposeButton';
@@ -22,17 +23,35 @@ import utils from '../utils';
 
 const { getActorInitials, getAvatarURL } = utils.node;
 
+// Out of sight, still read by a screen reader: Material UI's own
+// visuallyHidden, which the app does not depend on directly.
+const visuallyHidden = {
+  border: 0,
+  clip: 'rect(0 0 0 0)',
+  height: '1px',
+  margin: '-1px',
+  overflow: 'hidden',
+  padding: 0,
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  width: '1px',
+};
+
 // How tall the bar is, above the phone's own home bar: what the page leaves
-// free at its foot (App.jsx).
+// free at its foot (App.jsx). Material UI's own BottomNavigation height.
 export const MOBILE_BAR_HEIGHT = 56;
 
-// The bar at the foot of the screen on a mobile (roadmap row 166, from
-// Threads, Instagram and Flickr, and for anahita-mobile): Home, Search, +,
-// Notifications and the viewer's own profile photo, five, with + in the
-// middle. The rest is in the menu, ≡ at the top. A visitor has Home, Search
-// and Sign in. Icons alone, each with its name for a screen reader; the one
-// for the page that is open is in the text's own colour, the others quieter.
-// It leaves room under it for the phone's home bar.
+// The bar at the foot of the screen on a mobile (roadmap row 166, for
+// anahita-mobile too): Home, Search, +, Notifications and the viewer's own
+// profile photo, five, with + in the middle. The rest is in the menu, ≡ at
+// the top. A visitor has Home, Search and Sign in.
+//
+// Material UI's own BottomNavigation (the user, 2026-11-21, after a
+// floating pill was tried): across the foot of the screen, icons alone, the
+// open page's in the theme's colour; their names are for screen readers. Its paper is 70%
+// opaque and blurs what scrolls under it. Home, tapped at home, goes back to
+// the top. The + and the bell are BottomNavigationActions drawn by their own
+// components (`inBar`), which keep what they do: the composers, the count.
 const MobileBar = ({
   isAuthenticated,
   viewer,
@@ -43,85 +62,95 @@ const MobileBar = ({
   const { pathname } = useLocation();
   const atHome = pathname === '/';
   const profile = viewer.alias ? `/people/${viewer.alias}/` : '';
-  const atProfile = Boolean(profile) && pathname.startsWith(profile);
+  // The viewer's own profile, at /people/<alias> or /@<alias>.
+  const alias = (viewer.alias || '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  const ownProfile = alias ? new RegExp(`^/(people/|@)${alias}(/|$)`, 'i') : /^$/;
 
-  const shade = (isOpen) => {
-    return { color: isOpen ? 'text.primary' : 'text.secondary' };
-  };
+  let open = null;
+  if (searching) {
+    open = 'search';
+  } else if (atHome) {
+    open = 'home';
+  } else if (pathname.startsWith('/notifications')) {
+    open = 'notifications';
+  } else if (ownProfile.test(pathname)) {
+    open = 'profile';
+  }
 
-  const slots = [
-    <IconButton
+  const home = (
+    <BottomNavigationAction
       key="home"
+      value="home"
+      label={i18n.t('home:cTitle')}
+      icon={atHome ? <HomeIcon /> : <HomeOutlinedIcon />}
       component={Link}
       to="/"
-      aria-label={i18n.t('home:cTitle')}
-      aria-current={atHome ? 'page' : undefined}
-      sx={shade(atHome)}
-    >
-      {atHome ? <HomeIcon /> : <HomeOutlinedIcon />}
-    </IconButton>,
-    <IconButton
+      onClick={() => {
+        // Home again, from home: back to the top of the feed.
+        if (atHome) {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      }}
+    />
+  );
+  const search = (
+    <BottomNavigationAction
       key="search"
-      aria-label={i18n.t('search:cTitle')}
-      aria-current={searching ? 'page' : undefined}
+      value="search"
+      label={i18n.t('search:cTitle')}
+      icon={<SearchIcon />}
       onClick={onSearch}
-      sx={shade(searching)}
-    >
-      <SearchIcon />
-    </IconButton>,
-  ];
+    />
+  );
 
-  if (isAuthenticated) {
-    slots.push(
-      <Box key="compose" sx={shade(false)}>
-        <ComposeButton inBar />
-      </Box>,
-      <Box key="notifications" sx={shade(pathname.startsWith('/notifications'))}>
-        <NotificationButton />
-      </Box>,
-      <IconButton
-        key="profile"
-        component={Link}
-        to={profile}
-        aria-label={i18n.t('commons:yourProfile')}
-        aria-current={atProfile ? 'page' : undefined}
-      >
+  const items = isAuthenticated ? [
+    home,
+    search,
+    <ComposeButton key="compose" value="compose" inBar />,
+    <NotificationButton key="notifications" value="notifications" inBar />,
+    <BottomNavigationAction
+      key="profile"
+      value="profile"
+      label={i18n.t('commons:yourProfile')}
+      icon={
         <Avatar
           alt=""
           src={getAvatarURL(viewer) || undefined}
           sx={{
-            width: 28,
-            height: 28,
-            fontSize: 12,
-            outline: atProfile ? 2 : 0,
-            outlineColor: 'text.primary',
+            width: 24,
+            height: 24,
+            fontSize: 11,
+            // A picture takes no colour: open, it is ringed instead.
+            outline: open === 'profile' ? 2 : 0,
+            outlineColor: 'primary.main',
             outlineOffset: 2,
           }}
         >
           {getActorInitials(viewer)}
         </Avatar>
-      </IconButton>,
-    );
-  } else {
-    slots.push(
-      <Button
-        key="login"
-        color="inherit"
-        onClick={() => {
-          login();
-        }}
-        sx={{ whiteSpace: 'nowrap', color: 'text.secondary' }}
-      >
-        {i18n.t('actions:login')}
-      </Button>,
-    );
-  }
+      }
+      component={Link}
+      to={profile}
+    />,
+  ] : [
+    home,
+    search,
+    <BottomNavigationAction
+      key="login"
+      value="login"
+      label={i18n.t('actions:login')}
+      icon={<LoginIcon />}
+      onClick={() => {
+        login();
+      }}
+    />,
+  ];
 
   return (
     <Paper
       component="nav"
       square
-      elevation={0}
+      elevation={3}
       aria-label={i18n.t('commons:mainNavigation')}
       sx={{
         position: 'fixed',
@@ -129,23 +158,28 @@ const MobileBar = ({
         right: 0,
         bottom: 0,
         zIndex: (theme) => { return theme.zIndex.appBar; },
-        borderTop: 1,
-        borderColor: 'divider',
+        backgroundColor: (theme) => { return alpha(theme.palette.background.paper, 0.7); },
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
         pb: 'env(safe-area-inset-bottom)',
       }}
     >
-      <Box sx={{ display: 'flex', alignItems: 'center', height: MOBILE_BAR_HEIGHT }}>
-        {slots.map((slot) => {
-          return (
-            <Box
-              key={slot.key}
-              sx={{ flex: '1 1 0', display: 'flex', justifyContent: 'center' }}
-            >
-              {slot}
-            </Box>
-          );
-        })}
-      </Box>
+      {/* Each action at least 80 pixels wide, Material UI's own, made five
+          400, wider than many a mobile: they share the width instead. */}
+      <BottomNavigation
+        value={open}
+        sx={{
+          bgcolor: 'transparent',
+          // Icons alone, the open one in the theme's colour, all on one
+          // line: the names are for screen readers only (the user,
+          // 2026-11-21), and the open one is not lifted to make room for
+          // its name.
+          '& .MuiBottomNavigationAction-root': { minWidth: 0, py: 0 },
+          '& .MuiBottomNavigationAction-label': visuallyHidden,
+        }}
+      >
+        {items}
+      </BottomNavigation>
     </Paper>
   );
 };

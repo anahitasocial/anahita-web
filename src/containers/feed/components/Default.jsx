@@ -17,7 +17,7 @@ import ActorAvatar from '../../../components/ActorAvatar';
 import NodeType from '../../../proptypes/Node';
 import ActorHandle from '../../../components/ActorHandle';
 import LongSummary, { isLong, SummaryPicture } from '../../../components/LongSummary';
-import CardOwner from '../../../components/MediumOwnerCardHeader';
+import PostedOn, { isElsewhere } from '../../../components/PostedOn';
 import openOnClick from '../../../utils/openOnClick';
 import PostTitle from '../../../components/PostTitle';
 import PhotoSlides from '../../../components/PhotoSlides';
@@ -82,6 +82,7 @@ const FeedCardDefault = ({
 }) => {
   const navigate = useNavigate();
   const authorName = getPersonName(node.author);
+  const onAnother = showOwner && isElsewhere(node.owner, node.author);
   const portrait = getPortraitURL(node, 'medium');
   const cover = getCoverURL(node, 'medium');
   // A video from elsewhere shows as its poster, leading to it, and its
@@ -111,7 +112,6 @@ const FeedCardDefault = ({
       component="article"
     >
       <PinnedLabel show={Boolean(node.pinned)} />
-      {showOwner && node.owner && <CardOwner owner={node.owner} author={node.author} />}
       {context}
       <CardHeader
         avatar={
@@ -134,7 +134,11 @@ const FeedCardDefault = ({
                 {authorName}
               </Link>
             ) : authorName}
-            <ActorHandle actor={node.author} />
+            {/* Where it was made, in place of the handle, which would not
+                fit beside it on a mobile. */}
+            {onAnother ?
+              <PostedOn owner={node.owner} author={node.author} /> :
+              <ActorHandle actor={node.author} />}
           </Box>
         }
         subheader={

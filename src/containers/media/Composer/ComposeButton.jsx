@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import Box from '@mui/material/Box';
 import CircularProgress from '@mui/material/CircularProgress';
 import Fab from '@mui/material/Fab';
-import IconButton from '@mui/material/IconButton';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import AddIcon from '@mui/icons-material/Add';
 import PropTypes from 'prop-types';
 
@@ -32,7 +32,7 @@ const { node } = utils;
 // screen instead (`inBar`, roadmap row 166), on every page: it posts to the
 // profile on the screen when the viewer may post to it, and else to their
 // own.
-const ComposeButton = ({ inBar = false }) => {
+const ComposeButton = ({ inBar = false, ...inBarProps }) => {
   const viewer = useSelector((state) => { return state.session.viewer; });
   const onScreen = useSelector((state) => { return state.composeTarget; });
 
@@ -121,29 +121,32 @@ const ComposeButton = ({ inBar = false }) => {
     </>
   );
 
+  // In the bar, a BottomNavigationAction, given what the bar gives each of
+  // its actions (`inBarProps`: whether it is open, whether its name shows).
   if (inBar) {
     return (
       <>
-        <Box sx={{ position: 'relative', display: 'inline-flex' }}>
-          <IconButton
-            color="inherit"
-            disabled={nothing}
-            aria-label={i18n.t('composer:newPost')}
-            onClick={open}
-          >
-            <AddIcon />
-          </IconButton>
-          {(isSending || isPreparing) &&
-            <CircularProgress
-              size={40}
-              variant={isSending ? 'determinate' : 'indeterminate'}
-              value={isSending ? upload.percent : undefined}
-              aria-label={isSending ? progressOf(upload) : i18n.t(wordsOf(upload.kind, 'upload.processing'))}
-              sx={{
-                position: 'absolute', top: 0, left: 0, pointerEvents: 'none',
-              }}
-            />}
-        </Box>
+        <BottomNavigationAction
+          {...inBarProps}
+          label={i18n.t('composer:newPost')}
+          disabled={nothing}
+          onClick={open}
+          icon={
+            <Box component="span" sx={{ position: 'relative', display: 'inline-flex' }}>
+              <AddIcon />
+              {(isSending || isPreparing) &&
+                <CircularProgress
+                  size={32}
+                  variant={isSending ? 'determinate' : 'indeterminate'}
+                  value={isSending ? upload.percent : undefined}
+                  aria-label={isSending ? progressOf(upload) : i18n.t(wordsOf(upload.kind, 'upload.processing'))}
+                  sx={{
+                    position: 'absolute', top: -4, left: -4, pointerEvents: 'none',
+                  }}
+                />}
+            </Box>
+          }
+        />
         {composersOf}
       </>
     );
@@ -184,8 +187,8 @@ const ComposeButton = ({ inBar = false }) => {
 };
 
 ComposeButton.propTypes = {
-  // The + in the bar at the foot of a mobile's screen, not the round
-  // button at the bottom right.
+  // The + in the bar at the foot of a mobile's screen (MobileBar.jsx), not
+  // the round button at the bottom right.
   inBar: PropTypes.bool,
 };
 

@@ -73,6 +73,10 @@ const ActorHeader = ({
             sx={{
               position: 'relative',
               zIndex: 1,
+              // Back by the width of its white ring (Forms/Avatar.jsx), which
+              // shows only over the cover: the picture itself starts where
+              // the name below it does (the user, 2026-11-21).
+              ml: '-4px',
               // The picture's own button is sized for a larger circle; here
               // the circle is the size, smaller on a mobile.
               '& .MuiIconButton-root': { width: 'auto', height: 'auto', p: 0 },
@@ -102,6 +106,18 @@ const ActorHeader = ({
               minWidth: 0,
               pb: 0.5,
               mt: hasCover ? { xs: 7, sm: 9 } : 0,
+              // On a mobile, the ⋮ against the card's edge, its own padding
+              // the margin, and the buttons beside it small (the user,
+              // 2026-11-21): at full size, Following and Invite took the
+              // row.
+              mr: { xs: -1, sm: 0 },
+              '& .MuiButton-root': {
+                fontSize: { xs: 13, sm: undefined },
+                px: { xs: 1.25, sm: undefined },
+                py: { xs: 0.5, sm: undefined },
+                minWidth: { xs: 0, sm: undefined },
+              },
+              '& .MuiButton-startIcon': { mr: { xs: 0.5, sm: undefined } },
             }}
           >
             {followAction}

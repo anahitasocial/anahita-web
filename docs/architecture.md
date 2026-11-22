@@ -1382,7 +1382,9 @@ are about, what to leave out. The server's side is in the services'
    of their own for it, which looked like a setting (the user, 2026-10-19).
 2. **Back to the top.** Once somebody has scrolled about a screen down Home
    or a profile, an arrow fades in at the bottom left, across from the +
-   button, and takes them back up (`components/BackToTop.jsx`).
+   button, and takes them back up (`components/BackToTop.jsx`). On a mobile
+   it is a step above the bar at the foot of the screen, and Home, tapped at
+   home, goes back to the top too.
 3. **One column or several.** On a wide screen a pair of buttons, beside the
    vertical tabs on Home and in the header on a profile, lays posts out one
    under another or in columns. The choice is kept in the browser, one for
@@ -2124,9 +2126,11 @@ hashtags, places, saved, a profile's tabs) and the feed's
    be copied, or the click was on a link or a button in it: a hashtag, a
    mention, an address. Ctrl-, ⌘- or a middle click opens it in a new tab.
    The title stays a real link for the keyboard and screen readers.
-3. **Where it was posted,** a group or somebody else's profile, as a quiet
-   line above the author (`components/MediumOwnerCardHeader.jsx`), not a
-   second header as heavy as the author's.
+3. **Where it was posted,** a group or somebody else's profile, in the
+   author's own line: "Rastin Mehr ▸ Sarah Noble", in place of the author's
+   handle (`components/PostedOn.jsx`; the user, 2026-11-21). A row of its
+   own above the author stood alone between two lines on a mobile. A post's
+   own page keeps that row (`components/MediumOwnerCardHeader.jsx`).
 4. **What a reply answers** is quoted in plain words (`utils/plainText.js`),
    so a link in it reads as its words, not as Markdown written out.
 5. **Raised the same way** as every other card and the gadgets beside them:
@@ -2162,15 +2166,26 @@ icon before its words, through `components/MenuItemLabel.jsx`.
 Below 600 pixels (`breakpoints.down('sm')`), the app's main places are in a
 bar at the foot of the screen (`containers/MobileBar.jsx`, roadmap row 166):
 Home, Search, + (a new post), Notifications and the viewer's own profile
-photo, five, with + in the middle. Icons alone, each with its name for a
-screen reader; the one for the page that is open is in the text's colour,
-the others quieter. A visitor has Home, Search and Sign in; a visitor on a
-members-only site has no bar, only the way in. The top bar keeps ≡, the
-whole menu, and the site's logo in its middle. The bar leaves room under it
-for the phone's home bar (`env(safe-area-inset-bottom)`), as anahita-mobile
-needs, and the page leaves room for both at its foot. From 600 pixels up,
-the top bar holds the search box, the bell and the profile photo, and + is
-the round button at the bottom right.
+photo, five, with + in the middle: Material UI's own `BottomNavigation`, as
+it comes (the user, 2026-11-21, after a floating pill was tried), across the
+foot of the screen, icons alone: the open page's is in the theme's colour,
+or ringed for the profile photo, and their names are for screen readers
+only. Its paper is 70% opaque and blurs what scrolls under it. Home, tapped
+at home, goes back to the top. A visitor has Home, Search and Sign in; a
+visitor on a members-only site has no bar, only the way in. It stays above
+the phone's home bar (`env(safe-area-inset-bottom)`), as anahita-mobile
+needs, and the page leaves room for it at its foot. The top bar keeps ≡, the
+whole menu, and the site's logo in its middle, 40 pixels, 8 clear of the
+bar's top and foot. From 600 pixels up, the top bar holds the search box, the bell and
+the profile photo, and + is the round button at the bottom right.
+
+**Cards on a mobile** lie flat on the page, edge to edge: square, with no
+shadow, and a line under each, as Bluesky and Threads have them, with no gap
+between two: the line is the gap. The page is the cards' own colour
+(`MuiCard` and `MuiCssBaseline` in `styles/index.js`). How round corners
+are (`CORNER_RADIUS`, or one's own) is for a wider screen. On a profile,
+the buttons beside the picture are small, and ⋮ is against the card's
+edge.
 
 ### Quote posts
 

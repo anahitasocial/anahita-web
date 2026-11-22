@@ -22,7 +22,14 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ### Changed
 
-1. **Search's choices are in one dialog.** Above the results, one button
+1. **Flatter on a mobile.** Cards lie flat and square, edge to edge, with
+   only a line between them. The bar at the foot is icons alone, lets what
+   scrolls under it show through, and marks the open page; Home, tapped at
+   home, goes back to the top. Colours in the menu is Customize now. The logo
+   at the top is smaller, and a profile's buttons are smaller too. A post
+   made on somebody else's profile or in a group says so in its author's
+   line, "Rastin Mehr ▸ Sarah Noble", in place of a row of its own.
+2. **Search's choices are in one dialog.** Above the results, one button
    says how the search is set and opens the order, the choices for "Most
    relevant" and the distance, full screen on a mobile, where they took a
    third of the screen.

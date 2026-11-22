@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import IconButton from '@mui/material/IconButton';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
@@ -17,7 +18,13 @@ import i18n from '../../languages';
 // are unread, kept current as useUnreadCount says, and the way to them. On
 // a desktop it opens the latest few in a menu (roadmap row 97, part 4); on
 // a mobile it goes to the page.
-const NotificationButton = ({ count, setUnread, resetUnread }) => {
+const NotificationButton = ({
+  count,
+  setUnread,
+  resetUnread,
+  inBar = false,
+  ...inBarProps
+}) => {
   useUnreadCount({
     ask: () => {
       return api.notifications.count().then(({ data }) => {
@@ -44,6 +51,21 @@ const NotificationButton = ({ count, setUnread, resetUnread }) => {
     i18n.t('notifications:bell', { count }) :
     i18n.t('notifications:cTitle');
   const bell = <Bell count={count} />;
+
+  // In the bar at the foot of a mobile's screen (MobileBar.jsx), a
+  // BottomNavigationAction, given what the bar gives each of its actions.
+  if (inBar) {
+    return (
+      <BottomNavigationAction
+        {...inBarProps}
+        component={Link}
+        to="/notifications"
+        label={i18n.t('notifications:cTitle')}
+        aria-label={label}
+        icon={bell}
+      />
+    );
+  }
 
   if (mobile) {
     return (
@@ -79,6 +101,8 @@ const NotificationButton = ({ count, setUnread, resetUnread }) => {
 
 NotificationButton.propTypes = {
   count: PropTypes.number.isRequired,
+  // The bell in the bar at the foot of a mobile's screen.
+  inBar: PropTypes.bool,
   setUnread: PropTypes.func.isRequired,
   resetUnread: PropTypes.func.isRequired,
 };

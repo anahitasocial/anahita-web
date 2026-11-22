@@ -23,7 +23,10 @@ const useStyles = makeStyles()((theme) => {
 
 // The site's logo at the top of the menu: the server's (SITE_LOGO_URL) when
 // it gives one, else the active theme's.
-const Logo = ({ nodeInfo = null }) => {
+//
+// `size` is the circle's, in pixels: 40 in a mobile's top bar, 8 pixels
+// clear of its top and its foot.
+const Logo = ({ nodeInfo = null, size = 48 }) => {
   const { classes } = useStyles();
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
   const src = siteLogo(nodeInfo, assets.logo, prefersDarkMode);
@@ -34,6 +37,7 @@ const Logo = ({ nodeInfo = null }) => {
         src={src}
         alt={process.env.REACT_APP_NAME}
         className={classes.logo}
+        style={{ width: size, height: size }}
       />
     </IconButton>
   );
@@ -41,6 +45,7 @@ const Logo = ({ nodeInfo = null }) => {
 
 Logo.propTypes = {
   nodeInfo: PropTypes.object,
+  size: PropTypes.number,
 };
 
 const mapStateToProps = (state) => {

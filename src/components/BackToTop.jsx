@@ -12,7 +12,9 @@ const MENU_WIDTH = 240;
 
 // Back to the top of a long feed (the user, 2026-10-20): an arrow at the
 // bottom left, across from the + button, once somebody has scrolled a
-// screen or so down, and gone again near the top.
+// screen or so down, and gone again near the top. On a mobile, a step above
+// the bar at the foot of the screen (MobileBar.jsx, 56 high), where Home,
+// tapped at home, goes back to the top as well.
 const BackToTop = () => {
   const far = useScrollTrigger({ disableHysteresis: true, threshold: 800 });
 
@@ -27,7 +29,7 @@ const BackToTop = () => {
         sx={{
           position: 'fixed',
           left: { xs: 16, sm: 24, lg: MENU_WIDTH + 24 },
-          bottom: { xs: 'calc(16px + env(safe-area-inset-bottom))', sm: 24 },
+          bottom: { xs: 'calc(72px + env(safe-area-inset-bottom))', sm: 24 },
           zIndex: (theme) => { return theme.zIndex.speedDial; },
         }}
       >

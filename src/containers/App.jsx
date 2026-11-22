@@ -269,7 +269,7 @@ const App = ({
           {!(mobile && searching) && <div className={classes.grow} />}
           {hasBar && !searching &&
             <div className={classes.centredLogo}>
-              <MenuLogo />
+              <MenuLogo size={40} />
             </div>}
           {!isShutOut && mobile && !searching && !hasBar &&
             <IconButton

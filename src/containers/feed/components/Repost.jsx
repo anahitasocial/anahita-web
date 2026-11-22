@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import moment from 'moment';
 import { makeStyles } from 'tss-react/mui';
 
+import Box from '@mui/material/Box';
 import Card from '@mui/material/Card';
 import CardHeader from '@mui/material/CardHeader';
 import CardContent from '@mui/material/CardContent';
@@ -12,7 +13,7 @@ import RepostIcon from '@mui/icons-material/Repeat';
 import PostActionsRow from '../../../components/PostActionsRow';
 import MediumCard from '../../../components/MediumCard';
 import ActorAvatar from '../../../components/ActorAvatar';
-import CardOwner from '../../../components/MediumOwnerCardHeader';
+import PostedOn from '../../../components/PostedOn';
 import utils from '../../../utils';
 import NodeType from '../../../proptypes/Node';
 import timeAgo from '../../../utils/timeAgo';
@@ -62,7 +63,6 @@ const FeedCardRepost = ({
       className={classes.card}
       component="section"
     >
-      {showOwner && node.owner && <CardOwner owner={node.owner} author={node.author} />}
       <CardHeader
         avatar={
           <ActorAvatar
@@ -70,7 +70,17 @@ const FeedCardRepost = ({
             linked={node.author.id > 0}
           />
         }
-        title={node.author.name}
+        title={
+          <Box
+            component="span"
+            sx={{
+              display: 'flex', alignItems: 'baseline', columnGap: 1, flexWrap: 'wrap', minWidth: 0,
+            }}
+          >
+            {node.author.name}
+            {showOwner && <PostedOn owner={node.owner} author={node.author} />}
+          </Box>
+        }
         // Said in words that it is a repost, and when it was reposted: a
         // repost of one's own post read as posting it again (banu.io,
         // 2026-11-07).

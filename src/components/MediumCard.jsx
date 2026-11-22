@@ -17,7 +17,7 @@ import PostTitle from './PostTitle';
 import MediumType from '../proptypes/Medium';
 import ActorTitle from './ActorTitle';
 import ActorAvatar from './ActorAvatar';
-import CardHeaderOwner from './MediumOwnerCardHeader';
+import PostedOn, { isElsewhere } from './PostedOn';
 import PhotoSlides from './PhotoSlides';
 import VideoElsewhere from './VideoElsewhere';
 import videoElsewhere from '../utils/videoElsewhere';
@@ -66,7 +66,6 @@ const MediumCard = ({
   stats = null,
   actions = null,
   access = null,
-  ownerActions = null,
   menu = null,
   handleView = null,
   cardProps = {
@@ -119,11 +118,6 @@ const MediumCard = ({
   return (
     <Card {...cardProps}>
       <PinnedLabel show={Boolean(medium.pinned)} />
-      {medium.author && medium.owner.id !== medium.author.id &&
-        <CardHeaderOwner
-          owner={medium.owner}
-          actions={ownerActions}
-        />}
       <Blurred state={warned}>
         {cover &&
           <Link href={url}>
@@ -144,11 +138,25 @@ const MediumCard = ({
           />
         }
         title={
-          <ActorTitle
-            actor={author}
-            linked={Boolean(author.id)}
-            withHandle
-          />
+          // Where it was made, in place of the handle, which would not fit
+          // beside it on a mobile.
+          isElsewhere(medium.owner, author) ? (
+            <Box
+              component="span"
+              sx={{
+                display: 'flex', alignItems: 'baseline', columnGap: 1, flexWrap: 'wrap', minWidth: 0,
+              }}
+            >
+              <ActorTitle actor={author} linked={Boolean(author.id)} />
+              <PostedOn owner={medium.owner} author={author} fontSize={16} />
+            </Box>
+          ) : (
+            <ActorTitle
+              actor={author}
+              linked={Boolean(author.id)}
+              withHandle
+            />
+          )
         }
         subheader={
           <>
@@ -281,7 +289,6 @@ MediumCard.propTypes = {
   stats: PropTypes.node,
   actions: PropTypes.node,
   access: PropTypes.node,
-  ownerActions: PropTypes.node,
   menu: PropTypes.node,
   medium: MediumType.isRequired,
   handleView: PropTypes.func,

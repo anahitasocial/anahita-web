@@ -56,20 +56,48 @@ const v4Look = (prefersDarkMode) => {
           },
         },
       },
-      MuiCssBaseline: {
+      // On a mobile, cards lie flat on the page, edge to edge: square, with
+      // no shadow, and a line under each, as Bluesky and Threads have them
+      // (the user, 2026-11-21). The page is the cards' own colour, and the
+      // line is all there is between two cards.
+      // How round corners are is for a wider screen.
+      MuiCard: {
         styleOverrides: {
-          body: {
-            fontSize: '0.875rem',
-            lineHeight: 1.43,
-            letterSpacing: '0.01071em',
+          root: ({ theme }) => {
+            return {
+              [theme.breakpoints.down('sm')]: {
+                borderRadius: 0,
+                boxShadow: 'none',
+                borderBottom: `1px solid ${theme.palette.divider}`,
+                // No gap under it: the line is the gap, and the gap with the
+                // next card's own padding was twice the room above its
+                // header (the user, 2026-11-21). Doubled, to outweigh the
+                // margins lists give their cards one by one.
+                '&&': { marginBottom: 0 },
+              },
+            };
           },
-          // A placeholder takes its direction from its own words. In a box
-          // set right to left for a post in Persian or Arabic, an English
-          // placeholder then still reads "What's new?" and not "?What's
-          // new", with no translation needed.
-          'input::placeholder, textarea::placeholder': {
-            unicodeBidi: 'plaintext',
-          },
+        },
+      },
+      MuiCssBaseline: {
+        styleOverrides: (theme) => {
+          return {
+            body: {
+              fontSize: '0.875rem',
+              lineHeight: 1.43,
+              letterSpacing: '0.01071em',
+              [theme.breakpoints.down('sm')]: {
+                backgroundColor: theme.palette.background.paper,
+              },
+            },
+            // A placeholder takes its direction from its own words. In a box
+            // set right to left for a post in Persian or Arabic, an English
+            // placeholder then still reads "What's new?" and not "?What's
+            // new", with no translation needed.
+            'input::placeholder, textarea::placeholder': {
+              unicodeBidi: 'plaintext',
+            },
+          };
         },
       },
       MuiLink: {
