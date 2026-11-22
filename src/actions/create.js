@@ -50,9 +50,15 @@ const browseSuccess = (results, namespace, requestId) => {
   const normalized = normalize(data.data || [], nodes);
   const ids = normalized.result || [];
 
-  // Endpoints that report a total give an exact answer; the rest fall back to
-  // the "a full page probably means there is another one" heuristic.
-  const hasMore = total > 0 ? (start + ids.length) < total : ids.length >= limit;
+  // A list too costly to count (the home feed) says whether there is more;
+  // a counted one gives an exact answer; the rest fall back to the "a full
+  // page probably means there is another one" heuristic.
+  let hasMore = ids.length >= limit;
+  if (typeof pagination.has_more === 'boolean') {
+    hasMore = pagination.has_more;
+  } else if (total > 0) {
+    hasMore = (start + ids.length) < total;
+  }
 
   return {
     type: `${namespace.toUpperCase()}_BROWSE_SUCCESS`,
