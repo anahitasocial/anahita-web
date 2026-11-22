@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 
 import api from '../../../api';
 import useFeedsBrowse from '../useFeedsBrowse';
+import apiUtils from '../../../utils/api';
 
 vi.mock('../../../api', () => {
   return {
@@ -22,7 +23,10 @@ vi.mock('../../../api', () => {
 });
 
 const feed = (id) => { return { id, name: `Feed ${id}` }; };
-const answer = (data, pagination) => { return Promise.resolve({ data: { data, pagination } }); };
+// As the API's client hands an answer on: every key camelCased.
+const answer = (data, pagination) => {
+  return Promise.resolve({ data: apiUtils.camelCaseKeys(pagination ? { data, pagination } : { data }) });
+};
 
 describe('useFeedsBrowse', () => {
   let box;

@@ -50,12 +50,13 @@ const browseSuccess = (results, namespace, requestId) => {
   const normalized = normalize(data.data || [], nodes);
   const ids = normalized.result || [];
 
-  // A list too costly to count (the home feed) says whether there is more;
-  // a counted one gives an exact answer; the rest fall back to the "a full
-  // page probably means there is another one" heuristic.
+  // A list too costly to count (the home feed) says whether there is more
+  // (`has_more`, which reaches here as `hasMore`, as every key is camelCased
+  // by the API's client); a counted one gives an exact answer; the rest fall
+  // back to the "a full page probably means there is another one" heuristic.
   let hasMore = ids.length >= limit;
-  if (typeof pagination.has_more === 'boolean') {
-    hasMore = pagination.has_more;
+  if (typeof pagination.hasMore === 'boolean') {
+    ({ hasMore } = pagination);
   } else if (total > 0) {
     hasMore = (start + ids.length) < total;
   }

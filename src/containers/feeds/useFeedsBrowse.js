@@ -45,8 +45,9 @@ const useFeedsBrowse = ({ whose, alertSuccess, alertError }) => {
       setList((before) => {
         return start === 0 ? page : [...before, ...page];
       });
-      setNext(pagination.next_start || 0);
-      setHasMore(Boolean(pagination.has_more));
+      // camelCased by the API's client, as every key is.
+      setNext(pagination.nextStart || 0);
+      setHasMore(Boolean(pagination.hasMore));
     });
   };
 

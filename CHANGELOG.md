@@ -14,6 +14,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **Reply on a notification leads to the post,** to be read before it is
    answered, and no longer opens a reply form under the notification.
 
+### Fixed
+
+1. **The Feeds page's lists load their next page** as one scrolls: the
+   page after the first was never asked for.
+2. **The Following feed pages by what the server says,** `has_more` from
+   Anahita Services v1.7.0, which no longer counts it.
+
 ## v1.3.9 Birth, 2026-11-22
 
 Works with Anahita Services v1.4.0 or later.
