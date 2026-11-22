@@ -65,7 +65,11 @@ const MediaPane = ({
   hasPrev,
   handleNext,
   handlePrev,
+  onTap = null,
 }) => {
+  // On a mobile (Immersive.jsx) the screen is the picture's: a tap is the
+  // lightbox's to answer, and what is over the picture is in its bars.
+  const immersive = Boolean(onTap);
   const {
     hasPortrait,
     src,
@@ -149,6 +153,7 @@ const MediaPane = ({
       ref={paneRef}
       className={clsx(
         classes.mediaPane,
+        immersive && classes.mediaPaneImmersive,
         isZoomed && classes.mediaPaneZoomed,
         isPanning && classes.mediaPanePanning,
       )}
@@ -163,7 +168,7 @@ const MediaPane = ({
       <WarningVeil state={warned} />
       {(isZoomLoading || (!isPortraitLoaded && !(hasRow && !isZoomed))) &&
         <CircularProgress className={classes.spinner} />}
-      {fileCount > 1 && !isZoomed &&
+      {fileCount > 1 && !isZoomed && !immersive &&
         <span className={classes.fileCount} aria-live="polite">
           {i18n.t('photos:slides.position', {
             index: fileIndex + 1,
@@ -197,9 +202,11 @@ const MediaPane = ({
                   // Only the image on show takes the keyboard, and only it
                   // can be zoomed.
                   tabIndex={at === fileIndex ? 0 : -1}
-                  disabled={!canZoom}
+                  disabled={!canZoom && !immersive}
                   onClick={() => {
-                    if (at === fileIndex) handleZoomToggle();
+                    if (at !== fileIndex) return;
+                    if (immersive) onTap();
+                    else handleZoomToggle();
                   }}
                 >
                   <PhotoSlideImage
@@ -213,16 +220,16 @@ const MediaPane = ({
             );
           })}
         </div>}
-      {!isZoomed && !hasRow && canZoom && image &&
+      {!isZoomed && !hasRow && (canZoom || immersive) && image &&
         <ZoomButton
           className={classes.zoomButton}
           label={zoomLabel}
-          onClick={handleZoomToggle}
+          onClick={immersive ? onTap : handleZoomToggle}
         >
           {image}
         </ZoomButton>}
-      {!isZoomed && !hasRow && !canZoom && image}
-      {isZoomed &&
+      {!isZoomed && !hasRow && !canZoom && !immersive && image}
+      {isZoomed && !immersive &&
         <div className={classes.zoomExit}>
           <Tooltip title={zoomLabel}>
             <IconButton
@@ -235,8 +242,11 @@ const MediaPane = ({
             </IconButton>
           </Tooltip>
         </div>}
-      {!isZoomed && overlayStep('prev', handlePrev, !hasPrev, classes.overlayNavPrev)}
-      {!isZoomed && overlayStep('next', handleNext, !hasNext, classes.overlayNavNext)}
+      {/* None where there is nothing to step to: a picture alone. */}
+      {!isZoomed && !immersive && (hasPrev || hasNext) &&
+        overlayStep('prev', handlePrev, !hasPrev, classes.overlayNavPrev)}
+      {!isZoomed && !immersive && (hasPrev || hasNext) &&
+        overlayStep('next', handleNext, !hasNext, classes.overlayNavNext)}
     </Grid>
   );
 };
@@ -258,6 +268,8 @@ MediaPane.propTypes = {
   hasPrev: PropTypes.bool.isRequired,
   handleNext: PropTypes.func.isRequired,
   handlePrev: PropTypes.func.isRequired,
+  // On a mobile, what a tap on the picture does (Immersive.jsx).
+  onTap: PropTypes.func,
 };
 
 export default MediaPane;

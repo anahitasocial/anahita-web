@@ -26,6 +26,7 @@ MediumStepperLightbox.propTypes = {
   hasPrev: PropTypes.bool,
   handleNext: PropTypes.func,
   handlePrev: PropTypes.func,
+  handleClose: PropTypes.func,
 };
 
 export default MediumStepperLightbox;

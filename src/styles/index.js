@@ -209,5 +209,9 @@ export default (prefersDarkMode, palette, corners) => {
     palette: { ...base.palette, ...style.palette, ...ofChosen(palette, prefersDarkMode) },
     components,
     ...ofCorners(corners, style.shape),
+    // What it was made from, for a part of the page that must be dark
+    // whatever the reader's mode, to be made again in dark with the same
+    // colours (media/Stepper/Lightbox/Immersive.jsx).
+    anahita: { palette, corners },
   });
 };

@@ -15,6 +15,16 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    dialog in front of it: the sheet has copying, email, messages and the
    Mastodon and Bluesky apps already. On a desktop, and for something that
    is not public, the dialog stays as it was.
+2. **A reply's pictures open in the lightbox,** as a photo post's do: larger,
+   zoomed into, and stepped or swiped through, with the reply's words and
+   heart beside them. The arrows beside a picture are gone where there is
+   nothing to step to.
+3. **The lightbox on a mobile is the picture alone,** full screen, with a
+   bar at the top and the writer, words and buttons at the bottom; a tap
+   hides them. Swipe through the pictures, pull down or go back to close,
+   double-tap or pinch to zoom. Reply opens the replies in a sheet over the
+   picture, to read and answer there. Locations and Cited by are on the
+   post's page; on a wider screen the lightbox is as it was.
 
 ## v1.3.8 Birth, 2026-11-21
 

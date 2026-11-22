@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
@@ -11,6 +11,7 @@ import ReplyBox from './ReplyBox';
 import ReplyContent, { HEAD } from './ReplyContent';
 import ReplyForm from './ReplyForm';
 import ReplyMenu from './ReplyMenu';
+import ReplyTheatre from './ReplyTheatre';
 import useReplyItem from './useReplyItem';
 import PersonType from '../../proptypes/Person';
 import i18n from '../../languages';
@@ -50,6 +51,8 @@ const ReplyItem = ({
   const {
     author, warned, media, isEditing,
   } = item;
+  // Which of its pictures is open in the theatre, or none.
+  const [pictureAt, setPictureAt] = useState(null);
   // What is done with a reply, handed down to the replies under it.
   const handlers = {
     onReply, onEdit, onDelete, onHide, onLike, onWarning, onBlockFromOwner, blockFromOwnerLabel,
@@ -163,6 +166,7 @@ const ReplyItem = ({
             warned={warned}
             media={media}
             isEditing={isEditing}
+            onOpenPicture={setPictureAt}
           />
           {isEditing &&
             <ReplyForm
@@ -208,6 +212,16 @@ const ReplyItem = ({
             onSubmit={item.sendReply}
           />
         </Box>}
+      {pictureAt !== null &&
+        <ReplyTheatre
+          reply={reply}
+          at={pictureAt}
+          authorized={item.authorized}
+          onLike={onLike}
+          onClose={() => {
+            setPictureAt(null);
+          }}
+        />}
       {under}
     </Box>
   );

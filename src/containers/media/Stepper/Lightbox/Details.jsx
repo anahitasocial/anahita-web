@@ -142,6 +142,9 @@ const Details = ({
           <StepButton way="prev" onClick={handlePrev} disabled={!hasPrev} />
           <StepButton way="next" onClick={handleNext} disabled={!hasNext} />
         </Box>}
+      {/* A reply's pictures (replies/ReplyTheatre) come with no tabs: its
+          thread is the post's. */}
+      {(replies || locations) &&
       <Tabs
         className={classes.tabs}
         value={tab}
@@ -155,10 +158,10 @@ const Details = ({
         <Tab label={i18n.t('replies:cTitle')} value={TABS.REPLIES} />
         <Tab label={i18n.t('locations:cTitle')} value={TABS.LOCATIONS} />
         <Tab label={i18n.t('media:citations.citedBy')} value={TABS.CITED_BY} />
-      </Tabs>
+      </Tabs>}
       {tab === TABS.REPLIES && replies}
       {tab === TABS.LOCATIONS && locations}
-      {tab === TABS.CITED_BY &&
+      {tab === TABS.CITED_BY && (replies || locations) &&
         <CitedByTab
           medium={medium}
           scrollableTarget={scrollableTarget}

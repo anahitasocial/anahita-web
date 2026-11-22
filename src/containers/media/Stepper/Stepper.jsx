@@ -10,6 +10,8 @@ import IconButton from '@mui/material/IconButton';
 import Toolbar from '@mui/material/Toolbar';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 import CloseIcon from '@mui/icons-material/Close';
 import HomeIcon from '@mui/icons-material/Home';
@@ -95,6 +97,11 @@ const MediaStepperView = ({
 }) => {
   const url = getURL(medium);
   const title = getTitle(medium);
+  // On a mobile the lightbox has the whole screen, its own bars over the
+  // picture (Lightbox/Immersive.jsx); this bar is for a wider screen, or
+  // the post being edited.
+  const isStacked = useMediaQuery(useTheme().breakpoints.down('md'));
+  const hasBar = !isStacked || isEditing;
 
   return (
     <Dialog
@@ -109,6 +116,7 @@ const MediaStepperView = ({
         </title>
         <meta name="description" content={striptags(medium.content || '')} />
       </Helmet>
+      {hasBar &&
       <Toolbar className={classes.toolbar} variant="dense">
         <Tooltip title={i18n.t('commons:close')}>
           <IconButton
@@ -155,10 +163,11 @@ const MediaStepperView = ({
             <HomeIcon />
           </IconButton>
         </Tooltip>
-      </Toolbar>
-      <Divider />
+      </Toolbar>}
+      {hasBar && <Divider />}
       <Lightbox
         medium={medium}
+        handleClose={handleClose}
         fileIndex={fileIndex}
         handleFileIndex={handleFileIndex}
         editing={isEditing}

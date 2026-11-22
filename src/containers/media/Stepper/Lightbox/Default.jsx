@@ -10,6 +10,7 @@ import MediumType from '../../../../proptypes/Medium';
 import photoFiles from '../../../../utils/photoFiles';
 import { useWarning } from '../../../../components/WarningCover';
 import Details from './Details';
+import Immersive from './Immersive';
 import MediaPane from './MediaPane';
 import styles from './styles';
 import usePortrait from './usePortrait';
@@ -42,6 +43,7 @@ const MediumStepperLightboxDefault = ({
   hasPrev,
   handleNext,
   handlePrev,
+  handleClose = null,
 }) => {
   const isStacked = useMediaQuery(useTheme().breakpoints.down('md'));
   const fileCount = photoFiles.countOf(medium);
@@ -67,6 +69,27 @@ const MediumStepperLightboxDefault = ({
 
   const { hasPortrait } = picture;
   const hasPicture = hasPortrait || Boolean(medium && medium.video);
+
+  // On a mobile, the whole screen is the picture's (Immersive.jsx); being
+  // edited, it is the post with its form, as here.
+  if (isStacked && !editing && handleClose) {
+    return (
+      <Immersive
+        medium={medium}
+        fileIndex={fileIndex}
+        handleFileIndex={handleFileIndex}
+        actions={actions}
+        menu={menu}
+        stats={stats}
+        replies={replies}
+        hasNext={hasNext}
+        hasPrev={hasPrev}
+        handleNext={handleNext}
+        handlePrev={handlePrev}
+        handleClose={handleClose}
+      />
+    );
+  }
 
   return (
     <div className={classes.root} id={ROOT_ID}>
@@ -132,6 +155,8 @@ MediumStepperLightboxDefault.propTypes = {
   hasPrev: PropTypes.bool.isRequired,
   handleNext: PropTypes.func.isRequired,
   handlePrev: PropTypes.func.isRequired,
+  // Closes the lightbox: given, it is the whole screen on a mobile.
+  handleClose: PropTypes.func,
 };
 
 export default withStyles(MediumStepperLightboxDefault, styles);

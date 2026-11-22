@@ -21,13 +21,14 @@ const action = {
 };
 
 // The heart and the reply button under a reply, each there where it can be
-// pressed or has a number to show.
+// pressed or has a number to show. The heart alone where nothing toggles a
+// reply box: beside its pictures, in the theatre.
 const ReplyActions = ({
   reply,
   authorized,
   isReplying,
   onLike,
-  onToggleReplying,
+  onToggleReplying = null,
 }) => {
   return (
     <Box sx={{
@@ -53,7 +54,7 @@ const ReplyActions = ({
         >
           {reply.likesCount > 0 ? reply.likesCount : ''}
         </Button>}
-      {(authorized.comment || reply.commentCount > 0) &&
+      {onToggleReplying && (authorized.comment || reply.commentCount > 0) &&
         <Button
           size="small"
           color="inherit"
@@ -77,7 +78,7 @@ ReplyActions.propTypes = {
   authorized: PropTypes.object.isRequired,
   isReplying: PropTypes.bool.isRequired,
   onLike: PropTypes.func.isRequired,
-  onToggleReplying: PropTypes.func.isRequired,
+  onToggleReplying: PropTypes.func,
 };
 
 export default ReplyActions;

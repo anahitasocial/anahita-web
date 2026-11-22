@@ -50,6 +50,7 @@ const ReplyContent = ({
   warned,
   media,
   isEditing = false,
+  onOpenPicture = null,
 }) => {
   const navigate = useNavigate();
   // The reply's own page: what it answers above it, its replies under it.
@@ -110,7 +111,7 @@ const ReplyContent = ({
       <WarningCover state={warned} off={!media}>
         {Array.isArray(reply.files) && reply.files.length > 0 &&
         <Box sx={framed}>
-          <PhotoSlides medium={reply} size="medium" />
+          <PhotoSlides medium={reply} size="medium" onOpen={onOpenPicture} />
         </Box>}
         {reply.video &&
         <Box sx={framed}>
@@ -153,6 +154,8 @@ ReplyContent.propTypes = {
   // Whether it has pictures, a video or a sound for the warning to cover.
   media: PropTypes.bool.isRequired,
   isEditing: PropTypes.bool,
+  // Opens its pictures in the theatre, at the one pressed.
+  onOpenPicture: PropTypes.func,
 };
 
 export default ReplyContent;

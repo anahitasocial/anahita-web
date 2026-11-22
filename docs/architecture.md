@@ -599,7 +599,26 @@ arrows and the arrow keys step through them, and a swipe leaves the post only
 from its first or last image. `Stepper/index.jsx` holds which image is on
 show; the row tells it when a swipe has moved. Zooming takes the image on
 show out of the row and shows it at full size, as for any photo. A post with
-one image is drawn as it always was.
+one image is drawn as it always was, with no arrows where there is nothing
+to step to.
+
+**On a mobile** (below `md`, where the two panels used to stack), the
+lightbox is the picture alone, full screen on black
+(`Lightbox/Immersive.jsx`; the user, 2026-11-22): a bar at the top with
+the way out, "2 of 4" and the post's menu, and one at the bottom with the
+writer, the words in two lines (all of them a tap away) and the post's
+buttons. Reply and its count open the post's replies in a sheet over the
+picture, three quarters of the screen, to be read and answered there; it
+closes pulled down, tapped above or gone back from. A tap hides the
+bars and brings them back. It is swiped through as a phone's photos are:
+left and right through the pictures and on to the next post, pulled down
+to close, a double tap or a pinch to zoom; and it takes a step in the
+browser's history, so that the back gesture closes it, and the replies
+take another, so that it closes them first. Its locations and what cites
+it are on the post's page. Being edited, it is the post with its form, as on
+a wider screen. The bars are dark whatever the reader's mode, in the
+reader's own colours: the theme keeps the palette and corners it was made
+from (`theme.anahita`), and the lightbox makes them again in dark.
 
 Every image carries its description as `alt`. One without a description falls
 back to the post's title.
@@ -626,6 +645,12 @@ in turn. A reply is a post of any kind too: words alone make a note, pictures
 a photo post, a GIF or a video a video post. `containers/replies/Thread.jsx` shows them, as the Replies
 tab on a post's page and in the lightbox. What used to be comments are
 replies, made directly to the post.
+
+**A reply's pictures** open in the same lightbox as a photo post's, at the
+one pressed (`containers/replies/ReplyTheatre.jsx`): larger, zoomed into,
+and stepped or swiped through, its writer, words and heart beside them. It
+steps through that reply's pictures only, and has no tabs: the thread it is
+in is the post's, behind it.
 
 **A conversation** (roadmap row 129) is drawn flat, though each reply still
 answers what it answered. The replies to the post, or to the reply a page
