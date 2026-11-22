@@ -18,11 +18,12 @@ const LocationsListItem = ({
   location,
   actions = null,
   detail = null,
+  divider = true,
 }) => {
   return (
     <ListItem
       key={`locations-list-item-${location.id}`}
-      divider
+      divider={divider}
       disablePadding
       secondaryAction={actions}
     >
@@ -55,6 +56,9 @@ const LocationsListItem = ({
 
 LocationsListItem.propTypes = {
   location: LocationType.isRequired,
+  // A line under it; not under the last in a card, where the card's own
+  // edge, or what follows, is the line.
+  divider: PropTypes.bool,
   actions: PropTypes.node,
   // A line under the address, such as how many profiles used it lately.
   // Words go here, not in actions, whose room is an icon's.

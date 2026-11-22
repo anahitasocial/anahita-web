@@ -63,7 +63,13 @@ const v4Look = (prefersDarkMode) => {
       // How round corners are is for a wider screen.
       MuiCard: {
         styleOverrides: {
-          root: ({ theme }) => {
+          // Not an outlined card: one inside another, as a post a repost
+          // quotes, keeps the site's corners and its own outline (the user,
+          // 2026-11-21).
+          root: ({ theme, ownerState }) => {
+            if (ownerState && ownerState.variant === 'outlined') {
+              return {};
+            }
             return {
               [theme.breakpoints.down('sm')]: {
                 borderRadius: 0,

@@ -35,6 +35,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    third of the screen.
 3. **The layout buttons are plainer.** One column or several are two icons,
    the chosen one darker, with no outline beside the tabs' line.
+4. **Smaller things on a mobile.** The bar at the foot leaves room for the
+   phone's home bar when Anahita is opened from the home screen. A post
+   inside a repost keeps its rounded box. A profile's Locations card adds
+   with a plain + Add, and its rows have no line under the last.
 
 ### Fixed
 

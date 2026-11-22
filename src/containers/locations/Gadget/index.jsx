@@ -119,12 +119,16 @@ const LocationsGadget = ({
             locations={locations}
             height={MAP_HEIGHT}
           />}
-        <List>
-          {locations.map((location) => {
+        {/* No padding of its own and no line under the last: the room
+            above and below Add is the card actions' own, the same both
+            sides (the user, 2026-11-21). */}
+        <List disablePadding>
+          {locations.map((location, index) => {
             return (
               <ListItem
                 key={`location-graph-list-item-${location.id}`}
                 location={location}
+                divider={index < locations.length - 1}
                 actions={canDelete &&
                   <ControlDelete
                     tag={location}
@@ -143,15 +147,17 @@ const LocationsGadget = ({
           </CardActions>}
         {canAdd && !isFull &&
           <CardActions>
+            {/* A text button, the quietest: an outlined one beside the
+                rows' lines was one line too many. */}
             <Button
               fullWidth
               onClick={() => {
                 return setIsOpen(true);
               }}
-              variant="outlined"
+              startIcon={<AddIcon />}
               aria-label={i18n.t('locations:add.cTitle')}
             >
-              <AddIcon />
+              {i18n.t('actions:add')}
             </Button>
           </CardActions>}
       </Card>
