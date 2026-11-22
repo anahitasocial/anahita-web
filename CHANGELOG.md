@@ -44,7 +44,8 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 5. **Rounder corners on a mobile.** Below 600 pixels the site's corners are
    `md`, 8 pixels, while a wider screen keeps `sm`; anahita-services'
    `CORNER_RADIUS_MOBILE` changes them. One's own choice is for every
-   screen.
+   screen. In Customize, Reset is at the top beside Close, once
+   something is chosen, and the sheet stays clear of the phone's home bar.
 
 ### Fixed
 

@@ -155,6 +155,20 @@ const Palettes = ({
         <Typography variant="subtitle1" noWrap sx={{ flexGrow: 1, minWidth: 0, fontWeight: 500 }}>
           {current ? current.name : i18n.t('colours:site')}
         </Typography>
+        {/* Reset at the top, beside close, where it is seen, and only when
+            there is something of one's own to reset: at the foot it was out
+            of sight, and in the home-screen app under the home bar (the
+            user, 2026-11-21). */}
+        {(current || corners !== undefined) &&
+          <Button
+            size="small"
+            onClick={() => {
+              choose(undefined);
+              chooseCorners(undefined);
+            }}
+          >
+            {i18n.t('colours:reset')}
+          </Button>}
         <IconButton aria-label={i18n.t('actions:close')} onClick={onClose}>
           <CloseIcon fontSize="small" />
         </IconButton>
@@ -237,21 +251,8 @@ const Palettes = ({
           />
         </Box>
       </Box>
-      <Box sx={{
-        display: 'flex', justifyContent: 'flex-end', px: 1, py: 1,
-      }}
-      >
-        <Button
-          size="small"
-          onClick={() => {
-            choose(undefined);
-            chooseCorners(undefined);
-          }}
-          disabled={!current && corners === undefined}
-        >
-          {i18n.t('colours:reset')}
-        </Button>
-      </Box>
+      {/* Room at the foot, and above the phone's home bar on a mobile. */}
+      <Box sx={{ pb: mobile ? 'calc(16px + env(safe-area-inset-bottom))' : 2 }} />
     </Box>
   );
 };
@@ -269,9 +270,10 @@ Palettes.propTypes = {
 // Colours of one's own, for somebody signed in: Customize in the left menu
 // opens the palettes (docs/plans/colours.md), and the one chosen is the
 // app's colours at once, in light mode and dark, kept in this browser.
-// Under them, how round the corners are. Reset goes back to the site's own,
-// colours and corners. It does not dim or hold the page, which can be scrolled
-// with it open; a click or a tap outside it closes it.
+// Under them, how round the corners are. Reset, at the top once something is
+// chosen, goes back to the site's own, colours and corners. It does not dim
+// or hold the page, which can be scrolled with it open; a click or a tap
+// outside it closes it.
 const ColourPicker = ({
   current = undefined,
   corners = undefined,
