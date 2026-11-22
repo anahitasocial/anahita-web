@@ -7,6 +7,15 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Changed
+
+1. **Share on a mobile opens the phone's own share sheet,** with no
+   dialog in front of it: the sheet has copying, email, messages and the
+   Mastodon and Bluesky apps already. On a desktop, and for something that
+   is not public, the dialog stays as it was.
+
 ## v1.3.8 Birth, 2026-11-21
 
 Works with Anahita Services v1.4.0 or later.

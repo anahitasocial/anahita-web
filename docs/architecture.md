@@ -1206,6 +1206,12 @@ and, where the browser has one, the device's own share sheet ("More
 options"), which has every app the person uses. Mastodon asks for the
 person's server the first time and keeps it in the browser.
 
+On a mobile (below `sm`) with a share sheet of its own, Share opens that
+sheet at once, with no dialog: the sheet has copying, email, messages and
+the Mastodon and Bluesky apps already. The dialog stays for a desktop, where
+the sheet has no Mastodon or Bluesky; for something not public, whose note
+says who can open it; and when the sheet will not open.
+
 1. **Anything on a page opens it** through `utils/share.js#open`:
    `ShareAction`, `ShareButton` and `ShareMenuItem` in
    `containers/controls/Share.jsx`. A menu can close behind its item, since

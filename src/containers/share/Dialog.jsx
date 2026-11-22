@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
@@ -14,6 +14,8 @@ import ListItemText from '@mui/material/ListItemText';
 import Stack from '@mui/material/Stack';
 import TextField from '@mui/material/TextField';
 import Typography from '@mui/material/Typography';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
 
 import BlueskyIcon from '@mui/icons-material/CloudOutlined';
 import CopyIcon from '@mui/icons-material/ContentCopyOutlined';
@@ -28,6 +30,12 @@ import visitor from '../../utils/visitor';
 
 // The share dialog: one for the whole app, opened by any share button or
 // menu item through `utils/share.open`.
+//
+// On a mobile with a share sheet of its own, Share opens that sheet at once
+// and no dialog: it has copying, email, messages and the Mastodon and
+// Bluesky apps already, and whatever else the person uses (the user,
+// 2026-11-22). Not for something that is not public, which the dialog says
+// who can open; and the dialog after all when the sheet will not open.
 //
 // It shows the link and the ways to send it: copy it, email it, post it on
 // Mastodon or Bluesky, or hand it to the device's own share sheet where
@@ -45,11 +53,34 @@ const ShareDialog = ({
   const [server, setServer] = useState('');
   const [isAskingServer, setIsAskingServer] = useState(false);
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  // Read when Share is pressed, by the listener made once below.
+  const now = useRef({ isMobile, readAccess });
+  now.current = { isMobile, readAccess };
+
   useEffect(() => {
-    return share.listen((asked) => {
+    const showDialog = (asked) => {
       setServer(share.rememberedServer());
       setIsAskingServer(false);
       setWhat(asked);
+    };
+    return share.listen((asked) => {
+      const sheetFirst = now.current.isMobile && typeof navigator.share === 'function' &&
+        share.isOpen(asked.access, now.current.readAccess);
+      if (!sheetFirst) {
+        showDialog(asked);
+        return;
+      }
+      // Within the tap that pressed Share, as the sheet must be.
+      const url = share.linkOf(asked.path);
+      const title = share.messageOf({ url, title: asked.title, text: asked.text });
+      navigator.share({ title, url }).catch((error) => {
+        // Dismissed is not an error. Refused, the dialog has the rest.
+        if (!error || error.name !== 'AbortError') {
+          showDialog(asked);
+        }
+      });
     });
   }, []);
 
