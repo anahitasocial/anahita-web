@@ -50,7 +50,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    under their heading or between their cards, only the cards' lines; so do
    search's results, a hashtag's and a location's posts, recommendations,
    and every tab of a profile, and the cards run to both edges of the
-   screen. The filters of Events keep the cards' 16 pixels from its sides.
+   screen. The filters of Events keep the cards' 16 pixels from its sides. A
+   card's buttons have more room under them, so that they read as its own
+   and not the next card's.
 
 ### Fixed
 

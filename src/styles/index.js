@@ -32,6 +32,20 @@ const v4Look = (prefersDarkMode) => {
       // Content straight after a card's header drops its top padding: the
       // header's own padding below it is the gap, and the two together were
       // twice that. A picture or anything else between them keeps both.
+      // On a mobile a card's action row has 16 pixels under it, not 8: the
+      // buttons belong to the card above them, not to the next card, which
+      // begins at the line just under them (the user, 2026-11-21).
+      MuiCardActions: {
+        styleOverrides: {
+          root: ({ theme }) => {
+            return {
+              [theme.breakpoints.down('sm')]: {
+                paddingBottom: theme.spacing(2),
+              },
+            };
+          },
+        },
+      },
       MuiCardContent: {
         styleOverrides: {
           root: {

@@ -53,8 +53,10 @@ tone made specific; where they are silent, follow it.
    first, then the main action, the only contained one. Alone, a button is
    full width too: easy to reach with a thumb, and in the same place on
    every card as one scrolls (the user, 2026-11-08). A third action goes in
-   a menu. The row keeps MUI's own 8 pixels. In a dialog, a pair is full
-   width and side by side as in a card, and a button alone is its own
+   a menu. The row keeps MUI's own 8 pixels, but 16 under it on a mobile,
+   where cards meet at a line and the buttons must read as their own
+   card's (`MuiCardActions`; the user, 2026-11-21). In a dialog, a pair is
+   full width and side by side as in a card, and a button alone is its own
    size, at the right; the dialog's padding is in the theme
    (`MuiDialogActions`). Lists keep their own buttons (Unblock, Manage).
 3. Calm, not busy: one flat list, never indented lists under headings inside
