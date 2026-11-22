@@ -1,10 +1,10 @@
-// The colour picker, for somebody signed in (components/ColourPicker.jsx).
+// The colour picker, for somebody signed in (components/ColourPicker.jsx),
+// its colours and corners, which the menu calls Customize (the user,
+// 2026-11-21).
 export default {
-  title: 'Colores',
-  open: 'Colores',
+  title: 'Personalizar',
+  open: 'Personalizar',
   reset: 'Restablecer',
   site: 'Los colores del sitio',
   corners: 'Esquinas',
-  square: 'Rectas',
-  cornersOf: 'Esquinas de {{radius}} píxeles',
 };

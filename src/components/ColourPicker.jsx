@@ -8,6 +8,7 @@ import Drawer from '@mui/material/Drawer';
 import IconButton from '@mui/material/IconButton';
 import Paper from '@mui/material/Paper';
 import Popper from '@mui/material/Popper';
+import Slider from '@mui/material/Slider';
 import Tooltip from '@mui/material/Tooltip';
 import Typography from '@mui/material/Typography';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -15,7 +16,7 @@ import CloseIcon from '@mui/icons-material/Close';
 
 import palettes from '../styles/palettes';
 import i18n from '../languages';
-import rounder from '../utils/corners';
+import rounder, { CORNER_RADII } from '../utils/corners';
 
 // The palettes under their groups (Bauhaus, Mid-Century…), in the order of
 // the list.
@@ -53,19 +54,31 @@ const save = (id) => {
   }
 };
 
-// How round the corners are, for somebody who chose (roadmap row 168): five
-// steps of four pixels, square to round. The site's own (CORNER_RADIUS) may
-// be any of 0 to 24, and is what everybody else sees.
-export const CORNER_STEPS = [0, 4, 8, 12, 16];
-
+// How round the corners are, for somebody who chose (roadmap row 168): the
+// five steps Material UI names, none, sm, md, lg and xl (utils/corners.js),
+// kept by name, worked with in pixels. The site's own is what everybody else
+// sees (CORNER_RADIUS).
 const CORNERS_KEY = 'anahita-corners';
 
-// The corners chosen in this browser, or undefined for the site's own.
+const STEP_NAMES = Object.keys(CORNER_RADII);
+
+// A step's mark under the slider: its name, but 0 for none, which is
+// shorter (the user, 2026-11-21); a screen reader still hears "none".
+const markOf = (name) => {
+  return name === 'none' ? '0' : name;
+};
+
+// A radius's name, or undefined for one that is not a step.
+const nameOf = (radius) => {
+  return STEP_NAMES.find((name) => { return CORNER_RADII[name] === radius; });
+};
+
+// The corners chosen in this browser, in pixels, or undefined for the
+// site's own.
 export const savedCorners = () => {
   try {
-    const radius = Number(window.localStorage.getItem(CORNERS_KEY));
-    const kept = window.localStorage.getItem(CORNERS_KEY) !== null;
-    return kept && CORNER_STEPS.includes(radius) ? radius : undefined;
+    const name = window.localStorage.getItem(CORNERS_KEY);
+    return Object.hasOwn(CORNER_RADII, name) ? CORNER_RADII[name] : undefined;
   } catch {
     return undefined;
   }
@@ -73,10 +86,11 @@ export const savedCorners = () => {
 
 const saveCorners = (radius) => {
   try {
-    if (radius === undefined) {
-      window.localStorage.removeItem(CORNERS_KEY);
+    const name = nameOf(radius);
+    if (name) {
+      window.localStorage.setItem(CORNERS_KEY, name);
     } else {
-      window.localStorage.setItem(CORNERS_KEY, String(radius));
+      window.localStorage.removeItem(CORNERS_KEY);
     }
   } catch {
     // Not remembered, which is all.
@@ -114,16 +128,24 @@ Swatch.propTypes = {
 // The palettes as rows of swatches, one row for each group, and the chosen
 // one's name at the top, or "This site's colours" while none is: then no
 // swatch is marked, since the site's own may be none of them. On a mobile,
-// the sheet across the bottom, as tall as its three rows, so that the page
+// the sheet across the bottom, as tall as its rows and the corners, so the page
 // above it shows what each palette does; on a wider screen, a small card
 // beside the left menu, where each swatch says its name when pointed at.
 const Palettes = ({
-  current = undefined, corners = undefined, choose, chooseCorners, onClose, mobile,
+  current = undefined,
+  corners = undefined,
+  siteCorners = CORNER_RADII.sm,
+  choose,
+  chooseCorners,
+  onClose,
+  mobile,
 }) => {
   const size = mobile ? 40 : 32;
+  // Where the corners' slider stands: the chosen, or the site's.
+  const shownCorners = corners === undefined ? siteCorners : corners;
   return (
     <Box sx={mobile ?
-      { maxHeight: '50vh', display: 'flex', flexDirection: 'column' } :
+      { maxHeight: '67vh', display: 'flex', flexDirection: 'column' } :
       { width: 304 }}
     >
       <Box sx={{
@@ -185,55 +207,34 @@ const Palettes = ({
           );
         })}
       </Box>
-      {/* The corners, under the colours: a square drawn with each, the
-          chosen one ringed as a palette is. None is while the site's own
-          are kept. */}
+      {/* The corners, under the colours: a slider over the five steps
+          Material UI names (the user, 2026-11-21). Until somebody moves it,
+          it stands where the site's own are, and moving it makes them
+          theirs; Reset gives the site's back. */}
       <Box sx={{ px: 2, mt: 1 }}>
-        <Typography variant="overline" color="text.secondary" component="p" sx={{ lineHeight: 2 }}>
+        <Typography
+          id="colour-picker-corners"
+          variant="overline"
+          color="text.secondary"
+          component="p"
+          sx={{ lineHeight: 2 }}
+        >
           {i18n.t('colours:corners')}
         </Typography>
-        <Box sx={{
-          display: 'flex', gap: 2, justifyContent: 'space-between', py: 1, px: 1,
-        }}
-        >
-          {CORNER_STEPS.map((radius) => {
-            const selected = corners === radius;
-            const label = radius === 0 ?
-              i18n.t('colours:square') :
-              i18n.t('colours:cornersOf', { radius });
-            const step = (
-              <ButtonBase
-                key={radius}
-                aria-label={label}
-                aria-pressed={selected}
-                onClick={() => { chooseCorners(radius); }}
-                sx={{
-                  borderRadius: `${radius}px`,
-                  flexShrink: 0,
-                  outline: selected ? 2 : 0,
-                  outlineColor: 'text.primary',
-                  outlineOffset: 3,
-                }}
-              >
-                <Box
-                  component="span"
-                  sx={{
-                    display: 'block',
-                    width: size,
-                    height: size,
-                    borderRadius: `${radius}px`,
-                    border: 2,
-                    borderColor: 'primary.main',
-                  }}
-                />
-              </ButtonBase>
-            );
-            return mobile ? step : (
-              <Tooltip key={radius} title={label} placement="top">
-                {step}
-              </Tooltip>
-            );
-          })}
+        <Box sx={{ px: 1 }}>
+          <Slider
+            aria-labelledby="colour-picker-corners"
+            value={Math.max(STEP_NAMES.indexOf(nameOf(shownCorners)), 0)}
+            min={0}
+            max={STEP_NAMES.length - 1}
+            step={1}
+            marks={STEP_NAMES.map((name, at) => { return { value: at, label: markOf(name) }; })}
+            getAriaValueText={(at) => { return STEP_NAMES[at]; }}
+            onChange={(event, at) => {
+              chooseCorners(CORNER_RADII[STEP_NAMES[at]]);
+            }}
+            size="small"
+          />
         </Box>
       </Box>
       <Box sx={{
@@ -258,13 +259,14 @@ const Palettes = ({
 Palettes.propTypes = {
   current: PropTypes.object,
   corners: PropTypes.number,
+  siteCorners: PropTypes.number,
   choose: PropTypes.func.isRequired,
   chooseCorners: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   mobile: PropTypes.bool.isRequired,
 };
 
-// Colours of one's own, for somebody signed in: Colours in the left menu
+// Colours of one's own, for somebody signed in: Customize in the left menu
 // opens the palettes (docs/plans/colours.md), and the one chosen is the
 // app's colours at once, in light mode and dark, kept in this browser.
 // Under them, how round the corners are. Reset goes back to the site's own,
@@ -273,6 +275,7 @@ Palettes.propTypes = {
 const ColourPicker = ({
   current = undefined,
   corners = undefined,
+  siteCorners = CORNER_RADII.sm,
   onChoose,
   onChooseCorners,
   open,
@@ -307,6 +310,7 @@ const ColourPicker = ({
         <Palettes
           current={current}
           corners={corners}
+          siteCorners={siteCorners}
           choose={choose}
           chooseCorners={chooseCorners}
           onClose={onClose}
@@ -335,12 +339,12 @@ const ColourPicker = ({
     );
   }
 
-  // On a wider screen, a small card opening up from the Colours item.
+  // On a wider screen, a small card opening up from the Customize item.
   return (
     <Popper
       open={open}
       anchorEl={anchorEl}
-      // Up from the Colours item, near the foot of the menu, as a menu opens
+      // Up from the Customize item, near the foot of the menu, as a menu opens
       // there; down instead where there is no room above.
       placement="top-start"
       modifiers={[
@@ -368,10 +372,12 @@ ColourPicker.propTypes = {
   current: PropTypes.object,
   // The corners chosen, in pixels, or undefined for the site's own.
   corners: PropTypes.number,
+  // The site's own corners, in pixels, where the slider stands until moved.
+  siteCorners: PropTypes.number,
   onChoose: PropTypes.func.isRequired,
   onChooseCorners: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
-  // The Colours item it opens beside, on a wider screen.
+  // The Customize item it opens beside, on a wider screen.
   anchorEl: PropTypes.object,
   onClose: PropTypes.func.isRequired,
 };

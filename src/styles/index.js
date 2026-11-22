@@ -1,6 +1,7 @@
 import { createTheme } from '@mui/material/styles';
 import { colors } from '@mui/material';
 import assets from '../assets';
+import { CORNER_RADII } from '../utils/corners';
 
 const { red } = colors;
 const { styles } = assets;
@@ -125,8 +126,19 @@ const ofChosen = (palette, prefersDarkMode) => {
 
 // How round the corners are, in pixels: somebody's own choice or the
 // site's (roadmap row 168); undefined leaves the theme's, Material UI's 4.
-const ofCorners = (radius) => {
-  return typeof radius === 'number' && radius >= 0 ? { shape: { borderRadius: radius } } : {};
+// With it, Material UI's named shape tokens, borderRadiusSm to
+// borderRadiusXl, for what is to be as round whatever is chosen.
+const ofCorners = (radius, shape = {}) => {
+  return {
+    shape: {
+      ...shape,
+      borderRadiusSm: CORNER_RADII.sm,
+      borderRadiusMd: CORNER_RADII.md,
+      borderRadiusLg: CORNER_RADII.lg,
+      borderRadiusXl: CORNER_RADII.xl,
+      ...(typeof radius === 'number' && radius >= 0 ? { borderRadius: radius } : {}),
+    },
+  };
 };
 
 export default (prefersDarkMode, palette, corners) => {
@@ -148,6 +160,6 @@ export default (prefersDarkMode, palette, corners) => {
     ...style,
     palette: { ...base.palette, ...style.palette, ...ofChosen(palette, prefersDarkMode) },
     components,
-    ...ofCorners(corners),
+    ...ofCorners(corners, style.shape),
   });
 };

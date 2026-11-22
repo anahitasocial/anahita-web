@@ -99,7 +99,7 @@ server's NodeInfo document (`/.well-known/nodeinfo`):
 | --- | --- |
 | Whether people can sign up, and how | `REGISTRATION_MODE` |
 | Support email, phone and website | `SUPPORT_EMAIL`, `SUPPORT_PHONE`, `SUPPORT_WEBSITE` |
-| How round the corners are, in pixels, for whoever has not chosen their own | `CORNER_RADIUS` |
+| How round the corners are, `none`, `sm`, `md`, `lg` or `xl`, for whoever has not chosen their own | `CORNER_RADIUS` |
 | Who may create groups and send invitations | `GROUPS_FROM`, `INVITES_FROM` |
 | What people who are not signed in can read | `SITE_READ_ACCESS`: everything public, only the start of it, or nothing. The app shows them a notice, or on a members-only site a way in, in place of every page |
 | Whether anything new may be public | `MIN_CONTENT_ACCESS`. The app stops offering "Public" where it may not |

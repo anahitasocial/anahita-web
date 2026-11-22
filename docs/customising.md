@@ -96,7 +96,7 @@ and `make web` builds it.
    Choose a `primary` that white text reads on, at 4.5 to 1 or more; dark
    mode's are light mode's, lightened until they read on a dark page. The
    pairs in `src/styles/palettes.js` have been tried. People can still
-   choose another palette for themselves, under Colours.
+   choose another palette for themselves, under Customize.
 
    ```js
    // src/assets/mysite/styles/index.js
@@ -251,19 +251,25 @@ component looks everywhere, add it under `components`, for example
 `components: { MuiButton: { defaultProps: { disableElevation: true } } }`.
 
 The theme's colours are everybody's until they choose others: somebody
-signed in can pick one of fifteen palettes under Colours in the left menu,
+signed in can pick one of fifteen palettes under Customize in the left menu,
 kept in their browser, and Reset goes back to the theme's. A palette chosen
 replaces the theme's `primary` and `secondary` only
 ([Anahita's colours](plans/colours.md#the-colour-picker-2026-10-26)).
 
 **Corners.** How round the corners of cards, dialogs, menus, fields and
-buttons are is the site's, set in anahita-services by `CORNER_RADIUS`, any
-whole number of pixels from 0 (square) to 24, and read from NodeInfo as
-`cornerRadius`; unset, it is 4, Material UI's own, and the theme's
-`shape.borderRadius` stands. Under the palettes in Colours, somebody signed in
-may choose their own of five, 0, 4, 8, 12 or 16, kept in their browser as
-the palette is; Reset goes back to the site's, colours and corners. Profile
-photos stay round, and chips and the small labels on photos stay pills.
+buttons are is the site's, set in anahita-services by `CORNER_RADIUS` with
+Material UI's names for its shape tokens: `none` (square), `sm` (4 pixels),
+`md` (8), `lg` (16) or `xl` (24). The app reads it from NodeInfo, in pixels,
+as `cornerRadius`; unset, it is `sm`, Material UI's own 4, and the theme's
+`shape.borderRadius` stands. The theme carries the four as
+`shape.borderRadiusSm` to `shape.borderRadiusXl` (`utils/corners.js`), for
+what is to be as round whatever is chosen. Under the palettes in Customize,
+somebody signed in may choose their own of the five on a slider, which
+stands at the site's until it is moved, kept in their browser by name as the
+palette is; Reset goes back to the site's, colours and corners. Profile
+photos stay round, and chips and the small labels on photos stay pills. On
+a mobile, cards are square and flat whatever is chosen
+([architecture](architecture.md#the-bar-on-a-mobile)).
 
 ## Languages
 

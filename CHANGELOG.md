@@ -16,9 +16,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    and the site's logo. + posts to the profile on the screen when you may
    post there, and else to your own.
 2. **Rounder or squarer corners.** The site's corners follow
-   `CORNER_RADIUS` in anahita-services, and under Colours somebody signed in
-   may choose their own: square, or 4, 8, 12 or 16 pixels. Reset goes back to
-   the site's.
+   `CORNER_RADIUS` in anahita-services, and under Customize somebody signed
+   in may choose their own on a slider, by Material UI's names: none, sm,
+   md, lg or xl (0, 4, 8, 16 or 24 pixels). Reset goes back to the site's.
 
 ### Changed
 

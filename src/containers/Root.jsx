@@ -45,7 +45,7 @@ const Themed = ({ store }) => {
     return metadata && typeof metadata.cornerRadius === 'number' ? metadata.cornerRadius : undefined;
   });
   const corners = picking && chosenCorners !== undefined ? chosenCorners : siteCorners;
-  // Where the picker opens from: the Colours item, which its popup opens
+  // Where the picker opens from: the Customize item, which its popup opens
   // beside on a wider screen; null while it is closed.
   const [picker, setPicker] = React.useState(null);
   const openPicker = React.useCallback((from) => { setPicker(from || document.body); }, []);
@@ -73,6 +73,7 @@ const Themed = ({ store }) => {
         <ColourPicker
           current={palette}
           corners={chosenCorners}
+          siteCorners={siteCorners}
           onChoose={setChosen}
           onChooseCorners={setChosenCorners}
           open={Boolean(picker)}
