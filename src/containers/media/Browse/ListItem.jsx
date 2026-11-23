@@ -2,6 +2,8 @@ import React, { useMemo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import Typography from '@mui/material/Typography';
+
 import ControlLike from '../../likes/controls/Like';
 import LikesStats from '../../likes';
 import MediumCard from '../../../components/MediumCard';
@@ -17,6 +19,7 @@ import FeedReplyButton from '../../feed/components/ReplyButton';
 import utils from '../../../utils';
 import perms from '../../../permissions';
 import postCounts from '../../../components/PostCounts';
+import i18n from '../../../languages';
 
 const { getNamespace } = utils.node;
 
@@ -37,6 +40,25 @@ const MediaListItem = ({
   }, [namespace]);
 
   const canEditMedium = perms.medium.canEdit(viewer, medium);
+
+  // Put up from the article editor, in its author's own list only (roadmap
+  // row 178): said so beside its time, and with nothing to like, answer,
+  // repost or share here, which nobody else could see.
+  if (medium.libraryOnly) {
+    return (
+      <MediumCard
+        medium={medium}
+        handleView={handleView}
+        menu={<MediumMenu medium={medium} viewer={viewer} inline />}
+        access={
+          <Typography component="span" variant="body2" color="textSecondary">
+            {` · ${i18n.t('composer:library.only')}`}
+          </Typography>
+        }
+        actions={[]}
+      />
+    );
+  }
 
   return (
     <MediumCard

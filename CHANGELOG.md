@@ -16,6 +16,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    and channels. Off for people who sign up from now on; nothing is hidden,
    only search engines are asked not to index. Needs Anahita Services with
    `PATCH /:id/search-engines` (Embryo after v1.8.0).
+2. **Your media in your own Photos and Videos tabs:** what you put up from
+   the article editor is listed there for you alone, marked "In your media
+   only", to edit its alt text or delete it. Needs Anahita Services with
+   `library_only` in its lists (Embryo after v1.8.0).
 
 ### Fixed
 

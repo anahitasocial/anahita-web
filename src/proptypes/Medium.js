@@ -32,6 +32,8 @@ export default shape({
   commands: arrayOf(string),
   subscriberCount: number,
   isSubscribedByViewer: bool,
+  // Put up from the article editor, in its author's library only (row 178).
+  libraryOnly: bool,
   owner: ActorType,
   author: PersonType,
   createdAt: string,

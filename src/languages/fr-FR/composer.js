@@ -58,6 +58,9 @@ export default {
   },
   library: {
     title: 'Vos médias',
+    // Beside a post put up from the article editor, in its author's own
+    // list of photos or videos: nobody else sees it there.
+    only: 'Dans vos médias seulement',
     photos: 'Photos',
     videos: 'Vidéos',
     upload: 'Téléverser',

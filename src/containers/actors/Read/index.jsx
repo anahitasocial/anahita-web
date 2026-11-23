@@ -310,10 +310,14 @@ const ActorsRead = (props) => {
       );
     } else if (componentType === 'medium') {
       const MediaFeature = MediaBrowse(tab);
+      // On one's own profile, one's photos and videos with those put up
+      // from the article editor, to edit and delete there (roadmap row
+      // 178). The server gives them to their author alone.
+      const ownLibrary = (tab === 'photos' || tab === 'videos') && viewer && actor.id === viewer.id;
       tabPanels[tab] = (
         <MediaFeature
           key={`medium-browse-${tab}`}
-          queryFilters={{ oid: actor.id }}
+          queryFilters={ownLibrary ? { oid: actor.id, library: 1 } : { oid: actor.id }}
         />
       );
     }

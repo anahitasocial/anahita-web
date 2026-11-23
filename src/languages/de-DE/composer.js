@@ -74,6 +74,9 @@ export default {
   // The library of one's own photos and videos, in the editor.
   library: {
     title: 'Deine Medien',
+    // Beside a post put up from the article editor, in its author's own
+    // list of photos or videos: nobody else sees it there.
+    only: 'Nur in deinen Medien',
     photos: 'Fotos',
     videos: 'Videos',
     upload: 'Hochladen',
