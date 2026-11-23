@@ -15,6 +15,7 @@ import ReplyParent from '../../replies/ReplyParent';
 import postCounts from '../../../components/PostCounts';
 import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
+import { ARTICLE_COVER_RATIO } from '../../../constants/cover';
 import { DownloadAction } from '../../controls/medium/Download';
 import ControlRepost from '../../controls/Repost';
 import { ShareAction, ofNode } from '../../controls/Share';
@@ -73,6 +74,7 @@ const MediaReadView = ({
       <Cover
         node={medium}
         canEdit={canEdit}
+        ratio={ARTICLE_COVER_RATIO}
       />
     ) : null,
     form: (

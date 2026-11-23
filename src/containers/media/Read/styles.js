@@ -1,8 +1,8 @@
 export default (theme) => {
   return {
+    // An article's cover, in the shape link cards show it (constants/cover).
     cover: {
-      height: 0,
-      paddingTop: '30%',
+      aspectRatio: '1.91 / 1',
     },
     portraitButton: {
       width: '100%',

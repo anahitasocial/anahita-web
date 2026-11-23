@@ -84,6 +84,7 @@ const CoverForm = ({
   handleFieldChange,
   handleDelete,
   band = false,
+  ratio = null,
 }) => {
   // No cover: nothing at all for whoever may not add one, rather than an
   // empty grey box.
@@ -102,6 +103,9 @@ const CoverForm = ({
           <Fade in>
             <CardMedia
               className={classes.cover}
+              // An article's own shape, in place of a profile's band: a
+              // style of its own, over the class's.
+              style={ratio ? { aspectRatio: ratio, maxHeight: 'none' } : undefined}
               title={getActorName(node)}
               image={cover}
               src="picture"
@@ -173,6 +177,8 @@ CoverForm.propTypes = {
   // With no cover, a band the size of one to fill, for a profile's header;
   // a slim line otherwise.
   band: PropTypes.bool,
+  // How wide it is to how tall, when not a profile's band: an article's.
+  ratio: PropTypes.string,
 };
 
 export default withStyles(CoverForm, styles);

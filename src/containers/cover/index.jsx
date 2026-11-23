@@ -14,6 +14,7 @@ const Cover = (props) => {
     canEdit,
     alertError,
     band = false,
+    ratio = null,
   } = props;
 
   const [anchorEl, setAnchorEl] = useState(null);
@@ -103,6 +104,7 @@ const Cover = (props) => {
       handleFieldChange={handleFieldChange}
       handleDelete={handleDelete}
       band={band}
+      ratio={ratio}
     />
   );
 };
@@ -113,6 +115,7 @@ Cover.propTypes = {
   alertError: PropTypes.func.isRequired,
   // See CoverForm.
   band: PropTypes.bool,
+  ratio: PropTypes.string,
 };
 
 const mapDispatchToProps = (dispatch) => {

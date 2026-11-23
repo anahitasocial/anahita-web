@@ -137,9 +137,11 @@ const useLongComposer = ({
     onClose();
   };
 
-  // An article's cover goes once the article exists. Should it not be
-  // taken, the article is posted all the same, and the cover can be added
-  // on its page. A draft's goes when it is published.
+  // An article's cover goes once the article exists, and before it is
+  // published, so that it goes to Bluesky and the fediverse with it (roadmap
+  // row 180): sent the moment it was made, it went without. Should it not
+  // be taken, the article is posted all the same, and the cover can be
+  // added on its page.
   const withCover = (node) => {
     if (!about.withCover || !cover || !node || !node.id) {
       return Promise.resolve(true);
@@ -186,33 +188,54 @@ const useLongComposer = ({
     });
   };
 
-  const posted = (node) => {
-    return withCover(node).then((ok) => {
-      if (ok) {
-        base.alertSuccess(i18n.t('prompts:posted.success'));
-      }
-      reset();
+  // Its cover told of already, when it was refused.
+  const posted = (coverTaken = true) => {
+    if (coverTaken) {
+      base.alertSuccess(i18n.t('prompts:posted.success'));
+    }
+    reset();
+  };
+
+  // A draft published, its cover put on it first.
+  const publish = (id) => {
+    return withCover({ id }).then((coverTaken) => {
+      return api[namespace].publish({ id }, choices.access).then(() => {
+        return posted(coverTaken);
+      });
     });
   };
+
+  const hasCover = Boolean(about.withCover && cover);
 
   // A draft taken up again: what it says now, then published, a post from
   // now and announced as one. Its locations tied before it is published,
   // as a new one's are as it is made, so that it goes to other servers with
   // them.
+  //
+  // A new one with a cover is made a draft first, given its cover, then
+  // published; one without is posted as it always was.
   const send = () => {
     setIsSending(true);
-    const posting = draftId ?
-      saveOver().then(() => {
+    let posting;
+    if (draftId) {
+      posting = saveOver().then(() => {
         return postLocations.tag({ id: draftId });
       }).then(() => {
-        return api[namespace].publish({ id: draftId }, choices.access);
-      }).then((result) => {
-        return posted(result.data);
-      }) :
-      dispatch(actions[namespace].add({
+        return publish(draftId);
+      });
+    } else if (hasCover) {
+      posting = api[namespace].add({
+        title: name, content: text, ...choices.request(), draft: true, ...base.locationIds(),
+      }, actor).then((result) => {
+        return publish(result.data.id);
+      });
+    } else {
+      posting = dispatch(actions[namespace].add({
         title: name, content: text, ...choices.request(), ...base.locationIds(),
-      }, actor))
-        .then(posted);
+      }, actor)).then(() => {
+        return posted();
+      });
+    }
     posting.catch(() => {
       // What was written stays, to post again.
       base.alertError(i18n.t('prompts:posted.error'));

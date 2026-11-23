@@ -181,6 +181,7 @@ Each milestone ends in a shippable state.
 | 177 | ⬜ | Reports forwarded to other servers, asked for by the user on 2026-11-22 from FediDB's list: a report of a post or a profile from another server can be sent to that server, at the reporter's choice, as an ActivityPub `Flag` from the site, never naming who reported it; and a `Flag` from another server about somebody here opens a case. Only that server can take the post down | to be written | services + web | 1½–2 | — |
 | 178 | ✅ | Your media in your own lists, asked for by the user on 2026-11-23: three photos put up from the article editor could be neither edited nor deleted, the library holding no way to them. One's own Photos and Videos tabs list them too, for their author alone (`library=1`), marked "In your media only" beside the time, with the post's own menu (Edit photos for the alt text, Delete) and nothing to like, answer, repost or share; a list's items carry `library_only`. **Done 2026-11-23** | — | services + web | ½ | — |
 | 179 | ⬜ | Posts and character limits, asked for by the user on 2026-11-23 after a thread on banu.io went to Bluesky with two notes cut at 300 characters and a card linking back to each: **when a profile posts to Bluesky, a note is cut hard at 300 characters as it is written** (the user: "it is fair to do a hard cut at 300 chars to prevent the link backs in replies and the posts. We have implemented threads, that's the workaround"), so that nothing goes out with a link back; what else is refined with it is planned when the row is reached | to be written | services + web | 1–2 | 100, 144 |
+| 180 | ✅ | An article's cover where it is shared, from the user on 2026-11-23: an article posted with a cover went to Bluesky with no picture on its card, being sent the moment it was made, before the composer added its cover. One with a cover is now made a draft, given its cover, then published, and goes out once, with it; web-shell's `og:image` was the cover already, a test now says so. **Only the cover** (the user, 2026-11-23): an embedded photo was weighed as the picture of an article without one and left out, a photo being often taller than the wide frame cards are shown in. **An article's cover the shape of a card** (the user, 2026-11-23: "we don't want the image to be distorted"): 1.91 to 1 on its page, in lists and feeds, embedded and in the composer, where it was a profile's 3 to 1 band, so that its author sees what cards show; cropped to its middle, never stretched (`constants/cover.js`). **Done 2026-11-23** | — | web | ½ | — |
 | 63 | ⬜ | 26 · Verified domains: prove you own a website; verified link on Mastodon. **Taken out of M9 on 2026-10-13 and to be planned again:** half of it was a domain as a Bluesky handle through a server of our own, which is not how Bluesky was done **Taken back on 2026-11-22, at the user's word:** proof by DNS, the most solid for a profile (a TXT record `_anahita.<domain>`), re-checked now and then; groups too; the domain sent to the fediverse as a link, which Mastodon ticks when the site links back with `rel="me"`; whether the connection to a person's Bluesky account may make the domain its handle is checked when the plan is written again (about 2–3 sessions) | [verified-domains.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/verified-domains.md) | services + web | 4–5 | 8, 10 |
 | 66 | ⬜ | 34 · Collections: an album of posts of any kind. A collection is a media node (title, description, audience, likes, replies, reposts), its author orders what is in it, it opens as a slide show, and people, groups and events can have them. Filled from saved posts; saving itself stays as it is. Anahita only, not federated. Shape decided by the user 2026-10-06, five questions open, **not scheduled**. Named again by the user on 2026-10-13 as *polymorphic albums*, which is this; and a collection in order is what a course or a lesson would be made of (item 48) **Taken into the order on 2026-11-22** | [collections.md](https://github.com/anahitasocial/anahita-services/blob/main/docs/plans/collections.md) | services + web | not estimated, roughly 6 | 33; 12 for events |
 | 73 | ⬜ | 56 · Groups and events on the fediverse: asked by the user on 2026-10-15, "if they are public, shouldn't the posts under those profiles be followable by the fediverse?", as a website is. Nothing technical stands in the way; to settle first: consent (federation is opt-in per person today, so whether posting in a public group agrees to it), whether a post goes out as the group or as its author, and how replies from elsewhere are looked after. **To discuss later, at the user's word** **Put off by the user on 2026-10-17** ("too many variables, and they complicate the design"), after weighing it against websites: a group's posts are its members', so each needs their consent and an author on the fediverse, and an event is an `Event` object of its own; Bluesky for a group alone was about a day. Groups and events stay off the fediverse and Bluesky for now **Taken back on 2026-11-22, at the user's word,** both ways, as FEP-1b12 has them: somebody elsewhere follows a group here and posts in it, and people here follow groups elsewhere (Lemmy, PieFed, Friendica, NodeBB) and post in them. A post in a group is always its author's own, the group repeating it to its followers; one from somebody here goes out only if they took part in federation, which is their consent. Joining groups elsewhere first, then ours federating. About 5–7 sessions | — | services + web | not estimated | 25, 55 |
@@ -284,23 +285,24 @@ list is good"): small work that a site of 10 to 100 people uses first.
 1. **173,** a feed's Any or All once a second kind is added.
 2. **174,** search engine indexing.
 3. **175,** a site's own timeline, through custom feeds.
-4. **179,** posts and character limits: a hard cut at 300 characters when a profile posts to Bluesky.
-5. **176,** feeds at readable addresses.
-6. **134,** following from another server, both ways.
-7. **63,** verified domains.
-8. **108,** servers refused from a file.
-9. **177,** reports forwarded to other servers.
-10. **172,** a profile's link card.
-11. **169,** taking consent to a quote back.
-12. **137, phase 3,** sounds and videos from the fediverse played here.
-13. **73,** groups on the fediverse, joining groups elsewhere first.
-14. **148,** accessibility.
-15. **171,** a site in numbers.
-16. **66,** collections.
-17. **123,** direct messages.
-18. **142, phases 2 and 3,** the WordPress import; moved here by the user,
+4. **180,** an article's cover where it is shared.
+5. **179,** posts and character limits: a hard cut at 300 characters when a profile posts to Bluesky.
+6. **176,** feeds at readable addresses.
+7. **134,** following from another server, both ways.
+8. **63,** verified domains.
+9. **108,** servers refused from a file.
+10. **177,** reports forwarded to other servers.
+11. **172,** a profile's link card.
+12. **169,** taking consent to a quote back.
+13. **137, phase 3,** sounds and videos from the fediverse played here.
+14. **73,** groups on the fediverse, joining groups elsewhere first.
+15. **148,** accessibility.
+16. **171,** a site in numbers.
+17. **66,** collections.
+18. **123,** direct messages.
+19. **142, phases 2 and 3,** the WordPress import; moved here by the user,
     who may take it out of turn.
-19. **117,** Anahita AI.
+20. **117,** Anahita AI.
 
 Left out on 2026-11-22: lists, which custom feeds are already, and unlisted
 posts. Kept for later, for sites of thousands: limiting servers, signed

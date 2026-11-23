@@ -50,9 +50,9 @@ const styles = (theme) => {
     root: {
       marginBottom: theme.spacing(2),
     },
+    // An article's cover, in the shape link cards show it (constants/cover).
     cover: {
-      height: 0,
-      paddingTop: '30%',
+      aspectRatio: '1.91 / 1',
     },
     media: {
       height: 0,

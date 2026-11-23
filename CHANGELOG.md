@@ -25,6 +25,14 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    first; shared, it is the site's public timeline. Needs Anahita Services
    from Embryo after v1.8.0.
 
+### Changed
+
+1. **An article's cover is the shape of a link card,** 1.91 to 1, on its
+   page, in lists, in feeds, where it is embedded and where it is chosen,
+   in place of a profile's wide band: its author sees it as it is shown on
+   Bluesky, Mastodon and wherever its link is pasted. Nothing is stretched:
+   a picture of another shape is cropped to its middle, as cards do.
+
 ### Fixed
 
 1. **The logo has no white ring round it** in a mobile's top bar: the
@@ -34,7 +42,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    hashtag typed:** it was left selected, and whatever came next took its
    place, out of sight above on a mobile. The caret now goes on a new line
    under it, and nothing typed or pasted ever writes over a picture.
-3. **A feed turns to "Any of these" when a second kind is added:** a feed
+3. **An article goes to Bluesky and the fediverse with its cover:** it was
+   sent the moment it was made, before its cover was added. One with a
+   cover is now saved as a draft, given its cover, then published.
+4. **A feed turns to "Any of these" when a second kind is added:** a feed
    of chosen profiles given keywords later kept "All of these", and showed
    only the posts from those profiles that also held a keyword.
 

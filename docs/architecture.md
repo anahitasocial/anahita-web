@@ -1584,7 +1584,11 @@ desktop, left aligned:
    none, whoever may add one sees an empty band of the same size, in the
    page's colour, with "Add a cover photo" (`band` on `CoverForm`); anybody
    else sees no band at all. Cards of profiles use the same band. The cover's
-   and the profile photo's menus have **Upload** and Delete.
+   and the profile photo's menus have **Upload** and Delete. An article's
+   cover is not a band but the shape of a link card, 1.91 to 1, wherever it
+   is shown or chosen (`ratio` on `CoverForm`, `constants/cover.js`), so
+   that its author sees it as Bluesky, Mastodon and link previews show it;
+   a picture of another shape is cropped to its middle, never stretched.
 2. **The profile photo** over the cover's lower edge, or at the top of the
    card when there is no band, smaller on a mobile. Since the empty band is
    there whenever a cover may be added, putting one up or taking it down

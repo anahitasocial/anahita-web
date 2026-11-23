@@ -104,18 +104,24 @@ describe('useLongComposer', () => {
     expect(api.articles.add).not.toHaveBeenCalled();
   });
 
-  it('posts an article, its cover once it exists, then empties and closes', async () => {
-    api.articles.add.mockResolvedValue({ data: { id: 41 } });
-    coverApi.add.mockResolvedValue({});
+  // A draft first, its cover on it, then published: it goes to Bluesky and
+  // the fediverse as it is published, and so with its cover (row 180).
+  it('posts an article with its cover: a draft, the cover, then published', async () => {
+    const order = [];
+    api.articles.add.mockImplementation(() => { order.push('add'); return Promise.resolve({ data: { id: 41 } }); });
+    coverApi.add.mockImplementation(() => { order.push('cover'); return Promise.resolve({}); });
+    api.articles.publish.mockImplementation(() => { order.push('publish'); return Promise.resolve({ data: { id: 41 } }); });
     draw();
     act(() => { hook.result.current.setCover(new File(['x'], 'stargate.jpg')); });
     write('Chevron seven', 'Locked.');
     submit();
     await settle();
     expect(api.articles.add.mock.calls[0][0]).toMatchObject({
-      title: 'Chevron seven', content: 'Locked.', access: 'public',
+      title: 'Chevron seven', content: 'Locked.', access: 'public', draft: true,
     });
     expect(coverApi.add).toHaveBeenCalledWith({ id: 41 }, expect.any(File));
+    expect(api.articles.publish).toHaveBeenCalledWith({ id: 41 }, 'public');
+    expect(order).toEqual(['add', 'cover', 'publish']);
     expect(onClose).toHaveBeenCalled();
     expect(hook.result.current.title).toBe('');
     expect(held.alerts().map((each) => { return each.severity; })).toEqual(['success']);

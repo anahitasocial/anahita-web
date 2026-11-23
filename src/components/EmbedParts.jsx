@@ -12,6 +12,7 @@ import SmartLink from './SmartLink';
 import plainText from '../utils/plainText';
 import utils from '../utils';
 import i18n from '../languages';
+import { ARTICLE_COVER_RATIO } from '../constants/cover';
 
 const {
   getAuthor,
@@ -158,7 +159,7 @@ Caption.propTypes = {
 // Framed as a page's card is, a light border and slightly rounded corners
 // (the user, 2026-10-16), with a cover across its top where there is one:
 // an embedded post of words, or a profile.
-const Framed = ({ cover = '', children }) => {
+const Framed = ({ cover = '', ratio = '3 / 1', children }) => {
   return (
     <Box
       sx={{
@@ -177,7 +178,7 @@ const Framed = ({ cover = '', children }) => {
           loading="lazy"
           sx={{
             width: '100%',
-            aspectRatio: '3 / 1',
+            aspectRatio: ratio,
             objectFit: 'cover',
             display: 'block',
             borderBottom: 1,
@@ -193,6 +194,8 @@ const Framed = ({ cover = '', children }) => {
 
 Framed.propTypes = {
   cover: PropTypes.string,
+  // How wide its cover is to how tall: a profile's band, or an article's.
+  ratio: PropTypes.string,
   children: PropTypes.node,
 };
 
@@ -206,7 +209,7 @@ const Words = ({ post }) => {
   const elsewhere = owner && owner.id && owner.id !== author.id;
   const url = getURL(post);
   return (
-    <Framed cover={getCoverURL(post, 'medium')}>
+    <Framed cover={getCoverURL(post, 'medium')} ratio={ARTICLE_COVER_RATIO}>
       <Box
         sx={{
           display: 'flex', alignItems: 'center', columnGap: 1, rowGap: 0.5, flexWrap: 'wrap', mb: 1,

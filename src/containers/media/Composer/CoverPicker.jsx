@@ -9,6 +9,7 @@ import AddIcon from '@mui/icons-material/AddPhotoAlternate';
 import RemoveIcon from '@mui/icons-material/Close';
 
 import i18n from '../../../languages';
+import { ARTICLE_COVER_RATIO } from '../../../constants/cover';
 
 // What the cover service takes (identity-image-service): said when it is
 // picked rather than after the article is posted.
@@ -103,8 +104,7 @@ const CoverPicker = ({
         sx={{
           position: 'relative',
           width: '100%',
-          aspectRatio: '3 / 1',
-          maxHeight: 320,
+          aspectRatio: ARTICLE_COVER_RATIO,
           borderRadius: 1,
           overflow: 'hidden',
           backgroundColor: 'background.default',
