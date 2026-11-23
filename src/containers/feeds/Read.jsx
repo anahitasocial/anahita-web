@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet-async';
@@ -53,7 +53,15 @@ const CustomFeedRead = ({
 }) => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { feed, isMissing, reload } = useFeed(id);
+  const { feed, isMissing, reload } = useFeed(customFeeds.idOf(id));
+
+  // Reached by an older address, or by its id alone: shown at its own, as
+  // it is shared and as search engines are told (roadmap row 176).
+  useEffect(() => {
+    if (feed && `/feeds/${id}` !== customFeeds.urlOf(feed)) {
+      navigate(customFeeds.urlOf(feed), { replace: true });
+    }
+  }, [feed, id]);
   const [waiting, setWaiting] = useState(false);
   // The menu at the card's head, and the question before Delete.
   const [menuAnchor, setMenuAnchor] = useState(null);

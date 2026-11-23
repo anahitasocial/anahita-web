@@ -24,6 +24,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    needs nothing else, and shows everything written on the site, newest
    first; shared, it is the site's public timeline. Needs Anahita Services
    from Embryo after v1.8.0.
+4. **Feeds at readable addresses:** `/feeds/12-arts-design`, its name after
+   its number. `/feeds/12` and an address with an old name still open it,
+   and are put right. Needs Anahita Services from Embryo after v1.8.0.
 
 ### Changed
 

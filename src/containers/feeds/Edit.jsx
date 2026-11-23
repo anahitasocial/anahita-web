@@ -21,7 +21,7 @@ import PageColumn from '../../components/PageColumn';
 const CustomFeedEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { feed, isMissing } = useFeed(id);
+  const { feed, isMissing } = useFeed(customFeeds.idOf(id));
 
   if (isMissing) {
     return (

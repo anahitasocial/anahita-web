@@ -241,7 +241,7 @@ history. The main paths:
 | `/saved` | The posts the viewer saved. Signed in only; in the left menu |
 | `/recommendations` | People, groups, events and channels the viewer might follow, and feeds people have shared, a tab each (`?kind=`). Signed in only; reached from Who to follow on Home, and from the left menu where the installation has the recommendation service. `/suggestions`, its first address, leads to it |
 | `/feeds`, `/feeds/add`, `/feeds/:id/edit` | The viewer's custom feeds, making one, changing one. Signed in only |
-| `/feeds/:id` | A custom feed's own page. Read without signing in when the feed is public |
+| `/feeds/:id` | A custom feed's own page, at `/feeds/12-arts-design`: its id, then its name as the server makes it readable (`slug`; `customFeeds.urlOf`). Only the id is read (`customFeeds.idOf`), so `/feeds/12` and an old name still open it, and the page puts its own address in their place (roadmap row 176). Read without signing in when the feed is public |
 | `/events`, `/events/add`, `/events/:id` | The viewer's own events, making one, an event's page. `/events/:id/edit` sends to the event's settings. See *Events* |
 | `/people/add`, `/groups/add` | Making a person (administrators) or a group |
 | `/people/:id/settings/password` | The old address of the password form, linked from older emails. Sends to Security |

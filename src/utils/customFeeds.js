@@ -329,9 +329,17 @@ const isShared = (feed) => {
   return Boolean(feed) && Boolean(feed.access) && feed.access !== 'myself';
 };
 
-// Where a feed is read.
+// Where a feed is read: /feeds/12-arts-design, its name as the server
+// makes it readable (`slug`, roadmap row 176), or /feeds/12 without one.
 const urlOf = (feed) => {
-  return `/feeds/${feed.id}`;
+  return feed.slug ? `/feeds/${feed.id}-${feed.slug}` : `/feeds/${feed.id}`;
+};
+
+// The feed an address names: only its id is read, so an address with an
+// old name, or none, still opens it.
+const idOf = (param = '') => {
+  const id = parseInt(String(param), 10);
+  return Number.isNaN(id) ? 0 : id;
 };
 
 const FEED_TYPE = 'node.feed.feed-service.generator.v1';
@@ -433,5 +441,6 @@ export default {
   madeOn,
   toShare,
   urlOf,
+  idOf,
   whereToRead,
 };

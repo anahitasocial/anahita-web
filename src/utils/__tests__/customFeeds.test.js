@@ -226,3 +226,14 @@ describe('an area and where posts were written', () => {
     expect(said).toContain('customFeeds:summary.origin.elsewhere');
   });
 });
+
+describe('a feed\'s address (roadmap row 176)', () => {
+  it('reads as its name, and is opened by its id alone', () => {
+    expect(feeds.urlOf({ id: 12, slug: 'arts-design' })).toBe('/feeds/12-arts-design');
+    expect(feeds.urlOf({ id: 13, slug: '' })).toBe('/feeds/13');
+    expect(feeds.idOf('12-arts-design')).toBe(12);
+    expect(feeds.idOf('12-an-old-name')).toBe(12);
+    expect(feeds.idOf('12')).toBe(12);
+    expect(feeds.idOf('add')).toBe(0);
+  });
+});
