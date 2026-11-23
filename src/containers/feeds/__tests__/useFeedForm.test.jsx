@@ -121,6 +121,26 @@ describe('useFeedForm', () => {
     expect(result.definition.sources.following).toBe(true);
   });
 
+  it('matches any once a second kind is added to a feed of one', () => {
+    draw({
+      ...CERES,
+      definition: { sources: { following: false, actors: [5] }, match: 'all' },
+    });
+    expect(result.definition.match).toBe('all');
+
+    act(() => { result.setFilters({ keywordsAny: ['tycho'] }); });
+
+    expect(result.definition.match).toBe('any');
+  });
+
+  it('keeps all in a feed that asks for two kinds already', () => {
+    draw({ ...CERES, definition: { ...CERES.definition, match: 'all' } });
+
+    act(() => { result.setFilters({ keywordsAny: ['tycho'] }); });
+
+    expect(result.definition.match).toBe('all');
+  });
+
   it('ticks a kind of post on and off', () => {
     draw();
 

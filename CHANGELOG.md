@@ -14,6 +14,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **The logo has no white ring round it** in a mobile's top bar: the
    circle it sits in was filled white, and showed through the clear margin
    of its image.
+2. **A feed turns to "Any of these" when a second kind is added:** a feed
+   of chosen profiles given keywords later kept "All of these", and showed
+   only the posts from those profiles that also held a keyword.
 
 ## v1.3.10 Birth, 2026-11-23
 

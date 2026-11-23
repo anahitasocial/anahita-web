@@ -144,6 +144,13 @@ const useFeedForm = ({
       next.sources = { ...next.sources, following: false };
       setFrom(FROM_EVERYONE);
     }
+    // A second kind of thing to match, added to a feed that had one: any,
+    // as a new feed starts. A feed of one kind was kept as all, which would
+    // otherwise leave out what matches only one of the two (roadmap row
+    // 173). A feed that asks for two already keeps its choice.
+    if (customFeeds.matchingKinds(definition) < 2 && customFeeds.matchingKinds(next) > 1) {
+      next.match = customFeeds.MATCH_ANY;
+    }
     setValues({ ...values, definition: next });
   };
 

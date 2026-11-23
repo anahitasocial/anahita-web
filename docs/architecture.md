@@ -1481,8 +1481,10 @@ are about, what to leave out. The server's side is in the services'
     posts, and is not sent then. Once two kinds of thing to match are
     filled in (where posts come from, hashtags, keywords, locations, an
     area), "Show posts that match" offers **Any of these** or **All of
-    these**, one choice for the whole feed, a new feed starting at Any
-    (anahita-services roadmap row 149; `customFeeds.matchingKinds`). Under
+    these**, one choice for the whole feed, a new feed starting at Any,
+    and a feed of one kind turning to Any when a second is added
+    (`useFeedForm.setDefinition`; anahita-services roadmap rows 149 and
+    173; `customFeeds.matchingKinds`). Under
     the fields is what the feed shows, in a sentence, with "or" between
     what a post may match when it is any. There is no preview: saving opens the
     feed, Home on its tab when it is kept there. Everything done to a feed is
