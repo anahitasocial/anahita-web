@@ -7,6 +7,14 @@ the Embryo section under its version and date, and says first which
 Anahita Services releases it works with. Each change adds its line here
 when it is made. Kept from 2026-11-07; what came before is in the commits.
 
+## Embryo
+
+### Fixed
+
+1. **The logo has no white ring round it** in a mobile's top bar: the
+   circle it sits in was filled white, and showed through the clear margin
+   of its image.
+
 ## v1.3.10 Birth, 2026-11-23
 
 Works with Anahita Services v1.7.0 or later.

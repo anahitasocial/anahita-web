@@ -10,11 +10,11 @@ import siteLogo from '../utils/siteLogo';
 
 const useStyles = makeStyles()((theme) => {
   return {
+    // The logo as it is drawn: no fill and no border of our own, which
+    // showed as a white ring round it on the coloured top bar of a mobile,
+    // through the clear margin a logo's image has (the user, 2026-11-23).
     logo: {
-      backgroundColor: theme.palette.background.paper,
-      borderColor: theme.palette.background.paper,
-      borderWidth: 1,
-      borderStyle: 'solid',
+      backgroundColor: 'transparent',
       width: theme.spacing(6),
       height: theme.spacing(6),
     },
