@@ -24,8 +24,8 @@ export {
 // the first. Posted together with the first, in order, all or none.
 //
 // `parts` is the notes, each its words and its pictures (utils/threadNotes),
-// in order. `goesToBluesky` keeps a line under each for what Bluesky shows
-// of it, as under the first.
+// in order. `limit` is what each holds, 300 when the post goes to Bluesky
+// (utils/threadSplit.limitFor).
 //
 // With `writer`, as in the composer on a desktop, each note has the
 // writer's small picture in the column under theirs on the first, and one
@@ -39,7 +39,6 @@ const ThreadParts = ({
   max,
   disabled = false,
   direction = 'ltr',
-  goesToBluesky = false,
   outlined = false,
   limit = 0,
   writer = null,
@@ -68,7 +67,6 @@ const ThreadParts = ({
             onChange={onChange}
             disabled={disabled}
             direction={direction}
-            goesToBluesky={goesToBluesky}
             outlined={outlined}
             limit={limit}
             writer={writer}
@@ -129,7 +127,6 @@ ThreadParts.propTypes = {
   max: PropTypes.number.isRequired,
   disabled: PropTypes.bool,
   direction: PropTypes.string,
-  goesToBluesky: PropTypes.bool,
   // Boxed, as in the reply form; plain, as in the composer.
   outlined: PropTypes.bool,
   // Where a note ends, where the post goes: each note's count is shown

@@ -81,10 +81,13 @@ const useShortComposer = ({
     photosReady,
     hasVideo: Boolean(video),
   });
-  // Any note longer than a note may be (roadmap row 144): split, shortened,
-  // or made an article before it can go on.
-  const tooLong = threadSplit.lengthOf(text) > LIMITS.POST_MAX ||
-    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > LIMITS.POST_MAX; });
+  // Where a note of a thread ends, where the post goes (roadmap rows 126
+  // and 179): 300 when it goes to Bluesky, else 500.
+  const noteLimit = threadSplit.limitFor({ goesToBluesky, goesToFediverse: goesOut });
+  // Any note longer than that (roadmap row 144): split, shortened, or made
+  // an article before it can go on.
+  const tooLong = threadSplit.lengthOf(text) > noteLimit ||
+    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > noteLimit; });
   // Held back too while a note's pictures are still being sent.
   const isHeldBack = (hasPhotos && !photosReady) || busy || tooLong ||
     threadParts.some((note) => { return !threadNotes.isReady(note); }) ||
@@ -97,16 +100,13 @@ const useShortComposer = ({
   // Hashtags in use offered as one is typed (roadmap row 78).
   const hashtags = useTextareaHashtags({ value: body, onChange: setBody, mobile });
 
-  // Where a note of a thread ends, where the post goes (roadmap row 126),
-  // the count against it, and long words split into a thread.
-  const noteLimit = threadSplit.limitFor({ goesToBluesky, goesToFediverse: goesOut });
+  // The count against the note's limit, and long words split into a thread.
   const split = useThreadSplit({
     body, setBody, moreParts, setMoreParts, limit: noteLimit, canThread,
   });
   // What other networks will show of it, said before it is posted (roadmap
   // row 100): the first four pictures on Mastodon and Bluesky, with a link
-  // to the post here for the rest; and the first 300 letters on Bluesky
-  // (NoteParts.blueskyCut).
+  // to the post here for the rest.
   const morePictures = photoItems.length > LIMITS.PICTURES_SHOWN_MAX && (
     (goesOut && goesToBluesky && 'federation:composer.morePictures') ||
     (goesOut && 'federation:composer.morePicturesMastodon') ||

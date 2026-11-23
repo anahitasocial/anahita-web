@@ -9,7 +9,6 @@ import useTextareaHashtags from '../media/Composer/useHashtagSuggestions';
 import useThreadSplit from '../media/Composer/useThreadSplit';
 import useOnFediverse, { useOnBluesky } from '../media/Composer/useOnFediverse';
 import { problemOf } from '../media/Composer/Video/useVideoUpload';
-import LIMITS from '../../constants/limits';
 import linkPreviews from '../../utils/linkPreviews';
 import offers from '../../utils/offers';
 import photoFiles from '../../utils/photoFiles';
@@ -105,12 +104,6 @@ const useReplyForm = ({
   // or a video (roadmap row 143).
   const canThread = attachments;
   const threadParts = canThread ? moreParts.filter(threadNotes.hasSomething) : [];
-  // Held back while a note's pictures are being sent, and while any note
-  // is longer than a note may be (roadmap row 144).
-  const isHeldBack = (hasPhotos && !photosReady) || isSending ||
-    threadParts.some((note) => { return !threadNotes.isReady(note); }) ||
-    threadSplit.lengthOf(text) > LIMITS.POST_MAX ||
-    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > LIMITS.POST_MAX; });
   // Where a reply's note ends: what the networks the viewer is on hold, as a
   // reply goes where the thread's writer and its readers are (roadmap row
   // 126). The count, and long words split into a thread, as in the composer.
@@ -119,6 +112,13 @@ const useReplyForm = ({
   const noteLimit = threadSplit.limitFor({
     goesToBluesky: onBluesky, goesToFediverse: onFediverse,
   });
+  // Held back while a note's pictures are being sent, and while any note
+  // is longer than a note may be: 300 for somebody on Bluesky, else 500
+  // (roadmap rows 144 and 179).
+  const isHeldBack = (hasPhotos && !photosReady) || isSending ||
+    threadParts.some((note) => { return !threadNotes.isReady(note); }) ||
+    threadSplit.lengthOf(text) > noteLimit ||
+    threadParts.some((note) => { return threadSplit.lengthOf(note.words) > noteLimit; });
   const split = useThreadSplit({
     body, setBody, moreParts, setMoreParts, limit: noteLimit, canThread: canThread && !compact,
   });

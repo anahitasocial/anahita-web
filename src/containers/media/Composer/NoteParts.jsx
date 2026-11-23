@@ -7,9 +7,7 @@ import Link from '@mui/material/Link';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import LIMITS from '../../../constants/limits';
 import i18n from '../../../languages';
-import threadSplit from '../../../utils/threadSplit';
 
 // The small parts a note is drawn with in the composer and the reply form,
 // the first note and each after it alike: its head, the line under it with
@@ -17,17 +15,11 @@ import threadSplit from '../../../utils/threadSplit';
 // a thread.
 
 // How much room is left, as Bluesky counts it down (the user, 2026-11-08):
-// what is left, then a ring that fills. Ink as it fills; the warning's
-// colour past `warnAt`, where Bluesky stops showing the words; the error's
-// past the limit, where the post cannot go.
-export const CharacterCount = ({ length, limit, warnAt = 0 }) => {
+// what is left, then a ring that fills. Ink as it fills; the error's past
+// the limit, where the post cannot go.
+export const CharacterCount = ({ length, limit }) => {
   const left = limit - length;
-  let color = 'primary';
-  if (left < 0) {
-    color = 'error';
-  } else if (warnAt > 0 && length > warnAt) {
-    color = 'warning';
-  }
+  const color = left < 0 ? 'error' : 'primary';
   return (
     <Box
       role="img"
@@ -67,7 +59,6 @@ export const CharacterCount = ({ length, limit, warnAt = 0 }) => {
 CharacterCount.propTypes = {
   length: PropTypes.number.isRequired,
   limit: PropTypes.number.isRequired,
-  warnAt: PropTypes.number,
 };
 
 // The line under a note's words (roadmap row 126): what is to be said of
@@ -75,7 +66,7 @@ CharacterCount.propTypes = {
 // how much room is left of what a note holds. Its room is kept, so nothing
 // moves as it changes.
 export const ThreadLine = ({
-  length = -1, limit = 0, warnAt = 0, children = ' ',
+  length = -1, limit = 0, children = ' ',
 }) => {
   return (
     <Stack direction="row" spacing={2} sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
@@ -83,7 +74,7 @@ export const ThreadLine = ({
         {children}
       </Typography>
       {length >= 0 && limit > 0 &&
-        <CharacterCount length={length} limit={limit} warnAt={warnAt} />}
+        <CharacterCount length={length} limit={limit} />}
     </Stack>
   );
 };
@@ -91,8 +82,6 @@ export const ThreadLine = ({
 ThreadLine.propTypes = {
   length: PropTypes.number,
   limit: PropTypes.number,
-  // Where Bluesky stops showing the words, when the post goes there.
-  warnAt: PropTypes.number,
   children: PropTypes.node,
 };
 
@@ -212,13 +201,4 @@ export const Column = ({ children }) => {
 
 Column.propTypes = {
   children: PropTypes.node.isRequired,
-};
-
-// What is said under a note's words that go to Bluesky, when they are
-// longer than it shows: that they are cut there. Otherwise a space, to keep
-// the line.
-export const blueskyCut = (goesToBluesky, words) => {
-  return goesToBluesky && threadSplit.lengthOf(words) > LIMITS.BLUESKY_POST_MAX ?
-    i18n.t('federation:composer.cutForBluesky', { max: LIMITS.BLUESKY_POST_MAX }) :
-    ' ';
 };

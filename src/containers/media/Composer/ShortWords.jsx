@@ -22,7 +22,7 @@ import photoFiles from '../../../utils/photoFiles';
 import videos from '../../../utils/videos';
 import AttachButtons from './AttachButtons';
 import {
-  NoteHead, SplitWords, ThreadLine, WORDS, blueskyCut,
+  NoteHead, SplitWords, ThreadLine, WORDS,
 } from './NoteParts';
 
 const { CONTENT } = MEDIUM.FIELDS;
@@ -87,7 +87,7 @@ Said.propTypes = {
 const ShortWords = ({ composer, thread }) => {
   const {
     actor, viewer, mobile, choices, nodeInfo, files, busy, body, text,
-    linkPreview, hashtags, split, noteLimit, goesToBluesky, morePictures,
+    linkPreview, hashtags, split, noteLimit, morePictures,
   } = composer;
   const {
     hasPhotos, video, isSound, recorder, offers,
@@ -213,9 +213,8 @@ const ShortWords = ({ composer, thread }) => {
             <ThreadLine
               length={split.length}
               limit={noteLimit}
-              warnAt={goesToBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
             >
-              <SplitWords split={split} otherwise={blueskyCut(goesToBluesky, body)} />
+              <SplitWords split={split} />
             </ThreadLine>
           </Box>}
       </Box>

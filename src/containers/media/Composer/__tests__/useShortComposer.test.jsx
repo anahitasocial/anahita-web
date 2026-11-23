@@ -116,6 +116,21 @@ describe('useShortComposer', () => {
     expect(hook.result.current.split.canSplit).toBe(true);
   });
 
+  // Bluesky's own 300 when the post goes there, so that it goes whole, never
+  // cut with a link back; longer words are split into a thread (row 179).
+  it('holds a note going to Bluesky to 300, and offers a thread past it', async () => {
+    api.federation.blueskySettings.mockResolvedValue({ data: { connected: true } });
+    draw();
+    await settle();
+    expect(hook.result.current.goesToBluesky).toBe(true);
+    expect(hook.result.current.noteLimit).toBe(300);
+    type('x'.repeat(300));
+    expect(hook.result.current.canGoOn).toBe(true);
+    type('x'.repeat(301));
+    expect(hook.result.current.canGoOn).toBe(false);
+    expect(hook.result.current.split.canSplit).toBe(true);
+  });
+
   it('takes no words alone where the profile takes no notes', () => {
     draw({ kinds: ['photo'] });
     type('Words alone');

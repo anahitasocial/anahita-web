@@ -31,7 +31,6 @@ export default {
     replyStaysHereBluesky: 'Deine Antwort wird hier gelesen und nicht auf Bluesky. Um auch dort zu antworten, verbinde dein Bluesky-Konto in deinen Einstellungen unter Föderiert.',
     staysHere: 'Diese Notiz wird nicht mit dem Fediverse geteilt: Das wird nur eine Notiz, die für alle sichtbar ist.',
     articleStaysHere: 'Dieser Artikel wird nicht mit dem Fediverse geteilt: Das wird nur ein Artikel, der für alle sichtbar ist.',
-    cutForBluesky: 'Bluesky zeigt die ersten {{max}} Zeichen, mit einem Link zum Rest hier.',
     morePictures: 'Mastodon und Bluesky zeigen die ersten {{max}} Fotos, mit einem Link zu allen hier.',
     morePicturesMastodon: 'Mastodon zeigt die ersten {{max}} Fotos, mit einem Link zu allen hier.',
     morePicturesBluesky: 'Bluesky zeigt die ersten {{max}} Fotos, mit einem Link zu allen hier.',

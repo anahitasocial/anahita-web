@@ -78,7 +78,6 @@ const ShortComposer = ({
       max={LIMITS.THREAD_PARTS_MAX}
       disabled={busy}
       direction={choices.direction}
-      goesToBluesky={composer.goesToBluesky}
       limit={composer.noteLimit}
       writer={mobile ? null : viewer}
       uploader={viewer}

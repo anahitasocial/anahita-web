@@ -1,8 +1,10 @@
 import threadSplit from '../threadSplit';
 
 describe('a thread\'s limit (roadmap row 126)', () => {
-  it('is 500 wherever the post goes (roadmap row 144)', () => {
-    expect(threadSplit.limitFor({ goesToBluesky: true, goesToFediverse: true })).toBe(500);
+  it('is 500 (roadmap row 144), and 300 when it goes to Bluesky (row 179)', () => {
+    expect(threadSplit.limitFor({ goesToBluesky: true, goesToFediverse: true })).toBe(300);
+    expect(threadSplit.limitFor({ goesToBluesky: true })).toBe(300);
+    expect(threadSplit.limitFor({ goesToFediverse: true })).toBe(500);
     expect(threadSplit.limitFor({})).toBe(500);
   });
 

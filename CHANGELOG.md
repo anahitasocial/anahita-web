@@ -32,6 +32,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    in place of a profile's wide band: its author sees it as it is shown on
    Bluesky, Mastodon and wherever its link is pasted. Nothing is stretched:
    a picture of another shape is cropped to its middle, as cards do.
+2. **A note going to Bluesky holds 300 characters,** Bluesky's own, in
+   place of 500 with a warning at 300: it goes there whole, never cut with
+   a link back to the rest here. Longer words are split into a thread, as
+   past 500 before.
 
 ### Fixed
 

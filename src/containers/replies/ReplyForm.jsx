@@ -156,7 +156,6 @@ const ReplyForm = ({
         <ThreadLine
           length={form.split.length}
           limit={form.noteLimit}
-          warnAt={form.onBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
         >
           <SplitWords split={form.split} />
         </ThreadLine>}
@@ -178,7 +177,6 @@ const ReplyForm = ({
           disabled={isSending}
           direction={direction}
           limit={form.noteLimit}
-          goesToBluesky={form.onBluesky}
           outlined
           uploader={viewer && viewer.id ? viewer : null}
           photosMax={form.canAddPhotos ? form.photosMax : 0}

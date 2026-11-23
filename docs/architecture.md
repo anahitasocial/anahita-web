@@ -1941,28 +1941,26 @@ draws nothing (`utils/federation.js#isAbsent`).
    are shown as any replies are, each under the one before. Its notes may
    have a GIF or a video, sent the same way (`{ thread, firstNote }`,
    `VideoReplyOnTheWay` with `threadAfter` and `more`). Under each
-   note's words is how much room is left of its 500 (roadmap rows 126 and
-   144, `Composer/useThreadSplit.js`, `utils/threadSplit.js`), counted down
+   note's words is how much room is left of its 500, or of 300 where the
+   post goes to Bluesky (roadmap rows 126, 144 and 179, `Composer/useThreadSplit.js`, `utils/threadSplit.js`), counted down
    as Bluesky's app does, a number and a ring that fills (`CharacterCount`
    in `Composer/NoteParts.jsx`), as the services count it: a link 23
    however long, a Markdown link its words (`POST_MAX` and `LINK_LENGTH` in
-   `constants/limits.js`). Where the post goes to Bluesky, the ring turns to
-   the warning's colour past 300, where Bluesky stops showing the words;
-   past 500 it is red, and Next, Post and an edit's Update stop. "Add to
+   `constants/limits.js`; `BLUESKY_POST_MAX` where it goes to Bluesky, so
+   that it goes there whole, never cut with a link back to the rest; the
+   user, 2026-11-23). Past the limit it is red, and Next, Post and an edit's
+   Update stop. "Add to
    thread" is offered once the last note has words, wherever the post goes.
    Past the limit, "Split into a thread" breaks the words at paragraphs, then
    sentences, then spaces, never inside a link, into ten notes at most;
    "Undo" puts them back while the first note is as the split left it.
 3. **What other networks will show** of a public post on the viewer's own
-   profile is said in a line under it (roadmap row 100, `Composer/ShortWords.jsx`,
-   `blueskyCut` in `Composer/NoteParts.jsx`):
-   past 300 characters, when their Bluesky account is connected, that
-   Bluesky shows the first 300 with a link to the rest; with more than four
-   photos, that Mastodon, Bluesky or both show the first four with a link to
-   all of them. The Bluesky line's room is kept while the post goes there, so
-   nothing moves as the words pass 300. The numbers are `BLUESKY_POST_MAX` and
-   `PICTURES_SHOWN_MAX` in `constants/limits.js`; the count is of what is
-   typed, Markdown's marks included, a little more than Bluesky is sent.
+   profile is said in a line under it (roadmap row 100, `Composer/ShortWords.jsx`):
+   with more than four photos, that Mastodon, Bluesky or both show the first
+   four with a link to all of them (`PICTURES_SHOWN_MAX` in
+   `constants/limits.js`). Words are never cut for Bluesky any more: a note
+   going there holds 300 (above). The count is of what is typed, Markdown's
+   marks included, a little more than Bluesky is sent.
 4. **Answering something from another server** is offered where the server
    says the viewer may (`authorized.comment`), as for any post: the reply is
    the viewer's own note and is sent to whoever it answers when the viewer

@@ -31,7 +31,6 @@ export default {
     replyStaysHereBluesky: 'Sua resposta será lida aqui, e não no Bluesky. Para responder lá também, conecte sua conta do Bluesky nas suas configurações, em Federado.',
     staysHere: 'Esta nota não será compartilhada com o fediverso: só uma nota aberta a todo mundo é.',
     articleStaysHere: 'Este artigo não será compartilhado com o fediverso: só um artigo aberto a todo mundo é.',
-    cutForBluesky: 'O Bluesky mostra os primeiros {{max}} caracteres, com um link para o resto aqui.',
     morePictures: 'O Mastodon e o Bluesky mostram as primeiras {{max}} fotos, com um link para todas aqui.',
     morePicturesMastodon: 'O Mastodon mostra as primeiras {{max}} fotos, com um link para todas aqui.',
     morePicturesBluesky: 'O Bluesky mostra as primeiras {{max}} fotos, com um link para todas aqui.',

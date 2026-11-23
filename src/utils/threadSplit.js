@@ -3,11 +3,12 @@
 // React, so they can be tested on their own.
 import LIMITS from '../constants/limits';
 
-// What a note may hold, wherever it goes: 500, as on Mastodon and Threads
-// (roadmap row 144). Bluesky shows the first 300 of it, with a link to the
-// rest; the count warns of that, and does not stop at it.
-const limitFor = () => {
-  return LIMITS.POST_MAX;
+// What a note may hold: 500, as on Mastodon and Threads (roadmap row 144);
+// 300, Bluesky's own, when it goes to Bluesky, so that it goes there whole
+// and never cut with a link back to the rest here. Longer words are split
+// into a thread (roadmap row 179, the user, 2026-11-23).
+const limitFor = ({ goesToBluesky = false } = {}) => {
+  return goesToBluesky ? LIMITS.BLUESKY_POST_MAX : LIMITS.POST_MAX;
 };
 
 // A link as Markdown writes it, and an address standing alone: the

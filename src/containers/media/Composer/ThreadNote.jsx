@@ -18,7 +18,7 @@ import threadSplit from '../../../utils/threadSplit';
 import videos from '../../../utils/videos';
 import AttachButtons from './AttachButtons';
 import {
-  Column, NoteHead, ThreadJoin, ThreadLine, WORDS, blueskyCut,
+  Column, NoteHead, ThreadJoin, ThreadLine, WORDS,
 } from './NoteParts';
 import useThreadNote from './useThreadNote';
 
@@ -46,7 +46,6 @@ const ThreadNote = ({
   onChange,
   disabled,
   direction,
-  goesToBluesky,
   outlined,
   limit,
   writer,
@@ -179,15 +178,9 @@ const ThreadNote = ({
                 onVideo={held.takeVideo}
               />
             </Box>}
-          {(goesToBluesky || limit > 0) &&
+          {limit > 0 &&
             <Box sx={{ flexGrow: 1, minWidth: 0 }}>
-              <ThreadLine
-                length={limit > 0 ? threadSplit.lengthOf(words) : -1}
-                limit={limit}
-                warnAt={goesToBluesky ? LIMITS.BLUESKY_POST_MAX : 0}
-              >
-                {blueskyCut(goesToBluesky, words)}
-              </ThreadLine>
+              <ThreadLine length={threadSplit.lengthOf(words)} limit={limit} />
             </Box>}
         </Box>
       </Box>
@@ -206,7 +199,6 @@ ThreadNote.propTypes = {
   onChange: PropTypes.func.isRequired,
   disabled: PropTypes.bool.isRequired,
   direction: PropTypes.string.isRequired,
-  goesToBluesky: PropTypes.bool.isRequired,
   outlined: PropTypes.bool.isRequired,
   limit: PropTypes.number.isRequired,
   writer: PropTypes.object,
