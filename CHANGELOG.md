@@ -22,7 +22,11 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 1. **The logo has no white ring round it** in a mobile's top bar: the
    circle it sits in was filled white, and showed through the clear margin
    of its image.
-2. **A feed turns to "Any of these" when a second kind is added:** a feed
+2. **A picture put in an article stays when the text is pasted or a
+   hashtag typed:** it was left selected, and whatever came next took its
+   place, out of sight above on a mobile. The caret now goes on a new line
+   under it, and nothing typed or pasted ever writes over a picture.
+3. **A feed turns to "Any of these" when a second kind is added:** a feed
    of chosen profiles given keywords later kept "All of these", and showed
    only the posts from those profiles that also held a keyword.
 

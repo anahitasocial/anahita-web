@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 // ProseMirror's own parts come through @tiptap/pm by a path its package
 // declares in "exports", which the build reads and the linter's resolver
 // does not.
-// eslint-disable-next-line import/no-unresolved
-import { Plugin, PluginKey } from '@tiptap/pm/state';
+// eslint-disable-next-line import/no-unresolved, object-curly-newline
+import { NodeSelection, Plugin, PluginKey, TextSelection } from '@tiptap/pm/state';
 import { Node, NodeViewWrapper, ReactNodeViewRenderer } from '@tiptap/react';
 
 import Box from '@mui/material/Box';
@@ -201,6 +201,21 @@ View.propTypes = {
   selected: PropTypes.bool.isRequired,
 };
 
+// When an embed is what is selected, the caret is put on a new line after
+// it, and it says so; otherwise nothing is done.
+const afterSelectedEmbed = (view, type) => {
+  const { state } = view;
+  const { selection } = state;
+  if (!(selection instanceof NodeSelection) || selection.node.type !== type) {
+    return false;
+  }
+  const at = selection.to;
+  const tr = state.tr.insert(at, state.schema.nodes.paragraph.create());
+  tr.setSelection(TextSelection.create(tr.doc, at + 1));
+  view.dispatch(tr);
+  return true;
+};
+
 const KEY = new PluginKey('embeds');
 
 const EmbedNode = Node.create({
@@ -243,6 +258,22 @@ const EmbedNode = Node.create({
     return [
       new Plugin({
         key: KEY,
+        // An embed selected is never written over: what is typed or pasted
+        // goes on a line after it (the user, 2026-11-23). Taking it out is
+        // its own button, or Backspace.
+        props: {
+          handleTextInput: (view, from, to, text) => {
+            if (!afterSelectedEmbed(view, type)) {
+              return false;
+            }
+            view.dispatch(view.state.tr.insertText(text));
+            return true;
+          },
+          handlePaste: (view) => {
+            afterSelectedEmbed(view, type);
+            return false;
+          },
+        },
         appendTransaction: (transactions, before, state) => {
           const changed = transactions.some((each) => {
             return each.docChanged || each.selectionSet;

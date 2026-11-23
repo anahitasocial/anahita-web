@@ -287,12 +287,17 @@ const useLongEditor = ({
         setIsLibraryOpen(false);
       },
       // A photo or a video of one's own, put in as an embed, after what is
-      // selected, never in its place: an embed just put in is selected, and
-      // the next would take its place.
+      // selected, never in its place; then the caret on a new line under
+      // it. Left selected, the embed was taken away by whatever came next,
+      // text pasted or a hashtag typed, unseen on a mobile, where it is
+      // out of sight above (the user, 2026-11-23).
       pick: (url) => {
         setIsLibraryOpen(false);
         chain()
-          .insertContentAt(editor.state.selection.to, { type: 'embed', attrs: { url } })
+          .insertContentAt(editor.state.selection.to, [
+            { type: 'embed', attrs: { url } },
+            { type: 'paragraph' },
+          ])
           .run();
       },
     },

@@ -60,6 +60,43 @@ describe('useLongEditor', () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  // A picture put in was left selected, and what came next took its place
+  // (the user, 2026-11-23, on a mobile).
+  const kinds = (editor) => {
+    const found = [];
+    editor.state.doc.forEach((node) => { found.push(node.type.name); });
+    return found;
+  };
+
+  it('puts the caret under a picture put in, so what is written next goes after it', () => {
+    const { editor } = draw({ value: '' });
+    act(() => { hook.result.current.library.pick(`${window.location.origin}/photos/7`); });
+    act(() => { editor.commands.insertContent('RIP Coffee Grinder'); });
+
+    expect(kinds(editor)).toEqual(['embed', 'paragraph']);
+    expect(editor.getText()).toContain('RIP Coffee Grinder');
+
+    // And it stays when a hashtag is added from the chips under it.
+    draw({ value: `${onChange.mock.calls.at(-1)[0]}\n\n#coffee` });
+    expect(kinds(editor)).toContain('embed');
+  });
+
+  it('never writes over a picture that is selected', () => {
+    const { editor } = draw({ value: '' });
+    act(() => { hook.result.current.library.pick(`${window.location.origin}/photos/7`); });
+    expect(kinds(editor)[0]).toBe('embed');
+    act(() => { editor.commands.setNodeSelection(0); });
+
+    act(() => {
+      const { view } = editor;
+      const { from, to } = view.state.selection;
+      view.someProp('handleTextInput', (handle) => { return handle(view, from, to, '#'); });
+    });
+
+    expect(kinds(editor)[0]).toBe('embed');
+    expect(editor.getText()).toContain('#');
+  });
+
   it('is not written in while disabled', () => {
     const { editor } = draw({ disabled: true });
     expect(editor.isEditable).toBe(false);
