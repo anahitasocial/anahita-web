@@ -24,6 +24,7 @@ import SideTabs, {
 } from '../../components/SideTabs';
 import actions from '../../actions';
 import i18n from '../../languages';
+import customFeeds from '../../utils/customFeeds';
 import BackToTop from '../../components/BackToTop';
 
 import PersonType from '../../proptypes/Person';
@@ -86,7 +87,7 @@ const FeedsPage = ({
   const [params, setParams] = useSearchParams();
   const [listRef, startList] = useTabbedList();
 
-  const asked = Number(params.get('feed')) || FOLLOWING;
+  const asked = customFeeds.idOf(params.get('feed')) || FOLLOWING;
   const open = pinned.find((feed) => {
     return feed.id === asked;
   });
@@ -100,8 +101,9 @@ const FeedsPage = ({
       variant="scrollable"
       scrollButtons="auto"
       onChange={(event, feedId) => {
+        const chosen = pinned.find((feed) => { return feed.id === feedId; });
         setParams(
-          feedId === FOLLOWING ? {} : { feed: String(feedId) },
+          !chosen ? {} : { feed: customFeeds.homeParamOf(chosen) },
           { state: { keepPlace: true } },
         );
         startList();

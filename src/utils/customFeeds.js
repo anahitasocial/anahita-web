@@ -335,6 +335,16 @@ const urlOf = (feed) => {
   return feed.slug ? `/feeds/${feed.id}-${feed.slug}` : `/feeds/${feed.id}`;
 };
 
+// A feed open as a tab of Home: /?feed=12-arts-design, as its own page
+// reads (roadmap row 176).
+const homeParamOf = (feed) => {
+  return feed.slug ? `${feed.id}-${feed.slug}` : `${feed.id}`;
+};
+
+const homeUrlOf = (feed) => {
+  return `/?feed=${homeParamOf(feed)}`;
+};
+
 // The feed an address names: only its id is read, so an address with an
 // old name, or none, still opens it.
 const idOf = (param = '') => {
@@ -396,7 +406,7 @@ const toShare = (feed) => {
 // Where a feed is opened after it is saved: Home on its tab when it is kept
 // there, and its own page otherwise.
 const whereToRead = (feed) => {
-  return feed.isPinned ? `/?feed=${feed.id}` : urlOf(feed);
+  return feed.isPinned ? homeUrlOf(feed) : urlOf(feed);
 };
 
 // Leaves a dialog that has an address of its own: back to wherever it was
@@ -442,5 +452,7 @@ export default {
   toShare,
   urlOf,
   idOf,
+  homeParamOf,
+  homeUrlOf,
   whereToRead,
 };

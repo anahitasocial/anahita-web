@@ -235,5 +235,8 @@ describe('a feed\'s address (roadmap row 176)', () => {
     expect(feeds.idOf('12-an-old-name')).toBe(12);
     expect(feeds.idOf('12')).toBe(12);
     expect(feeds.idOf('add')).toBe(0);
+    // As a tab of Home, the same way.
+    expect(feeds.homeUrlOf({ id: 12, slug: 'arts-design' })).toBe('/?feed=12-arts-design');
+    expect(feeds.homeUrlOf({ id: 13 })).toBe('/?feed=13');
   });
 });

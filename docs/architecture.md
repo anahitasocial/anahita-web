@@ -1408,7 +1408,10 @@ are about, what to leave out. The server's side is in the services'
 
 1. **Home tabs.** The first tab is Following, the feed there always was
    (`containers/feed/Leaders`). After it, the feeds from `GET /feeds/pinned`,
-   in the viewer's order. The open tab is in the address as `?feed=<id>`.
+   in the viewer's order. The open tab is in the address as
+   `?feed=12-arts-design`, read as a feed's own page is: only its id
+   counts, so `?feed=12` still opens it (`customFeeds.homeUrlOf`, roadmap
+   row 176).
    The way to `/feeds` is "Feeds" in the left menu; the tabs have no button
    of their own for it, which looked like a setting (the user, 2026-10-19).
 2. **Back to the top.** Once somebody has scrolled about a screen down Home

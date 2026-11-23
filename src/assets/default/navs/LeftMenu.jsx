@@ -36,6 +36,7 @@ import AboutIcon from '@mui/icons-material/Info';
 import { Link, useLocation } from 'react-router-dom';
 
 import offers from '../../../utils/offers';
+import customFeeds from '../../../utils/customFeeds';
 import i18n from '../../../languages';
 import PersonType from '../../../proptypes/Person';
 import NodeInfoType from '../../../proptypes/NodeInfo';
@@ -64,7 +65,7 @@ const LeftMenu = ({
   const feeds = usePinnedFeeds(isAuthenticated);
   // Suggestions of who to follow, where the installation makes any.
   const hasSuggestions = useHasSuggestions(isAuthenticated);
-  const openFeed = pathname === '/' ? Number(new URLSearchParams(search).get('feed')) || 0 : 0;
+  const openFeed = pathname === '/' ? customFeeds.idOf(new URLSearchParams(search).get('feed')) : 0;
   const isFeedOpen = feeds.some((feed) => {
     return feed.id === openFeed;
   });
@@ -97,7 +98,7 @@ const LeftMenu = ({
               <ListItemButton
                 key={`menu-feed-${feed.id}`}
                 component={Link}
-                to={`/?feed=${feed.id}`}
+                to={customFeeds.homeUrlOf(feed)}
                 selected={openFeed === feed.id}
                 sx={{ pl: 4 }}
               >
