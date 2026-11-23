@@ -92,7 +92,7 @@ export default {
     cDescription: 'Super administrateurs uniquement.',
   },
   fediverse: {
-    mTitle: 'Fédivers',
+    mTitle: 'Fédéré',
     cTitle: 'Serveurs que ce site refuse',
     cDescription: 'Rien n’est accepté de ces serveurs ni ne leur est envoyé, et personne ne peut y être recherché. Un nom couvre tous les noms qui en dépendent.',
     absent: 'Ce site ne fait pas tourner le service qui le relie au fédivers.',

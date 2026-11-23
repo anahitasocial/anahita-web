@@ -26,9 +26,9 @@ export default {
     },
   },
   composer: {
-    replyStaysHere: 'Votre réponse sera lue ici et non sur le serveur d’où cela vient : vous n’êtes pas sur le fédivers. Vous pouvez changer cela dans vos paramètres, sous Fédivers.',
+    replyStaysHere: 'Votre réponse sera lue ici et non sur le serveur d’où cela vient : vous n’êtes pas sur le fédivers. Vous pouvez changer cela dans vos paramètres, sous Fédéré.',
     editStaysHereBluesky: 'Bluesky ne fait qu’ajouter ou supprimer des publications : cette modification n’atteindra pas la copie là-bas.',
-    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky. Pour répondre là-bas aussi, connectez votre compte Bluesky dans vos paramètres, sous Fédivers.',
+    replyStaysHereBluesky: 'Votre réponse sera lue ici et non sur Bluesky. Pour répondre là-bas aussi, connectez votre compte Bluesky dans vos paramètres, sous Fédéré.',
     staysHere: 'Cette note ne sera pas partagée avec le fédivers : seule une note ouverte à tout le monde l’est.',
     articleStaysHere: 'Cet article ne sera pas partagé avec le fédivers : seul un article ouvert à tout le monde l’est.',
     cutForBluesky: 'Bluesky affiche les {{max}} premiers caractères, avec un lien vers la suite ici.',

@@ -43,7 +43,7 @@ const TAB_ORDER = [
   TABS.FEDIVERSE,
 ];
 
-// Site settings. Super admin only, every tab, but for the Fediverse tab's
+// Site settings. Super admin only, every tab, but for the Federated tab's
 // list of refused accounts, which administrators see too, alone
 // (permissions/settings.js).
 //

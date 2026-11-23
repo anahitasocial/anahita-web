@@ -92,7 +92,7 @@ export default {
     cDescription: 'Nur für Super-Administrator:innen.',
   },
   fediverse: {
-    mTitle: 'Fediverse',
+    mTitle: 'Föderiert',
     cTitle: 'Server, die diese Website ablehnt',
     cDescription: 'Von diesen Servern wird nichts angenommen und nichts an sie geschickt, und niemand dort kann nachgeschlagen werden. Ein Name gilt auch für jeden Namen darunter.',
     absent: 'Auf dieser Website läuft der Dienst nicht, der sie mit dem Fediverse verbindet.',

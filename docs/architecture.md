@@ -248,14 +248,14 @@ history. The main paths:
 | `/people/:id/settings/:section` | A person's settings, grouped into sections |
 | `/groups`, `/groups/:id` | Groups, and a group. `:id` is `<id>-<slug>` |
 | `/groups/:id/settings` | A group's settings |
-| `/channels`, `/channels/:id`, `/channels/:id/settings` | Channels, a channel (a profile its admins post on as it, roadmap row 147), and its settings: Info, Admins, Privacy (as a group's), Posts (articles and topics turned on, `ChannelPostKinds.jsx`; downloads), On your site (its website's feed, `channels/FeedCard.jsx` and `ConnectFeedDialog.jsx`, and the lines for its site), Fediverse, Danger zone. A channel's page has an Events tab as a group's has; under its posts and replies, its admins see Written by (`components/WrittenBy.jsx`). Its page is at `/@alias` like any profile. The old `/websites…` addresses lead here |
+| `/channels`, `/channels/:id`, `/channels/:id/settings` | Channels, a channel (a profile its admins post on as it, roadmap row 147), and its settings: Info, Admins, Privacy (as a group's), Posts (articles and topics turned on, `ChannelPostKinds.jsx`; downloads), On your site (its website's feed, `channels/FeedCard.jsx` and `ConnectFeedDialog.jsx`, and the lines for its site), Federated, Danger zone. A channel's page has an Events tab as a group's has; under its posts and replies, its admins see Written by (`components/WrittenBy.jsx`). Its page is at `/@alias` like any profile. The old `/websites…` addresses lead here |
 | `/channels/add` | Create channel, the group's form shared (`actors/Add`), for those the installation's `channelsFrom` allows; a website's feed is connected afterwards, in its settings. `/channels/connect`, where a channel was once made of a feed, leads here. See [Channels](https://github.com/anahitasocial/anahita-services/blob/main/docs/channels.md) in anahita-services |
 | `/notes/:id`, `/articles/:id`, `/topics/:id`, `/photos/:id`, `/videos/:id`, `/audio/:id` | One post. There is no page listing every post of a type; the bare paths send an old bookmark home |
 | `/hashtags`, `/hashtags/:alias`, `/locations`, `/locations/:id` | Hashtags and places, the lists and each one. The Hashtags page has Trending and All; the hashtags one follows are the ones in one's custom feeds, read there, not listed here (`containers/hashtags`). The old `/tags/:alias` sends to `/hashtags/:alias` |
 | `/notifications` | The viewer's notifications |
 | `/admin/:tab` | The administration area. The tab is in the address so an email can link to it. See below |
 | `/invites` | Invitations, for a member who may invite. An administrator is sent to `/admin/invites`. The People page's + leads here with the form already open (`{ invite: true }` in the router's state, kept through the redirect); the list's own + is in its header |
-| `/settings` | Site settings, for super administrators, and for administrators the Fediverse tab's refused accounts alone (`permissions/settings.js`). A page and a menu entry of its own: OAuth clients, signing keys, Privacy, which shows what the installation lets visitors read and can make everything public members-only, and Fediverse, what the site refuses, in two tabs: Servers and Accounts |
+| `/settings` | Site settings, for super administrators, and for administrators the Federated tab's refused accounts alone (`permissions/settings.js`). A page and a menu entry of its own: OAuth clients, signing keys, Privacy, which shows what the installation lets visitors read and can make everything public members-only, and Federated, what the site refuses, in two tabs: Servers and Accounts |
 | `/signup-requests` | Where the signup queue used to be. Redirects to `/admin/signup-requests` |
 | `/legal/tos`, `/legal/privacy`, `/agreements` | The legal documents, and accepting new versions |
 | `/onboarding` | Where somebody signed in with an incomplete profile is sent, once (`routes/OnboardingGate.jsx`): a name and a few words; a picture, in a circle that shows the initials of that name until there is one; hashtags they are interested in, up to ten, which make one "My interests" feed on their home page; profiles the site features; then people and groups recommended for them, with the reason for each. Nothing is followed without a tick. A step with nothing to show is left out (`onboarding/featured.js#stepsFor`), every step can be skipped, and without the recommendation service there are no interests and no recommendations (`containers/onboarding`) |
@@ -1970,7 +1970,7 @@ draws nothing (`utils/federation.js#isAbsent`).
    as it is for any profile here, to say where an organisation on another
    server is (`locations/Gadget`, `hideWhenEmpty`); nobody else sees it
    while it is empty.
-7. **What the site refuses** is in Site settings, under Fediverse
+7. **What the site refuses** is in Site settings, under Federated
    (`settings/Fediverse.jsx`), in two tabs. **Servers**
    (`settings/FediverseServers.jsx`), for super administrators as every tab
    there is: the list with why, and a button to stop refusing one. The list is
@@ -1987,7 +1987,7 @@ draws nothing (`utils/federation.js#isAbsent`).
    networks is kept here, newest first, with a search, and each can be refused.
    Only administrators see this: these people did not ask to be listed here.
 
-8. **The switch** is a card under Settings › Fediverse, beside the Bluesky
+8. **The switch** is a card under Settings › Federated, beside the Bluesky
    card, on the viewer's own profile only (`actors/Settings/Fediverse.jsx`): "Let people on other servers find and
    follow me". Off until the person turns it on, and theirs alone to turn
    on. It shows their handle, says that what is sent cannot be called back,
@@ -2073,7 +2073,7 @@ draws nothing (`utils/federation.js#isAbsent`).
       for somebody connected (`useOnBluesky`, asked once and kept up to
       date by the settings card).
 15. **A person's own Bluesky account** is connected in their settings,
-    under Fediverse (`actors/Settings/Bluesky.jsx`): a handle and an app
+    under Federated (`actors/Settings/Bluesky.jsx`): a handle and an app
     password, with a link to where Bluesky makes one, then "Connected as"
     and a button to disconnect, which asks first. When Bluesky no longer
     takes the connection the card says so and offers the form again.

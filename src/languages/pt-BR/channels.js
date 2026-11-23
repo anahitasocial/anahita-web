@@ -101,8 +101,8 @@ export default {
     access: 'Privacidade',
     permissions: 'Publicações',
     website: 'No seu site',
-    fediverse: 'Fediverso',
-    // Its card under Fediverse: off until one of its administrators turns
+    fediverse: 'Federado',
+    // Its card under Federated: off until one of its administrators turns
     // it on, as a person's is.
     fediverseCard: {
       enable: 'Deixar que pessoas de outros servidores o encontrem e sigam',

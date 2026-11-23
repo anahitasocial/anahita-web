@@ -13,6 +13,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 1. **Reply on a notification leads to the post,** to be read before it is
    answered, and no longer opens a reply form under the notification.
+2. **The Fediverse tab is called Federated,** in a person's settings, a
+   channel's and the site's: it holds Bluesky as well as the fediverse,
+   and "fediverse" is ActivityPub's alone. Its address stays
+   `/settings/fediverse`, so that links to it keep working.
 
 ### Fixed
 

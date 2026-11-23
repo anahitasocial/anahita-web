@@ -25,7 +25,7 @@ const {
 // in it are the same privilege here, so there is one name for it.
 //
 // With one opening (the user, 2026-10-29): administrators refuse accounts
-// from other networks one by one, so the list of them, the Fediverse tab's
+// from other networks one by one, so the list of them, the Federated tab's
 // Accounts, is theirs too. They see Site settings with that tab alone, and
 // in it that list alone; everything else stays super administrators'.
 const canBrowse = (viewer) => {
@@ -33,7 +33,7 @@ const canBrowse = (viewer) => {
 };
 
 // The tabs of Site settings this viewer sees: every one for a super
-// administrator, the Fediverse tab alone for an administrator.
+// administrator, the Federated tab alone for an administrator.
 const canBrowseTab = (viewer, tab) => {
   if (isSuperAdmin(viewer)) {
     return true;

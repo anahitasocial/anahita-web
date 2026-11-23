@@ -86,7 +86,9 @@ tone made specific; where they are silent, follow it.
     card's action row short: Download only on a post's own page. Share is
     always the last action, after Download.
 14. No Delete inside an edit form when the list or page has one already.
-15. A person's settings have a Fediverse tab for network settings.
+15. A person's settings have a Federated tab for the networks it reaches,
+    the fediverse and Bluesky; "Fediverse" is ActivityPub's alone (the
+    user, 2026-11-23). A channel's and the site's settings have one too.
 16. Every string is in every base, `src/languages/en-CA`, `fr-FR`, `de-DE`,
     `es-419` and `pt-BR`; in a layer (`en-US`, `fr-CA`) only when it differs there. `yarn test` fails on
     a base missing one. The translations are Claude's; the docs say so.

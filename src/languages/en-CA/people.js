@@ -101,7 +101,7 @@ export default {
       security: 'Security',
       access: 'Privacy',
       permissions: 'Permissions',
-      fediverse: 'Fediverse',
+      fediverse: 'Federated',
       notifications: 'Notifications',
       content: 'Content',
       data: 'Your data',

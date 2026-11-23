@@ -41,7 +41,9 @@ export const SECTIONS = {
   PERMISSIONS: 'permissions',
   // Other networks: the fediverse, by ActivityPub, and Bluesky. One tab
   // for both, since to whoever sets them they are one question: where
-  // else am I, and what of mine goes there.
+  // else am I, and what of mine goes there. Called Federated, which both
+  // are (the user, 2026-11-23: "Fediverse" is ActivityPub's alone); the
+  // key and the address stay, so that links to it keep working.
   FEDIVERSE: 'fediverse',
   // What the person is told about (roadmap row 97). Their own.
   NOTIFICATIONS: 'notifications',

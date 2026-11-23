@@ -38,7 +38,7 @@ const LIMIT = 50;
 // How long after the last key the list is asked for again.
 const SEARCH_WAIT = 300;
 
-// The servers this installation refuses, the Fediverse tab's Servers
+// The servers this installation refuses, the Federated tab's Servers
 // (Fediverse.jsx): nothing is taken from them, nothing is sent to them,
 // and nobody on them can be looked up.
 //

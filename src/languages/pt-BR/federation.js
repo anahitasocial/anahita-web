@@ -26,9 +26,9 @@ export default {
     },
   },
   composer: {
-    replyStaysHere: 'Sua resposta será lida aqui, e não no servidor de onde isto veio: você não está no fediverso. Você pode mudar isso nas suas configurações, em Fediverso.',
+    replyStaysHere: 'Sua resposta será lida aqui, e não no servidor de onde isto veio: você não está no fediverso. Você pode mudar isso nas suas configurações, em Federado.',
     editStaysHereBluesky: 'O Bluesky só adiciona e exclui publicações, então esta alteração não vai chegar à cópia de lá.',
-    replyStaysHereBluesky: 'Sua resposta será lida aqui, e não no Bluesky. Para responder lá também, conecte sua conta do Bluesky nas suas configurações, em Fediverso.',
+    replyStaysHereBluesky: 'Sua resposta será lida aqui, e não no Bluesky. Para responder lá também, conecte sua conta do Bluesky nas suas configurações, em Federado.',
     staysHere: 'Esta nota não será compartilhada com o fediverso: só uma nota aberta a todo mundo é.',
     articleStaysHere: 'Este artigo não será compartilhado com o fediverso: só um artigo aberto a todo mundo é.',
     cutForBluesky: 'O Bluesky mostra os primeiros {{max}} caracteres, com um link para o resto aqui.',

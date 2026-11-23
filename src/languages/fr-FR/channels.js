@@ -99,7 +99,7 @@ export default {
     access: 'Confidentialité',
     permissions: 'Publications',
     website: 'Sur votre site',
-    fediverse: 'Fédivers',
+    fediverse: 'Fédéré',
     fediverseCard: {
       enable: 'Laisser les gens d’autres serveurs le trouver et le suivre',
       help: 'Les gens sur Mastodon et d’autres serveurs du fédivers peuvent alors trouver la chaîne par son identifiant et la suivre, et ses notes leur sont envoyées.',

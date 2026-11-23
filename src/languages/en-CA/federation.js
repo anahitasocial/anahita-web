@@ -26,9 +26,9 @@ export default {
     },
   },
   composer: {
-    replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Fediverse.',
+    replyStaysHere: 'Your reply will be read here and not on the server this came from: you are not on the fediverse. You can change that in your settings, under Federated.',
     editStaysHereBluesky: 'Bluesky only adds and deletes posts, so this change will not reach the copy there.',
-    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Fediverse.',
+    replyStaysHereBluesky: 'Your reply will be read here and not on Bluesky. To reply there too, connect your Bluesky account in your settings, under Federated.',
     staysHere: 'This note will not be shared with the fediverse: only a note open to everybody is.',
     articleStaysHere: 'This article will not be shared with the fediverse: only an article open to everybody is.',
     cutForBluesky: 'Bluesky shows the first {{max}} characters, with a link to the rest here.',

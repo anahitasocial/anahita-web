@@ -92,7 +92,7 @@ export default {
     cDescription: 'Só para a superadministração.',
   },
   fediverse: {
-    mTitle: 'Fediverso',
+    mTitle: 'Federado',
     cTitle: 'Servidores que este site recusa',
     cDescription: 'Nada é recebido desses servidores nem enviado a eles, e ninguém neles pode ser buscado. Um nome abrange todos os nomes abaixo dele.',
     absent: 'Este site não executa o serviço que o conecta ao fediverso.',

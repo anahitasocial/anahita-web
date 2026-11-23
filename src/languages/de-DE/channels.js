@@ -101,8 +101,8 @@ export default {
     access: 'Privatsphäre',
     permissions: 'Beiträge',
     website: 'Auf deiner Website',
-    fediverse: 'Fediverse',
-    // Its card under Fediverse: off until one of its administrators turns
+    fediverse: 'Föderiert',
+    // Its card under Federated: off until one of its administrators turns
     // it on, as a person's is.
     fediverseCard: {
       enable: 'Leute auf anderen Servern sie finden und ihr folgen lassen',
