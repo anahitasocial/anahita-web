@@ -47,6 +47,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    place of 500 with a warning at 300: it goes there whole, never cut with
    a link back to the rest here. Longer words are split into a thread, as
    past 500 before.
+3. **An article's words are a little smaller on its page:** 17 px on a wide
+   screen and 16 px on a mobile, as every post is there, where they were
+   18 px; the room between their lines stays.
 
 ### Fixed
 

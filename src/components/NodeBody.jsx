@@ -188,12 +188,17 @@ const useStyles = makeStyles()((theme) => {
     },
     body1,
     body2,
-    // Long writing on its own page, read at length: larger, with more room
-    // between its lines. Its cards keep their own size.
+    // Long writing on its own page, read at length: a little larger on a
+    // wide screen, where its lines are long, and the size of every post on a
+    // mobile; more room between its lines either way. 18 px read too large
+    // in this face (the user, 2026-11-23). Its cards keep their own size.
     reading: {
       ...body1,
-      fontSize: '1.125rem',
+      fontSize: '1.0625rem',
       lineHeight: 1.6,
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '1rem',
+      },
     },
   };
 });
