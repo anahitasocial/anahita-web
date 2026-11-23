@@ -46,6 +46,10 @@ describe('a custom feed\'s definition', () => {
     expect(feeds.problem({})).toBe('too_broad');
     expect(feeds.problem({ filters: { mediaTypes: ['photo'] } })).toBe('too_broad');
     expect(feeds.problem({ filters: { actorTypes: ['group'] } })).toBe('too_broad');
+    // The site's own timeline (roadmap row 175), and not everything from
+    // elsewhere.
+    expect(feeds.problem({ filters: { origin: 'here' } })).toBe('');
+    expect(feeds.problem({ filters: { origin: 'elsewhere' } })).toBe('too_broad');
     expect(feeds.problem({ sources: { following: true } })).toBe('');
     expect(feeds.problem({ sources: { actors: [4] } })).toBe('');
     expect(feeds.problem({ filters: { hashtagsAny: ['garden'] } })).toBe('');

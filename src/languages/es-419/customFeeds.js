@@ -129,7 +129,7 @@ export default {
     // Where posts come from: one choice, three ways.
     from: {
       everyone: 'Todo el mundo',
-      everyoneHelp: 'Todas las publicaciones de aquí, también las del fediverso y Bluesky. Necesita un hashtag, una palabra clave, un lugar o una zona abajo.',
+      everyoneHelp: 'Todas las publicaciones de aquí, también las del fediverso y Bluesky. Necesita un hashtag, una palabra clave, un lugar o una zona abajo, o Publicado: En este sitio, para la cronología propia del sitio.',
       following: 'Perfiles que sigo',
       followingHelp: 'Personas, grupos y eventos que sigues.',
       chosen: 'Perfiles elegidos',
@@ -157,7 +157,7 @@ export default {
       invalid: 'Revisa el nombre y la descripción.',
       malformed: 'No se pudo leer este feed. Inténtalo de nuevo.',
       unknown_field: 'No se pudo leer este feed. Inténtalo de nuevo.',
-      too_broad: 'Esto serían todas las publicaciones del sitio. Elige de dónde vienen las publicaciones, o agrega un hashtag, una palabra clave o un lugar.',
+      too_broad: 'Esto serían todas las publicaciones del sitio. Elige de dónde vienen las publicaciones, o agrega un hashtag, una palabra clave o un lugar, o elige Publicado: En este sitio.',
       too_many_actors: 'Un feed admite hasta 100 perfiles.',
       too_many_hashtags: 'Un feed admite hasta 40 hashtags.',
       too_many_keywords: 'Un feed admite hasta 40 palabras clave.',

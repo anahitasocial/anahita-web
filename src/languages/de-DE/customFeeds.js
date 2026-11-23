@@ -129,7 +129,7 @@ export default {
     // Where posts come from: one choice, three ways.
     from: {
       everyone: 'Alle',
-      everyoneHelp: 'Jeder Beitrag hier, auch aus dem Fediverse und von Bluesky. Braucht unten einen Hashtag, einen Begriff, einen Ort oder ein Gebiet.',
+      everyoneHelp: 'Jeder Beitrag hier, auch aus dem Fediverse und von Bluesky. Braucht unten einen Hashtag, einen Begriff, einen Ort oder ein Gebiet, oder Veröffentlicht: Auf dieser Website, für die eigene Timeline der Website.',
       following: 'Profile, denen ich folge',
       followingHelp: 'Personen, Gruppen und Veranstaltungen, denen du folgst.',
       chosen: 'Ausgewählte Profile',
@@ -157,7 +157,7 @@ export default {
       invalid: 'Prüfe den Namen und die Beschreibung.',
       malformed: 'Dieser Feed konnte nicht gelesen werden. Bitte versuch es noch einmal.',
       unknown_field: 'Dieser Feed konnte nicht gelesen werden. Bitte versuch es noch einmal.',
-      too_broad: 'Das wären alle Beiträge der Website. Wähle, woher die Beiträge kommen, oder füge einen Hashtag, einen Begriff oder einen Ort hinzu.',
+      too_broad: 'Das wären alle Beiträge der Website. Wähle, woher die Beiträge kommen, oder füge einen Hashtag, einen Begriff oder einen Ort hinzu, oder wähle Veröffentlicht: Auf dieser Website.',
       too_many_actors: 'Ein Feed nimmt bis zu 100 Profile auf.',
       too_many_hashtags: 'Ein Feed nimmt bis zu 40 Hashtags auf.',
       too_many_keywords: 'Ein Feed nimmt bis zu 40 Begriffe auf.',

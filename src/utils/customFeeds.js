@@ -146,7 +146,9 @@ const narrows = (definition) => {
 const problem = (definition) => {
   const { sources, filters, exclude } = complete(definition);
 
-  if (!hasSources(definition) && !narrows(definition)) {
+  // The whole site only through what narrows it, or as what was written
+  // here: the site's own timeline (anahita-services roadmap row 175).
+  if (!hasSources(definition) && !narrows(definition) && filters.origin !== 'here') {
     return 'too_broad';
   }
   if (sources.actors.length > LIMITS.actors || exclude.actors.length > LIMITS.actors) {

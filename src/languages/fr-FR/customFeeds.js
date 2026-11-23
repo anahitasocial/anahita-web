@@ -128,7 +128,7 @@ export default {
     search: 'Saisissez pour chercher',
     from: {
       everyone: 'Tout le monde',
-      everyoneHelp: 'Toutes les publications ici, y compris celles du fédivers et de Bluesky. Il faut alors un hashtag, un mot-clé, un lieu ou une zone ci-dessous.',
+      everyoneHelp: 'Toutes les publications ici, y compris celles du fédivers et de Bluesky. Il faut alors un hashtag, un mot-clé, un lieu ou une zone ci-dessous, ou Publié : Sur ce site, pour le fil du site.',
       following: 'Profils que je suis',
       followingHelp: 'Les personnes, groupes et événements que vous suivez.',
       chosen: 'Profils choisis',
@@ -156,7 +156,7 @@ export default {
       invalid: 'Vérifiez le nom et la description.',
       malformed: 'Ce fil n’a pas pu être lu. Veuillez réessayer.',
       unknown_field: 'Ce fil n’a pas pu être lu. Veuillez réessayer.',
-      too_broad: 'Ce serait toutes les publications du site. Choisissez d’où elles viennent, ou ajoutez un hashtag, un mot-clé ou un lieu.',
+      too_broad: 'Ce serait toutes les publications du site. Choisissez d’où elles viennent, ou ajoutez un hashtag, un mot-clé ou un lieu, ou choisissez Publié : Sur ce site.',
       too_many_actors: 'Un fil accepte jusqu’à 100 profils.',
       too_many_hashtags: 'Un fil accepte jusqu’à 40 hashtags.',
       too_many_keywords: 'Un fil accepte jusqu’à 40 mots-clés.',

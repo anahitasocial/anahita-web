@@ -20,6 +20,10 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    the article editor is listed there for you alone, marked "In your media
    only", to edit its alt text or delete it. Needs Anahita Services with
    `library_only` in its lists (Embryo after v1.8.0).
+3. **A site's own timeline:** a feed of Everyone with Posted: On this site
+   needs nothing else, and shows everything written on the site, newest
+   first; shared, it is the site's public timeline. Needs Anahita Services
+   from Embryo after v1.8.0.
 
 ### Fixed
 

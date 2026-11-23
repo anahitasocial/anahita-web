@@ -129,7 +129,7 @@ export default {
     // Where posts come from: one choice, three ways.
     from: {
       everyone: 'Everyone',
-      everyoneHelp: 'Every post here, those from the fediverse and Bluesky too. Needs a hashtag, a keyword, a location or an area below.',
+      everyoneHelp: 'Every post here, those from the fediverse and Bluesky too. Needs a hashtag, a keyword, a location or an area below, or Posted: On this site, for this site’s own timeline.',
       following: 'Profiles I follow',
       followingHelp: 'People, groups and events you follow.',
       chosen: 'Chosen profiles',
@@ -157,7 +157,7 @@ export default {
       invalid: 'Check the name and the description.',
       malformed: 'This feed could not be read. Please try again.',
       unknown_field: 'This feed could not be read. Please try again.',
-      too_broad: 'This would be every post on the site. Choose where the posts come from, or add a hashtag, a keyword or a location.',
+      too_broad: 'This would be every post on the site. Choose where the posts come from, or add a hashtag, a keyword or a location, or choose Posted: On this site.',
       too_many_actors: 'A feed takes up to 100 profiles.',
       too_many_hashtags: 'A feed takes up to 40 hashtags.',
       too_many_keywords: 'A feed takes up to 40 keywords.',
