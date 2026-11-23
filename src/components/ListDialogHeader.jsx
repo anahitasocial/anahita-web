@@ -18,8 +18,9 @@ const ListDialogHeader = ({
   children = null,
 }) => {
   return (
-    <Toolbar sx={{ gap: 1, px: 1 }}>
-      <IconButton edge="start" aria-label={i18n.t('commons:close')} onClick={onClose}>
+    // The X's glyph 16 px from the edge, as the composers' is.
+    <Toolbar disableGutters sx={{ gap: 1, pl: 1, pr: 2 }}>
+      <IconButton aria-label={i18n.t('commons:close')} onClick={onClose}>
         <CloseIcon />
       </IconButton>
       <Typography id={id} variant="h6" component="h2" noWrap sx={{ flexGrow: 1, minWidth: 0 }}>

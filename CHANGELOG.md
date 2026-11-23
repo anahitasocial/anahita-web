@@ -63,6 +63,9 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 4. **A feed turns to "Any of these" when a second kind is added:** a feed
    of chosen profiles given keywords later kept "All of these", and showed
    only the posts from those profiles that also held a keyword.
+5. **The ✕ of the long composer, the media library and the lists' dialogs
+   sits 16 px from the edge,** in line with what is under it, as the short
+   composer's does; on a mobile it was 4 px from it.
 
 ## v1.3.10 Birth, 2026-11-23
 

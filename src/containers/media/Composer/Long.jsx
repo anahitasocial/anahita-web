@@ -81,9 +81,11 @@ const LongComposer = ({
         sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}
       >
         {/* Close and Post at the top, as in the short box on a mobile. */}
-        <Toolbar sx={{ gap: 1, px: 1 }}>
+        {/* What is seen sits 16 px from the edges, as what is below does: the
+            X's glyph, inside its button's own 8 px, and the last button
+            (the user, 2026-11-08 and 2026-11-23). */}
+        <Toolbar disableGutters sx={{ gap: 1, pl: 1, pr: 2 }}>
           <IconButton
-            edge="start"
             aria-label={i18n.t('composer:close')}
             disabled={busy}
             onClick={close}

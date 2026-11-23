@@ -370,8 +370,9 @@ const MediaLibrary = ({
       maxWidth="md"
       slotProps={{ paper: { sx: mobile ? {} : { height: 'calc(100% - 64px)' } } }}
     >
-      <Toolbar sx={{ gap: 1, px: 1 }}>
-        <IconButton edge="start" aria-label={i18n.t('composer:close')} onClick={onClose}>
+      {/* The X's glyph 16 px from the edge, as the composers' is. */}
+      <Toolbar disableGutters sx={{ gap: 1, pl: 1, pr: 2 }}>
+        <IconButton aria-label={i18n.t('composer:close')} onClick={onClose}>
           <CloseIcon />
         </IconButton>
         <Typography variant="h6" sx={{ flexGrow: 1 }}>
