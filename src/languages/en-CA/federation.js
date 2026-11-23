@@ -117,4 +117,22 @@ export default {
       failed: 'That didn’t work. Try again in a moment.',
     },
   },
+  // Following and answering from another server (anahita-services roadmap
+  // row 134): the page another server sends somebody here to, and the
+  // dialog for somebody from elsewhere on a page here.
+  interaction: {
+    notFound: 'This couldn’t be opened here',
+    search: 'Search',
+    follow: 'Follow from your own server',
+    post: 'Answer from your own server',
+    line: 'From your server',
+    handle: 'Your handle',
+    handleHelp: 'Like @name@mastodon.social. Kept in this browser only.',
+    continue: 'Continue',
+    here: 'Have an account here?',
+    none: 'Your server doesn’t take you there. Search on it for:',
+    notOut: 'This doesn’t go to other servers.',
+    badHandle: 'Not a handle. Try one like @name@mastodon.social.',
+    failed: 'That didn’t work. Try again in a moment.',
+  },
 };

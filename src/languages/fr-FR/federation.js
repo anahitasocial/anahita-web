@@ -117,4 +117,22 @@ export default {
       failed: 'Cela n’a pas marché. Réessayez dans un instant.',
     },
   },
+  // Following and answering from another server (anahita-services roadmap
+  // row 134): the page another server sends somebody here to, and the
+  // dialog for somebody from elsewhere on a page here.
+  interaction: {
+    notFound: 'Impossible de l’ouvrir ici',
+    search: 'Rechercher',
+    follow: 'Suivre depuis votre serveur',
+    post: 'Répondre depuis votre serveur',
+    line: 'Depuis votre serveur',
+    handle: 'Votre identifiant',
+    handleHelp: 'Comme @nom@mastodon.social. Gardé dans ce navigateur.',
+    continue: 'Continuer',
+    here: 'Un compte ici ?',
+    none: 'Votre serveur ne vous y mène pas. Cherchez-y :',
+    notOut: 'Ceci ne va pas sur les autres serveurs.',
+    badHandle: 'Pas un identifiant. Essayez @nom@mastodon.social.',
+    failed: 'Ça n’a pas marché. Réessayez dans un instant.',
+  },
 };

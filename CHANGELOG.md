@@ -28,6 +28,13 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
    its number, and `/?feed=12-arts-design` for one open as a tab of Home.
    `/feeds/12` and an address with an old name still open it, and are put
    right. Needs Anahita Services from Embryo after v1.8.0.
+5. **Following and answering from another server's page,** both ways. A
+   page on Mastodon or Pixelfed sends somebody from here to
+   `/authorize_interaction`, which opens what they were on, signing in first
+   if need be. A visitor from another server sees + Follow on a profile on
+   the fediverse, and an icon under a post of one: they give their handle,
+   kept in their browser, and are sent to their own server's page for it.
+   Needs Anahita Services from Embryo after v1.8.0.
 
 ### Changed
 

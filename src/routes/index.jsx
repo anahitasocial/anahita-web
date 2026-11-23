@@ -27,6 +27,7 @@ import ShareDialog from '../containers/share/Dialog';
 import NotFoundPage from '../containers/NotFound';
 
 const AuthPage = lazy(() => { return import('../containers/auth'); });
+const AuthorizeInteraction = lazy(() => { return import('../containers/federation/AuthorizeInteraction'); });
 
 const ActorByHandle = lazy(() => { return import('../containers/actors/ByHandle'); });
 const GroupsAdd = lazy(() => { return import('../containers/actors/Add'); });
@@ -236,6 +237,10 @@ const AppRoutes = () => {
               <Route path="/search" element={<SearchPage />} />
 
               <Route path="/auth" element={<AuthPage />} />
+              {/* Where a page of another server sends somebody from here to
+                  follow or answer something (roadmap row 134), at the path
+                  Mastodon and Pixelfed use. */}
+              <Route path="/authorize_interaction" element={<AuthorizeInteraction />} />
               <Route path="/auth/:tab" element={<AuthPage />} />
 
               <Route

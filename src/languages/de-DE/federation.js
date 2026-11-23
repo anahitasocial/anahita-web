@@ -117,4 +117,22 @@ export default {
       failed: 'Das hat nicht geklappt. Versuch es gleich noch einmal.',
     },
   },
+  // Following and answering from another server (anahita-services roadmap
+  // row 134): the page another server sends somebody here to, and the
+  // dialog for somebody from elsewhere on a page here.
+  interaction: {
+    notFound: 'Das ließ sich hier nicht öffnen',
+    search: 'Suchen',
+    follow: 'Von deinem Server aus folgen',
+    post: 'Von deinem Server aus antworten',
+    line: 'Von deinem Server',
+    handle: 'Dein Handle',
+    handleHelp: 'Etwa @name@mastodon.social. Nur in diesem Browser.',
+    continue: 'Weiter',
+    here: 'Konto hier?',
+    none: 'Dein Server führt dich nicht dorthin. Suche dort nach:',
+    notOut: 'Das geht nicht an andere Server.',
+    badHandle: 'Kein Handle. Versuch etwa @name@mastodon.social.',
+    failed: 'Das hat nicht geklappt. Versuch es gleich noch einmal.',
+  },
 };

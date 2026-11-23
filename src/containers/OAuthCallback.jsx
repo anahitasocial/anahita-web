@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, useLocation } from 'react-router-dom';
 import actions from '../actions';
 import passkeyOffer from '../utils/passkeyOffer';
+import afterSignIn from '../utils/afterSignIn';
 
 const OAuthCallback = () => {
   const dispatch = useDispatch();
@@ -31,7 +32,8 @@ const OAuthCallback = () => {
       .then(() => {
         // Signed in just now: a passkey may be offered (roadmap row 153).
         passkeyOffer.markDue();
-        navigate('/');
+        // On to where they were going, when they were (roadmap row 134).
+        navigate(afterSignIn.take() || '/');
       })
       .catch(() => {
         navigate('/');

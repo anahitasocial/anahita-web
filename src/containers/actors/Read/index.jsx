@@ -22,6 +22,7 @@ import Cover from '../../cover';
 
 import ControlFollow from '../../controls/Follow';
 import ControlFollowRequest from '../../controls/FollowRequest';
+import FromElsewhere from '../../federation/FromElsewhere';
 import ControlInviteAnswer from '../../controls/InviteAnswer';
 import ActorInvite from '../Invite';
 import EventDateTile from '../../../components/EventDateTile';
@@ -376,6 +377,10 @@ const ActorsRead = (props) => {
                 />
               </Box>}
             {showFollow && !showInviteAnswer && <ControlFollow actor={actor} prominent />}
+            {/* Somebody from another server, not signed in: + Follow, from
+                their own server (roadmap row 134), on a profile that is on
+                the fediverse. */}
+            {!isAuthenticated && !movedTo && <FromElsewhere node={actor} profile={actor} kind="follow" />}
             {movedTo && !isBlocked &&
               <Button
                 variant="contained"

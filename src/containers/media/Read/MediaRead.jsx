@@ -15,6 +15,7 @@ import ReplyParent from '../../replies/ReplyParent';
 import postCounts from '../../../components/PostCounts';
 import QuoteDetach from '../../controls/QuoteDetach';
 import Cover from '../../cover';
+import FromElsewhere from '../../federation/FromElsewhere';
 import { ARTICLE_COVER_RATIO } from '../../../constants/cover';
 import { DownloadAction } from '../../controls/medium/Download';
 import ControlRepost from '../../controls/Repost';
@@ -116,6 +117,11 @@ const MediaReadView = ({
       // Share is last, after whatever else there is.
       isAuthenticated && (
         <ShareAction what={ofNode(medium)} key={`medium-share-${medium.id}`} />
+      ),
+      // Somebody from another server, not signed in: answered, liked or
+      // reposted from their own (roadmap row 134), when it went out.
+      !isAuthenticated && !isReply && (
+        <FromElsewhere node={medium} profile={medium.owner} kind="post" key={`medium-elsewhere-${medium.id}`} />
       ),
     ],
     stats: (

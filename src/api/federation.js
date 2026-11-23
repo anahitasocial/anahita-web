@@ -175,8 +175,16 @@ const comeBack = () => {
   return axios.delete('/activitypub/move');
 };
 
+// Where somebody from another server, not signed in here, is sent to act on
+// a profile or a post here from their own server (roadmap row 134): its
+// `url`, or, with none, the `address` to search for there.
+const intent = (handle, nodeId) => {
+  return axios.get('/activitypub/intent', { params: { handle, node_id: nodeId } });
+};
+
 export default {
   settings,
+  intent,
   comeBack,
   aliases,
   setAliases,

@@ -117,4 +117,22 @@ export default {
       failed: 'Não deu certo. Tente de novo daqui a pouco.',
     },
   },
+  // Following and answering from another server (anahita-services roadmap
+  // row 134): the page another server sends somebody here to, and the
+  // dialog for somebody from elsewhere on a page here.
+  interaction: {
+    notFound: 'Não foi possível abrir aqui',
+    search: 'Buscar',
+    follow: 'Seguir do seu servidor',
+    post: 'Responder do seu servidor',
+    line: 'Do seu servidor',
+    handle: 'Seu identificador',
+    handleHelp: 'Como @nome@mastodon.social. Só neste navegador.',
+    continue: 'Continuar',
+    here: 'Tem conta aqui?',
+    none: 'Seu servidor não leva você até lá. Busque nele por:',
+    notOut: 'Isto não vai para outros servidores.',
+    badHandle: 'Não é um identificador. Tente @nome@mastodon.social.',
+    failed: 'Não deu certo. Tente de novo em um instante.',
+  },
 };
