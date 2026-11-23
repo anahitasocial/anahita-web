@@ -47,4 +47,13 @@ export default {
     notOnSite: 'Diese Website zeigt Neues nur angemeldeten Personen',
     notNarrower: 'Nicht enger als dieses Profil',
   },
+  // Whether search engines may index a profile and its posts (anahita-services
+  // roadmap row 174): `noindex` when not, which hides nothing.
+  searchEngines: {
+    title: 'Suchmaschinen',
+    label: 'Suchmaschinen dürfen dieses Profil indexieren',
+    help: 'Suchmaschinen wie Google dürfen dieses Profil und seine Beiträge aufnehmen. Aus, werden sie gebeten, es nicht zu tun. Wer sie sehen kann, bleibt wie oben eingestellt.',
+    saved: 'Gespeichert',
+    notSaved: 'Konnte nicht gespeichert werden. Versuch es gleich noch einmal.',
+  },
 };

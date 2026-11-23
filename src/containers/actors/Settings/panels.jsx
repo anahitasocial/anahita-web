@@ -37,6 +37,7 @@ import DownloadDefault from './DownloadDefault';
 import QuotePolicy from './QuotePolicy';
 import ContentChoices from './ContentChoices';
 import GraphAccess from './GraphAccess';
+import SearchEngines from './SearchEngines';
 import BlockedServers from './BlockedServers';
 import ActorBlocked from './Blocked';
 import DataExport from './DataExport';
@@ -103,6 +104,7 @@ const cardsFor = (namespace) => {
       ActorInfo: Info(namespace),
       ActorAccess: Access(namespace),
       ActorGraphAccess: GraphAccess(namespace),
+      ActorSearchEngines: SearchEngines(namespace),
       ActorPermissions: Permissions(namespace),
       ActorPostKinds: PostKinds(namespace),
       ActorReposts: RepostsOnProfile(namespace),
@@ -125,6 +127,7 @@ export const panelsOfPerson = ({ actor, viewer }) => {
   const {
     ActorAccess,
     ActorGraphAccess,
+    ActorSearchEngines,
     ActorPermissions,
     ActorReposts,
     ActorQuotes,
@@ -144,11 +147,13 @@ export const panelsOfPerson = ({ actor, viewer }) => {
     [ITEMS.WEBAUTHN]: <WebAuthn />,
     [ITEMS.AUTHLOGS]: <AuthLogs personId={actor.id} />,
     // Who can see the profile, then who can see its followers and whom
-    // it follows (roadmap row 151).
+    // it follows (roadmap row 151), then whether search engines may index
+    // it (row 174).
     [ITEMS.ACCESS]: (
       <Stack spacing={2}>
         <ActorAccess />
         <ActorGraphAccess />
+        <ActorSearchEngines />
       </Stack>
     ),
     [ITEMS.REPOSTS]: <ActorReposts />,
@@ -205,6 +210,7 @@ export const panelsOfGroup = ({
     ActorInfo,
     ActorAccess,
     ActorGraphAccess,
+    ActorSearchEngines,
     ActorPermissions,
     ActorPostKinds,
     ActorDownloads,
@@ -226,6 +232,7 @@ export const panelsOfGroup = ({
       <Stack spacing={2}>
         <ActorAccess />
         <ActorGraphAccess />
+        <ActorSearchEngines />
         <ActorBlocked actor={actor} />
       </Stack>
     ),

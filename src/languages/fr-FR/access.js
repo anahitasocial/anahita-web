@@ -47,4 +47,13 @@ export default {
     notOnSite: 'Ce site réserve ce qui est nouveau aux personnes connectées',
     notNarrower: 'Pas plus restreint que ce profil',
   },
+  // Whether search engines may index a profile and its posts (anahita-services
+  // roadmap row 174): `noindex` when not, which hides nothing.
+  searchEngines: {
+    title: 'Moteurs de recherche',
+    label: 'Laisser les moteurs de recherche indexer ce profil',
+    help: 'Les moteurs de recherche comme Google peuvent référencer ce profil et ses publications. Désactivé, on leur demande de ne pas le faire. Qui peut les voir reste tel que réglé plus haut.',
+    saved: 'Enregistré',
+    notSaved: 'Impossible d’enregistrer. Réessayez dans un instant.',
+  },
 };

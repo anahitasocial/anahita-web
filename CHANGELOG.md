@@ -9,6 +9,14 @@ when it is made. Kept from 2026-11-07; what came before is in the commits.
 
 ## Embryo
 
+### Added
+
+1. **Search engines, in Settings › Privacy:** a switch for whether search
+   engines may index a profile and its posts, for people, groups, events
+   and channels. Off for people who sign up from now on; nothing is hidden,
+   only search engines are asked not to index. Needs Anahita Services with
+   `PATCH /:id/search-engines` (Embryo after v1.8.0).
+
 ### Fixed
 
 1. **The logo has no white ring round it** in a mobile's top bar: the

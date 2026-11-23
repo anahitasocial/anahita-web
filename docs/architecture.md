@@ -1644,6 +1644,15 @@ and the dialog says so in grey, not as a failure: "Naomi keeps this list to
 some people." What keeps it is Settings › Privacy's Followers and following
 card (`actors/Settings/GraphAccess.jsx`), for people, groups and events.
 
+**Search engines** (anahita-services roadmap row 174): a card under
+Followers and following in Settings › Privacy, for people, groups, events
+and channels (`actors/Settings/SearchEngines.jsx`), one switch saved as it
+is switched (`api.searchEngines.edit`, `PATCH /:namespace/:id/search-engines`).
+Off, web-shell sends the profile's pages and its posts' with `noindex`;
+nothing is hidden, and the help line says who can see them stays as set
+above. Off for somebody who signs up, on for everybody before and for a new
+group, event or channel.
+
 **Blocking a server** (roadmap row 152): Block server in the menu of a
 profile on the fediverse (`containers/controls/useBlockServer.jsx`, beside
 Mute, not for Bluesky), with a confirmation; and Blocked servers in

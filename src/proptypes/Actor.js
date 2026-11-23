@@ -50,6 +50,7 @@ export default shape({
   isAdministrated: bool,
   // Whether what this actor reposts is also among its profile's posts.
   showRepostsOnProfile: bool,
+  searchEngines: bool,
   // On a person: who may quote their posts, when a post does not say.
   quotePolicy: string,
   websiteUrl: string,

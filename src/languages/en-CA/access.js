@@ -47,4 +47,13 @@ export default {
     notOnSite: 'This site keeps what is new to people who are signed in',
     notNarrower: 'No narrower than this profile',
   },
+  // Whether search engines may index a profile and its posts (anahita-services
+  // roadmap row 174): `noindex` when not, which hides nothing.
+  searchEngines: {
+    title: 'Search engines',
+    label: 'Let search engines index this profile',
+    help: 'Search engines such as Google may list this profile and its posts. Off, they are asked not to. Who can see them stays as set above.',
+    saved: 'Saved',
+    notSaved: 'Couldn’t save that. Try again in a moment.',
+  },
 };
